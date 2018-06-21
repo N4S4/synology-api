@@ -58,7 +58,7 @@ dwn.get_info()
 
 response would be json data
 
-```json 
+```
 {'data': {'enable_list_usergrp': False,
   'hostname': 'MyCloud',
   'is_manager': True,
@@ -104,7 +104,7 @@ This wrapper cover the following APIs for now:
 | SYNO.FileStation.Compress | 
 | SYNO.FileStation.BackgroundTask | 
 
-####FileStation Functions list
+#### FileStation Functions list
 
 To explain the use of some function I will divide all the functions in two sets
 
@@ -162,7 +162,7 @@ To run the following functions you'll have to start the task with the start func
 | get_compress_status() | Get the compress task status |
 | stop_compress_task() | Stop the compress task |
 
-####DownloadStations functions are:
+#### DownloadStations functions are:
 
 | Function | Description |
 | --- | --- |
@@ -179,7 +179,7 @@ To run the following functions you'll have to start the task with the start func
 | edit_task()  | Edit a Task  |
 
 
-####What's still missing
+#### What's still missing
 
 There is still few missing function which is a work in progress:
 
