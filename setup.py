@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='synology-synology_api',
+    name='synology_api',
     version='0.0.1',
     packages=find_packages(exclude=['tests*']),
     license='MIT',
