@@ -58,7 +58,7 @@ dwn.get_info()
 
 response would be json data
 
-```
+```json 
 {'data': {'enable_list_usergrp': False,
   'hostname': 'MyCloud',
   'is_manager': True,
@@ -104,7 +104,68 @@ This wrapper cover the following APIs for now:
 | SYNO.FileStation.Compress | 
 | SYNO.FileStation.BackgroundTask | 
 
-#### FileStation Functions list
+| sys_info |
+| -------- |
+| SYNO.Core.System |
+| SYNO.Core.FileServ.SMB |
+| SYNO.Core.FileServ.AFP |
+| SYNO.Core.FileServ.NFS' |
+| SYNO.Core.FileServ.FTP |
+| SYNO.Core.FileServ.FTP.SFTP |
+| SYNO.Backup.Service.NetworkBackup |
+| SYNO.Core.BandwidthControl.Protocol |
+| SYNO.Core.Share |
+| SYNO.Core.FileServ.ServiceDiscovery |
+| SYNO.Core.SyslogClient.FileTransfer |
+| SYNO.Core.Network |
+| SYNO.Core.Web.DSM |
+| SYNO.Core.CurrentConnection |
+| SYNO.Core.BandwidthControl.Status |
+| SYNO.Core.System.Status |
+| SYNO.Core.SyslogClient.Status |
+| SYNO.Core.SyslogClient.Setting.Notify |
+| SYNO.Core.SecurityScan.Conf |
+| SYNO.Core.SecurityScan.Status |
+| SYNO.Core.SecurityScan.Status |
+| SYNO.Core.User |
+| SYNO.Core.QuickConnect |
+| SYNO.Core.QuickConnect.Permission |
+| SYNO.Core.Network.Router.Topology |
+| SYNO.Core.Network.Wifi.Client |
+| SYNO.Core.Network.Bond |
+| SYNO.Core.Network.Bridge |
+| SYNO.Core.Network.Ethernet |
+| SYNO.Core.Network.LocalBridge |
+| SYNO.Core.Network.USBModem |
+| SYNO.Core.Network.PPPoE |
+| SYNO.Core.Network.IPv6Tunnel |
+| SYNO.Core.Network.VPN.PPTP |
+| SYNO.Core.Network.VPN.OpenVPNWithConf |
+| SYNO.Core.Network.VPN.OpenVPN |
+| SYNO.Core.Network.VPN.L2TP |
+| SYNO.Core.Directory.Domain.Schedule |
+| SYNO.Core.Directory.LDAP |
+| SYNO.Core.Directory.SSO |
+| SYNO.Core.Upgrade.Server |
+| SYNO.Core.Upgrade.Server.Download |
+| SYNO.Core.Upgrade.Setting |
+| SYNO.Core.Notification.SMS.Conf |
+| SYNO.Core.Notification.Mail.Conf |
+| SYNO.Core.Notification.Push.Mail |
+| SYNO.Core.Notification.Push.Conf |
+| SYNO.Core.Hardware.BeepControl |
+| SYNO.Core.Hardware.FanSpeed |
+| SYNO.Core.Hardware.Hibernation |
+| SYNO.Core.ExternalDevice.UPS |
+| SYNO.Core.Hardware.PowerSchedule |
+| SYNO.Core.Terminal |
+| SYNO.Core.SNMP |
+| SYNO.Core.System.Process |
+| SYNO.Core.System.Utilization |
+| SYNO.Storage.CGI.Storage |
+
+
+####FileStation Functions list
 
 To explain the use of some function I will divide all the functions in two sets
 
@@ -162,7 +223,7 @@ To run the following functions you'll have to start the task with the start func
 | get_compress_status() | Get the compress task status |
 | stop_compress_task() | Stop the compress task |
 
-#### DownloadStations functions are:
+####DownloadStations functions are:
 
 | Function | Description |
 | --- | --- |
@@ -178,8 +239,73 @@ To run the following functions you'll have to start the task with the start func
 | resume_task()  | Resume a task  |
 | edit_task()  | Edit a Task  |
 
+####sys_info 
 
-#### What's still missing
+Although there is nothing you can set (yet), is possible to retrieve lots of 
+DS info with below functions:
+
+| Functions |  
+| --- | 
+| fileserv_smb() |  
+| fileserv_afp() |  
+| fileserv_nfs() |  
+| fileserv_ftp() |  
+| fileserv_sftp() |  
+| network_backup_info() |  
+| bandwidth_control_protocol() |  
+| shared_folders_info() |  
+| services_status() |  
+| services_discovery() |  
+| file_transfer_status() |  
+| network_status() |  
+| web_status() |  
+| current_connection() |
+| bandwidth_control_status() |
+| sys_status() |
+| latest_logs() |
+| client_notify_settings_status() |
+| get_security_scan_info() |
+| get_security_scan_rules() |
+| get_security_scan_status() |
+| get_user_list() |
+| quickconnect_info() |
+| quickconnect_permissions() |
+| network_topology() |
+| network_wifi_client() |
+| network_bond() |
+| network_bridge() |
+| network_ethernet() |
+| network_local_bridge() |
+| network_usb_modem() |
+| network_pppoe() |
+| network_ipv6tunnel() |
+| network_vpn_pptp() |
+| network_openvpn_with_conf() |
+| network_openvpn() |
+| network_vpn_l2tp() |
+| domain_schedule() |
+| client_ldap() |
+| client_sso() |
+| sys_upgrade_check() |
+| sys_upgrade_download() |
+| sys_upgrade_setting() |
+| notification_sms_conf() |
+| notification_mail_conf() |
+| notification_push_mail() |
+| notification_push_conf() |
+| hardware_beep_control() |
+| hardware_fan_speed() |
+| hardware_hibernation() |
+| hardware_ups() |
+| hardware_power_schedule() |
+| terminal_info() |
+| snmp_info() |
+| process() |
+| utilisation() |
+| storage() |
+
+
+####What's still missing
 
 There is still few missing function which is a work in progress:
 
