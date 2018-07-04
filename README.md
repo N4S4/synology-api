@@ -165,7 +165,7 @@ This wrapper cover the following APIs for now:
 | SYNO.Storage.CGI.Storage |
 
 
-####FileStation Functions list
+#### FileStation Functions list
 
 To explain the use of some function I will divide all the functions in two sets
 
@@ -223,7 +223,7 @@ To run the following functions you'll have to start the task with the start func
 | get_compress_status() | Get the compress task status |
 | stop_compress_task() | Stop the compress task |
 
-####DownloadStations functions are:
+#### DownloadStations functions are:
 
 | Function | Description |
 | --- | --- |
@@ -239,7 +239,7 @@ To run the following functions you'll have to start the task with the start func
 | resume_task()  | Resume a task  |
 | edit_task()  | Edit a Task  |
 
-####sys_info 
+#### sys_info 
 
 Although there is nothing you can set (yet), is possible to retrieve lots of 
 DS info with below functions:
@@ -305,7 +305,7 @@ DS info with below functions:
 | storage() |
 
 
-####What's still missing
+#### What's still missing
 
 There is still few missing function which is a work in progress:
 
