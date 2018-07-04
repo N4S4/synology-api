@@ -1,1 +1,1 @@
-from . import auth, filestation, downloadstation
+from . import auth, filestation, downloadstation, sys_info
