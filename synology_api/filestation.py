@@ -1,6 +1,8 @@
 import time
 from datetime import datetime
 import requests
+import os
+from requests_toolbelt import MultipartEncoder
 
 from . import auth as syn
 
@@ -498,6 +500,33 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
+    def upload_file(self, dest_path, file_path, create_parents=True, overwrite=True):
+        api_name = 'SYNO.FileStation.Upload'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        filename = os.path.basename(file_path)
+
+        session = requests.session()
+
+        with open(file_path, 'rb') as payload:
+            url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=upload&_sid=%s' % (
+                api_name, info['minVersion'], self._sid)
+
+            args = {
+                'path': dest_path,
+                'create_parents': create_parents,
+                'overwrite': overwrite,
+            }
+
+            files = {'file': (filename, payload, 'application/octet-stream')}
+
+            r = session.post(url, data=args, files=files)
+
+            if r.status_code is 200 and r.json()['success']:
+                return 'Upload Complete'
+            else:
+                return r.status_code, r.json()
+
     def get_shared_link_info(self, link_id=None):
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
@@ -973,9 +1002,8 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    # TODO aggiungi SYNO.FileStation.Upload formatta richiesta Form-based File Upload in HTML
 
-    # TODO SYNO.FileStation.Thumb controlla funzione precedente
 
-    # TODO SYNO.FileStation.Download conrolls funzione precedente
+# TODO SYNO.FileStation.Thumb controlla funzione precedente
 
+# TODO SYNO.FileStation.Download conrolls funzione precedente
