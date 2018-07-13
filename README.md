@@ -95,6 +95,7 @@ This wrapper cover the following APIs for now:
 | SYNO.FileStation.Favorite | 
 | SYNO.FileStation.DirSize | 
 | SYNO.FileStation.CheckPermission | 
+| SYNO.FileStation.Upload | 
 | SYNO.FileStation.Sharing | 
 | SYNO.FileStation.CreateFolder | 
 | SYNO.FileStation.Rename | 
@@ -186,6 +187,7 @@ you can run the following set of functions at your will entering just the requir
 | edit_favorite_name() | Edit a favorite name  |
 | replace_all_favorite() | Replace multiple favorites of folders to the existed user’s favorites.  |
 | check_permission() | Check if a logged-in user has write permission to create new files/folders in a given folder  |
+| upload_file() | upload a file to the station |
 | get_shared_link_info() | Get information of a sharing link by the sharing link ID  |
 | get_shared_link_list() | List user’s file sharing links.  |
 | create_sharing_link() | Generate one or more sharing link(s) by file/folder path(s)  |
@@ -311,7 +313,6 @@ There is still few missing function which is a work in progress:
 
 | Missing in FileStation |
 |----------------------|
-| SYNO.FileStation.Upload | 
 | SYNO.FileStation.Thumb  | 
 | SYNO.FileStation.Download  | 
 
