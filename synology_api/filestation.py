@@ -1,8 +1,8 @@
+import os
 import time
 from datetime import datetime
+
 import requests
-import os
-from requests_toolbelt import MultipartEncoder
 
 from . import auth as syn
 
@@ -27,6 +27,7 @@ class FileStation:
         self._extract_taskid_list = []
         self._compress_taskid = ''
         self._compress_taskid_list = []
+        self.request_data = self.session.request_data
 
         self.session.login('FileStation')
         self.session.get_api_list('FileStation')
@@ -35,32 +36,7 @@ class FileStation:
         self._sid = self.session.sid
         self.base_url = self.session.base_url
 
-        print('You are now logged your sid is: ' + self._sid)
-
-    def request_data(self, api_name, api_path, req_param, method=None, response_json=True):  # 'post' or 'get'
-
-        if method is None:
-            method = 'get'
-
-        req_param['_sid'] = self._sid
-
-        if method is 'get':
-            url = ('%s%s' % (self.base_url, api_path)) + '?api=' + api_name
-            response = requests.get(url, req_param)
-
-            if response_json is True:
-                return response.json()
-            else:
-                return response
-
-        elif method is 'post':
-            url = ('%s%s' % (self.base_url, api_path)) + '?api=' + api_name
-            response = requests.post(url, req_param)
-
-            if response_json is True:
-                return response.json()
-            else:
-                return response
+        print('You are now logged in!')
 
     def logout(self):
         self.session.logout('FileStation')
@@ -1006,4 +982,4 @@ class FileStation:
 
 # TODO SYNO.FileStation.Thumb controlla funzione precedente
 
-# TODO SYNO.FileStation.Download conrolls funzione precedente
+# TODO SYNO.FileStation.Download controlla funzione precedente

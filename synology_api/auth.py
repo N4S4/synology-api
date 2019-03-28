@@ -33,7 +33,7 @@ class Authentication:
         logout_api = 'auth.cgi?api=SYNO.API.Auth'
         param = {'version': '2', 'method': 'logout', 'session': application}
 
-        response = requests.get(self.base_url + logout_api, param)
+        response = requests.get(self._base_url + logout_api, param)
         if response.json()['success'] is True:
             self._session_expire = True
             self._sid = None
@@ -84,6 +84,31 @@ class Authentication:
         if print_check == 0:
             print('Not Found')
         return
+
+    def request_data(self, api_name, api_path, req_param, method=None, response_json=True):  # 'post' or 'get'
+
+        if method is None:
+            method = 'get'
+
+        req_param['_sid'] = self._sid
+
+        if method is 'get':
+            url = ('%s%s' % (self._base_url, api_path)) + '?api=' + api_name
+            response = requests.get(url, req_param)
+
+            if response_json is True:
+                return response.json()
+            else:
+                return response
+
+        elif method is 'post':
+            url = ('%s%s' % (self._base_url, api_path)) + '?api=' + api_name
+            response = requests.post(url, req_param)
+
+            if response_json is True:
+                return response.json()
+            else:
+                return response
 
     @property
     def sid(self):

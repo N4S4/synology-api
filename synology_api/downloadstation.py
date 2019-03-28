@@ -1,5 +1,4 @@
 from . import auth as syn
-import requests
 
 
 class DownloadStation:
@@ -12,36 +11,12 @@ class DownloadStation:
         self.session.login('DownloadStation')
         self.session.get_api_list('DownloadStation')
 
+        self.request_data = self.session.request_data
         self.download_list = self.session.app_api_list
         self._sid = self.session.sid
         self.base_url = self.session.base_url
 
-        print('You are now logged your sid is: ' + self._sid)
-
-    def request_data(self, name, api_path, req_param, method=None, response_json=True):  # 'post' or 'get'
-
-        if method is None:
-            method = 'get'
-
-        req_param['_sid'] = self._sid
-
-        if method == 'get':
-            url = ('%s%s' % (self.base_url, api_path)) + '?api=' + name
-            response = requests.get(url, req_param)
-
-            if response_json is True:
-                return response.json()
-            else:
-                return response
-
-        elif method == 'post':
-            url = ('%s%s' % (self.base_url, api_path)) + '?api=' + name
-            response = requests.post(url, req_param)
-
-            if response_json is True:
-                return response.json()
-            else:
-                return response
+        print('You are now logged in!')
 
     def logout(self):
         self.session.logout('DownloadStation')
