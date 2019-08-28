@@ -87,6 +87,11 @@ class Authentication:
 
     def request_data(self, api_name, api_path, req_param, method=None, response_json=True):  # 'post' or 'get'
 
+        # Convert all booleen in string in lowercase because Synology API is waiting for "true" or "false"
+        for k,v in req_param.items():
+            if isinstance(v, bool):
+                req_param[k] = str(v).lower()
+
         if method is None:
             method = 'get'
 
