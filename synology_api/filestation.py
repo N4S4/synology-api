@@ -3,6 +3,8 @@ import time
 from datetime import datetime
 
 import requests
+import sys
+import urllib
 
 from . import auth as syn
 
@@ -978,8 +980,43 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
+    def get_file(self, path=None, mode=None):
+        api_name = 'SYNO.FileStation.Download'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'download'}
+
+        if path is None:
+            return 'Enter a valid path'
+
+        for key, val in locals().items():
+            if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
+                if val is not None:
+                    req_param[str(key)] = val
+
+        session = requests.session()
+
+        url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=download&_sid=%s&path=%s&mode=%s' % (
+                api_name, info['maxVersion'], self._sid, urllib.parse.quote_plus(path), mode)
+
+        if mode is None:
+            return 'Enter a valid mode (open / download)'
+
+        if mode == r'open':
+            with session.get(url, stream=True) as r:
+                r.raise_for_status()
+                for chunk in r.iter_content(chunk_size=8192):
+                    if chunk: # filter out keep-alive new chunks
+                        sys.stdout.buffer.write(chunk)
+
+        if mode == r'download':
+            with session.get(url, stream=True) as r:
+                r.raise_for_status()
+                with open(os.path.basename(path), 'wb') as f:
+                    for chunk in r.iter_content(chunk_size=8192):
+                        if chunk: # filter out keep-alive new chunks
+                            f.write(chunk)
 
 
 # TODO SYNO.FileStation.Thumb controlla funzione precedente
 
-# TODO SYNO.FileStation.Download controlla funzione precedente
