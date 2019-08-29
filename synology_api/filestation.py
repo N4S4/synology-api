@@ -5,6 +5,7 @@ from datetime import datetime
 import requests
 import sys
 import urllib
+from urllib import parse
 
 from . import auth as syn
 
@@ -996,8 +997,8 @@ class FileStation:
 
         session = requests.session()
 
-        url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=download&_sid=%s&path=%s&mode=%s' % (
-                api_name, info['maxVersion'], self._sid, urllib.parse.quote_plus(path), mode)
+        url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=download&path=%s&mode=%s&_sid=\'%s\'' % (
+                api_name, info['maxVersion'], urllib.parse.quote_plus(path), mode, self._sid)
 
         if mode is None:
             return 'Enter a valid mode (open / download)'
