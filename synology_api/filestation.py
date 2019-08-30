@@ -4,7 +4,6 @@ from datetime import datetime
 
 import requests
 import sys
-import urllib
 from urllib import parse
 
 from . import auth as syn
