@@ -224,6 +224,7 @@ To run the following functions you'll have to start the task with the start func
 | start_file_compression() | Start to compress file(s)/folder(s). |
 | get_compress_status() | Get the compress task status |
 | stop_compress_task() | Stop the compress task |
+| get_file() | Download or open file by kidburglar |
 
 #### DownloadStations functions are:
 
