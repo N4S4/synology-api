@@ -313,8 +313,7 @@ There is still few missing function which is a work in progress:
 
 | Missing in FileStation |
 |----------------------|
-| SYNO.FileStation.Thumb  | 
-| SYNO.FileStation.Download  | 
+| SYNO.FileStation.Thumb  |  
 
 | Missing in DownloadStation |
 |---|
