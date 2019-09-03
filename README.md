@@ -165,6 +165,16 @@ This wrapper cover the following APIs for now:
 | SYNO.Core.System.Utilization |
 | SYNO.Storage.CGI.Storage |
 
+| Virtualization |
+| -------- |
+| SYNO.Virtualization.API.Task.Info |
+| SYNO.Virtualization.API.Network |
+| SYNO.Virtualization.API.Storage |
+| SYNO.Virtualization.API.Host |
+| SYNO.Virtualization.API.Guest |
+| SYNO.Virtualization.API.Guest.Action |
+| SYNO.Virtualization.API.Guest.Image |
+
 
 #### FileStation Functions list
 
@@ -224,7 +234,7 @@ To run the following functions you'll have to start the task with the start func
 | start_file_compression() | Start to compress file(s)/folder(s). |
 | get_compress_status() | Get the compress task status |
 | stop_compress_task() | Stop the compress task |
-| get_file() | Download or open file by kidburglar |
+| get_file() | Download or open file by [kidburglar](https://github.com/kidburglar) |
 
 #### DownloadStations functions are:
 
@@ -307,6 +317,25 @@ DS info with below functions:
 | utilisation() |
 | storage() |
 
+### Virtualization
+
+| get_task_list() |
+| clear_task() |
+| get_taks_info() |
+| get_network_group_list() |
+| get_storage_operation() |
+| get_host_operation() |
+| get_vm_operation() |
+| get_specific_vm_info() |
+| set_vm_property() |
+| delete_vm() |
+| vm_power_on() |
+| vm_force_power_off() |
+| vm_shut_down() |
+| get_images_list() |
+| delete_image() |
+| create_image() |
+
 
 #### What's still missing
 
@@ -318,7 +347,11 @@ There is still few missing function which is a work in progress:
 
 | Missing in DownloadStation |
 |---|
-|SYNO.DownloadStation.Task create|
+| SYNO.DownloadStation.Task create |
+
+| Missing in Virtualization |
+|---|
+| SYNO.Virtualization.API.Guest create |
 
 ### Bugs
 
