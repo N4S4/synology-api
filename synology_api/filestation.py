@@ -984,15 +984,9 @@ class FileStation:
         api_name = 'SYNO.FileStation.Download'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'download'}
 
         if path is None:
             return 'Enter a valid path'
-
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
-                if val is not None:
-                    req_param[str(key)] = val
 
         session = requests.session()
 
@@ -1006,7 +1000,7 @@ class FileStation:
             with session.get(url, stream=True) as r:
                 r.raise_for_status()
                 for chunk in r.iter_content(chunk_size=8192):
-                    if chunk: # filter out keep-alive new chunks
+                    if chunk:  # filter out keep-alive new chunks
                         sys.stdout.buffer.write(chunk)
 
         if mode == r'download':
@@ -1014,9 +1008,7 @@ class FileStation:
                 r.raise_for_status()
                 with open(os.path.basename(path), 'wb') as f:
                     for chunk in r.iter_content(chunk_size=8192):
-                        if chunk: # filter out keep-alive new chunks
+                        if chunk:  # filter out keep-alive new chunks
                             f.write(chunk)
 
-
-# TODO SYNO.FileStation.Thumb controlla funzione precedente
-
+# TODO SYNO.FileStation.Thumb to be done
