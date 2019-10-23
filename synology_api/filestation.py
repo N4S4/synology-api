@@ -77,40 +77,25 @@ class FileStation(Synology):
             goto_path,
             additional 
     """
-    def get_file_list(self, folder_path, offset=None, limit=None, sort_by=None,
-                      sort_direction=None, pattern=None, filetype=None, goto_path=None, additional=None):
+    def get_file_list(self, folder_path, **kwargs): 
+        
+        param = kwargs
 
-        api_name = 'SYNO.FileStation.List'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'list'}
+        param_keys = param.keys()
 
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param', 'additional']:
-                if val is not None:
-                    param[str(key)] = val
-
-        if folder_path is None:
-            return 'Enter a valid folder_path'
-
-        if filetype is not None:
+        if 'filetype' in param_keys:
             param['filetype'] = str(param['filetype']).lower()
 
-        if additional is None:
-            additional = ['real_path', 'size', 'owner', 'time']
+        if 'additional' not in param_keys:
+            param['additional'] = "real_path,size,owner,time"
 
-        if type(additional) is list:
-            additional = ','.join(additional)
+        if type(param['additional']) is list:
+            param['additional'] = ','.join(param['additional'])
 
-        param['additional'] = additional
-
-        return self.request_data(api_name, api_path, param)
+        return self.request_data(self.app(), 'List', 'list', param)
 
     def get_file_info(self, path=None, additional=None):
-        api_name = 'SYNO.FileStation.List'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'getinfo'}
+        param = {}
 
         if type(path) is list:
             new_path = []
@@ -129,14 +114,29 @@ class FileStation(Synology):
 
         param['additional'] = additional
 
-        return self.request_data(api_name, api_path, param)
+        return self.request_data(self.app(), 'List', 'getinfo', param)
 
     # TODO  all working if specify extension check if correct [pattern, extension]
     #  it works if you put extension='...'
-
-    def search_start(self, folder_path=None, recursive=None, pattern=None, extension=None, filetype=None,
-                     size_from=None, size_to=None, mtime_from=None, mtime_to=None, crtime_from=None, crtime_to=None,
-                     atime_from=None, atime_to=None, owner=None, group=None):
+    """
+    method: search_start
+    args: folder_path
+    kwargs: recursive,
+            pattern,
+            extension,
+            filetype,
+            size_from,
+            site_to,
+            mtime_from,
+            mtime_to,
+            crtime_from,
+            crtime_to,
+            atime_from,
+            atime_to,
+            owner,
+            group
+    """
+    def search_start(self, folder_path, **kwargs):
 
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
@@ -160,15 +160,12 @@ class FileStation(Synology):
                         except ValueError:
                             return 'Enter the correct Date Time format "YYY-MM-DD HH:MM:SS" or Unix timestamp'
 
-        if folder_path is None:
-            return 'Enter a valid folder_path'
-        else:
-            param['folder_path'] = '"' + folder_path + '"'
+        param['folder_path'] = '"{p}"'.format(p=param['folder_path'])
 
         if filetype is not None:
             param['filetype'] = '"' + filetype + '"'
 
-        response = self.request_data(api_name, api_path, param)
+        response = self.api_request(self.app(), 'Search', 'start', param)
 
         self._search_taskid = '"' + response['data']['taskid'] + '"'
         self._search_taskid_list.append('"' + response['data']['taskid'] + '"')
