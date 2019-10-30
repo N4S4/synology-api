@@ -12,8 +12,6 @@ class Synology:
 
     app = None
 
-    _log_api = 'auth.cgi?api=SYNO.API.Auth'
-
     def __init__(self, ipaddr, port, username, password):
         self.ipaddr = ipaddr
         self.port = port
@@ -22,13 +20,14 @@ class Synology:
         self.sid = None
         self.session_expire = True
         self.session = None
+        self._log_api = '/auth.cgi?api=SYNO.API.Auth'
         self.url = 'http://{ip}:{p}/webapi'.format(ip=self.ipaddr, p=self.port)
 
         self.full_api_dict = {}
         self.app_api_dict = {}
 
     def _response(self, urlpath, param):
-        return requests.post(self.url + urlpath, param)
+        return requests.get(self.url + urlpath, param)
 
     def login(self, app):
         param = {'version': '2', 'method': 'login', 'account': self.user,
@@ -59,13 +58,13 @@ class Synology:
     def populate_api_dict(self, app=None):
         querydict = {'version': '1', 'method': 'query', 'query': 'all'}
 
-        response = self._response('query.cgi?api=SYNO.API.Info', querydict)
+        response = self._response('/query.cgi?api=SYNO.API.Info', querydict)
 
-        self.full_api_dict = response['data']
+        self.full_api_dict = response.json()['data']
         if self.app is not None:
             for key in self.full_api_dict:
                 if app.lower() in key.lower():
-                    self.app_api_dict[key] = self.full_api_dict['data'][key]
+                    self.app_api_dict[key] = self.full_api_dict[key]
         else:
             self.app_api_dict = self.full_api_dict
 
@@ -96,6 +95,7 @@ class Synology:
         def decorator_api_call(func):
             global method
             reqdata = func()
+            print(type(func))
             api_str = 'SYNO.{a}.{m}'.format(a=reqdata['app'],
                                             m=reqdata['api_name'])
             api_path = self.app_api_dict['path']

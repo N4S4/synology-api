@@ -36,14 +36,16 @@ class FileStation(Synology):
 
         self.login(self.app())
         self.populate_api_dict(self.app())
+        self.file_station_list = self.app_api_dict
 
     def logout(self):
         super().logout('FileStation')
     
     @Synology.api_call
     def get_info(self):
-        return self.api_request(self.app(), 'Info', 'getInfo')
-    
+        r = self.api_request(self.app, 'Info', 'getInfo')
+        return r
+
     """
     method: get_list_share
     kwargs: additional,
