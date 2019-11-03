@@ -21,8 +21,8 @@ class FileStation(Synology):
 
         self._dir_taskid = ''
         self._dir_taskid_list = []
-        self._md5_calc_taskid = ''
-        self._md5_calc_taskid_list = []
+        self._md5_taskid = ''
+        self._md5_taskid_list = []
         self._search_taskid = ''
         self._search_taskid_list = []
         self._copy_move_taskid = ''
@@ -43,7 +43,7 @@ class FileStation(Synology):
     
     @Synology.api_call
     def get_info(self):
-        r = self.api_request(self.app, 'Info', 'getInfo')
+        r = self.api_request('Info', 'getInfo')
         return r
 
     """
@@ -66,7 +66,7 @@ class FileStation(Synology):
             additional = kwargs.get('additional')
             param['additional'] = ','.join(additional)
 
-        return self.api_request(self.app(), 'List', 'list_share', param)
+        return self.api_request('List', 'list_share', param)
 
     """
     method: get_file_list
@@ -96,7 +96,7 @@ class FileStation(Synology):
         if type(param['additional']) is list:
             param['additional'] = ','.join(param['additional'])
 
-        return self.api_request(self.app(), 'List', 'list', param)
+        return self.api_request('List', 'list', param)
 
     @Synology.api_call
     def get_file_info(self, path=None, additional=None):
@@ -119,10 +119,38 @@ class FileStation(Synology):
 
         param['additional'] = additional
 
-        return self.api_request(self.app(), 'List', 'getinfo', param)
+        return self.api_request('List', 'getinfo', param)
 
     # TODO  all working if specify extension check if correct [pattern, extension]
     #  it works if you put extension='...'
+    @Synology.api_call
+    def _search_start(self, folder_path, **kwargs):
+            param = kwargs
+
+            if 'time' in param.keys():
+                t = param['time']
+                is_str = isinstance(t, str)
+                is_int = isinstance(t, int)
+
+                if not is_str and is_int:
+                    raise ValueError(
+                            "Timestamp must be string or Unix timestamp, type is {t}.".format(
+                                t=type(param['time'])))
+                elif is_int and not is_str:
+                    datetime.fromtimestamp(t).strftime('%Y-%m-%d %H:%M:%S')
+                    param['time'] = val
+                else: #is_str is True, is_int might be True or False 
+                    date = time.strptime(t, "%Y-%m-%d %H:%M:%S")
+                    timestamp = time.mktime(date)
+                    param['time'] = timestamp
+
+        param['folder_path'] = '"{p}"'.format(p=param['folder_path'])
+
+        if 'filetype' in param.keys():
+            param['filetype'] = '"{f}"'.format(f=param['filetype'])
+
+        return self.api_request('Search', 'start', param)
+
     """
     method: search_start
     args: folder_path
@@ -142,541 +170,434 @@ class FileStation(Synology):
             group
     """
     def search_start(self, folder_path, **kwargs):
+        response = self._search_start(folder_path, **kwargs)
 
-        api_name = 'SYNO.FileStation.Search'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'start', 'folder_path': ''}
-
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param'] and 'time' not in key:
-                if val is not None:
-                    param[str(key)] = val
-            if 'time' in key:
-                if val is not None:
-                    try:
-                        date = time.strptime(val, "%Y-%m-%d %H:%M:%S")
-                        timestamp = time.mktime(date)
-                        param[key] = timestamp
-                    except ValueError:
-                        try:
-                            datetime.fromtimestamp(int(val)).strftime('%Y-%m-%d %H:%M:%S')
-                            param[key] = val
-                        except ValueError:
-                            return 'Enter the correct Date Time format "YYY-MM-DD HH:MM:SS" or Unix timestamp'
-
-        param['folder_path'] = '"{p}"'.format(p=param['folder_path'])
-
-        if filetype is not None:
-            param['filetype'] = '"' + filetype + '"'
-
-        response = self.api_request(self.app(), 'Search', 'start', param)
-
-        self._search_taskid = '"' + response['data']['taskid'] + '"'
-        self._search_taskid_list.append('"' + response['data']['taskid'] + '"')
-
-        return 'You can now check the status of request with get_search_list() , your id is: ' + self._search_taskid
-
-    def get_search_list(self, task_id=None, filetype=None, limit=None, sort_by=None, sort_direction=None,
-                        offset=None, additional=None):
-        api_name = 'SYNO.FileStation.Search'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'list', 'taskid': ''}
-
-        if task_id is None:
-            return 'Enter a correct taskid, choose one of the following: ' + str(self._search_taskid_list)
+        if response['success']:
+            self._search_taskid = response['data']['taskid']
+            self._search_taskid_list.append(response['data']['taskid'])
         else:
-            param['taskid'] = task_id
+            raise self.SynologyError(
+                    "Could not start search task.\nResponse: {r}".format(
+                        r=response))
 
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param', 'additional', 'task_id']:
-                if val is not None:
-                    param[str(key)] = val
+        return response
 
-        if filetype is not None:
+    """
+    method: get_search_list
+    args: task_id
+    kwargs: filetype,
+            limit,
+            sort_by,
+            sort_direction,
+            offset,
+            additional
+    """
+    @Synology.api_call
+    def get_search_list(self, task_id, **kwargs):
+        param = kwargs
+        param['taskid'] = task_id
+
+        if 'filetype' in param.keys():
             param['filetype'] = str(filetype).lower()
 
-        if additional is None:
-            additional = ['size', 'owner', 'time']
+        if 'additional' not in param.keys():
+            param['additional'] = ['size', 'owner', 'time']
 
-        if type(additional) is list:
-            additional = '","'.join(additional)
+        if type(param['additional']) is list:
+            param['additional'] = str(param['additional']
 
-        param['additional'] = '["' + additional + '"]'
-
-        return self.request_data(api_name, api_path, param)
-
-    def stop_search_task(self, taskid=None):
-        api_name = 'SYNO.FileStation.Search'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'stop', 'taskid': self._search_taskid}
+        return self.api_request('Search', 'list', param)
+    
+    @Synology.api_call
+    def _stop_search_task(self, taskid):
+        param = {}
 
         if taskid is None:
-            return 'Enter a valid taskid, choose between ' + str(self._search_taskid_list)
+            if self._search_taskid is None:
+                raise self.SynologyError(
+                    "Tried to stop search tasks but none exist.")
+            else:
+                taskid = self._search_taskid
+
+        param['taskid'] = taskid
+
+        return self.api_request('Search', 'stop', param)
+
+    def stop_search_task(self, taskid=None)
+        response = self._stop_search_task(taskid)
+
+        if not response['success']:
+            raise self.SynologyError(
+                "Could not stop search jobs. Response: {r}".format(r=response))
 
         self._search_taskid_list.remove(taskid)
+        self._search_taskid = self._search_taskid_list[-1]
 
-        return self.request_data(api_name, api_path, param)
+        return response 
+    
+    """
+    method: stop_all_search_task
+    args: log
+    Argument 'log' should be an object with a method 'error', such as the
+    logger from the standard logging library.
+    Two values are returned: a list of the tasks which were not stopped
+    (or an empty list), and the response of the first task that couldn't
+    be stopped (or None if all were successfully stopped).
+    """ 
+    def stop_all_search_task(self, log=None):
+        for task in self._search_taskid_list:
+            try:
+                response = self.stop_search_task(task)
+            except self.SynologyError as err:
+                if log is not None:
+                    try:
+                        log.error(str(err))
+                    except AttributeError as err:
+                        pass
+                return self._search_task_id_list, response
+        return self._search_task_id_list, None
+    
+    """
+    method: get_mount_point_list
+    args:
+    kwargs: type,
+            offset,
+            limit,
+            sort_by
+            sort_direction,
+            additional
+    """
+    @Synology.api_call
+    def get_mount_point_list(self, **kwargs):
+        param = kwargs
 
-    def stop_all_search_task(self):
-        api_name = 'SYNO.FileStation.Search'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'stop', 'taskid': ''}
+        if 'additional' not in param.keys():
+            param['additional'] = ['real_path', 'size', 'owner', 'time']
 
-        assert len(self._search_taskid_list) is not 0, 'Task list is empty' + str(self._search_taskid_list)
+        if type(param['additional']) is list:
+            param['additional'] = str(param['additional'])
 
-        for task_id in self._search_taskid_list:
-            param['taskid'] = task_id
-            self.request_data(api_name, api_path, param)
+        return self.api_request('VirtualFolder', 'list', param)
+    
+    """
+    method: get_favorite_list
+    args:
+    kwargs: offset,
+            limit,
+            sort_by,
+            status_filter,
+            additional
+    """ 
+    @Synology.api_call
+    def get_favorite_list(self, **kwargs):
 
-        self._search_taskid_list = []
+        if 'additional' not in param.keys():
+            param['additional'] = ['real_path', 'size', 'owner', 'time']
 
-        return 'All task are stopped'
+        if type(param['additional']) is list:
+            param['additional'] = str(param['additional'])
 
-    def get_mount_point_list(self, mount_type=None, offset=None, limit=None, sort_by=None,
-                             sort_direction=None, additional=None):
+        return self.api_request('Favorite', 'list', param)
+    
+    @Synology.api_call
+    def add_a_favorite(self, path, name=None, index=None):
+        param = {'path': path}
+        if name is not None:
+            param['name'] = name
+        if param['index'] is not None:
+            param['index'] = index
 
-        api_name = 'SYNO.FileStation.VirtualFolder'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'list'}
-
-        if mount_type is not None:
-            param['type'] = mount_type
-
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param', 'additional', 'mount_type']:
-                if val is not None:
-                    param[str(key)] = val
-
-        if additional is None:
-            additional = ['real_path', 'size', 'owner', 'time']
-
-        if type(additional) is list:
-            additional = ','.join(additional)
-
-        param['additional'] = additional
-
-        return self.request_data(api_name, api_path, param)
-
-    def get_favorite_list(self, offset=None, limit=None, sort_by=None,
-                          status_filter=None, additional=None):
-
-        api_name = 'SYNO.FileStation.Favorite'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'list'}
-
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param', 'additional']:
-                if val is not None:
-                    param[str(key)] = val
-
-        if additional is None:
-            additional = ['real_path', 'size', 'owner', 'time']
-
-        if type(additional) is list:
-            additional = ','.join(additional)
-
-        param['additional'] = additional
-
-        return self.request_data(api_name, api_path, param)
-
-    def add_a_favorite(self, path=None, name=None, index=None):
-        api_name = 'SYNO.FileStation.Favorite'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'add'}
-
-        if path is None:
-            return 'Enter a valid path'
-
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param']:
-                if val is not None:
-                    param[str(key)] = val
-
-        return self.request_data(api_name, api_path, param)
-
-    def delete_a_favorite(self, path=None):
-        api_name = 'SYNO.FileStation.Favorite'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'delete'}
-
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param']:
-                if val is not None:
-                    param[str(key)] = val
-
-        return self.request_data(api_name, api_path, param)
-
+        return self.api_request('Favorite', 'add', param)
+    
+    @Synology.api_call
+    def delete_a_favorite(self, path):
+        return self.api_request('Favorite', 'delete', {'path': path})
+    
+    @Synology.api_call
     def clear_broken_favorite(self):
-        api_name = 'SYNO.FileStation.Favorite'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'clear_broken'}
-
-        return self.request_data(api_name, api_path, param)
-
-    def edit_favorite_name(self, path=None, new_name=None):
-        api_name = 'SYNO.FileStation.Favorite'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'edit'}
-
-        if path is None:
-            return 'Enter a valid path'
-        else:
-            param['path'] = path
-
-        if new_name is None:
-            return 'Enter a valid new_name'
-        else:
-            param['new_name'] = new_name
-
-        return self.request_data(api_name, api_path, param)
-
-    def replace_all_favorite(self, path=None, name=None):
-        api_name = 'SYNO.FileStation.Favorite'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'edit'}
-
+        return self.api_request(slef.app(), 'Favorite', 'clear_broken', param)
+    
+    @Synology.api_call
+    def edit_favorite_name(self, path, new_name):
+        return self.api_request('Favorite', 'edit',
+                {'path': path, 'new_name': new_name})
+    
+    @Synology.api_call
+    def replace_all_favorite(self, path, name):
         if type(path) is list:
-            path = ','.join(path)
-            param['path'] = path
-        elif path is not None:
-            param['path'] = path
-        else:
-            return 'Enter a valid path'
+            path = ",".join(path)
 
         if type(name) is list:
-            name = ','.join(name)
-            param['name'] = name
-        elif name is not None:
-            param['name'] = name
-        else:
-            return 'Enter a valid name'
+            path = ",".join(name)
 
-        return self.request_data(api_name, api_path, param)
-
-    def start_dir_size_calc(self, path=None):
-        api_name = 'SYNO.FileStation.DirSize'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'start'}
-
+        return self.api_request('Favorite', 'edit',
+                {'path': path, 'name': name})
+    
+    @Synology.api_call
+    def _start_dir_size_calc(self, path):
         if type(path) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in path]
-            path = new_path
-            path = '[' + ','.join(path) + ']'
-            param['path'] = path
-        elif path is not None:
-            param['path'] = path
-        else:
-            return 'Enter a valid path'
+            path = str(path)
 
-        response_id = '"' + self.request_data(api_name, api_path, param)['data']['taskid'] + '"'
+        return self.api_request('DirSize', 'start', param)
 
-        self._dir_taskid = response_id
-        self._dir_taskid_list.append(response_id)
+    def start_dir_size_calc(self, path):
+        response = self._start_dir_size_calc(path)
+        self._dir_taskid = response['data']['taskid']
+        self._dir_taskid_list.append(self._dir_taskid)
 
-        return 'You can now check the status of request with get_dir_status() , your id is: ' + self._dir_taskid
+        return response    
+    
+    @Synology.api_call
+    def _stop_dir_size_calc(self, taskid):
+        return self.api_request('DirName', 'stop',
+                {'taskid' = '"{t}"'.format(t=taskid))
 
-    def stop_dir_size_calc(self, taskid=None):
-        api_name = 'SYNO.FileStation.DirSize'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'stop', 'taskid': taskid}
+    def stop_dir_size_calc(self, taskid)
+        response = self._stop_dir_size_calc(taskid)
+        if not response['success']:
+            raise self.SynologyError(
+                    "Cannot stop task {t}.\nResponse: {r}".format(
+                        t=taskid, r=response))
+        self._dir_taskid_list.remove(taskid)
+        if self._dit_taskid is taskid:
+            self._dir_taskid = self._dir_taskid_list[-1]
 
-        if taskid is None:
-            return 'Enter a valid taskid choose between: ' + str(self._dir_taskid_list)
-        else:
-            param['taskid'] = '"' + taskid + '"'
-
-        self.request_data(api_name, api_path, param)
-        self._dir_taskid_list.remove('"' + taskid + '"')
-
-        return 'The task has been stopped'
-
+        return response
+    
+    @Synology.api_call
     def get_dir_status(self, taskid=None):
-        api_name = 'SYNO.FileStation.DirSize'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'status', 'taskid': taskid}
+            if taskid is None:
+                if self._dir_taskid is None:
+                    raise SynologyError("No DirSize tasks currently running.")
+                else:
+                    taskid = self._dir_taskid
 
-        if taskid is None and self._dir_taskid is not '':
-            param['taskid'] = self._dir_taskid
-        else:
-            return 'Did you run start_dir_size_calc() first? No task id found!' + str(self._dir_taskid_list)
+        return self.api_request('DirSize', 'status',
+                {'taskid': taskid})
 
-        return self.request_data(api_name, api_path, param)
+    @Synology.api_call
+    def _start_md5_calc(self, file_path):
+        return self.api_request('MD5', 'start',
+                {'file_path': file_path})
 
-    def start_md5_calc(self, file_path=None):
-        api_name = 'SYNO.FileStation.MD5'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'start'}
-
-        if file_path is None:
-            return 'Enter a correct file_path'
-        else:
-            param['file_path'] = file_path
-
-        self._md5_calc_taskid = self.request_data(api_name, api_path, param)['data']['taskid']
-        self._md5_calc_taskid_list.append(self._md5_calc_taskid)
-
-        return 'You can now check the status of request with get_md5_status() , your id is: ' + self._md5_calc_taskid
-
+    def start_md5_calc(self, file_path):
+        response = self._start_md5_calc(file_path)
+        self._md5_taskid = response['data']['taskid']
+        self._md5_taskid_list.append(self._md5_taskid)
+        return response
+    
+    @Synology.api_call
     def get_md5_status(self, taskid=None):
-        api_name = 'SYNO.FileStation.MD5'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'status'}
-
-        if taskid is None and self._md5_calc_taskid is not '':
-            param['taskid'] = self._md5_calc_taskid
-        elif taskid is not None:
-            param['taskid'] = taskid
-        else:
-            return 'Did you run start_md5_calc() first? No task id found! ' + str(self._md5_calc_taskid)
-
-        return self.request_data(api_name, api_path, param)
-
-    def stop_md5_calc(self, taskid=None):
-        api_name = 'SYNO.FileStation.DirSize'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'stop', 'taskid': taskid}
-
         if taskid is None:
-            return 'Enter a valid taskid choose between: ' + str(self._md5_calc_taskid_list)
-        else:
-            param['taskid'] = '"' + taskid + '"'
+            if self._md5_taskid is not None:
+                taskid = self._md5_taskid
+            else:
+                raise SynologyError("No MD5 tasks currently running.")
 
-        self.request_data(api_name, api_path, param)
-        self._md5_calc_taskid_list.remove(taskid)
+        return self.api_request('MD5', 'status',
+                {'taskid': taskid})
 
-        return 'The task has been stopped'
+    @Synology.api_call
+    def _stop_md5_calc(self, taskid):
+        self.api_request('MD5', 'stop',
+                {'taskid': taskid})
 
-    def check_permissions(self, path=None, filename=None, overwrite=None, create_only=None):
-        api_name = 'SYNO.FileStation.CheckPermission'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'write'}
+    def stop_md5_calc(self, taskid):
+        response = self._stop_md5_calc(tskid)
+        if response['success']:
+            self._md5_taskid_list.remove(taskid)
+            if self._md5_taskid is taskid:
+                self._md5_taskid = self._md5_taskid_list[-1]
 
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param']:
-                if val is not None:
-                    param[str(key)] = val
+        return response
+    
+    """
+    method: check_permissions
+    args: path, filename
+    kwargs: overwrite, create_only
+    """
+    @Synology.api_call
+    def check_permissions(self, path, filename, **kwargs):
+        param = kwargs
+        param['path'] = path
+        param['filename'] = filename
+        return self.api_request('CheckPermission', 'write', param)
 
-        if path is None:
-            return 'Enter a valid path'
 
-        if filename is None:
-            return 'Enter a valid name'
+    _url_ptrn = "{u}{p}?api={n}&version={m}&method=upload&_sid={s}"
+    """
+    method: upload_file
+    args: dest_path, file_path, log, create_parets=True, overwrite=False
+    FileStation.upload_file() works differently from other methods. Instead of
+    sending a single requests.request(), it opens a requests.session() to
+    upload the file found at 'file_path' on the client to 'dest_path' on the
+    NAS. As such, it does not use the usual @Synology.api_call decorator.
 
-        return self.request_data(api_name, api_path, param)
+    The 'log' argument is an object with an "error" method, such as the logger
+    from Python's standard library "logging". This is used in case of an error
+    during the file upload to make reporting on any errors easier. If any
+    exceptions are caught, the method returns false. Note that it is on the 
+    client to check for any errors regarding the file to be uploaded (such as
+    anything covered by OSError).
 
-    def upload_file(self, dest_path, file_path, create_parents=True, overwrite=True):
+    Note: I have not seen any other methods using a session yet, but if it's
+    common enough it may be worthwhile to create another decorator similar to
+    @Synology.api_call, such as @Synology.api_session.
+    """
+    def upload_file(self, dest_path, file_path, log,
+            create_parents=True, overwrite=False):
         api_name = 'SYNO.FileStation.Upload'
         info = self.file_station_list[api_name]
         api_path = info['path']
         filename = os.path.basename(file_path)
 
         session = requests.session()
+        try:
+            with open(file_path, 'rb') as payload:
+                url = self._url_ptrn.format(u=self.base_url, p=api_path,
+                        n=api_name, m=info['minVersion'], s=self._sid)
 
-        with open(file_path, 'rb') as payload:
-            url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=upload&_sid=%s' % (
-                api_name, info['minVersion'], self._sid)
+                args = {
+                    'path': dest_path,
+                    'create_parents': create_parents,
+                    'overwrite': overwrite,
+                }
 
-            args = {
-                'path': dest_path,
-                'create_parents': create_parents,
-                'overwrite': overwrite,
-            }
+                file_info = {'file': (filename, payload,
+                            'application/octet-stream')}
 
-            files = {'file': (filename, payload, 'application/octet-stream')}
+                r = session.post(url, data=args, files=file_info) 
+                return r
 
-            r = session.post(url, data=args, files=files)
+        except ConnectionError as err:
+            log.error("Could not connect to Synology.\nError: {e}".format(
+                        e=str(err)))
 
-            if r.status_code is 200 and r.json()['success']:
-                return 'Upload Complete'
-            else:
-                return r.status_code, r.json()
+        except requests.Timeout as err:
+            log.error("Request timed out.\nError: {e}".format(e=str(err)))
 
-    def get_shared_link_info(self, link_id=None):
-        api_name = 'SYNO.FileStation.Sharing'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'getinfo'}
+        except requests.exceptions.RequestException as err:
+            log.error("Session raised an exception.\nError: {e}".format(
+                        e=str(err)))
 
-        if link_id is None:
-            return 'Enter a valid id'
-        else:
-            param['id'] = link_id
+        return False
 
-        return self.request_data(api_name, api_path, param)
+    @Synology.api_call
+    def get_shared_link_info(self, link_id):
+        return self.api_request('Sharing', 'getinfo',
+                {'id': link_id})
+    
+    """
+    method: get_shared_link_list
+    kwargs: offset,
+            limit,
+            sort_by,
+            sort_direction,
+            force_clean
+    """
+    @Synology.api_call
+    def get_shared_link_list(self, **kwargs):
+        return self.api_request('Sharing', 'list', kwargs)
+    
+    """
+    method: create_sharing_link
+    args: path
+    kwargs: password,
+            date_expired,
+            date_available
+    """ 
+    @Synology.api_call
+    def create_sharing_link(self, path, **kwargs):
+        param = kwargs
+        param['path'] = path
+        return self.api_request('Sharing', 'create', param)
 
-    def get_shared_link_list(self, offset=None, limit=None, sort_by=None,
-                             sort_direction=None, force_clean=None):
-        api_name = 'SYNO.FileStation.Sharing'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'list'}
-
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param']:
-                if val is not None:
-                    param[str(key)] = val
-
-        return self.request_data(api_name, api_path, param)
-
-    def create_sharing_link(self, path=None, password=None, date_expired=None,
-                            date_available=None):
-        api_name = 'SYNO.FileStation.Sharing'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'create'}
-
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param']:
-                if val is not None:
-                    param[str(key)] = val
-
-        if path is None:
-            return 'Enter a valid path'
-
-        return self.request_data(api_name, api_path, param)
-
-    def delete_shared_link(self, link_id=None):
-        api_name = 'SYNO.FileStation.Sharing'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'delete'}
-
-        if link_id is None:
-            return 'Enter a valid id'
-        else:
-            param['id'] = link_id
-
-        return self.request_data(api_name, api_path, param)
-
+    @Synology.api_call
+    def delete_shared_link(self, link_id):
+        return self.api_request('Sharing', 'delete', {'id': link_id})
+    
+    @Synology.api_call
     def clear_invalid_shared_link(self):
-        api_name = 'SYNO.FileStation.Sharing'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'clear_invalid'}
-
-        return self.request_data(api_name, api_path, param)
-
-    def edit_shared_link(self, link_id=None, password=None, date_expired=None,
-                         date_available=None):
-        api_name = 'SYNO.FileStation.Sharing'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'edit'}
-
-        if link_id is None:
-            return 'Enter a valid id'
-        else:
-            param['id'] = link_id
-
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param']:
-                if val is not None:
-                    param[str(key)] = val
-
-        return self.request_data(api_name, api_path, param)
-
-    def create_folder(self, folder_path=None, name=None, force_parent=None, additional=None):
-        api_name = 'SYNO.FileStation.CreateFolder'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'create'}
-
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param', 'folder_path', 'additional', 'name']:
-                if val is not None:
-                    param[str(key)] = val
+        return self.api_request('Sharing', 'clear_invalid')
+    
+    """
+    method: edit_shared_link
+    args: link_id
+    kwargs: password,
+            date_expired,
+            date_available
+    """ 
+    @Synology.api_call
+    def edit_shared_link(self, link_id, **kwargs):
+        param = kwargs
+        param['id'] = link_id
+        return self.api_request('Sharing', 'edit', param)
+    
+    """
+    method: create_folder
+    args: folder_path, name
+    kwargs: force_parent, additional
+    """    
+    @Synology.api_call
+    def create_folder(self, folder_path, name, **kwargs):
+        param = **kwargs
 
         if type(folder_path) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in folder_path]
-            folder_path = new_path
-            folder_path = '[' + ','.join(folder_path) + ']'
-            param['folder_path'] = folder_path
-        elif folder_path is not None:
-            param['folder_path'] = folder_path
-        else:
-            return 'Enter a valid path'
+            new_fp = []
+            for path in folder_path:
+                path = '"{p}"'.format(path)
+                new_fp.append(path)
+            folder_path = str(new_fp)
+        param['folder_path'] = folder_path
 
         if type(name) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in name]
-            name = new_path
-            name = '[' + ','.join(name) + ']'
-            param['name'] = name
-        elif name is not None:
-            param['name'] = name
-        else:
-            return 'Enter a valid path'
+            new_name = []
+            for nm in name:
+                nm = '"{n}"'.format(n=nm)
+                new_name.append(nm) 
+            name = str(new_name)
+        param['name'] = name
 
-        if additional is None:
-            additional = ['real_path', 'size', 'owner', 'time']
+        if 'additional' not in param.keys():
+            param['additional'] = ['real_path', 'size', 'owner', 'time']
 
-        if type(additional) is list:
-            additional = ','.join(additional)
+        if type(param['additional']) is list:
+            param['additional'] = ','.join(param['additional'])
 
-        param['additional'] = additional
+        return self.api_request('CreateFolder', 'create', param)
 
-        return self.request_data(api_name, api_path, param)
-
-    def rename_folder(self, path=None, name=None, additional=None, search_taskid=None):
-        api_name = 'SYNO.FileStation.Rename'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'rename'}
+    """
+    method: rename_folder
+    args: path, name
+    kwargs: additional, search_taskid
+    """ 
+    @Synology.api_call
+    def rename_folder(self, path, name, **kwargs):
+        param = kwargs
 
         if type(path) is list:
             new_path = []
-            [new_path.append('"' + x + '"') for x in path]
-            path = new_path
-            path = '[' + ','.join(path) + ']'
-            param['path'] = path
-        elif path is not None:
-            param['path'] = path
-        else:
-            return 'Enter a valid path'
+            for np in path:
+                np = '"{n}"'.format(n=np)
+                new_path.append(np)
+            path = str(new_path)
+        param['path'] = path
 
         if type(name) is list:
             new_path = []
-            [new_path.append('"' + x + '"') for x in name]
-            name = new_path
-            name = '[' + ','.join(name) + ']'
-            param['name'] = name
-        elif name is not None:
-            param['name'] = name
-        else:
-            return 'Enter a valid path'
+            for np in path:
+                np = '"{n}"'.format(n=np)
+                new_path.append(np)
+            name = str(new_path)
+        param['name'] = name
 
-        if additional is None:
-            additional = ['real_path', 'size', 'owner', 'time']
+        if 'additional' not in param.keys():
+            param['additional'] = ['real_path', 'size', 'owner', 'time']
 
-        if type(additional) is list:
-            additional = ','.join(additional)
+        if type(param['additional']) is list:
+            param['additional'] = ','.join(param['additional'])
 
-        param['additional'] = additional
-
-        if search_taskid is not None:
-            param['search_taskid'] = search_taskid
-
-        return self.request_data(api_name, api_path, param)
+        return self.api_request('Rename', 'rename', param)
 
     def start_copy_move(self, path=None, dest_folder_path=None, overwrite=None, remove_src=None,
                         accurate_progress=None, search_taskid=None):
@@ -713,7 +634,7 @@ class FileStation(Synology):
                 if val is not None:
                     param[str(key)] = val
 
-        self._copy_move_taskid = self.request_data(api_name, api_path, param)['data']['taskid']
+        self._copy_move_taskid = self.api_request(api_name, api_path, param)['data']['taskid']
         self._dir_taskid_list.append(self._copy_move_taskid)
 
         return 'You can now check the status of request with get_copy_move_status() , ' \
@@ -730,7 +651,7 @@ class FileStation(Synology):
         else:
             param['taskid'] = '"' + taskid + '"'
 
-        return self.request_data(api_name, api_path, param)
+        return self.api_request(api_name, api_path, param)
 
     def stop_copy_move_task(self, taskid=None):
         api_name = 'SYNO.FileStation.CopyMove'
@@ -745,7 +666,7 @@ class FileStation(Synology):
 
         self._copy_move_taskid_list.remove(taskid)
 
-        return self.request_data(api_name, api_path, param)
+        return self.api_request(api_name, api_path, param)
 
     def start_delete_task(self, path=None, accurate_progress=None, recursive=None, search_taskid=None):
         api_name = 'SYNO.FileStation.Delete'
@@ -769,7 +690,7 @@ class FileStation(Synology):
                 if val is not None:
                     param[str(key)] = val
 
-        self._delete_taskid = self.request_data(api_name, api_path, param)['data']['taskid']
+        self._delete_taskid = self.api_request(api_name, api_path, param)['data']['taskid']
         self._delete_taskid_list.append(self._delete_taskid)
 
         return 'You can now check the status of request with get_delete_status() , ' \
@@ -786,7 +707,7 @@ class FileStation(Synology):
         else:
             param['taskid'] = taskid
 
-        return self.request_data(api_name, api_path, param)
+        return self.api_request(api_name, api_path, param)
 
     def stop_delete_task(self, taskid=None):
         api_name = 'SYNO.FileStation.Delete'
@@ -801,7 +722,7 @@ class FileStation(Synology):
 
         self._delete_taskid_list.remove('"' + taskid + '"')
 
-        return self.request_data(api_name, api_path, param)
+        return self.api_request(api_name, api_path, param)
 
     def delete_blocking_function(self, path=None, recursive=None, search_taskid=None):
         api_name = 'SYNO.FileStation.Delete'
@@ -827,7 +748,7 @@ class FileStation(Synology):
 
         'This function will stop your script until done! Do not interrupt '
 
-        return self.request_data(api_name, api_path, param)
+        return self.api_request(api_name, api_path, param)
 
     def start_extract_task(self, file_path=None, dest_folder_path=None, overwrite=None, keep_dir=None,
                            create_subfolder=None, codepage=None, password=None, item_id=None):
@@ -848,7 +769,7 @@ class FileStation(Synology):
         if dest_folder_path is None:
             return 'Enter a valid dest_folder_path'
 
-        self._extract_taskid = self.request_data(api_name, api_path, param)['data']['taskid']
+        self._extract_taskid = self.api_request(api_name, api_path, param)['data']['taskid']
 
         self._extract_taskid_list.append(self._extract_taskid)
 
@@ -866,7 +787,7 @@ class FileStation(Synology):
         else:
             param['taskid'] = taskid
 
-        return self.request_data(api_name, api_path, param)
+        return self.api_request(api_name, api_path, param)
 
     def stop_extract_task(self, taskid=None):
         api_name = 'SYNO.FileStation.Extract'
@@ -881,7 +802,7 @@ class FileStation(Synology):
 
         self._extract_taskid_list.remove(taskid)
 
-        return self.request_data(api_name, api_path, param)
+        return self.api_request(api_name, api_path, param)
 
     def get_file_list_of_archive(self, file_path=None, offset=None, limit=None, sort_by=None,
                                  sort_direction=None, codepage=None, password=None, item_id=None):
@@ -898,7 +819,7 @@ class FileStation(Synology):
         if file_path is None:
             return 'Enter a valid file_path'
 
-        return self.request_data(api_name, api_path, param)
+        return self.api_request(api_name, api_path, param)
 
     def start_file_compression(self, path=None, dest_file_path=None, level=None, mode=None,
                                compress_format=None, password=None):
@@ -933,7 +854,7 @@ class FileStation(Synology):
         if password is not None:
             param['_password'] = password
 
-        self._compress_taskid = self.request_data(api_name, api_path, param)['data']['taskid']
+        self._compress_taskid = self.api_request(api_name, api_path, param)['data']['taskid']
 
         return 'You can now check the status of request with get_compress_status() , ' \
                'your id is: ' + self._compress_taskid
@@ -949,7 +870,7 @@ class FileStation(Synology):
         else:
             param['taskid'] = taskid
 
-        return self.request_data(api_name, api_path, param)
+        return self.api_request(api_name, api_path, param)
 
     def stop_compress_task(self, taskid=None):
         api_name = 'SYNO.FileStation.Compress'
@@ -962,7 +883,7 @@ class FileStation(Synology):
         else:
             param['taskid'] = taskid
 
-        return self.request_data(api_name, api_path, param)
+        return self.api_request(api_name, api_path, param)
 
     def get_list_of_all_background_task(self, offset=None, limit=None, sort_by=None,
                                         sort_direction=None, api_filter=None):
@@ -983,7 +904,7 @@ class FileStation(Synology):
             api_filter = '[' + ','.join(api_filter) + ']'
             param['api_filter'] = api_filter
 
-        return self.request_data(api_name, api_path, param)
+        return self.api_request(api_name, api_path, param)
 
     def get_file(self, path=None, mode=None):
         api_name = 'SYNO.FileStation.Download'

@@ -29,6 +29,9 @@ class Synology:
     def _response(self, urlpath, param):
         return requests.get(self.url + urlpath, param)
 
+    def app(self):
+        raise NotImplementedError("Application undefined.")
+
     def login(self, app):
         param = {'version': '2', 'method': 'login', 'account': self.user,
                  'passwd': self.passwd, 'session': app, 'format': 'cookie'}
@@ -85,12 +88,13 @@ class Synology:
                 data.append(key)
         return data
 
-    def api_request(self, app, api_name, api_method, param=None):
-        r = {'app': app, 'api_name': api_name, 'api_method': api_method}
+    def api_request(self, api_name, api_method, param=None):
+        r = {'app': self.app(), 'api_name': api_name, 'api_method': api_method}
         if param is not None:
             r.update(param)
         return r
-
+    
+    @classmethod
     def api_call(self, method=None, response_json=True):
         def decorator_api_call(func):
             global method
