@@ -598,160 +598,122 @@ class FileStation(Synology):
             param['additional'] = ','.join(param['additional'])
 
         return self.api_request('Rename', 'rename', param)
-
-    def start_copy_move(self, path=None, dest_folder_path=None, overwrite=None, remove_src=None,
-                        accurate_progress=None, search_taskid=None):
-        api_name = 'SYNO.FileStation.CopyMove'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'start'}
-
-        if type(path) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in path]
-            path = new_path
-            path = '[' + ','.join(path) + ']'
-            param['path'] = path
-        elif path is not None:
-            param['path'] = path
-        else:
-            return 'Enter a valid path'
-
-        if type(dest_folder_path) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in dest_folder_path]
-            dest_folder_path = new_path
-            dest_folder_path = '[' + ','.join(dest_folder_path) + ']'
-            param['name'] = dest_folder_path
-        elif dest_folder_path is not None:
-            param['dest_folder_path'] = dest_folder_path
-        else:
-            return 'Enter a valid path'
-
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param', 'path', 'additional',
-                           'dest_folder_path', 'new_path']:
-                if val is not None:
-                    param[str(key)] = val
-
-        self._copy_move_taskid = self.api_request(api_name, api_path, param)['data']['taskid']
-        self._dir_taskid_list.append(self._copy_move_taskid)
-
-        return 'You can now check the status of request with get_copy_move_status() , ' \
-               'your id is: ' + self._copy_move_taskid
-
-    def get_copy_move_status(self, taskid=None):
-        api_name = 'SYNO.FileStation.CopyMove'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'status'}
-
-        if taskid is None:
-            return 'Enter a valid taskid choose between ' + str(self._copy_move_taskid_list)
-        else:
-            param['taskid'] = '"' + taskid + '"'
-
-        return self.api_request(api_name, api_path, param)
-
-    def stop_copy_move_task(self, taskid=None):
-        api_name = 'SYNO.FileStation.CopyMove'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'stop'}
-
-        if taskid is None:
-            return 'Enter a valid taskid choose between ' + str(self._copy_move_taskid_list)
-        else:
-            param['taskid'] = taskid
-
-        self._copy_move_taskid_list.remove(taskid)
-
-        return self.api_request(api_name, api_path, param)
-
-    def start_delete_task(self, path=None, accurate_progress=None, recursive=None, search_taskid=None):
-        api_name = 'SYNO.FileStation.Delete'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'start'}
+    
+    """
+    method: start_copy_move
+    args: path, dest_folder
+    kwargs: overwite,
+            remove_src,
+            accurate_progress,
+            search_taskid
+    """
+    @Synology.api_call
+    def _start_copy_move(self, path, dest_folder, **kwargs):
+        param = kwargs 
 
         if type(path) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in path]
-            path = new_path
-            path = '[' + ','.join(path) + ']'
-            param['path'] = path
-        elif path is not None:
-            param['path'] = path
-        else:
-            return 'Enter a valid path'
+            path = str(path)
+        param['path'] = path
 
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param', 'path', 'new_path']:
-                if val is not None:
-                    param[str(key)] = val
+        if type(dest_folder) is list:
+            dest_folder = str(dest_folder)
+        param['name'] = dest_folder
 
-        self._delete_taskid = self.api_request(api_name, api_path, param)['data']['taskid']
-        self._delete_taskid_list.append(self._delete_taskid)
+        return self.api_request('CopyMove', 'start', param)
+        
+    def start_copy_move(self, path, dest_folder, **kwargs): 
+        response = self._start_copy_move(path, dest_folder, **kwargs)
+        if response['success']:
+            self._copy_move_taskid = response['data']['taskid']
+            self._dir_taskid_list.append(self._copy_move_taskid)
+        return response
+    
+    @Synology.api_call
+    def get_copy_move_status(self, taskid):
+        return self.api_request('CopyMove', 'status', {'taskid': taskid})
+    
+    @Synology.api_call
+    def _stop_copy_move_task(self, taskid):
+        return self.api_request('CopyMove', 'stop', param)
 
-        return 'You can now check the status of request with get_delete_status() , ' \
-               'task id is: ' + self._delete_taskid
+    def stop_copy_move_taks(self, taskid):
+        response = self._copy_move_task(taskid)
+        
+        if response['success']:
+            self._copy_move_taskid_list.remove(taskid)
+            if self._copy_move_taskid is taskid:
+                self._copy_move_taskid = self._copy_move_taskid_list[-1]
 
-    def get_delete_status(self, taskid=None):
-        api_name = 'SYNO.FileStation.Delete'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'status'}
+        return response
+   
+    """
+    method: start_delete_task
+    args: path
+    kwargs: accurate_progress,
+            recursive,
+            search_taskid
+    """ 
+    @Synology.api_call
+    def _start_delete_task(self, path, **kwargs):
+        if type(path) is list:
+            path = str(path)
+        param['path'] = path
+        return self.api_request('Delete', 'start', param)
+    
+    def start_delete_task(self, path, **kwargs):
+        response = self._start_delete_taks(path, **kwargs)
+        if response['success']:
+            self._delete_taskid = response['data']['taskid']
+            self._delete_taskid_list.append(self._delete_taskid)
+        return response
+    
+    @Synology.api_call
+    def get_delete_status(self, taskid):
+        return self.api_request('Delete', 'status', {'param': param})
+    
+    @Synology.api_call
+    def _stop_delete_task(self, taskid):
+        return self.api_request('Delete', 'stop', {'taskid': taskid})
+    
+    def stop_delete_task(self, taskid):
+        response = self._stop_delete_task(taskid)
+        if response['success']:
+            self._delete_taskid_list.remove(taskid)
+            if self._delete_taskid is taskid:
+                self._delete_taskid = self._delete_taskid_list[-1]
+        return response 
+    
+    """
+    method: delete_blocking_function
+    args: path
+    kwargs: recursive,
+            search_taskid
 
-        if taskid is None:
-            return 'Enter a valid taskid, choose between ' + str(self._delete_taskid_list)
-        else:
-            param['taskid'] = taskid
-
-        return self.api_request(api_name, api_path, param)
-
-    def stop_delete_task(self, taskid=None):
-        api_name = 'SYNO.FileStation.Delete'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'stop'}
-
-        if taskid is None:
-            return 'Enter a valid taskid, choose between ' + str(self._delete_taskid_list)
-        else:
-            param['taskid'] = taskid
-
-        self._delete_taskid_list.remove('"' + taskid + '"')
-
-        return self.api_request(api_name, api_path, param)
-
-    def delete_blocking_function(self, path=None, recursive=None, search_taskid=None):
-        api_name = 'SYNO.FileStation.Delete'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'delete'}
+    delete_blocking_function may appear to hang for a while. This is normal.
+    TODO: possibly add async option?
+    """
+    @Synology.api_call
+    def delete_blocking_function(self, path, **kwargs):
+        param = kwargs
 
         if type(path) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in path]
-            path = new_path
-            path = '[' + ','.join(path) + ']'
-            param['path'] = path
-        elif path is not None:
-            param['path'] = path
-        else:
-            return 'Enter a valid path'
+            path = str(path)
+        param['path'] = path
 
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param', 'path', 'new_path']:
-                if val is not None:
-                    param[str(key)] = val
-
-        'This function will stop your script until done! Do not interrupt '
-
-        return self.api_request(api_name, api_path, param)
-
-    def start_extract_task(self, file_path=None, dest_folder_path=None, overwrite=None, keep_dir=None,
-                           create_subfolder=None, codepage=None, password=None, item_id=None):
+        return self.api_request('Delete', 'delete', param)
+    
+    """
+    method: start_extract_task
+    args: file_path, dest_folder
+    kwargs: overwrite,
+            keep_dir,
+            create_subfolder,
+            codepage,
+            password,
+            item_id
+    """
+    @Synology.api_call
+    def start_extract_task(self, file_path, dest_folder, **kwargs):
         api_name = 'SYNO.FileStation.Extract'
         info = self.file_station_list[api_name]
         api_path = info['path']

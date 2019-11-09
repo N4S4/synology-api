@@ -28,7 +28,15 @@ class Synology:
 
     def _response(self, urlpath, param):
         return requests.get(self.url + urlpath, param)
-
+    
+    """
+    method: app
+    raises: NotImplementedError
+    This method is a placeholder to be overridden in classes that inherit
+    the 'Synology' class. In those classes it should return a string with the
+    name of the class's associated application. Here it will raise a
+    NotImplementedError.
+    """
     def app(self):
         raise NotImplementedError("Application undefined.")
 
