@@ -88,7 +88,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def create_task(self, uri, unzip_password=None, destination=None):
+    def task_create(self, uri, unzip_password=None, destination=None):
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
