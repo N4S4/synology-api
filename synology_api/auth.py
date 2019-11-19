@@ -19,10 +19,9 @@ class Authentication:
         param = {'version': '2', 'method': 'login', 'account': self._username,
                  'passwd': self._password, 'session': application, 'format': 'cookie'}
 
-        if not self._session_expire:
-            if self._sid is not None:
-                self._session_expire = False
-                return 'User already logged'
+        if not self._session_expire and self._sid is not None:
+            self._session_expire = False
+            return 'User already logged'
         else:
             session_request = requests.get(self._base_url + login_api, param)
             self._sid = session_request.json()['data']['sid']
@@ -92,28 +91,21 @@ class Authentication:
             if isinstance(v, bool):
                 req_param[k] = str(v).lower()
 
-        if method is None:
-            method = 'get'
-
         req_param['_sid'] = self._sid
 
-        if method is 'get':
-            url = ('%s%s' % (self._base_url, api_path)) + '?api=' + api_name
+        url = ('%s%s' % (self._base_url, api_path)) + '?api=' + api_name
+        # checking and handling HTTP-Method (perform a request)
+        if method.lower() is 'get' or method is None:
             response = requests.get(url, req_param)
-
-            if response_json is True:
-                return response.json()
-            else:
-                return response
-
-        elif method is 'post':
-            url = ('%s%s' % (self._base_url, api_path)) + '?api=' + api_name
+        elif method.lower() is 'post':
             response = requests.post(url, req_param)
-
-            if response_json is True:
-                return response.json()
-            else:
-                return response
+        else: #raise error method not found
+            raise ValueError("method value:'{}' is not valid".format(method))
+        
+        if response_json is True:
+            return response.json()
+        else:
+            return response
 
     @property
     def sid(self):
