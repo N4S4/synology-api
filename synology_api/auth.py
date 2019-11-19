@@ -19,10 +19,9 @@ class Authentication:
         param = {'version': '2', 'method': 'login', 'account': self._username,
                  'passwd': self._password, 'session': application, 'format': 'cookie'}
 
-        if not self._session_expire:
-            if self._sid is not None:
-                self._session_expire = False
-                return 'User already logged'
+        if not self._session_expire and self._sid is not None:
+            self._session_expire = False
+            return 'User already logged'
         else:
             session_request = requests.get(self._base_url + login_api, param)
             self._sid = session_request.json()['data']['sid']
