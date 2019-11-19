@@ -120,7 +120,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete_task(self, task_id, force=False):
+    def task_delete(self, task_id, force=False):
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -132,7 +132,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def pause_task(self, task_id):
+    def task_pause(self, task_id):
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -143,7 +143,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def resume_task(self, task_id):
+    def task_resume(self, task_id):
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -154,7 +154,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def edit_task(self, task_id, destination='sharedfolder'):
+    def task_edit(self, task_id, destination='sharedfolder'):
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -165,7 +165,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def get_statistic_info(self):
+    def statistic_get_info(self):
         api_name = 'SYNO.DownloadStation.Statistic'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -173,7 +173,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def get_rss_info_list(self, offset=None, limit=None):
+    def rss_site_get_info_list(self, offset=None, limit=None):
         api_name = 'SYNO.DownloadStation.RSS.Site'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -186,7 +186,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def refresh_rss_site(self, rss_id=None):
+    def rss_site_refresh(self, rss_id=None):
         api_name = 'SYNO.DownloadStation.RSS.Site'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -219,7 +219,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def start_bt_search(self, keyword=None, module='all'):
+    def bt_search_start(self, keyword=None, module='all'):
         api_name = 'SYNO.DownloadStation.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -238,7 +238,7 @@ class DownloadStation:
 
         return 'You can now check the status of request with get_bt_search_results(), your id is: ' + self._bt_search_id
 
-    def get_bt_search_results(self, taskid=None, offset=None, limit=None, sort_by=None, sort_direction=None,
+    def bt_search_get_results(self, taskid=None, offset=None, limit=None, sort_by=None, sort_direction=None,
                               filter_category=None, filter_title=None):
         api_name = 'SYNO.DownloadStation.BTSearch'
         info = self.download_list[api_name]
@@ -257,7 +257,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def get_bt_search_category(self):
+    def bt_search_get_category(self):
         api_name = 'SYNO.DownloadStation.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -265,7 +265,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def clean_bt_search(self, taskid=None):
+    def bt_search_clean(self, taskid=None):
         api_name = 'SYNO.DownloadStation.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -282,7 +282,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def get_bt_module(self):
+    def bt_search_get_module(self):
         api_name = 'SYNO.DownloadStation.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
