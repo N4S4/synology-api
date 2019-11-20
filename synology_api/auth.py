@@ -104,7 +104,6 @@ class Authentication:
             response = requests.get(url, headers=requestHeaders, params = req_param)
         elif method.lower() == 'post':
             response = requests.post(url, headers=requestHeaders, data = req_param)
-            print('URL:{}'.format(response.url))
         else: #raise error method not found
             raise ValueError("method value:'{}' is not valid".format(method))
         
