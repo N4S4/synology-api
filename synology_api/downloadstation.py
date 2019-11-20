@@ -75,6 +75,17 @@ class DownloadStation:
         return self.request_data(api_name, api_path, req_param)
 
     def tasks_list(self, additional_param=None):
+        """
+offset  Optional. Beginning task on the requested record. Default to “0”.
+limit   Optional. Number of records requested: “-1” means to list all tasks. Default to “-1”.
+additional  Optional. Additional requested info, as string-list. When an additional option is requested, objects will be provided in the specified additional option.
+    Possible additional options include:
+     detail: returns Task_Detail object
+     transfer: returns Task_Transfer object
+     file: returns Task_File object (BT only)
+     tracker: returns Task_Tracker object (BT only)
+     peer: returns Task_Peer object (BT only)
+        """
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -89,6 +100,17 @@ class DownloadStation:
         return self.request_data(api_name, api_path, req_param)
 
     def task_create(self, uri, unzip_password=None, destination=None):
+        """
+uri             Optional. Accepts HTTP/FTP/magnet/ED2K links or the file path starting with a shared folder, multiple enter as list.
+file            Optional. File uploading from client. For more info, please see Limitations:
+                    Due to multipart upload limitations, creating tasks by uploading files should adhere to one of the following implementations:
+                        a Set the upload files as the only POST request method data, and set other files as GET parameters.
+                        b Set all the parameters as POST data, and the upload file should implement LAST parameters.
+username        Optional. Login username (FTP,...)
+password        Optional. Login password (FTP,...)
+unzip_password  Optional. Password for unzipping download tasks
+destination     Optional. Download destination path (!!) starting with a shared folder
+        """
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -97,9 +119,9 @@ class DownloadStation:
         if isinstance(uri, list):
             param['uri'] = ",".join(uri)
         if unzip_password is not None:
-            parm['unzip_password'] = unzip_password
+            param['unzip_password'] = unzip_password
         if destination is not None:
-            parm['destination'] = destination
+            param['destination'] = destination
         
         return self.request_data(api_name, api_path, param, method="post")
 
@@ -121,6 +143,11 @@ class DownloadStation:
         return self.request_data(api_name, api_path, req_param)
 
     def task_delete(self, task_id, force=False):
+        """
+Parameter   Description
+id          Task IDs to be deleted, multiple enter as list.
+force       Delete tasks and force to move uncompleted download files to the destination.
+        """
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
