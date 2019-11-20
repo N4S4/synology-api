@@ -95,9 +95,9 @@ class Authentication:
 
         url = ('%s%s' % (self._base_url, api_path)) + '?api=' + api_name
         # checking and handling HTTP-Method (perform a request)
-        if method is None or method.lower() is 'get':
+        if method is None or method.lower() == 'get':
             response = requests.get(url, req_param)
-        elif method.lower() is 'post':
+        elif method.lower() == 'post':
             response = requests.post(url, req_param)
         else: #raise error method not found
             raise ValueError("method value:'{}' is not valid".format(method))
