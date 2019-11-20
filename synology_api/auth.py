@@ -17,7 +17,7 @@ class Authentication:
     def login(self, application):
         login_api = 'auth.cgi?api=SYNO.API.Auth'
         param = {'version': '2', 'method': 'login', 'account': self._username,
-                 'passwd': self._password, 'session': application, 'format': 'cookie'}
+                 'passwd': self._password, 'session': application, 'format': 'sid'}
 
         if not self._session_expire and self._sid is not None:
             self._session_expire = False
