@@ -1,5 +1,9 @@
 import requests
 
+requestHeaders = {
+        #'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36',
+        'Content-type': 'multipart/form-data',
+}
 
 class Authentication:
     def __init__(self, ip_address, port, username, password):
@@ -97,9 +101,9 @@ class Authentication:
         url = ('%s%s' % (self._base_url, api_path))
         # checking and handling HTTP-Method (perform a request)
         if method is None or method.lower() == 'get':
-            response = requests.get(url, params = req_param)
+            response = requests.get(url, headers=requestHeaders, params = req_param)
         elif method.lower() == 'post':
-            response = requests.post(url, data = req_param)
+            response = requests.post(url, headers=requestHeaders, data = req_param)
             print('URL:{}'.format(response.url))
         else: #raise error method not found
             raise ValueError("method value:'{}' is not valid".format(method))
