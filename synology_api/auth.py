@@ -92,13 +92,14 @@ class Authentication:
                 req_param[k] = str(v).lower()
 
         req_param['_sid'] = self._sid
+        req_param['api'] = api_name
 
-        url = ('%s%s' % (self._base_url, api_path)) + '?api=' + api_name
+        url = ('%s%s' % (self._base_url, api_path))
         # checking and handling HTTP-Method (perform a request)
         if method is None or method.lower() == 'get':
-            response = requests.get(url, req_param)
+            response = requests.get(url, params = req_param)
         elif method.lower() == 'post':
-            response = requests.post(url, req_param)
+            response = requests.post(url, data = req_param)
         else: #raise error method not found
             raise ValueError("method value:'{}' is not valid".format(method))
         
