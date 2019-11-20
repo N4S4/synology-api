@@ -95,8 +95,22 @@ class Synology:
             if app.lower() in key.lower():
                 data.append(key)
         return data
+    
+    def api_request(self, api_name:str, api_method:str, param=None):
+        """
+        api_request acta as a factory for constructing request data objects.
+        It is intended to be called as the return value of methods decorated
+        by 'Synology.api_call'.
+        
+        Args:
+            api_name (str): Which API to use.
+            api_method (str): Which method of the API to use.
+            param: Defaults to None. If provided, should be a dict containing
+                   any of the api method's parameters.
 
-    def api_request(self, api_name, api_method, param=None):
+        Returns:
+            api_request: a request data object
+        """
         r = {'app': self.app(), 'api_name': api_name, 'api_method': api_method}
         if param is not None:
             r.update(param)
@@ -104,12 +118,31 @@ class Synology:
     
     @classmethod
     def api_call(self, method=None, response_json=True):
+        """
+        api_call is a decorator function used to call the methods of various
+        API's provided by DSM. It is intended to decorate methods of classes
+        which inherit the Synology class.
+
+        Methods decorated by api_call should return a call to
+        'Synology.api_request', which acts as a factory for the request data
+        object. Classes which inherit the Synology class will of course call
+        'self.api_request' instead, but note that the decoration for the method
+        will remain 'Synology.api_call'.
+
+        Arg:
+            method (str or None): 'post' or 'get', defaults to None. If None,
+                                  or if not 'post' or 'get', use 'get'.
+            response_json (bool): Defaults to True. Determines Whether the
+                                  response should be in json format.
+
+        Returns:
+            api_call: a decorator function (which returns a wrapper function).
+        """
         def decorator_api_call(func):
             @functools.wraps(func)
             def wrap_api_call(*args, **kwargs):
                 global method
                 reqdata = func(*args, **kwargs)
-                #print(type(func))
                 api_str = 'SYNO.{a}.{m}'.format(a=reqdata['app'],
                                             m=reqdata['api_name'])
                 api_path = self.app_api_dict['path']

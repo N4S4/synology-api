@@ -714,74 +714,48 @@ class FileStation(Synology):
     """
     @Synology.api_call
     def start_extract_task(self, file_path, dest_folder, **kwargs):
-        api_name = 'SYNO.FileStation.Extract'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'start', 'file_path': file_path,
-                     'dest_folder_path': dest_folder_path}
+        param = kwargs
+        param['file_path'] = file_path
+        param['dest_folder_path'] = dest_folder
+        
+        response = self.api_request('Extract', 'start', param)
 
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param']:
-                if val is not None:
-                    param[str(key)] = val
-
-        if file_path is None:
-            return 'Enter a valid file_path'
-
-        if dest_folder_path is None:
-            return 'Enter a valid dest_folder_path'
-
-        self._extract_taskid = self.api_request(api_name, api_path, param)['data']['taskid']
-
+        self._extract_taskid = response['data']['taskid']
         self._extract_taskid_list.append(self._extract_taskid)
 
-        return 'You can now check the status of request with get_extract_status() , ' \
-               'your id is: ' + self._extract_taskid
+        return response
 
-    def get_extract_status(self, taskid=None):
-        api_name = 'SYNO.FileStation.Extract'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'status'}
+    def get_extract_status(self, taskid):
+        return self.api_request('Extract', 'status', {'taskid': taskid})
+    
+    @Synology.api_call
+    def _stop_extract_task(self, taskid):
+        return self.api_request('Extract', 'stop', {'taskid': taskid})
 
-        if taskid is None:
-            return 'Enter a valid taskid, choose between ' + str(self._extract_taskid_list)
-        else:
-            param['taskid'] = taskid
-
-        return self.api_request(api_name, api_path, param)
-
-    def stop_extract_task(self, taskid=None):
-        api_name = 'SYNO.FileStation.Extract'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'stop'}
-
-        if taskid is None:
-            return 'Enter a valid taskid, choose between ' + str(self._extract_taskid_list)
-        else:
-            param['taskid'] = taskid
-
-        self._extract_taskid_list.remove(taskid)
-
-        return self.api_request(api_name, api_path, param)
-
-    def get_file_list_of_archive(self, file_path=None, offset=None, limit=None, sort_by=None,
-                                 sort_direction=None, codepage=None, password=None, item_id=None):
-        api_name = 'SYNO.FileStation.Extract'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'list'}
-
-        for key, val in locals().items():
-            if key not in ['self', 'api_name', 'info', 'api_path', 'param']:
-                if val is not None:
-                    param[str(key)] = val
-
-        if file_path is None:
-            return 'Enter a valid file_path'
-
-        return self.api_request(api_name, api_path, param)
+    def stop_extract_task(self, taskid):
+        response = self._stop_extract_task(taskid)
+        if response['success']:
+            self._extract_taskid_list.remove(taskid)
+            if self._extract_taskid is taskid:
+                self._extract_taskid = self._extract_taksid_list[-1]
+        return response
+    
+    """
+    method: get_archive_file_list
+    args: file_path
+    kwargs: offset,
+            limit,
+            sort_by,
+            sort_direction,
+            codepage,
+            password,
+            item_id
+    """
+    @Synology.api_call
+    def get_archive_file_list(self, file_path, **kwargs):
+        param = kwargs
+        param['file_path'] = file_path
+        return self.api_request('Extract', 'list', param)
 
     def start_file_compression(self, path=None, dest_file_path=None, level=None, mode=None,
                                compress_format=None, password=None):
