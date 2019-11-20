@@ -95,7 +95,7 @@ class Authentication:
 
         url = ('%s%s' % (self._base_url, api_path)) + '?api=' + api_name
         # checking and handling HTTP-Method (perform a request)
-        if method.lower() is 'get' or method is None:
+        if method is None or method.lower() is 'get':
             response = requests.get(url, req_param)
         elif method.lower() is 'post':
             response = requests.post(url, req_param)
