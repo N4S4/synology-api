@@ -11,8 +11,17 @@ for hobby as is my passion and in my **little** free time.
 Said this you will find many things can be simplified and I slowly will.
 
 If you wish to help me you are welcome!
+ 
+ 
+## SOMETHING GOING ON IN OUR MINDS
 
-
+We are working on a major update which will change how the wrapper works on the backstage, 
+improvements in responses speed and less resources used on your NAS. 
+We are trying to keep functions name in the same way so you wont have many (or at all ) issues if you were using it before.
+Once the update is ready and stable the following wrapper will be deprecated but not cancelled.
+You can find the active branch, on this page, named 'Improving-code'.
+If you wish to help just don't be shy and let us know!
+ 
 ## Premise
 
 I've tried this wrapper only with python3 
