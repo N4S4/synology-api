@@ -1,94 +1,90 @@
-from . import auth as syn
+from .synology import Synology
 
 
-class AudioStation:
+class AudioStation(Synology):
+
+    def app(self):
+        return 'AudioStation'
 
     def __init__(self, ip_address, port, username, password):
-        self.session = syn.Authentication(ip_address, port, username, password)
+        super(AudioStation, self).__init__(ip_address, port, username,
+                                           password)
 
-        self.session.login('AudioStation')
-        self.session.get_api_list('AudioStation')
-
-        self.request_data = self.session.request_data
-        self.audiostation_list = self.session.app_api_list
-        self._sid = self.session.sid
-        self.base_url = self.session.base_url
+        self.login(self.app())
+        self.populate_api_dict(self.app())
 
         print('You are now logged in!')
 
     def logout(self):
-        self.session.logout('AudioStation')
+        super().logout(self.app())
 
+    @Synology.api_call
     def get_info(self):
-        api_name = 'SYNO.AudioStation.Info'
-        info = self.audiostation_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'getinfo'}
+        return self.api_request('Info', 'getinfo')
 
-        return self.request_data(api_name, api_path, req_param)
+    '''
+       Method: list
+       Args: library = all
+       limit = 100000
+       '''
 
+    @Synology.api_call
     def get_playlist_info(self):
-        api_name = 'SYNO.AudioStation.Playlist'
-        info = self.audiostation_list[api_name]
-        api_path = info['path']
-        req_param = {'method': 'list', 'library': 'all', 'limit': '100000', 'version': info['maxVersion']}
+        param = {'library': 'all', 'limit': '100000'}
+        return self.api_request('Playlist', 'getinfo', param)
 
-        return self.request_data(api_name, api_path, req_param)
+    '''
+    methid: list
+    type: all
+    additional: subplayer_list
+    '''
 
+    @Synology.api_call
     def list_remote_player(self):
-        api_name = 'SYNO.AudioStation.RemotePlayer'
-        info = self.audiostation_list[api_name]
-        api_path = info['path']
-        req_param = {'method': 'list', 'type': 'all', 'additional': 'subplayer_list', 'version': info['maxVersion']}
+        param = {'type': 'all', 'additional': 'subplayer_list'}
 
-        return self.request_data(api_name, api_path, req_param)
+        return self.api_request('RemotePlayer', 'list', param)
 
+
+    @Synology.api_call
     def list_pinned_song(self):
-        api_name = 'SYNO.AudioStation.Pin'
-        info = self.audiostation_list[api_name]
-        api_path = info['path']
-        req_param = {'method': 'list', 'version': info['maxVersion']}
+        return self.api_request('Pin', 'list')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    '''
+    id: device
+    '''
+    @Synology.api_call
     def device_id(self, device):
-        api_name = 'SYNO.AudioStation.RemotePlayer'
-        info = self.audiostation_list[api_name]
-        api_path = info['path']
-        req_param = {'method': 'getplaylist', 'id': device, 'version': info['maxVersion']}
+        param = {'id': device}
 
-        return self.request_data(api_name, api_path, req_param)
+        return self.api_request('RemotePLayer', 'getplaylist', param)
 
     # You Must choose the device if any from list_remote_player()
 
+    @Synology.api_call
     def remote_play(self, device):
-        api_name = 'SYNO.AudioStation.RemotePlayer'
-        info = self.audiostation_list[api_name]
-        api_path = info['path']
-        req_param = {'method': 'control', 'id': device, 'version': info['maxVersion'], 'action': 'play'}
+        param = {'id': device}
 
-        return self.request_data(api_name, api_path, req_param)
+        return self.api_request('RemotePlayer', 'control', param)
 
+    '''
+    id: device
+    action: stop
+    '''
+    @Synology.api_call
     def remote_stop(self, device):
-        api_name = 'SYNO.AudioStation.RemotePlayer'
-        info = self.audiostation_list[api_name]
-        api_path = info['path']
-        req_param = {'method': 'control', 'id': device, 'version': info['maxVersion'], 'action': 'stop'}
+        param = {'id': device, 'action': 'stop'}
 
-        return self.request_data(api_name, api_path, req_param)
+        return self.api_request('RemotePlayer', 'control', param)
 
+    @Synology.api_call
     def remote_next(self, device):
-        api_name = 'SYNO.AudioStation.RemotePlayer'
-        info = self.audiostation_list[api_name]
-        api_path = info['path']
-        req_param = {'method': 'control', 'id': device, 'version': info['maxVersion'], 'action': 'next'}
+        param = {'id': device, 'action': 'next'}
 
-        return self.request_data(api_name, api_path, req_param)
+        return self.api_request('RemotePlayer', 'control', param)
 
+    @Synology.api_call
     def remote_prev(self, device):
-        api_name = 'SYNO.AudioStation.RemotePlayer'
-        info = self.audiostation_list[api_name]
-        api_path = info['path']
-        req_param = {'method': 'control', 'id': device, 'version': info['maxVersion'], 'action': 'prev'}
+        param = {'id': device, 'action': 'prev'}
 
-        return self.request_data(api_name, api_path, req_param)
+        return self.api_request('RemotePlayer', 'control', param)
