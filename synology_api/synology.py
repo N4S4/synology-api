@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import requests
-
+import functools
 
 class Synology:
     class AlreadyLoggedInError(ConnectionRefusedError):
@@ -28,6 +28,17 @@ class Synology:
 
     def _response(self, urlpath, param):
         return requests.get(self.url + urlpath, param)
+    
+    """
+    method: app
+    raises: NotImplementedError
+    This method is a placeholder to be overridden in classes that inherit
+    the 'Synology' class. In those classes it should return a string with the
+    name of the class's associated application. Here it will raise a
+    NotImplementedError.
+    """
+    def app(self):
+        raise NotImplementedError("Application undefined.")
 
     def login(self, app):
         param = {'version': '2', 'method': 'login', 'account': self.user,
@@ -85,42 +96,47 @@ class Synology:
                 data.append(key)
         return data
 
-    def api_request(self, app, api_name, api_method, param=None):
-        r = {'app': app, 'api_name': api_name, 'api_method': api_method}
+    def api_request(self, api_name, api_method, param=None):
+        r = {'app': self.app(), 'api_name': api_name, 'api_method': api_method}
         if param is not None:
             r.update(param)
         return r
-
+    
+    @classmethod
     def api_call(self, method=None, response_json=True):
         def decorator_api_call(func):
-            global method
-            reqdata = func()
-            print(type(func))
-            api_str = 'SYNO.{a}.{m}'.format(a=reqdata['app'],
+            @functools.wraps(func)
+            def wrap_api_call(*args, **kwargs):
+                global method
+                reqdata = func(*args, **kwargs)
+                #print(type(func))
+                api_str = 'SYNO.{a}.{m}'.format(a=reqdata['app'],
                                             m=reqdata['api_name'])
-            api_path = self.app_api_dict['path']
-            req_param = {'version': self.app_api_dict['maxVersion'],
+                api_path = self.app_api_dict['path']
+                req_param = {'version': self.app_api_dict['maxVersion'],
                          'method': reqdata['api_method']}
-            if method not in ['post', 'get']:
-                method = 'get'
+                if method not in ['post', 'get']:
+                    method = 'get'
 
-            # synology expects strings "true" and "false" for bools
-            for k, v in req_param.items():
-                if isinstance(v, bool):
-                    req_param[k] = str(v).lower()
+                # synology expects strings "true" and "false" for bools
+                for k, v in req_param.items():
+                    if isinstance(v, bool):
+                        req_param[k] = str(v).lower()
 
-            req_param['_sid'] = self.sid
+                req_param['_sid'] = self.sid
 
-            response = None
-            requrl = '{u}{p}?api={s}'.format(u=self.url, p=api_path, s=api_str)
-            if method is 'get':
-                response = requests.get(requrl, req_param)
-            else:
-                response = requests.post(requrl, req_param)
+                response = None
+                requrl = '{u}{p}?api={s}'.format(u=self.url, p=api_path, s=api_str)
+                if method is 'get':
+                    response = requests.get(requrl, req_param)
+                else:
+                    response = requests.post(requrl, req_param)
 
-            if response_json:
-                return response.json()
-            else:
-                return response
+                if response_json:
+                    return response.json()
+                else:
+                    return response
+
+            return wrap_api_call
 
         return decorator_api_call

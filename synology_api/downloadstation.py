@@ -20,11 +20,11 @@ class DownloadStation(Synology):
 
     @Synology.api_call
     def get_info(self):
-        return self.api_request(self.app(), 'Info', 'getinfo')
+        return self.api_request('Info', 'getinfo')
 
     @Synology.api_call
     def get_config(self):
-        return self.api_request(self.app(), 'Info', 'getconfig')
+        return self.api_request('Info', 'getconfig')
 
     """
     Method: set_server_config
@@ -44,12 +44,12 @@ class DownloadStation(Synology):
         param = {}
         for key in kwargs.keys():
             param[str(key)] = kwargs[key]
-        return self.api_request(self.app(), 'Info', 'setserverconfig',
+        return self.api_request('Info', 'setserverconfig',
                                 param=param)
 
     @Synology.api_call
     def schedule_info(self):
-        return self.api_request(self.app(), 'Schedule', 'getconfig')
+        return self.api_request('Schedule', 'getconfig')
 
     @Synology.api_call
     def schedule_set_config(self, enabled=False, emule_enabled=False):
@@ -60,7 +60,7 @@ class DownloadStation(Synology):
 
         param = {'enabled': str(enabled).lower(),
                  'emule_enabled': str(emule_enabled).lower()}
-        return self.api_request(self.app(), 'Schedule', 'setconfig', param)
+        return self.api_request('Schedule', 'setconfig', param)
 
     @Synology.api_call
     def tasks_list(self, additional_param=None):
@@ -69,7 +69,7 @@ class DownloadStation(Synology):
 
         param = {'additional': ",".join(additional_param)}
 
-        return self.api_request(self.app(), 'Task', 'list', param)
+        return self.api_request('Task', 'list', param)
 
     @Synology.api_call
     def tasks_info(self, task_id, additional_param=None):
@@ -78,7 +78,7 @@ class DownloadStation(Synology):
 
         param = {'additional': ",".join(additional_param)}
 
-        return self.api_request(self.app(), 'Task', 'getinfo', param)
+        return self.api_request('Task', 'getinfo', param)
 
     @Synology.api_call
     def delete_task(self, task_id, force=False):
@@ -86,7 +86,7 @@ class DownloadStation(Synology):
             task_id = ",".join(task_id)  # task_id is now type str
         param = {'id': task_id, 'force_complete': str(force).lower()}
 
-        return self.api_request(self.app(), 'Task', 'delete', param)
+        return self.api_request('Task', 'delete', param)
 
     @Synology.api_call
     def pause_task(self, task_id):
@@ -94,7 +94,7 @@ class DownloadStation(Synology):
             task_id = ",".join(task_id)  # task_id is now type str
         param = {'id': task_id}
 
-        return self.api_request(self.app(), 'Task', 'pause', param)
+        return self.api_request('Task', 'pause', param)
 
     @Synology.api_call
     def resume_task(self, task_id):
@@ -102,7 +102,7 @@ class DownloadStation(Synology):
             task_id = ",".join(task_id)  # task_id is now type str
         param = {'id': task_id}
 
-        return self.api_request(self.app(), 'Task', 'resume', param)
+        return self.api_request('Task', 'resume', param)
 
     @Synology.api_call
     def edit_task(self, task_id, destination='sharedfolder'):
@@ -110,11 +110,11 @@ class DownloadStation(Synology):
             task_id = ",".join(task_id)  # task_id is now type str
         param = {'id': task_id, 'destination': destination}
 
-        return self.api_request(self.app(), 'Task', 'edit', param)
+        return self.api_request('Task', 'edit', param)
 
     @Synology.api_call
     def get_statistic_info(self):
-        return self.api_request(self.app(), 'Statistic', 'getinfo')
+        return self.api_request('Statistic', 'getinfo')
 
     @Synology.api_call
     def get_rss_info_list(self, offset=None, limit=None):
@@ -127,7 +127,7 @@ class DownloadStation(Synology):
         if len(param) == 0:
             param = None
 
-        return self.api_request(self.app(), 'RSS.Site', 'list', param)
+        return self.api_request('RSS.Site', 'list', param)
 
     @Synology.api_call
     def refresh_rss_site(self, rss_id):
@@ -137,7 +137,7 @@ class DownloadStation(Synology):
             rss_id = ','.join(rss_id)
             param['id'] = rss_id
 
-        return self.api_request(self.app(), 'RSS.Site', 'refresh', param)
+        return self.api_request('RSS.Site', 'refresh', param)
 
     @Synology.api_call
     def rss_feed_list(self, offset=None, limit=None, rss_id=None):
@@ -153,14 +153,14 @@ class DownloadStation(Synology):
         if limit is not None:
             param['limit'] = limit
 
-        return self.api_request(self.app(), 'RSS.Feed', 'list', param)
+        return self.api_request('RSS.Feed', 'list', param)
 
     @Synology.api_call
     def start_bt_search(self, keyword, module='all'):
 
         param = {'keyword': keyword, 'module': module}
 
-        self._bt_search_id = self.api_request(self.app(), 'BTSearch', 'start', param)['data']['taskid']
+        self._bt_search_id = self.api_request('BTSearch', 'start', param)['data']['taskid']
 
         self._bt_search_id_list.append(self._bt_search_id)
 
@@ -184,11 +184,11 @@ class DownloadStation(Synology):
             param['taskid'] = ','.join(taskid)
         param.update(kwargs)
 
-        return self.api_request(self.app(), 'BTSearch', 'list', param)
+        return self.api_request('BTSearch', 'list', param)
 
     @Synology.api_call
     def get_bt_search_category(self):
-        return self.api_request(self.app(), 'BTSearch', 'get')
+        return self.api_request('BTSearch', 'get')
 
     @Synology.api_call
     def clean_bt_search(self, taskid):
@@ -201,8 +201,8 @@ class DownloadStation(Synology):
         else:
             self._bt_search_id_list.remove(taskid)
 
-        return self.api_request(self.app(), 'BTSearch', 'path', param)
+        return self.api_request('BTSearch', 'path', param)
 
     @Synology.api_call
     def get_bt_module(self):
-        return self.api_request(self.app(), 'BTSearch', 'getModule')
+        return self.api_request('BTSearch', 'getModule')
