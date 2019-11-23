@@ -18,6 +18,7 @@ less open pull requests which means less hassle and review.
 
 ## Pull Request
 
+Check if there is an active branch in progress and Always make sure you are pulling into the right branch.
 Before creating a PR make sure to do not change setup, License and any other non code related file.
 Changing them would only slow down the process with consequently need of modifying the PR
 
