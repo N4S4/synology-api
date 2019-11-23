@@ -22,6 +22,12 @@ Once the update is ready and stable the following wrapper will be deprecated but
 You can find the active branch, on this page, named 'Improving-code'.
 If you wish to help just don't be shy and let us know!
  
+ 
+## Something to have a look
+
+[Contributing](https://github.com/N4S4/synology-api/blob/master/CONTRIBUTING.md)
+[Code of Conduct](https://github.com/N4S4/synology-api/blob/master/CODE_OF_CONDUCT.md)
+
 ## Premise
 
 I've tried this wrapper only with python3 
