@@ -3,28 +3,68 @@
 import requests
 import functools
 
+"""
+This is used by the api_call function to mark methods which need to be
+modified at class creation.
+"""
+class _api_deco:
+    def __init__(self, func, *args, **kwargs):
+        self.func = func
+        self.decorate = True
+        self.deco_args = args
+        self.deco_kwargs = kwargs
+        functools.update_wrapper(self, self.func)
+
+    def __call__(self, *args, **kwargs):
+        return self.func(*args, **kwargs)
+
+"""
+Decorator function marking methods as calls to the synology api. Meant for use
+with methods in classes which inherit from the Synology class. Needed as a
+function separate from _api_deco so that arguments can be added as attributes
+to methods of Synology's child classes. These attributes are then passed to
+Synology.api_call as arguments.
+
+api_call should only be used to decorate methods of classes who inherit from
+the Synology class. It is defined outside of the Synology class so that is not
+limited to the scope of a class method, which would be the case otherwise.
+"""
+def api_call(*args, **kwargs):
+    def deco_func(func):
+        return _api_deco(func, *args, **kwargs)
+    return deco_func
+
 class Synology:
     class AlreadyLoggedInError(ConnectionRefusedError):
         pass
 
     class NotLoggedInError(PermissionError):
         pass
-
-    app = None
+    
+    #These attributes must be defined here so that they can be accessed
+    #from class methods.
+    app_api_dict = {}
+    full_api_dict = {}
+    sid = None
 
     def __init__(self, ipaddr, port, username, password):
         self.ipaddr = ipaddr
         self.port = port
         self.user = username
         self.passwd = password
-        self.sid = None
         self.session_expire = True
         self.session = None
         self._log_api = '/auth.cgi?api=SYNO.API.Auth'
         self.url = 'http://{ip}:{p}/webapi'.format(ip=self.ipaddr, p=self.port)
-
-        self.full_api_dict = {}
-        self.app_api_dict = {}
+    
+    @classmethod #decorator redundant, added for clarity
+    def __init_subclass__(cls, *args, **kwargs):
+        super().__init_subclass__(*args, **kwargs)
+        for attrname in dir(cls):
+            attr = getattr(cls, attrname)
+            if 'decorate' in dir(attr):
+                if attr.decorate:
+                    cls._add_api_method(attr, *attr.deco_args, **attr.deco_kwargs)
 
     def _response(self, urlpath, param):
         return requests.get(self.url + urlpath, param)
@@ -96,7 +136,8 @@ class Synology:
                 data.append(key)
         return data
     
-    def api_request(self, api_name:str, api_method:str, param=None):
+    @classmethod
+    def api_request(cls, api_name:str, api_method:str, param=None):
         """
         api_request acta as a factory for constructing request data objects.
         It is intended to be called as the return value of methods decorated
@@ -111,17 +152,18 @@ class Synology:
         Returns:
             api_request: a request data object
         """
-        r = {'app': self.app(), 'api_name': api_name, 'api_method': api_method}
+        r = {'app': cls.app(), 'api_name': api_name, 'api_method': api_method}
         if param is not None:
             r.update(param)
         return r
     
     @classmethod
-    def api_call(self, method=None, response_json=True):
+    def _add_api_method(self, func, method=None, response_json=True):
         """
-        api_call is a decorator function used to call the methods of various
-        API's provided by DSM. It is intended to decorate methods of classes
-        which inherit the Synology class.
+        _add_api_method is used to call the methods of various API's provided
+        by DSM. It is intended to be used by methods decorated by the
+        'api_call' function (see above) that are members of classes which
+        inherit from the Synology class.
 
         Methods decorated by api_call should return a call to
         'Synology.api_request', which acts as a factory for the request data
@@ -138,38 +180,34 @@ class Synology:
         Returns:
             api_call: a decorator function (which returns a wrapper function).
         """
-        def decorator_api_call(func):
-            @functools.wraps(func)
-            def wrap_api_call(*args, **kwargs):
-                global method
-                reqdata = func(*args, **kwargs)
-                api_str = 'SYNO.{a}.{m}'.format(a=reqdata['app'],
+        @functools.wraps(func)
+        def wrap_api_method(*args, **kwargs):
+            reqdata = func(*args, **kwargs)
+            api_str = 'SYNO.{a}.{m}'.format(a=reqdata['app'],
                                             m=reqdata['api_name'])
-                api_path = self.app_api_dict['path']
-                req_param = {'version': self.app_api_dict['maxVersion'],
+            api_path = cls.app_api_dict['path']
+            req_param = {'version': cls.app_api_dict['maxVersion'],
                          'method': reqdata['api_method']}
-                if method not in ['post', 'get']:
-                    method = 'get'
+            if method not in ['post', 'get']:
+                method = 'get'
 
-                # synology expects strings "true" and "false" for bools
-                for k, v in req_param.items():
-                    if isinstance(v, bool):
-                        req_param[k] = str(v).lower()
+            # synology expects strings "true" and "false" for bools
+            for k, v in req_param.items():
+                if isinstance(v, bool):
+                    req_param[k] = str(v).lower()
 
-                req_param['_sid'] = self.sid
+            req_param['_sid'] = cls.sid
 
-                response = None
-                requrl = '{u}{p}?api={s}'.format(u=self.url, p=api_path, s=api_str)
-                if method is 'get':
-                    response = requests.get(requrl, req_param)
-                else:
-                    response = requests.post(requrl, req_param)
+            response = None
+            requrl = '{u}{p}?api={s}'.format(u=self.url, p=api_path, s=api_str)
+            if method is 'get':
+                response = requests.get(requrl, req_param)
+            else:
+                response = requests.post(requrl, req_param)
 
-                if response_json:
-                    return response.json()
-                else:
-                    return response
+            if response_json:
+                return response.json()
+            else:
+                return response
 
-            return wrap_api_call
-
-        return decorator_api_call
+       setattr(cls, func.__name__, wrap_api_method) 
