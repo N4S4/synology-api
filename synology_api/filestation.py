@@ -6,7 +6,7 @@ import requests
 import sys
 from urllib import parse
 
-from .synology import Synology
+from .synology import Synology, api_call
 
 
 class FileStation(Synology):
@@ -41,7 +41,7 @@ class FileStation(Synology):
     def logout(self):
         super().logout('FileStation')
     
-    @Synology.api_call
+    @api_call
     def get_info(self):
         r = self.api_request('Info', 'getInfo')
         return r
@@ -55,7 +55,7 @@ class FileStation(Synology):
             sort_direction,
             only_writable
     """
-    @Synology.api_call
+    @api_call
     def get_list_share(self, **kwargs):
         param = kwargs
 
@@ -80,7 +80,7 @@ class FileStation(Synology):
             goto_path,
             additional 
     """
-    @Synology.api_call
+    @api_call
     def get_file_list(self, folder_path, **kwargs): 
         
         param = kwargs
@@ -98,7 +98,7 @@ class FileStation(Synology):
 
         return self.api_request('List', 'list', param)
 
-    @Synology.api_call
+    @api_call
     def get_file_info(self, path=None, additional=None):
         param = {}
 
@@ -123,7 +123,7 @@ class FileStation(Synology):
 
     # TODO  all working if specify extension check if correct [pattern, extension]
     #  it works if you put extension='...'
-    @Synology.api_call
+    @api_call
     def _search_start(self, folder_path, **kwargs):
             param = kwargs
 
@@ -192,7 +192,7 @@ class FileStation(Synology):
             offset,
             additional
     """
-    @Synology.api_call
+    @api_call
     def get_search_list(self, task_id, **kwargs):
         param = kwargs
         param['taskid'] = task_id
@@ -208,7 +208,7 @@ class FileStation(Synology):
 
         return self.api_request('Search', 'list', param)
     
-    @Synology.api_call
+    @api_call
     def _stop_search_task(self, taskid):
         param = {}
 
@@ -267,7 +267,7 @@ class FileStation(Synology):
             sort_direction,
             additional
     """
-    @Synology.api_call
+    @api_call
     def get_mount_point_list(self, **kwargs):
         param = kwargs
 
@@ -288,7 +288,7 @@ class FileStation(Synology):
             status_filter,
             additional
     """ 
-    @Synology.api_call
+    @api_call
     def get_favorite_list(self, **kwargs):
 
         if 'additional' not in param.keys():
@@ -299,7 +299,7 @@ class FileStation(Synology):
 
         return self.api_request('Favorite', 'list', param)
     
-    @Synology.api_call
+    @api_call
     def add_a_favorite(self, path, name=None, index=None):
         param = {'path': path}
         if name is not None:
@@ -309,20 +309,20 @@ class FileStation(Synology):
 
         return self.api_request('Favorite', 'add', param)
     
-    @Synology.api_call
+    @api_call
     def delete_a_favorite(self, path):
         return self.api_request('Favorite', 'delete', {'path': path})
     
-    @Synology.api_call
+    @api_call
     def clear_broken_favorite(self):
         return self.api_request(slef.app(), 'Favorite', 'clear_broken', param)
     
-    @Synology.api_call
+    @api_call
     def edit_favorite_name(self, path, new_name):
         return self.api_request('Favorite', 'edit',
                 {'path': path, 'new_name': new_name})
     
-    @Synology.api_call
+    @api_call
     def replace_all_favorite(self, path, name):
         if type(path) is list:
             path = ",".join(path)
@@ -333,7 +333,7 @@ class FileStation(Synology):
         return self.api_request('Favorite', 'edit',
                 {'path': path, 'name': name})
     
-    @Synology.api_call
+    @api_call
     def _start_dir_size_calc(self, path):
         if type(path) is list:
             path = str(path)
@@ -347,7 +347,7 @@ class FileStation(Synology):
 
         return response    
     
-    @Synology.api_call
+    @api_call
     def _stop_dir_size_calc(self, taskid):
         return self.api_request('DirName', 'stop',
                 {'taskid' = '"{t}"'.format(t=taskid))
@@ -364,7 +364,7 @@ class FileStation(Synology):
 
         return response
     
-    @Synology.api_call
+    @api_call
     def get_dir_status(self, taskid=None):
             if taskid is None:
                 if self._dir_taskid is None:
@@ -375,7 +375,7 @@ class FileStation(Synology):
         return self.api_request('DirSize', 'status',
                 {'taskid': taskid})
 
-    @Synology.api_call
+    @api_call
     def _start_md5_calc(self, file_path):
         return self.api_request('MD5', 'start',
                 {'file_path': file_path})
@@ -386,7 +386,7 @@ class FileStation(Synology):
         self._md5_taskid_list.append(self._md5_taskid)
         return response
     
-    @Synology.api_call
+    @api_call
     def get_md5_status(self, taskid=None):
         if taskid is None:
             if self._md5_taskid is not None:
@@ -397,7 +397,7 @@ class FileStation(Synology):
         return self.api_request('MD5', 'status',
                 {'taskid': taskid})
 
-    @Synology.api_call
+    @api_call
     def _stop_md5_calc(self, taskid):
         self.api_request('MD5', 'stop',
                 {'taskid': taskid})
@@ -416,7 +416,7 @@ class FileStation(Synology):
     args: path, filename
     kwargs: overwrite, create_only
     """
-    @Synology.api_call
+    @api_call
     def check_permissions(self, path, filename, **kwargs):
         param = kwargs
         param['path'] = path
@@ -431,7 +431,7 @@ class FileStation(Synology):
     FileStation.upload_file() works differently from other methods. Instead of
     sending a single requests.request(), it opens a requests.session() to
     upload the file found at 'file_path' on the client to 'dest_path' on the
-    NAS. As such, it does not use the usual @Synology.api_call decorator.
+    NAS. As such, it does not use the usual @api_call decorator.
 
     The 'log' argument is an object with an "error" method, such as the logger
     from Python's standard library "logging". This is used in case of an error
@@ -442,7 +442,7 @@ class FileStation(Synology):
 
     Note: I have not seen any other methods using a session yet, but if it's
     common enough it may be worthwhile to create another decorator similar to
-    @Synology.api_call, such as @Synology.api_session.
+    @api_call, such as @Synology.api_session.
     """
     def upload_file(self, dest_path, file_path, log,
             create_parents=True, overwrite=False):
@@ -482,7 +482,7 @@ class FileStation(Synology):
 
         return False
 
-    @Synology.api_call
+    @api_call
     def get_shared_link_info(self, link_id):
         return self.api_request('Sharing', 'getinfo',
                 {'id': link_id})
@@ -495,7 +495,7 @@ class FileStation(Synology):
             sort_direction,
             force_clean
     """
-    @Synology.api_call
+    @api_call
     def get_shared_link_list(self, **kwargs):
         return self.api_request('Sharing', 'list', kwargs)
     
@@ -506,17 +506,17 @@ class FileStation(Synology):
             date_expired,
             date_available
     """ 
-    @Synology.api_call
+    @api_call
     def create_sharing_link(self, path, **kwargs):
         param = kwargs
         param['path'] = path
         return self.api_request('Sharing', 'create', param)
 
-    @Synology.api_call
+    @api_call
     def delete_shared_link(self, link_id):
         return self.api_request('Sharing', 'delete', {'id': link_id})
     
-    @Synology.api_call
+    @api_call
     def clear_invalid_shared_link(self):
         return self.api_request('Sharing', 'clear_invalid')
     
@@ -527,7 +527,7 @@ class FileStation(Synology):
             date_expired,
             date_available
     """ 
-    @Synology.api_call
+    @api_call
     def edit_shared_link(self, link_id, **kwargs):
         param = kwargs
         param['id'] = link_id
@@ -538,7 +538,7 @@ class FileStation(Synology):
     args: folder_path, name
     kwargs: force_parent, additional
     """    
-    @Synology.api_call
+    @api_call
     def create_folder(self, folder_path, name, **kwargs):
         param = **kwargs
 
@@ -571,7 +571,7 @@ class FileStation(Synology):
     args: path, name
     kwargs: additional, search_taskid
     """ 
-    @Synology.api_call
+    @api_call
     def rename_folder(self, path, name, **kwargs):
         param = kwargs
 
@@ -607,7 +607,7 @@ class FileStation(Synology):
             accurate_progress,
             search_taskid
     """
-    @Synology.api_call
+    @api_call
     def _start_copy_move(self, path, dest_folder, **kwargs):
         param = kwargs 
 
@@ -628,11 +628,11 @@ class FileStation(Synology):
             self._dir_taskid_list.append(self._copy_move_taskid)
         return response
     
-    @Synology.api_call
+    @api_call
     def get_copy_move_status(self, taskid):
         return self.api_request('CopyMove', 'status', {'taskid': taskid})
     
-    @Synology.api_call
+    @api_call
     def _stop_copy_move_task(self, taskid):
         return self.api_request('CopyMove', 'stop', param)
 
@@ -653,7 +653,7 @@ class FileStation(Synology):
             recursive,
             search_taskid
     """ 
-    @Synology.api_call
+    @api_call
     def _start_delete_task(self, path, **kwargs):
         if type(path) is list:
             path = str(path)
@@ -667,11 +667,11 @@ class FileStation(Synology):
             self._delete_taskid_list.append(self._delete_taskid)
         return response
     
-    @Synology.api_call
+    @api_call
     def get_delete_status(self, taskid):
         return self.api_request('Delete', 'status', {'param': param})
     
-    @Synology.api_call
+    @api_call
     def _stop_delete_task(self, taskid):
         return self.api_request('Delete', 'stop', {'taskid': taskid})
     
@@ -692,7 +692,7 @@ class FileStation(Synology):
     delete_blocking_function may appear to hang for a while. This is normal.
     TODO: possibly add async option?
     """
-    @Synology.api_call
+    @api_call
     def delete_blocking_function(self, path, **kwargs):
         param = kwargs
 
@@ -712,7 +712,7 @@ class FileStation(Synology):
             password,
             item_id
     """
-    @Synology.api_call
+    @api_call
     def start_extract_task(self, file_path, dest_folder, **kwargs):
         param = kwargs
         param['file_path'] = file_path
@@ -728,7 +728,7 @@ class FileStation(Synology):
     def get_extract_status(self, taskid):
         return self.api_request('Extract', 'status', {'taskid': taskid})
     
-    @Synology.api_call
+    @api_call
     def _stop_extract_task(self, taskid):
         return self.api_request('Extract', 'stop', {'taskid': taskid})
 
@@ -751,7 +751,7 @@ class FileStation(Synology):
             password,
             item_id
     """
-    @Synology.api_call
+    @api_call
     def get_archive_file_list(self, file_path, **kwargs):
         param = kwargs
         param['file_path'] = file_path
