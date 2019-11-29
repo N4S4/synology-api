@@ -3,7 +3,7 @@ from .synology import Synology, api_call
 
 class DownloadStation(Synology):
 
-    # this is a function so that ithe value returned is not accidentally changed
+    @property
     def app(self):
         return 'DownloadStation'
 

@@ -42,7 +42,7 @@ class Synology:
         pass
     
     #These attributes must be defined here so that they can be accessed
-    #from class methods.
+    #from class methods (specifically, _add_api_method).
     app_api_dict = {}
     full_api_dict = {}
     sid = None
@@ -77,6 +77,7 @@ class Synology:
     name of the class's associated application. Here it will raise a
     NotImplementedError.
     """
+    @property
     def app(self):
         raise NotImplementedError("Application undefined.")
 
@@ -136,8 +137,7 @@ class Synology:
                 data.append(key)
         return data
     
-    @classmethod
-    def api_request(cls, api_name:str, api_method:str, param=None):
+    def api_request(self, api_name:str, api_method:str, param=None):
         """
         api_request acta as a factory for constructing request data objects.
         It is intended to be called as the return value of methods decorated
@@ -152,7 +152,7 @@ class Synology:
         Returns:
             api_request: a request data object
         """
-        r = {'app': cls.app(), 'api_name': api_name, 'api_method': api_method}
+        r = {'app': self.app(), 'api_name': api_name, 'api_method': api_method}
         if param is not None:
             r.update(param)
         return r
@@ -181,8 +181,8 @@ class Synology:
             api_call: a decorator function (which returns a wrapper function).
         """
         @functools.wraps(func)
-        def wrap_api_method(*args, **kwargs):
-            reqdata = func(*args, **kwargs)
+        def wrap_api_method(self, *args, **kwargs):
+            reqdata = func(self, *args, **kwargs)
             api_str = 'SYNO.{a}.{m}'.format(a=reqdata['app'],
                                             m=reqdata['api_name'])
             api_path = cls.app_api_dict['path']

@@ -11,7 +11,7 @@ from .synology import Synology, api_call
 
 class FileStation(Synology):
 
-    # this is a function so that the value returned is not accidentally changed
+    @property
     def app(self):
         return 'FileStation'
 
