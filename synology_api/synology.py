@@ -46,13 +46,11 @@ class Synology:
     app_api_dict = {}
     full_api_dict = {}
     sid = None
+    _log_api = '/auth.cgi?api=SYNO.API.Auth'
 
-    def __init__(self, ipaddr, port, username, password):
-        self.session_expire = True
-        self.session = None
-        self._log_api = '/auth.cgi?api=SYNO.API.Auth'
-        self.url = 'http://{ip}:{p}/webapi'.format(ip=self.ipaddr, p=self.port)
-    
+    def __init__(self):
+        pass
+
     @classmethod #decorator redundant, added for clarity
     def __init_subclass__(cls, *args, **kwargs):
         super().__init_subclass__(*args, **kwargs)
@@ -61,10 +59,7 @@ class Synology:
             if 'decorate' in dir(attr):
                 if attr.decorate:
                     cls._add_api_method(attr, *attr.deco_args, **attr.deco_kwargs)
-
-    def _response(self, urlpath, param):
-        return requests.get(self.url + urlpath, param)
-    
+     
     """
     method: app
     raises: NotImplementedError
@@ -78,24 +73,26 @@ class Synology:
         raise NotImplementedError("Application undefined.")
     
     @classmethod
-    def login(cls, app, username, passwd, ipaddr='127.0.0.1', port='5000'):
+    def login(cls, username, passwd, ipaddr='127.0.0.1', port='5000'):
+        cls.ipaddr = ipaddr
+        cls.port = port
+        cls.user = username
         """
         Factory class method
         """
         param = {'version': '2', 'method': 'login', 'account': username,
-                 'passwd': passwd, 'session': app, 'format': 'cookie'} 
+                 'passwd': passwd, 'session': cls.app, 'format': 'cookie'} 
         cls.url = 'http://{ip}:{p}/webapi'.format(ip=cls.ipaddr, p=cls.port)
         cls.session_expire = True
-
-        cls.session = self._response(self._log_api, param)
-        cls.sid = self.session.json()['data']['sid']
+        cls.session = requests.get(cls.url + cls._log_api, param)
+        cls.sid = cls.session.json()['data']['sid']
         cls.session_expire = False
-        return True
+        return cls()
 
     def logout(self, app):
         param = {'version': '2', 'method': 'logout', 'session': app}
 
-        response = self._response(self._log_api, param)
+        response = requests.get(self.url + self._log_api, param)
         self.session_expire = True
         self.sid = None
         respjson = response.json()
@@ -107,7 +104,7 @@ class Synology:
     def populate_api_dict(self, app=None):
         querydict = {'version': '1', 'method': 'query', 'query': 'all'}
 
-        response = self._response('/query.cgi?api=SYNO.API.Info', querydict)
+        response = requests.get(self.url + '/query.cgi?api=SYNO.API.Info', querydict)
 
         self.full_api_dict = response.json()['data']
         if self.app is not None:
@@ -202,16 +199,12 @@ class Synology:
 
             response = None
             requrl = '{u}/{p}?api={s}'.format(u=self.url, p=api_path, s=api_str,)
-            print("Request url: " + requrl + "\n")
-            print("Request Paramaters: " + str(req_param) + "\n")
 
             if method is 'get':
                 response = requests.get(requrl, req_param)
             else:
                 response = requests.post(requrl, req_param)
             
-            print(response.text)
-
             if response_json:
                 return response.json()
             else:

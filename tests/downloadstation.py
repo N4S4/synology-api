@@ -7,11 +7,10 @@ from synology_api.downloadstation import DownloadStation
 
 def downloadstation_test():
     pwd = getpass("Password: ")
-    dls = DownloadStation('192.168.1.63', '5000', 'andrew', pwd)
-    pprint.pprint(dls.session.json())
+    dls = DownloadStation.login('andrew', pwd, ipaddr='192.168.1.63', port='5000')
     pprint.pprint(dls.get_info())
     pprint.pprint(dls.get_config())
-
+    print(dls.logout())
     return 0
 
 import sys

@@ -5,12 +5,10 @@ class DownloadStation(Synology):
     def app(self):
         return 'DownloadStation'
 
-    def __init__(self, ip_address, port, username, password):
-        super(DownloadStation, self).__init__(ip_address, port, username,
-                                              password)
+    def __init__(self):
+        super(DownloadStation, self).__init__()
         self._bt_search_id = ''
         self._bt_search_id_list = []
-        self.login(self.app())
         self.populate_api_dict(self.app())
 
     def logout(self):

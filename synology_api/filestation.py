@@ -15,9 +15,9 @@ class FileStation(Synology):
     def app(self):
         return 'FileStation'
 
-    def __init__(self, ip_address, port, username, password):
+    def __init__(self):
 
-        super(FileStation, self).__init__(ip_address, port, username, password)
+        super(FileStation, self).__init__()
 
         self._dir_taskid = ''
         self._dir_taskid_list = []
@@ -34,7 +34,6 @@ class FileStation(Synology):
         self._compress_taskid = ''
         self._compress_taskid_list = []
 
-        self.login(self.app())
         self.populate_api_dict(self.app())
         self.file_station_list = self.app_api_dict
 
