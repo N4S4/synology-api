@@ -41,7 +41,7 @@ class FileStation(Synology):
     def logout(self):
         super().logout('FileStation')
     
-    @api_call
+    @api_call()
     def get_info(self):
         r = self.api_request('Info', 'getInfo')
         return r
@@ -55,7 +55,7 @@ class FileStation(Synology):
             sort_direction,
             only_writable
     """
-    @api_call
+    @api_call()
     def get_list_share(self, **kwargs):
         param = kwargs
 
@@ -144,12 +144,12 @@ class FileStation(Synology):
                     timestamp = time.mktime(date)
                     param['time'] = timestamp
 
-        param['folder_path'] = '"{p}"'.format(p=param['folder_path'])
+            param['folder_path'] = '"{p}"'.format(p=param['folder_path'])
 
-        if 'filetype' in param.keys():
-            param['filetype'] = '"{f}"'.format(f=param['filetype'])
+            if 'filetype' in param.keys():
+                param['filetype'] = '"{f}"'.format(f=param['filetype'])
 
-        return self.api_request('Search', 'start', param)
+            return self.api_request('Search', 'start', param)
 
     """
     method: search_start
@@ -204,7 +204,7 @@ class FileStation(Synology):
             param['additional'] = ['size', 'owner', 'time']
 
         if type(param['additional']) is list:
-            param['additional'] = str(param['additional']
+            param['additional'] = str(param['additional'])
 
         return self.api_request('Search', 'list', param)
     
@@ -223,7 +223,7 @@ class FileStation(Synology):
 
         return self.api_request('Search', 'stop', param)
 
-    def stop_search_task(self, taskid=None)
+    def stop_search_task(self, taskid=None):
         response = self._stop_search_task(taskid)
 
         if not response['success']:
@@ -350,9 +350,9 @@ class FileStation(Synology):
     @api_call
     def _stop_dir_size_calc(self, taskid):
         return self.api_request('DirName', 'stop',
-                {'taskid' = '"{t}"'.format(t=taskid))
+                {'taskid': '"{t}"'.format(t=taskid)})
 
-    def stop_dir_size_calc(self, taskid)
+    def stop_dir_size_calc(self, taskid):
         response = self._stop_dir_size_calc(taskid)
         if not response['success']:
             raise self.SynologyError(
@@ -372,7 +372,7 @@ class FileStation(Synology):
                 else:
                     taskid = self._dir_taskid
 
-        return self.api_request('DirSize', 'status',
+            return self.api_request('DirSize', 'status',
                 {'taskid': taskid})
 
     @api_call
@@ -540,7 +540,7 @@ class FileStation(Synology):
     """    
     @api_call
     def create_folder(self, folder_path, name, **kwargs):
-        param = **kwargs
+        param = kwargs
 
         if type(folder_path) is list:
             new_fp = []

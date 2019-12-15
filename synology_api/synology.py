@@ -2,7 +2,7 @@
 
 import requests
 import functools
-
+import pprint
 """
 This is used by the api_call function to mark methods which need to be
 modified at class creation.
@@ -48,10 +48,6 @@ class Synology:
     sid = None
 
     def __init__(self, ipaddr, port, username, password):
-        self.ipaddr = ipaddr
-        self.port = port
-        self.user = username
-        self.passwd = password
         self.session_expire = True
         self.session = None
         self._log_api = '/auth.cgi?api=SYNO.API.Auth'
@@ -80,19 +76,20 @@ class Synology:
     @property
     def app(self):
         raise NotImplementedError("Application undefined.")
+    
+    @classmethod
+    def login(cls, app, username, passwd, ipaddr='127.0.0.1', port='5000'):
+        """
+        Factory class method
+        """
+        param = {'version': '2', 'method': 'login', 'account': username,
+                 'passwd': passwd, 'session': app, 'format': 'cookie'} 
+        cls.url = 'http://{ip}:{p}/webapi'.format(ip=cls.ipaddr, p=cls.port)
+        cls.session_expire = True
 
-    def login(self, app):
-        param = {'version': '2', 'method': 'login', 'account': self.user,
-                 'passwd': self.passwd, 'session': app, 'format': 'cookie'}
-
-        if not self.session_expire:
-            if self.sid is not None:
-                self.session_expire = False
-                raise self.AlreadyLoggedInError("Already logged in.")
-
-        self.session = self._response(self._log_api, param)
-        self.sid = self.session.json()['data']['sid']
-        self.session_expire = False
+        cls.session = self._response(self._log_api, param)
+        cls.sid = self.session.json()['data']['sid']
+        cls.session_expire = False
         return True
 
     def logout(self, app):
@@ -158,7 +155,9 @@ class Synology:
         return r
     
     @classmethod
-    def _add_api_method(self, func, method=None, response_json=True):
+    def _add_api_method(cls, func, method='get', response_json=True):
+        setattr(func, 'method', method)
+        setattr(func, 'response_json', response_json)
         """
         _add_api_method is used to call the methods of various API's provided
         by DSM. It is intended to be used by methods decorated by the
@@ -182,12 +181,15 @@ class Synology:
         """
         @functools.wraps(func)
         def wrap_api_method(self, *args, **kwargs):
+            method = func.method
+            response_json = func.response_json
             reqdata = func(self, *args, **kwargs)
             api_str = 'SYNO.{a}.{m}'.format(a=reqdata['app'],
                                             m=reqdata['api_name'])
-            api_path = cls.app_api_dict['path']
-            req_param = {'version': cls.app_api_dict['maxVersion'],
-                         'method': reqdata['api_method']}
+            api_data = cls.app_api_dict[api_str]
+            api_path = api_data['path']
+            req_param = {'version': api_data['maxVersion'],
+                         'method': reqdata['api_method']} #http method, not api
             if method not in ['post', 'get']:
                 method = 'get'
 
@@ -199,15 +201,20 @@ class Synology:
             req_param['_sid'] = cls.sid
 
             response = None
-            requrl = '{u}{p}?api={s}'.format(u=self.url, p=api_path, s=api_str)
+            requrl = '{u}/{p}?api={s}'.format(u=self.url, p=api_path, s=api_str,)
+            print("Request url: " + requrl + "\n")
+            print("Request Paramaters: " + str(req_param) + "\n")
+
             if method is 'get':
                 response = requests.get(requrl, req_param)
             else:
                 response = requests.post(requrl, req_param)
+            
+            print(response.text)
 
             if response_json:
                 return response.json()
             else:
                 return response
 
-       setattr(cls, func.__name__, wrap_api_method) 
+        setattr(cls, func.__name__, wrap_api_method) 

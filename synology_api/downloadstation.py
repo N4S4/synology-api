@@ -1,9 +1,7 @@
 from .synology import Synology, api_call
 
-
 class DownloadStation(Synology):
 
-    @property
     def app(self):
         return 'DownloadStation'
 
@@ -18,11 +16,11 @@ class DownloadStation(Synology):
     def logout(self):
         super().logout(self.app())
 
-    @api_call
+    @api_call()
     def get_info(self):
         return self.api_request('Info', 'getinfo')
 
-    @api_call
+    @api_call()
     def get_config(self):
         return self.api_request('Info', 'getconfig')
 
