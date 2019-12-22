@@ -37,7 +37,7 @@ class FileStation(Synology):
         self.populate_api_dict(self.app())
         self.file_station_list = self.app_api_dict
 
-    def logout(self):
+    def logout(self, **kwargs):
         super().logout('FileStation')
     
     @api_call()
@@ -136,7 +136,7 @@ class FileStation(Synology):
                             "Timestamp must be string or Unix timestamp, type is {t}.".format(
                                 t=type(param['time'])))
                 elif is_int and not is_str:
-                    datetime.fromtimestamp(t).strftime('%Y-%m-%d %H:%M:%S')
+                    val = datetime.fromtimestamp(t).strftime('%Y-%m-%d %H:%M:%S')
                     param['time'] = val
                 else: #is_str is True, is_int might be True or False 
                     date = time.strptime(t, "%Y-%m-%d %H:%M:%S")
@@ -197,7 +197,7 @@ class FileStation(Synology):
         param['taskid'] = task_id
 
         if 'filetype' in param.keys():
-            param['filetype'] = str(filetype).lower()
+            param['filetype'] = param['filetype']
 
         if 'additional' not in param.keys():
             param['additional'] = ['size', 'owner', 'time']
@@ -253,8 +253,8 @@ class FileStation(Synology):
                         log.error(str(err))
                     except AttributeError as err:
                         pass
-                return self._search_task_id_list, response
-        return self._search_task_id_list, None
+                return self._search_taskid_list, response
+        return self._search_taskid_list, None
     
     """
     method: get_mount_point_list
@@ -289,6 +289,7 @@ class FileStation(Synology):
     """ 
     @api_call
     def get_favorite_list(self, **kwargs):
+        param = kwargs
 
         if 'additional' not in param.keys():
             param['additional'] = ['real_path', 'size', 'owner', 'time']
@@ -314,7 +315,7 @@ class FileStation(Synology):
     
     @api_call
     def clear_broken_favorite(self):
-        return self.api_request(slef.app(), 'Favorite', 'clear_broken', param)
+        return self.api_request(self.app(), 'Favorite', 'clear_broken')
     
     @api_call
     def edit_favorite_name(self, path, new_name):
@@ -337,7 +338,7 @@ class FileStation(Synology):
         if type(path) is list:
             path = str(path)
 
-        return self.api_request('DirSize', 'start', param)
+        return self.api_request('DirSize', 'start', path)
 
     def start_dir_size_calc(self, path):
         response = self._start_dir_size_calc(path)
@@ -348,6 +349,7 @@ class FileStation(Synology):
     
     @api_call
     def _stop_dir_size_calc(self, taskid):
+
         return self.api_request('DirName', 'stop',
                 {'taskid': '"{t}"'.format(t=taskid)})
 
@@ -358,7 +360,7 @@ class FileStation(Synology):
                     "Cannot stop task {t}.\nResponse: {r}".format(
                         t=taskid, r=response))
         self._dir_taskid_list.remove(taskid)
-        if self._dit_taskid is taskid:
+        if self._dir_taskid is taskid:
             self._dir_taskid = self._dir_taskid_list[-1]
 
         return response
@@ -367,7 +369,7 @@ class FileStation(Synology):
     def get_dir_status(self, taskid=None):
             if taskid is None:
                 if self._dir_taskid is None:
-                    raise SynologyError("No DirSize tasks currently running.")
+                    raise self.SynologyError("No DirSize tasks currently running.")
                 else:
                     taskid = self._dir_taskid
 
@@ -391,7 +393,7 @@ class FileStation(Synology):
             if self._md5_taskid is not None:
                 taskid = self._md5_taskid
             else:
-                raise SynologyError("No MD5 tasks currently running.")
+                raise self.SynologyError("No MD5 tasks currently running.")
 
         return self.api_request('MD5', 'status',
                 {'taskid': taskid})
@@ -402,7 +404,7 @@ class FileStation(Synology):
                 {'taskid': taskid})
 
     def stop_md5_calc(self, taskid):
-        response = self._stop_md5_calc(tskid)
+        response = self._stop_md5_calc(taskid)
         if response['success']:
             self._md5_taskid_list.remove(taskid)
             if self._md5_taskid is taskid:
@@ -633,10 +635,10 @@ class FileStation(Synology):
     
     @api_call
     def _stop_copy_move_task(self, taskid):
-        return self.api_request('CopyMove', 'stop', param)
+        return self.api_request('CopyMove', 'stop', taskid)
 
     def stop_copy_move_taks(self, taskid):
-        response = self._copy_move_task(taskid)
+        response = self._stop_copy_move_task(taskid)
         
         if response['success']:
             self._copy_move_taskid_list.remove(taskid)
@@ -654,13 +656,15 @@ class FileStation(Synology):
     """ 
     @api_call
     def _start_delete_task(self, path, **kwargs):
+        param = kwargs
+
         if type(path) is list:
             path = str(path)
         param['path'] = path
         return self.api_request('Delete', 'start', param)
     
     def start_delete_task(self, path, **kwargs):
-        response = self._start_delete_taks(path, **kwargs)
+        response = self._start_delete_task(path, **kwargs)
         if response['success']:
             self._delete_taskid = response['data']['taskid']
             self._delete_taskid_list.append(self._delete_taskid)
@@ -668,7 +672,7 @@ class FileStation(Synology):
     
     @api_call
     def get_delete_status(self, taskid):
-        return self.api_request('Delete', 'status', {'param': param})
+        return self.api_request('Delete', 'status', {'taskid': taskid})
     
     @api_call
     def _stop_delete_task(self, taskid):
@@ -713,6 +717,7 @@ class FileStation(Synology):
     """
     @api_call
     def start_extract_task(self, file_path, dest_folder, **kwargs):
+
         param = kwargs
         param['file_path'] = file_path
         param['dest_folder_path'] = dest_folder
@@ -723,7 +728,6 @@ class FileStation(Synology):
         self._extract_taskid_list.append(self._extract_taskid)
 
         return response
-
     def get_extract_status(self, taskid):
         return self.api_request('Extract', 'status', {'taskid': taskid})
     
@@ -851,8 +855,8 @@ class FileStation(Synology):
 
         session = requests.session()
 
-        url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=download&path=%s&mode=%s&_sid=%s' % (
-                api_name, info['maxVersion'], parse.quote_plus(path), mode, self._sid)
+        url = ('%s%s' % (self.url, api_path)) + '?api=%s&version=%s&method=download&path=%s&mode=%s&_sid=%s' % (
+                api_name, info['maxVersion'], parse.quote_plus(path), mode, self.sid)
 
         if mode is None:
             return 'Enter a valid mode (open / download)'
