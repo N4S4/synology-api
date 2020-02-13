@@ -15,7 +15,7 @@ class Authentication:
                 self._base_url = '%s/webapi/' % base_url
         else:
             if not ip_address:
-                raise Exception('Missing both base_url and ip_address on Authentication')
+                raise AuthenticationError('Missing both base_url and ip_address on Authentication')
             if not port:
                 port = 5000
             self._base_url = 'http://%s:%s/webapi/' % (ip_address, port)
@@ -131,3 +131,6 @@ class Authentication:
     @property
     def base_url(self):
         return self._base_url
+
+class AuthenticationError(Exception):
+    pass
