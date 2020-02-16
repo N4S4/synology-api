@@ -69,10 +69,6 @@ dwn = downloadstation.DownloadStation('Synology Ip', 'Synology Port', 'Username'
 
 dwn.get_info()
 
-# You can also initate the classes with your DSM Base URL
-# on this case, you need to set up argument order :
-fl = filestation.FileStation(base_url='https://synology_ip:synology_port/', username='Username', password='Password')
-
 ```
 
 response would be json data

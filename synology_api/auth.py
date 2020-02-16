@@ -2,23 +2,14 @@ import requests
 
 
 class Authentication:
-    def __init__(self, ip_address=None, port=None, username=None, password=None, base_url=None):
+    def __init__(self, ip_address, port, username, password):
+        self._ip_address = ip_address
+        self._port = port
         self._username = username
         self._password = password
         self._sid = None
         self._session_expire = True
-
-        if base_url:
-            if base_url.endswith('/'):
-                self._base_url = '%swebapi/' % base_url
-            else:
-                self._base_url = '%s/webapi/' % base_url
-        else:
-            if not ip_address:
-                raise AuthenticationError('Missing both base_url and ip_address on Authentication')
-            if not port:
-                port = 5000
-            self._base_url = 'http://%s:%s/webapi/' % (ip_address, port)
+        self._base_url = 'http://%s:%s/webapi/' % (self._ip_address, self._port)
 
         self.full_api_list = {}
         self.app_api_list = {}
@@ -131,6 +122,3 @@ class Authentication:
     @property
     def base_url(self):
         return self._base_url
-
-class AuthenticationError(Exception):
-    pass
