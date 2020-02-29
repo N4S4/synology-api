@@ -149,11 +149,11 @@ class FileStation:
                     try:
                         date = time.strptime(val, "%Y-%m-%d %H:%M:%S")
                         timestamp = time.mktime(date)
-                        req_param[key] = timestamp
+                        req_param[key] = '"' + str(timestamp) + '"'
                     except ValueError:
                         try:
                             datetime.fromtimestamp(int(val)).strftime('%Y-%m-%d %H:%M:%S')
-                            req_param[key] = val
+                            req_param[key] = '"' + val + '"'
                         except ValueError:
                             return 'Enter the correct Date Time format "YYY-MM-DD HH:MM:SS" or Unix timestamp'
 
