@@ -618,7 +618,7 @@ class FileStation:
             name = '[' + ','.join(name) + ']'
             req_param['name'] = name
         elif name is not None:
-            req_param['name'] = name
+            req_param['name'] = '"' + name + '"'
         else:
             return 'Enter a valid path'
 
