@@ -148,7 +148,7 @@ class Synology:
         """
         r = {'app': self.app, 'api_name': api_name, 'api_method': api_method}
         if param is not None:
-            r.update(param)
+            r['data'] = param
         return r
     
     @classmethod
@@ -187,6 +187,9 @@ class Synology:
             api_path = api_data['path']
             req_param = {'version': api_data['maxVersion'],
                          'method': reqdata['api_method']} #http method, not api
+
+            req_param.update(reqdata.get('data', {}))
+
             if method not in ['post', 'get']:
                 method = 'get'
 

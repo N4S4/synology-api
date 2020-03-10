@@ -82,13 +82,12 @@ class FileStation(Synology):
     def get_file_list(self, folder_path, **kwargs):
 
         param = kwargs
+        param['folder_path'] = folder_path
 
-        param_keys = param.keys()
-
-        if 'filetype' in param_keys:
+        if 'filetype' in param:
             param['filetype'] = str(param['filetype']).lower()
 
-        if 'additional' not in param_keys:
+        if 'additional' not in param:
             param['additional'] = "real_path,size,owner,time"
 
         if type(param['additional']) is list:
