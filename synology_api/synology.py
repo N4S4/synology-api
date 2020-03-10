@@ -81,7 +81,7 @@ class Synology:
         Factory class method
         """
         param = {'version': '2', 'method': 'login', 'account': username,
-                 'passwd': passwd, 'session': cls.app, 'format': 'cookie'} 
+                 'passwd': passwd, 'session': cls.app, 'format': 'cookie'}
         cls.url = 'http://{ip}:{p}/webapi'.format(ip=cls.ipaddr, p=cls.port)
         cls.session_expire = True
         cls.session = requests.get(cls.url + cls._log_api, param)
@@ -146,7 +146,7 @@ class Synology:
         Returns:
             api_request: a request data object
         """
-        r = {'app': self.app(), 'api_name': api_name, 'api_method': api_method}
+        r = {'app': self.app, 'api_name': api_name, 'api_method': api_method}
         if param is not None:
             r.update(param)
         return r

@@ -1,18 +1,17 @@
 from .synology import Synology, api_call
 
-class DownloadStation(Synology):
 
-    def app(self):
-        return 'DownloadStation'
+class DownloadStation(Synology):
+    app = 'DownloadStation'
 
     def __init__(self):
         super(DownloadStation, self).__init__()
         self._bt_search_id = ''
         self._bt_search_id_list = []
-        self.populate_api_dict(self.app())
+        self.populate_api_dict(self.app)
 
     def logout(self):
-        super().logout(self.app())
+        super().logout(self.app)
 
     @api_call()
     def get_info(self):
@@ -35,7 +34,7 @@ class DownloadStation(Synology):
           emule_default_destination=None
     """
 
-    @api_call
+    @api_call()
     def set_server_config(self, **kwargs):
         param = {}
         for key in kwargs.keys():
@@ -43,11 +42,11 @@ class DownloadStation(Synology):
         return self.api_request('Info', 'setserverconfig',
                                 param=param)
 
-    @api_call
+    @api_call()
     def schedule_info(self):
         return self.api_request('Schedule', 'getconfig')
 
-    @api_call
+    @api_call()
     def schedule_set_config(self, enabled=False, emule_enabled=False):
         for b in [enabled, emule_enabled]:
             if b is not True and b is not False:
@@ -58,7 +57,7 @@ class DownloadStation(Synology):
                  'emule_enabled': str(emule_enabled).lower()}
         return self.api_request('Schedule', 'setconfig', param)
 
-    @api_call
+    @api_call()
     def tasks_list(self, additional_param=None):
         if additional_param is None:
             additional_param = ['detail', 'transfer', 'file', 'tracker', 'peer']
@@ -67,7 +66,7 @@ class DownloadStation(Synology):
 
         return self.api_request('Task', 'list', param)
 
-    @api_call
+    @api_call()
     def tasks_info(self, task_id, additional_param=None):
         if additional_param is None:
             additional_param = ['detail', 'transfer', 'file', 'tracker', 'peer']
@@ -76,7 +75,7 @@ class DownloadStation(Synology):
 
         return self.api_request('Task', 'getinfo', param)
 
-    @api_call
+    @api_call()
     def delete_task(self, task_id, force=False):
         if type(task_id) is list:
             task_id = ",".join(task_id)  # task_id is now type str
@@ -84,7 +83,7 @@ class DownloadStation(Synology):
 
         return self.api_request('Task', 'delete', param)
 
-    @api_call
+    @api_call()
     def pause_task(self, task_id):
         if type(task_id) is list:
             task_id = ",".join(task_id)  # task_id is now type str
@@ -92,7 +91,7 @@ class DownloadStation(Synology):
 
         return self.api_request('Task', 'pause', param)
 
-    @api_call
+    @api_call()
     def resume_task(self, task_id):
         if type(task_id) is list:
             task_id = ",".join(task_id)  # task_id is now type str
@@ -100,7 +99,7 @@ class DownloadStation(Synology):
 
         return self.api_request('Task', 'resume', param)
 
-    @api_call
+    @api_call()
     def edit_task(self, task_id, destination='sharedfolder'):
         if type(task_id) is list:
             task_id = ",".join(task_id)  # task_id is now type str
@@ -108,11 +107,11 @@ class DownloadStation(Synology):
 
         return self.api_request('Task', 'edit', param)
 
-    @api_call
+    @api_call()
     def get_statistic_info(self):
         return self.api_request('Statistic', 'getinfo')
 
-    @api_call
+    @api_call()
     def get_rss_info_list(self, offset=None, limit=None):
 
         param = {}
@@ -125,7 +124,7 @@ class DownloadStation(Synology):
 
         return self.api_request('RSS.Site', 'list', param)
 
-    @api_call
+    @api_call()
     def refresh_rss_site(self, rss_id):
 
         param = {'id': rss_id}
@@ -135,7 +134,7 @@ class DownloadStation(Synology):
 
         return self.api_request('RSS.Site', 'refresh', param)
 
-    @api_call
+    @api_call()
     def rss_feed_list(self, offset=None, limit=None, rss_id=None):
 
         param = {'id': rss_id}
@@ -151,7 +150,7 @@ class DownloadStation(Synology):
 
         return self.api_request('RSS.Feed', 'list', param)
 
-    @api_call
+    @api_call()
     def start_bt_search(self, keyword, module='all'):
 
         param = {'keyword': keyword, 'module': module}
@@ -173,7 +172,7 @@ class DownloadStation(Synology):
           filter_title
     """
 
-    @api_call
+    @api_call()
     def get_bt_search_results(self, taskid, **kwargs):
         param = {}
         if type(taskid) is list:
@@ -182,11 +181,11 @@ class DownloadStation(Synology):
 
         return self.api_request('BTSearch', 'list', param)
 
-    @api_call
+    @api_call()
     def get_bt_search_category(self):
         return self.api_request('BTSearch', 'get')
 
-    @api_call
+    @api_call()
     def clean_bt_search(self, taskid):
 
         param = {'taskid': taskid}
@@ -199,6 +198,6 @@ class DownloadStation(Synology):
 
         return self.api_request('BTSearch', 'path', param)
 
-    @api_call
+    @api_call()
     def get_bt_module(self):
         return self.api_request('BTSearch', 'getModule')
