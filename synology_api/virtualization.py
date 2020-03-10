@@ -1,13 +1,11 @@
-from . import auth as syn
+from .synology import Synology
+from .synology import api_call
 
-
-class Virtualization:
+class Virtualization(Synology):
 
     def __init__(self, ip_address, port, username, password):
 
-        self.session = syn.Authentication(ip_address, port, username, password)
-
-        self.request_data = self.session.request_data
+        super().__init__()
 
         self._taskid_list = []
         self._network_group_list = []
@@ -17,48 +15,21 @@ class Virtualization:
         self._vm_guest_name_list = []
         self._vm_created_taskid_list = []
 
-        self.session.login('Virtualization')
-        self.session.get_api_list('Virtualization')
-
-        self.file_station_list = self.session.app_api_list
-        self._sid = self.session.sid
-        self.base_url = self.session.base_url
-
+    @api_call()
     def get_task_list(self):
-        api_name = 'SYNO.Virtualization.API.Task.Info'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
-
-        self._taskid_list = self.request_data(api_name, api_path, req_param)
-
-        return self._taskid_list
+        return self.api_request('API.Task.Info', 'list')
 
     def clear_task(self, taskid):
-        api_name = 'SYNO.Virtualization.API.Task.Info'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'clear'}
-
         if taskid is None:
-            return 'Enter a valid taskid, choose between get_task_list results'
-        else:
-            req_param['taskid'] = taskid
+            raise ValueError("Invalid taskid")
 
-        return self.request_data(api_name, api_path, req_param)
+        return self.api_request('API.Task.Info', 'clear', {'taskid': taskid})
 
     def get_task_info(self, taskid):
-        api_name = 'SYNO.Virtualization.API.Task.Info'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
-
         if taskid is None:
-            return 'Enter a valid taskid, choose between get_task_list results'
-        else:
-            req_param['taskid'] = taskid
+            raise ValueError("Invalid taskid")
 
-        return self.request_data(api_name, api_path, req_param)
+        return self.api_request('API.Task.Info', 'get', {'taskid': taskid})
 
     def get_network_group_list(self):
         api_name = 'SYNO.Virtualization.API.Network'
