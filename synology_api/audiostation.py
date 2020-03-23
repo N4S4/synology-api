@@ -4,13 +4,6 @@ from .synology import Synology, api_call
 class AudioStation(Synology):
     app = 'AudioStation'
 
-    def __init__(self):
-        super(AudioStation, self).__init__()
-
-        self.populate_api_dict(self.app)
-
-        print('You are now logged in!')
-
     def logout(self):
         super().logout(self.app)
 

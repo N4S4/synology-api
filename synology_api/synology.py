@@ -90,7 +90,9 @@ class Synology:
             raise ConnectionError('Login failed: %s' % (resp['error']))
         cls.sid = resp['data']['sid']
         cls.session_expire = False
-        return cls()
+        obj = cls()
+        obj.populate_api_dict(obj.app)
+        return obj
 
     def logout(self, app):
         param = {'version': '2', 'method': 'logout', 'session': app}

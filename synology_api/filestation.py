@@ -31,7 +31,6 @@ class FileStation(Synology):
         self._compress_taskid = ''
         self._compress_taskid_list = []
 
-        self.populate_api_dict(self.app)
         self.file_station_list = self.app_api_dict
 
     def logout(self, **kwargs):

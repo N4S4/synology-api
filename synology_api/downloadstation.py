@@ -8,7 +8,6 @@ class DownloadStation(Synology):
         super(DownloadStation, self).__init__()
         self._bt_search_id = ''
         self._bt_search_id_list = []
-        self.populate_api_dict(self.app)
 
     def logout(self):
         super().logout(self.app)
