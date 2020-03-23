@@ -85,7 +85,10 @@ class Synology:
         cls.url = 'http://{ip}:{p}/webapi'.format(ip=cls.ipaddr, p=cls.port)
         cls.session_expire = True
         cls.session = requests.get(cls.url + cls._log_api, param)
-        cls.sid = cls.session.json()['data']['sid']
+        resp = cls.session.json()
+        if not resp['success']:
+            raise ConnectionError('Login failed: %s' % (resp['error']))
+        cls.sid = resp['data']['sid']
         cls.session_expire = False
         return cls()
 
