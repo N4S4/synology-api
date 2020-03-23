@@ -2,15 +2,11 @@ from .synology import Synology, api_call
 
 
 class AudioStation(Synology):
-
-
     app = 'AudioStation'
 
-    def __init__(self, ip_address, port, username, password):
-        super(AudioStation, self).__init__(ip_address, port, username,
-                                           password)
+    def __init__(self):
+        super(AudioStation, self).__init__()
 
-        self.login(self.app)
         self.populate_api_dict(self.app)
 
         print('You are now logged in!')
@@ -45,7 +41,6 @@ class AudioStation(Synology):
 
         return self.api_request('RemotePlayer', 'list', param)
 
-
     @api_call()
     def list_pinned_song(self):
         return self.api_request('Pin', 'list')
@@ -53,6 +48,7 @@ class AudioStation(Synology):
     '''
     id: device
     '''
+
     @api_call()
     def device_id(self, device):
         param = {'id': device}
@@ -71,6 +67,7 @@ class AudioStation(Synology):
     id: device
     action: stop
     '''
+
     @api_call()
     def remote_stop(self, device):
         param = {'id': device, 'action': 'stop'}
