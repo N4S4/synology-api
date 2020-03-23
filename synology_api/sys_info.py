@@ -207,67 +207,47 @@ class SysInfo(Synology):
     def utilisation(self):
         return self.api_request('System.Utilization', 'get')
 
-    def storage(self):
-        api_name = 'SYNO.Storage.CGI.Storage'
-        info = self.gen_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'load_info'}
-
-        return self.request_data(api_name, api_path, req_param)
-
-    def network_backup_info(self):
-        api_name = 'SYNO.Backup.Service.NetworkBackup'
-        info = self.gen_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
-
-        return self.request_data(api_name, api_path, req_param)
-
-    def bandwidth_control_protocol(self):
-        api_name = 'SYNO.Core.BandwidthControl.Protocol'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'protocol': 'NetworkBackup'}
-
-        return self.request_data(api_name, api_path, req_param)
-
-    def network_openvpn(self):
-        api_name = 'SYNO.Core.Network.VPN.OpenVPN'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': '["status"]'}
-
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def network_vpn_l2tp(self):
-        api_name = 'SYNO.Core.Network.VPN.L2TP'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        return self.api_request('Network.VPN.L2TP', 'list')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def network_ipv6tunnel(self):
-        api_name = 'SYNO.Core.Network.IPv6Tunnel'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Network.IPv6Tunnel', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
+    @api_call()
+    def bandwidth_control_protocol(self):
+        req_param = {'protocol': 'NetworkBackup'}
+        return self.api_request('BandwidthControl.Protocol', 'get', req_param)
 
+    @api_call()
+    def network_openvpn(self):
+        req_param = {'additional': '["status"]'}
+        return self.api_request('Network.VPN.OpenVPN', 'list', req_param)
+
+    @api_call()
     def get_user_list(self):
-        api_name = 'SYNO.Core.User'
-        info = self.core_list[api_name]
-        api_path = info['path']
         additional = '["email", "description", "expired"]'
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': additional}
+        req_param = {'additional': additional}
+        return self.api_request('User', 'list', req_param)
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def get_security_scan_rules(self):
-        api_name = 'SYNO.Core.SecurityScan.Status'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'items': 'ALL', 'method': 'rule_get'}
+        req_param = {'items': 'ALL'}
+        return self.api_request('SecurityScan.Status', 'rule_get', req_param)
 
-        return self.request_data(api_name, api_path, req_param)
+
+class Backup(Synology):
+    app = "Backup"
+
+    @api_call()
+    def network_backup_info(self):
+        return self.api_request('Service.NetworkBackup', 'get')
+
+
+class Storage(Synology):
+    app = "Storage"
+
+    @api_call()
+    def storage(self):
+        return self.api_request('CGI.Storage', 'load_info')
