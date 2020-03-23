@@ -33,9 +33,6 @@ class FileStation(Synology):
 
         self.file_station_list = self.app_api_dict
 
-    def logout(self, **kwargs):
-        super().logout('FileStation')
-
     @api_call()
     def get_info(self):
         r = self.api_request('Info', 'getInfo')

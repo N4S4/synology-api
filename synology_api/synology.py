@@ -94,8 +94,8 @@ class Synology:
         obj.populate_api_dict(obj.app)
         return obj
 
-    def logout(self, app):
-        param = {'version': '2', 'method': 'logout', 'session': app}
+    def logout(self):
+        param = {'version': '2', 'method': 'logout', 'session': self.app}
 
         response = requests.get(self.url + self._log_api, param)
         self.session_expire = True

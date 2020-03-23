@@ -4,9 +4,6 @@ from .synology import Synology, api_call
 class AudioStation(Synology):
     app = 'AudioStation'
 
-    def logout(self):
-        super().logout(self.app)
-
     @api_call()
     def get_info(self):
         return self.api_request('Info', 'getinfo')

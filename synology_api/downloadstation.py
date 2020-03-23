@@ -9,8 +9,6 @@ class DownloadStation(Synology):
         self._bt_search_id = ''
         self._bt_search_id_list = []
 
-    def logout(self):
-        super().logout(self.app)
 
     @api_call()
     def get_info(self):

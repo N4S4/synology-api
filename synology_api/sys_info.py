@@ -4,9 +4,6 @@ from .synology import api_call, Synology
 class SysInfo(Synology):
     app = 'Core'
 
-    def logout(self):
-        super().logout(self.app)
-
     @api_call()
     def fileserv_smb(self):
         return self.api_request('FileServ.SMB', 'get')
