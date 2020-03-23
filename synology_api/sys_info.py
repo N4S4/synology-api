@@ -4,7 +4,7 @@ from .synology import api_call, Synology
 class SysInfo(Synology):
     app = 'Core'
 
-    def __init__(self, ip_address, port, username, password):
+    def __init__(self):
         super().__init__()
         self.populate_api_dict(self.app)
 
