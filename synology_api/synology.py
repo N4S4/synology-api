@@ -81,16 +81,21 @@ class Synology:
         Factory class method
         """
         param = {'version': '2', 'method': 'login', 'account': username,
-                 'passwd': passwd, 'session': cls.app, 'format': 'cookie'} 
+                 'passwd': passwd, 'session': cls.app, 'format': 'cookie'}
         cls.url = 'http://{ip}:{p}/webapi'.format(ip=cls.ipaddr, p=cls.port)
         cls.session_expire = True
         cls.session = requests.get(cls.url + cls._log_api, param)
-        cls.sid = cls.session.json()['data']['sid']
+        resp = cls.session.json()
+        if not resp['success']:
+            raise ConnectionError('Login failed: %s' % (resp['error']))
+        cls.sid = resp['data']['sid']
         cls.session_expire = False
-        return cls()
+        obj = cls()
+        obj.populate_api_dict(obj.app)
+        return obj
 
-    def logout(self, app):
-        param = {'version': '2', 'method': 'logout', 'session': app}
+    def logout(self):
+        param = {'version': '2', 'method': 'logout', 'session': self.app}
 
         response = requests.get(self.url + self._log_api, param)
         self.session_expire = True
@@ -146,9 +151,9 @@ class Synology:
         Returns:
             api_request: a request data object
         """
-        r = {'app': self.app(), 'api_name': api_name, 'api_method': api_method}
+        r = {'app': self.app, 'api_name': api_name, 'api_method': api_method}
         if param is not None:
-            r.update(param)
+            r['data'] = param
         return r
     
     @classmethod
@@ -187,6 +192,9 @@ class Synology:
             api_path = api_data['path']
             req_param = {'version': api_data['maxVersion'],
                          'method': reqdata['api_method']} #http method, not api
+
+            req_param.update(reqdata.get('data', {}))
+
             if method not in ['post', 'get']:
                 method = 'get'
 

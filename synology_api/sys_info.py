@@ -1,479 +1,246 @@
-from . import auth as syn
+from .synology import api_call, Synology
 
 
-class SysInfo:
-    def __init__(self, ip_address, port, username, password):
+class SysInfo(Synology):
+    app = 'Core'
 
-        self.session = syn.Authentication(ip_address, port, username, password)
-
-        self.session.login('Core')
-        self.session.get_api_list('Core')
-        self.session.get_api_list()
-
-        self.request_data = self.session.request_data
-        self.core_list = self.session.app_api_list
-        self.gen_list = self.session.full_api_list
-        self._sid = self.session.sid
-        self.base_url = self.session.base_url
-
-        print('You are now logged in!')
-
-    def logout(self):
-        self.session.logout('Core')
-
+    @api_call()
     def fileserv_smb(self):
-        api_name = 'SYNO.Core.FileServ.SMB'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('FileServ.SMB', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def fileserv_afp(self):
-        api_name = 'SYNO.Core.FileServ.AFP'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('FileServ.AFP', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def fileserv_nfs(self):
-        api_name = 'SYNO.Core.FileServ.NFS'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('FileServ.NFS', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def fileserv_ftp(self):
-        api_name = 'SYNO.Core.FileServ.FTP'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('FileServ.FTP', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def fileserv_sftp(self):
-        api_name = 'SYNO.Core.FileServ.FTP.SFTP'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('FileServ.FTP.SFTP', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
-    def network_backup_info(self):
-        api_name = 'SYNO.Backup.Service.NetworkBackup'
-        info = self.gen_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
-
-        return self.request_data(api_name, api_path, req_param)
-
-    def bandwidth_control_protocol(self):
-        api_name = 'SYNO.Core.BandwidthControl.Protocol'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'protocol': 'NetworkBackup'}
-
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def shared_folders_info(self):
-        api_name = 'SYNO.Core.Share'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        return self.api_request('Share', 'list')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def services_status(self):
-        api_name = 'SYNO.Core.Service'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Service', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def services_discovery(self):
-        api_name = 'SYNO.Core.FileServ.ServiceDiscovery'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('FileServ.ServiceDiscovery', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def file_transfer_status(self):
-        api_name = 'SYNO.Core.SyslogClient.FileTransfer'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('SyslogClient.FileTransfer', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def network_status(self):
-        api_name = 'SYNO.Core.Network'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Network', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def web_status(self):
-        api_name = 'SYNO.Core.Web.DSM'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Web.DSM', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def current_connection(self):
-        api_name = 'SYNO.Core.CurrentConnection'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('CurrentConnection', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def bandwidth_control_status(self):
-        api_name = 'SYNO.Core.BandwidthControl.Status'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        return self.api_request('BandwidthControl.Status', 'list')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def sys_status(self):
-        api_name = 'SYNO.Core.System.Status'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('System.Status', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def latest_logs(self):
-        api_name = 'SYNO.Core.SyslogClient.Status'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'latestlog_get'}
+        return self.api_request('SyslogClient.Status', 'latestlog_get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def client_notify_settings_status(self):
-        api_name = 'SYNO.Core.SyslogClient.Setting.Notify'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('SyslogClient.Setting.Notify', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def get_security_scan_info(self):
-        api_name = 'SYNO.Core.SecurityScan.Conf'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'first_get'}
+        return self.api_request('SecurityScan.Conf', 'first_get')
 
-        return self.request_data(api_name, api_path, req_param)
-
-    def get_security_scan_rules(self):
-        api_name = 'SYNO.Core.SecurityScan.Status'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'items': 'ALL', 'method': 'rule_get'}
-
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def get_security_scan_status(self):
-        api_name = 'SYNO.Core.SecurityScan.Status'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'system_get'}
+        return self.api_request('SecurityScan.Status', 'system_get')
 
-        return self.request_data(api_name, api_path, req_param)
-
-    def get_user_list(self):
-        api_name = 'SYNO.Core.User'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        additional = '["email", "description", "expired"]'
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': additional}
-
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def quickconnect_info(self):
-        api_name = 'SYNO.Core.QuickConnect'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get_misc_config'}
+        return self.api_request('QuickConnect', 'get_misc_config')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def quickconnect_permissions(self):
-        api_name = 'SYNO.Core.QuickConnect.Permission'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('QuickConnect.Permission', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def network_topology(self):
-        api_name = 'SYNO.Core.Network.Router.Topology'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Network.Router.Topology', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def network_wifi_client(self):
-        api_name = 'SYNO.Core.Network.Wifi.Client'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        return self.api_request('Network.Wifi.Client', 'list')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def network_bond(self):
-        api_name = 'SYNO.Core.Network.Bond'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        return self.api_request('Network.Bond', 'list')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def network_bridge(self):
-        api_name = 'SYNO.Core.Network.Bridge'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        return self.api_request('Network.Bridge', 'list')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def network_ethernet(self):
-        api_name = 'SYNO.Core.Network.Ethernet'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        return self.api_request('Network.Ethernet', 'list')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def network_local_bridge(self):
-        api_name = 'SYNO.Core.Network.LocalBridge'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        return self.api_request('Network.LocalBridge', 'list')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def network_usb_modem(self):
-        api_name = 'SYNO.Core.Network.USBModem'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        return self.api_request('Network.USBModem', 'list')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def network_pppoe(self):
-        api_name = 'SYNO.Core.Network.PPPoE'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        return self.api_request('Network.PPPoE', 'list')
 
-        return self.request_data(api_name, api_path, req_param)
-
-    def network_ipv6tunnel(self):
-        api_name = 'SYNO.Core.Network.IPv6Tunnel'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
-
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def network_vpn_pptp(self):
-        api_name = 'SYNO.Core.Network.VPN.PPTP'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        return self.api_request('Network.VPN.PPTP', 'list')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def network_openvpn_with_conf(self):
-        api_name = 'SYNO.Core.Network.VPN.OpenVPNWithConf'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        return self.api_request('Network.VPN.OpenVPNWithConf', 'list')
 
-        return self.request_data(api_name, api_path, req_param)
-
-    def network_openvpn(self):
-        api_name = 'SYNO.Core.Network.VPN.OpenVPN'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': '["status"]'}
-
-        return self.request_data(api_name, api_path, req_param)
-
-    def network_vpn_l2tp(self):
-        api_name = 'SYNO.Core.Network.VPN.L2TP'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
-
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def domain_schedule(self):
-        api_name = 'SYNO.Core.Directory.Domain.Schedule'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Directory.Domain.Schedule', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def client_ldap(self):
-        api_name = 'SYNO.Core.Directory.LDAP'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Directory.LDAP', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def client_sso(self):
-        api_name = 'SYNO.Core.Directory.SSO'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Directory.SSO', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def sys_upgrade_check(self):
-        api_name = 'SYNO.Core.Upgrade.Server'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'check'}
+        return self.api_request('Upgrade.Server', 'check')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def sys_upgrade_download(self):
-        api_name = 'SYNO.Core.Upgrade.Server.Download'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'progress'}
+        return self.api_request('Upgrade.Server.Download', 'progress')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def sys_upgrade_setting(self):
-        api_name = 'SYNO.Core.Upgrade.Setting'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Upgrade.Setting', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def notification_sms_conf(self):
-        api_name = 'SYNO.Core.Notification.SMS.Conf'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Notification.SMS.Conf', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def notification_mail_conf(self):
-        api_name = 'SYNO.Core.Notification.Mail.Conf'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Notification.Mail.Conf', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def notification_push_mail(self):
-        api_name = 'SYNO.Core.Notification.Push.Mail'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Notification.Push.Mail', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def notification_push_conf(self):
-        api_name = 'SYNO.Core.Notification.Push.Conf'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Notification.Push.Conf', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def hardware_beep_control(self):
-        api_name = 'SYNO.Core.Hardware.BeepControl'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Hardware.BeepControl', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def hardware_fan_speed(self):
-        api_name = 'SYNO.Core.Hardware.FanSpeed'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Hardware.FanSpeed', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def hardware_hibernation(self):
-        api_name = 'SYNO.Core.Hardware.Hibernation'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Hardware.Hibernation', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def hardware_ups(self):
-        api_name = 'SYNO.Core.ExternalDevice.UPS'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('ExternalDevice.UPS', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def hardware_power_schedule(self):
-        api_name = 'SYNO.Core.Hardware.PowerSchedule'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'load'}
+        return self.api_request('Hardware.PowerSchedule', 'load')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def terminal_info(self):
-        api_name = 'SYNO.Core.Terminal'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('Terminal', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def snmp_info(self):
-        api_name = 'SYNO.Core.SNMP'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('SNMP', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def process(self):
-        api_name = 'SYNO.Core.System.Process'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        return self.api_request('System.Process', 'list')
 
-        return self.request_data(api_name, api_path, req_param)
-
+    @api_call()
     def utilisation(self):
-        api_name = 'SYNO.Core.System.Utilization'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        return self.api_request('System.Utilization', 'get')
 
-        return self.request_data(api_name, api_path, req_param)
+    @api_call()
+    def network_vpn_l2tp(self):
+        return self.api_request('Network.VPN.L2TP', 'list')
 
+    @api_call()
+    def network_ipv6tunnel(self):
+        return self.api_request('Network.IPv6Tunnel', 'get')
+
+    @api_call()
+    def bandwidth_control_protocol(self):
+        req_param = {'protocol': 'NetworkBackup'}
+        return self.api_request('BandwidthControl.Protocol', 'get', req_param)
+
+    @api_call()
+    def network_openvpn(self):
+        req_param = {'additional': '["status"]'}
+        return self.api_request('Network.VPN.OpenVPN', 'list', req_param)
+
+    @api_call()
+    def get_user_list(self):
+        additional = '["email", "description", "expired"]'
+        req_param = {'additional': additional}
+        return self.api_request('User', 'list', req_param)
+
+    @api_call()
+    def get_security_scan_rules(self):
+        req_param = {'items': 'ALL'}
+        return self.api_request('SecurityScan.Status', 'rule_get', req_param)
+
+
+class Backup(Synology):
+    app = "Backup"
+
+    @api_call()
+    def network_backup_info(self):
+        return self.api_request('Service.NetworkBackup', 'get')
+
+
+class Storage(Synology):
+    app = "Storage"
+
+    @api_call()
     def storage(self):
-        api_name = 'SYNO.Storage.CGI.Storage'
-        info = self.gen_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'load_info'}
-
-        return self.request_data(api_name, api_path, req_param)
+        return self.api_request('CGI.Storage', 'load_info')
