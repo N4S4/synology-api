@@ -74,11 +74,11 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def tasks_list(self, additional_param=None):
+    def tasks_list(self, additional_param=None, offset=0, limit=-1):
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': additional_param}
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': additional_param, 'limit': limit, 'offset': offset}
 
         if additional_param is None:
             additional_param = ['detail', 'transfer', 'file', 'tracker', 'peer']
