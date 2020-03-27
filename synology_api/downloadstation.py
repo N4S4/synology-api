@@ -55,11 +55,11 @@ class DownloadStation(Synology):
         return self.api_request('Schedule', 'setconfig', param)
 
     @api_call()
-    def tasks_list(self, additional_param=None):
+    def tasks_list(self, additional_param=None, offset=0, limit=-1):
         if additional_param is None:
             additional_param = ['detail', 'transfer', 'file', 'tracker', 'peer']
 
-        param = {'additional': ",".join(additional_param)}
+        param = {'additional': ",".join(additional_param), 'limit': limit, 'offset': offset}
 
         return self.api_request('Task', 'list', param)
 
