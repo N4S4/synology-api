@@ -237,6 +237,12 @@ class Backup(Synology):
     def network_backup_info(self):
         return self.api_request('Service.NetworkBackup', 'get')
 
+class DSM(Synology):
+    app = "DSM"
+
+    @api_call()
+    def get_info(self):
+        return self.api_request('Info', 'getinfo')
 
 class Storage(Synology):
     app = "Storage"
