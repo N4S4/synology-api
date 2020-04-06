@@ -64,6 +64,30 @@ class DownloadStation(Synology):
         return self.api_request('Task', 'list', param)
 
     @api_call()
+    def tasks_create(self, uri=None, file=None, username=None, password=None, unzip_password=None, destination=None):
+
+        param = dict()
+
+        if (uri is not None):
+            if type(uri) is list:
+                param['uri'] = ",".join(uri)
+            else:
+                param['uri'] = uri
+        elif (file is not None):
+            param['file'] = file
+
+        if unzip_password is not None:
+            param['unzip_password'] = unzip_password
+        if username is not None:
+            param['username'] = username
+        if password is not None:
+            param['password'] = password
+        if destination is not None:
+            param['destination'] = destination
+
+        return self.api_request('Task', 'create', param)
+
+    @api_call()
     def tasks_info(self, task_id, additional_param=None):
         if additional_param is None:
             additional_param = ['detail', 'transfer', 'file', 'tracker', 'peer']
