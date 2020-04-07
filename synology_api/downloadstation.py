@@ -68,7 +68,7 @@ class DownloadStation(Synology):
         if additional_param is None:
             additional_param = ['detail', 'transfer', 'file', 'tracker', 'peer']
 
-        param = {'additional': ",".join(additional_param)}
+        param = {'id': task_id, 'additional': ",".join(additional_param)}
 
         return self.api_request('Task', 'getinfo', param)
 
