@@ -388,7 +388,7 @@ Just Don't Be Scared
 
 ## Groups to Ask Discuss Request and Improve the code
 
-- Telegram [Synology Api](https://t.me/SynologyApi
+- Telegram [Synology Api](https://t.me/SynologyApi) Preferred
 - Slack [Synology Api](https://bit.ly/SynologyApi)
 
 ### Authors
