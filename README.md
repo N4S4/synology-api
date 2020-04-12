@@ -386,6 +386,11 @@ The code is probably is some parts twisted and I will try to optimize it at best
 
 Just Don't Be Scared
 
+## Groups to Ask Discuss Request and Improve the code
+
+- Telegram [Synology Api](https://t.me/SynologyApi
+- Slack [Synology Api](https://bit.ly/SynologyApi)
+
 ### Authors
 
 - Renato Visaggio - _Initial_ _Work_ - [N4S4](https://github.com/N4S4)
