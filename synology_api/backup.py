@@ -53,7 +53,7 @@ class SysInfo:
 
         return self.request_data(api_name, api_path, req_param)
         
-     def backup_task_get(self):
+    def backup_task_get(self):
         api_name = 'SYNO.Backup.Task'
         info = self.core_list[api_name]
         api_path = info['path']
