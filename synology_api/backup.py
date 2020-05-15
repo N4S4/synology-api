@@ -1,7 +1,7 @@
 from . import auth as syn
 
 
-class SysInfo:
+class Backup:
     def __init__(self, ip_address, port, username, password):
 
         self.session = syn.Authentication(ip_address, port, username, password)
