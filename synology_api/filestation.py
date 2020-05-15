@@ -428,20 +428,20 @@ class FileStation:
 
         return 'You can now check the status of request with get_md5_status() , your id is: ' + self._md5_calc_taskid
 
-    def get_md5_status(self, taskid=None):
-        api_name = 'SYNO.FileStation.MD5'
-        info = self.file_station_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'status'}
+#    def get_md5_status(self, taskid=None):
+#        api_name = 'SYNO.FileStation.MD5'
+#        info = self.file_station_list[api_name]
+#        api_path = info['path']
+#        req_param = {'version': info['maxVersion'], 'method': 'status'}
 
-        if taskid is None and self._md5_calc_taskid is not '':
-            req_param['taskid'] = f'"{self._md5_calc_taskid}"'
-        elif taskid is not None:
-            req_param['taskid'] = f'"{taskid}"'
-        else:
-            return 'Did you run start_md5_calc() first? No task id found! ' + str(self._md5_calc_taskid)
+#        if taskid is None and self._md5_calc_taskid is not '':
+#            req_param['taskid'] = f'"{self._md5_calc_taskid}"'
+#       elif taskid is not None:
+#            req_param['taskid'] = f'"{taskid}"'
+#        else:
+#            return 'Did you run start_md5_calc() first? No task id found! ' + str(self._md5_calc_taskid)
 
-        return self.request_data(api_name, api_path, req_param)
+#        return self.request_data(api_name, api_path, req_param)
 
     def stop_md5_calc(self, taskid=None):
         api_name = 'SYNO.FileStation.DirSize'
