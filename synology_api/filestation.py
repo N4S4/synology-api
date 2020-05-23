@@ -436,7 +436,7 @@ class FileStation:
 
         if taskid is None and self._md5_calc_taskid is not '':
             req_param['taskid'] = f'"{self._md5_calc_taskid}"'
-       elif taskid is not None:
+        elif taskid is not None:
             req_param['taskid'] = f'"{taskid}"'
         else:
             return 'Did you run start_md5_calc() first? No task id found! ' + str(self._md5_calc_taskid)
