@@ -3,8 +3,8 @@ from . import auth as syn
 
 class AudioStation:
 
-    def __init__(self, ip_address, port, username, password):
-        self.session = syn.Authentication(ip_address, port, username, password)
+    def __init__(self, ip_address, port, username, password, secure=False):
+        self.session = syn.Authentication(ip_address, port, username, password, secure)
 
         self.session.login('AudioStation')
         self.session.get_api_list('AudioStation')
