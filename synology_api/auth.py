@@ -2,14 +2,15 @@ import requests
 
 
 class Authentication:
-    def __init__(self, ip_address, port, username, password):
+    def __init__(self, ip_address, port, username, password, secure=False):
         self._ip_address = ip_address
         self._port = port
         self._username = username
         self._password = password
         self._sid = None
         self._session_expire = True
-        self._base_url = 'http://%s:%s/webapi/' % (self._ip_address, self._port)
+        schema = 'https' if secure else 'http'
+        self._base_url = '%s://%s:%s/webapi/' % (schema, self._ip_address, self._port)
 
         self.full_api_list = {}
         self.app_api_list = {}
