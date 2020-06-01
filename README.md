@@ -391,7 +391,11 @@ Just Don't Be Scared
 - Telegram [Synology Api](https://t.me/SynologyApi) Preferred
 - Slack [Synology Api](https://bit.ly/SynologyApi)
 
-### Authors
+## Support
+If this code helped and you wish to support me 
+- Paypal: https://paypal.me/ren4s4
+
+## Authors
 
 - Renato Visaggio - _Initial_ _Work_ - [N4S4](https://github.com/N4S4)
 
