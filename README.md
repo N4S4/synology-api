@@ -9,8 +9,6 @@ I would like to specify that **I am Not** a programmer as I do it all
 for hobby as is my passion and in my **little** free time.
 
 Said this you will find many things can be simplified and I slowly will.
-
-If you wish to help me you are welcome!
  
  
 ## SOMETHING GOING ON IN OUR MINDS
@@ -18,9 +16,14 @@ If you wish to help me you are welcome!
 We are working on a major update which will change how the wrapper works on the backstage, 
 improvements in responses speed and less resources used on your NAS. 
 We are trying to keep functions name in the same way so you wont have many (or at all ) issues if you were using it before.
-Once the update is ready and stable the following wrapper will be deprecated but not cancelled.
+Both branches will be kept active and updated with latest functionalities (I'll try my best at least)
+
+### Which one should you download? 
+If you wish to have a stable one I'd suggest to download the master branch,
+If you are looking for troubles or just to help me to develop the improving-code branch than download that, as it is written in a more "pythonic" way,
+the improving-code is still in development (and not sure if will ever be stable as it has more complicated code, which means time consuming)
 You can find the active branch, on this page, named 'Improving-code'.
-If you wish to help just don't be shy and let us know!
+If you wish to help just don't be shy and let me know!
  
  
 ## Something worth to read
@@ -41,6 +44,13 @@ Prior to install this wrapper you will need to install requests library.
 
 Just go to repository folder and run the setup.py it will install the wrapper for you.
 from the command line go to the downloaded folder and run:
+
+```
+pip3 install synology-api
+```
+
+or
+
 
 ```
 python3.6 setup.py install
