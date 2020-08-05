@@ -15,7 +15,7 @@ Said this you will find many things can be simplified and I slowly will.
 
 I am working on a major update which will change how the wrapper works on the backstage, 
 improvements in responses speed and less resources used on your NAS. 
-We are trying to keep functions name in the same way so you wont have many (or at all ) issues if you were using it before.
+I am trying to keep functions name in the same way so you wont have many (or at all ) issues if you were using it before.
 Both branches will be kept active and updated with latest functionalities (I'll try my best at least)
 
 ### Which one should you download? 
