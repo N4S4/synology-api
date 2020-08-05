@@ -13,15 +13,17 @@ Said this you will find many things can be simplified and I slowly will.
  
 ## SOMETHING GOING ON IN OUR MINDS
 
-We are working on a major update which will change how the wrapper works on the backstage, 
+I am working on a major update which will change how the wrapper works on the backstage, 
 improvements in responses speed and less resources used on your NAS. 
 We are trying to keep functions name in the same way so you wont have many (or at all ) issues if you were using it before.
 Both branches will be kept active and updated with latest functionalities (I'll try my best at least)
 
 ### Which one should you download? 
-If you wish to have a stable one I'd suggest to download the master branch,
+If you wish to have a stable one I'd suggest to download the master branch.
+
 If you are looking for troubles or just to help me to develop the improving-code branch than download that, as it is written in a more "pythonic" way,
 the improving-code is still in development (and not sure if will ever be stable as it has more complicated code, which means time consuming)
+
 You can find the active branch, on this page, named 'Improving-code'.
 If you wish to help just don't be shy and let me know!
  
