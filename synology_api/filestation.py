@@ -9,6 +9,14 @@ from urllib import parse
 from .synology import Synology, api_call
 
 
+def to_compatible_str(lst: list) -> str:
+    """
+    Convert a list to an API compatible string representation.
+    """
+    # The API only accepts double quoted strings, but str() returns single quoted strings
+    return str(lst).replace('\'', '\"')
+
+
 class FileStation(Synology):
     app = 'FileStation'
 
@@ -552,7 +560,7 @@ class FileStation(Synology):
         if type(folder_path) is list:
             new_fp = []
             for path in folder_path:
-                path = '"{p}"'.format(path)
+                path = '"{p}"'.format(p=path)
                 new_fp.append(path)
             folder_path = str(new_fp)
         param['folder_path'] = folder_path
@@ -752,7 +760,7 @@ class FileStation(Synology):
         if response['success']:
             self._extract_taskid_list.remove(taskid)
             if self._extract_taskid is taskid:
-                self._extract_taskid = self._extract_taksid_list[-1]
+                self._extract_taskid = self._extract_taskid_list[-1]
         return response
 
     """
@@ -781,11 +789,7 @@ class FileStation(Synology):
         param = {'version': info['maxVersion'], 'method': 'start'}
 
         if type(path) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in path]
-            path = new_path
-            path = '[' + ','.join(path) + ']'
-            param['path'] = path
+            param['path'] = to_compatible_str(path)
         elif path is not None:
             param['path'] = path
         else:
@@ -850,11 +854,7 @@ class FileStation(Synology):
                     param[str(key)] = val
 
         if type(api_filter) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in api_filter]
-            api_filter = new_path
-            api_filter = '[' + ','.join(api_filter) + ']'
-            param['api_filter'] = api_filter
+            param['api_filter'] = to_compatible_str(api_filter)
 
         return self.api_request(api_name, api_path, param)
 
@@ -865,6 +865,14 @@ class FileStation(Synology):
 
         if path is None:
             return 'Enter a valid path'
+
+        if type(path) is list:
+            path = to_compatible_str(path)
+            # Giving a list of files / folders to the API returns a .zip file as a response
+            # Change the filename, because right now it is a long string of file paths
+            filepath = 'content.zip'
+        else:
+            filepath = os.path.basename(path)
 
         session = requests.session()
 
@@ -884,7 +892,7 @@ class FileStation(Synology):
         if mode == r'download':
             with session.get(url, stream=True) as r:
                 r.raise_for_status()
-                with open(os.path.basename(path), 'wb') as f:
+                with open(filepath, 'wb') as f:
                     for chunk in r.iter_content(chunk_size=8192):
                         if chunk:  # filter out keep-alive new chunks
                             f.write(chunk)
