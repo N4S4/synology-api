@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='synology-api',
-    version='0.1.0',
+    version='0.1.1',
     packages=find_packages(exclude=['tests*']),
     license='MIT',
     description='Python Synology API Wrapper',
