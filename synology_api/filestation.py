@@ -980,7 +980,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_file(self, path=None, mode=None, chunkSize=8192):
+    def get_file(self, path=None, mode=None, chunkSize=8192, dest_path="."):
         api_name = 'SYNO.FileStation.Download'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1006,7 +1006,9 @@ class FileStation:
         if mode == r'download':
             with session.get(url, stream=True) as r:
                 r.raise_for_status()
-                with open(os.path.basename(path), 'wb') as f:
+                if not os.path.isdir(dest_path):
+                    os.makedirs(dest_path)
+                with open(dest_path + "/" +os.path.basename(path), 'wb') as f:
                     for chunk in r.iter_content(chunk_size=chunkSize):
                         if chunk:  # filter out keep-alive new chunks
                             f.write(chunk)
