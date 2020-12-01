@@ -1,3 +1,5 @@
+![synology-api](https://user-images.githubusercontent.com/33936751/100731387-99fffc00-33cb-11eb-833c-b6ab87177651.jpg)
+
 # Synology Wrapper
 
 If you find yourself on this page,
@@ -10,7 +12,11 @@ for hobby as is my passion and in my **little** free time.
 
 Said this you will find many things can be simplified and I slowly will.
  
- 
+## Feeling kind?
+If this code helps and you wish to support me 
+- Paypal: https://paypal.me/ren4s4
+
+
 ## SOMETHING GOING ON IN OUR MINDS
 
 I am working on a major update which will change how the wrapper works on the backstage, 
@@ -403,9 +409,6 @@ Just Don't Be Scared
 - Telegram [Synology Api](https://t.me/SynologyApi) Preferred
 - Slack [Synology Api](https://bit.ly/SynologyApi)
 
-## Support
-If this code helped and you wish to support me 
-- Paypal: https://paypal.me/ren4s4
 
 ## Authors
 
