@@ -2,13 +2,14 @@ import requests
 
 
 class Authentication:
-    def __init__(self, ip_address, port, username, password, secure=False):
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False):
         self._ip_address = ip_address
         self._port = port
         self._username = username
         self._password = password
         self._sid = None
         self._session_expire = True
+        self._verify = cert_verify
         schema = 'https' if secure else 'http'
         self._base_url = '%s://%s:%s/webapi/' % (schema, self._ip_address, self._port)
 
@@ -25,7 +26,7 @@ class Authentication:
                 self._session_expire = False
                 return 'User already logged'
         else:
-            session_request = requests.get(self._base_url + login_api, param)
+            session_request = requests.get(self._base_url + login_api, param, verify=self._verify)
             self._sid = session_request.json()['data']['sid']
             self._session_expire = False
             return 'User logging... New session started!'
@@ -48,7 +49,7 @@ class Authentication:
         query_path = 'query.cgi?api=SYNO.API.Info'
         list_query = {'version': '1', 'method': 'query', 'query': 'all'}
 
-        response = requests.get(self._base_url + query_path, list_query).json()
+        response = requests.get(self._base_url + query_path, list_query, verify=self._verify).json()
 
         if app is not None:
             for key in response['data']:
@@ -88,8 +89,8 @@ class Authentication:
 
     def request_data(self, api_name, api_path, req_param, method=None, response_json=True):  # 'post' or 'get'
 
-        # Convert all booleen in string in lowercase because Synology API is waiting for "true" or "false"
-        for k,v in req_param.items():
+        # Convert all boolean in string in lowercase because Synology API is waiting for "true" or "false"
+        for k, v in req_param.items():
             if isinstance(v, bool):
                 req_param[k] = str(v).lower()
 
@@ -100,7 +101,7 @@ class Authentication:
 
         if method is 'get':
             url = ('%s%s' % (self._base_url, api_path)) + '?api=' + api_name
-            response = requests.get(url, req_param)
+            response = requests.get(url, req_param, verify=self._verify)
 
             if response_json is True:
                 return response.json()
@@ -109,7 +110,7 @@ class Authentication:
 
         elif method is 'post':
             url = ('%s%s' % (self._base_url, api_path)) + '?api=' + api_name
-            response = requests.post(url, req_param)
+            response = requests.post(url, req_param, verify=self._verify)
 
             if response_json is True:
                 return response.json()
