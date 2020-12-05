@@ -71,7 +71,7 @@ pip3 install git+https://github.com/N4S4/synology-api
 ```
 
 
-## Basic Usage
+## Basic Usage HTTP
 
 ```python
 from synology_api import filestation, downloadstation
@@ -105,6 +105,18 @@ response would be json data
   'uid': 1026},
  'success': True}
 ```
+
+## If required HTTPS  (it requires a valid certificate)
+
+```python
+
+fl = filestation.FileStation('Synology Ip', 'Synology Port', 'Username', 'Password', secure=True, cert_verify=True)
+
+```
+
+the ```secure=True``` variable is needed to be set to true if https is required; default value is ```False``` <br />
+the ```cert_verify=True```  is optional, if you want to verify your certificate set it to ```True```; default value is ```False```
+
 
 ## Available Functions
 
@@ -199,7 +211,7 @@ This wrapper cover the following APIs for now:
 | SYNO.Storage.CGI.Storage |
 
 | Virtualization |
-| -------- |
+| -------------- |
 | SYNO.Virtualization.API.Task.Info |
 | SYNO.Virtualization.API.Network |
 | SYNO.Virtualization.API.Storage |
@@ -208,6 +220,10 @@ This wrapper cover the following APIs for now:
 | SYNO.Virtualization.API.Guest.Action |
 | SYNO.Virtualization.API.Guest.Image |
 
+| Backup |
+| ------ |
+| SYNO.Backup.Repository |
+| SYNO.Backup.Task |
 
 #### FileStation Functions list
 
@@ -352,6 +368,8 @@ DS info with below functions:
 
 ### Virtualization
 
+| Functions |  
+| --- | 
 | get_task_list() |
 | clear_task() |
 | get_taks_info() |
@@ -368,6 +386,16 @@ DS info with below functions:
 | get_images_list() |
 | delete_image() |
 | create_image() |
+
+### Backup
+
+| Functions |  
+| --- | 
+| backup_repository_get() |
+| backup_repository_list() |
+| backup_task_list |
+| backup_task_status |
+| backup_task_get |
 
 
 #### What's still missing
