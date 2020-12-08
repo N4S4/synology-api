@@ -225,6 +225,11 @@ This wrapper cover the following APIs for now:
 | SYNO.Backup.Repository |
 | SYNO.Backup.Task |
 
+| Active Backup for Business |
+| ------ |
+| SYNO.ActiveBackup.Inventory |
+| SYNO.ActiveBackup.Overview |
+
 #### FileStation Functions list
 
 To explain the use of some function I will divide all the functions in two sets
@@ -397,6 +402,12 @@ DS info with below functions:
 | backup_task_status |
 | backup_task_get |
 
+### Active Backup for Business
+
+| Functions | Description |
+| --- | --- |
+| list_vm_hypervisor() | list of all configured hypervisors |
+| list_device_transfer_size() | list of all detected vms |
 
 #### What's still missing
 
@@ -441,8 +452,5 @@ Just Don't Be Scared
 ## Authors
 
 - Renato Visaggio - _Initial_ _Work_ - [N4S4](https://github.com/N4S4)
-
-
-
-
+- Raphael Pertl - _Active_ _Backup_ - [raph2i](https://github.com/raph2i)
 
