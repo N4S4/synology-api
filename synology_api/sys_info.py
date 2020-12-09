@@ -2,9 +2,9 @@ from . import auth as syn
 
 
 class SysInfo:
-    def __init__(self, ip_address, port, username, password, secure=False):
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False):
 
-        self.session = syn.Authentication(ip_address, port, username, password, secure)
+        self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify)
 
         self.session.login('Core')
         self.session.get_api_list('Core')
