@@ -478,7 +478,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def upload_file(self, dest_path, file_path, create_parents=True, overwrite=True):
+    def upload_file(self, dest_path, file_path, create_parents=True, overwrite=True verify=True):
         api_name = 'SYNO.FileStation.Upload'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -498,7 +498,7 @@ class FileStation:
 
             files = {'file': (filename, payload, 'application/octet-stream')}
 
-            r = session.post(url, data=args, files=files)
+            r = session.post(url, data=args, files=files, verify=verify)
 
             if r.status_code is 200 and r.json()['success']:
                 return 'Upload Complete'
