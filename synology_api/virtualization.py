@@ -3,9 +3,9 @@ from . import auth as syn
 
 class Virtualization:
 
-    def __init__(self, ip_address, port, username, password, secure=False):
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False):
 
-        self.session = syn.Authentication(ip_address, port, username, password, secure)
+        self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify)
 
         self.request_data = self.session.request_data
 
@@ -23,6 +23,9 @@ class Virtualization:
         self.file_station_list = self.session.app_api_list
         self._sid = self.session.sid
         self.base_url = self.session.base_url
+
+    def logout(self):
+        self.session.logout('Virtualization')
 
     def get_task_list(self):
         api_name = 'SYNO.Virtualization.API.Task.Info'

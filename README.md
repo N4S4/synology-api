@@ -1,3 +1,5 @@
+![synology-api](https://user-images.githubusercontent.com/33936751/100731387-99fffc00-33cb-11eb-833c-b6ab87177651.jpg)
+
 # Synology Wrapper
 
 If you find yourself on this page,
@@ -10,7 +12,11 @@ for hobby as is my passion and in my **little** free time.
 
 Said this you will find many things can be simplified and I slowly will.
  
- 
+## Feeling kind?
+If this code helps and you wish to support me 
+- Paypal: https://paypal.me/ren4s4
+
+
 ## SOMETHING GOING ON IN OUR MINDS
 
 I am working on a major update which will change how the wrapper works on the backstage, 
@@ -65,7 +71,7 @@ pip3 install git+https://github.com/N4S4/synology-api
 ```
 
 
-## Basic Usage
+## Basic Usage HTTP
 
 ```python
 from synology_api import filestation, downloadstation
@@ -99,6 +105,18 @@ response would be json data
   'uid': 1026},
  'success': True}
 ```
+
+## If required HTTPS  (it requires a valid certificate)
+
+```python
+
+fl = filestation.FileStation('Synology Ip', 'Synology Port', 'Username', 'Password', secure=True, cert_verify=True)
+
+```
+
+the ```secure=True``` variable is needed to be set to true if https is required; default value is ```False``` <br />
+the ```cert_verify=True```  is optional, if you want to verify your certificate set it to ```True```; default value is ```False```
+
 
 ## Available Functions
 
@@ -193,7 +211,7 @@ This wrapper cover the following APIs for now:
 | SYNO.Storage.CGI.Storage |
 
 | Virtualization |
-| -------- |
+| -------------- |
 | SYNO.Virtualization.API.Task.Info |
 | SYNO.Virtualization.API.Network |
 | SYNO.Virtualization.API.Storage |
@@ -202,6 +220,15 @@ This wrapper cover the following APIs for now:
 | SYNO.Virtualization.API.Guest.Action |
 | SYNO.Virtualization.API.Guest.Image |
 
+| Backup |
+| ------ |
+| SYNO.Backup.Repository |
+| SYNO.Backup.Task |
+
+| Active Backup for Business |
+| ------ |
+| SYNO.ActiveBackup.Inventory |
+| SYNO.ActiveBackup.Overview |
 
 #### FileStation Functions list
 
@@ -346,6 +373,8 @@ DS info with below functions:
 
 ### Virtualization
 
+| Functions |  
+| --- | 
 | get_task_list() |
 | clear_task() |
 | get_taks_info() |
@@ -363,6 +392,22 @@ DS info with below functions:
 | delete_image() |
 | create_image() |
 
+### Backup
+
+| Functions |  
+| --- | 
+| backup_repository_get() |
+| backup_repository_list() |
+| backup_task_list |
+| backup_task_status |
+| backup_task_get |
+
+### Active Backup for Business
+
+| Functions | Description |
+| --- | --- |
+| list_vm_hypervisor() | list of all configured hypervisors |
+| list_device_transfer_size() | list of all detected vms |
 
 #### What's still missing
 
@@ -403,15 +448,9 @@ Just Don't Be Scared
 - Telegram [Synology Api](https://t.me/SynologyApi) Preferred
 - Slack [Synology Api](https://bit.ly/SynologyApi)
 
-## Support
-If this code helped and you wish to support me 
-- Paypal: https://paypal.me/ren4s4
 
 ## Authors
 
 - Renato Visaggio - _Initial_ _Work_ - [N4S4](https://github.com/N4S4)
-
-
-
-
+- Raphael Pertl - _Active_ _Backup_ - [raph2i](https://github.com/raph2i)
 
