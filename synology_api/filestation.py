@@ -980,7 +980,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_file(self, path=None, mode=None, chunkSize=8192, dest_path=".",verify=True):
+    def get_file(self, path=None, mode=None, dest_path=".", chunk_size=8192, verify=True):
         api_name = 'SYNO.FileStation.Download'
         info = self.file_station_list[api_name]
         api_path = info['path']
