@@ -478,7 +478,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def upload_file(self, dest_path, file_path, create_parents=True, overwrite=True verify=True):
+    def upload_file(self, dest_path, file_path, create_parents=True, overwrite=True, verify=True):
         api_name = 'SYNO.FileStation.Upload'
         info = self.file_station_list[api_name]
         api_path = info['path']
