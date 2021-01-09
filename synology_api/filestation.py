@@ -478,13 +478,16 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def upload_file(self, dest_path, file_path, create_parents=True, overwrite=True, verify=True):
+    def upload_file(self, dest_path, file_path, create_parents=True, overwrite=True, verify=False):
         api_name = 'SYNO.FileStation.Upload'
         info = self.file_station_list[api_name]
         api_path = info['path']
         filename = os.path.basename(file_path)
 
         session = requests.session()
+        
+        if self.base_url[:5] == 'https':
+            verify = True
 
         with open(file_path, 'rb') as payload:
             url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=upload&_sid=%s' % (
@@ -980,7 +983,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_file(self, path=None, mode=None, dest_path=".", chunk_size=8192, verify=True):
+    def get_file(self, path=None, mode=None, dest_path=".", chunk_size=8192, verify=False):
 
         api_name = 'SYNO.FileStation.Download'
         info = self.file_station_list[api_name]
@@ -988,6 +991,9 @@ class FileStation:
 
         if path is None:
             return 'Enter a valid path'
+        
+        if self.base_url[:5] == 'https':
+            verify = True
 
         session = requests.session()
 
