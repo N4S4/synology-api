@@ -478,13 +478,16 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def upload_file(self, dest_path, file_path, create_parents=True, overwrite=True):
+    def upload_file(self, dest_path, file_path, create_parents=True, overwrite=True, verify=False):
         api_name = 'SYNO.FileStation.Upload'
         info = self.file_station_list[api_name]
         api_path = info['path']
         filename = os.path.basename(file_path)
 
         session = requests.session()
+        
+        if self.base_url[:5] == 'https':
+            verify = True
 
         with open(file_path, 'rb') as payload:
             url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=upload&_sid=%s' % (
@@ -498,7 +501,7 @@ class FileStation:
 
             files = {'file': (filename, payload, 'application/octet-stream')}
 
-            r = session.post(url, data=args, files=files)
+            r = session.post(url, data=args, files=files, verify=verify)
 
             if r.status_code is 200 and r.json()['success']:
                 return 'Upload Complete'
@@ -980,13 +983,17 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_file(self, path=None, mode=None, dest_path=".", chunk_size=8192):
+    def get_file(self, path=None, mode=None, dest_path=".", chunk_size=8192, verify=False):
+
         api_name = 'SYNO.FileStation.Download'
         info = self.file_station_list[api_name]
         api_path = info['path']
 
         if path is None:
             return 'Enter a valid path'
+        
+        if self.base_url[:5] == 'https':
+            verify = True
 
         session = requests.session()
 
@@ -997,14 +1004,14 @@ class FileStation:
             return 'Enter a valid mode (open / download)'
 
         if mode == r'open':
-            with session.get(url, stream=True) as r:
+            with session.get(url, stream=True,verify=verify) as r:
                 r.raise_for_status()
                 for chunk in r.iter_content(chunk_size=chunk_size):
                     if chunk:  # filter out keep-alive new chunks
                         sys.stdout.buffer.write(chunk)
 
         if mode == r'download':
-            with session.get(url, stream=True) as r:
+            with session.get(url, stream=True,verify=verify) as r:
                 r.raise_for_status()
                 if not os.path.isdir(dest_path):
                     os.makedirs(dest_path)
