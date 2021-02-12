@@ -449,8 +449,11 @@ Just Don't Be Scared
 - Slack [Synology Api](https://bit.ly/SynologyApi)
 
 
-## Authors
+## Author
 
 - Renato Visaggio - _Initial_ _Work_ - [N4S4](https://github.com/N4S4)
+
+## Contributors
+
 - Raphael Pertl - _Active_ _Backup_ - [raph2i](https://github.com/raph2i)
 
