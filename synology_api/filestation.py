@@ -485,9 +485,6 @@ class FileStation:
         filename = os.path.basename(file_path)
 
         session = requests.session()
-        
-        if self.base_url[:5] == 'https':
-            verify = True
 
         with open(file_path, 'rb') as payload:
             url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=upload&_sid=%s' % (
@@ -991,9 +988,6 @@ class FileStation:
 
         if path is None:
             return 'Enter a valid path'
-        
-        if self.base_url[:5] == 'https':
-            verify = True
 
         session = requests.session()
 
