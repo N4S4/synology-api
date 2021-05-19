@@ -492,8 +492,8 @@ class FileStation:
 
             args = {
                 'path': dest_path,
-                'create_parents': create_parents,
-                'overwrite': overwrite,
+                'create_parents': str(create_parents).lower(),
+                'overwrite': str(overwrite).lower(),
             }
 
             files = {'file': (filename, payload, 'application/octet-stream')}
