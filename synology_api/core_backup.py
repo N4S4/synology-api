@@ -1,25 +1,9 @@
-from . import auth as syn
+from . import base_api_core
 
 
-class Backup:
+class Backup(base_api_core.Core):
     def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False):
-
-        self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify)
-
-        self.session.login('Core')
-        self.session.get_api_list('Core')
-        self.session.get_api_list()
-
-        self.request_data = self.session.request_data
-        self.core_list = self.session.app_api_list
-        self.gen_list = self.session.full_api_list
-        self._sid = self.session.sid
-        self.base_url = self.session.base_url
-
-        print('You are now logged in!')
-
-    def logout(self):
-        self.session.logout('Core')
+        super(Backup, self).__init__(ip_address, port, username, password, secure, cert_verify)
 
     def backup_repository_get(self):
         api_name = 'SYNO.Backup.Repository'

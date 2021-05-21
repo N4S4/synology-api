@@ -1,1 +1,12 @@
-from . import auth, filestation, downloadstation, audiostation, sys_info, virtualization, backup, active_backup
+from . import \
+    audiostation,\
+    auth,\
+    base_api_core,\
+    core_active_backup,\
+    core_backup,\
+    core_certificate,\
+    core_sys_info,\
+    downloadstation,\
+    filestation,\
+    virtualization
+
