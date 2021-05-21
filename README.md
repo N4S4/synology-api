@@ -17,9 +17,9 @@ If this code helps and you wish to support me
 - Paypal: https://paypal.me/ren4s4
 
 
-## SOMETHING GOING ON IN OUR MINDS
-
-I am working on a major update which will change how the wrapper works on the backstage, 
+## SOMETHING GOING ON IN OUR MIND
+ 
+I am working on improving-code branch which changes how the wrapper works on the backstage, 
 improvements in responses speed and less resources used on your NAS. 
 I am trying to keep functions name in the same way so you wont have many (or at all ) issues if you were using it before.
 Both branches will be kept active and updated with latest functionalities (I'll try my best at least)
@@ -150,7 +150,7 @@ This wrapper cover the following APIs for now:
 | SYNO.FileStation.Compress | 
 | SYNO.FileStation.BackgroundTask | 
 
-| sys_info |
+| core_sys_info |
 | -------- |
 | SYNO.Core.System |
 | SYNO.Core.FileServ.SMB |
@@ -220,12 +220,12 @@ This wrapper cover the following APIs for now:
 | SYNO.Virtualization.API.Guest.Action |
 | SYNO.Virtualization.API.Guest.Image |
 
-| Backup |
+| core_backup |
 | ------ |
 | SYNO.Backup.Repository |
 | SYNO.Backup.Task |
 
-| Active Backup for Business |
+| core_active_backup (Active Backup for Business) |
 | ------ |
 | SYNO.ActiveBackup.Inventory |
 | SYNO.ActiveBackup.Overview |
@@ -251,7 +251,7 @@ you can run the following set of functions at your will entering just the requir
 | edit_favorite_name() | Edit a favorite name  |
 | replace_all_favorite() | Replace multiple favorites of folders to the existed user’s favorites.  |
 | check_permission() | Check if a logged-in user has write permission to create new files/folders in a given folder  |
-| upload_file() | upload a file to the station |
+| upload_file() | upload a file to the station (fix by @longyn) |
 | get_shared_link_info() | Get information of a sharing link by the sharing link ID  |
 | get_shared_link_list() | List user’s file sharing links.  |
 | create_sharing_link() | Generate one or more sharing link(s) by file/folder path(s)  |
@@ -288,7 +288,7 @@ To run the following functions you'll have to start the task with the start func
 | start_file_compression() | Start to compress file(s)/folder(s). |
 | get_compress_status() | Get the compress task status |
 | stop_compress_task() | Stop the compress task |
-| get_file() | Download or open file by [kidburglar](https://github.com/kidburglar) |
+| get_file() | Download or open file |
 
 #### DownloadStations functions are:
 
@@ -306,7 +306,7 @@ To run the following functions you'll have to start the task with the start func
 | resume_task()  | Resume a task  |
 | edit_task()  | Edit a Task  |
 
-#### sys_info 
+#### core_sys_info 
 
 Although there is nothing you can set (yet), is possible to retrieve lots of 
 DS info with below functions:
@@ -392,7 +392,7 @@ DS info with below functions:
 | delete_image() |
 | create_image() |
 
-### Backup
+### core_backup
 
 | Functions |  
 | --- | 
@@ -402,12 +402,21 @@ DS info with below functions:
 | backup_task_status |
 | backup_task_get |
 
-### Active Backup for Business
+### core_active_backup Active Backup for Business
 
 | Functions | Description |
 | --- | --- |
 | list_vm_hypervisor() | list of all configured hypervisors |
 | list_device_transfer_size() | list of all detected vms |
+
+### core_certificate tnx to @ajarzyn
+
+| Functions | Description |
+| --- | --- |
+| list_cert() | list certificates |
+| set_default_cert() | set default certificate |
+| upload_cert() | upload a certificate |
+
 
 #### What's still missing
 
