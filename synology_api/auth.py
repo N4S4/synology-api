@@ -1,4 +1,5 @@
 import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 
 class Authentication:
@@ -10,11 +11,16 @@ class Authentication:
         self._sid = None
         self._session_expire = True
         self._verify = cert_verify
+        if self._verify is False:
+            requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         schema = 'https' if secure else 'http'
         self._base_url = '%s://%s:%s/webapi/' % (schema, self._ip_address, self._port)
 
         self.full_api_list = {}
         self.app_api_list = {}
+
+    def verify_cert_enabled(self):
+        return self._verify
 
     def login(self, application):
         login_api = 'auth.cgi?api=SYNO.API.Auth'
