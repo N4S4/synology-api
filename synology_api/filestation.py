@@ -406,9 +406,7 @@ class FileStation:
         req_param = {'version': info['maxVersion'], 'method': 'status', 'taskid': taskid}
 
         if taskid is None and self._dir_taskid is not '':
-            req_param['taskid'] = self._dir_taskid
-        else:
-            return 'Did you run start_dir_size_calc() first? No task id found!' + str(self._dir_taskid_list)
+            return 'Choose a taskid from this list: ' + str(self._dir_taskid)
 
         return self.request_data(api_name, api_path, req_param)
 
