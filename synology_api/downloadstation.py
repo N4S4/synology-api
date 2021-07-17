@@ -111,7 +111,7 @@ class DownloadStation:
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'create', 'uri': uri}
 
-        if additional_param is list:
+        if additional_param is dict:
             for key in additional_param.keys():
                 req_param[key] = additional_param[key]
 
