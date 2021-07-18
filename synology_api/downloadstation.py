@@ -105,6 +105,18 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, req_param)
 
+    def create_uri_task(self, uri, additional_param=None):
+        api_name = 'SYNO.DownloadStation.Task'
+        info = self.download_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'create', 'uri': uri}
+
+        if additional_param is dict:
+            for key in additional_param.keys():
+                req_param[key] = additional_param[key]
+
+        return self.request_data(api_name, api_path, req_param)
+
     def delete_task(self, task_id, force=False):
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
