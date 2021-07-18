@@ -3,9 +3,9 @@ from . import auth as syn
 
 class DownloadStation:
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False):
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=2):
 
-        self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify)
+        self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version)
         self._bt_search_id = ''
         self._bt_search_id_list = []
         self.session.login('DownloadStation')
@@ -105,7 +105,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def create_uri_task(self, uri, additional_param=None):
+    def create_task(self, uri, additional_param=None):
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']

@@ -110,13 +110,14 @@ response would be json data
 
 ```python
 
-fl = filestation.FileStation('Synology Ip', 'Synology Port', 'Username', 'Password', secure=True, cert_verify=True)
+fl = filestation.FileStation('Synology Ip', 'Synology Port', 'Username', 'Password', secure=True, cert_verify=True, dsm_version=7)
 
 ```
 
 the ```secure=True``` variable is needed to be set to true if https is required; default value is ```False``` <br />
-the ```cert_verify=True```  is optional, if you want to verify your certificate set it to ```True```; default value is ```False```
-
+the ```cert_verify=True```  is optional, if you want to verify your certificate set it to ```True```; default value is ```False```<br />
+the ```dms_version=7``` is optional, make sure to set '7' if you use DSM version 7 or above, if left blank default value 
+will be for DSM 6 or below 
 
 ## Available Functions
 
@@ -301,6 +302,7 @@ To run the following functions you'll have to start the task with the start func
 | schedule_set_config()  | Sets advanced schedule settings.  |
 | tasks_list()  | Provides task listing  |
 | tasks_info()  | Provides detailed task information  |
+| create_task  | Create a download task |
 | delete_task()  | Delete a Task  |
 | pause_task()  | Pause a Task  |
 | resume_task()  | Resume a task  |
@@ -426,10 +428,6 @@ There is still few missing function which is a work in progress:
 |----------------------|
 | SYNO.FileStation.Thumb  |  
 
-| Missing in DownloadStation |
-|---|
-| SYNO.DownloadStation.Task create |
-
 | Missing in Virtualization |
 |---|
 | SYNO.Virtualization.API.Guest create |
@@ -456,6 +454,7 @@ Just Don't Be Scared
 
 - Telegram [Synology Api](https://t.me/SynologyApi) Preferred
 - Slack [Synology Api](https://bit.ly/SynologyApi)
+- Facebook Group [Synology Api](https://www.facebook.com/groups/1438135323193796)
 
 
 ## Author
@@ -464,5 +463,5 @@ Just Don't Be Scared
 
 ## Contributors
 
-- Raphael Pertl - _Active_ _Backup_ - [raph2i](https://github.com/raph2i)
+- List of contributors here_ - [Contributors](https://github.com/N4S4/synology-api/graphs/contributors)
 

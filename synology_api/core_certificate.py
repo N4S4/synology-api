@@ -6,8 +6,8 @@ import json
 
 
 class Certificate(base_api_core.Core):
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False):
-        super(Certificate, self).__init__(ip_address, port, username, password, secure, cert_verify)
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=2):
+        super(Certificate, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version)
 
     def _base_certificate_methods(self, method, cert_id=None, ids=None):
         available_method = ['list', 'set', 'delete']

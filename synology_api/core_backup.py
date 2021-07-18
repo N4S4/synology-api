@@ -2,8 +2,8 @@ from . import base_api_core
 
 
 class Backup(base_api_core.Core):
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False):
-        super(Backup, self).__init__(ip_address, port, username, password, secure, cert_verify)
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=2):
+        super(Backup, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version)
 
     def backup_repository_get(self):
         api_name = 'SYNO.Backup.Repository'

@@ -3,7 +3,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 
 class Authentication:
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False):
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=2):
         self._ip_address = ip_address
         self._port = port
         self._username = username
@@ -11,6 +11,7 @@ class Authentication:
         self._sid = None
         self._session_expire = True
         self._verify = cert_verify
+        self._version = dsm_version
         if self._verify is False:
             requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         schema = 'https' if secure else 'http'
@@ -24,7 +25,7 @@ class Authentication:
 
     def login(self, application):
         login_api = 'auth.cgi?api=SYNO.API.Auth'
-        param = {'version': '2', 'method': 'login', 'account': self._username,
+        param = {'version': self._version, 'method': 'login', 'account': self._username,
                  'passwd': self._password, 'session': application, 'format': 'cookie'}
 
         if not self._session_expire:
