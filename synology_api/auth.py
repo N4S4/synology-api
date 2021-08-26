@@ -30,7 +30,6 @@ class Authentication:
 
         if not self._session_expire:
             if self._sid is not None:
-                self._session_expire = False
                 return 'User already logged'
         else:
             session_request = requests.get(self._base_url + login_api, param, verify=self._verify)
