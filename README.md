@@ -116,7 +116,7 @@ fl = filestation.FileStation('Synology Ip', 'Synology Port', 'Username', 'Passwo
 
 the ```secure=True``` variable is needed to be set to true if https is required; default value is ```False``` <br />
 the ```cert_verify=True```  is optional, if you want to verify your certificate set it to ```True```; default value is ```False```<br />
-the ```dms_version=7``` is optional, make sure to set '7' if you use DSM version 7 or above, if left blank default value 
+the ```dsm_version=7``` is optional, make sure to set '7' if you use DSM version 7 or above, if left blank default value 
 will be for DSM 6 or below 
 
 ## Available Functions
