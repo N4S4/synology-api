@@ -33,30 +33,6 @@ class DirectoryServer(base_api_core.Core):
     """
 
     def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7):
-        """Directory Server class.  
-
-        Handles directory server requests.
-
-        Parameters
-        ----------
-        ip_address: str
-            The IP address of the Synology device.  eg. "192.168.1.100", or "synology.local"
-        port: str
-            The Port used to interact with the web server of the Synology device. eg. "5000", "5001", "80", or "443"
-        username: str
-            The username for login, similar to the AD/LDAP Bind DN used to make account changes. eg. "admindoe"
-        password: str
-            The password for login, similar to the AD/LDAP Bind Pass for the username. eg "Password123"
-        secure: Optional, boolean
-            Set to true if we should attempt to use https encryption. 
-            Default: False
-        cert_verify: Optional, Boolean
-            Set to true if we should attempt to verify the server cert is registered and valid.
-            Default: False
-        dsm_version: Optional, Integer
-            The version of API used for the API. 
-
-        """
         super(DirectoryServer, self).__init__(ip_address, port,
                                               username, password, secure, cert_verify, dsm_version)
 
