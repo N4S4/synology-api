@@ -6,9 +6,9 @@ import json
 
 
 class Certificate(base_api_core.Core):
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=2):
-        super(Certificate, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version)
-
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=2, debug=True):
+        super(Certificate, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug)
+        self._debug = debug
     def _base_certificate_methods(self, method, cert_id=None, ids=None):
         available_method = ['list', 'set', 'delete']
         if method not in available_method:
@@ -79,7 +79,8 @@ class Certificate(base_api_core.Core):
             payload_ca_cert.close()
 
         if r.status_code is 200 and r.json()['success']:
-            print('Certificate upload successful.')
+            if self._debug is True:
+                print('Certificate upload successful.')
 
         return r.status_code, r.json()
 

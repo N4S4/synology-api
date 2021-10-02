@@ -3,7 +3,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 
 class Authentication:
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=2):
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=2, debug=True):
         self._ip_address = ip_address
         self._port = port
         self._username = username
@@ -12,6 +12,7 @@ class Authentication:
         self._session_expire = True
         self._verify = cert_verify
         self._version = dsm_version
+        self._debug = debug
         if self._verify is False:
             requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         schema = 'https' if secure else 'http'
@@ -31,12 +32,14 @@ class Authentication:
         if not self._session_expire:
             if self._sid is not None:
                 self._session_expire = False
-                return 'User already logged'
+                if self._debug is True:
+                    return 'User already logged'
         else:
             session_request = requests.get(self._base_url + login_api, param, verify=self._verify)
             self._sid = session_request.json()['data']['sid']
             self._session_expire = False
-            return 'User logging... New session started!'
+            if self._debug is True:
+                return 'User logging... New session started!'
 
     def logout(self, application):
         logout_api = 'auth.cgi?api=SYNO.API.Auth'
@@ -46,11 +49,13 @@ class Authentication:
         if response.json()['success'] is True:
             self._session_expire = True
             self._sid = None
-            return 'Logged out'
+            if self._debug is True:
+                return 'Logged out'
         else:
             self._session_expire = True
             self._sid = None
-            return 'No valid session is open'
+            if self._debug is True:
+                return 'No valid session is open'
 
     def get_api_list(self, app=None):
         query_path = 'query.cgi?api=SYNO.API.Info'

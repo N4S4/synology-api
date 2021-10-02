@@ -16,6 +16,12 @@ Said this you will find many things can be simplified and I slowly will.
 If this code helps and you wish to support me 
 - Paypal: https://paypal.me/ren4s4
 
+## Groups to Ask Discuss Request and Improve the code
+
+- Telegram [Synology Api](https://t.me/SynologyApi) Preferred
+- Slack [Synology Api](https://bit.ly/SynologyApi)
+- Facebook Group [Synology Api](https://www.facebook.com/groups/1438135323193796)
+
 
 ## SOMETHING GOING ON IN OUR MIND
  
@@ -110,7 +116,7 @@ response would be json data
 
 ```python
 
-fl = filestation.FileStation('Synology Ip', 'Synology Port', 'Username', 'Password', secure=True, cert_verify=True, dsm_version=7)
+fl = filestation.FileStation('Synology Ip', 'Synology Port', 'Username', 'Password', secure=True, cert_verify=True, dsm_version=7, debug=True)
 
 ```
 
@@ -118,6 +124,7 @@ the ```secure=True``` variable is needed to be set to true if https is required;
 the ```cert_verify=True```  is optional, if you want to verify your certificate set it to ```True```; default value is ```False```<br />
 the ```dsm_version=7``` is optional, make sure to set '7' if you use DSM version 7 or above, if left blank default value 
 will be for DSM 6 or below 
+the ```debug=True``` is optional, if set to False not all responses will return to console
 
 ## Available Functions
 
@@ -449,13 +456,6 @@ The code is probably is some parts twisted and I will try to optimize it at best
 ### Contributing
 
 Just Don't Be Scared
-
-## Groups to Ask Discuss Request and Improve the code
-
-- Telegram [Synology Api](https://t.me/SynologyApi) Preferred
-- Slack [Synology Api](https://bit.ly/SynologyApi)
-- Facebook Group [Synology Api](https://www.facebook.com/groups/1438135323193796)
-
 
 ## Author
 
