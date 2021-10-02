@@ -3,7 +3,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 
 class Authentication:
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=2, debug=True):
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True):
         self._ip_address = ip_address
         self._port = port
         self._username = username
