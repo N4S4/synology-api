@@ -112,6 +112,45 @@ response would be json data
  'success': True}
 ```
 
+### Synology Photos
+
+```python
+import synology_api
+from pprint import pprint
+
+photos = synology_api.photos.Photos('Synology Ip', 'Synology Port', 'Username', 'Password', dsm_version=7)
+
+albums = photos.list_albums()
+pprint(albums)
+
+folders = photos.list_folders()
+pprint(folders)
+
+print("count", photos.count_folders())
+
+folders = photos.list_folders(3)
+pprint(folders)
+
+tag = 'mytag'
+tags = photos.suggest_condition(tag)
+tag_id = next(filter(lambda elem: elem['name'] == tag, tags['data']['general_tag']))['id']
+
+folder = '/myfolder'
+folder_id = photos.lookup_folder_id(folder)
+
+user_id = photos.get_userinfo()['data']['id']
+
+album_response = photos.create_album('MyAlbum', {"user_id":user_id,"item_type":[],"folder_filter":[folder_id],"general_tag":[tag_id],"general_tag_policy":"or"})
+pprint(album_response)
+album_id = album_response['data']['album']['id']
+
+users_and_groups = photos.list_shareable_users_and_groups()
+group = 'mygroup'
+group_id = next(filter(lambda elem: elem['name'] == group and elem['type'] == 'group', users_and_groups['data']['list']))['id']
+
+pprint(photos.share_album(album_id, [{"role":"download","action":"update","member":{"type":"group","id":group_id}}]))
+```
+
 ## If required HTTPS  (it requires a valid certificate)
 
 ```python
