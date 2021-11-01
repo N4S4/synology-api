@@ -52,3 +52,11 @@ class Backup(base_api_core.Core):
         req_param = {'version': info['minVersion'], 'method': 'status', 'blOnline': 'false', 'additional': '["last_bkp_time","next_bkp_time","last_bkp_result","is_modified","last_bkp_progress"]', 'task_id': taskid}
 
         return self.request_data(api_name, api_path, req_param)
+
+    def vault_target_list(self):
+        api_name = 'SYNO.Backup.Service.VersionBackup.Target'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['minVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
