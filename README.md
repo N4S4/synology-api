@@ -158,6 +158,17 @@ This wrapper cover the following APIs for now:
 | SYNO.FileStation.Compress | 
 | SYNO.FileStation.BackgroundTask | 
 
+| Photo |
+| -------- |
+|SYNO.Foto.UserInfo|
+|SYNO.Foto.Browse.Folder|
+|SYNO.FotoTeam.Browse.Folder|
+|SYNO.Foto.Browse.Album|
+|SYNO.Foto.Browse.ConditionAlbum|
+|SYNO.Foto.Sharing.Passphrase|
+|SYNO.FotoTeam.Sharing.Passphrase|
+|SYNO.Foto.Sharing.Misc|
+
 | core_sys_info |
 | -------- |
 | SYNO.Core.System |
@@ -298,7 +309,7 @@ To run the following functions you'll have to start the task with the start func
 | stop_compress_task() | Stop the compress task |
 | get_file() | Download or open file |
 
-#### DownloadStations functions are:
+#### DownloadStations functions:
 
 | Function | Description |
 | --- | --- |
@@ -315,7 +326,30 @@ To run the following functions you'll have to start the task with the start func
 | resume_task()  | Resume a task  |
 | edit_task()  | Edit a Task  |
 
-#### core_sys_info 
+#### Photo functions:
+
+| Function |
+| --- |
+|get_userinfo()|
+|get_folder()|
+|list_folders()|
+|list_teams_folders()|
+|count_folders()|
+|count_team_folders()|
+|lookup_folder()|
+|lookup_team_folder()|
+|get_album()|
+|list_albums()|
+|suggest_condition()|
+|create_album()|
+|delete_album()|
+|set_album_condition()|
+|share_album()|
+|share_team_folder()|
+|list_shareable_users_and_groups()|
+
+
+#### core_sys_info:
 
 Although there is nothing you can set (yet), is possible to retrieve lots of 
 DS info with below functions:

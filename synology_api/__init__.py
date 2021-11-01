@@ -9,5 +9,6 @@ from . import \
     core_sys_info,\
     downloadstation,\
     filestation,\
+    photos,\
     virtualization
 
