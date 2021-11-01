@@ -7,41 +7,41 @@ class Backup(base_api_core.Core):
 
     def backup_repository_get(self):
         api_name = 'SYNO.Backup.Repository'
-        info = self.core_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        req_param = {'version': info['minVersion'], 'method': 'get'}
 
         return self.request_data(api_name, api_path, req_param)
         
     def backup_repository_list(self):
         api_name = 'SYNO.Backup.Repository'
-        info = self.core_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        req_param = {'version': info['minVersion'], 'method': 'list'}
 
         return self.request_data(api_name, api_path, req_param)
         
     def backup_task_list(self):
         api_name = 'SYNO.Backup.Task'
-        info = self.core_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        req_param = {'version': info['minVersion'], 'method': 'list'}
 
         return self.request_data(api_name, api_path, req_param)
         
     def backup_task_status(self):
         api_name = 'SYNO.Backup.Task'
-        info = self.core_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'status'}
+        req_param = {'version': info['minVersion'], 'method': 'status'}
 
         return self.request_data(api_name, api_path, req_param)
         
     def backup_task_get(self):
         api_name = 'SYNO.Backup.Task'
-        info = self.core_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
+        req_param = {'version': info['minVersion'], 'method': 'get'}
 
         return self.request_data(api_name, api_path, req_param)
 
