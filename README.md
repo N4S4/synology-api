@@ -446,6 +446,10 @@ DS info with below functions:
 | backup_task_get |
 | backup_task_result() |
 
+### core_backup Hyper Backup Vault
+
+| vault_target_list() |
+
 ### core_active_backup Active Backup for Business
 
 | Functions | Description |
