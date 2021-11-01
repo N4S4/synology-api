@@ -435,7 +435,7 @@ DS info with below functions:
 | delete_image() |
 | create_image() |
 
-### core_backup
+### core_backup Hyper Backup
 
 | Functions |  
 | --- | 
@@ -444,6 +444,7 @@ DS info with below functions:
 | backup_task_list |
 | backup_task_status |
 | backup_task_get |
+| backup_task_result() |
 
 ### core_active_backup Active Backup for Business
 
