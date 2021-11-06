@@ -2,7 +2,7 @@ from . import base_api_core
 
 
 class SysInfo(base_api_core.Core):
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=2, debug=True):
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True):
         super(SysInfo, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug)
 
     def fileserv_smb(self):
@@ -278,14 +278,6 @@ class SysInfo(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def network_openvpn_with_conf(self):
-        api_name = 'SYNO.Core.Network.VPN.OpenVPNWithConf'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
-
-        return self.request_data(api_name, api_path, req_param)
-
     def network_openvpn(self):
         api_name = 'SYNO.Core.Network.VPN.OpenVPN'
         info = self.core_list[api_name]
@@ -459,5 +451,325 @@ class SysInfo(base_api_core.Core):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'load_info'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def external_device_storage_usb(self):
+        api_name = 'SYNO.Core.ExternalDevice.Storage.USB'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list',
+                     'additional': ['dev_type', 'product', 'status', 'partitions']}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def external_device_storage_esata(self):
+        api_name = 'SYNO.Core.ExternalDevice.Storage.eSATA'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': ['dev_type', 'status']}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def file_index_resource(self):
+        api_name = 'SYNO.Finder.FileIndexing.Status'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def cms_info(self):
+        api_name = 'SYNO.Core.CMS.Info'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # TODO {'error': {'code': 2502}, 'success': False}
+    '''def service_port_info(self):  
+        api_name = 'SYNO.Core.Service.PortInfo'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'load', 'target': ['port_forward']}
+
+        return self.request_data(api_name, api_path, req_param)'''
+
+    def port_forwarding_rules(self):
+        api_name = 'SYNO.Core.PortForwarding.Rules'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'load'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def port_forwarding_router_conf(self):
+        api_name = 'SYNO.Core.PortForwarding.RouterConf'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def disk_list(self):
+        api_name = 'SYNO.Core.Polling.Data'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def ddns_provider_info(self):
+        api_name = 'SYNO.Core.DDNS.Provider'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def ddns_record_info(self):
+        api_name = 'SYNO.Core.DDNS.Record'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def ddns_external_ip(self):
+        api_name = 'SYNO.Core.DDNS.ExtIP'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'retry': 'true'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def ddns_synology(self):
+        api_name = 'SYNO.Core.DDNS.Synology'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get_myds_account'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def iscsi_lun_info(self):
+        api_name = 'SYNO.Core.ISCSI.LUN'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def hddman(self):
+        api_name = 'SYNO.Storage.CGI.HddMan'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def ftp_security_info(self):
+        api_name = 'SYNO.Core.FileServ.FTP.Security'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def bandwidth_control_info(self):
+        api_name = 'SYNO.Core.BandwidthControl.Protocol'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get', 'protocol': 'FTP'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def directory_domain_info(self):  # TODO to test
+        api_name = 'SYNO.Core.Directory.Domain'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def ws_transfer_info(self):  # TODO to test
+        api_name = 'SYNO.Core.FileServ.ServiceDiscovery.WSTransfer'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def ref_link_copy_info(self):
+        api_name = 'SYNO.Core.FileServ.ReflinkCopy'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def bonjour_service_info(self):
+        api_name = 'SYNO.Core.ExternalDevice.Printer.BonjourSharing'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def users_info(self, offset=0, limit=-1):
+        api_name = 'SYNO.Core.User'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'type': 'local', 'offset': offset, 'limit': limit}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def password_policy(self):
+        api_name = 'SYNO.Core.User.PasswordPolicy'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def password_expiry(self):
+        api_name = 'SYNO.Core.User.PasswordExpiry'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def personal_photo_enable(self):
+        api_name = 'SYNO.Core.User.Home'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def ftp_chroot_user(self):
+        api_name = 'SYNO.Core.FileServ.FTP.ChrootUser'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'load'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def server_pair(self):
+        api_name = 'SYNO.S2S.Server.Pair'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': ['sync_shares']}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def groups_info(self, offset=0, limit=-1, name_only=False):
+        api_name = 'SYNO.Core.Group'
+        info = self.core_list[api_name]
+        api_path = info['path']
+
+        if name_only:
+            name_only = 'true'
+        elif not name_only:
+            name_only = 'false'
+        else:
+            return 'name_only must be True or False'
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'offset': offset, 'limit': limit,
+                     'name_only': name_only, 'type': 'local'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def ldap_info(self):
+        api_name = 'SYNO.Core.Directory.LDAP'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # TODO {'error': {'code': 103}, 'success': False}
+    '''def domain_info(self):
+        api_name = 'SYNO.Core.Directory.Domain'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get', 'get': {'additional': 'true'}}
+
+        return self.request_data(api_name, api_path, req_param)'''
+
+    def sso_iwa_info(self):
+        api_name = 'SYNO.Core.Directory.SSO.IWA'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def sso_info(self):
+        api_name = 'SYNO.Core.Directory.SSO'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def network_interface_info(self):
+        api_name = 'SYNO.Core.Network.Interface'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def proxy_info(self):
+        api_name = 'SYNO.Core.Network.Proxy'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def gateway_list(self, ip_type='ipv4', type='wan'):
+        api_name = 'SYNO.Core.Network.Router.Gateway.List'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get', 'iptype': ip_type, 'type': type}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def firewall_info(self):
+        api_name = 'SYNO.Core.Security.Firewall.Profile'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # TODO {'error': {'code': 101}, 'success': False}
+    '''def upgrade_schedule_set(self, week_day=4, hour=4, minute=10):
+        api_name = 'SYNO.Core.Upgrade.Setting'
+        info = self.core_list[api_name]
+        api_path = info['path']
+
+        schedule = {'week_day': '4', 'hour': 4, 'minute': 10}
+        req_param = {'version': info['maxVersion'], 'method': 'set', 'autoupdate_type': 'hotfix-security',
+                     'schedule': schedule}
+
+        return self.request_data(api_name, api_path, req_param)'''
+
+    def auto_upgrade_status(self):
+        api_name = 'SYNO.Core.Upgrade.AutoUpgrade'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'status'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def upgrade_server_check(self):
+        api_name = 'SYNO.Core.Upgrade.Server'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'check', 'user_reading': 'true',
+                     'need_auto_smallupdate': 'true', 'need_promotion': 'true'}
 
         return self.request_data(api_name, api_path, req_param)

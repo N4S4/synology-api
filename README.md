@@ -390,7 +390,6 @@ DS info with below functions:
 | network_pppoe() |
 | network_ipv6tunnel() |
 | network_vpn_pptp() |
-| network_openvpn_with_conf() |
 | network_openvpn() |
 | network_vpn_l2tp() |
 | domain_schedule() |
@@ -413,6 +412,41 @@ DS info with below functions:
 | process() |
 | utilisation() |
 | storage() |
+| external_device_storage_usb() ||
+| external_device_storage_esata() |
+| file_index_resource() |
+| cms_info() |
+| port_forwarding_rules() |
+| port_forwarding_router_conf |
+| disk_list |
+| ddns_provider_info |
+| ddns_record_info |
+| ddns_external_ip |
+| ddns_synology |
+| iscsi_lun_info |
+| hddman |
+|ftp_security_info|
+|bandwidth_control_info|
+|directory_domain_info|
+|ws_transfer_info|
+|ref_link_copy_info|
+|bonjour_service_info|
+|users_info|
+|password_policy|
+|password_expiry|
+|personal_photo_enable|
+|ftp_chroot_user|
+|server_pair|
+|groups_info|
+|ldap_info|
+|sso_iwa_info|
+|sso_info|
+|network_interface_info|
+|proxy_info|
+|gateway_list|
+|firewall_info|
+|auto_upgrade_status|
+|upgrade_server_check|
 
 ### Virtualization
 
@@ -465,10 +499,73 @@ DS info with below functions:
 | set_default_cert() | set default certificate |
 | upload_cert() | upload a certificate |
 
+### vpn
+| Functions | 
+| --- | 
+|settings_list()|
+|active_connections_list()|
+|log_list()|
+|network_interface_setting()|
+|security_autoblock_setting()|
+|permission_setting()|
+|pptp_settings_info()|
+|openvpn_settings_info()|
+|l2tp_settings_info()|
 
+### oauth
+| Functions | 
+| --- |
+|clients()| 
+|tokens()| 
+|logs()| 
+
+
+### security_advisor
+| Functions | 
+| --- |
+|general_info()| 
+|security_scan()| 
+|checklist()| 
+|login_activity()| 
+|advisor_config()| 
+|scan_config()| 
+
+
+### dhcp_server
+| Functions | 
+| --- |
+|general_info()| 
+|vendor()| 
+|pxe()| 
+|tftp()| 
+|network_bond()| 
+|network_ethernet()| 
+
+
+### usb_copy 
+| Functions | 
+| --- |
+|usb_copy_info()| 
+|toggle_usb_copy()| 
+|logs()| 
+|global_settings()| 
+
+### log_center
+| Functions | 
+| --- |
+|logcenter()| 
+|client_status_cnt()| 
+|client_status_eps()| 
+|remote_log_archives()|
+|display_logs()| 
+|setting_storage_list()| 
+|registry_send_list()| 
+|history()| 
+
+ 
 #### What's still missing
 
-There is still few missing function which is a work in progress:
+There is still few missing function for the api supplied from Synology which is a work in progress:
 
 | Missing in FileStation |
 |----------------------|
