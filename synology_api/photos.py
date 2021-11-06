@@ -3,7 +3,7 @@ import json
 
 class Photos:
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=2):
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7):
         self.session = syn.Authentication(ip_address, port, username, password, secure,  cert_verify, dsm_version)
 
         self.session.login('Foto')
