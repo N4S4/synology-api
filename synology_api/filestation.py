@@ -11,9 +11,9 @@ from . import auth as syn
 
 class FileStation:
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True):
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
 
-        self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug)
+        self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
 
         self._dir_taskid = ''
         self._dir_taskid_list = []

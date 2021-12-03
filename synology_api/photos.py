@@ -3,8 +3,8 @@ import json
 
 class Photos:
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7):
-        self.session = syn.Authentication(ip_address, port, username, password, secure,  cert_verify, dsm_version)
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, otp_code=None):
+        self.session = syn.Authentication(ip_address, port, username, password, secure,  cert_verify, dsm_version, otp_code)
 
         self.session.login('Foto')
         self.session.get_api_list('Foto')
@@ -70,7 +70,7 @@ class Photos:
 
     def lookup_folder(self, path):
         return self._lookup_folder(path, 'SYNO.FotoBrowse.Folder', 'SYNO.Foto.Browse.Folder')
-    
+
     def lookup_team_folder(self, path):
         return self._lookup_folder(path, 'SYNO.FotoTeam.Browse.Folder', 'SYNO.FotoTeam.Browse.Folder')
 
@@ -170,7 +170,7 @@ class Photos:
         shared_response = self.request_data(api_name, api_path, req_param)
         if not shared_response['success']:
             return
-        
+
         if not permission:
             return shared_response
 

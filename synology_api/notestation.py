@@ -3,8 +3,8 @@ from . import base_api_core
 
 class NoteStation(base_api_core.Core):
     def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7,
-                 debug=True):
-        super(NoteStation, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug)
+                 debug=True, otp_code=None):
+        super(NoteStation, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
 
     def settings_info(self):
         api_name = 'SYNO.NoteStation.Setting'
@@ -15,7 +15,7 @@ class NoteStation(base_api_core.Core):
         return self.request_data(api_name, api_path, req_param)
 
     # TODO success response but need more info about it
-    '''def notestation_settings_init(self):  
+    '''def notestation_settings_init(self):
         api_name = 'SYNO.NoteStation.Setting'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -92,7 +92,7 @@ class NoteStation(base_api_core.Core):
         return self.request_data(api_name, api_path, req_param)
 
     # TODO success response but need additional data
-    '''def note_idle(self):  
+    '''def note_idle(self):
         api_name = 'SYNO.NoteStation.Note'
         info = self.gen_list[api_name]
         api_path = info['path']
