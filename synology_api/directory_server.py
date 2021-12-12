@@ -32,9 +32,9 @@ class DirectoryServer(base_api_core.Core):
     - Perform an entry request to complete a Deletion
     """
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True):
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
         super(DirectoryServer, self).__init__(ip_address, port,
-                                              username, password, secure, cert_verify, dsm_version, debug)
+                                              username, password, secure, cert_verify, dsm_version, debug, otp_code)
 
     def get_directory_info(self):
         """"
@@ -42,7 +42,7 @@ class DirectoryServer(base_api_core.Core):
 
         Returns
         -------
-        Information about your domain. Example below. 
+        Information about your domain. Example below.
         {
             "data": {
                 "data": {
@@ -80,7 +80,7 @@ class DirectoryServer(base_api_core.Core):
 
     def list_directory_objects(self, basedn: str, offset: int = 0, limit: int = 40, objectCategory: str([]) = [ "person", "group", "organizationalUnit", "computer", "container", "builtinDomain"] ):
         """
-        lists directory objects.        
+        lists directory objects.
 
         Parameters
         ----------
@@ -89,20 +89,20 @@ class DirectoryServer(base_api_core.Core):
 
         offset : Optional, int
             When searching large data, you may wish to start at a certain number, eg for 10 at a time one
-            would set the limit to 10 and the offset by multiples of 10 for each request. 
+            would set the limit to 10 and the offset by multiples of 10 for each request.
             Default: 0
         limit : Optional, int
-            The numeric the number of maximum objects to return.  
-            Default: 40 
+            The numeric the number of maximum objects to return.
+            Default: 40
         objectCategory : Optional, str([])
-            The categories of items to search.  eg. ["organizationalUnit","container","builtinDomain"] for a list of 
-            base server containers, and ["person","group","organizationalUnit","computer"] for a list of contained objects.  
+            The categories of items to search.  eg. ["organizationalUnit","container","builtinDomain"] for a list of
+            base server containers, and ["person","group","organizationalUnit","computer"] for a list of contained objects.
             Default: ["person","group","organizationalUnit","computer","container","builtinDomain"]
 
         Returns
         -------
         dictionary
-            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. 
+            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
             The first level is the success to the AD server.  The second Data level is the status of the actual request.
             Since this is a compound request, the data contains an object with it's own request and results contained
             within. The object will explain any issues with the request.  The data structure is as follows:
@@ -184,8 +184,8 @@ class DirectoryServer(base_api_core.Core):
 
         Returns
         -------
-        dictionary 
-            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. The 
+        dictionary
+            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. The
             data dictionary contains an 'error', or it contains a 'dn' and a 'name'. here is an example of a successful
             result.
             {'data': {'dn': 'CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM', 'name': 'NETBIOSNAME\\ababab'}, 'success': True}
@@ -205,13 +205,13 @@ class DirectoryServer(base_api_core.Core):
                        username
                        ) -> List[str]:
         """
-        Send a password reset email.  
-        
-        This will trigger the password reset email from 
+        Send a password reset email.
+
+        This will trigger the password reset email from
         Control Panel>Notification>Rules>System>Reset password for your account to be sent
-        to the user. In order to use this, 
+        to the user. In order to use this,
         Control Panel>User & Group>Advanced>"Allow non-administrator users to reset forgotten passwords via email"
-        must be enabled. 
+        must be enabled.
 
         Parameters
         ----------
@@ -240,7 +240,7 @@ class DirectoryServer(base_api_core.Core):
     def change_user_password(self, user_dn: str, password: str):
         """
         Change the user's password.  This is a compound dual-level request where the synology API proxies your
-        request to the Directory Server. 
+        request to the Directory Server.
 
         Parameters
         ----------
@@ -251,7 +251,7 @@ class DirectoryServer(base_api_core.Core):
 
         Returns
         -------
-            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. 
+            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
             The first level is the success to the AD server.  The second Data level is the status of the actual request.
             Since this is a compound request, the data contains an object with it's own request and results contained
             within. The object will explain any issues with the request.  The data structure is as follows:
@@ -296,7 +296,7 @@ class DirectoryServer(base_api_core.Core):
             type: Optional[str] = 'security',
             scope: Optional[str] = 'global'
     ) -> List[str]:
-        """ 
+        """
         Create a new AD group.
 
         Parameters
@@ -306,25 +306,25 @@ class DirectoryServer(base_api_core.Core):
         located_dn : str
             The DN to place the group in.  eg. "CN=Groups,DC=MY,DC=DOMAIN,DC=COM"
         email : str, Optional
-            The email address used to reference this group. 
+            The email address used to reference this group.
             Default: ""
         description : str, Optional
-            A description of the AD Group. 
+            A description of the AD Group.
             Default: Empty
         type : str, Optional
-            Example Options: security, distribution 
+            Example Options: security, distribution
 
-            (definitions from 
+            (definitions from
             https://docs.microsoft.com/en-us/microsoft-365/admin/create-groups/compare-groups?view=o365-worldwide
             )
-                - distribution (Distribution groups) are used for sending email 
+                - distribution (Distribution groups) are used for sending email
                 notifications to a group of people.
-                - security - Security groups are used for granting access to resources 
+                - security - Security groups are used for granting access to resources
                 such as SharePoint sites.
 
             Default: security
         scope : str, Optional
-            Example Options : local, global, universal 
+            Example Options : local, global, universal
             (Definitions from
             https://www.netwrix.com/active_directory_group_management.html )
                 - local (Domain Local Groups) should be used to manage permissions to
@@ -379,7 +379,7 @@ class DirectoryServer(base_api_core.Core):
         Returns
         -------
         dictionary
-            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. 
+            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
             The first level is the success to the AD server.  The second Data level is the status of the actual request.
             Since this is a compound request, the data contains an object with it's own request and results contained
             within. The object will explain any issues with the request.  The data structure is as follows:
@@ -421,7 +421,7 @@ class DirectoryServer(base_api_core.Core):
         return self.request_data(api_name, api_path, req_param)
 
     def does_dn_exist(self, groupName):
-        """Checks if a container exists. This can be used to verifiy the username or group name is unique.  This will 
+        """Checks if a container exists. This can be used to verifiy the username or group name is unique.  This will
         not check the container, only if a similarly named container already exists.
 
         Parameters
@@ -475,13 +475,13 @@ class DirectoryServer(base_api_core.Core):
         physicalDeliveryOfficeName: Optional, str
             The office location in the user's place of business
         telephoneNumber: Optional, str
-            The user's telephone number. 
+            The user's telephone number.
         web: Optional, str
             The user's website or location on the web where information can be obtained.
 
         Returns
         -------
-            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. 
+            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
             The first level is the success to the AD server.  The second Data level is the status of the actual request.
             Since this is a compound request, the data contains an object with it's own request and results contained
             within. The object will explain any issues with the request.  The data structure is as follows:
@@ -552,11 +552,11 @@ class DirectoryServer(base_api_core.Core):
         nameOfObject: str
             The user DN to be modified. eg. "CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM"
         jsonObject: str: o
-            the json Object to be added, eg, a user object where the 
+            the json Object to be added, eg, a user object where the
 
         Returns
         -------
-            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. 
+            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
             The first level is the success to the AD server.  The second Data level is the status of the actual request.
             Since this is a compound request, the data contains an object with it's own request and results contained
             within. The object will explain any issues with the request.  The data structure is as follows:
@@ -594,23 +594,23 @@ class DirectoryServer(base_api_core.Core):
         return self.request_data(api_name, api_path, req_param,"post")
 
     def update_domain_records(self):
-        """ 
-        Updates the Synology users and groups database with information from Directory Server.  
+        """
+        Updates the Synology users and groups database with information from Directory Server.
 
-        This is a long-running and asynchronous task.  You are given back a task_id and you can 
+        This is a long-running and asynchronous task.  You are given back a task_id and you can
         use that task_id to check the status with the get_task_status(task_id) method.
 
         Returns
         -------
         dictionary
-            The 'data' object contains the 'task_id' used to track with the getTaskStatus() method.  
+            The 'data' object contains the 'task_id' used to track with the getTaskStatus() method.
             The 'success' object will be true if the operation was successful. or false if failed.
 
             {"data": {"task_id": "@administrators/DomainUpdate6146195136397F2"}, "success": true}
 
         Note
         ----
-        Typical utilization of Update Domain requires starting the update job and waiting for 
+        Typical utilization of Update Domain requires starting the update job and waiting for
         completion. Waiting involves using the getTaskStatus and can be accomplished via a busy-wait
         method such as the following:
 
@@ -644,10 +644,10 @@ class DirectoryServer(base_api_core.Core):
         -------
         dictionary
             The 'data' object contains the 'status' used to determine the current status. 'status'
-            will be 'updating' or 'finish' if the job was started.   
+            will be 'updating' or 'finish' if the job was started.
             The 'success' object will be true if the operation was successful. or false if failed.
 
-            {'data': {'status': 'updating'}, 'success': True}   
+            {'data': {'status': 'updating'}, 'success': True}
         """
 
         api_name = 'SYNO.Core.Directory.Domain'
@@ -669,7 +669,7 @@ class DirectoryServer(base_api_core.Core):
 
         Returns
         -------
-        The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. 
+        The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
         The first level is the success to the AD server.  The second Data level is the status of the actual request.
         Since this is a compound request, the data contains an object with it's own request and results contained
         within. The object will explain any issues with the request.  The data structure is as follows:
@@ -733,7 +733,7 @@ class DirectoryServer(base_api_core.Core):
 
         Returns
         -------
-        The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. 
+        The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
         The first level is the success to the AD server.  The second Data level is the status of the actual request.
         Since this is a compound request, the data contains an object with it's own request and results contained
         within. The object will explain any issues with the request.  The data structure is as follows:
@@ -770,7 +770,7 @@ class DirectoryServer(base_api_core.Core):
     def entryRequest(self, task_id: str):
         """
         Some requests require an entry.
-        
+
         Delete for example requires an entry.  If an entry is required, the task will not
         complete without an Entry Request.
 

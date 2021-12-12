@@ -2,8 +2,8 @@ from . import base_api_core
 
 
 class SysInfo(base_api_core.Core):
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True):
-        super(SysInfo, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug)
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
+        super(SysInfo, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
 
     def fileserv_smb(self):
         api_name = 'SYNO.Core.FileServ.SMB'
@@ -488,7 +488,7 @@ class SysInfo(base_api_core.Core):
         return self.request_data(api_name, api_path, req_param)
 
     # TODO {'error': {'code': 2502}, 'success': False}
-    '''def service_port_info(self):  
+    '''def service_port_info(self):
         api_name = 'SYNO.Core.Service.PortInfo'
         info = self.gen_list[api_name]
         api_path = info['path']

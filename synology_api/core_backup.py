@@ -2,8 +2,8 @@ from . import base_api_core
 
 
 class Backup(base_api_core.Core):
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True):
-        super(Backup, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug)
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
+        super(Backup, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
 
     def backup_repository_get(self):
         api_name = 'SYNO.Backup.Repository'
@@ -12,7 +12,7 @@ class Backup(base_api_core.Core):
         req_param = {'version': info['minVersion'], 'method': 'get'}
 
         return self.request_data(api_name, api_path, req_param)
-        
+
     def backup_repository_list(self):
         api_name = 'SYNO.Backup.Repository'
         info = self.gen_list[api_name]
@@ -20,7 +20,7 @@ class Backup(base_api_core.Core):
         req_param = {'version': info['minVersion'], 'method': 'list'}
 
         return self.request_data(api_name, api_path, req_param)
-        
+
     def backup_task_list(self):
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
@@ -28,7 +28,7 @@ class Backup(base_api_core.Core):
         req_param = {'version': info['minVersion'], 'method': 'list'}
 
         return self.request_data(api_name, api_path, req_param)
-        
+
     def backup_task_status(self):
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
@@ -36,7 +36,7 @@ class Backup(base_api_core.Core):
         req_param = {'version': info['minVersion'], 'method': 'status'}
 
         return self.request_data(api_name, api_path, req_param)
-        
+
     def backup_task_get(self):
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
