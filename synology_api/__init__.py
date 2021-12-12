@@ -3,7 +3,7 @@ from . import \
     auth,\
     base_api_core,\
     directory_server,\
-    docker,\
+    docker_api,\
     drive_admin_console,\
     core_active_backup,\
     core_backup,\
