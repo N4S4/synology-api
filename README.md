@@ -85,11 +85,11 @@ from synology_api import filestation, downloadstation
 # Initiate the classes DownloadStation & FileStation with (ip_address, port, username, password)
 # it will login automatically 
 
-fl = filestation.FileStation('Synology Ip', 'Synology Port', 'Username', 'Password')
+fl = filestation.FileStation('Synology Ip', 'Synology Port', 'Username', 'Password', secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None)
 
 fl.get_info()
 
-dwn = downloadstation.DownloadStation('Synology Ip', 'Synology Port', 'Username', 'Password')
+dwn = downloadstation.DownloadStation('Synology Ip', 'Synology Port', 'Username', 'Password', secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None)
 
 dwn.get_info()
 
@@ -116,7 +116,7 @@ response would be json data
 
 ```python
 
-fl = filestation.FileStation('Synology Ip', 'Synology Port', 'Username', 'Password', secure=True, cert_verify=True, dsm_version=7, debug=True)
+fl = filestation.FileStation('Synology Ip', 'Synology Port', 'Username', 'Password', secure=True, cert_verify=True, dsm_version=7, debug=True, otp_code=None)
 
 ```
 
@@ -124,7 +124,8 @@ the ```secure=True``` variable is needed to be set to true if https is required;
 the ```cert_verify=True```  is optional, if you want to verify your certificate set it to ```True```; default value is ```False```<br />
 the ```dsm_version=7``` is optional, make sure to set '7' if you use DSM version 7 or above, if left blank default value 
 will be for DSM 6 or below 
-the ```debug=True``` is optional, if set to False not all responses will return to console
+the ```debug=True``` is optional, if set to False not all responses will return to console<br />
+If your login require ```otp_code``` you can set it changing the None value.
 
 ## Available Functions
 
