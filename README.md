@@ -1,4 +1,4 @@
-![synology-api](https://user-images.githubusercontent.com/33936751/100731387-99fffc00-33cb-11eb-833c-b6ab87177651.jpg)
+
 
 # Synology Wrapper
 
