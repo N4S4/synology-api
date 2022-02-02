@@ -19,5 +19,6 @@ from . import \
     filestation,\
     photos,\
     usb_copy,\
-    virtualization
+    virtualization,\
+    universal_search
 
