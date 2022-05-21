@@ -11,7 +11,7 @@ this wrapper might come to your help to build your script.
 I would like to specify that **I am Not** a programmer as I do it all
 for hobby as is my passion and in my **little** free time.
 
-Said this you will find many things can be simplified and I slowly will.
+Said this you will find many things can be simplified, and I slowly will.
  
 ## Feeling kind?
 If this code helps and you wish to support me 
@@ -20,27 +20,8 @@ If this code helps and you wish to support me
 ## Groups to Ask Discuss Request and Improve the code
 
 - Telegram [Synology Api](https://t.me/SynologyApi) Preferred
-- Slack [Synology Api](https://bit.ly/SynologyApi)
-- Facebook Group [Synology Api](https://www.facebook.com/groups/1438135323193796)
 
 
-## SOMETHING GOING ON IN OUR MIND
- 
-I am working on improving-code branch which changes how the wrapper works on the backstage, 
-improvements in responses speed and less resources used on your NAS. 
-I am trying to keep functions name in the same way so you wont have many (or at all ) issues if you were using it before.
-Both branches will be kept active and updated with latest functionalities (I'll try my best at least)
-
-### Which one should you download? 
-If you wish to have a stable one I'd suggest to download the master branch.
-
-If you are looking for troubles or just to help me to develop the improving-code branch than download that, as it is written in a more "pythonic" way,
-the improving-code is still in development (and not sure if will ever be stable as it has more complicated code, which means time consuming)
-
-You can find the active branch, on this page, named 'Improving-code'.
-If you wish to help just don't be shy and let me know!
- 
- 
 ## Something worth to read
 
 [Contributing](https://github.com/N4S4/synology-api/blob/master/CONTRIBUTING.md),
@@ -84,7 +65,7 @@ pip3 install git+https://github.com/N4S4/synology-api
 from synology_api import filestation, downloadstation
 
 # Initiate the classes DownloadStation & FileStation with (ip_address, port, username, password)
-# it will login automatically 
+# it will log in automatically 
 
 fl = filestation.FileStation('Synology Ip', 'Synology Port', 'Username', 'Password', secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None)
 
@@ -589,7 +570,7 @@ well report them please (if you'll ever use this code)
 
 There is still a lot to implement.
 
-The code is probably is some parts twisted and I will try to optimize it at best
+The code is probably in some parts twisted, I will try to optimize it at best
 
 ### Contributing
 

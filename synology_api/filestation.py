@@ -123,7 +123,7 @@ class FileStation:
             additional = ['real_path', 'size', 'owner', 'time']
 
         if type(additional) is list:
-            additional = ','.join(additional)
+            additional = str(additional).replace("'", '"')
 
         req_param['additional'] = additional
 
