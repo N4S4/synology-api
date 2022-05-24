@@ -6,6 +6,8 @@ from typing import Dict
 
 from pytest import fixture
 
+from synology_api.photos import Photos
+
 CREDENTIALS_FILE = 'credentials.json'
 
 with path( 'tests', '__init__.py' ) as p:
@@ -16,3 +18,7 @@ with path( 'tests', '__init__.py' ) as p:
 @fixture
 def device() -> Dict:
 	return DEVICE
+
+@fixture
+def photos( device ) -> Photos:
+	return Photos( **device )
