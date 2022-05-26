@@ -32,10 +32,6 @@ class Authentication:
         if self._otp_code:
             param['otp_code'] = self._otp_code
 
-        # log into Photos only works without the session key
-        if application in ['Foto']:
-            del ( param['session'] )
-
         if not self._session_expire:
             if self._sid is not None:
                 self._session_expire = False
