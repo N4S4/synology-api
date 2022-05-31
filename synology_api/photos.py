@@ -54,12 +54,11 @@ class Photos:
 
         return self.request_data(api_name, api_path, req_param)
 
-
     def count_folders(self, folder_id=0):
-        return self._count_folders(folder_id, 'SYNO.FotoBrowse.Folder')
+        return self._count_folders(folder_id, 'SYNO.Foto.Browse.Folder')
 
-    def count_team_folders(self, fodler_id=0):
-        return self._count_folders(folder_id, 'SYNO.FotoTeam.FotoBrowse.Folder')
+    def count_team_folders(self, folder_id=0):
+        return self._count_folders(folder_id, 'SYNO.FotoTeam.Browse.Folder')
 
     def _count_folders(self, folder_id, api_name):
         info = self.photos_list[api_name]
