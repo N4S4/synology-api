@@ -128,3 +128,11 @@ class admin_console(base_api_core.Core):
         req_param = {'version': info['maxVersion'], 'method': 'list', 'start': start, 'limit': limit, 'user': user}
 
         return self.request_data(api_name, api_path, req_param)
+
+    def index_pause(self, time_pause=60):
+        api_name = 'SYNO.SynologyDrive.Index'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'set_native_client_index_pause', 'pause_duration': time_pause}
+
+        return self.request_data(api_name, api_path, req_param)
