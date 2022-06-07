@@ -3,6 +3,7 @@
 # https://global.download.synology.com/download/Document/Software/DeveloperGuide/Os/DSM/All/enu/DSM_Login_Web_API_Guide_enu.pdf
 
 errorcodes = {
+    0: 'Success',
     100: 'Unknown error',
     101: 'No parameter of API, method or version',
     102: 'The requested API does not exist',
