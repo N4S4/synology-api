@@ -23,13 +23,13 @@ class Certificate(base_api_core.Core):
         req_param = {'version': '1',
                      'method': method}
 
-        if method is 'set' and cert_id:
+        if 'set' == method and cert_id:
             req_param.update(
                 {'as_default': 'true',
                  'desc': '\"\"',
                  'id': f"\"{cert_id}\""
                  })
-        elif method is 'delete' and ids:
+        elif 'delete' == method and ids:
             ids = json.dumps(ids)
             req_param.update({"ids": ids})
 
@@ -46,42 +46,36 @@ class Certificate(base_api_core.Core):
             ids = [ids]
         return self._base_certificate_methods('delete', ids=ids)
 
-    def upload_cert(self, serv_key="server.key", ser_cert="server.crt", ca_cert="server-ca.crt", set_as_default=True):
+    def upload_cert(self, serv_key="server.key", ser_cert="server.crt", ca_cert=None, set_as_default=True, cert_id=None, desc=None):
         api_name = 'SYNO.Core.Certificate'
         info = self.session.app_api_list[api_name]
         api_path = info['path']
         serv_key = os.path.abspath(serv_key)
         ser_cert = os.path.abspath(ser_cert)
-        ca_cert = os.path.abspath(ca_cert)
+        # ca_cert is optional argument for upload cert
+        ca_cert = os.path.abspath(ca_cert) if ca_cert else None
 
         session = requests.session()
-
-        payload_serv_key = open(serv_key, 'rb')
-        payload_ser_cert = open(ser_cert, 'rb')
-        payload_ca_cert = open(ca_cert, 'rb')
 
         url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=import&_sid=%s' % (
                     api_name, info['minVersion'], self._sid)
 
-        files = {'key': (serv_key, payload_serv_key, 'application/x-iwork-keynote-sffkey'),
-                 'cert': (ser_cert, payload_ser_cert, 'application/pkix-cert'),
-                 'inter_cert': (ca_cert, payload_ca_cert, 'application/pkix-cert')}
+        if cert_id:
+            print("update exist cert: " + cert_id)
+        data_payload = {'id': cert_id or '', 'desc': desc or '', 'as_default': 'true' if set_as_default else 'false'}
 
-        data_payload = {'id': '', 'desc': '', 'as_default': 'true' if set_as_default else 'false'}
+        with open(serv_key, 'rb') as payload_serv_key, open(ser_cert, 'rb') as payload_ser_cert:
+            files = {'key': (serv_key, payload_serv_key, 'application/x-iwork-keynote-sffkey'),
+                     'cert': (ser_cert, payload_ser_cert, 'application/pkix-cert')}
+            if ca_cert:
+                with open(ca_cert, 'rb') as payload_ca_cert:
+                    files['inter_cert'] = (ca_cert, payload_ca_cert, 'application/pkix-cert')
+                    r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled())
+            else:
+                r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled())
 
-        try:
-            r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled())
-        except Exception as e:
-            print(e)
-        # close file if reading files rises an exception.
-        finally:
-            payload_serv_key.close()
-            payload_ser_cert.close()
-            payload_ca_cert.close()
-
-        if r.status_code is 200 and r.json()['success']:
+        if 200 == r.status_code and r.json()['success']:
             if self._debug is True:
                 print('Certificate upload successful.')
 
         return r.status_code, r.json()
-
