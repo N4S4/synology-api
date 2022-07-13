@@ -46,7 +46,7 @@ class Certificate(base_api_core.Core):
             ids = [ids]
         return self._base_certificate_methods('delete', ids=ids)
 
-    def upload_cert(self, serv_key="server.key", ser_cert="server.crt", ca_cert=None, set_as_default=True):
+    def upload_cert(self, serv_key="server.key", ser_cert="server.crt", ca_cert=None, set_as_default=True, cert_id=None, desc=None):
         api_name = 'SYNO.Core.Certificate'
         info = self.session.app_api_list[api_name]
         api_path = info['path']
@@ -60,7 +60,9 @@ class Certificate(base_api_core.Core):
         url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=import&_sid=%s' % (
                     api_name, info['minVersion'], self._sid)
 
-        data_payload = {'id': '', 'desc': '', 'as_default': 'true' if set_as_default else 'false'}
+        if cert_id:
+            print("update exist cert: " + cert_id)
+        data_payload = {'id': cert_id or '', 'desc': desc or '', 'as_default': 'true' if set_as_default else 'false'}
 
         with open(serv_key, 'rb') as payload_serv_key, open(ser_cert, 'rb') as payload_ser_cert:
             files = {'key': (serv_key, payload_serv_key, 'application/x-iwork-keynote-sffkey'),
