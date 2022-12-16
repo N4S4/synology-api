@@ -1,10 +1,10 @@
 from . import base_api_core
 
 
-class admin_console(base_api_core.Core):
+class AdminConsole(base_api_core.Core):
     def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7,
                  debug=True, otp_code=None):
-        super(admin_console, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
+        super(AdminConsole, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
 
     def status_info(self):
         api_name = 'SYNO.SynologyDrive'
@@ -133,6 +133,7 @@ class admin_console(base_api_core.Core):
         api_name = 'SYNO.SynologyDrive.Index'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'set_native_client_index_pause', 'pause_duration': time_pause}
+        req_param = {'version': info['maxVersion'], 'method': 'set_native_client_index_pause',
+                     'pause_duration': time_pause}
 
         return self.request_data(api_name, api_path, req_param)

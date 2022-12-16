@@ -46,7 +46,8 @@ class Certificate(base_api_core.Core):
             ids = [ids]
         return self._base_certificate_methods('delete', ids=ids)
 
-    def upload_cert(self, serv_key="server.key", ser_cert="server.crt", ca_cert=None, set_as_default=True, cert_id=None, desc=None):
+    def upload_cert(self, serv_key="server.key", ser_cert="server.crt", ca_cert=None,
+                    set_as_default=True, cert_id=None, desc=None):
         api_name = 'SYNO.Core.Certificate'
         info = self.session.app_api_list[api_name]
         api_path = info['path']

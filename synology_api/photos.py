@@ -1,6 +1,7 @@
 from . import auth as syn
 import json
 
+
 class Photos:
 
     def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, otp_code=None):
@@ -50,7 +51,8 @@ class Photos:
             additional = []
         info = self.photos_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'id': folder_id, 'limit': limit, 'offset': offset, 'additional': json.dumps(additional)}
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'id': folder_id, 'limit': limit, 'offset': offset,
+                     'additional': json.dumps(additional)}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -76,16 +78,19 @@ class Photos:
     def _lookup_folder(self, path, api_name_count, api_name_list):
         parent = 0
         found_path = ''
+        folder = ''
         for part in path.strip('/').split('/'):
             count_response = self._count_folders(parent, api_name_count)
             if not count_response['success']:
-               return
+                return
             count = count_response['data']['count']
             for offset in range(0, count, 1000):
-                folders_response = self._list_folders(parent, limit=1000, offset=offset, additional=None, api_name=api_name_list)
+                folders_response = self._list_folders(parent, limit=1000, offset=offset, additional=None,
+                                                      api_name=api_name_list)
                 if not folders_response['success']:
                     return
-                folder = next(filter(lambda elem: elem['name'] == '%s/%s' % (found_path, part), folders_response['data']['list']), None)
+                folder = next(filter(lambda elem: elem['name'] == '%s/%s' % (found_path, part),
+                                     folders_response['data']['list']), None)
                 if folder:
                     parent = folder['id']
                     found_path = folder['name']
@@ -93,7 +98,6 @@ class Photos:
             else:
                 return
         return folder
-
 
     def get_album(self, album_id, additional=None):
         if not isinstance(album_id, list):
@@ -103,10 +107,10 @@ class Photos:
         api_name = 'SYNO.Foto.Browse.Album'
         info = self.photos_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'id': json.dumps(album_id), 'additional': json.dumps(additional)}
+        req_param = {'version': info['maxVersion'], 'method': 'get', 'id': json.dumps(album_id),
+                     'additional': json.dumps(additional)}
 
         return self.request_data(api_name, api_path, req_param)
-
 
     def list_albums(self, offset=0, limit=100):
         api_name = 'SYNO.Foto.Browse.Album'
@@ -125,7 +129,8 @@ class Photos:
         api_name = 'SYNO.Foto.Browse.ConditionAlbum'
         info = self.photos_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'suggest', 'user_id': user_id, 'keyword': keyword, 'condition': json.dumps(condition)}
+        req_param = {'version': info['maxVersion'], 'method': 'suggest', 'user_id': user_id, 'keyword': keyword,
+                     'condition': json.dumps(condition)}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -133,7 +138,8 @@ class Photos:
         api_name = 'SYNO.Foto.Browse.ConditionAlbum'
         info = self.photos_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'create', 'name': name, 'condition': json.dumps(condition)}
+        req_param = {'version': info['maxVersion'], 'method': 'create', 'name': name,
+                     'condition': json.dumps(condition)}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -151,15 +157,18 @@ class Photos:
         api_name = 'SYNO.Foto.Browse.ConditionAlbum'
         info = self.photos_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'set_condition', 'id': folder_id, 'condition': json.dumps(condition)}
+        req_param = {'version': info['maxVersion'], 'method': 'set_condition', 'id': folder_id,
+                     'condition': json.dumps(condition)}
 
         return self.request_data(api_name, api_path, req_param)
 
     def share_album(self, album_id, permission=None, enabled=True, expiration=0):
-        self._share('SYNO.Foto.Sharing.Passphrase', policy='album', permission=permission, album_id=album_id, enabled=enabled, expiration=expiration)
+        self._share('SYNO.Foto.Sharing.Passphrase', policy='album', permission=permission, album_id=album_id,
+                    enabled=enabled, expiration=expiration)
 
     def share_team_folder(self, folder_id, permission=None, enabled=True, expiration=0):
-        self._share('SYNO.FotoTeam.Sharing.Passphrase', policy='folder', permission=permission, folder_id=folder_id, enabled=enabled, expiration=expiration)
+        self._share('SYNO.FotoTeam.Sharing.Passphrase', policy='folder', permission=permission, folder_id=folder_id,
+                    enabled=enabled, expiration=expiration)
 
     def _share(self, api_name, policy, permission, expiration, **kwargs):
         info = self.photos_list[api_name]
@@ -175,14 +184,15 @@ class Photos:
 
         passphrase = shared_response['data']['passphrase']
 
-        req_param = {'version': info['maxVersion'], 'method': 'update', 'passphrase': passphrase, 'expiration': expiration, 'permission': json.dumps(permission)}
+        req_param = {'version': info['maxVersion'], 'method': 'update', 'passphrase': passphrase,
+                     'expiration': expiration, 'permission': json.dumps(permission)}
         return self.request_data(api_name, api_path, req_param)
 
     def list_shareable_users_and_groups(self, team_space_sharable_list=False):
         api_name = 'SYNO.Foto.Sharing.Misc'
         info = self.photos_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list_user_group', 'team_space_sharable_list': team_space_sharable_list}
+        req_param = {'version': info['maxVersion'], 'method': 'list_user_group',
+                     'team_space_sharable_list': team_space_sharable_list}
 
         return self.request_data(api_name, api_path, req_param)
-

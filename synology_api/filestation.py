@@ -997,14 +997,14 @@ class FileStation:
             return 'Enter a valid mode (open / download)'
 
         if mode == r'open':
-            with session.get(url, stream=True,verify=verify) as r:
+            with session.get(url, stream=True, verify=verify) as r:
                 r.raise_for_status()
                 for chunk in r.iter_content(chunk_size=chunk_size):
                     if chunk:  # filter out keep-alive new chunks
                         sys.stdout.buffer.write(chunk)
 
         if mode == r'download':
-            with session.get(url, stream=True,verify=verify) as r:
+            with session.get(url, stream=True, verify=verify) as r:
                 r.raise_for_status()
                 if not os.path.isdir(dest_path):
                     os.makedirs(dest_path)

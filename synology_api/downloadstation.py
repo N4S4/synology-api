@@ -287,4 +287,3 @@ class DownloadStation:
         param = {'version': info['maxVersion'], 'method': 'getModule'}
 
         return self.request_data(api_name, api_path, param)
-

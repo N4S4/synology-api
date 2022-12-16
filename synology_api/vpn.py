@@ -112,7 +112,7 @@ class VPN(base_api_core.Core):
     # TODO not working {'error': {'code': 600}, 'success': False} response
     '''def openvpn_settings_setup(self, serv_type='openvpn', serv_enable=True, serv_ip='10.8.0.0', serv_range=5,
                                comp_enable=True, push_route_enable=False, tls_auth_key=False, verify_server_cn=False,
-                               auth_conn=3, port=1194, protocol='udp', encryption='AES-256-CBC', authentication= 'SHA512',
+                               auth_conn=3, port=1194, protocol='udp', encryption='AES-256-CBC', authentication='SHA512',
                                enable_ipv6_server=False, ipv6_prefix='', mssfix_value=1450):
         api_name = 'SYNO.VPNServer.Settings.Config'
         info = self.gen_list[api_name]
@@ -212,4 +212,3 @@ class VPN(base_api_core.Core):
                      'sha2_truncbug': sha2_truncbug, 'kernel_mode': kernel_mode}
 
         return self.request_data(api_name, api_path, req_param)'''
-

@@ -25,6 +25,6 @@ class ActiveBackupBusiness(base_api_core.Core):
         req_param = {'version': '1',
                      'method': 'list_device_transfer_size',
                      'time_start': int(time.time() - 86400),
-                     'time_end': int(time.time()) }
+                     'time_end': int(time.time())}
 
         return self.request_data(api_name, api_path, req_param)
