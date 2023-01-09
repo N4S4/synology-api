@@ -1,9 +1,13 @@
 import requests
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from .error_codes import error_code_msg
+from .error_codes import CODE_SUCCESS
+from urllib3 import disable_warnings
+from urllib3.exceptions import InsecureRequestWarning
 
 
 class Authentication:
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True,
+                 otp_code=None):
         self._ip_address = ip_address
         self._port = port
         self._username = username
@@ -15,7 +19,7 @@ class Authentication:
         self._debug = debug
         self._otp_code = otp_code
         if self._verify is False:
-            requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+            disable_warnings(InsecureRequestWarning)
         schema = 'https' if secure else 'http'
         self._base_url = '%s://%s:%s/webapi/' % (schema, self._ip_address, self._port)
 
@@ -27,22 +31,25 @@ class Authentication:
 
     def login(self, application):
         login_api = 'auth.cgi?api=SYNO.API.Auth'
-        param = {'version': self._version, 'method': 'login', 'account': self._username,
-                 'passwd': self._password, 'session': application, 'format': 'cookie'}
+        params = {'version': self._version, 'method': 'login', 'account': self._username,
+                  'passwd': self._password, 'session': application, 'format': 'cookie'}
         if self._otp_code:
-            param['otp_code'] = self._otp_code
+            params['otp_code'] = self._otp_code
 
-        if not self._session_expire:
-            if self._sid is not None:
-                self._session_expire = False
-                if self._debug is True:
-                    return 'User already logged'
-        else:
-            session_request = requests.get(self._base_url + login_api, param, verify=self._verify)
-            self._sid = session_request.json()['data']['sid']
+        if not self._session_expire and self._sid is not None:
             self._session_expire = False
             if self._debug is True:
-                return 'User logging... New session started!'
+                return CODE_SUCCESS, 'User already logged'
+        else:
+            session_request = requests.get(self._base_url + login_api, params, verify=self._verify)
+            session_request_json = session_request.json()
+            error_code, error_msg = error_code_msg(session_request_json)
+            if not error_code:
+                self._sid = session_request.json()['data']['sid']
+                self._session_expire = False
+                if self._debug is True:
+                    return 'User logging... New session started!'
+            return error_code, error_msg
 
     def logout(self, application):
         logout_api = 'auth.cgi?api=SYNO.API.Auth'

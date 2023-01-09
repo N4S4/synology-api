@@ -5,15 +5,15 @@ from urllib import parse
 class UniversalSearch:
 	def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
 		self.session = auth.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
-		self.session.login('Finder')
+		if debug is True:
+			print(self.session.logout('Finder'))
+		else:
+			self.session.login('Finder')
 		self.session.get_api_list('Finder')
 		self.request_data = self.session.request_data
 		self.finder_list = self.session.app_api_list
 		self._sid = self.session.sid
 		self.base_url = self.session.base_url
-
-		if debug is True:
-			print('You are now logged in!')
 
 	def search(self, keyword):
 		api_name = 'SYNO.Finder.FileIndexing.Search'

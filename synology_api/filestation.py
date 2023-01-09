@@ -30,16 +30,15 @@ class FileStation:
         self._compress_taskid = ''
         self._compress_taskid_list = []
         self.request_data = self.session.request_data
-
-        self.session.login('FileStation')
+        if debug is True:
+            print(self.session.login('FileStation'))
+        else:
+            self.session.login('FileStation')
         self.session.get_api_list('FileStation')
 
         self.file_station_list = self.session.app_api_list
         self._sid = self.session.sid
         self.base_url = self.session.base_url
-
-        if debug is True:
-            print('You are now logged in!')
 
     def logout(self):
         self.session.logout('FileStation')

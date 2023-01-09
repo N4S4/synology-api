@@ -8,7 +8,10 @@ class DownloadStation:
         self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
         self._bt_search_id = ''
         self._bt_search_id_list = []
-        self.session.login('DownloadStation')
+        if debug is True:
+            print(self.session.login('DownloadStation'))
+        else:
+            self.session.login('DownloadStation')
         self.session.get_api_list('DownloadStation')
 
         self.request_data = self.session.request_data
@@ -16,8 +19,6 @@ class DownloadStation:
         self._sid = self.session.sid
         self.base_url = self.session.base_url
 
-        if debug is True:
-            print('You are now logged in!')
 
     def logout(self):
         self.session.logout('DownloadStation')

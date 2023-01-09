@@ -4,10 +4,13 @@ import json
 
 class Photos:
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, otp_code=None):
-        self.session = syn.Authentication(ip_address, port, username, password, secure,  cert_verify, dsm_version, otp_code)
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
+        self.session = syn.Authentication(ip_address, port, username, password, secure,  cert_verify, dsm_version, debug, otp_code)
 
-        self.session.login('Foto')
+        if debug is True:
+            print(self.session.login('Foto'))
+        else:
+            self.session.login('Foto')
         self.session.get_api_list('Foto')
 
         self.request_data = self.session.request_data
