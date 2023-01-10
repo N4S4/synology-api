@@ -5,10 +5,7 @@ class Core(object):
     def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
 
         self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
-        if debug is True:
-            print(self.session.login('Core'))
-        else:
-            self.session.login('Core')
+        self.session.login('Core')
         self.session.get_api_list('Core')
         self.session.get_api_list()
 

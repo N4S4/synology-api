@@ -17,10 +17,7 @@ class Virtualization:
         self._vm_guest_name_list = []
         self._vm_created_taskid_list = []
 
-        if debug is True:
-            print(self.session.login('Virtualization'))
-        else:
-            self.session.login('Virtualization')
+        self.session.login('Virtualization')
         self.session.get_api_list('Virtualization')
 
         self.file_station_list = self.session.app_api_list
