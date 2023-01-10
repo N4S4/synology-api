@@ -64,8 +64,7 @@ class Authentication:
         if self._debug is True:
             if not error_code:
                 print('Successfully logged out.')
-        else:
-            if self._debug is True:
+            else:
                 print('Logout failed: ' + self._get_error_message(error_code))
 
     def get_api_list(self, app=None):
