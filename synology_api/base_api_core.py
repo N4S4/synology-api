@@ -19,4 +19,4 @@ class Core(object):
         self.base_url = self.session.base_url
 
     def logout(self):
-        self.session.logout('Core')
+        print(self.session.logout('Core'))

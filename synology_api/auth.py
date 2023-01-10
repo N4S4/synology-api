@@ -56,16 +56,13 @@ class Authentication:
         param = {'version': '2', 'method': 'logout', 'session': application}
 
         response = requests.get(self._base_url + logout_api, param, verify=self._verify)
-        if response.json()['success'] is True:
+        error_code, error_msg = error_code_msg(response.json())
+        if not error_code:
             self._session_expire = True
             self._sid = None
             if self._debug is True:
-                return 'Logged out'
-        else:
-            self._session_expire = True
-            self._sid = None
-            if self._debug is True:
-                return 'No valid session is open'
+                return 'Logged Out'
+        return error_code, error_msg
 
     def get_api_list(self, app=None):
         query_path = 'query.cgi?api=SYNO.API.Info'
