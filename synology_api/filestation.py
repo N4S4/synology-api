@@ -38,7 +38,7 @@ class FileStation:
         self._sid = self.session.sid
         self.base_url = self.session.base_url
 
-        self.interactive_output = True
+        self.interactive_output = interactive_output
 
         if debug is True:
             print('You are now logged in!')
@@ -170,7 +170,8 @@ class FileStation:
 
         response = self.request_data(api_name, api_path, req_param)
 
-        self._search_taskid = '"' + response['data']['taskid'] + '"'
+        taskid = response['data']['taskid']
+        self._search_taskid = '"{}"'.format(taskid)
         self._search_taskid_list.append('"' + response['data']['taskid'] + '"')
 
         message = ('You can now check the status of request with '
@@ -178,7 +179,7 @@ class FileStation:
         if self.interactive_output:
             output = message
         else:
-            output = {"message": message, "taskid": self._search_taskid}
+            output = {"message": message, "taskid": taskid}
 
         return output
 
@@ -231,7 +232,7 @@ class FileStation:
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'stop', 'taskid': ''}
 
-        assert len(self._search_taskid_list) is not 0, 'Task list is empty' + str(self._search_taskid_list)
+        assert len(self._search_taskid_list), 'Task list is empty' + str(self._search_taskid_list)
 
         for task_id in self._search_taskid_list:
             req_param['taskid'] = task_id
@@ -386,8 +387,9 @@ class FileStation:
         else:
             return 'Enter a valid path'
 
-        response_id = '"' + self.request_data(api_name, api_path, req_param)['data']['taskid'] + '"'
+        taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
 
+        response_id = '"{}"'.format(taskid)
         self._dir_taskid = response_id
         self._dir_taskid_list.append(response_id)
 
@@ -397,7 +399,7 @@ class FileStation:
         if self.interactive_output:
             output = message
         else:
-            output = {"message": message, "taskid": response_id}
+            output = {"message": message, "taskid": taskid}
 
         return output
 
@@ -424,7 +426,7 @@ class FileStation:
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'status', 'taskid': taskid}
 
-        if taskid is None and self._dir_taskid is not '':
+        if taskid is None and self._dir_taskid != '':
             return 'Choose a taskid from this list: ' + str(self._dir_taskid)
 
         return self.request_data(api_name, api_path, req_param)
@@ -458,7 +460,7 @@ class FileStation:
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'status'}
 
-        if taskid is None and self._md5_calc_taskid is not '':
+        if taskid is None and self._md5_calc_taskid != '':
             req_param['taskid'] = '"{taskid}"'.format(taskid=self._md5_calc_taskid)
         elif taskid is not None:
             req_param['taskid'] = '"{taskid}"'.format(taskid=taskid)
@@ -524,7 +526,7 @@ class FileStation:
 
             r = session.post(url, data=args, files=files, verify=verify)
 
-            if r.status_code is 200 and r.json()['success']:
+            if r.status_code == 200 and r.json()['success']:
                 return 'Upload Complete'
             else:
                 return r.status_code, r.json()
@@ -805,7 +807,7 @@ class FileStation:
         if self.interactive_output:
             output = message
         else:
-            output = {"message": message, "taskid": self._delete_task_id}
+            output = {"message": message, "taskid": self._delete_taskid}
 
         return output
 
@@ -884,7 +886,6 @@ class FileStation:
             return 'Enter a valid dest_folder_path'
 
         self._extract_taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
-
         self._extract_taskid_list.append(self._extract_taskid)
 
         message = ('You can now check the status of request with '
