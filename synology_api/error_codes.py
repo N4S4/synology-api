@@ -1,11 +1,9 @@
 # source: pages 8 and 16 on PDF:
 # https://global.download.synology.com/download/Document/Software/DeveloperGuide/Os/DSM/All/enu/DSM_Login_Web_API_Guide_enu.pdf
-from typing import Dict, Tuple
-
 CODE_SUCCESS = 0
 CODE_UNKNOWN = 9999
 
-errorcodes = {
+error_codes = {
     CODE_SUCCESS: 'Success',
     100: 'Unknown error',
     101: 'No parameter of API, method or version',
@@ -71,18 +69,3 @@ errorcodes = {
     410: 'Password must be changed',
     CODE_UNKNOWN: 'Unknown Error',
 }
-
-
-def get_error_msg(error_code: int) -> str:
-    if error_code in errorcodes.keys():
-        return errorcodes.get(error_code)
-    else:
-        return errorcodes.get(CODE_UNKNOWN)
-
-
-def error_code_msg(response_json: Dict) -> Tuple[int, str]:
-    if not response_json.get('success'):
-        errorcode = response_json.get('error').get('code')
-        return errorcode, get_error_msg(errorcode)
-    else:
-        return CODE_SUCCESS, get_error_msg(CODE_SUCCESS)

@@ -30,10 +30,8 @@ class FileStation:
         self._compress_taskid = ''
         self._compress_taskid_list = []
         self.request_data = self.session.request_data
-        if debug is True:
-            print(self.session.login('FileStation'))
-        else:
-            self.session.login('FileStation')
+        
+        self.session.login('FileStation')
         self.session.get_api_list('FileStation')
 
         self.file_station_list = self.session.app_api_list
