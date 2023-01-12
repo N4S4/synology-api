@@ -30,7 +30,7 @@ class FileStation:
         self._compress_taskid = ''
         self._compress_taskid_list = []
         self.request_data = self.session.request_data
-
+        
         self.session.login('FileStation')
         self.session.get_api_list('FileStation')
 
@@ -38,11 +38,8 @@ class FileStation:
         self._sid = self.session.sid
         self.base_url = self.session.base_url
 
-        if debug is True:
-            print('You are now logged in!')
-
     def logout(self):
-        self.session.logout('FileStation')
+        print(self.session.logout('FileStation'))
 
     def get_info(self):
         api_name = 'SYNO.FileStation.Info'
@@ -532,7 +529,7 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def create_sharing_link(self, path=None, password=None, date_expired=None,
-                            date_available=None):
+                            date_available=None, expire_times=0):
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -570,7 +567,7 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def edit_shared_link(self, link_id=None, password=None, date_expired=None,
-                         date_available=None):
+                         date_available=None, expire_times=0):
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
