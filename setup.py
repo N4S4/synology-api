@@ -14,7 +14,7 @@ setup(
     description='Python Synology API Wrapper',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    install_requires=['requests'],
+    install_requires=['requests', 'urllib3', 'setuptools'],
     url='https://github.com/N4S4/synology-api',
     author='Renato Visaggio',
     author_email='synology.python.api@gmail.com'
