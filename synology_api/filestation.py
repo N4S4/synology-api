@@ -39,7 +39,7 @@ class FileStation:
         self.base_url = self.session.base_url
 
     def logout(self):
-        self.session.logout('FileStation')
+        print(self.session.logout('FileStation'))
 
     def get_info(self):
         api_name = 'SYNO.FileStation.Info'

@@ -15,7 +15,7 @@ class AudioStation:
         self.base_url = self.session.base_url
 
     def logout(self):
-        self.session.logout('AudioStation')
+        print(self.session.logout('AudioStation'))
 
     def get_info(self):
         api_name = 'SYNO.AudioStation.Info'

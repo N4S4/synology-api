@@ -18,7 +18,7 @@ class Photos:
         self._userinfo = None
 
     def logout(self):
-        self.session.logout('Foto')
+        print(self.session.logout('Foto'))
 
     def get_userinfo(self):
         if self._userinfo is not None:
