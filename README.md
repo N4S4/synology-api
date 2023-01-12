@@ -34,7 +34,7 @@ I do not know if it actually runs with previous versions
 
 ## Prerequisites
 
-Prior to install this wrapper you will need to install requests library.
+Prior to install this wrapper see requirements.txt.
 
 ## Installation
 
