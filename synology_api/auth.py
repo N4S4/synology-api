@@ -139,14 +139,16 @@ class Authentication:
         else:
             return response
 
-    def _get_error_code(self, response: dict):
+    @staticmethod
+    def _get_error_code(response: dict):
         if response.get('success'):
             code = CODE_SUCCESS
         else:
             code = response.get('error').get('code')
         return code
 
-    def _get_error_message(self, code: int) -> str:
+    @staticmethod
+    def _get_error_message(code: int) -> str:
         message = error_codes.get(code, CODE_UNKNOWN)
         return 'Error {} - {}'.format(code, message)
 
