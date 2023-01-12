@@ -18,11 +18,8 @@ class DownloadStation:
 
         self.interactive_output = interactive_output
 
-        if debug is True:
-            print('You are now logged in!')
-
     def logout(self):
-        self.session.logout('DownloadStation')
+        print(self.session.logout('DownloadStation'))
 
     def get_info(self):
         api_name = 'SYNO.DownloadStation.Info'

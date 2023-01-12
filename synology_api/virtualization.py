@@ -25,7 +25,7 @@ class Virtualization:
         self.base_url = self.session.base_url
 
     def logout(self):
-        self.session.logout('Virtualization')
+        print(self.session.logout('Virtualization'))
 
     def get_task_list(self):
         api_name = 'SYNO.Virtualization.API.Task.Info'
