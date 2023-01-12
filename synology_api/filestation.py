@@ -531,7 +531,7 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def create_sharing_link(self, path=None, password=None, date_expired=None,
-                            date_available=None):
+                            date_available=None, expire_times=0):
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -569,7 +569,7 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def edit_shared_link(self, link_id=None, password=None, date_expired=None,
-                         date_available=None):
+                         date_available=None, expire_times=0):
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
