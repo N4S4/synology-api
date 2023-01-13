@@ -19,7 +19,7 @@ class DownloadStation:
         self.interactive_output = interactive_output
 
     def logout(self):
-        print(self.session.logout('DownloadStation'))
+        self.session.logout('DownloadStation')
 
     def get_info(self):
         api_name = 'SYNO.DownloadStation.Info'

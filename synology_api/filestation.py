@@ -41,7 +41,7 @@ class FileStation:
         self.interactive_output = interactive_output
 
     def logout(self):
-        print(self.session.logout('FileStation'))
+        self.session.logout('FileStation')
 
     def get_info(self):
         api_name = 'SYNO.FileStation.Info'
