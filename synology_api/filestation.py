@@ -11,7 +11,7 @@ from . import auth as syn
 
 class FileStation:
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None, interactive_output=True):
 
         self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
 
@@ -37,6 +37,8 @@ class FileStation:
         self.file_station_list = self.session.app_api_list
         self._sid = self.session.sid
         self.base_url = self.session.base_url
+
+        self.interactive_output = interactive_output
 
     def logout(self):
         print(self.session.logout('FileStation'))
@@ -165,10 +167,18 @@ class FileStation:
 
         response = self.request_data(api_name, api_path, req_param)
 
-        self._search_taskid = '"' + response['data']['taskid'] + '"'
+        taskid = response['data']['taskid']
+        self._search_taskid = '"{}"'.format(taskid)
         self._search_taskid_list.append('"' + response['data']['taskid'] + '"')
 
-        return 'You can now check the status of request with get_search_list() , your id is: ' + self._search_taskid
+        message = ('You can now check the status of request with '
+                   'get_search_list() , your id is: ' + self._search_taskid)
+        if self.interactive_output:
+            output = message
+        else:
+            output = {"message": message, "taskid": taskid}
+
+        return output
 
     def get_search_list(self, task_id=None, filetype=None, limit=None, sort_by=None, sort_direction=None,
                         offset=None, additional=None):
@@ -219,7 +229,7 @@ class FileStation:
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'stop', 'taskid': ''}
 
-        assert len(self._search_taskid_list) is not 0, 'Task list is empty' + str(self._search_taskid_list)
+        assert len(self._search_taskid_list), 'Task list is empty' + str(self._search_taskid_list)
 
         for task_id in self._search_taskid_list:
             req_param['taskid'] = task_id
@@ -374,12 +384,22 @@ class FileStation:
         else:
             return 'Enter a valid path'
 
-        response_id = '"' + self.request_data(api_name, api_path, req_param)['data']['taskid'] + '"'
+        taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
 
+        response_id = '"{}"'.format(taskid)
         self._dir_taskid = response_id
         self._dir_taskid_list.append(response_id)
 
-        return 'You can now check the status of request with get_dir_status() , your id is: ' + self._dir_taskid
+        message = ('You can now check the status of request '
+                   'with get_dir_status() , your id is: '
+                   + response_id)
+        if self.interactive_output:
+            output = message
+        else:
+            output = {"message": message, "taskid": taskid}
+
+        return output
+
 
     def stop_dir_size_calc(self, taskid=None):
         api_name = 'SYNO.FileStation.DirSize'
@@ -403,7 +423,7 @@ class FileStation:
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'status', 'taskid': taskid}
 
-        if taskid is None and self._dir_taskid is not '':
+        if taskid is None and self._dir_taskid != '':
             return 'Choose a taskid from this list: ' + str(self._dir_taskid)
 
         return self.request_data(api_name, api_path, req_param)
@@ -422,7 +442,14 @@ class FileStation:
         self._md5_calc_taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
         self._md5_calc_taskid_list.append(self._md5_calc_taskid)
 
-        return 'You can now check the status of request with get_md5_status() , your id is: ' + self._md5_calc_taskid
+        message = ('You can now check the status of request with '
+                   'get_md5_status() , your id is: ' + self._md5_calc_taskid)
+        if self.interactive_output:
+            output = message
+        else:
+            output = {"message": message, "taskid": self._md5_calc_taskid}
+
+        return output
 
     def get_md5_status(self, taskid=None):
         api_name = 'SYNO.FileStation.MD5'
@@ -430,7 +457,7 @@ class FileStation:
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'status'}
 
-        if taskid is None and self._md5_calc_taskid is not '':
+        if taskid is None and self._md5_calc_taskid != '':
             req_param['taskid'] = '"{taskid}"'.format(taskid=self._md5_calc_taskid)
         elif taskid is not None:
             req_param['taskid'] = '"{taskid}"'.format(taskid=taskid)
@@ -496,7 +523,7 @@ class FileStation:
 
             r = session.post(url, data=args, files=files, verify=verify)
 
-            if r.status_code is 200 and r.json()['success']:
+            if r.status_code == 200 and r.json()['success']:
                 return 'Upload Complete'
             else:
                 return r.status_code, r.json()
@@ -707,8 +734,16 @@ class FileStation:
         self._copy_move_taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
         self._dir_taskid_list.append(self._copy_move_taskid)
 
-        return 'You can now check the status of request with get_copy_move_status() , ' \
-               'your id is: ' + self._copy_move_taskid
+        message = ('You can now check the status of request with '
+                   'get_copy_move_status() , your id is: '
+                   + self._copy_move_taskid)
+        if self.interactive_output:
+            output = message
+        else:
+            output = {"message": message, "taskid": self._copy_move_taskid}
+
+        return output
+
 
     def get_copy_move_status(self, taskid=None):
         api_name = 'SYNO.FileStation.CopyMove'
@@ -763,8 +798,16 @@ class FileStation:
         self._delete_taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
         self._delete_taskid_list.append(self._delete_taskid)
 
-        return 'You can now check the status of request with get_delete_status() , ' \
-               'task id is: ' + self._delete_taskid
+        message = ('You can now check the status of request with '
+                   'get_delete_status() , task id is: '
+                   + self._delete_taskid)
+        if self.interactive_output:
+            output = message
+        else:
+            output = {"message": message, "taskid": self._delete_taskid}
+
+        return output
+
 
     def get_delete_status(self, taskid=None):
         api_name = 'SYNO.FileStation.Delete'
@@ -840,11 +883,17 @@ class FileStation:
             return 'Enter a valid dest_folder_path'
 
         self._extract_taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
-
         self._extract_taskid_list.append(self._extract_taskid)
 
-        return 'You can now check the status of request with get_extract_status() , ' \
-               'your id is: ' + self._extract_taskid
+        message = ('You can now check the status of request with '
+                   'get_extract_status() , your id is: '
+                   + self._extract_taskid)
+        if self.interactive_output:
+            output = message
+        else:
+            output = {"message": message, "taskid": self._extract_taskid}
+
+        return output
 
     def get_extract_status(self, taskid=None):
         api_name = 'SYNO.FileStation.Extract'
@@ -926,8 +975,16 @@ class FileStation:
 
         self._compress_taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
 
-        return 'You can now check the status of request with get_compress_status() , ' \
-               'your id is: ' + self._compress_taskid
+        message =('You can now check the status of request with '
+                  'get_compress_status() , your id is: '
+                  + self._compress_taskid)
+        if self.interactive_output:
+            output = message
+        else:
+            output = {"message": message, "taskid": self._compress_taskid}
+
+        return output
+
 
     def get_compress_status(self, taskid=None):
         api_name = 'SYNO.FileStation.Compress'

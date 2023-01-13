@@ -3,7 +3,7 @@ from . import auth as syn
 
 class DownloadStation:
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
+    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None, interactive_output=True):
 
         self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
         self._bt_search_id = ''
@@ -15,6 +15,8 @@ class DownloadStation:
         self.download_list = self.session.app_api_list
         self._sid = self.session.sid
         self.base_url = self.session.base_url
+
+        self.interactive_output = interactive_output
 
     def logout(self):
         print(self.session.logout('DownloadStation'))
@@ -231,7 +233,15 @@ class DownloadStation:
 
         self._bt_search_id_list.append(self._bt_search_id)
 
-        return 'You can now check the status of request with get_bt_search_results(), your id is: ' + self._bt_search_id
+        message = ('You can now check the status of request with '
+                   'get_bt_search_results(), your id is: '
+                   + self._bt_search_id)
+        if self.interactive_output:
+            output = message
+        else:
+            output = {"message": message, "taskid": self._bt_search_id}
+
+        return output
 
     def get_bt_search_results(self, taskid=None, offset=None, limit=None, sort_by=None, sort_direction=None,
                               filter_category=None, filter_title=None):
