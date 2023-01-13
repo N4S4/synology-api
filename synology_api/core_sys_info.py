@@ -773,3 +773,75 @@ class SysInfo(base_api_core.Core):
                      'need_auto_smallupdate': 'true', 'need_promotion': 'true'}
 
         return self.request_data(api_name, api_path, req_param)
+
+    def alarm_rules_logs(self):
+        api_name = 'SYNO.ResourceMonitor.Log'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'offset' : 0, 'limit': 100,
+                     'sort_direction': 'DESC', 'sort_by': 'time', 'mode':'sequential'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def alarm_rules_list(self):
+        api_name = 'SYNO.ResourceMonitor.EventRule'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def resource_monitor_settings_list(self):
+        api_name = 'SYNO.ResourceMonitor.Setting'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def file_handling_access(self, sort_direction='ASC', sort_by='service', limit=50, offset=0):
+        api_name = 'SYNO.Core.FileHandle'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get', 'forceReload': 'true', 'action': 'enum',
+                     'sort_direction': sort_direction, 'sort_by': sort_by, 'limit': limit, 'offset': offset}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def list_service_group(self, interval=0):
+        api_name = 'SYNO.Core.System.ProcessGroup'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'node': 'xnode-3697', 'interval': interval}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def list_process_group(self):
+        api_name = 'SYNO.Core.System.Process'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def installed_package_list(self):
+        api_name = 'SYNO.Core.Package'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        additional = ["description","description_enu","dependent_packages","beta","distributor","distributor_url",
+                      "maintainer","maintainer_url","dsm_apps","dsm_app_page","dsm_app_launch_name","report_beta_url",
+                      "support_center","startable","installed_info","support_url","is_uninstall_pages","install_type",
+                      "autoupdate","silent_upgrade","installing_progress","ctl_uninstall","updated_at","status","url",
+                      "available_operation"]
+
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': additional}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def active_notifications(self):
+        api_name = 'SYNO.Core.DSMNotify'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'notify', 'action': 'load'}
+
+        return self.request_data(api_name, api_path, req_param)
