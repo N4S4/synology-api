@@ -1,9 +1,9 @@
 # source: pages 8 and 16 on PDF:
 # https://global.download.synology.com/download/Document/Software/DeveloperGuide/Os/DSM/All/enu/DSM_Login_Web_API_Guide_enu.pdf
-CODE_SUCCESS = 0
-CODE_UNKNOWN = 9999
+CODE_SUCCESS : int = 0
+CODE_UNKNOWN : int = 9999
 
-error_codes = {
+error_codes : dict[int, str]= {
     CODE_SUCCESS: 'Success',
     100: 'Unknown error',
     101: 'No parameter of API, method or version',
