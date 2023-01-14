@@ -80,7 +80,7 @@ class Authentication:
                 print('Logout failed: ' + self._get_error_message(error_code))
         return
 
-    def get_api_list(self, app:str=None) -> None:
+    def get_api_list(self, app:Optional[str]=None) -> None:
         query_path = 'query.cgi?api=SYNO.API.Info'
         list_query = {'version': '1', 'method': 'query', 'query': 'all'}
 
