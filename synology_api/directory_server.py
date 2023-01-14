@@ -1,6 +1,6 @@
 '''directory_server.py works with base_api_core to provide AD capabilities.'''
 import json
-from typing import List, Optional
+from typing import Optional
 from . import auth as syn
 from . import base_api_core
 
