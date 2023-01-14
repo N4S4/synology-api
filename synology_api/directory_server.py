@@ -32,11 +32,22 @@ class DirectoryServer(base_api_core.Core):
     - Perform an entry request to complete a Deletion
     """
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
+    def __init__(self,
+                    ip_address : str,
+                    port : str,
+                    username : str,
+                    password : str,
+                    secure : bool = False,
+                    cert_verify : bool = False,
+                    dsm_version : int = 7,
+                    debug : bool = True,
+                    otp_code : Optional[str] = None
+                ) -> None:
         super(DirectoryServer, self).__init__(ip_address, port,
                                               username, password, secure, cert_verify, dsm_version, debug, otp_code)
+        return
 
-    def get_directory_info(self):
+    def get_directory_info(self) -> dict[str, object]:
         """"
         Gets directory info.
 
@@ -78,7 +89,12 @@ class DirectoryServer(base_api_core.Core):
                      'version': info['maxVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def list_directory_objects(self, basedn: str, offset: int = 0, limit: int = 40, objectCategory: str([]) = [ "person", "group", "organizationalUnit", "computer", "container", "builtinDomain"] ):
+    def list_directory_objects(self,
+                                basedn: str,
+                                offset: int = 0,
+                                limit: int = 40,
+                                objectCategory: list[str] = [ "person", "group", "organizationalUnit", "computer", "container", "builtinDomain"]
+                            ) -> dict[str, object]:
         """
         lists directory objects.
 
@@ -158,7 +174,7 @@ class DirectoryServer(base_api_core.Core):
             cannot_change_password: str = 'false',
             change_password_next_logon: str = 'null',
             password_never_expire: str = 'true'
-    ) -> List[str]:
+    ) -> dict[str, object]:
         """Create a new user.
 
         Please note that synchronization with Synology is a separate step.  The user can be created in AD, but not able to logon until the next synchronization occurs.
@@ -202,8 +218,8 @@ class DirectoryServer(base_api_core.Core):
         return self.request_data(api_name, api_path, req_param)
 
     def reset_password(self,
-                       username
-                       ) -> List[str]:
+                       username : str
+                       ) -> dict[str, object]:
         """
         Send a password reset email.
 
@@ -237,7 +253,7 @@ class DirectoryServer(base_api_core.Core):
                      username+'"', 'version': newApi['maxVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def change_user_password(self, user_dn: str, password: str):
+    def change_user_password(self, user_dn: str, password: str) -> dict[str, object]:
         """
         Change the user's password.  This is a compound dual-level request where the synology API proxies your
         request to the Directory Server.
@@ -295,7 +311,7 @@ class DirectoryServer(base_api_core.Core):
             description: Optional[str] = '',
             type: Optional[str] = 'security',
             scope: Optional[str] = 'global'
-    ) -> List[str]:
+    ) -> dict[str, object]:
         """
         Create a new AD group.
 
@@ -362,7 +378,7 @@ class DirectoryServer(base_api_core.Core):
                      'description': description, 'type': type, 'scope': scope, 'email': email, 'version': info['maxVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def add_user_to_group(self, userDn: str, groupDn: str):
+    def add_user_to_group(self, userDn: str, groupDn: str) -> dict[str, object]:
         """
         Adds a user as a member of a group.
 
@@ -420,7 +436,7 @@ class DirectoryServer(base_api_core.Core):
                      'stop_when_error': stop_when_error, 'version': newApi['maxVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def does_dn_exist(self, groupName):
+    def does_dn_exist(self, groupName) -> bool:
         """Checks if a container exists. This can be used to verifiy the username or group name is unique.  This will
         not check the container, only if a similarly named container already exists.
 
@@ -446,15 +462,16 @@ class DirectoryServer(base_api_core.Core):
         return self.request_data(api_name, api_path, req_param)['data']['isConflict']
 
     def modify_user_info(self,
-        user_dn: str = None,
-        firstName: str = None,
-        lastName: str = None,
-        displayName: str = None,
-        description: str = None,
-        initials: str = None,
-        physicalDeliveryOfficeName: str = None,
-        telephoneNumber: str = None,
-        web: str = None ):
+        user_dn: Optional[str] = None,
+        firstName: Optional[str] = None,
+        lastName: Optional[str] = None,
+        displayName: Optional[str] = None,
+        description: Optional[str] = None,
+        initials: Optional[str] = None,
+        physicalDeliveryOfficeName: Optional[str] = None,
+        telephoneNumber: Optional[str] = None,
+        web: Optional[str] = None
+    ) -> dict[str, object]:
         """
         Performs modification to user information within the Active Directory.
 
@@ -543,7 +560,7 @@ class DirectoryServer(base_api_core.Core):
 
         return val
 
-    def setEntryRequest(self, modificationAPI: str, method: str, nameOfObject: str, jsonObject: str):
+    def setEntryRequest(self, modificationAPI: str, method: str, nameOfObject: str, jsonObject: str) -> dict[str, object]:
         """
         Performs modification to an object within the Active Directory.
 
@@ -593,7 +610,7 @@ class DirectoryServer(base_api_core.Core):
         print (json.dumps(req_param))
         return self.request_data(api_name, api_path, req_param,"post")
 
-    def update_domain_records(self):
+    def update_domain_records(self) -> dict[str, object]:
         """
         Updates the Synology users and groups database with information from Directory Server.
 
@@ -626,7 +643,7 @@ class DirectoryServer(base_api_core.Core):
                      'method': 'update_start', 'version': info['minVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def get_task_status(self, task_id):
+    def get_task_status(self, task_id:str) -> dict[str, object]:
         """
         Gets the current status of a task running on the Directory Domain object.
 
@@ -657,7 +674,7 @@ class DirectoryServer(base_api_core.Core):
                      'task_id': task_id, 'version': info['minVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def deleteItems(self, dnList: str([])):
+    def deleteItems(self, dnList: list[str]) -> dict[str, object]:
         """
         Deletes an array of DNs from AD.
 
@@ -720,7 +737,7 @@ class DirectoryServer(base_api_core.Core):
 
         return returnValue
 
-    def delete_item(self, dn):
+    def delete_item(self, dn:str) -> dict[str, object]:
         """
         Deletes a DN from AD.
 
@@ -767,7 +784,7 @@ class DirectoryServer(base_api_core.Core):
         items.append(dn)
         return self.deleteItems(items)
 
-    def entryRequest(self, task_id: str):
+    def entryRequest(self, task_id: str) -> str:
         """
         Some requests require an entry.
 
