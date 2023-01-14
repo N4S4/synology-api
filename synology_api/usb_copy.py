@@ -1,11 +1,23 @@
+from typing import Optional
 from . import base_api_core
 
 
 class USBCopy(base_api_core.Core):
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
+    def __init__(self,
+                    ip_address : str,
+                    port : str,
+                    username : str,
+                    password : str,
+                    secure : bool = False,
+                    cert_verify : bool = False,
+                    dsm_version : int = 7,
+                    debug : bool = True,
+                    otp_code : Optional[str] = None
+                ) -> None:
         super(USBCopy, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
+        return
 
-    def usb_copy_info(self, id=1):
+    def usb_copy_info(self, id:int=1) -> dict[str, object]:
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -13,7 +25,7 @@ class USBCopy(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def toggle_usb_copy(self, enable=True, id=1):
+    def toggle_usb_copy(self, enable:bool=True, id:int=1) -> dict[str, object]:
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -29,7 +41,7 @@ class USBCopy(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def logs(self, offset=0, limit=200):
+    def logs(self, offset:int=0, limit:int=200) -> dict[str, object]:
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -38,7 +50,7 @@ class USBCopy(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def global_settings(self):
+    def global_settings(self) -> dict[str, object]:
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
         api_path = info['path']
