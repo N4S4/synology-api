@@ -3,7 +3,7 @@
 CODE_SUCCESS : int = 0
 CODE_UNKNOWN : int = 9999
 
-error_codes : dict[int, str]= {
+error_codes : dict[int, str] = {
     CODE_SUCCESS: 'Success',
     100: 'Unknown error',
     101: 'No parameter of API, method or version',
