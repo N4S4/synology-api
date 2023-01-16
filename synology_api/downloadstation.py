@@ -29,7 +29,8 @@ class DownloadStation:
         self.base_url : str = self.session.base_url
 
         self.interactive_output : bool = interactive_output
-
+        return
+        
     def logout(self) -> None:
         self.session.logout('DownloadStation')
         return
