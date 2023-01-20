@@ -1,3 +1,6 @@
+from io import BytesIO
+from typing import Optional
+
 from . import base_api_core
 
 import os
@@ -80,3 +83,33 @@ class Certificate(base_api_core.Core):
                 print('Certificate upload successful.')
 
         return r.status_code, r.json()
+
+    def export_cert(self, cert_id: str) -> Optional[BytesIO]:
+        """Export a certificate from the Synology NAS.
+
+        :param cert_id: The certificate ID to export. This can be found in the list_cert() method.
+        :return: A BytesIO object containing the certificate archive.
+        """
+
+        api_name = "SYNO.Core.Certificate"
+        info = self.session.app_api_list[api_name]
+        api_path = info['path']
+
+        session = requests.session()
+
+        url = (
+            f"{self.base_url}{api_path}?"
+            f"api={api_name}&"
+            f"version={info['minVersion']}&"
+            f"method=export&"
+            f"file=\"archive\"&"
+            f"_sid={self._sid}&"
+            f"id={cert_id}"
+        )
+
+        result = session.get(url, verify=self.session.verify_cert_enabled())
+
+        if result.status_code == 200:
+            return BytesIO(result.content)
+
+        return
