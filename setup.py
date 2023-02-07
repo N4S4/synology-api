@@ -25,7 +25,8 @@ setup(
     author_email='synology.python.api@gmail.com',
     entry_points={
         'console_scripts': [
-            'synocli = synology_cli.__main__:main',
+            'synocli = synology_cli.cli:main',
+            'synophotos = synology_cli.cli_photos:main',
         ],
     }
 )
