@@ -17,7 +17,9 @@ setup(
     install_requires=[
         'appdirs',
         'click',
+        'dataclass_factory',
         'requests',
+        'rich',
         'urllib3',
         'setuptools'],
     url='https://github.com/N4S4/synology-api',
@@ -25,6 +27,7 @@ setup(
     author_email='synology.python.api@gmail.com',
     entry_points={
         'console_scripts': [
+            'synoapi = synology_cli.cli_webapi:main',
             'synocli = synology_cli.cli:main',
             'synophotos = synology_cli.cli_photos:main',
         ],
