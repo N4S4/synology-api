@@ -27,10 +27,19 @@ If this code helps and you wish to support me
 [Contributing](https://github.com/N4S4/synology-api/blob/master/CONTRIBUTING.md),
 [Code of Conduct](https://github.com/N4S4/synology-api/blob/master/CODE_OF_CONDUCT.md)
 
+
+## See Related projects
+
+- [Synology API Telegram Bot](https://github.com/N4S4/synology-api-telegram-bot)
+
+If you want to show your project in this section, write me.
+
 ## Premise
 
 I've tried this wrapper only with python3 
 I do not know if it actually runs with previous versions 
+
+Before opening an issue make sure you do your own research, if you are not sure, write me.
 
 ## Prerequisites
 
@@ -339,103 +348,103 @@ To run the following functions you'll have to start the task with the start func
 Although there is nothing you can set (yet), is possible to retrieve lots of 
 DS info with below functions:
 
-| Functions |  
-| --- | 
-| fileserv_smb() |  
-| fileserv_afp() |  
-| fileserv_nfs() |  
-| fileserv_ftp() |  
-| fileserv_sftp() |  
-| network_backup_info() |  
-| bandwidth_control_protocol() |  
-| shared_folders_info() |  
-| services_status() |  
-| services_discovery() |  
-| file_transfer_status() |  
-| network_status() |  
-| web_status() |  
-| current_connection() |
-| bandwidth_control_status() |
-| sys_status() |
-| latest_logs() |
+| Functions                       |
+|---------------------------------| 
+| fileserv_smb()                  |  
+| fileserv_afp()                  |  
+| fileserv_nfs()                  |  
+| fileserv_ftp()                  |  
+| fileserv_sftp()                 |  
+| network_backup_info()           |  
+| bandwidth_control_protocol()    |  
+| shared_folders_info()           |  
+| services_status()               |  
+| services_discovery()            |  
+| file_transfer_status()          |  
+| network_status()                |  
+| web_status()                    |  
+| current_connection()            |
+| bandwidth_control_status()      |
+| sys_status()                    |
+| latest_logs()                   |
 | client_notify_settings_status() |
-| get_security_scan_info() |
-| get_security_scan_rules() |
-| get_security_scan_status() |
-| get_user_list() |
-| quickconnect_info() |
-| quickconnect_permissions() |
-| network_topology() |
-| network_wifi_client() |
-| network_bond() |
-| network_bridge() |
-| network_ethernet() |
-| network_local_bridge() |
-| network_usb_modem() |
-| network_pppoe() |
-| network_ipv6tunnel() |
-| network_vpn_pptp() |
-| network_openvpn() |
-| network_vpn_l2tp() |
-| domain_schedule() |
-| client_ldap() |
-| client_sso() |
-| sys_upgrade_check() |
-| sys_upgrade_download() |
-| sys_upgrade_setting() |
-| notification_sms_conf() |
-| notification_mail_conf() |
-| notification_push_mail() |
-| notification_push_conf() |
-| hardware_beep_control() |
-| hardware_fan_speed() |
-| hardware_hibernation() |
-| hardware_ups() |
-| hardware_power_schedule() |
-| terminal_info() |
-| snmp_info() |
-| process() |
-| utilisation() |
-| storage() |
-| external_device_storage_usb() ||
+| get_security_scan_info()        |
+| get_security_scan_rules()       |
+| get_security_scan_status()      |
+| get_user_list()                 |
+| quickconnect_info()             |
+| quickconnect_permissions()      |
+| network_topology()              |
+| network_wifi_client()           |
+| network_bond()                  |
+| network_bridge()                |
+| network_ethernet()              |
+| network_local_bridge()          |
+| network_usb_modem()             |
+| network_pppoe()                 |
+| network_ipv6tunnel()            |
+| network_vpn_pptp()              |
+| network_openvpn()               |
+| network_vpn_l2tp()              |
+| domain_schedule()               |
+| client_ldap()                   |
+| client_sso()                    |
+| sys_upgrade_check()             |
+| sys_upgrade_download()          |
+| sys_upgrade_setting()           |
+| notification_sms_conf()         |
+| notification_mail_conf()        |
+| notification_push_mail()        |
+| notification_push_conf()        |
+| hardware_beep_control()         |
+| hardware_fan_speed()            |
+| hardware_hibernation()          |
+| hardware_ups()                  |
+| hardware_power_schedule()       |
+| terminal_info()                 |
+| snmp_info()                     |
+| process()                       |
+| utilisation()                   |
+| storage()                       |
+| external_device_storage_usb()   ||
 | external_device_storage_esata() |
-| file_index_resource() |
-| cms_info() |
-| port_forwarding_rules() |
-| port_forwarding_router_conf |
-| disk_list |
-| ddns_provider_info |
-| ddns_record_info |
-| ddns_external_ip |
-| ddns_synology |
-| iscsi_lun_info |
-| hddman |
-|ftp_security_info|
-|bandwidth_control_info|
-|directory_domain_info|
-|ws_transfer_info|
-|ref_link_copy_info|
-|bonjour_service_info|
-|users_info|
-|password_policy|
-|password_expiry|
-|personal_photo_enable|
-|ftp_chroot_user|
-|server_pair|
-|groups_info|
-|ldap_info|
-|sso_iwa_info|
-|sso_info|
-|network_interface_info|
-|proxy_info|
-|gateway_list|
-|firewall_info|
-|auto_upgrade_status|
-|upgrade_server_check|
+| file_index_resource()           |
+| cms_info()                      |
+| port_forwarding_rules()         |
+| port_forwarding_router_conf     |
+| disk_list                       |
+| ddns_provider_info              |
+| ddns_record_info                |
+| ddns_external_ip                |
+| ddns_synology                   |
+| iscsi_lun_info                  |
+| hddman                          |
+| ftp_security_info               |
+| bandwidth_control_info          |
+| directory_domain_info           |
+| ws_transfer_info                |
+| ref_link_copy_info              |
+| bonjour_service_info            |
+| users_info                      |
+| password_policy                 |
+| password_expiry                 |
+| personal_photo_enable           |
+| ftp_chroot_user                 |
+| server_pair                     |
+| groups_info                     |
+| ldap_info                       |
+| sso_iwa_info                    |
+| sso_info                        |
+| network_interface_info          |
+| proxy_info                      |
+| gateway_list                    |
+| firewall_info                   |
+| auto_upgrade_status             |
+| upgrade_server_check            |
 
 ### Virtualization
 
-| Functions |  
+| Functions |
 | --- | 
 | get_task_list() |
 | clear_task() |
