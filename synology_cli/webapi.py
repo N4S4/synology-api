@@ -5,7 +5,7 @@ from .webservice import SynoWebService
 
 # urls
 
-ENTRY_URL = '{base_url}/webapi/entry.cgi'
+ENTRY_URL = '{url}/webapi/entry.cgi'
 
 # parameter sets
 
@@ -19,4 +19,4 @@ ENTRY_PARAMS = {
 class SynoWebApi( SynoWebService ):
 
     def info( self ) -> Dict:
-        return get( self.url( ENTRY_URL ), ENTRY_PARAMS, verify=True ).json()
+        return get(self.get_url(ENTRY_URL), ENTRY_PARAMS, verify=True).json()

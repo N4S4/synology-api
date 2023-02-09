@@ -20,7 +20,7 @@ def cli_webapi( ctx: Context, url: str, account: str, password: str ):
     url = url if url else ctx.obj.cfg.active_profile().url
     account = account if account else ctx.obj.cfg.active_profile().account
     password = password if password else ctx.obj.cfg.active_profile().password
-    ctx.obj.service = SynoWebApi( base_url=url )
+    ctx.obj.service = SynoWebApi( url=url )
 
 @cli_webapi.command( 'list', help='lists API entrypoints' )
 @pass_context
