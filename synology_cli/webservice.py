@@ -1,4 +1,4 @@
-
+import sys
 from abc import abstractmethod
 from dataclasses import dataclass, field
 from typing import Optional, Dict, Any
@@ -85,9 +85,11 @@ class SynoWebService:
 
         return SynoResponse( response=response )
 
-    # todo: this needs to be improved when response contains success = false
     def get_list_to_dataclass( self, url, params, cls ):
         syno_response = self.get( url, params )
+        if not syno_response.success:
+            print( f'error doing get request: code={syno_response.error_code}' )
+            sys.exit( -1 )
         element_list = syno_response.data.get( 'list' )
         return [ self._factory.load( e, cls ) for e in element_list ]
 
