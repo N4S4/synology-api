@@ -1,7 +1,7 @@
 
 from typing import cast
 
-from click import pass_context, group, option, Context
+from click import pass_context, group, option, Context, argument
 
 from synology_cli import ctx as appctx
 from synology_cli.photos import SynoPhotos, Folder
@@ -24,11 +24,18 @@ def cli_photos( ctx: Context, url: str, account: str, password: str ):
 def photos_create( ctx ):
     print( 'invoked command photos create' )
 
-@cli_photos.command( 'list', help='lists photos' )
+@cli_photos.command( 'ls', help='lists photos' )
+@option( '-a', '--album-id', required=False, help='id of the album to list' )
+@option( '-f', '--folder-id', required=False, help='id of the folder to list' )
 @pass_context
-def photos_list( ctx: Context ):
-    root_folder = cast( SynoPhotos, ctx.obj.service ).root_folder()
-    ctx.obj.console.print( dataclass_table( root_folder, Folder ) )
+def photos_list( ctx: Context, folder_id: int = None, album_id: int = None ):
+    syno_photos = cast( SynoPhotos, ctx.obj.service )
+    syno_response = syno_photos.login()
+    if syno_response.success:
+        ctx.obj.console.print( dataclass_table( syno_photos.browse_folder( folder_id or 0 ), Folder ) )
+    else:
+        ctx.obj.console.print( f'error logging in: code={syno_response.error_code}' )
+    pass
 
 @cli_photos.command( 'remove', help='removes photos' )
 @pass_context

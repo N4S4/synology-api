@@ -139,20 +139,13 @@ class Album:
 @dataclass
 class SynoPhotos( SynoWebService ):
 
-    def get_folders( self, id: int ) -> List[Folder]:
-        self.login()
-        response = get( self.get_url( ENTRY_URL ), { **BROWSE_FOLDER_PARAMS, '_sid': self.session_id }, verify=True )
-        json = response.json()
-        if json.get( 'success' ):
-            factory = Factory()
-            return [ f for f in json.get( 'data' ).get( 'list' ) ]
+    def browse_folder( self, id: int = 0 ) -> List[Folder]:
+        syno_response = self.get( ENTRY_URL, BROWSE_FOLDER_PARAMS, id=id )
+        if syno_response.success:
+            return [f for f in syno_response.data.get( 'list' )]
         else:
-            error_code = json.get( 'error' ).get( 'code' )
-            error_msg = ''
+            print( f'error: {syno_response.error_code}' )
             return []
-
-    def root_folder( self ) -> List[Folder]:
-        return self.get_folders( 0 )
 
     def list_items( self, parent: Union[Folder, Album]=None, folder_id=0, album_id=0 ) -> List[Item]:
         # when Folder/Album was provided, overwrite folder_id/album_id

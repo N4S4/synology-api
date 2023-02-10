@@ -73,6 +73,9 @@ class SynoWebService:
         return stub.format( url=self.url )
 
     def get( self, url: str, template: Dict, **kwargs ) -> SynoResponse:
+        if self.session_id:
+            template = { **template, '_sid': self.session_id }
+
         response = get(
             url=self.get_url( url ),
             params={ **template, **kwargs },
