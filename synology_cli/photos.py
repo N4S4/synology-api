@@ -6,10 +6,7 @@ from dataclasses import field
 from queue import SimpleQueue
 from typing import Optional, List, Dict, Type, Union, Callable
 
-from dataclass_factory import Factory
-from requests import get
-from typing_extensions import ClassVar
-
+from .photos_parameters import BROWSE_ALBUM
 from .webservice import ENTRY_URL
 from .webservice import SynoWebService
 
@@ -131,13 +128,20 @@ class Album:
     version: int = field( default=0 )
 
     # additional fields
-    items: [] = field( init=False, default_factory=list )
+    # items: [] = field( init=False, default_factory=list )
+
+    @classmethod
+    def table_fields( cls ) -> List[str]:
+        return [ 'id', 'name', 'item_count', 'owner_user_id', 'shared' ]
 
     def is_shared(self) -> bool:
         return self.shared or self.temporary_shared
 
 @dataclass
 class SynoPhotos( SynoWebService ):
+
+    def browse_albums( self ) -> List[Album]:
+        return self.get_list_to_dataclass( ENTRY_URL, BROWSE_ALBUM, Album )
 
     def browse_folder( self, id: int = 0 ) -> List[Folder]:
         syno_response = self.get( ENTRY_URL, BROWSE_FOLDER_PARAMS, id=id )

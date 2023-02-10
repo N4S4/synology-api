@@ -3,6 +3,7 @@ from abc import abstractmethod
 from dataclasses import dataclass, field
 from typing import Optional, Dict, Any
 
+from dataclass_factory import Factory
 from requests import get, Response
 from typing_extensions import Protocol
 
@@ -69,8 +70,8 @@ class SynoWebService:
     session_id: str = field( default=None )
     device_id: str = field( default=None )
 
-    def get_url( self, stub: str ) -> str:
-        return stub.format( url=self.url )
+    def __post_init__(self):
+        self._factory = Factory()
 
     def get( self, url: str, template: Dict, **kwargs ) -> SynoResponse:
         if self.session_id:
@@ -83,6 +84,15 @@ class SynoWebService:
         )
 
         return SynoResponse( response=response )
+
+    # todo: this needs to be improved when response contains success = false
+    def get_list_to_dataclass( self, url, params, cls ):
+        syno_response = self.get( url, params )
+        element_list = syno_response.data.get( 'list' )
+        return [ self._factory.load( e, cls ) for e in element_list ]
+
+    def get_url( self, stub: str ) -> str:
+        return stub.format( url=self.url )
 
     def login( self ) -> SynoResponse:
         syno_response = self.get( ENTRY_URL, LOGIN_PARAMS, account=self.account, passwd= self.password )
