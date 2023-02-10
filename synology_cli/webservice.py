@@ -1,9 +1,9 @@
 
 from abc import abstractmethod
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Dict, Any
 
-from requests import get
+from requests import get, Response
 from typing_extensions import Protocol
 
 ENTRY_URL = '{url}/webapi/entry.cgi'
@@ -33,6 +33,34 @@ class WebService( Protocol ):
         pass
 
 @dataclass
+class SynoRequest:
+
+    pass
+
+@dataclass
+class SynoResponse:
+
+    response: Response = field( default=None )
+    status_code: int = field(default=None)
+    data: Dict = field( default_factory=dict )
+    success: bool = field( default=False )
+    error_code: int = field( default=None )
+    error_msg: str = field( default=None )
+
+    def __post_init__( self ):
+        self.status_code = self.response.status_code
+        json = self.response.json()
+        self.success = json.get( 'success', False )
+        if self.success:
+            self.data = json.get( 'data', {} )
+        else:
+            self.error_code = json.get( 'error' ).get( 'code' )
+            self.error_msg = '...' # todo
+
+    def response_data( self, key: str ) -> Any:
+        return self.data.get( key, None )
+
+@dataclass
 class SynoWebService:
 
     url: str = field(default=None)
@@ -44,16 +72,19 @@ class SynoWebService:
     def get_url( self, stub: str ) -> str:
         return stub.format( url=self.url )
 
-    def login( self ):
+    def get( self, url: str, template: Dict, **kwargs ) -> SynoResponse:
         response = get(
-            url=self.get_url( ENTRY_URL ),
-            params={ **LOGIN_PARAMS, 'account': self.account, 'passwd': self.password },
+            url=self.get_url( url ),
+            params={ **template, **kwargs },
             verify=True
         )
-        response_json = response.json()
-        if response_json.get( 'success' ):
-            self.session_id = response_json.get( 'data' ).get( 'sid' )
-            self.device_id = response_json.get( 'data' ).get( 'device_id' )
-        else:
-            error_code = response_json.get( 'error' ).get( 'code' )
-            error_msg = ''
+
+        return SynoResponse( response=response )
+
+    def login( self ) -> SynoResponse:
+        syno_response = self.get( ENTRY_URL, LOGIN_PARAMS, account=self.account, passwd= self.password )
+        if syno_response.success:
+            self.session_id = syno_response.response_data( 'sid' )
+            self.device_id = syno_response.response_data( 'device_id' )
+
+        return syno_response
