@@ -6,6 +6,7 @@ from typing import Dict
 from appdirs import user_config_dir
 from dataclasses import dataclass, field
 from dataclass_factory import Factory
+from rich.console import Console
 
 from .webservice import WebService
 
@@ -30,6 +31,8 @@ class ApplicationContext:
 
     cfg: ApplicationConfiguration = field( default=None )
     service: WebService = field( default=None )
+
+    console: Console = field( default=Console() )
 
 # init
 

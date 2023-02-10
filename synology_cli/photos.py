@@ -8,6 +8,7 @@ from typing import Optional, List, Dict, Type, Union, Callable
 
 from dataclass_factory import Factory
 from requests import get
+from typing_extensions import ClassVar
 
 from .webservice import ENTRY_URL
 from .webservice import SynoWebService
@@ -79,10 +80,7 @@ class Item:
 
     # additional fields
     folder: Folder = field( init=False, default=None )
-    albums: List[Album] = field( init=False, default=None )
-
-    def __post_init__(self):
-        self.albums = []
+    albums: List[Album] = field( init=False, default_factory=list )
 
 @dataclass
 class Folder:
@@ -98,12 +96,15 @@ class Folder:
     additional: [] = field( default=None )
 
     # additional fields
-    items: List[Item] = field( init=False, default=None )
-    subfolders: List[Folder] = field( init=False, default=None )
+    items: List[Item] = field( init=False, default_factory=list )
+    subfolders: List[Folder] = field( init=False, default_factory=list )
 
-    def __post_init__(self):
-        self.items = []
-        self.subfolders = []
+    # metadata for table printing -> we're doing this via classmethod
+    # table_fields: ClassVar[List[str]] = field( default=[ 'id', 'name' ] )
+
+    @classmethod
+    def table_fields( cls ) -> List[str]:
+        return [ 'id', 'name', 'parent', 'owner_user_id', 'shared' ]
 
     def is_root(self) -> bool:
         return True if self.id == self.parent else False
@@ -130,13 +131,10 @@ class Album:
     version: int = field( default=0 )
 
     # additional fields
-    items: [] = field( init=False, default=None )
+    items: [] = field( init=False, default_factory=list )
 
     def is_shared(self) -> bool:
         return self.shared or self.temporary_shared
-
-    def __post_init__(self):
-        self.items = []
 
 @dataclass
 class SynoPhotos( SynoWebService ):

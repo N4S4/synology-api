@@ -1,14 +1,11 @@
+
 from typing import cast
 
 from click import pass_context, group, option, Context
-from rich import box
-
-from rich.console import Console
-from rich.pretty import Pretty as pp
-from rich.table import Table
 
 from synology_cli import ctx as appctx
-from synology_cli.photos import SynoPhotos
+from synology_cli.photos import SynoPhotos, Folder
+from synology_cli.ui import dataclass_table
 
 @group( help='photos group' )
 @option( '-u', '--url', is_flag=False, required=False, help='URL' )
@@ -31,27 +28,7 @@ def photos_create( ctx ):
 @pass_context
 def photos_list( ctx: Context ):
     root_folder = cast( SynoPhotos, ctx.obj.service ).root_folder()
-
-    console = Console()
-
-    table = Table( box=box.MINIMAL, show_header=False, show_footer=False )
-    table.add_row(
-        '[blue]id[/blue]',
-        '[blue]name[/blue]',
-        '[blue]parent[/blue]',
-        '[blue]owner_user_id[/blue]',
-        '[blue]shared[/blue]',
-    )
-    for f in root_folder:
-        table.add_row(
-            pp( f.get( 'id' ) ),
-            f.get( 'name' ),
-            pp( f.get( 'parent' ) ),
-            pp( f.get( 'owner_user_id' ) ),
-            pp( f.get( 'shared' ) ),
-        )
-
-    console.print( table )
+    ctx.obj.console.print( dataclass_table( root_folder, Folder ) )
 
 @cli_photos.command( 'remove', help='removes photos' )
 @pass_context
