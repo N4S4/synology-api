@@ -5,7 +5,7 @@ from typing import cast
 from click import pass_context, group, option, Context, pass_obj
 
 from synology_cli import ctx as appctx, ApplicationContext
-from synology_cli.photos import SynoPhotos, Folder, Album
+from synology_cli.photos import SynoPhotos, Folder, Album, Item
 from synology_cli.ui import dataclass_table
 
 @group( help='photos group' )
@@ -40,6 +40,12 @@ def photos_list( ctx: ApplicationContext, folder_id: int = None, album_id: int =
 @pass_obj
 def list_albums( ctx: ApplicationContext ):
     ctx.console.print( dataclass_table( ctx.service.browse_albums(), Album ) )
+
+@cli_photos.command( 'list-items', help='lists items' )
+@option( '-f', '--folder-id', required=False, help='id of the folder to list' )
+@pass_obj
+def list_items( ctx: ApplicationContext, folder_id: int = None ):
+    ctx.console.print( dataclass_table( ctx.service.browse_items( folder_id or 0 ), Item ) )
 
 def main( *args, **kwargs ):
     cli_photos()  # trigger cli

@@ -23,7 +23,7 @@ BROWSE_FOLDER_PARAMS = {
     'folder_id': 0
 }
 
-BROWSE_ITEM_PARAMS = {
+BROWSE_ITEM = {
     **LIST,
     'api': 'SYNO.Foto.Browse.Item',
     'sort_by': 'filename',

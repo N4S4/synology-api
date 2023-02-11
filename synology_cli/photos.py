@@ -6,7 +6,7 @@ from dataclasses import field
 from queue import SimpleQueue
 from typing import Optional, List, Dict, Type, Union, Callable
 
-from .photos_parameters import BROWSE_ALBUM
+from .photos_parameters import BROWSE_ALBUM, BROWSE_ITEM
 from .webservice import ENTRY_URL
 from .webservice import SynoWebService
 
@@ -73,11 +73,15 @@ class Item:
     indexed_time: int = field( default=None )
     type: str = field( default=None )
     live_type: str = field( default=None )
-    additional: [] = field( default=None )
+    additional: List[str] = field( default=None )
 
     # additional fields
-    folder: Folder = field( init=False, default=None )
-    albums: List[Album] = field( init=False, default_factory=list )
+    #folder: Folder = field( init=False, default=None )
+    #albums: List[Album] = field( init=False, default_factory=list )
+
+    @classmethod
+    def table_fields(cls) -> List[str]:
+        return ['id', 'filename', 'filesize', 'folder_id', 'owner_user_id']
 
 @dataclass
 class Folder:
@@ -90,11 +94,11 @@ class Folder:
     shared: bool = field( default=False )
     sort_by: str = field( default=None )
     sort_direction: str = field( default=None )
-    additional: [] = field( default=None )
+    additional: List[str] = field( default=None )
 
     # additional fields
-    items: List[Item] = field( init=False, default_factory=list )
-    subfolders: List[Folder] = field( init=False, default_factory=list )
+    # items: List[Item] = field( init=False, default_factory=list )
+    # subfolders: List[Folder] = field( init=False, default_factory=list )
 
     # metadata for table printing -> we're doing this via classmethod
     # table_fields: ClassVar[List[str]] = field( default=[ 'id', 'name' ] )
@@ -144,12 +148,10 @@ class SynoPhotos( SynoWebService ):
         return self.get_list_to_dataclass( ENTRY_URL, BROWSE_ALBUM, Album )
 
     def browse_folder( self, id: int = 0 ) -> List[Folder]:
-        syno_response = self.get( ENTRY_URL, BROWSE_FOLDER_PARAMS, id=id )
-        if syno_response.success:
-            return [f for f in syno_response.data.get( 'list' )]
-        else:
-            print( f'error: {syno_response.error_code}' )
-            return []
+        return self.get_list_to_dataclass( ENTRY_URL, { **BROWSE_FOLDER_PARAMS, 'id': id }, Folder )
+
+    def browse_items( self, id: int = 0 ) -> List[Item]:
+        return self.get_list_to_dataclass( ENTRY_URL, { **BROWSE_ITEM, 'id': id }, Item )
 
     def list_items( self, parent: Union[Folder, Album]=None, folder_id=0, album_id=0 ) -> List[Item]:
         # when Folder/Album was provided, overwrite folder_id/album_id
@@ -164,13 +166,6 @@ class SynoPhotos( SynoWebService ):
             return self._process_response(self.inst.list_items(album_id=album_id), Item)
         else:
             return []
-
-    def list_albums( self ) -> List[Album]:
-        return self._process_response( self.inst.list_albums(), Album )
-
-    def list_folders(self, parent: Optional[Folder] = None) -> List[Folder]:
-        parent_id = parent.id if parent else 0
-        return self._process_response( self.inst.list_folders(folder_id=parent_id), Folder )
 
     def traverse_folders(self, fn_folder: Callable = None, fn_item: Callable = None ) -> List[Folder]:
         folders = []
