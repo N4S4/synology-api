@@ -1,18 +1,15 @@
-import sys
+
 from abc import abstractmethod
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, ClassVar
 
 from dataclass_factory import Factory
 from requests import get, Response, post, PreparedRequest
 from typing_extensions import Protocol
 
+from .parameters.webservice import ENTRY_URL
 from .parameters.webservice import LOGIN_PARAMS
 from synology_api.error_codes import error_codes, CODE_UNKNOWN
-
-ENTRY_URL = '{url}/webapi/entry.cgi'
-
-# parameter sets
 
 class WebService( Protocol ):
 
@@ -43,6 +40,8 @@ class SynoResponse:
     error_code: int = field( default=None )
     error_msg: str = field( default=None )
 
+    factory: ClassVar[Factory] = field( default=Factory() )
+
     def __post_init__( self ):
         self.status_code = self.response.status_code
         json = self.response.json()
@@ -52,6 +51,10 @@ class SynoResponse:
         else:
             self.error_code = json.get( 'error' ).get( 'code' )
             self.error_msg = error_codes.get( self.error_code, error_codes.get( CODE_UNKNOWN ) )
+
+    def as_list( self, cls ):
+        element_list = self.data.get( 'list' )
+        return [ SynoResponse.factory.load( e, cls ) for e in element_list ]
 
     def request( self ) -> PreparedRequest:
         return self.response.request
@@ -94,14 +97,6 @@ class SynoWebService:
         )
 
         return SynoResponse( response )
-
-    def get_list_to_dataclass( self, url, params, cls ):
-        syno_response = self.get( url, params )
-        if not syno_response.success:
-            print( f'error doing get request: code={syno_response.error_code}' )
-            sys.exit( -1 )
-        element_list = syno_response.data.get( 'list' )
-        return [ self._factory.load( e, cls ) for e in element_list ]
 
     def get_url( self, stub: str ) -> str:
         return stub.format( url=self.url )

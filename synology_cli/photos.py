@@ -1,13 +1,12 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from dataclasses import field
+from dataclasses import dataclass, field
 from queue import SimpleQueue
-from typing import List, Dict, Type, Union, Callable
+from typing import List, Dict, Type, Callable
 
-from .parameters.photos import BROWSE_ALBUM, BROWSE_ITEM, BROWSE_FOLDER, BROWSE_NORMAL_ALBUM_URL, CREATE_ALBUM
-from .webservice import ENTRY_URL
+from .parameters.photos import BROWSE_ALBUM, BROWSE_ITEM, BROWSE_FOLDER, CREATE_ALBUM
+from .parameters.webservice import ENTRY_URL
 from .webservice import SynoWebService
 
 @dataclass
@@ -93,17 +92,19 @@ class Album:
 @dataclass
 class SynoPhotos( SynoWebService ):
 
-    def browse_albums( self ) -> List[Album]:
-        return self.get_list_to_dataclass( ENTRY_URL, BROWSE_ALBUM, Album )
+    def list_albums(self) -> List[Album]:
+        return self.get( ENTRY_URL, BROWSE_ALBUM ).as_list( Album )
 
-    def browse_folder( self, id: int = 0 ) -> List[Folder]:
-        return self.get_list_to_dataclass( ENTRY_URL, { **BROWSE_FOLDER, 'id': id }, Folder )
+    def list_folders(self, parent_id: int = 0) -> List[Folder]:
+        return self.get(ENTRY_URL, {**BROWSE_FOLDER, 'id': parent_id}).as_list(Folder)
 
-    def browse_items( self, id: int = 0 ) -> List[Item]:
-        return self.get_list_to_dataclass( ENTRY_URL, { **BROWSE_ITEM, 'id': id }, Item )
+    def list_items(self, parent_id: int = 0) -> List[Item]:
+        return self.get(ENTRY_URL, {**BROWSE_ITEM, 'id': parent_id}).as_list(Item)
 
     def create_album( self, name: str ) -> int:
         return self.get( ENTRY_URL, { **CREATE_ALBUM, 'name': name } ).data.get( 'album' ).get( 'id' )
+
+    # old code below
 
     def traverse_folders(self, fn_folder: Callable = None, fn_item: Callable = None ) -> List[Folder]:
         folders = []

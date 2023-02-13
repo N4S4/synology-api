@@ -29,12 +29,12 @@ def cli_photos( ctx: Context, url: str, account: str, password: str ):
         ctx.obj.console.print( f'error logging in: code={syno_response.error_code}' )
         exit( -1 )
 
-@cli_photos.command( 'list', help='lists items' )
+@cli_photos.command( 'list-folders', help='lists folders' )
 @option( '-a', '--album-id', required=False, help='id of the album to list' )
 @option( '-f', '--folder-id', required=False, help='id of the folder to list' )
 @pass_obj
 def photos_list( ctx: ApplicationContext, folder_id: int = None, album_id: int = None ):
-    ctx.console.print( dataclass_table( ctx.service.browse_folder( folder_id or 0 ), Folder ) )
+    ctx.console.print( dataclass_table( ctx.service.list_folders( folder_id or 0 ), Folder ) )
 
 @cli_photos.command( 'create-album', help='creates a new album' )
 @option( '-n', '--name', required=True, help='album name' )
@@ -45,13 +45,13 @@ def create_album( ctx: ApplicationContext, name: str ):
 @cli_photos.command( 'list-albums', help='lists albums' )
 @pass_obj
 def list_albums( ctx: ApplicationContext ):
-    ctx.console.print( dataclass_table( ctx.service.browse_albums(), Album ) )
+    ctx.console.print( dataclass_table( ctx.service.list_albums(), Album ) )
 
 @cli_photos.command( 'list-items', help='lists items' )
 @option( '-f', '--folder-id', required=False, help='id of the folder to list' )
 @pass_obj
 def list_items( ctx: ApplicationContext, folder_id: int = None ):
-    ctx.console.print( dataclass_table( ctx.service.browse_items( folder_id or 0 ), Item ) )
+    ctx.console.print( dataclass_table( ctx.service.list_items( folder_id or 0 ), Item ) )
 
 def main( *args, **kwargs ):
     cli_photos()  # trigger cli
