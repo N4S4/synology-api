@@ -4,38 +4,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 from dataclasses import field
 from queue import SimpleQueue
-from typing import Optional, List, Dict, Type, Union, Callable
+from typing import List, Dict, Type, Union, Callable
 
-from .photos_parameters import BROWSE_ALBUM, BROWSE_ITEM
+from .parameters.photos import BROWSE_ALBUM, BROWSE_ITEM, BROWSE_FOLDER
 from .webservice import ENTRY_URL
 from .webservice import SynoWebService
 
 # urls
 
 # parameter sets
-
-BROWSE_FOLDER_PARAMS = {
-    'api': 'SYNO.Foto.Browse.Folder',
-    'method': 'list',
-    'version': 2,
-    'offset': 0,
-    'limit': 50,
-    'folder_id': 0,
-    'format': 'sid',
-    '_sid': None
-}
-
-BROWSE_ITEM_PARAMS = {
-    'api': 'SYNO.Foto.Browse.Item',
-    'method': 'list',
-    'version': 2,
-    'offset': 0,
-    'limit': 50,
-    'sort_by': 'filename',
-    'sort_direction': 'asc',
-    'format': 'sid',
-    '_sid': None
-}
 
 def list_items(self, folder_id=0, album_id=0, limit=1000, offset=0, additional=None):
     api_name = 'SYNO.Foto.Browse.Item'
@@ -148,7 +125,7 @@ class SynoPhotos( SynoWebService ):
         return self.get_list_to_dataclass( ENTRY_URL, BROWSE_ALBUM, Album )
 
     def browse_folder( self, id: int = 0 ) -> List[Folder]:
-        return self.get_list_to_dataclass( ENTRY_URL, { **BROWSE_FOLDER_PARAMS, 'id': id }, Folder )
+        return self.get_list_to_dataclass( ENTRY_URL, { **BROWSE_FOLDER, 'id': id }, Folder )
 
     def browse_items( self, id: int = 0 ) -> List[Item]:
         return self.get_list_to_dataclass( ENTRY_URL, { **BROWSE_ITEM, 'id': id }, Item )

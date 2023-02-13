@@ -7,7 +7,7 @@ from dataclass_factory import Factory
 from requests import get, Response
 from typing_extensions import Protocol
 
-from .webservice_parameters import LOGIN_PARAMS
+from .parameters.webservice import LOGIN_PARAMS
 
 ENTRY_URL = '{url}/webapi/entry.cgi'
 

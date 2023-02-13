@@ -17,7 +17,7 @@ BROWSE_ALBUM = {
     'api': 'SYNO.Foto.Browse.Album',
 }
 
-BROWSE_FOLDER_PARAMS = {
+BROWSE_FOLDER = {
     **LIST,
     'api': 'SYNO.Foto.Browse.Folder',
     'folder_id': 0
