@@ -7,17 +7,11 @@ from dataclass_factory import Factory
 from requests import get, Response
 from typing_extensions import Protocol
 
+from .webservice_parameters import LOGIN_PARAMS
+
 ENTRY_URL = '{url}/webapi/entry.cgi'
 
 # parameter sets
-
-LOGIN_PARAMS = {
-    'api': 'SYNO.API.Auth',
-    'version': 7,
-    'method': 'login',
-    'account': None,
-    'passwd': None,
-}
 
 class WebService( Protocol ):
 
@@ -97,7 +91,7 @@ class SynoWebService:
         return stub.format( url=self.url )
 
     def login( self ) -> SynoResponse:
-        syno_response = self.get( ENTRY_URL, LOGIN_PARAMS, account=self.account, passwd= self.password )
+        syno_response = self.get(ENTRY_URL, LOGIN_PARAMS, account=self.account, passwd=self.password)
         if syno_response.success:
             self.session_id = syno_response.response_data( 'sid' )
             self.device_id = syno_response.response_data( 'device_id' )
