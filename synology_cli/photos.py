@@ -6,7 +6,7 @@ from dataclasses import field
 from queue import SimpleQueue
 from typing import List, Dict, Type, Union, Callable
 
-from .parameters.photos import BROWSE_ALBUM, BROWSE_ITEM, BROWSE_FOLDER
+from .parameters.photos import BROWSE_ALBUM, BROWSE_ITEM, BROWSE_FOLDER, BROWSE_NORMAL_ALBUM_URL, CREATE_ALBUM
 from .webservice import ENTRY_URL
 from .webservice import SynoWebService
 
@@ -101,6 +101,9 @@ class SynoPhotos( SynoWebService ):
 
     def browse_items( self, id: int = 0 ) -> List[Item]:
         return self.get_list_to_dataclass( ENTRY_URL, { **BROWSE_ITEM, 'id': id }, Item )
+
+    def create_album( self, name: str ) -> int:
+        return self.get( ENTRY_URL, { **CREATE_ALBUM, 'name': name } ).data.get( 'album' ).get( 'id' )
 
     def traverse_folders(self, fn_folder: Callable = None, fn_item: Callable = None ) -> List[Folder]:
         folders = []

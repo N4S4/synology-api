@@ -1,7 +1,16 @@
 
 # urls
 
+BROWSE_NORMAL_ALBUM_URL = '{url}/entry.cgi/SYNO.Foto.Browse.NormalAlbum'
+
 # parameter sets
+
+CREATE = {
+    'method': 'create',
+    'version': '1',
+    'format': 'sid',
+    '_sid': None
+}
 
 LIST = {
     'method': 'list',
@@ -28,4 +37,13 @@ BROWSE_ITEM = {
     'api': 'SYNO.Foto.Browse.Item',
     'sort_by': 'filename',
     'sort_direction': 'asc',
+}
+
+CREATE_ALBUM = {
+    **CREATE,
+    'api': 'SYNO.Foto.Browse.NormalAlbum',
+    'name': None,
+    # this should be '[1,2,3]' with the numbers being item ids,
+    # but can be empty as well (although the Web UI does not allow that)
+    'item': '[]',
 }

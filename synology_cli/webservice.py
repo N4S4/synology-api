@@ -4,10 +4,11 @@ from dataclasses import dataclass, field
 from typing import Optional, Dict, Any
 
 from dataclass_factory import Factory
-from requests import get, Response
+from requests import get, Response, post, PreparedRequest
 from typing_extensions import Protocol
 
 from .parameters.webservice import LOGIN_PARAMS
+from synology_api.error_codes import error_codes, CODE_UNKNOWN
 
 ENTRY_URL = '{url}/webapi/entry.cgi'
 
@@ -50,7 +51,10 @@ class SynoResponse:
             self.data = json.get( 'data', {} )
         else:
             self.error_code = json.get( 'error' ).get( 'code' )
-            self.error_msg = '...' # todo
+            self.error_msg = error_codes.get( self.error_code, error_codes.get( CODE_UNKNOWN ) )
+
+    def request( self ) -> PreparedRequest:
+        return self.response.request
 
     def response_data( self, key: str ) -> Any:
         return self.data.get( key, None )
@@ -78,6 +82,18 @@ class SynoWebService:
         )
 
         return SynoResponse( response=response )
+
+    def post( self, url: str, template: Dict, **kwargs ) -> SynoResponse:
+        if self.session_id:
+            template = { **template, '_sid': self.session_id }
+
+        response = post(
+            url=self.get_url( url ),
+            params={ **template, **kwargs },
+            verify=True
+        )
+
+        return SynoResponse( response )
 
     def get_list_to_dataclass( self, url, params, cls ):
         syno_response = self.get( url, params )
