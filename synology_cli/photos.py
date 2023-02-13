@@ -10,34 +10,6 @@ from .parameters.photos import BROWSE_ALBUM, BROWSE_ITEM, BROWSE_FOLDER
 from .webservice import ENTRY_URL
 from .webservice import SynoWebService
 
-# urls
-
-# parameter sets
-
-def list_items(self, folder_id=0, album_id=0, limit=1000, offset=0, additional=None):
-    api_name = 'SYNO.Foto.Browse.Item'
-    api_path = self.photos_list[api_name]['path']
-    additional = additional or []
-    req_param = {
-        'method': 'list',
-        'version': self.photos_list[api_name]['maxVersion'],
-        'offset': offset,
-        'limit': limit,
-        'sort_by': 'filename',
-        'sort_direction': 'asc',
-#            'type': 'photo',
-#            'passphrase': '',
-        'additional': json.dumps(additional),
-        #'additional': ["thumbnail", "resolution", "orientation", "video_convert", "video_meta"]
-    }
-    # add folder_id/album_id, depending on which parent is used
-    if folder_id > 0:
-        req_param['folder_id'] = folder_id
-    elif album_id > 0:
-        req_param['album_id'] = album_id
-
-    return self.request_data(api_name, api_path, req_param, method='post')
-
 @dataclass
 class Item:
 
@@ -129,20 +101,6 @@ class SynoPhotos( SynoWebService ):
 
     def browse_items( self, id: int = 0 ) -> List[Item]:
         return self.get_list_to_dataclass( ENTRY_URL, { **BROWSE_ITEM, 'id': id }, Item )
-
-    def list_items( self, parent: Union[Folder, Album]=None, folder_id=0, album_id=0 ) -> List[Item]:
-        # when Folder/Album was provided, overwrite folder_id/album_id
-        if type( parent ) is Folder:
-            folder_id = parent.id
-        elif type( parent ) is Album:
-            album_id = parent.id
-
-        if folder_id > 0:
-            return self._process_response( self.inst.list_items( folder_id=folder_id ), Item )
-        elif album_id > 0:
-            return self._process_response(self.inst.list_items(album_id=album_id), Item)
-        else:
-            return []
 
     def traverse_folders(self, fn_folder: Callable = None, fn_item: Callable = None ) -> List[Folder]:
         folders = []
