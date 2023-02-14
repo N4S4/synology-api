@@ -47,3 +47,10 @@ CREATE_ALBUM = {
     # but can be empty as well (although the Web UI does not allow that)
     'item': '[]',
 }
+
+CREATE_FOLDER = {
+    **CREATE,
+    'api': 'SYNO.Foto.Browse.Folder',
+    'target_id': None, # id of the parent folder
+    'name': None, # name of the folder
+}

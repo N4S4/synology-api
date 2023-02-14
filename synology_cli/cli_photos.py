@@ -42,6 +42,13 @@ def photos_list( ctx: ApplicationContext, folder_id: int = None, album_id: int =
 def create_album( ctx: ApplicationContext, name: str ):
     ctx.console.print( ctx.service.create_album( name ) )
 
+@cli_photos.command( 'create-folder', help='creates a new folder' )
+@option( '-n', '--name', required=True, help='album name' )
+@option( '-p', '--parent-id', required=False, help='parent id' )
+@pass_obj
+def create_folder( ctx: ApplicationContext, name: str, parent_id: int ):
+    ctx.console.print( ctx.service.create_folder( name, parent_id ) )
+
 @cli_photos.command( 'list-albums', help='lists albums' )
 @pass_obj
 def list_albums( ctx: ApplicationContext ):
