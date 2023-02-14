@@ -52,7 +52,7 @@ def create_folder( ctx: ApplicationContext, name: str, parent_id: int ):
 @cli_photos.command( 'get-root-folder', help='gets the root folder' )
 @pass_obj
 def get_root_folder( ctx: ApplicationContext ):
-    ctx.console.print( _ws( ctx ).root_folder().id )
+    ctx.print( _ws( ctx ).root_folder().id )
 
 @cli_photos.command( 'list-albums', help='lists albums' )
 @pass_obj

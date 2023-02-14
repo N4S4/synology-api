@@ -1,7 +1,7 @@
 
 from json import loads
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Any
 
 from appdirs import user_config_dir
 from dataclasses import dataclass, field
@@ -33,6 +33,9 @@ class ApplicationContext:
     service: WebService = field( default=None )
 
     console: Console = field( default=Console() )
+
+    def print( self, obj: Any ) -> None:
+        self.console.print( obj )
 
 # init
 
