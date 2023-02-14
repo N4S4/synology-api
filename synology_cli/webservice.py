@@ -82,9 +82,11 @@ class SynoWebService:
         if self.session_id:
             template = { **template, '_sid': self.session_id }
 
+        params = {**template, **kwargs} # create variable making debuggin easier
+
         response = get(
             url=self.get_url( url ),
-            params={ **template, **kwargs },
+            params=params,
             verify=True
         )
 

@@ -5,7 +5,8 @@ from dataclasses import dataclass, field
 from queue import SimpleQueue
 from typing import List, Dict, Type, Callable
 
-from .parameters.photos import BROWSE_ALBUM, BROWSE_ITEM, BROWSE_FOLDER, CREATE_ALBUM, CREATE_FOLDER, GET_FOLDER
+from .parameters.photos import BROWSE_ALBUM, BROWSE_ITEM, BROWSE_FOLDER, CREATE_ALBUM, CREATE_FOLDER, GET_FOLDER, \
+    ADD_ITEM_TO_ALBUM
 from .parameters.webservice import ENTRY_URL
 from .webservice import SynoWebService
 
@@ -145,6 +146,11 @@ class SynoPhotos( SynoWebService ):
 
     def root_folder( self ) -> Folder:
         return self.folder( 0 )
+
+    def add_items( self, album: Album, items: List[Item] ) -> None:
+        item_ids = [str( i.id ) for i in items]
+        item_ids_str = f'[{",".join(item_ids)}]'
+        self.get( ENTRY_URL, { **ADD_ITEM_TO_ALBUM, 'id': album.id, 'item': item_ids_str } )
 
     # old code below
 

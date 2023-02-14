@@ -70,3 +70,11 @@ CREATE_FOLDER = {
     'target_id': None, # id of the parent folder
     'name': None, # name of the folder
 }
+
+ADD_ITEM_TO_ALBUM = {
+    'api': 'SYNO.Foto.Browse.NormalAlbum',
+    'method': 'add_item',
+    'version': 1,
+    'id': 0,
+    'item': '[]' # should be '[1,2,3]'
+}

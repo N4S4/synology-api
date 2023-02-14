@@ -39,10 +39,17 @@ def cli_photos( ctx: Context, url: str, account: str, password: str ):
 # create
 
 @cli_photos.command( 'create-album', help='creates a new album' )
-@option( '-n', '--name', required=True, help='album name' )
+@option( '-f', '--from-folder', required=False, help='id of folder to populate album with' )
+@option( '-s', '--share-with', required=False, help='share album with' )
+@argument( 'name', nargs=1, required=True )
 @pass_obj
-def create_album( ctx: ApplicationContext, name: str ):
-    ctx.console.print( _ws( ctx ).create_album( name ).id )
+def create_album( ctx: ApplicationContext, name: str, from_folder: int = None, share_with: int = None ):
+    album = synophotos.create_album( name )
+    if from_folder:
+        items = synophotos.list_items( from_folder, all_items=True, recursive=False )
+        synophotos.add_items( album, items )
+    
+    ctx.print( album.id )
 
 @cli_photos.command( 'create-folder', help='creates a new folder' )
 @option( '-n', '--name', required=True, help='album name' )
