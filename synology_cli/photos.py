@@ -96,8 +96,8 @@ class SynoPhotos( SynoWebService ):
     def count_albums(self) -> int:
         return self.get( ENTRY_URL, COUNT_ALBUM ).data.get( 'count' )
 
-    def count_folders(self) -> int:
-        return self.get( ENTRY_URL, COUNT_FOLDER ).data.get( 'count' )
+    def count_folders(self, parent_id: int = 0) -> int:
+        return self.get( ENTRY_URL, { **COUNT_FOLDER, 'id': parent_id } ).data.get( 'count' )
 
     def count_items(self) -> int:
         return self.get( ENTRY_URL, COUNT_ITEM ).data.get( 'count' )

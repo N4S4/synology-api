@@ -66,9 +66,10 @@ def count_albums(ctx: ApplicationContext):
     ctx.console.print( synophotos.count_albums() )
 
 @cli_photos.command('count-folders', help='counts the number of folders')
+@argument( 'parent_id', nargs=1, required=False )
 @pass_obj
-def count_folders(ctx: ApplicationContext):
-    ctx.console.print( synophotos.count_folders() )
+def count_folders(ctx: ApplicationContext, parent_id: int = 0):
+    ctx.console.print( synophotos.count_folders( parent_id ) )
 
 @cli_photos.command('count-items', help='counts the number of items')
 @pass_obj
