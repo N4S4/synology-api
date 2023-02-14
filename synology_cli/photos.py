@@ -95,8 +95,18 @@ class SynoPhotos( SynoWebService ):
     def list_albums(self) -> List[Album]:
         return self.get( ENTRY_URL, BROWSE_ALBUM ).as_list( Album )
 
-    def list_folders(self, parent_id: int = 0) -> List[Folder]:
-        return self.get(ENTRY_URL, {**BROWSE_FOLDER, 'id': parent_id}).as_list(Folder)
+    def list_folders(self, parent_id: int = 0, recursive: bool = False) -> List[Folder]:
+        if recursive:
+            root = self.folder( parent_id )
+            folders, queue = [], [ root ]
+            while len( queue ) > 0:
+                parent = queue.pop( 0 )
+                children = self.get(ENTRY_URL, {**BROWSE_FOLDER, 'id': parent.id}).as_list(Folder)
+                folders.extend( children )
+                queue.extend( children )
+            return folders
+        else:
+            return self.get(ENTRY_URL, {**BROWSE_FOLDER, 'id': parent_id}).as_list(Folder)
 
     def list_items(self, parent_id: int = 0) -> List[Item]:
         return self.get(ENTRY_URL, {**BROWSE_ITEM, 'id': parent_id}).as_list(Item)
@@ -107,36 +117,13 @@ class SynoPhotos( SynoWebService ):
     def create_folder( self, name: str, parent_id: int = 0 ) -> int:
         return self.get( ENTRY_URL, { **CREATE_FOLDER, 'name': f'\"{name}\"', 'target_id': parent_id } )
 
+    def folder( self, id: int ) -> Folder:
+        return self.get( ENTRY_URL, { **GET_FOLDER, 'id': id } ).as_obj( Folder )
+
     def root_folder( self ) -> Folder:
-        return self.get( ENTRY_URL, GET_FOLDER ).as_obj( Folder )
+        return self.folder( 0 )
 
     # old code below
-
-    def traverse_folders(self, fn_folder: Callable = None, fn_item: Callable = None ) -> List[Folder]:
-        folders = []
-        q = SimpleQueue()
-        q.put(self.root_folder())
-
-        while not q.empty():
-            # get/process next folder
-            folder = q.get()
-            if fn_folder:
-                fn_folder( folder )
-            folders.append( folder )
-
-            # process items
-            items = self.list_items(folder)
-            for item in items:
-                folder.items.append( item )
-                item.folder = folder
-                if fn_item:
-                    fn_item( item )
-
-            # store sub folders
-            for f in self.list_folders(folder):
-                folder.subfolders.append( f )
-                q.put(f)
-        return folders
 
     def traverse_albums(self, fn_album: Callable = None, fn_item: Callable = None) -> List[Album]:
         albums = []

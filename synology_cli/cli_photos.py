@@ -1,12 +1,15 @@
 
 from sys import exit
-from typing import cast
+from typing import cast, Optional
 
-from click import pass_context, group, option, Context, pass_obj
+from click import argument, pass_context, group, option, Context, pass_obj
 
 from synology_cli import ctx as appctx, ApplicationContext
 from synology_cli.photos import SynoPhotos, Folder, Album, Item
 from synology_cli.ui import dataclass_table
+
+# global variable for functions below
+synophotos: Optional[SynoPhotos] = None
 
 @group( help='photos group' )
 @option( '-u', '--url', is_flag=False, required=False, help='URL' )
@@ -29,12 +32,11 @@ def cli_photos( ctx: Context, url: str, account: str, password: str ):
         ctx.obj.console.print( f'error logging in: code={syno_response.error_code}' )
         exit( -1 )
 
-@cli_photos.command( 'list-folders', help='lists folders' )
-@option( '-a', '--album-id', required=False, help='id of the album to list' )
-@option( '-f', '--folder-id', required=False, help='id of the folder to list' )
-@pass_obj
-def photos_list( ctx: ApplicationContext, folder_id: int = None, album_id: int = None ):
-    ctx.console.print( dataclass_table( _ws( ctx ).list_folders( folder_id or 0 ), Folder ) )
+    # set global object to ease access in functions below
+    global synophotos
+    synophotos = ctx.obj.service
+
+# create
 
 @cli_photos.command( 'create-album', help='creates a new album' )
 @option( '-n', '--name', required=True, help='album name' )
@@ -49,10 +51,17 @@ def create_album( ctx: ApplicationContext, name: str ):
 def create_folder( ctx: ApplicationContext, name: str, parent_id: int ):
     ctx.console.print( _ws( ctx ).create_folder( name, parent_id ) )
 
-@cli_photos.command( 'get-root-folder', help='gets the root folder' )
+# list
+
+@cli_photos.command( 'list-folders', help='lists folders' )
+@option( '-r', '--recursive', required=False, is_flag=True, help='include all folders recursively' )
+@argument( 'parent_id', nargs=1, required=False )
 @pass_obj
-def get_root_folder( ctx: ApplicationContext ):
-    ctx.print( _ws( ctx ).root_folder().id )
+def list_folders( ctx: ApplicationContext, parent_id: int = 0, recursive: bool = False ):
+    if parent_id == 0:
+        parent_id = synophotos.root_folder().id
+
+    ctx.print( synophotos.list_folders( parent_id, recursive ) )
 
 @cli_photos.command( 'list-albums', help='lists albums' )
 @pass_obj
@@ -64,6 +73,13 @@ def list_albums( ctx: ApplicationContext ):
 @pass_obj
 def list_items( ctx: ApplicationContext, folder_id: int = None ):
     ctx.console.print( dataclass_table( _ws( ctx ).list_items( folder_id or 0 ), Item ) )
+
+@cli_photos.command( 'get-root-folder', help='gets the root folder' )
+@pass_obj
+def get_root_folder( ctx: ApplicationContext ):
+    ctx.print( _ws( ctx ).root_folder().id )
+
+# helper
 
 def _ws( ctx: ApplicationContext ) -> SynoPhotos:
     return cast( SynoPhotos, ctx.service )

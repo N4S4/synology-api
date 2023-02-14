@@ -18,12 +18,15 @@ def dataclass_table( instances: List, cls: Type = None ) -> Optional[Table]:
         table_fields: List[str] = cls.table_fields()
     except AttributeError:
         try:
-            table_fields = [ f.name for f in fields( instances[0] ) ]
-        except (TypeError, IndexError):
+            table_fields = instances[0].__class__.table_fields()
+        except (AttributeError, IndexError):
             try:
-                table_fields = [ f for f in instances[0].keys() ]
-            except AttributeError:
-                table_fields: List[str] = []
+                table_fields = [ f.name for f in fields( instances[0] ) ]
+            except (TypeError, IndexError):
+                try:
+                    table_fields = [ f for f in instances[0].keys() ]
+                except (AttributeError, IndexError):
+                    table_fields: List[str] = []
 
     # determine values to display
 

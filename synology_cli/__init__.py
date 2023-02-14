@@ -8,6 +8,7 @@ from dataclasses import dataclass, field
 from dataclass_factory import Factory
 from rich.console import Console
 
+from .ui import dataclass_table
 from .webservice import WebService
 
 @dataclass
@@ -35,7 +36,10 @@ class ApplicationContext:
     console: Console = field( default=Console() )
 
     def print( self, obj: Any ) -> None:
-        self.console.print( obj )
+        if isinstance( obj, list ):
+            self.console.print( dataclass_table( obj ) )
+        else:
+            self.console.print( obj )
 
 # init
 
