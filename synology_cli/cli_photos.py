@@ -105,6 +105,11 @@ def list_items( ctx: ApplicationContext, parent_id: int = 0, all_items: bool = F
         ctx.print( 'fetching items without paging and/or recursively, this might take a while ...' )
     ctx.print( synophotos.list_items( parent_id, all_items, recursive ) )
 
+@cli_photos.command( 'list-user-groups', help='lists users and groups' )
+@pass_obj
+def list_user_groups( ctx: ApplicationContext ):
+    ctx.print( synophotos.list_user_group() )
+
 @cli_photos.command( 'get-root-folder', help='gets the root folder' )
 @pass_obj
 def get_root_folder( ctx: ApplicationContext ):

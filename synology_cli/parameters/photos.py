@@ -112,3 +112,11 @@ ADD_ITEM_TO_ALBUM = {
     'id': 0,
     'item': '[]' # should be '[1,2,3]'
 }
+
+LIST_USER_GROUP = {
+    **SID,
+	'api': 'SYNO.Foto.Sharing.Misc',
+	'method': 'list_user_group',
+	'version': 1,
+	'team_space_sharable_list': 'false'
+}
