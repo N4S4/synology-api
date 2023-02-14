@@ -10,6 +10,12 @@ SID = {
     '_sid': None
 }
 
+COUNT = {
+	'method': 'count',
+	'version': 1,
+    **SID,
+}
+
 CREATE = {
     'method': 'create',
     'version': 1,
@@ -46,6 +52,11 @@ BROWSE_ITEM = {
     'api': 'SYNO.Foto.Browse.Item',
     'sort_by': 'filename',
     'sort_direction': 'asc',
+}
+
+COUNT_ALBUM = {
+    **COUNT,
+    'api': 'SYNO.Foto.Browse.Album',
 }
 
 GET_FOLDER = {

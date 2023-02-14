@@ -58,6 +58,13 @@ def create_album( ctx: ApplicationContext, name: str, from_folder: int = None, s
 def create_folder( ctx: ApplicationContext, name: str, parent_id: int ):
     ctx.console.print( _ws( ctx ).create_folder( name, parent_id ) )
 
+# count ... not sure if this is useful
+
+@cli_photos.command('count-albums', help='counts the number of albums')
+@pass_obj
+def count_albums(ctx: ApplicationContext):
+    ctx.console.print( synophotos.count_albums() )
+
 # list
 
 @cli_photos.command( 'list-folders', help='lists folders' )
