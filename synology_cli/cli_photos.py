@@ -34,36 +34,36 @@ def cli_photos( ctx: Context, url: str, account: str, password: str ):
 @option( '-f', '--folder-id', required=False, help='id of the folder to list' )
 @pass_obj
 def photos_list( ctx: ApplicationContext, folder_id: int = None, album_id: int = None ):
-    ctx.console.print( dataclass_table( ctx.service.list_folders( folder_id or 0 ), Folder ) )
+    ctx.console.print( dataclass_table( _ws( ctx ).list_folders( folder_id or 0 ), Folder ) )
 
 @cli_photos.command( 'create-album', help='creates a new album' )
 @option( '-n', '--name', required=True, help='album name' )
 @pass_obj
 def create_album( ctx: ApplicationContext, name: str ):
-    ctx.console.print( ctx.service.create_album( name ) )
+    ctx.console.print( _ws( ctx ).create_album( name ).id )
 
 @cli_photos.command( 'create-folder', help='creates a new folder' )
 @option( '-n', '--name', required=True, help='album name' )
 @option( '-p', '--parent-id', required=False, help='parent id' )
 @pass_obj
 def create_folder( ctx: ApplicationContext, name: str, parent_id: int ):
-    ctx.console.print( ctx.service.create_folder( name, parent_id ) )
+    ctx.console.print( _ws( ctx ).create_folder( name, parent_id ) )
 
 @cli_photos.command( 'get-root-folder', help='gets the root folder' )
 @pass_obj
 def get_root_folder( ctx: ApplicationContext ):
-    ctx.console.print( _ws( ctx ).root_folder() )
+    ctx.console.print( _ws( ctx ).root_folder().id )
 
 @cli_photos.command( 'list-albums', help='lists albums' )
 @pass_obj
 def list_albums( ctx: ApplicationContext ):
-    ctx.console.print( dataclass_table( ctx.service.list_albums(), Album ) )
+    ctx.console.print( dataclass_table( _ws( ctx ).list_albums(), Album ) )
 
 @cli_photos.command( 'list-items', help='lists items' )
 @option( '-f', '--folder-id', required=False, help='id of the folder to list' )
 @pass_obj
 def list_items( ctx: ApplicationContext, folder_id: int = None ):
-    ctx.console.print( dataclass_table( ctx.service.list_items( folder_id or 0 ), Item ) )
+    ctx.console.print( dataclass_table( _ws( ctx ).list_items( folder_id or 0 ), Item ) )
 
 def _ws( ctx: ApplicationContext ) -> SynoPhotos:
     return cast( SynoPhotos, ctx.service )

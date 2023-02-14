@@ -101,14 +101,14 @@ class SynoPhotos( SynoWebService ):
     def list_items(self, parent_id: int = 0) -> List[Item]:
         return self.get(ENTRY_URL, {**BROWSE_ITEM, 'id': parent_id}).as_list(Item)
 
-    def create_album( self, name: str ) -> int:
-        return self.get( ENTRY_URL, { **CREATE_ALBUM, 'name': name } ).data.get( 'album' ).get( 'id' )
+    def create_album( self, name: str ) -> Album:
+        return self.get( ENTRY_URL, { **CREATE_ALBUM, 'name': name } ).as_obj( Album )
 
     def create_folder( self, name: str, parent_id: int = 0 ) -> int:
         return self.get( ENTRY_URL, { **CREATE_FOLDER, 'name': f'\"{name}\"', 'target_id': parent_id } )
 
     def root_folder( self ) -> Folder:
-        return self.get( ENTRY_URL, GET_FOLDER ).as_obj( Folder ).id
+        return self.get( ENTRY_URL, GET_FOLDER ).as_obj( Folder )
 
     # old code below
 
