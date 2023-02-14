@@ -72,6 +72,16 @@ COUNT_ITEM = {
     'api': 'SYNO.Foto.Browse.Item',
 }
 
+COUNT_ITEM_FOLDER = {
+    **COUNT_ITEM,
+    'folder_id': 0,
+}
+
+COUNT_ITEM_ALBUM = {
+    **COUNT_ITEM,
+    'album_id': 0,
+}
+
 GET_FOLDER = {
     'api': 'SYNO.Foto.Browse.Folder',
     'id': 0,
