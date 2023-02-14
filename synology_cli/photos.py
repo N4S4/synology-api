@@ -6,7 +6,7 @@ from queue import SimpleQueue
 from typing import List, Dict, Type, Callable
 
 from .parameters.photos import BROWSE_ALBUM, BROWSE_ITEM, BROWSE_FOLDER, CREATE_ALBUM, CREATE_FOLDER, GET_FOLDER, \
-    ADD_ITEM_TO_ALBUM, COUNT_ALBUM, COUNT_FOLDER
+    ADD_ITEM_TO_ALBUM, COUNT_ALBUM, COUNT_FOLDER, COUNT_ITEM
 from .parameters.webservice import ENTRY_URL
 from .webservice import SynoWebService
 
@@ -93,11 +93,14 @@ class Album:
 @dataclass
 class SynoPhotos( SynoWebService ):
 
-    def count_albums(self) -> List[Album]:
+    def count_albums(self) -> int:
         return self.get( ENTRY_URL, COUNT_ALBUM ).data.get( 'count' )
 
-    def count_folders(self) -> List[Album]:
+    def count_folders(self) -> int:
         return self.get( ENTRY_URL, COUNT_FOLDER ).data.get( 'count' )
+
+    def count_items(self) -> int:
+        return self.get( ENTRY_URL, COUNT_ITEM ).data.get( 'count' )
 
     def list_albums(self) -> List[Album]:
         return self.get( ENTRY_URL, BROWSE_ALBUM ).as_list( Album )

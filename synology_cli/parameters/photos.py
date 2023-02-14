@@ -10,6 +10,8 @@ SID = {
     '_sid': None
 }
 
+# parameter sets for various operations
+
 COUNT = {
 	'method': 'count',
 	'version': 1,
@@ -62,6 +64,11 @@ COUNT_ALBUM = {
 COUNT_FOLDER = {
     **COUNT,
     'api': 'SYNO.Foto.Browse.Folder',
+}
+
+COUNT_ITEM = {
+    **COUNT,
+    'api': 'SYNO.Foto.Browse.Item',
 }
 
 GET_FOLDER = {
