@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from queue import SimpleQueue
 from typing import List, Dict, Type, Callable
 
-from .parameters.photos import BROWSE_ALBUM, BROWSE_ITEM, BROWSE_FOLDER, CREATE_ALBUM, CREATE_FOLDER
+from .parameters.photos import BROWSE_ALBUM, BROWSE_ITEM, BROWSE_FOLDER, CREATE_ALBUM, CREATE_FOLDER, GET_FOLDER
 from .parameters.webservice import ENTRY_URL
 from .webservice import SynoWebService
 
@@ -106,6 +106,9 @@ class SynoPhotos( SynoWebService ):
 
     def create_folder( self, name: str, parent_id: int = 0 ) -> int:
         return self.get( ENTRY_URL, { **CREATE_FOLDER, 'name': f'\"{name}\"', 'target_id': parent_id } )
+
+    def root_folder( self ) -> Folder:
+        return self.get( ENTRY_URL, GET_FOLDER ).as_obj( Folder ).id
 
     # old code below
 

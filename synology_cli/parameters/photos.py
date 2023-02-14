@@ -5,11 +5,21 @@ BROWSE_NORMAL_ALBUM_URL = '{url}/entry.cgi/SYNO.Foto.Browse.NormalAlbum'
 
 # parameter sets
 
-CREATE = {
-    'method': 'create',
-    'version': '1',
+SID = {
     'format': 'sid',
     '_sid': None
+}
+
+CREATE = {
+    'method': 'create',
+    'version': 1,
+    **SID,
+}
+
+GET = {
+    'method': 'get',
+    'version': 2,
+    **SID,
 }
 
 LIST = {
@@ -17,8 +27,7 @@ LIST = {
     'version': 2,
     'offset': 0,
     'limit': 50,
-    'format': 'sid',
-    '_sid': None
+    **SID,
 }
 
 BROWSE_ALBUM = {
@@ -37,6 +46,13 @@ BROWSE_ITEM = {
     'api': 'SYNO.Foto.Browse.Item',
     'sort_by': 'filename',
     'sort_direction': 'asc',
+}
+
+GET_FOLDER = {
+    'api': 'SYNO.Foto.Browse.Folder',
+    'id': 0,
+    'additional': '["access_permission"]', # ???
+    **GET,
 }
 
 CREATE_ALBUM = {

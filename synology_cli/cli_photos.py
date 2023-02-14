@@ -49,6 +49,11 @@ def create_album( ctx: ApplicationContext, name: str ):
 def create_folder( ctx: ApplicationContext, name: str, parent_id: int ):
     ctx.console.print( ctx.service.create_folder( name, parent_id ) )
 
+@cli_photos.command( 'get-root-folder', help='gets the root folder' )
+@pass_obj
+def get_root_folder( ctx: ApplicationContext ):
+    ctx.console.print( _ws( ctx ).root_folder() )
+
 @cli_photos.command( 'list-albums', help='lists albums' )
 @pass_obj
 def list_albums( ctx: ApplicationContext ):
@@ -59,6 +64,9 @@ def list_albums( ctx: ApplicationContext ):
 @pass_obj
 def list_items( ctx: ApplicationContext, folder_id: int = None ):
     ctx.console.print( dataclass_table( ctx.service.list_items( folder_id or 0 ), Item ) )
+
+def _ws( ctx: ApplicationContext ) -> SynoPhotos:
+    return cast( SynoPhotos, ctx.service )
 
 def main( *args, **kwargs ):
     cli_photos()  # trigger cli

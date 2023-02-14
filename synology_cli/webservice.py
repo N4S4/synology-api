@@ -1,7 +1,7 @@
 
 from abc import abstractmethod
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any, ClassVar
+from typing import Optional, Dict, Any, ClassVar, List
 
 from dataclass_factory import Factory
 from requests import get, Response, post, PreparedRequest
@@ -52,9 +52,13 @@ class SynoResponse:
             self.error_code = json.get( 'error' ).get( 'code' )
             self.error_msg = error_codes.get( self.error_code, error_codes.get( CODE_UNKNOWN ) )
 
-    def as_list( self, cls ):
+    def as_list( self, cls ) -> List:
         element_list = self.data.get( 'list' )
         return [ SynoResponse.factory.load( e, cls ) for e in element_list ]
+
+    def as_obj( self, cls ) -> Any:
+        first_key, first_value = next( iter( self.data.items() ) )
+        return SynoResponse.factory.load( first_value, cls )
 
     def request( self ) -> PreparedRequest:
         return self.response.request
