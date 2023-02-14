@@ -69,10 +69,14 @@ def list_albums( ctx: ApplicationContext ):
     ctx.console.print( dataclass_table( _ws( ctx ).list_albums(), Album ) )
 
 @cli_photos.command( 'list-items', help='lists items' )
-@option( '-f', '--folder-id', required=False, help='id of the folder to list' )
+@option( 'all_items', '-a', '--all', required=False, is_flag=True, help='skip paging and list all items' )
+@option( '-r', '--recursive', required=False, is_flag=True, help='includes all items recursively' )
+@argument( 'parent_id', nargs=1, required=False )
 @pass_obj
-def list_items( ctx: ApplicationContext, folder_id: int = None ):
-    ctx.console.print( dataclass_table( _ws( ctx ).list_items( folder_id or 0 ), Item ) )
+def list_items( ctx: ApplicationContext, parent_id: int = 0, all_items: bool = False, recursive: bool = False ):
+    if all_items or recursive:
+        ctx.print( 'fetching items without paging and/or recursively, this might take a while ...' )
+    ctx.print( synophotos.list_items( parent_id, all_items, recursive ) )
 
 @cli_photos.command( 'get-root-folder', help='gets the root folder' )
 @pass_obj

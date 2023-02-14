@@ -108,8 +108,31 @@ class SynoPhotos( SynoWebService ):
         else:
             return self.get(ENTRY_URL, {**BROWSE_FOLDER, 'id': parent_id}).as_list(Folder)
 
-    def list_items(self, parent_id: int = 0) -> List[Item]:
-        return self.get(ENTRY_URL, {**BROWSE_ITEM, 'id': parent_id}).as_list(Item)
+    def list_items(self, parent_id: int = 0, all_items: bool = False, recursive: bool = False) -> List[Item]:
+        items = []
+
+        if parent_id == 0:
+            parent_id = self.root_folder().id
+
+        parent_ids = [parent_id]
+        if recursive:
+            parent_ids.extend( [p.id for p in self.list_folders( parent_id, recursive=True )] )
+            all_items = True # recursive implies all_items, recursive + limiting does not make sense
+
+        for parent_id in parent_ids:
+            if all_items:
+                limit, offset = BROWSE_ITEM.get( 'limit' ), BROWSE_ITEM.get('offset')
+                while True:
+                    page = self.get(ENTRY_URL, {**BROWSE_ITEM, 'folder_id': parent_id, 'limit': limit, 'offset': offset} ).as_list(Item)
+                    if len( page ) > 0:
+                        items.extend( page )
+                        offset = offset + limit
+                    else:
+                        break
+            else:
+                items = self.get(ENTRY_URL, {**BROWSE_ITEM, 'folder_id': parent_id}).as_list(Item)
+
+        return items
 
     def create_album( self, name: str ) -> Album:
         return self.get( ENTRY_URL, { **CREATE_ALBUM, 'name': name } ).as_obj( Album )

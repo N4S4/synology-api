@@ -26,7 +26,7 @@ LIST = {
     'method': 'list',
     'version': 2,
     'offset': 0,
-    'limit': 50,
+    'limit': 100,
     **SID,
 }
 
