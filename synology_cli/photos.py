@@ -205,12 +205,10 @@ class SynoPhotos( SynoWebService ):
         self.get( ENTRY_URL, { **ADD_ITEM_TO_ALBUM, 'id': album.id, 'item': item_ids_str } )
 
     def id_for_user( self, user: str ) -> int:
-        n: dict = next( filter( lambda d: d if d.get( 'name' ) == user and d.get( 'type' ) == 'user' else None, self.list_user_group() ), None )
-        return n.get( 'id') if n else None
+        return next( ( d.get( 'id' ) for d in self.list_user_group() if (d.get( 'name' ) == user and d.get( 'type' ) == 'user') ), None )
 
     def id_for_group( self, group: str ) -> int:
-        n: dict = next( filter( lambda d: d if d.get( 'name' ) == group and d.get( 'type' ) == 'group' else None, self.list_user_group() ), None )
-        return n.get( 'id') if n else None
+        return next( ( d.get( 'id' ) for d in self.list_user_group() if (d.get( 'name' ) == group and d.get( 'type' ) == 'group') ), None )
 
     # sharing
 
