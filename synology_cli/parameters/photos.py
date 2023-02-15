@@ -136,7 +136,7 @@ UPDATE_PERMISSION = {
     'api': 'SYNO.Foto.Sharing.Passphrase',
 	'method': 'update',
 	'version': 1,
-	'passphrase': None, # \"-escaped string, not sure if this is needed, is created when sharing an album
+	'passphrase': None, # \"-escaped string, is created when sharing an album, probably contains encoded album_id + policy
 	'expiration': 0, # unknown what is meant by 0, maybe seconds to expiration?
 	'permission': None, # this is a json string, with " escaped as \"
 }
