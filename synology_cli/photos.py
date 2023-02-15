@@ -141,18 +141,23 @@ class SynoPhotos( SynoWebService ):
     def list_albums(self) -> List[Album]:
         return self.get( ENTRY_URL, BROWSE_ALBUM ).as_list( Album )
 
-    def list_folders(self, parent_id: int = 0, recursive: bool = False) -> List[Folder]:
+    def list_folders(self, parent_id: int = 0, name: str = None, recursive: bool = False) -> List[Folder]:
+        folders = []
         if recursive:
             root = self.folder( parent_id )
-            folders, queue = [], [ root ]
+            queue = [ root ]
             while len( queue ) > 0:
                 parent = queue.pop( 0 )
                 children = self.get(ENTRY_URL, {**BROWSE_FOLDER, 'id': parent.id}).as_list(Folder)
                 folders.extend( children )
                 queue.extend( children )
-            return folders
         else:
-            return self.get(ENTRY_URL, {**BROWSE_FOLDER, 'id': parent_id}).as_list(Folder)
+            folders = self.get(ENTRY_URL, {**BROWSE_FOLDER, 'id': parent_id}).as_list(Folder)
+
+        if name:
+            folders = list( filter( lambda f: name.lower() in f.name.lower(), folders ) )
+
+        return folders
 
     def list_items(self, parent_id: int = 0, all_items: bool = False, recursive: bool = False) -> List[Item]:
         items = []

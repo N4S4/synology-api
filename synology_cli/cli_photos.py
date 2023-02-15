@@ -83,13 +83,14 @@ def count_items(ctx: ApplicationContext, folder_id: int = None, album_id: int = 
 
 @cli_photos.command( 'list-folders', help='lists folders' )
 @option( '-r', '--recursive', required=False, is_flag=True, help='include all folders recursively' )
+@option( '-n', '--name', required=False, help='folders only which name contains provided name (case insensitive)' )
 @argument( 'parent_id', nargs=1, required=False )
 @pass_obj
-def list_folders( ctx: ApplicationContext, parent_id: int = 0, recursive: bool = False ):
+def list_folders( ctx: ApplicationContext, parent_id: int = 0, name: str = None, recursive: bool = False ):
     if parent_id == 0:
         parent_id = synophotos.root_folder().id
 
-    ctx.print( synophotos.list_folders( parent_id, recursive ) )
+    ctx.print( synophotos.list_folders( parent_id, name, recursive ) )
 
 @cli_photos.command( 'list-albums', help='lists albums' )
 @pass_obj
