@@ -120,6 +120,8 @@ class Permission:
 @dataclass
 class SynoPhotos( SynoWebService ):
 
+    # counting elements
+
     def count_albums(self) -> int:
         return self.get( ENTRY_URL, COUNT_ALBUM ).data.get( 'count' )
 
@@ -133,6 +135,8 @@ class SynoPhotos( SynoWebService ):
             return self.get( ENTRY_URL, { **COUNT_ITEM, 'album_id': album_id } ).data.get( 'count' )
         else:
             return self.get( ENTRY_URL, COUNT_ITEM ).data.get( 'count' )
+
+    # listing elements
 
     def list_albums(self) -> List[Album]:
         return self.get( ENTRY_URL, BROWSE_ALBUM ).as_list( Album )
@@ -179,11 +183,15 @@ class SynoPhotos( SynoWebService ):
     def list_user_group(self):
         return self.get( ENTRY_URL, LIST_USER_GROUP ).data.get( 'list' )
 
+    # create functionality
+
     def create_album( self, name: str ) -> Album:
         return self.get( ENTRY_URL, { **CREATE_ALBUM, 'name': name } ).as_obj( Album )
 
     def create_folder( self, name: str, parent_id: int = 0 ) -> int:
         return self.get( ENTRY_URL, { **CREATE_FOLDER, 'name': f'\"{name}\"', 'target_id': parent_id } )
+
+    # helpers
 
     def folder( self, id: int ) -> Folder:
         return self.get( ENTRY_URL, { **GET_FOLDER, 'id': id } ).as_obj( Folder )
@@ -195,6 +203,14 @@ class SynoPhotos( SynoWebService ):
         item_ids = [str( i.id ) for i in items]
         item_ids_str = f'[{",".join(item_ids)}]'
         self.get( ENTRY_URL, { **ADD_ITEM_TO_ALBUM, 'id': album.id, 'item': item_ids_str } )
+
+    def id_for_user( self, user: str ) -> int:
+        n: dict = next( filter( lambda d: d if d.get( 'name' ) == user and d.get( 'type' ) == 'user' else None, self.list_user_group() ), None )
+        return n.get( 'id') if n else None
+
+    def id_for_group( self, group: str ) -> int:
+        n: dict = next( filter( lambda d: d if d.get( 'name' ) == group and d.get( 'type' ) == 'group' else None, self.list_user_group() ), None )
+        return n.get( 'id') if n else None
 
     # sharing
 

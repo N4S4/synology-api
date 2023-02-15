@@ -134,6 +134,19 @@ def share_album(ctx: ApplicationContext, album_id: int, role: str = 'view', publ
 def unshare_album( ctx: ApplicationContext, album_id: int ):
     ctx.print( synophotos.unshare_album( album_id ) )
 
+# finder for ids
+
+@cli_photos.command( 'id', help='helps finding ids of various things' )
+@option( '-u', '--user', required=False, is_flag=True, help='search for user id' )
+@option( '-g', '--group', required=False, is_flag=True, help='search for group id' )
+@argument( 'element', nargs=1, required=True )
+@pass_obj
+def find_id( ctx: ApplicationContext, element: str, user: bool, group: bool ):
+    if user:
+        ctx.print( synophotos.id_for_user( element ) )
+    elif group:
+        ctx.print( synophotos.id_for_group( element ) )
+
 # helper
 
 def _ws( ctx: ApplicationContext ) -> SynoPhotos:
