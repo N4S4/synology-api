@@ -119,42 +119,20 @@ def get_root_folder( ctx: ApplicationContext ):
 # sharing
 
 @cli_photos.command( 'share-album', help='shares an album' )
+@option( '-r', '--role', required=False, default='view', help='permission role, can be "view", "download" or "upload"' )
 @option( '-p', '--public', required=False, is_flag=True, help='shares an album publicly' )
-@option( '-u', '--user-id', required=False, help='shares an album with a user with the provided id' )
-@option( '-g', '--group-id', required=False, help='shares an album with a group with the provided id' )
+@option( '-uid', '--user-id', required=False, help='shares an album with a user with the provided id' )
+@option( '-gid', '--group-id', required=False, help='shares an album with a group with the provided id' )
 @argument( 'album_id', nargs=1, required=True )
 @pass_obj
-def share_album(ctx: ApplicationContext, album_id: int, public: bool = False, user_id: int = None, group_id: int = None ):
-    data = synophotos.share_album( album_id )
-    if public:
-        permission = Permission( role='view', member=Member( type='public' ) )
-    elif user_id:
-        permission = Permission( role='view', member=Member( type='user', id=int( user_id ) ) )
-    elif group_id:
-        permission = Permission( role='view', member=Member( type='group', id=int( group_id ) ) )
-    else:
-        permission = None
-
-    if permission:
-        ctx.print( synophotos.grant_permission( [ permission ], data.get( 'passphrase' ) ) )
+def share_album(ctx: ApplicationContext, album_id: int, role: str = 'view', public: bool = False, user_id: int = None, group_id: int = None ):
+    ctx.print( synophotos.share_album( album_id, role, public, user_id, group_id ).data )
 
 @cli_photos.command( 'unshare-album', help='unshares an album' )
 @argument( 'album_id', nargs=1, required=True )
 @pass_obj
 def unshare_album( ctx: ApplicationContext, album_id: int ):
     ctx.print( synophotos.unshare_album( album_id ) )
-
-@cli_photos.command( 'grant-permission', help='grants sharing permissions' )
-@option( '-r', '--role', required=False, default='view', help='permission role, can be "view", "download" or "upload"' )
-@option( '-p', '--passphrase', required=True, help='passphrase, generated when sharing an album' )
-@option( '-uid', '--user-id', required=False, help='user id' )
-@option( '-gid', '--group-id', required=False, help='group id' )
-@pass_obj
-def grant_permission( ctx: ApplicationContext, passphrase: str, role: str = 'view', user_id: int = None, group_id: int = None ):
-    id = group_id if group_id else user_id
-    type = 'group' if group_id else 'user'
-    permission = Permission( role=role, member=Member( id=id, type=type ) )
-    ctx.print( synophotos.grant_permission( [ permission ], passphrase ) )
 
 # helper
 

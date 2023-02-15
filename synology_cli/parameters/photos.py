@@ -146,7 +146,7 @@ SAMPLE_PERMISSION = [{
     'action': 'update',
     'member': {
         'type': 'user',
-        'id': 1000
+        'id': 1000 # this needs to be an int, otherwise error 120 will be returned
     }
 }]
 

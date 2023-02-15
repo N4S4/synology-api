@@ -198,16 +198,26 @@ class SynoPhotos( SynoWebService ):
 
     # sharing
 
-    def share_album(self, album_id: int, enabled: bool = True ):
-        enabled = 'true' if enabled else 'false' # need to convert to string first
-        return self.get( ENTRY_URL, { **SHARE_ALBUM, 'album_id': album_id, 'enabled': enabled } ).data
+    def share_album(self, album_id: int, role: str, public: bool, user_id: int, group_id: int ):
+        response = self.get( ENTRY_URL, { **SHARE_ALBUM, 'album_id': album_id, 'enabled': 'true' } )
+
+        if public:
+            permissions = [ Permission( role=role, member=Member( type='public' ) ) ]
+        elif user_id:
+            permissions = [ Permission( role=role, member=Member( type='user', id=int( user_id ) ) ) ]
+        elif group_id:
+            permissions = [ Permission( role=role, member=Member( type='group', id=int( group_id ) ) ) ]
+        else:
+            permissions = None
+
+        if permissions:
+            return self.grant_permission( permissions, response.data.get( 'passphrase' ) )
 
     def grant_permission(self, permissions: List[Permission], passphrase: str ):
-        permission = Permission.as_str( permissions )
-        return self.get( ENTRY_URL, { **UPDATE_PERMISSION, 'permission': permission, 'passphrase': f'"{passphrase}"' } )
+        return self.get( ENTRY_URL, { **UPDATE_PERMISSION, 'permission': Permission.as_str( permissions ), 'passphrase': f'"{passphrase}"' } )
 
     def unshare_album(self, album_id: int ):
-        return self.share_album( album_id, False )
+        return self.get( ENTRY_URL, { **SHARE_ALBUM, 'album_id': album_id, 'enabled': 'false' } ).data
 
     # old code below
 
