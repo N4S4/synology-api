@@ -3,9 +3,10 @@ from sys import exit
 from typing import cast, Optional
 
 from click import argument, pass_context, group, option, Context, pass_obj
+from dataclass_factory import Factory
 
 from synology_cli import ctx as appctx, ApplicationContext
-from synology_cli.photos import SynoPhotos, Folder, Album, Item
+from synology_cli.photos import SynoPhotos, Folder, Album, Item, Member, Permission
 from synology_cli.ui import dataclass_table
 
 # global variable for functions below
@@ -27,7 +28,7 @@ def cli_photos( ctx: Context, url: str, account: str, password: str ):
 
     # create service and attempt to log in
     ctx.obj.service = SynoPhotos( url=url, account=account, password=password )
-    syno_response = ctx.obj.service.login()
+    syno_response = ctx.obj.service.login() # todo: save sid to be able to skip login later? but for how long?
     if not syno_response.success:
         ctx.obj.console.print( f'error logging in: code={syno_response.error_code}' )
         exit( -1 )
@@ -128,6 +129,18 @@ def share_album( ctx: ApplicationContext, album_id: int ):
 @pass_obj
 def unshare_album( ctx: ApplicationContext, album_id: int ):
     ctx.print( synophotos.unshare_album( album_id ) )
+
+@cli_photos.command( 'grant-permission', help='grants sharing permissions' )
+@option( '-r', '--role', required=False, default='view', help='permission role, can be "view", "download" or "upload"' )
+@option( '-p', '--passphrase', required=True, help='passphrase, generated when sharing an album' )
+@option( '-uid', '--user-id', required=False, help='user id' )
+@option( '-gid', '--group-id', required=False, help='group id' )
+@pass_obj
+def grant_permission( ctx: ApplicationContext, passphrase: str, role: str = 'view', user_id: int = None, group_id: int = None ):
+    id = group_id if group_id else user_id
+    type = 'group' if group_id else 'user'
+    permission = Permission( role=role, member=Member( id=id, type=type ) )
+    ctx.print( synophotos.grant_permission( [ permission ], passphrase ) )
 
 # helper
 

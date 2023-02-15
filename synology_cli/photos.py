@@ -2,13 +2,16 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from queue import SimpleQueue
+from json import dumps, loads
 from typing import List, Dict, Type, Callable
 
 from .parameters.photos import BROWSE_ALBUM, BROWSE_ITEM, BROWSE_FOLDER, CREATE_ALBUM, CREATE_FOLDER, GET_FOLDER, \
-    ADD_ITEM_TO_ALBUM, COUNT_ALBUM, COUNT_FOLDER, COUNT_ITEM, LIST_USER_GROUP, SHARE_ALBUM
+    ADD_ITEM_TO_ALBUM, COUNT_ALBUM, COUNT_FOLDER, COUNT_ITEM, LIST_USER_GROUP, SHARE_ALBUM, UPDATE_PERMISSION
 from .parameters.webservice import ENTRY_URL
-from .webservice import SynoWebService
+from .webservice import SynoWebService, SynoResponse
+
+
+# photos-related dataclasses
 
 @dataclass
 class Item:
@@ -89,6 +92,30 @@ class Album:
 
     def is_shared(self) -> bool:
         return self.shared or self.temporary_shared
+
+@dataclass
+class Member:
+
+    type: str = field( default='user' ) # 'user' or 'group'
+    id: int = field( default=0 ) # id of the user or group
+
+@dataclass
+class Permission:
+
+    role: str = field( default='view' ) # can be 'download', 'view' and 'upload'
+    action: str = field( default='update' ) # 'update' ... what else is possible?
+    member: Member = field( default=Member() ) # this cannot be None
+
+    @classmethod
+    def from_str(cls, s: str) -> List[Permission]:
+        return [SynoResponse.factory.load(obj, Permission) for obj in loads(s.replace(r'\"', '"')) ]
+
+    @classmethod
+    def as_str(cls, permissions: List[Permission]) -> str:
+        # return dumps(SynoResponse.factory.dump(permissions)).replace('"', r'\"')
+        return dumps(SynoResponse.factory.dump(permissions))
+
+# class for photos
 
 @dataclass
 class SynoPhotos( SynoWebService ):
@@ -175,6 +202,10 @@ class SynoPhotos( SynoWebService ):
         enabled = 'true' if enabled else 'false' # need to convert to string first
         return self.get( ENTRY_URL, { **SHARE_ALBUM, 'album_id': album_id, 'enabled': enabled } ).data
 
+    def grant_permission(self, permissions: List[Permission], passphrase: str ):
+        permission = Permission.as_str( permissions )
+        return self.get( ENTRY_URL, { **UPDATE_PERMISSION, 'permission': permission, 'passphrase': f'"{passphrase}"' } )
+
     def unshare_album(self, album_id: int ):
         return self.share_album( album_id, False )
 
@@ -221,13 +252,3 @@ class SynoPhotos( SynoWebService ):
         self.traverse_albums( fn_album=process_album )
 
         return list( item_map.values() )
-
-    # noinspection PyMethodMayBeStatic
-    def _process_response(self, response: Dict, cls: Type ) -> List:
-        rval = []
-
-        if 'data' in response and response.get('success', False):
-            for item in response.get('data').get('list', []):
-                rval.append(cls(**item))
-
-        return rval
