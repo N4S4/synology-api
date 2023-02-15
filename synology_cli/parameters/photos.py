@@ -122,6 +122,7 @@ LIST_USER_GROUP = {
 }
 
 SHARE_ALBUM = {
+    **SID,
 	'api': 'SYNO.Foto.Sharing.Passphrase',
 	'method': 'set_shared',
 	'version': 1,
@@ -131,7 +132,8 @@ SHARE_ALBUM = {
 }
 
 UPDATE_PERMISSION = {
-	'api': 'SYNO.Foto.Sharing.Passphrase',
+    **SID,
+    'api': 'SYNO.Foto.Sharing.Passphrase',
 	'method': 'update',
 	'version': 1,
 	'passphrase': None, # \"-escaped string, not sure if this is needed, is created when sharing an album

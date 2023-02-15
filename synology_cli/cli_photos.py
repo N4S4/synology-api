@@ -119,10 +119,18 @@ def get_root_folder( ctx: ApplicationContext ):
 # sharing
 
 @cli_photos.command( 'share-album', help='shares an album' )
+@option( '-p', '--public', required=False, is_flag=True, help='shares an album publicly' )
 @argument( 'album_id', nargs=1, required=True )
 @pass_obj
-def share_album( ctx: ApplicationContext, album_id: int ):
-    ctx.print( synophotos.share_album( album_id ) )
+def share_album( ctx: ApplicationContext, album_id: int, public: bool = False ):
+    data = synophotos.share_album( album_id )
+    if public:
+        permission = Permission( role='view', member=Member( type='public' ) )
+    else:
+        permission = None
+
+    if permission:
+        ctx.print( synophotos.grant_permission( [ permission ], data.get( 'passphrase' ) ) )
 
 @cli_photos.command( 'unshare-album', help='unshares an album' )
 @argument( 'album_id', nargs=1, required=True )

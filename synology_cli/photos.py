@@ -113,7 +113,7 @@ class Permission:
     @classmethod
     def as_str(cls, permissions: List[Permission]) -> str:
         # return dumps(SynoResponse.factory.dump(permissions)).replace('"', r'\"')
-        return dumps(SynoResponse.factory.dump(permissions))
+        return dumps(SynoResponse.factory.dump(permissions), separators=(',', ':'))
 
 # class for photos
 
