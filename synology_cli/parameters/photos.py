@@ -120,3 +120,12 @@ LIST_USER_GROUP = {
 	'version': 1,
 	'team_space_sharable_list': 'false'
 }
+
+SHARE_ALBUM = {
+	'api': 'SYNO.Foto.Sharing.Passphrase',
+	'method': 'set_shared',
+	'version': 1,
+	'policy': 'album',
+	'album_id': 0,
+	'enabled': 'false' # or "true"
+}

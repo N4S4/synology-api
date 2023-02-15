@@ -115,6 +115,20 @@ def list_user_groups( ctx: ApplicationContext ):
 def get_root_folder( ctx: ApplicationContext ):
     ctx.print( _ws( ctx ).root_folder().id )
 
+# sharing
+
+@cli_photos.command( 'share-album', help='shares an album' )
+@argument( 'album_id', nargs=1, required=True )
+@pass_obj
+def share_album( ctx: ApplicationContext, album_id: int ):
+    ctx.print( synophotos.share_album( album_id ) )
+
+@cli_photos.command( 'unshare-album', help='unshares an album' )
+@argument( 'album_id', nargs=1, required=True )
+@pass_obj
+def unshare_album( ctx: ApplicationContext, album_id: int ):
+    ctx.print( synophotos.unshare_album( album_id ) )
+
 # helper
 
 def _ws( ctx: ApplicationContext ) -> SynoPhotos:

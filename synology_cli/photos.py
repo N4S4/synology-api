@@ -6,7 +6,7 @@ from queue import SimpleQueue
 from typing import List, Dict, Type, Callable
 
 from .parameters.photos import BROWSE_ALBUM, BROWSE_ITEM, BROWSE_FOLDER, CREATE_ALBUM, CREATE_FOLDER, GET_FOLDER, \
-    ADD_ITEM_TO_ALBUM, COUNT_ALBUM, COUNT_FOLDER, COUNT_ITEM, LIST_USER_GROUP
+    ADD_ITEM_TO_ALBUM, COUNT_ALBUM, COUNT_FOLDER, COUNT_ITEM, LIST_USER_GROUP, SHARE_ALBUM
 from .parameters.webservice import ENTRY_URL
 from .webservice import SynoWebService
 
@@ -168,6 +168,15 @@ class SynoPhotos( SynoWebService ):
         item_ids = [str( i.id ) for i in items]
         item_ids_str = f'[{",".join(item_ids)}]'
         self.get( ENTRY_URL, { **ADD_ITEM_TO_ALBUM, 'id': album.id, 'item': item_ids_str } )
+
+    # sharing
+
+    def share_album(self, album_id: int, enabled: bool = True ):
+        enabled = 'true' if enabled else 'false' # need to convert to string first
+        return self.get( ENTRY_URL, { **SHARE_ALBUM, 'album_id': album_id, 'enabled': enabled } ).data
+
+    def unshare_album(self, album_id: int ):
+        return self.share_album( album_id, False )
 
     # old code below
 
