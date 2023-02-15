@@ -121,14 +121,17 @@ def get_root_folder( ctx: ApplicationContext ):
 @cli_photos.command( 'share-album', help='shares an album' )
 @option( '-p', '--public', required=False, is_flag=True, help='shares an album publicly' )
 @option( '-u', '--user-id', required=False, help='shares an album with a user with the provided id' )
+@option( '-g', '--group-id', required=False, help='shares an album with a group with the provided id' )
 @argument( 'album_id', nargs=1, required=True )
 @pass_obj
-def share_album( ctx: ApplicationContext, album_id: int, public: bool = False, user_id: int = None ):
+def share_album(ctx: ApplicationContext, album_id: int, public: bool = False, user_id: int = None, group_id: int = None ):
     data = synophotos.share_album( album_id )
     if public:
         permission = Permission( role='view', member=Member( type='public' ) )
     elif user_id:
         permission = Permission( role='view', member=Member( type='user', id=int( user_id ) ) )
+    elif group_id:
+        permission = Permission( role='view', member=Member( type='group', id=int( group_id ) ) )
     else:
         permission = None
 
