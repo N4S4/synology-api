@@ -34,7 +34,7 @@ class ApplicationConfiguration:
 
     def save_sessions( self ) -> None:
         with Path(ucd, SESSIONS_FILE) as f:
-            f.write_text( dumps( self.sessions ), encoding='UTF-8' )
+            f.write_text( dumps( self.sessions, indent=2 ), encoding='UTF-8' )
 
 @dataclass
 class ApplicationContext:

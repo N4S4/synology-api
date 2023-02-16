@@ -48,16 +48,15 @@ def cli_photos( ctx: Context, url: str, account: str, password: str ):
                 ctx.obj.console.print( f'error logging in: code={syno_session.error_code}, msg={syno_session.error_msg}' )
                 sysexit( -1 )
 
+        save_session = True # todo: make this configurable?
+        if save_session:
+            ctx.obj.cfg.sessions[ ctx.obj.cfg.config.get( 'profile' ) ] = syno_session.as_dict()
+            ctx.obj.cfg.save_sessions()
+
     # set global object to ease access in functions below
     global synophotos
     synophotos = ctx.obj.service
     synophotos.session = syno_session
-
-    # save session
-    save_session = True # todo: make this configurable? And save only if it was freshly created?
-    if save_session:
-        ctx.obj.cfg.sessions[ ctx.obj.cfg.config.get( 'profile' ) ] = syno_session.as_dict()
-        ctx.obj.cfg.save_sessions()
 
 # create
 
