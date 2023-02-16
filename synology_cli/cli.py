@@ -12,9 +12,9 @@ from synology_cli.cli_webapi import cli_webapi
 def cli( ctx, url: str, account: str, password: str ):
     ctx.obj = appctx
     # override config values in config file
-    appctx.cfg.active_profile().url = url if url else appctx.cfg.active_profile().url
-    appctx.cfg.active_profile().account = account if account else appctx.cfg.active_profile().account
-    appctx.cfg.active_profile().password = password if password else appctx.cfg.active_profile().password
+    url = url if url else ctx.obj.cfg.active_profile().get( 'url' )
+    account = account if account else ctx.obj.cfg.active_profile().get( 'account' )
+    password = password if password else ctx.obj.cfg.active_profile().get( 'password' )
 
 # main commands, sub commands are defined in submodules
 

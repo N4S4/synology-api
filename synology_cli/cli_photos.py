@@ -6,8 +6,9 @@ from click import argument, pass_context, group, option, Context, pass_obj
 from rich.prompt import Prompt
 
 from synology_cli import ctx as appctx, ApplicationContext
-from synology_cli.photos import SynoPhotos, Folder, Album, Item, Member, Permission
+from synology_cli.photos import SynoPhotos, Album
 from synology_cli.ui import dataclass_table
+from synology_cli.webservice import FACTORY, SynoSession
 
 # global variable for functions below
 synophotos: Optional[SynoPhotos] = None
@@ -22,29 +23,41 @@ def cli_photos( ctx: Context, url: str, account: str, password: str ):
     ctx.obj = appctx
 
     # update account settings
-    url = url if url else ctx.obj.cfg.active_profile().url
-    account = account if account else ctx.obj.cfg.active_profile().account
-    password = password if password else ctx.obj.cfg.active_profile().password
+    url = url if url else ctx.obj.cfg.profile.get( 'url' )
+    account = account if account else ctx.obj.cfg.profile.get( 'account' )
+    password = password if password else ctx.obj.cfg.profile.get( 'password' )
 
     # create service and attempt to log in
     ctx.obj.service = SynoPhotos( url=url, account=account, password=password )
-    syno_session = ctx.obj.service.login() # todo: save sid to be able to skip login later? but for how long?
 
-    if not syno_session.is_valid():
-        if syno_session.error_code == 403: # 2FA requested
-            otp_token = Prompt.ask( 'Enter 2FA code' )
-            syno_session = ctx.obj.service.login( otp_token )
-            if not syno_session.is_valid():
-                ctx.obj.console.print(f'error logging in: code={syno_session.error_code}, msg={syno_session.error_msg}')
+    # load existing session
+    syno_session = FACTORY.load( ctx.obj.cfg.session, SynoSession ) if ctx.obj.cfg.session else None
+
+    # attempt to log in, if no session exists
+    # todo: check if saved session has been expired, but unclear how to detect that
+    if not syno_session:
+        syno_session = ctx.obj.service.login()
+        if not syno_session.is_valid():
+            if syno_session.error_code == 403: # 2FA requested
+                otp_token = Prompt.ask( 'Enter 2FA code' )
+                syno_session = ctx.obj.service.login( otp_token )
+                if not syno_session.is_valid():
+                    ctx.obj.console.print(f'error logging in: code={syno_session.error_code}, msg={syno_session.error_msg}')
+                    sysexit( -1 )
+            else:
+                ctx.obj.console.print( f'error logging in: code={syno_session.error_code}, msg={syno_session.error_msg}' )
                 sysexit( -1 )
-        else:
-            ctx.obj.console.print( f'error logging in: code={syno_session.error_code}, msg={syno_session.error_msg}' )
-            sysexit( -1 )
 
     # set global object to ease access in functions below
     global synophotos
     synophotos = ctx.obj.service
     synophotos.session = syno_session
+
+    # save session
+    save_session = True # todo: make this configurable? And save only if it was freshly created?
+    if save_session:
+        ctx.obj.cfg.sessions[ ctx.obj.cfg.config.get( 'profile' ) ] = syno_session.as_dict()
+        ctx.obj.cfg.save_sessions()
 
 # create
 

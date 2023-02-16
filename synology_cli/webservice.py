@@ -11,6 +11,8 @@ from .parameters.webservice import ENTRY_URL
 from .parameters.webservice import LOGIN_PARAMS
 from synology_api.error_codes import error_codes, CODE_UNKNOWN, CODE_SUCCESS
 
+FACTORY = Factory()
+
 class WebService( Protocol ):
 
     @property
@@ -77,10 +79,13 @@ class SynoSession:
     synotoken: str = field( default=None )
 
     error_code: int = field( default=CODE_SUCCESS )
-    error_msg: str = field( default=None )
+    error_msg: Optional[str] = field( default=None )
 
     def is_valid(self) -> bool:
         return True if self.error_code == CODE_SUCCESS else False
+
+    def as_dict( self ) -> Dict:
+        return FACTORY.dump( self, SynoSession )
 
 @dataclass
 class SynoWebService:

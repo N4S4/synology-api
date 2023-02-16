@@ -1,15 +1,19 @@
 
-from json import loads
+from json import loads, dumps
 from pathlib import Path
+from sys import exit as sysexit
 from typing import Dict, Any
 
 from appdirs import user_config_dir
 from dataclasses import dataclass, field
-from dataclass_factory import Factory
 from rich.console import Console
 
 from .ui import dataclass_table
 from .webservice import WebService
+
+CONFIG_FILE = 'config.json'
+PROFILES_FILE = 'profiles.json'
+SESSIONS_FILE = 'sessions.json'
 
 @dataclass
 class Profile:
@@ -21,11 +25,16 @@ class Profile:
 @dataclass
 class ApplicationConfiguration:
 
-    profile: str = field( default=None )
-    profiles: Dict[str, Profile] = field( default_factory=dict )
+    profile: Dict = field( default=None ) # active profile
+    session: Dict = field( default=None ) # active session
 
-    def active_profile( self ) -> Profile:
-        return self.profiles.get( self.profile )
+    config: Dict[str, str] = field( default_factory=dict )
+    profiles: Dict[str, Dict] = field( default_factory=dict )
+    sessions: Dict[str, Dict] = field( default_factory=dict )
+
+    def save_sessions( self ) -> None:
+        with Path(ucd, SESSIONS_FILE) as f:
+            f.write_text( dumps( self.sessions ), encoding='UTF-8' )
 
 @dataclass
 class ApplicationContext:
@@ -45,5 +54,27 @@ class ApplicationContext:
 
 ctx: ApplicationContext = ApplicationContext()
 
-with Path( user_config_dir( 'synocli', roaming=True ), 'config.json' ) as p:
-    ctx.cfg = Factory().load( loads( p.read_text( encoding='UTF-8' ) ), ApplicationConfiguration )
+with Path( user_config_dir( 'synocli', roaming=True ) ) as ucd:
+    ctx.cfg = ApplicationConfiguration()
+
+    try:
+        with Path( ucd, CONFIG_FILE ) as f:
+            ctx.cfg.config = loads( f.read_text( encoding='UTF-8' ) )
+    except FileNotFoundError:
+        print( f'Error reading configuration file {f}, exiting ...' )
+        sysexit( -1 )
+
+    try:
+        with Path(ucd, PROFILES_FILE) as f:
+            ctx.cfg.profiles = loads( f.read_text(encoding='UTF-8') )
+            ctx.cfg.profile = ctx.cfg.profiles.get( ctx.cfg.config.get( 'profile' ) )
+    except FileNotFoundError:
+        print( f'Error reading profiles file {f}, exiting ...' )
+        sysexit( -1 )
+
+    try:
+        with Path(ucd, SESSIONS_FILE) as f:
+            ctx.cfg.sessions = loads(f.read_text(encoding='UTF-8'))
+            ctx.cfg.session = ctx.cfg.sessions.get( ctx.cfg.config.get( 'profile' ) )
+    except FileNotFoundError:
+        pass
