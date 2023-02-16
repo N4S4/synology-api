@@ -3,13 +3,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from json import dumps, loads
-from typing import List, Dict, Type, Callable
+from typing import List, Dict, Callable
 
 from .parameters.photos import BROWSE_ALBUM, BROWSE_ITEM, BROWSE_FOLDER, CREATE_ALBUM, CREATE_FOLDER, GET_FOLDER, \
     ADD_ITEM_TO_ALBUM, COUNT_ALBUM, COUNT_FOLDER, COUNT_ITEM, LIST_USER_GROUP, SHARE_ALBUM, UPDATE_PERMISSION
 from .parameters.webservice import ENTRY_URL
 from .webservice import SynoWebService, SynoResponse
-
 
 # photos-related dataclasses
 

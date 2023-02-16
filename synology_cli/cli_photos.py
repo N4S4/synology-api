@@ -1,9 +1,9 @@
 
-from sys import exit
+from sys import exit as sysexit
 from typing import cast, Optional
 
 from click import argument, pass_context, group, option, Context, pass_obj
-from dataclass_factory import Factory
+from rich.prompt import Prompt
 
 from synology_cli import ctx as appctx, ApplicationContext
 from synology_cli.photos import SynoPhotos, Folder, Album, Item, Member, Permission
@@ -28,14 +28,23 @@ def cli_photos( ctx: Context, url: str, account: str, password: str ):
 
     # create service and attempt to log in
     ctx.obj.service = SynoPhotos( url=url, account=account, password=password )
-    syno_response = ctx.obj.service.login() # todo: save sid to be able to skip login later? but for how long?
-    if not syno_response.success:
-        ctx.obj.console.print( f'error logging in: code={syno_response.error_code}' )
-        exit( -1 )
+    syno_session = ctx.obj.service.login() # todo: save sid to be able to skip login later? but for how long?
+
+    if not syno_session.is_valid():
+        if syno_session.error_code == 403: # 2FA requested
+            otp_token = Prompt.ask( 'Enter 2FA code' )
+            syno_session = ctx.obj.service.login( otp_token )
+            if not syno_session.is_valid():
+                ctx.obj.console.print(f'error logging in: code={syno_session.error_code}, msg={syno_session.error_msg}')
+                sysexit( -1 )
+        else:
+            ctx.obj.console.print( f'error logging in: code={syno_session.error_code}, msg={syno_session.error_msg}' )
+            sysexit( -1 )
 
     # set global object to ease access in functions below
     global synophotos
     synophotos = ctx.obj.service
+    synophotos.session = syno_session
 
 # create
 

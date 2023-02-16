@@ -9,7 +9,7 @@ from typing_extensions import Protocol
 
 from .parameters.webservice import ENTRY_URL
 from .parameters.webservice import LOGIN_PARAMS
-from synology_api.error_codes import error_codes, CODE_UNKNOWN
+from synology_api.error_codes import error_codes, CODE_UNKNOWN, CODE_SUCCESS
 
 class WebService( Protocol ):
 
@@ -67,16 +67,39 @@ class SynoResponse:
         return self.data.get( key, None )
 
 @dataclass
+class SynoSession:
+
+    account: str = field( default=None )
+    device_id: str = field( default=None )
+    ik_message: str = field( default=None )
+    is_portal_port: bool = field( default=None )
+    sid: str = field( default=None )
+    synotoken: str = field( default=None )
+
+    error_code: int = field( default=CODE_SUCCESS )
+    error_msg: str = field( default=None )
+
+    def is_valid(self) -> bool:
+        return True if self.error_code == CODE_SUCCESS else False
+
+@dataclass
 class SynoWebService:
 
     url: str = field(default=None)
     account: str = field( default=None )
     password: str = field( default=None )
-    session_id: str = field( default=None )
-    device_id: str = field( default=None )
+    session: SynoSession = field( default=None )
 
     def __post_init__(self):
         self._factory = Factory()
+
+    @property
+    def session_id(self) -> Optional[str]:
+        return self.session.sid if self.session else None
+
+    @property
+    def device_id(self) -> Optional[str]:
+        return self.session.device_id if self.session else None
 
     def get( self, url: str, template: Dict, **kwargs ) -> SynoResponse:
         if self.session_id:
@@ -107,10 +130,13 @@ class SynoWebService:
     def get_url( self, stub: str ) -> str:
         return stub.format( url=self.url )
 
-    def login( self ) -> SynoResponse:
-        syno_response = self.get(ENTRY_URL, LOGIN_PARAMS, account=self.account, passwd=self.password)
-        if syno_response.success:
-            self.session_id = syno_response.response_data( 'sid' )
-            self.device_id = syno_response.response_data( 'device_id' )
+    def login( self, otp_code: str = None ) -> SynoSession:
+        if otp_code:
+            syno_response = self.get(ENTRY_URL, LOGIN_PARAMS, account=self.account, passwd=self.password, otp_code=otp_code)
+        else:
+            syno_response = self.get(ENTRY_URL, LOGIN_PARAMS, account=self.account, passwd=self.password)
 
-        return syno_response
+        if syno_response.success:
+            return self._factory.load( syno_response.data, SynoSession )
+        else:
+            return SynoSession( error_code=syno_response.error_code, error_msg=syno_response.error_msg )
