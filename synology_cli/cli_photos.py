@@ -69,7 +69,7 @@ def create_album( ctx: ApplicationContext, name: str, from_folder: int = None, s
     album = synophotos.create_album( name )
     if from_folder:
         items = synophotos.list_items( from_folder, all_items=True, recursive=False )
-        synophotos.add_items( album, items )
+        synophotos.add_album_items(album, items)
     
     ctx.print( album.id )
 
@@ -150,6 +150,17 @@ def get_root_folder( ctx: ApplicationContext ):
 def share_album(ctx: ApplicationContext, album_id: int, role: str = 'view', public: bool = False, user_id: int = None, group_id: int = None ):
     ctx.print( synophotos.share_album( album_id, role, public, user_id, group_id ).data )
 
+@cli_photos.command( 'share-folder', help='creates an album from a folder and shares it' )
+@option( '-n', '--album-name', required=False, help='name of the album to be created' )
+@option( '-r', '--role', required=False, default='view', help='permission role, can be "view", "download" or "upload"' )
+@option( '-p', '--public', required=False, is_flag=True, help='shares an album publicly' )
+@option( '-uid', '--user-id', required=False, help='shares an album with a user with the provided id' )
+@option( '-gid', '--group-id', required=False, help='shares an album with a group with the provided id' )
+@argument( 'folder_id', nargs=1, required=True )
+@pass_obj
+def share_folder(ctx: ApplicationContext, folder_id: int, album_name: str = None, role: str = 'view', public: bool = False, user_id: int = None, group_id: int = None ):
+    ctx.print( synophotos.share_folder( folder_id, album_name, role, public, user_id, group_id ).data )
+
 @cli_photos.command( 'unshare-album', help='unshares an album' )
 @argument( 'album_id', nargs=1, required=True )
 @pass_obj
@@ -170,6 +181,11 @@ def find_id( ctx: ApplicationContext, element: str, user: bool, group: bool ):
         ctx.print( synophotos.id_for_group( element ) )
 
 # helper
+
+@cli_photos.command( 'profile', help='shows the name of the currently active profile' )
+@pass_obj
+def profile( ctx: ApplicationContext ):
+    ctx.print( ctx.cfg.profile )
 
 def _ws( ctx: ApplicationContext ) -> SynoPhotos:
     return cast( SynoPhotos, ctx.service )

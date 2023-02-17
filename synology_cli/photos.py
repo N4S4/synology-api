@@ -203,7 +203,7 @@ class SynoPhotos( SynoWebService ):
     def root_folder( self ) -> Folder:
         return self.folder( 0 )
 
-    def add_items( self, album: Album, items: List[Item] ) -> None:
+    def add_album_items(self, album: Album, items: List[Item]) -> None:
         item_ids = [str( i.id ) for i in items]
         item_ids_str = f'[{",".join(item_ids)}]'
         self.get( ENTRY_URL, { **ADD_ITEM_TO_ALBUM, 'id': album.id, 'item': item_ids_str } )
@@ -230,6 +230,13 @@ class SynoPhotos( SynoWebService ):
 
         if permissions:
             return self.grant_permission( permissions, response.data.get( 'passphrase' ) )
+
+    def share_folder(self, folder_id: int, album_name: str, role: str, public: bool, user_id: int, group_id: int ):
+        folder = self.folder( folder_id )
+        album_name = album_name if album_name else folder.name.split( '/' )[-1]
+        album = self.create_album( album_name )
+        self.add_album_items( album, self.list_items( folder_id, True, False ) )
+        return self.share_album( album.id, role, public, user_id, group_id )
 
     def grant_permission(self, permissions: List[Permission], passphrase: str ):
         return self.get( ENTRY_URL, { **UPDATE_PERMISSION, 'permission': Permission.as_str( permissions ), 'passphrase': f'"{passphrase}"' } )
