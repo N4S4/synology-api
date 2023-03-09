@@ -390,6 +390,102 @@ class SysInfo(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
+    def set_fan_speed(self, fan_speed: str = 'quietfan'):  # coolfan , fullfan
+        api_name = 'SYNO.Core.Hardware.FanSpeed'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'set', "dual_fan_speed":fan_speed}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def enable_zram(self, enable_zram: bool = True):
+        api_name = 'SYNO.Core.Hardware.ZRAM'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'set', "enable_zram": str(enable_zram).lower()}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def enable_power_recovery(self, restart_auto_after_issue: bool = True, wake_on_lan: bool = False):
+        api_name = 'SYNO.Core.Hardware.PowerRecovery'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'set',
+                     "rc_power_config": str(restart_auto_after_issue).lower(), 'wol1': str(wake_on_lan).lower()}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def enable_beep_control(self, fan_fail: bool = None, volume_crash: bool= None, poweron_beep: bool= None,
+                            poweroff_beep: bool= None):
+        api_name = 'SYNO.Core.Hardware.BeepControl'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'set', "fan_fail": str(fan_fail).lower(),
+                     "volume_crash": str(volume_crash).lower(), "poweron_beep": str(poweron_beep).lower(),
+                     "poweroff_beep": str(poweron_beep).lower()}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def set_led_control(self, led_brightness: int = 2):
+        api_name = 'SYNO.Core.Led.Brightness'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'set', 'led_brightness': led_brightness}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def set_hibernation(self, internal_hd_idletime: int = 0, usb_idletime: int = 0):
+        api_name = 'SYNO.Core.Hardware.Hibernation'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'set', 'internal_hd_idletime': internal_hd_idletime,
+                     'usb_idletime': usb_idletime}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def enable_external_ups(self, enable: bool = False, mode: str = 'SLAVE', delay_time: int = 1,
+                            snmp_auth_key_dirty: bool = False, snmp_privacy_key_dirty: bool = False):
+        api_name = 'SYNO.Core.ExternalDevice.UPS'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'set', 'enable': str(enable).lower(), 'mode': mode,
+                     'delay_time': delay_time, 'snmp_auth_key_dirty': str(snmp_auth_key_dirty).lower(),
+                     'snmp_privacy_key_dirty': str(snmp_privacy_key_dirty).lower()}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_system_info(self):
+        api_name = 'SYNO.Core.System'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'info'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_cpu_temp(self):
+        api_name = 'SYNO.Core.System'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'info'}
+
+        return self.request_data(api_name, api_path, req_param)['data']['sys_temp']
+
+    def get_network_info(self):
+        api_name = 'SYNO.Core.System'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'info', 'type': 'network'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_volume_info(self):
+        api_name = 'SYNO.Core.System'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'info', 'type': 'storage_v2'}
+
+        return self.request_data(api_name, api_path, req_param)
+
     def hardware_hibernation(self):
         api_name = 'SYNO.Core.Hardware.Hibernation'
         info = self.core_list[api_name]

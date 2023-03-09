@@ -441,6 +441,18 @@ DS info with below functions:
 | firewall_info                   |
 | auto_upgrade_status             |
 | upgrade_server_check            |
+| set_fan_speed                   |
+| enable_zram                     |
+| enable_power_recovery           |
+| enable_beep_control             |
+| set_led_control                 |
+| set_hibernation                 |
+| enable_external_ups             |
+| get_system_info                 |
+| get_cpu_temp                    |
+| get_network_info                |
+| get_volume_info                 |
+
 
 ### Virtualization
 
