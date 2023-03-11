@@ -71,6 +71,8 @@ error_codes = {
 }
 
 # TODO use the error code
+# source https://cndl.synology.cn/download/Document/Software/DeveloperGuide/Package/FileStation/All/enu/Synology_File_Station_API_Guide.pdf
+# page 10~11
 file_station_error_code = {
     100: 'Unknown error',
     101: 'No parameter of API, method or version',
