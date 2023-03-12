@@ -9,11 +9,21 @@ import json
 
 
 class Certificate(base_api_core.Core):
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
+    def __init__(self,
+                    ip_address: str,
+                    port: str,
+                    username: str,
+                    password: str,
+                    secure: bool = False,
+                    cert_verify: bool = False,
+                    dsm_version: int = 7,
+                    debug: bool = True,
+                    otp_code: Optional[str] = None):
         super(Certificate, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
-        self._debug = debug
+        self._debug : bool = debug
+        return
 
-    def _base_certificate_methods(self, method, cert_id=None, ids=None):
+    def _base_certificate_methods(self, method: str, cert_id: Optional[str]=None, ids:Optional[str|list[str]]=None) -> str | dict[str, object]:
         available_method = ['list', 'set', 'delete']
         if method not in available_method:
             # print error here
@@ -38,19 +48,25 @@ class Certificate(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def list_cert(self):
+    def list_cert(self) -> dict[str, object]:
         return self._base_certificate_methods('list')
 
-    def set_default_cert(self, cert_id):
+    def set_default_cert(self, cert_id: str) -> dict[str, object]:
         return self._base_certificate_methods('set', cert_id)
 
-    def delete_certificate(self, ids):
+    def delete_certificate(self, ids: str|list[str]) -> dict[str,object]:
         if isinstance(ids, str):
             ids = [ids]
         return self._base_certificate_methods('delete', ids=ids)
 
-    def upload_cert(self, serv_key="server.key", ser_cert="server.crt", ca_cert=None,
-                    set_as_default=True, cert_id=None, desc=None):
+    def upload_cert(self,
+                        serv_key: str = "server.key",
+                        ser_cert: str = "server.crt",
+                        ca_cert: Optional[str] = None,
+                        set_as_default: bool = True,
+                        cert_id: Optional[str] = None,
+                        desc: Optional[str] = None
+                    ) -> tuple(int, dict[str, object]):
         api_name = 'SYNO.Core.Certificate'
         info = self.session.app_api_list[api_name]
         api_path = info['path']
