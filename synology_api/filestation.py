@@ -1,6 +1,7 @@
 import os
 import time
 from datetime import datetime
+from os import PathLike
 
 import requests
 import sys
@@ -11,7 +12,12 @@ from . import auth as syn
 
 class FileStation:
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None, interactive_output=True):
+    def __init__(self, ip_address: str, port: int, 
+                 username: str, password: str, 
+                 secure=False, cert_verify=False, 
+                 dsm_version=7, debug=True, 
+                 otp_code: str = None, 
+                 interactive_output=True):
 
         self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
 
@@ -74,8 +80,8 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_file_list(self, folder_path=None, offset=None, limit=None, sort_by=None,
-                      sort_direction=None, pattern=None, filetype=None, goto_path=None, additional=None):
+    def get_file_list(self, folder_path: PathLike = None, offset=None, limit=None, sort_by=None,
+                      sort_direction=None, pattern=None, filetype=None, goto_path: PathLike = None, additional=None):
 
         api_name = 'SYNO.FileStation.List'
         info = self.file_station_list[api_name]
@@ -103,7 +109,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_file_info(self, path=None, additional=None):
+    def get_file_info(self, path: PathLike = None, additional=None):
         api_name = 'SYNO.FileStation.List'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -131,7 +137,7 @@ class FileStation:
     # TODO  all working if specify extension check if correct [pattern, extension]
     #  it works if you put extension='...'
 
-    def search_start(self, folder_path=None, recursive=None, pattern=None, extension=None, filetype=None,
+    def search_start(self, folder_path: PathLike = None, recursive=None, pattern=None, extension=None, filetype=None,
                      size_from=None, size_to=None, mtime_from=None, mtime_to=None, crtime_from=None, crtime_to=None,
                      atime_from=None, atime_to=None, owner=None, group=None):
 
@@ -210,7 +216,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_search_task(self, taskid=None):
+    def stop_search_task(self, taskid: str = None):
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -288,7 +294,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def add_a_favorite(self, path=None, name=None, index=None):
+    def add_a_favorite(self, path: PathLike = None, name=None, index=None):
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -304,7 +310,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete_a_favorite(self, path=None):
+    def delete_a_favorite(self, path: PathLike = None):
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -325,7 +331,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def edit_favorite_name(self, path=None, new_name=None):
+    def edit_favorite_name(self, path: PathLike = None, new_name=None):
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -343,7 +349,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def replace_all_favorite(self, path=None, name=None):
+    def replace_all_favorite(self, path: PathLike = None, name=None):
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -367,7 +373,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def start_dir_size_calc(self, path=None):
+    def start_dir_size_calc(self, path: PathLike = None):
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -401,7 +407,7 @@ class FileStation:
         return output
 
 
-    def stop_dir_size_calc(self, taskid=None):
+    def stop_dir_size_calc(self, taskid: str = None):
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -417,7 +423,7 @@ class FileStation:
 
         return 'The task has been stopped'
 
-    def get_dir_status(self, taskid=None):
+    def get_dir_status(self, taskid: str = None):
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -428,7 +434,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def start_md5_calc(self, file_path=None):
+    def start_md5_calc(self, file_path: PathLike = None):
         api_name = 'SYNO.FileStation.MD5'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -451,7 +457,7 @@ class FileStation:
 
         return output
 
-    def get_md5_status(self, taskid=None):
+    def get_md5_status(self, taskid: str = None):
         api_name = 'SYNO.FileStation.MD5'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -466,7 +472,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_md5_calc(self, taskid=None):
+    def stop_md5_calc(self, taskid: str = None):
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -482,7 +488,7 @@ class FileStation:
 
         return 'The task has been stopped'
 
-    def check_permissions(self, path=None, filename=None, overwrite=None, create_only=None):
+    def check_permissions(self, path: PathLike = None, filename=None, overwrite=None, create_only=None):
         api_name = 'SYNO.FileStation.CheckPermission'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -555,7 +561,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def create_sharing_link(self, path=None, password=None, date_expired=None,
+    def create_sharing_link(self, path: PathLike = None, password=None, date_expired=None,
                             date_available=None, expire_times=0):
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
@@ -612,7 +618,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def create_folder(self, folder_path=None, name=None, force_parent=None, additional=None):
+    def create_folder(self, folder_path: PathLike = None, name=None, force_parent=None, additional=None):
         api_name = 'SYNO.FileStation.CreateFolder'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -655,7 +661,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def rename_folder(self, path=None, name=None, additional=None, search_taskid=None):
+    def rename_folder(self, path: PathLike = None, name=None, additional=None, search_taskid: str = None):
         api_name = 'SYNO.FileStation.Rename'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -696,8 +702,8 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def start_copy_move(self, path=None, dest_folder_path=None, overwrite=None, remove_src=None,
-                        accurate_progress=None, search_taskid=None):
+    def start_copy_move(self, path: PathLike = None, dest_folder_path: PathLike = None, overwrite=None, remove_src=None,
+                        accurate_progress=None, search_taskid: str = None):
         api_name = 'SYNO.FileStation.CopyMove'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -745,7 +751,7 @@ class FileStation:
         return output
 
 
-    def get_copy_move_status(self, taskid=None):
+    def get_copy_move_status(self, taskid: str = None):
         api_name = 'SYNO.FileStation.CopyMove'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -758,7 +764,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_copy_move_task(self, taskid=None):
+    def stop_copy_move_task(self, taskid: str = None):
         api_name = 'SYNO.FileStation.CopyMove'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -773,7 +779,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def start_delete_task(self, path=None, accurate_progress=None, recursive=None, search_taskid=None):
+    def start_delete_task(self, path: PathLike = None, accurate_progress=None, recursive=None, search_taskid: str = None):
         api_name = 'SYNO.FileStation.Delete'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -809,7 +815,7 @@ class FileStation:
         return output
 
 
-    def get_delete_status(self, taskid=None):
+    def get_delete_status(self, taskid: str = None):
         api_name = 'SYNO.FileStation.Delete'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -822,7 +828,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_delete_task(self, taskid=None):
+    def stop_delete_task(self, taskid: str = None):
         api_name = 'SYNO.FileStation.Delete'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -837,7 +843,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete_blocking_function(self, path=None, recursive=None, search_taskid=None):
+    def delete_blocking_function(self, path: PathLike = None, recursive=None, search_taskid: str = None):
         api_name = 'SYNO.FileStation.Delete'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -863,7 +869,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def start_extract_task(self, file_path=None, dest_folder_path=None, overwrite=None, keep_dir=None,
+    def start_extract_task(self, file_path: PathLike = None, dest_folder_path: PathLike = None, overwrite=None, keep_dir=None,
                            create_subfolder=None, codepage=None, password=None, item_id=None):
         api_name = 'SYNO.FileStation.Extract'
         info = self.file_station_list[api_name]
@@ -895,7 +901,7 @@ class FileStation:
 
         return output
 
-    def get_extract_status(self, taskid=None):
+    def get_extract_status(self, taskid: str = None):
         api_name = 'SYNO.FileStation.Extract'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -908,7 +914,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_extract_task(self, taskid=None):
+    def stop_extract_task(self, taskid: str = None):
         api_name = 'SYNO.FileStation.Extract'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -923,7 +929,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_file_list_of_archive(self, file_path=None, offset=None, limit=None, sort_by=None,
+    def get_file_list_of_archive(self, file_path: PathLike = None, offset=None, limit=None, sort_by=None,
                                  sort_direction=None, codepage=None, password=None, item_id=None):
         api_name = 'SYNO.FileStation.Extract'
         info = self.file_station_list[api_name]
@@ -940,7 +946,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def start_file_compression(self, path=None, dest_file_path=None, level=None, mode=None,
+    def start_file_compression(self, path: PathLike = None, dest_file_path: PathLike = None, level=None, mode=None,
                                compress_format=None, password=None):
         api_name = 'SYNO.FileStation.Compress'
         info = self.file_station_list[api_name]
@@ -986,7 +992,7 @@ class FileStation:
         return output
 
 
-    def get_compress_status(self, taskid=None):
+    def get_compress_status(self, taskid: str = None):
         api_name = 'SYNO.FileStation.Compress'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -999,7 +1005,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_compress_task(self, taskid=None):
+    def stop_compress_task(self, taskid: str = None):
         api_name = 'SYNO.FileStation.Compress'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1033,7 +1039,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_file(self, path=None, mode=None, dest_path=".", chunk_size=8192, verify=False):
+    def get_file(self, path: PathLike = None, mode=None, dest_path: PathLike = ".", chunk_size=8192, verify=False):
 
         api_name = 'SYNO.FileStation.Download'
         info = self.file_station_list[api_name]
