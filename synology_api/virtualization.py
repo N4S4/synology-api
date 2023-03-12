@@ -3,7 +3,10 @@ from . import auth as syn
 
 class Virtualization:
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
+    def __init__(self, ip_address: str, port: int, 
+                 username: str, password: str, 
+                 secure=False, cert_verify=False, 
+                 dsm_version=7, debug=True, otp_code: str = None):
 
         self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
 

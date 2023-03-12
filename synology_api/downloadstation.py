@@ -3,7 +3,11 @@ from . import auth as syn
 
 class DownloadStation:
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None, interactive_output=True):
+    def __init__(self, ip_address: str, port: int, 
+                 username: str, password: str, 
+                 secure=False, cert_verify=False, 
+                 dsm_version=7, debug=True, otp_code: str = None,
+                 interactive_output: bool = True):
 
         self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
         self._bt_search_id = ''

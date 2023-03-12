@@ -2,9 +2,11 @@ from . import base_api_core
 
 
 class VPN(base_api_core.Core):
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7,
-                 debug=True, otp_code=None):
-        super(VPN, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
+    def __init__(self, ip_address: str, port: int, 
+                 username: str, password: str, 
+                 secure=False, cert_verify=False, 
+                 dsm_version=7, debug=True, otp_code: str = None):
+        super().__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
 
     def settings_list(self):
         api_name = 'SYNO.VPNServer.Settings.Config'
