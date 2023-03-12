@@ -1,5 +1,6 @@
 import requests
 from .error_codes import error_codes, CODE_SUCCESS, CODE_UNKNOWN
+from typing import Union
 from urllib3 import disable_warnings
 from urllib3.exceptions import InsecureRequestWarning
 
@@ -28,10 +29,10 @@ class Authentication:
         self.full_api_list = {}
         self.app_api_list = {}
 
-    def verify_cert_enabled(self):
+    def verify_cert_enabled(self) -> bool:
         return self._verify
 
-    def login(self, application: str):
+    def login(self, application: str) -> None:
         login_api = 'auth.cgi?api=SYNO.API.Auth'
         params = {'version': self._version, 'method': 'login', 'account': self._username,
                   'passwd': self._password, 'session': application, 'format': 'cookie'}
@@ -56,7 +57,7 @@ class Authentication:
                 if self._debug is True:
                     print('Login failed: ' + self._get_error_message(error_code))
 
-    def logout(self, application: str):
+    def logout(self, application: str) -> None:
         logout_api = 'auth.cgi?api=SYNO.API.Auth'
         param = {'version': self._version, 'method': 'logout', 'session': application}
 
@@ -70,7 +71,7 @@ class Authentication:
             else:
                 print('Logout failed: ' + self._get_error_message(error_code))
 
-    def get_api_list(self, app: str = None):
+    def get_api_list(self, app: str = None) -> None:
         query_path = 'query.cgi?api=SYNO.API.Info'
         list_query = {'version': '1', 'method': 'query', 'query': 'all'}
 
@@ -85,7 +86,7 @@ class Authentication:
 
         return
 
-    def show_api_name_list(self):
+    def show_api_name_list(self) -> None:
         prev_key = ''
         for key in self.full_api_list:
             if key != prev_key:
@@ -93,7 +94,7 @@ class Authentication:
                 prev_key = key
         return
 
-    def show_json_response_type(self):
+    def show_json_response_type(self) -> None:
         for key in self.full_api_list:
             for sub_key in self.full_api_list[key]:
                 if sub_key == 'requestFormat':
@@ -101,7 +102,7 @@ class Authentication:
                         print(key + '   Returns JSON data')
         return
 
-    def search_by_app(self, app: str):
+    def search_by_app(self, app: str) -> None:
         print_check = 0
         for key in self.full_api_list:
             if app.lower() in key.lower():
@@ -113,7 +114,7 @@ class Authentication:
         return
 
     def request_data(self, api_name: str, api_path: str, 
-                     req_param: dict, method: str = None, response_json=True):  # 'post' or 'get'
+                     req_param: dict, method: str = None, response_json=True) -> Union[str, dict]:  # 'post' or 'get'
 
         # Convert all boolean in string in lowercase because Synology API is waiting for "true" or "false"
         for k, v in req_param.items():
@@ -144,7 +145,7 @@ class Authentication:
             return response
 
     @staticmethod
-    def _get_error_code(response: dict):
+    def _get_error_code(response: dict) -> str:
         if response.get('success'):
             code = CODE_SUCCESS
         else:
@@ -157,9 +158,9 @@ class Authentication:
         return 'Error {} - {}'.format(code, message)
 
     @property
-    def sid(self):
+    def sid(self) -> str:
         return self._sid
 
     @property
-    def base_url(self):
+    def base_url(self) -> str:
         return self._base_url
