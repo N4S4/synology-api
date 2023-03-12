@@ -5,8 +5,11 @@ from urllib3.exceptions import InsecureRequestWarning
 
 
 class Authentication:
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True,
-                 otp_code=None):
+    def __init__(self, ip_address: str, port: int, 
+                 username: str, password: str, 
+                 secure=False, cert_verify=False, 
+                 dsm_version=7, debug=True,
+                 otp_code: str = None):
         self._ip_address = ip_address
         self._port = port
         self._username = username
@@ -28,7 +31,7 @@ class Authentication:
     def verify_cert_enabled(self):
         return self._verify
 
-    def login(self, application):
+    def login(self, application: str):
         login_api = 'auth.cgi?api=SYNO.API.Auth'
         params = {'version': self._version, 'method': 'login', 'account': self._username,
                   'passwd': self._password, 'session': application, 'format': 'cookie'}
@@ -53,7 +56,7 @@ class Authentication:
                 if self._debug is True:
                     print('Login failed: ' + self._get_error_message(error_code))
 
-    def logout(self, application):
+    def logout(self, application: str):
         logout_api = 'auth.cgi?api=SYNO.API.Auth'
         param = {'version': self._version, 'method': 'logout', 'session': application}
 
@@ -67,7 +70,7 @@ class Authentication:
             else:
                 print('Logout failed: ' + self._get_error_message(error_code))
 
-    def get_api_list(self, app=None):
+    def get_api_list(self, app: str = None):
         query_path = 'query.cgi?api=SYNO.API.Info'
         list_query = {'version': '1', 'method': 'query', 'query': 'all'}
 
@@ -98,7 +101,7 @@ class Authentication:
                         print(key + '   Returns JSON data')
         return
 
-    def search_by_app(self, app):
+    def search_by_app(self, app: str):
         print_check = 0
         for key in self.full_api_list:
             if app.lower() in key.lower():
@@ -109,7 +112,8 @@ class Authentication:
             print('Not Found')
         return
 
-    def request_data(self, api_name, api_path, req_param, method=None, response_json=True):  # 'post' or 'get'
+    def request_data(self, api_name: str, api_path: str, 
+                     req_param: dict, method: str = None, response_json=True):  # 'post' or 'get'
 
         # Convert all boolean in string in lowercase because Synology API is waiting for "true" or "false"
         for k, v in req_param.items():
@@ -121,7 +125,7 @@ class Authentication:
 
         req_param['_sid'] = self._sid
 
-        url = ('%s%s' % (self._base_url, api_path)) + '?api=' + api_name
+        url = f"{self._base_url}{api_path}?api={api_name}"
 
         if method == 'get':
             response = requests.get(url, req_param, verify=self._verify)
