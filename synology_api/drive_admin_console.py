@@ -1,12 +1,23 @@
+from typing import Optional
 from . import base_api_core
 
 
 class AdminConsole(base_api_core.Core):
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7,
-                 debug=True, otp_code=None):
+    def __init__(self,
+                    ip_address: str,
+                    port: str,
+                    username: str,
+                    password: str,
+                    secure: bool = False,
+                    cert_verify: bool = False,
+                    dsm_version: int = 7,
+                    debug: bool = True,
+                    otp_code: Optional[str] = None
+                ) -> None:
         super(AdminConsole, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
+        return
 
-    def status_info(self):
+    def status_info(self) -> dict[str, object]:
         api_name = 'SYNO.SynologyDrive'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -14,7 +25,7 @@ class AdminConsole(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def config_info(self):
+    def config_info(self) -> dict[str, object]:
         api_name = 'SYNO.SynologyDrive.Config'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -22,7 +33,7 @@ class AdminConsole(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def connections(self):
+    def connections(self) -> dict[str, object]:
         api_name = 'SYNO.SynologyDrive.Connection'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -30,7 +41,7 @@ class AdminConsole(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def drive_check_user(self):
+    def drive_check_user(self) -> dict[str, object]:
         api_name = 'SYNO.SynologyDrive'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -38,7 +49,7 @@ class AdminConsole(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def active_connections(self):
+    def active_connections(self) -> dict[str, object]:
         api_name = 'SYNO.SynologyDrive.Connection'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -46,7 +57,7 @@ class AdminConsole(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def active_sync_connections(self):
+    def active_sync_connections(self) -> dict[str, object]:
         api_name = 'SYNO.SynologyDriveShareSync.Connection'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -54,7 +65,7 @@ class AdminConsole(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def share_active_list(self):
+    def share_active_list(self) -> dict[str, object]:
         api_name = 'SYNO.SynologyDrive.Share'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -62,8 +73,16 @@ class AdminConsole(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def log(self, share_type='all', get_all=False, limit=1000, keyword='', date_from=0, date_to=0, username='',
-            target='user'):
+    def log(self,
+                share_type:str='all',
+                get_all:bool=False,
+                limit:int=1000,
+                keyword:str='',
+                date_from:int = 0,
+                date_to:int = 0,
+                username: str = '',
+                target: str = 'user'
+            ) -> dict[str, object]:
         api_name = 'SYNO.SynologyDrive.Log'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -81,7 +100,7 @@ class AdminConsole(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def c2fs_share(self):
+    def c2fs_share(self) -> dict[str, object]:
         api_name = 'SYNO.C2FS.Share'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -89,7 +108,7 @@ class AdminConsole(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def settings(self):
+    def settings(self) -> dict[str, object]:
         api_name = 'SYNO.SynologyDrive.Settings'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -97,7 +116,7 @@ class AdminConsole(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def db_usage(self):
+    def db_usage(self) -> dict[str, object]:
         api_name = 'SYNO.SynologyDrive.DBUsage'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -105,7 +124,7 @@ class AdminConsole(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete_status(self):
+    def delete_status(self) -> dict[str, object]:
         api_name = 'SYNO.SynologyDrive.Node.Delete'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -113,7 +132,7 @@ class AdminConsole(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def file_property_transfer_status(self):
+    def file_property_transfer_status(self) -> dict[str, object]:
         api_name = 'SYNO.SynologyDrive.Migration.UserHome'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -121,7 +140,7 @@ class AdminConsole(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def user_sync_profile(self, user='', start=0, limit='null'):
+    def user_sync_profile(self, user:str='', start:int=0, limit:str|int='null') -> dict[str, object]:
         api_name = 'SYNO.SynologyDrive.Profiles'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -129,7 +148,7 @@ class AdminConsole(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def index_pause(self, time_pause=60):
+    def index_pause(self, time_pause:int=60) -> dict[str, object]:
         api_name = 'SYNO.SynologyDrive.Index'
         info = self.gen_list[api_name]
         api_path = info['path']

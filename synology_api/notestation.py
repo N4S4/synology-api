@@ -1,12 +1,23 @@
+from typing import Optional
 from . import base_api_core
 
 
 class NoteStation(base_api_core.Core):
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7,
-                 debug=True, otp_code=None):
+    def __init__(self,
+                    ip_address: str,
+                    port: str,
+                    username: str,
+                    password: str,
+                    secure: bool = False,
+                    cert_verify: bool = False,
+                    dsm_version: int = 7,
+                    debug: bool = True,
+                    otp_code: Optional[str] = None
+                ) -> None:
         super(NoteStation, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
+        return
 
-    def settings_info(self):
+    def settings_info(self) -> dict[str, object]:
         api_name = 'SYNO.NoteStation.Setting'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -15,7 +26,7 @@ class NoteStation(base_api_core.Core):
         return self.request_data(api_name, api_path, req_param)
 
     # TODO success response but need more info about it
-    '''def notestation_settings_init(self):
+    '''def notestation_settings_init(self) -> dict[str, object]:
         api_name = 'SYNO.NoteStation.Setting'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -23,7 +34,7 @@ class NoteStation(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)'''
 
-    def info(self):
+    def info(self) -> dict[str, object]:
         api_name = 'SYNO.NoteStation.Info'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -31,7 +42,7 @@ class NoteStation(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def notebooks_info(self):
+    def notebooks_info(self) -> dict[str, object]:
         api_name = 'SYNO.NoteStation.Notebook'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -39,7 +50,7 @@ class NoteStation(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def tags_info(self):
+    def tags_info(self) -> dict[str, object]:
         api_name = 'SYNO.NoteStation.Tag'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -47,7 +58,7 @@ class NoteStation(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def shortcuts(self):
+    def shortcuts(self) -> dict[str, object]:
         api_name = 'SYNO.NoteStation.Shortcut'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -55,7 +66,7 @@ class NoteStation(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def todo(self):
+    def todo(self) -> dict[str, object]:
         api_name = 'SYNO.NoteStation.Todo'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -63,7 +74,7 @@ class NoteStation(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def smart(self):  # TODO need to investigate for additional params
+    def smart(self) -> dict[str, object]:  # TODO need to investigate for additional params
         api_name = 'SYNO.NoteStation.Smart'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -71,7 +82,7 @@ class NoteStation(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def note_list(self):
+    def note_list(self) -> dict[str, object]:
         api_name = 'SYNO.NoteStation.Note'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -79,7 +90,7 @@ class NoteStation(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def specific_note_id(self, note_id):
+    def specific_note_id(self, note_id) -> dict[str, object]:
         api_name = 'SYNO.NoteStation.Note'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -92,7 +103,7 @@ class NoteStation(base_api_core.Core):
         return self.request_data(api_name, api_path, req_param)
 
     # TODO success response but need additional data
-    '''def note_idle(self):
+    '''def note_idle(self) -> dict[str, object]:
         api_name = 'SYNO.NoteStation.Note'
         info = self.gen_list[api_name]
         api_path = info['path']
