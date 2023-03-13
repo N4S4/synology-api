@@ -66,7 +66,7 @@ class Certificate(base_api_core.Core):
                         set_as_default: bool = True,
                         cert_id: Optional[str] = None,
                         desc: Optional[str] = None
-                    ) -> tuple(int, dict[str, object]):
+                    ) -> tuple[int, dict[str, object]]:
         api_name = 'SYNO.Core.Certificate'
         info = self.session.app_api_list[api_name]
         api_path = info['path']
