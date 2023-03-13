@@ -1073,7 +1073,7 @@ class FileStation:
                                 mode: Optional[str]=None,
                                 compress_format: Optional[str] = None,
                                 password: Optional[str] = None
-                            ) -> dict[str, object] | str | tuple(str):
+                            ) -> dict[str, object] | str | tuple[str]:
         api_name = 'SYNO.FileStation.Compress'
         info = self.file_station_list[api_name]
         api_path = info['path']
