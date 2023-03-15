@@ -1,6 +1,9 @@
 from typing import Optional
 import requests
-from .error_codes import error_codes, CODE_SUCCESS, CODE_UNKNOWN
+# Import error codes:
+from .error_codes import error_codes, CODE_SUCCESS, CODE_UNKNOWN, download_station_error_codes, file_station_error_codes
+from .error_codes import auth_error_codes, virtualization_error_codes#, surveillance_station_error_codes
+
 from urllib3 import disable_warnings
 from urllib3.exceptions import InsecureRequestWarning
 
@@ -62,7 +65,7 @@ class Authentication:
             else:
                 self._sid = None
                 if self._debug is True:
-                    print('Login failed: ' + self._get_error_message(error_code))
+                    print('Login failed: ' + self._get_error_message(error_code, api_name='Auth'))
         return
 
     def logout(self, application:str) -> None:
@@ -77,7 +80,7 @@ class Authentication:
             if not error_code:
                 print('Successfully logged out.')
             else:
-                print('Logout failed: ' + self._get_error_message(error_code))
+                print('Logout failed: ' + self._get_error_message(error_code, api_name='Auth'))
         return
 
     def get_api_list(self, app:Optional[str]=None) -> None:
@@ -151,7 +154,7 @@ class Authentication:
 
         if error_code:
             if self._debug is True:
-                print('Data request failed: ' + self._get_error_message(error_code))
+                print('Data request failed: ' + self._get_error_message(error_code, api_name=api_name))
 
         if response_json is True:
             return response.json()
@@ -167,8 +170,19 @@ class Authentication:
         return code
 
     @staticmethod
-    def _get_error_message(code: int) -> str:
-        message = error_codes.get(code, CODE_UNKNOWN)
+    def _get_error_message(code: int, api_name: str) -> str:
+        if (code in error_codes.keys()):
+            message = error_codes[code]
+        elif (api_name == 'Auth'):
+            message = auth_error_codes.get(code, "<UndefinedAuthError>")
+        elif (api_name.find('DownloadStation') > -1):
+            message = download_station_error_codes.get(code, "<UndefinedDownloadStationError>")
+        elif (api_name.find('Virtualization') > -1):
+            message = virtualization_error_codes.get(code,"<UndefinedVirtualizationError>")
+        elif (api_name.find('FileStation') > -1):
+            message = file_station_error_codes.get("<UndefinedFileStationError>")
+        else:
+            message = "<Undefined%sError>" % (api_name)
         return 'Error {} - {}'.format(code, message)
 
     @property
