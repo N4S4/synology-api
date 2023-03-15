@@ -331,15 +331,15 @@ class Authentication:
         if (code in error_codes.keys()):
             message = error_codes[code]
         elif (api_name == 'Auth'):
-            message = auth_error_codes.get(code, "<UndefinedAuthError>")
+            message = auth_error_codes.get(code, "<Undefined.Auth.Error>")
         elif (api_name.find('DownloadStation') > -1):
-            message = download_station_error_codes.get(code, "<UndefinedDownloadStationError>")
+            message = download_station_error_codes.get(code, "<Undefined.DownloadStation.Error>")
         elif (api_name.find('Virtualization') > -1):
-            message = virtualization_error_codes.get(code,"<UndefinedVirtualizationError>")
+            message = virtualization_error_codes.get(code,"<Undefined.Virtualization.Error>")
         elif (api_name.find('FileStation') > -1):
-            message = file_station_error_codes.get("<UndefinedFileStationError>")
+            message = file_station_error_codes.get(code, "<Undefined.FileStation.Error>")
         else:
-            message = "<Undefined%sError>" % (api_name)
+            message = "<Undefined.%s.Error>" % (api_name)
         return 'Error {} - {}'.format(code, message)
 
     @property
