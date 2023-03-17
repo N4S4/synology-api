@@ -4,20 +4,21 @@ from . import base_api_core
 
 class VPN(base_api_core.Core):
     def __init__(self,
-                    ip_address: str,
-                    port: str,
-                    username: str,
-                    password: str,
-                    secure: bool = False,
-                    cert_verify: bool = False,
-                    dsm_version: int = 7,
-                    debug: bool = True,
-                    otp_code: Optional[str] = None
-                ) -> None:
-        super(VPN, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
+                 ip_address: str,
+                 port: str,
+                 username: str,
+                 password: str,
+                 secure: bool = False,
+                 cert_verify: bool = False,
+                 dsm_version: int = 7,
+                 debug: bool = True,
+                 otp_code: Optional[str] = None
+                 ) -> None:
+        super(VPN, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug,
+                                  otp_code)
         return
 
-    def settings_list(self) -> dict[str, object]:
+    def settings_list(self) -> dict[str, object] | str:
         api_name = 'SYNO.VPNServer.Settings.Config'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -26,20 +27,20 @@ class VPN(base_api_core.Core):
         return self.request_data(api_name, api_path, req_param)
 
     def active_connections_list(self,
-                                    sort: str = 'login_time',
-                                    dir: str = 'DESC',
-                                    start: int = 0,
-                                    limit: int = 100
-                                ) -> dict[str, object]:
+                                sort: str = 'login_time',
+                                sort_dir: str = 'DESC',
+                                start: int = 0,
+                                limit: int = 100
+                                ) -> dict[str, object] | str:
         api_name = 'SYNO.VPNServer.Management.Connection'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'enum', 'sort': sort, 'dir': dir, 'start': start,
+        req_param = {'version': info['maxVersion'], 'method': 'enum', 'sort': sort, 'dir': sort_dir, 'start': start,
                      'limit': limit}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def log_list(self, start:int=0, limit:int=50, prtltype:int=0) -> dict[str, object]:
+    def log_list(self, start: int = 0, limit: int = 50, prtltype: int = 0) -> dict[str, object] | str:
         api_name = 'SYNO.VPNServer.Management.Log'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -48,7 +49,7 @@ class VPN(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def network_interface_setting(self) -> dict[str, object]:
+    def network_interface_setting(self) -> dict[str, object] | str:
         api_name = 'SYNO.VPNServer.Management.Interface'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -56,7 +57,7 @@ class VPN(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def security_autoblock_setting(self) -> dict[str, object]:
+    def security_autoblock_setting(self) -> dict[str, object] | str:
         api_name = 'SYNO.Core.Security.AutoBlock'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -64,7 +65,7 @@ class VPN(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def permission_setting(self, start:int=0, limit:int=100) -> dict[str, object]:
+    def permission_setting(self, start: int = 0, limit: int = 100) -> dict[str, object] | str:
         api_name = 'SYNO.VPNServer.Management.Account'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -73,7 +74,7 @@ class VPN(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def pptp_settings_info(self) -> dict[str, object]:
+    def pptp_settings_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.VPNServer.Settings.Config'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -81,7 +82,7 @@ class VPN(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def openvpn_settings_info(self) -> dict[str, object]:
+    def openvpn_settings_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.VPNServer.Settings.Config'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -89,7 +90,7 @@ class VPN(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def l2tp_settings_info(self) -> dict[str, object]:
+    def l2tp_settings_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.VPNServer.Settings.Config'
         info = self.gen_list[api_name]
         api_path = info['path']
