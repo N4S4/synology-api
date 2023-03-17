@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 import os
 import time
 from datetime import datetime
@@ -46,7 +46,7 @@ class FileStation:
         self.session.login('FileStation')
         self.session.get_api_list('FileStation')
 
-        self.file_station_list : dict[str, object] = self.session.app_api_list
+        self.file_station_list : Any = self.session.app_api_list
         self._sid : str = self.session.sid
         self.base_url : str = self.session.base_url
 
@@ -102,7 +102,7 @@ class FileStation:
                         pattern: Optional[str] = None,
                         filetype: Optional[str] = None,
                         goto_path: Optional[str] = None,
-                        additional: Optional[str|list[str]]=None) -> dict[str, object]:
+                        additional: Optional[str|list[str]]=None) -> dict[str, object] | str:
 
         api_name = 'SYNO.FileStation.List'
         info = self.file_station_list[api_name]
@@ -174,7 +174,7 @@ class FileStation:
                         atime_to: Optional[str|int] = None,
                         owner: Optional[str] = None,
                         group: Optional[str] = None
-                    ) -> dict[str, object]:
+                    ) -> dict[str, object] | str:
 
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
@@ -229,7 +229,7 @@ class FileStation:
                             sort_direction: Optional[str] = None,
                             offset: Optional[int] = None,
                             additional: Optional[str|list[str]] = None
-                        ) -> dict[str, object]:
+                        ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -258,7 +258,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_search_task(self, taskid:str) -> dict[str, object]:
+    def stop_search_task(self, taskid:str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -347,7 +347,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def add_a_favorite(self, path:str, name:Optional[str]=None, index:Optional[int]=None) -> dict[str, object]:
+    def add_a_favorite(self, path:str, name:Optional[str]=None, index:Optional[int]=None) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -384,7 +384,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def edit_favorite_name(self, path:str, new_name:str) -> dict[str, object]:
+    def edit_favorite_name(self, path:str, new_name:str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -426,7 +426,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def start_dir_size_calc(self, path:str) -> dict[str, object]:
+    def start_dir_size_calc(self, path:str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -476,7 +476,7 @@ class FileStation:
 
         return 'The task has been stopped'
 
-    def get_dir_status(self, taskid:Optional[str]=None) -> dict[str, object]:
+    def get_dir_status(self, taskid:Optional[str]=None) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -546,7 +546,7 @@ class FileStation:
                             filename:str,
                             overwrite:Optional[bool] = None,
                             create_only:Optional[bool] = None
-                        ) -> dict[str, object]:
+                        ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.CheckPermission'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -598,7 +598,7 @@ class FileStation:
             else:
                 return r.status_code, r.json()
 
-    def get_shared_link_info(self, link_id:str) -> dict[str, object]:
+    def get_shared_link_info(self, link_id:str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -637,7 +637,7 @@ class FileStation:
                                 date_expired: Optional[str|int] = None,
                                 date_available: Optional[str|int] = None,
                                 expire_times: int = 0
-                            ) -> dict[str, object]:
+                            ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -653,7 +653,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete_shared_link(self, link_id:str) -> dict[str, object]:
+    def delete_shared_link(self, link_id:str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -680,7 +680,7 @@ class FileStation:
                             date_expired: Optional[str|int] = None,
                             date_available: Optional[str|int] = None,
                             expire_times: int = 0
-                        ) -> dict[str, object]:
+                        ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -751,7 +751,7 @@ class FileStation:
                         name:str | list[str],
                         additional: Optional[str|list[str]] = None,
                         search_taskid: Optional[str] = None
-                    ) -> dict[str, object]:
+                    ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Rename'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -847,7 +847,7 @@ class FileStation:
         return output
 
 
-    def get_copy_move_status(self, taskid:str) -> dict[str, object]:
+    def get_copy_move_status(self, taskid:str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.CopyMove'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -916,7 +916,7 @@ class FileStation:
         return output
 
 
-    def get_delete_status(self, taskid:str) -> dict[str, object]:
+    def get_delete_status(self, taskid:str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Delete'
         info = self.file_station_list[api_name]
         api_path = info['path']

@@ -1,6 +1,5 @@
-from typing import Optional
+from typing import Optional, Any
 from synology_api import auth
-from urllib import parse
 
 
 class UniversalSearch:
@@ -18,8 +17,8 @@ class UniversalSearch:
         self.session : auth.Authentication = auth.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
         self.session.login('Finder')
         self.session.get_api_list('Finder')
-        self.request_data : function = self.session.request_data
-        self.finder_list : dict[str, object] = self.session.app_api_list
+        self.request_data : Any = self.session.request_data
+        self.finder_list :Any = self.session.app_api_list
         self._sid : str = self.session.sid
         self.base_url : str = self.session.base_url
 

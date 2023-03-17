@@ -438,7 +438,7 @@ class SysInfo(base_api_core.Core):
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'set', "fan_fail": str(fan_fail).lower(),
                      "volume_crash": str(volume_crash).lower(), "poweron_beep": str(poweron_beep).lower(),
-                     "poweroff_beep": str(poweron_beep).lower()}
+                     "poweroff_beep": str(poweroff_beep).lower()}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -776,7 +776,7 @@ class SysInfo(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def groups_info(self, offset:int=0, limit:int=-1, name_only:bool=False) -> dict[str, object]:
+    def groups_info(self, offset:int=0, limit:int=-1, name_only:bool=False) -> dict[str, object] | str:
         api_name = 'SYNO.Core.Group'
         info = self.core_list[api_name]
         api_path = info['path']

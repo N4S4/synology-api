@@ -82,7 +82,7 @@ class AdminConsole(base_api_core.Core):
                 date_to:int = 0,
                 username: str = '',
                 target: str = 'user'
-            ) -> dict[str, object]:
+            ) -> dict[str, object] | str:
         api_name = 'SYNO.SynologyDrive.Log'
         info = self.gen_list[api_name]
         api_path = info['path']

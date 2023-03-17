@@ -14,7 +14,7 @@ class SecurityAdvisor(base_api_core.Core):
                     debug: bool = True,
                     otp_code: Optional[str] = None
                 ) -> None:
-        super(SecurityAdvisor, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code=None)
+        super(SecurityAdvisor, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
         return
 
     def general_info(self) -> dict[str, object]:

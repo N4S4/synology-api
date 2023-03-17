@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 from . import auth as syn
 import json
 
@@ -20,18 +20,18 @@ class Photos:
         self.session.login('Foto')
         self.session.get_api_list('Foto')
 
-        self.request_data : function = self.session.request_data
-        self.photos_list : dict[str, object] = self.session.app_api_list
+        self.request_data : Any = self.session.request_data
+        self.photos_list : Any = self.session.app_api_list
         self._sid : str = self.session.sid
         self.base_url : str = self.session.base_url
 
-        self._userinfo : dict[str, object] = None
+        self._userinfo : Any = None
 
     def logout(self) -> None:
         self.session.logout('Foto')
         return
     
-    def get_userinfo(self) -> dict[str, object]:
+    def get_userinfo(self) -> Any:
         if self._userinfo is not None:
             return self._userinfo
 
@@ -67,7 +67,7 @@ class Photos:
                         ) -> dict[str, object]:
         return self._list_folders(folder_id, limit, offset, additional, 'SYNO.FotoTeam.Browse.Folder')
 
-    def _list_folders(self, folder_id:int, limit:int, offset:int, additional:Optional[str|list[str]], api_name:str) -> dict[str, object]:
+    def _list_folders(self, folder_id:int, limit:int, offset:int, additional:Optional[str|list[str]], api_name:str) -> Any:
         if additional is None:
             additional = []
         info = self.photos_list[api_name]
@@ -83,7 +83,7 @@ class Photos:
     def count_team_folders(self, folder_id:int=0) -> dict[str, object]:
         return self._count_folders(folder_id, 'SYNO.FotoTeam.Browse.Folder')
 
-    def _count_folders(self, folder_id:int, api_name:str) -> dict[str, object]:
+    def _count_folders(self, folder_id:int, api_name:str) -> Any:
         info = self.photos_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'count', 'id': folder_id}
@@ -188,7 +188,7 @@ class Photos:
                         permission:Optional[str|list[str]] = None,
                         enabled: bool = True,
                         expiration: int | str = 0
-                    ) -> dict[str, object]:
+                    ) -> Any:
         self._share('SYNO.Foto.Sharing.Passphrase', policy='album', permission=permission, album_id=album_id,
                     enabled=enabled, expiration=expiration)
 
@@ -197,7 +197,7 @@ class Photos:
                             permission: Optional[str] = None,
                             enabled: bool = True,
                             expiration:int|str = 0
-                        ) -> dict[str, object]:
+                        ) -> Any:
         self._share('SYNO.FotoTeam.Sharing.Passphrase', policy='folder', permission=permission, folder_id=folder_id,
                     enabled=enabled, expiration=expiration)
 
@@ -207,7 +207,7 @@ class Photos:
                permission:str,
                expiration:int|str,
                **kwargs
-            ) -> dict[str, object]:
+            ) -> dict[str, object] | Any:
         info = self.photos_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'set_shared', 'policy': policy, **kwargs}

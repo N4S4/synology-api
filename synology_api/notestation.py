@@ -90,7 +90,7 @@ class NoteStation(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def specific_note_id(self, note_id) -> dict[str, object]:
+    def specific_note_id(self, note_id) -> dict[str, object] | str:
         api_name = 'SYNO.NoteStation.Note'
         info = self.gen_list[api_name]
         api_path = info['path']

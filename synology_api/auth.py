@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 import requests
 from .error_codes import error_codes, CODE_SUCCESS, CODE_UNKNOWN
 from urllib3 import disable_warnings
@@ -128,7 +128,7 @@ class Authentication:
                         req_param:dict[str, object],
                         method:Optional[str] = None,
                         response_json: bool = True
-                    ) -> str:  # 'post' or 'get'
+                    ) -> Any:  # 'post' or 'get'
 
         # Convert all boolean in string in lowercase because Synology API is waiting for "true" or "false"
         for k, v in req_param.items():

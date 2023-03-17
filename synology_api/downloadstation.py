@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 from . import auth as syn
 
 
@@ -23,8 +23,8 @@ class DownloadStation:
         self.session.login('DownloadStation')
         self.session.get_api_list('DownloadStation')
 
-        self.request_data : function = self.session.request_data
-        self.download_list : dict[str, object] = self.session.app_api_list
+        self.request_data : Any = self.session.request_data
+        self.download_list : Any = self.session.app_api_list
         self._sid : str = self.session.sid
         self.base_url : str = self.session.base_url
 
@@ -85,7 +85,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def schedule_set_config(self, enabled:bool=False, emule_enabled:bool=False) -> dict[str, object]:
+    def schedule_set_config(self, enabled:bool=False, emule_enabled:bool=False) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Schedule'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -206,7 +206,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def refresh_rss_site(self, rss_id:Optional[str]=None) -> dict[str, object]:
+    def refresh_rss_site(self, rss_id:Optional[str]=None) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.RSS.Site'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -220,7 +220,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def rss_feed_list(self, rss_id:Optional[str]=None, offset:Optional[int]=None, limit:Optional[int]=None) -> dict[str, object]:
+    def rss_feed_list(self, rss_id:Optional[str]=None, offset:Optional[int]=None, limit:Optional[int]=None) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.RSS.Feed'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -239,7 +239,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def start_bt_search(self, keyword:Optional[str]=None, module:str='all') -> dict[str, object]:
+    def start_bt_search(self, keyword:Optional[str]=None, module:str='all') -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -274,7 +274,7 @@ class DownloadStation:
                                 sort_direction: Optional[str] = None,
                                 filter_category: Optional[str] = None,
                                 filter_title: Optional[str] = None
-                            ) -> dict[str, object]:
+                            ) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -300,7 +300,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def clean_bt_search(self, taskid:Optional[str|list[str]]=None) -> dict[str, object]:
+    def clean_bt_search(self, taskid:Optional[str|list[str]]=None) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']

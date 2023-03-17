@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 from . import auth as syn
 
 
@@ -20,9 +20,9 @@ class Core(object):
         self.session.get_api_list('Core')
         self.session.get_api_list()
 
-        self.request_data : function = self.session.request_data
-        self.core_list : dict[str, object] = self.session.app_api_list
-        self.gen_list : dict[str, object] = self.session.full_api_list
+        self.request_data : Any = self.session.request_data
+        self.core_list : Any = self.session.app_api_list
+        self.gen_list : Any = self.session.full_api_list
         self._sid : str = self.session.sid
         self.base_url : str = self.session.base_url
 
