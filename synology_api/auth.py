@@ -128,7 +128,7 @@ class Authentication:
                      req_param: dict[str, object],
                      method: Optional[str] = None,
                      response_json: bool = True
-                     ) -> Any:  # 'post' or 'get'
+                     ) -> dict[str, object] | str:  # 'post' or 'get'
 
         # Convert all boolean in string in lowercase because Synology API is waiting for "true" or "false"
         for k, v in req_param.items():
