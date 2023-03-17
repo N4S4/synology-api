@@ -4,20 +4,21 @@ from . import base_api_core
 
 class USBCopy(base_api_core.Core):
     def __init__(self,
-                    ip_address: str,
-                    port: str,
-                    username: str,
-                    password: str,
-                    secure: bool = False,
-                    cert_verify: bool = False,
-                    dsm_version: int = 7,
-                    debug: bool = True,
-                    otp_code: Optional[str] = None
-                ) -> None:
-        super(USBCopy, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
+                 ip_address: str,
+                 port: str,
+                 username: str,
+                 password: str,
+                 secure: bool = False,
+                 cert_verify: bool = False,
+                 dsm_version: int = 7,
+                 debug: bool = True,
+                 otp_code: Optional[str] = None
+                 ) -> None:
+        super(USBCopy, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug,
+                                      otp_code)
         return
 
-    def usb_copy_info(self, id:int=1) -> dict[str, object]:
+    def usb_copy_info(self, id: int = 1) -> dict[str, object] | str:
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -25,7 +26,7 @@ class USBCopy(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def toggle_usb_copy(self, enable:bool=True, id:int=1) -> dict[str, object] | str:
+    def toggle_usb_copy(self, enable: bool = True, id: int = 1) -> dict[str, object] | str:
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -41,7 +42,7 @@ class USBCopy(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def logs(self, offset:int=0, limit:int=200) -> dict[str, object]:
+    def logs(self, offset: int = 0, limit: int = 200) -> dict[str, object] | str:
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -50,7 +51,7 @@ class USBCopy(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def global_settings(self) -> dict[str, object]:
+    def global_settings(self) -> dict[str, object] | str:
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
         api_path = info['path']
