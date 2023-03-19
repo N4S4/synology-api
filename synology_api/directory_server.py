@@ -45,7 +45,7 @@ class DirectoryServer(base_api_core.Core):
         super(DirectoryServer, self).__init__(ip_address, port,
                                               username, password, secure, cert_verify, dsm_version, debug, otp_code)
 
-    def get_directory_info(self) -> dict[str, object]:
+    def get_directory_info(self) -> dict[str, object] | str:
         """
         Gets directory info.
 
@@ -92,7 +92,7 @@ class DirectoryServer(base_api_core.Core):
                                 offset: int = 0,
                                 limit: int = 40,
                                 objectCategory: list[str] = [ "person", "group", "organizationalUnit", "computer", "container", "builtinDomain"]
-                            ) -> dict[str, object]:
+                            ) -> dict[str, object] | str:
         """
         lists directory objects.
 
@@ -255,7 +255,7 @@ class DirectoryServer(base_api_core.Core):
                      username+'"', 'version': newApi['maxVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def change_user_password(self, user_dn: str, password: str) -> dict[str, object]:
+    def change_user_password(self, user_dn: str, password: str) -> dict[str, object] | str:
         """
         Change the user's password.  This is a compound dual-level request where the synology API proxies your
         request to the Directory Server.
@@ -380,7 +380,7 @@ class DirectoryServer(base_api_core.Core):
                      'description': description, 'type': type, 'scope': scope, 'email': email, 'version': info['maxVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def add_user_to_group(self, userDn: str, groupDn: str) -> dict[str, object]:
+    def add_user_to_group(self, userDn: str, groupDn: str) -> dict[str, object] | str:
         """
         Adds a user as a member of a group.
 
@@ -438,7 +438,7 @@ class DirectoryServer(base_api_core.Core):
                      'stop_when_error': stop_when_error, 'version': newApi['maxVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def does_dn_exist(self, groupName: str) -> dict[str, object]:
+    def does_dn_exist(self, groupName: str) -> dict[str, object] | str:
         """Checks if a container exists. This can be used to verifiy the username or group name is unique.  This will
         not check the container, only if a similarly named container already exists.
 
@@ -562,7 +562,7 @@ class DirectoryServer(base_api_core.Core):
 
         return val
 
-    def setEntryRequest(self, modificationAPI: str, method: str, nameOfObject: str, jsonObject: Any) -> dict[str, object]:
+    def setEntryRequest(self, modificationAPI: str, method: str, nameOfObject: str, jsonObject: Any) -> dict[str, object] | str:
         """
         Performs modification to an object within the Active Directory.
 
@@ -614,7 +614,7 @@ class DirectoryServer(base_api_core.Core):
         print (json.dumps(req_param))
         return self.request_data(api_name, api_path, req_param,"post")
 
-    def update_domain_records(self) -> dict[str, object]:
+    def update_domain_records(self) -> dict[str, object] | str:
         """
         Updates the Synology users and groups database with information from Directory Server.
 
@@ -647,7 +647,7 @@ class DirectoryServer(base_api_core.Core):
                      'method': 'update_start', 'version': info['minVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def get_task_status(self, task_id: str) -> dict[str, object]:
+    def get_task_status(self, task_id: str) -> dict[str, object] | str:
         """
         Gets the current status of a task running on the Directory Domain object.
 
@@ -678,7 +678,7 @@ class DirectoryServer(base_api_core.Core):
                      'task_id': task_id, 'version': info['minVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def deleteItems(self, dnList: list[str]) -> dict[str, object]:
+    def deleteItems(self, dnList: list[str]) -> dict[str, object] | str:
         """
         Deletes an array of DNs from AD.
 
@@ -741,7 +741,7 @@ class DirectoryServer(base_api_core.Core):
 
         return returnValue
 
-    def delete_item(self, dn: str) -> dict[str, object]:
+    def delete_item(self, dn: str) -> dict[str, object] | str:
         """
         Deletes a DN from AD.
 

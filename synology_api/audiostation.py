@@ -5,17 +5,18 @@ from . import auth as syn
 class AudioStation:
 
     def __init__(self,
-                    ip_address: str,
-                    port: str,
-                    username: str,
-                    password: str,
-                    secure: bool = False,
-                    cert_verify: bool = False,
-                    dsm_version: int = 7,
-                    debug: bool = True,
-                    otp_code: Optional[str] = None
-                ) -> None:
-        self.session = syn.Authentication(ip_address, port, username, password, secure,  cert_verify, dsm_version, debug, otp_code)
+                 ip_address: str,
+                 port: str,
+                 username: str,
+                 password: str,
+                 secure: bool = False,
+                 cert_verify: bool = False,
+                 dsm_version: int = 7,
+                 debug: bool = True,
+                 otp_code: Optional[str] = None
+                 ) -> None:
+        self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug,
+                                          otp_code)
 
         self.session.login('AudioStation')
         self.session.get_api_list('AudioStation')
@@ -25,11 +26,11 @@ class AudioStation:
         self._sid = self.session.sid
         self.base_url = self.session.base_url
         return
-    
+
     def logout(self) -> None:
         self.session.logout('AudioStation')
         return
-    
+
     def get_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.AudioStation.Info'
         info = self.audiostation_list[api_name]

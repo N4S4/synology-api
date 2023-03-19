@@ -13,50 +13,51 @@ from . import auth as syn
 class FileStation:
 
     def __init__(self,
-                    ip_address: str,
-                    port: str,
-                    username: str,
-                    password: str,
-                    secure: bool = False,
-                    cert_verify: bool = False,
-                    dsm_version: int = 7,
-                    debug: bool = True,
-                    otp_code: Optional[str] = None,
-                    interactive_output: bool = True
-                ) -> None:
+                 ip_address: str,
+                 port: str,
+                 username: str,
+                 password: str,
+                 secure: bool = False,
+                 cert_verify: bool = False,
+                 dsm_version: int = 7,
+                 debug: bool = True,
+                 otp_code: Optional[str] = None,
+                 interactive_output: bool = True
+                 ) -> None:
 
-        self.session : syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
+        self.session: syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify,
+                                                              dsm_version, debug, otp_code)
 
-        self._dir_taskid : str = ''
-        self._dir_taskid_list : list[str] = []
-        self._md5_calc_taskid : str = ''
-        self._md5_calc_taskid_list : list[str] = []
-        self._search_taskid : str = ''
-        self._search_taskid_list : list[str] = []
-        self._copy_move_taskid : str = ''
-        self._copy_move_taskid_list : list[str] = []
-        self._delete_taskid : str = ''
-        self._delete_taskid_list : list[str] = []
-        self._extract_taskid : str = ''
-        self._extract_taskid_list : list[str] = []
-        self._compress_taskid : str = ''
-        self._compress_taskid_list : list[str] = []
+        self._dir_taskid: str = ''
+        self._dir_taskid_list: list[str] = []
+        self._md5_calc_taskid: str = ''
+        self._md5_calc_taskid_list: list[str] = []
+        self._search_taskid: str = ''
+        self._search_taskid_list: list[str] = []
+        self._copy_move_taskid: str = ''
+        self._copy_move_taskid_list: list[str] = []
+        self._delete_taskid: str = ''
+        self._delete_taskid_list: list[str] = []
+        self._extract_taskid: str = ''
+        self._extract_taskid_list: list[str] = []
+        self._compress_taskid: str = ''
+        self._compress_taskid_list: list[str] = []
         self.request_data = self.session.request_data
-        
+
         self.session.login('FileStation')
         self.session.get_api_list('FileStation')
 
-        self.file_station_list : Any = self.session.app_api_list
-        self._sid : str = self.session.sid
-        self.base_url : str = self.session.base_url
+        self.file_station_list: Any = self.session.app_api_list
+        self._sid: str = self.session.sid
+        self.base_url: str = self.session.base_url
 
-        self.interactive_output : bool = interactive_output
+        self.interactive_output: bool = interactive_output
 
     def logout(self) -> None:
         self.session.logout('FileStation')
         return
 
-    def get_info(self) -> dict[str, object]:
+    def get_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Info'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -65,13 +66,13 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def get_list_share(self,
-                        additional: Optional[str|list[str]]=None,
-                        offset: Optional[int] = None,
-                        limit: Optional[int] = None,
-                        sort_by: Optional[str]=None,
-                        sort_direction: Optional[str] = None,
-                        onlywritable: bool = False
-                    ) -> dict[str, object]:
+                       additional: Optional[str | list[str]] = None,
+                       offset: Optional[int] = None,
+                       limit: Optional[int] = None,
+                       sort_by: Optional[str] = None,
+                       sort_direction: Optional[str] = None,
+                       onlywritable: bool = False
+                       ) -> dict[str, object] | str:
 
         api_name = 'SYNO.FileStation.List'
         info = self.file_station_list[api_name]
@@ -94,15 +95,15 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def get_file_list(self,
-                        folder_path: Optional[str] = None,
-                        offset: Optional[int] = None,
-                        limit: Optional[int] = None,
-                        sort_by: Optional[str] = None,
-                        sort_direction: Optional[str] = None,
-                        pattern: Optional[str] = None,
-                        filetype: Optional[str] = None,
-                        goto_path: Optional[str] = None,
-                        additional: Optional[str|list[str]]=None) -> dict[str, object] | str:
+                      folder_path: Optional[str] = None,
+                      offset: Optional[int] = None,
+                      limit: Optional[int] = None,
+                      sort_by: Optional[str] = None,
+                      sort_direction: Optional[str] = None,
+                      pattern: Optional[str] = None,
+                      filetype: Optional[str] = None,
+                      goto_path: Optional[str] = None,
+                      additional: Optional[str | list[str]] = None) -> dict[str, object] | str:
 
         api_name = 'SYNO.FileStation.List'
         info = self.file_station_list[api_name]
@@ -130,7 +131,10 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_file_info(self, path:Optional[str]=None, additional:Optional[str|list[str]]=None) -> dict[str, object]:
+    def get_file_info(self,
+                      path: Optional[str] = None,
+                      additional: Optional[str | list[str]] = None
+                      ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.List'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -159,22 +163,22 @@ class FileStation:
     #  it works if you put extension='...'
 
     def search_start(self,
-                        folder_path: Optional[str] = None,
-                        recursive: Optional[bool]=None,
-                        pattern: Optional[str] = None,
-                        extension: Optional[str] = None,
-                        filetype: Optional[str] = None,
-                        size_from: Optional[int] = None,
-                        size_to: Optional[int] = None,
-                        mtime_from: Optional[str|int] = None,
-                        mtime_to: Optional[str|int] = None,
-                        crtime_from: Optional[str|int] = None,
-                        crtime_to: Optional[str|int] = None,
-                        atime_from: Optional[str|int] = None,
-                        atime_to: Optional[str|int] = None,
-                        owner: Optional[str] = None,
-                        group: Optional[str] = None
-                    ) -> dict[str, object] | str:
+                     folder_path: Optional[str] = None,
+                     recursive: Optional[bool] = None,
+                     pattern: Optional[str] = None,
+                     extension: Optional[str] = None,
+                     filetype: Optional[str] = None,
+                     size_from: Optional[int] = None,
+                     size_to: Optional[int] = None,
+                     mtime_from: Optional[str | int] = None,
+                     mtime_to: Optional[str | int] = None,
+                     crtime_from: Optional[str | int] = None,
+                     crtime_to: Optional[str | int] = None,
+                     atime_from: Optional[str | int] = None,
+                     atime_to: Optional[str | int] = None,
+                     owner: Optional[str] = None,
+                     group: Optional[str] = None
+                     ) -> dict[str, object] | str:
 
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
@@ -222,13 +226,13 @@ class FileStation:
         return output
 
     def get_search_list(self,
-                            task_id: str,
-                            filetype: Optional[str] = None,
-                            limit: Optional[int] = None,
-                            sort_by: Optional[str] = None,
-                            sort_direction: Optional[str] = None,
-                            offset: Optional[int] = None,
-                            additional: Optional[str|list[str]] = None
+                        task_id: str,
+                        filetype: Optional[str] = None,
+                        limit: Optional[int] = None,
+                        sort_by: Optional[str] = None,
+                        sort_direction: Optional[str] = None,
+                        offset: Optional[int] = None,
+                        additional: Optional[str | list[str]] = None
                         ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
@@ -258,7 +262,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_search_task(self, taskid:str) -> dict[str, object] | str:
+    def stop_search_task(self, taskid: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -288,13 +292,13 @@ class FileStation:
         return 'All task are stopped'
 
     def get_mount_point_list(self,
-                                mount_type:Optional[str] = None,
-                                offset: Optional[int] = None,
-                                limit: Optional[int] = None,
-                                sort_by: Optional[str] = None,
-                                sort_direction: Optional[str] = None,
-                                additional:Optional[str|list[str]] = None
-                            ) -> dict[str, object]:
+                             mount_type: Optional[str] = None,
+                             offset: Optional[int] = None,
+                             limit: Optional[int] = None,
+                             sort_by: Optional[str] = None,
+                             sort_direction: Optional[str] = None,
+                             additional: Optional[str | list[str]] = None
+                             ) -> dict[str, object] | str:
 
         api_name = 'SYNO.FileStation.VirtualFolder'
         info = self.file_station_list[api_name]
@@ -320,12 +324,12 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def get_favorite_list(self,
-                            offset: Optional[int] = None,
-                            limit: Optional[int] = None,
-                            sort_by: Optional[str] = None,
-                            status_filter: Optional[str] = None,
-                            additional: Optional[str|list[str]] = None
-                        ) -> dict[str, object]:
+                          offset: Optional[int] = None,
+                          limit: Optional[int] = None,
+                          sort_by: Optional[str] = None,
+                          status_filter: Optional[str] = None,
+                          additional: Optional[str | list[str]] = None
+                          ) -> dict[str, object] | str:
 
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
@@ -347,7 +351,11 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def add_a_favorite(self, path:str, name:Optional[str]=None, index:Optional[int]=None) -> dict[str, object] | str:
+    def add_a_favorite(self,
+                       path: str,
+                       name: Optional[str] = None,
+                       index: Optional[int] = None
+                       ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -363,7 +371,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete_a_favorite(self, path:Optional[str]=None) -> dict[str, object]:
+    def delete_a_favorite(self, path: Optional[str] = None) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -376,7 +384,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def clear_broken_favorite(self) -> dict[str, object]:
+    def clear_broken_favorite(self) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -384,7 +392,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def edit_favorite_name(self, path:str, new_name:str) -> dict[str, object] | str:
+    def edit_favorite_name(self, path: str, new_name: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -402,7 +410,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def replace_all_favorite(self, path:str|list[str], name:str|list[str]):
+    def replace_all_favorite(self, path: str | list[str], name: str | list[str]):
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -426,7 +434,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def start_dir_size_calc(self, path:str) -> dict[str, object] | str:
+    def start_dir_size_calc(self, path: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -459,8 +467,7 @@ class FileStation:
 
         return output
 
-
-    def stop_dir_size_calc(self, taskid:str) -> str:
+    def stop_dir_size_calc(self, taskid: str) -> str:
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -476,7 +483,7 @@ class FileStation:
 
         return 'The task has been stopped'
 
-    def get_dir_status(self, taskid:Optional[str]=None) -> dict[str, object] | str:
+    def get_dir_status(self, taskid: Optional[str] = None) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -487,7 +494,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def start_md5_calc(self, file_path:str) -> str | dict[str, object]:
+    def start_md5_calc(self, file_path: str) -> str | dict[str, object]:
         api_name = 'SYNO.FileStation.MD5'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -510,7 +517,7 @@ class FileStation:
 
         return output
 
-    def get_md5_status(self, taskid:Optional[str]=None) -> str | dict[str, object]:
+    def get_md5_status(self, taskid: Optional[str] = None) -> str | dict[str, object]:
         api_name = 'SYNO.FileStation.MD5'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -525,7 +532,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_md5_calc(self, taskid:str) -> str:
+    def stop_md5_calc(self, taskid: str) -> str:
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -542,11 +549,11 @@ class FileStation:
         return 'The task has been stopped'
 
     def check_permissions(self,
-                            path:str,
-                            filename:str,
-                            overwrite:Optional[bool] = None,
-                            create_only:Optional[bool] = None
-                        ) -> dict[str, object] | str:
+                          path: str,
+                          filename: str,
+                          overwrite: Optional[bool] = None,
+                          create_only: Optional[bool] = None
+                          ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.CheckPermission'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -566,12 +573,12 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def upload_file(self,
-                        dest_path: str,
-                        file_path: str,
-                        create_parents: bool = True,
-                        overwrite: bool = True,
-                        verify: bool = False
-                    ) -> str | tuple[int, dict[str,object]]:
+                    dest_path: str,
+                    file_path: str,
+                    create_parents: bool = True,
+                    overwrite: bool = True,
+                    verify: bool = False
+                    ) -> str | tuple[int, dict[str, object]]:
         api_name = 'SYNO.FileStation.Upload'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -598,7 +605,7 @@ class FileStation:
             else:
                 return r.status_code, r.json()
 
-    def get_shared_link_info(self, link_id:str) -> dict[str, object] | str:
+    def get_shared_link_info(self, link_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -612,12 +619,12 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def get_shared_link_list(self,
-                                offset: Optional[int] = None,
-                                limit: Optional[int] = None,
-                                sort_by: Optional[str] = None,
-                                sort_direction: Optional[str] = None,
-                                force_clean: Optional[bool] = None
-                            ) -> dict[str, object]:
+                             offset: Optional[int] = None,
+                             limit: Optional[int] = None,
+                             sort_by: Optional[str] = None,
+                             sort_direction: Optional[str] = None,
+                             force_clean: Optional[bool] = None
+                             ) -> dict[str, object] | str:
 
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
@@ -632,11 +639,11 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def create_sharing_link(self,
-                                path:str,
-                                password: Optional[str] = None,
-                                date_expired: Optional[str|int] = None,
-                                date_available: Optional[str|int] = None,
-                                expire_times: int = 0
+                            path: str,
+                            password: Optional[str] = None,
+                            date_expired: Optional[str | int] = None,
+                            date_available: Optional[str | int] = None,
+                            expire_times: int = 0
                             ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
@@ -653,7 +660,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete_shared_link(self, link_id:str) -> dict[str, object] | str:
+    def delete_shared_link(self, link_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -666,7 +673,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def clear_invalid_shared_link(self) -> dict[str, object]:
+    def clear_invalid_shared_link(self) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -675,12 +682,12 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def edit_shared_link(self,
-                            link_id: str,
-                            password: Optional[str] = None,
-                            date_expired: Optional[str|int] = None,
-                            date_available: Optional[str|int] = None,
-                            expire_times: int = 0
-                        ) -> dict[str, object] | str:
+                         link_id: str,
+                         password: Optional[str] = None,
+                         date_expired: Optional[str | int] = None,
+                         date_available: Optional[str | int] = None,
+                         expire_times: int = 0
+                         ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -699,11 +706,11 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def create_folder(self,
-                        folder_path:str|list[str],
-                        name:str | list[str],
-                        force_parent: Optional[bool] = None,
-                        additional: Optional[str|list[str]] = None
-                    ) -> str | dict[str, object]:
+                      folder_path: str | list[str],
+                      name: str | list[str],
+                      force_parent: Optional[bool] = None,
+                      additional: Optional[str | list[str]] = None
+                      ) -> str | dict[str, object]:
         api_name = 'SYNO.FileStation.CreateFolder'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -747,11 +754,11 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def rename_folder(self,
-                        path:str | list[str],
-                        name:str | list[str],
-                        additional: Optional[str|list[str]] = None,
-                        search_taskid: Optional[str] = None
-                    ) -> dict[str, object] | str:
+                      path: str | list[str],
+                      name: str | list[str],
+                      additional: Optional[str | list[str]] = None,
+                      search_taskid: Optional[str] = None
+                      ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Rename'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -793,12 +800,12 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def start_copy_move(self,
-                            path:str | list[str],
-                            dest_folder_path:str | list[str],
-                            overwrite: Optional[bool] = None,
-                            remove_src: Optional[bool] = None,
-                            accurate_progress: Optional[bool] = None,
-                            search_taskid: Optional[str] = None
+                        path: str | list[str],
+                        dest_folder_path: str | list[str],
+                        overwrite: Optional[bool] = None,
+                        remove_src: Optional[bool] = None,
+                        accurate_progress: Optional[bool] = None,
+                        search_taskid: Optional[str] = None
                         ) -> str | dict[str, object]:
         api_name = 'SYNO.FileStation.CopyMove'
         info = self.file_station_list[api_name]
@@ -846,8 +853,7 @@ class FileStation:
 
         return output
 
-
-    def get_copy_move_status(self, taskid:str) -> dict[str, object] | str:
+    def get_copy_move_status(self, taskid: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.CopyMove'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -860,7 +866,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_copy_move_task(self, taskid:str) -> dict[str, object] | str:
+    def stop_copy_move_task(self, taskid: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.CopyMove'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -876,11 +882,11 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def start_delete_task(self,
-                            path: str | list[str],
-                            accurate_progress: Optional[bool] = None,
-                            recursive: Optional[bool] = None,
-                            search_taskid: Optional[str] = None
-                        ) -> dict[str, object] | str:
+                          path: str | list[str],
+                          accurate_progress: Optional[bool] = None,
+                          recursive: Optional[bool] = None,
+                          search_taskid: Optional[str] = None
+                          ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Delete'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -915,8 +921,7 @@ class FileStation:
 
         return output
 
-
-    def get_delete_status(self, taskid:str) -> dict[str, object] | str:
+    def get_delete_status(self, taskid: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Delete'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -929,7 +934,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_delete_task(self, taskid:str) -> dict[str, object] | str:
+    def stop_delete_task(self, taskid: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Delete'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -945,9 +950,9 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def delete_blocking_function(self,
-                                    path:str,
-                                    recursive: Optional[bool] = None,
-                                    search_taskid: Optional[str] = None) -> dict[str, object] | str:
+                                 path: str,
+                                 recursive: Optional[bool] = None,
+                                 search_taskid: Optional[str] = None) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Delete'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -974,15 +979,15 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def start_extract_task(self,
-                            file_path: str,
-                            dest_folder_path: str,
-                            overwrite: Optional[bool] = None,
-                            keep_dir: Optional[bool] = None,
-                            create_subfolder: Optional[bool] = None,
-                            codepage: Optional[str] = None,
-                            password: Optional[str] = None,
-                            item_id: Optional[str] = None
-                        ) -> dict[str, object] | str:
+                           file_path: str,
+                           dest_folder_path: str,
+                           overwrite: Optional[bool] = None,
+                           keep_dir: Optional[bool] = None,
+                           create_subfolder: Optional[bool] = None,
+                           codepage: Optional[str] = None,
+                           password: Optional[str] = None,
+                           item_id: Optional[str] = None
+                           ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Extract'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1013,7 +1018,7 @@ class FileStation:
 
         return output
 
-    def get_extract_status(self, taskid:str) -> dict[str, object] | str:
+    def get_extract_status(self, taskid: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Extract'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1026,7 +1031,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_extract_task(self, taskid:str) -> dict[str, object] | str:
+    def stop_extract_task(self, taskid: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Extract'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1042,15 +1047,15 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def get_file_list_of_archive(self,
-                                    file_path:str,
-                                    offset: Optional[int] = None,
-                                    limit: Optional[int] = None,
-                                    sort_by: Optional[str] = None,
-                                    sort_direction: Optional[str] = None,
-                                    codepage: Optional[str] = None,
-                                    password: Optional[str] = None,
-                                    item_id: Optional[str] = None
-                                ) -> dict[str, object] | str:
+                                 file_path: str,
+                                 offset: Optional[int] = None,
+                                 limit: Optional[int] = None,
+                                 sort_by: Optional[str] = None,
+                                 sort_direction: Optional[str] = None,
+                                 codepage: Optional[str] = None,
+                                 password: Optional[str] = None,
+                                 item_id: Optional[str] = None
+                                 ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Extract'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1067,13 +1072,13 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def start_file_compression(self,
-                                path: str | list[str],
-                                dest_file_path: str,
-                                level: Optional[int] = None,
-                                mode: Optional[str]=None,
-                                compress_format: Optional[str] = None,
-                                password: Optional[str] = None
-                            ) -> dict[str, object] | str | tuple[str]:
+                               path: str | list[str],
+                               dest_file_path: str,
+                               level: Optional[int] = None,
+                               mode: Optional[str] = None,
+                               compress_format: Optional[str] = None,
+                               password: Optional[str] = None
+                               ) -> dict[str, object] | str | tuple[str]:
         api_name = 'SYNO.FileStation.Compress'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1107,9 +1112,9 @@ class FileStation:
 
         self._compress_taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
 
-        message =('You can now check the status of request with '
-                  'get_compress_status() , your id is: '
-                  + self._compress_taskid)
+        message = ('You can now check the status of request with '
+                   'get_compress_status() , your id is: '
+                   + self._compress_taskid)
         if self.interactive_output:
             output = message
         else:
@@ -1117,8 +1122,7 @@ class FileStation:
 
         return output
 
-
-    def get_compress_status(self, taskid:str) -> dict[str, object] | str:
+    def get_compress_status(self, taskid: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Compress'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1131,7 +1135,7 @@ class FileStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_compress_task(self, taskid:str) -> dict[str, object] | str:
+    def stop_compress_task(self, taskid: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Compress'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1145,12 +1149,12 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def get_list_of_all_background_task(self,
-                                            offset: Optional[int] = None,
-                                            limit: Optional[int] = None,
-                                            sort_by: Optional[str] = None,
-                                            sort_direction: Optional[str] = None,
-                                            api_filter: Optional[str] = None
-                                        ) -> dict[str, object]:
+                                        offset: Optional[int] = None,
+                                        limit: Optional[int] = None,
+                                        sort_by: Optional[str] = None,
+                                        sort_direction: Optional[str] = None,
+                                        api_filter: Optional[str] = None
+                                        ) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.BackgroundTask'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1171,12 +1175,12 @@ class FileStation:
         return self.request_data(api_name, api_path, req_param)
 
     def get_file(self,
-                    path: str,
-                    mode: str,
-                    dest_path: str=".",
-                    chunk_size: int = 8192,
-                    verify: bool = False
-                ) -> Optional[str]:
+                 path: str,
+                 mode: str,
+                 dest_path: str = ".",
+                 chunk_size: int = 8192,
+                 verify: bool = False
+                 ) -> Optional[str]:
 
         api_name = 'SYNO.FileStation.Download'
         info = self.file_station_list[api_name]
@@ -1188,7 +1192,7 @@ class FileStation:
         session = requests.session()
 
         url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=download&path=%s&mode=%s&_sid=%s' % (
-                api_name, info['maxVersion'], parse.quote_plus(path), mode, self._sid)
+            api_name, info['maxVersion'], parse.quote_plus(path), mode, self._sid)
 
         if mode is None:
             return 'Enter a valid mode (open / download)'

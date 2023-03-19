@@ -5,20 +5,21 @@ from . import auth as syn
 class Virtualization:
 
     def __init__(self,
-                    ip_address: str,
-                    port: str,
-                    username: str,
-                    password: str,
-                    secure: bool =False,
-                    cert_verify: bool = False,
-                    dsm_version: int = 7,
-                    debug: bool = True,
-                    otp_code: Optional[str] = None
-                ) -> None:
+                 ip_address: str,
+                 port: str,
+                 username: str,
+                 password: str,
+                 secure: bool = False,
+                 cert_verify: bool = False,
+                 dsm_version: int = 7,
+                 debug: bool = True,
+                 otp_code: Optional[str] = None
+                 ) -> None:
 
-        self.session : syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
+        self.session: syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify,
+                                                              dsm_version, debug, otp_code)
 
-        self.request_data : Any = self.session.request_data
+        self.request_data: Any = self.session.request_data
 
         self._taskid_list: Any = []
         self._network_group_list: Any = []
@@ -31,9 +32,9 @@ class Virtualization:
         self.session.login('Virtualization')
         self.session.get_api_list('Virtualization')
 
-        self.file_station_list : Any = self.session.app_api_list
-        self._sid : str = self.session.sid
-        self.base_url : str = self.session.base_url
+        self.file_station_list: Any = self.session.app_api_list
+        self._sid: str = self.session.sid
+        self.base_url: str = self.session.base_url
         return
 
     def logout(self) -> None:
@@ -50,7 +51,7 @@ class Virtualization:
 
         return self._taskid_list
 
-    def clear_task(self, taskid:str) -> dict[str, object] | str:
+    def clear_task(self, taskid: str) -> dict[str, object] | str:
         api_name = 'SYNO.Virtualization.API.Task.Info'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -63,7 +64,7 @@ class Virtualization:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_task_info(self, taskid:str) -> dict[str, object] | str:
+    def get_task_info(self, taskid: str) -> dict[str, object] | str:
         api_name = 'SYNO.Virtualization.API.Task.Info'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -106,7 +107,7 @@ class Virtualization:
 
         return self._host_operation_list
 
-    def get_vm_operation(self, additional:bool=False) -> list[dict[str,object]]:
+    def get_vm_operation(self, additional: bool = False) -> list[dict[str, object]]:
         api_name = 'SYNO.Virtualization.API.Guest'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -123,10 +124,10 @@ class Virtualization:
         return info
 
     def get_specific_vm_info(self,
-                                additional:Optional[str|list[str]]=None,
-                                guest_id: Optional[str] = None,
-                                guest_name: Optional[str] = None
-                            ) -> dict[str, object] | str:
+                             additional: Optional[str | list[str]] = None,
+                             guest_id: Optional[str] = None,
+                             guest_name: Optional[str] = None
+                             ) -> dict[str, object] | str:
         api_name = 'SYNO.Virtualization.API.Guest'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -144,13 +145,13 @@ class Virtualization:
         return self.request_data(api_name, api_path, req_param)
 
     def set_vm_property(self,
-                            guest_id: Optional[str] = None,
-                            guest_name: Optional[str] = None,
-                            autorun: Optional[int] = None,
-                            description: Optional[str] = None,
-                            new_guest_name: Optional[str] = None,
-                            vcpu_num: Optional[int] = None,
-                            vram_size: Optional[int] = None
+                        guest_id: Optional[str] = None,
+                        guest_name: Optional[str] = None,
+                        autorun: Optional[int] = None,
+                        description: Optional[str] = None,
+                        new_guest_name: Optional[str] = None,
+                        vcpu_num: Optional[int] = None,
+                        vram_size: Optional[int] = None
                         ) -> dict[str, object] | str:
         api_name = 'SYNO.Virtualization.API.Guest'
         info = self.file_station_list[api_name]
@@ -191,7 +192,7 @@ class Virtualization:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete_vm(self, guest_id:Optional[str]=None, guest_name:Optional[str]=None) -> dict[str, object] | str:
+    def delete_vm(self, guest_id: Optional[str] = None, guest_name: Optional[str] = None) -> dict[str, object] | str:
         api_name = 'SYNO.Virtualization.API.Guest'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -209,10 +210,10 @@ class Virtualization:
         return self.request_data(api_name, api_path, req_param)
 
     def vm_power_on(self,
-                        guest_id: Optional[str] = None,
-                        guest_name: Optional[str] = None,
-                        host_id: Optional[str] = None,
-                        host_name: Optional[str] = None
+                    guest_id: Optional[str] = None,
+                    guest_name: Optional[str] = None,
+                    host_id: Optional[str] = None,
+                    host_name: Optional[str] = None
                     ) -> dict[str, object] | str:
         api_name = 'SYNO.Virtualization.API.Guest.Action'
         info = self.file_station_list[api_name]
@@ -239,7 +240,10 @@ class Virtualization:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def vm_force_power_off(self, guest_id:Optional[str]=None, guest_name:Optional[str]=None) -> dict[str, object] | str:
+    def vm_force_power_off(self,
+                           guest_id: Optional[str] = None,
+                           guest_name: Optional[str] = None
+                           ) -> dict[str, object] | str:
         api_name = 'SYNO.Virtualization.API.Guest.Action'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -256,7 +260,7 @@ class Virtualization:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def vm_shut_down(self, guest_id:Optional[str]=None, guest_name:Optional[str]=None) -> dict[str, object] | str:
+    def vm_shut_down(self, guest_id: Optional[str] = None, guest_name: Optional[str] = None) -> dict[str, object] | str:
         api_name = 'SYNO.Virtualization.API.Guest.Action'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -281,7 +285,7 @@ class Virtualization:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete_image(self, image_id:Optional[str]=None, image_name:Optional[str]=None) -> dict[str, object] | str:
+    def delete_image(self, image_id: Optional[str] = None, image_name: Optional[str] = None) -> dict[str, object] | str:
         api_name = 'SYNO.Virtualization.API.Guest.Image'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -299,13 +303,13 @@ class Virtualization:
         return self.request_data(api_name, api_path, req_param)
 
     def create_image(self,
-                        auto_clean_task: bool = True,
-                        storage_names: Optional[str] = None,
-                        storage_ids: Optional[str] = None,
-                        type: Optional[str] = None,
-                        ds_file_path: Optional[str] = None,
-                        image_name: Optional[str] = None
-                    ) -> dict[str, object] | str:
+                     auto_clean_task: bool = True,
+                     storage_names: Optional[str] = None,
+                     storage_ids: Optional[str] = None,
+                     type: Optional[str] = None,
+                     ds_file_path: Optional[str] = None,
+                     image_name: Optional[str] = None
+                     ) -> dict[str, object] | str:
         api_name = 'SYNO.Virtualization.API.Guest.Image'
         info = self.file_station_list[api_name]
         api_path = info['path']
