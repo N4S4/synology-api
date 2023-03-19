@@ -1,4 +1,4 @@
-from typing import Optional, Any
+from typing import Optional
 import requests
 from .error_codes import error_codes, CODE_SUCCESS, CODE_UNKNOWN
 from urllib3 import disable_warnings
