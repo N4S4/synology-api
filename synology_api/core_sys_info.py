@@ -16,7 +16,6 @@ class SysInfo(base_api_core.Core):
                  ) -> None:
         super(SysInfo, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug,
                                       otp_code)
-        return
 
     def fileserv_smb(self) -> dict[str, object] | str:
         api_name = 'SYNO.Core.FileServ.SMB'
@@ -495,6 +494,61 @@ class SysInfo(base_api_core.Core):
 
         return self.request_data(api_name, api_path, req_param)['data']['sys_temp']
 
+    def get_all_system_utilization(self) -> str:
+        api_name = 'SYNO.Core.System.Utilization'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)['data']
+
+    def get_cpu_utilization(self) -> str:
+        api_name = 'SYNO.Core.System.Utilization'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)['data']['cpu']
+
+    def get_disk_utilization(self) -> str:
+        api_name = 'SYNO.Core.System.Utilization'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)['data']['disk']
+
+    def get_memory_utilization(self) -> str:
+        api_name = 'SYNO.Core.System.Utilization'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)['data']['memory']
+
+    def shutdown(self):
+        api_name = 'SYNO.Core.System'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'shutdown'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def reboot(self):
+        api_name = 'SYNO.Core.System'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'reboot'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_info(self) -> dict[str, object] | str:
+        api_name = 'SYNO.DSM.Info'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'getinfo'}
+
+        return self.request_data(api_name, api_path, req_param)
     def get_network_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.Core.System'
         info = self.core_list[api_name]
@@ -556,14 +610,6 @@ class SysInfo(base_api_core.Core):
         info = self.core_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'list'}
-
-        return self.request_data(api_name, api_path, req_param)
-
-    def utilisation(self) -> dict[str, object] | str:
-        api_name = 'SYNO.Core.System.Utilization'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get'}
 
         return self.request_data(api_name, api_path, req_param)
 

@@ -413,7 +413,7 @@ DS info with below functions:
 | process()                       |
 | utilisation()                   |
 | storage()                       |
-| external_device_storage_usb()   ||
+| external_device_storage_usb()   |
 | external_device_storage_esata() |
 | file_index_resource()           |
 | cms_info()                      |
@@ -459,7 +459,11 @@ DS info with below functions:
 | get_cpu_temp                    |
 | get_network_info                |
 | get_volume_info                 |
-
+| get_all_system_utilization      |
+| get_cpu_utilization             |
+| get_disk_utilization            |
+| get_memory_utilization          |
+| dsm_info                        |
 
 ### Virtualization
 
