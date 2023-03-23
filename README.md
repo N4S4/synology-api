@@ -91,18 +91,18 @@ dwn.get_info()
 response would be json data
 
 ```json 
-{'data': {'enable_list_usergrp': False,
-  'hostname': 'MyCloud',
-  'is_manager': True,
-  'items': [{'gid': 100}, {'gid': 101}],
-  'support_file_request': True,
-  'support_sharing': True,
-  'support_vfs': True,
-  'support_virtual': {'enable_iso_mount': True, 'enable_remote_mount': True},
-  'support_virtual_protocol': ['cifs', 'nfs', 'iso'],
-  'system_codepage': 'enu',
-  'uid': 1026},
- 'success': True}
+{"data": {"enable_list_usergrp": "False",
+  "hostname": "MyCloud",
+  "is_manager": "True",
+  "items": [{"gid": 100}, {"gid": 101}],
+  "support_file_request": "True",
+  "support_sharing": "True",
+  "support_vfs": "True",
+  "support_virtual": {"enable_iso_mount": "True", "enable_remote_mount": "True"},
+  "support_virtual_protocol": ["cifs", "nfs", "iso"],
+  "system_codepage": "enu",
+  "uid": 1026},
+ "success": "True"}
 ```
 
 ## If required HTTPS  (it requires a valid certificate)
@@ -127,121 +127,124 @@ I will slowly implement more functions, Synology APIs are plenty, too many for m
 
 This wrapper cover the following APIs for now:
 
-| DownloadStation  | 
-| ------------- | 
-| SYNO.DownloadStation.Info  | 
-| SYNO.DownloadStation.Schedule  | 
-| SYNO.DownloadStation.Task  | 
+| DownloadStation               |
+|-------------------------------|
+| SYNO.DownloadStation.Info     |
+| SYNO.DownloadStation.Schedule |
+| SYNO.DownloadStation.Task     |
 
-| FileStation   |
-| ------------- | 
-| SYNO.FileStation.Info | 
-| SYNO.FileStation.List | 
-| SYNO.FileStation.Search | 
-| SYNO.FileStation.VirtualFolder | 
-| SYNO.FileStation.Favorite | 
-| SYNO.FileStation.DirSize | 
+| FileStation                      |
+|----------------------------------|
+| SYNO.FileStation.Info            |
+| SYNO.FileStation.List            | 
+| SYNO.FileStation.Search          | 
+| SYNO.FileStation.VirtualFolder   | 
+| SYNO.FileStation.Favorite        | 
+| SYNO.FileStation.DirSize         | 
 | SYNO.FileStation.CheckPermission | 
-| SYNO.FileStation.Upload | 
-| SYNO.FileStation.Sharing | 
-| SYNO.FileStation.CreateFolder | 
-| SYNO.FileStation.Rename | 
-| SYNO.FileStation.CopyMove | 
-| SYNO.FileStation.Delete | 
-| SYNO.FileStation.Extract | 
-| SYNO.FileStation.Compress | 
-| SYNO.FileStation.BackgroundTask | 
+| SYNO.FileStation.Upload          | 
+| SYNO.FileStation.Sharing         | 
+| SYNO.FileStation.CreateFolder    | 
+| SYNO.FileStation.Rename          | 
+| SYNO.FileStation.CopyMove        | 
+| SYNO.FileStation.Delete          | 
+| SYNO.FileStation.Extract         | 
+| SYNO.FileStation.Compress        | 
+| SYNO.FileStation.BackgroundTask  | 
 
-| Photo |
-| -------- |
-|SYNO.Foto.UserInfo|
-|SYNO.Foto.Browse.Folder|
-|SYNO.FotoTeam.Browse.Folder|
-|SYNO.Foto.Browse.Album|
-|SYNO.Foto.Browse.ConditionAlbum|
-|SYNO.Foto.Sharing.Passphrase|
-|SYNO.FotoTeam.Sharing.Passphrase|
-|SYNO.Foto.Sharing.Misc|
+| Photo                            |
+|----------------------------------|
+| SYNO.Foto.UserInfo               |
+| SYNO.Foto.Browse.Folder          |
+| SYNO.FotoTeam.Browse.Folder      |
+| SYNO.Foto.Browse.Album           |
+| SYNO.Foto.Browse.ConditionAlbum  |
+| SYNO.Foto.Sharing.Passphrase     |
+| SYNO.FotoTeam.Sharing.Passphrase |
+| SYNO.Foto.Sharing.Misc           |
+| SYNO.Foto.Browse.Item            |
+| SYNO.Foto.Search.Filter          |
+| SYNO.Foto.Setting.Guest          |
 
-| core_sys_info |
-| -------- |
-| SYNO.Core.System |
-| SYNO.Core.FileServ.SMB |
-| SYNO.Core.FileServ.AFP |
-| SYNO.Core.FileServ.NFS' |
-| SYNO.Core.FileServ.FTP |
-| SYNO.Core.FileServ.FTP.SFTP |
-| SYNO.Backup.Service.NetworkBackup |
-| SYNO.Core.BandwidthControl.Protocol |
-| SYNO.Core.Share |
-| SYNO.Core.FileServ.ServiceDiscovery |
-| SYNO.Core.SyslogClient.FileTransfer |
-| SYNO.Core.Network |
-| SYNO.Core.Web.DSM |
-| SYNO.Core.CurrentConnection |
-| SYNO.Core.BandwidthControl.Status |
-| SYNO.Core.System.Status |
-| SYNO.Core.SyslogClient.Status |
+| core_sys_info                         |
+|---------------------------------------|
+| SYNO.Core.System                      |
+| SYNO.Core.FileServ.SMB                |
+| SYNO.Core.FileServ.AFP                |
+| SYNO.Core.FileServ.NFS'               |
+| SYNO.Core.FileServ.FTP                |
+| SYNO.Core.FileServ.FTP.SFTP           |
+| SYNO.Backup.Service.NetworkBackup     |
+| SYNO.Core.BandwidthControl.Protocol   |
+| SYNO.Core.Share                       |
+| SYNO.Core.FileServ.ServiceDiscovery   |
+| SYNO.Core.SyslogClient.FileTransfer   |
+| SYNO.Core.Network                     |
+| SYNO.Core.Web.DSM                     |
+| SYNO.Core.CurrentConnection           |
+| SYNO.Core.BandwidthControl.Status     |
+| SYNO.Core.System.Status               |
+| SYNO.Core.SyslogClient.Status         |
 | SYNO.Core.SyslogClient.Setting.Notify |
-| SYNO.Core.SecurityScan.Conf |
-| SYNO.Core.SecurityScan.Status |
-| SYNO.Core.SecurityScan.Status |
-| SYNO.Core.User |
-| SYNO.Core.QuickConnect |
-| SYNO.Core.QuickConnect.Permission |
-| SYNO.Core.Network.Router.Topology |
-| SYNO.Core.Network.Wifi.Client |
-| SYNO.Core.Network.Bond |
-| SYNO.Core.Network.Bridge |
-| SYNO.Core.Network.Ethernet |
-| SYNO.Core.Network.LocalBridge |
-| SYNO.Core.Network.USBModem |
-| SYNO.Core.Network.PPPoE |
-| SYNO.Core.Network.IPv6Tunnel |
-| SYNO.Core.Network.VPN.PPTP |
+| SYNO.Core.SecurityScan.Conf           |
+| SYNO.Core.SecurityScan.Status         |
+| SYNO.Core.SecurityScan.Status         |
+| SYNO.Core.User                        |
+| SYNO.Core.QuickConnect                |
+| SYNO.Core.QuickConnect.Permission     |
+| SYNO.Core.Network.Router.Topology     |
+| SYNO.Core.Network.Wifi.Client         |
+| SYNO.Core.Network.Bond                |
+| SYNO.Core.Network.Bridge              |
+| SYNO.Core.Network.Ethernet            |
+| SYNO.Core.Network.LocalBridge         |
+| SYNO.Core.Network.USBModem            |
+| SYNO.Core.Network.PPPoE               |
+| SYNO.Core.Network.IPv6Tunnel          |
+| SYNO.Core.Network.VPN.PPTP            |
 | SYNO.Core.Network.VPN.OpenVPNWithConf |
-| SYNO.Core.Network.VPN.OpenVPN |
-| SYNO.Core.Network.VPN.L2TP |
-| SYNO.Core.Directory.Domain.Schedule |
-| SYNO.Core.Directory.LDAP |
-| SYNO.Core.Directory.SSO |
-| SYNO.Core.Upgrade.Server |
-| SYNO.Core.Upgrade.Server.Download |
-| SYNO.Core.Upgrade.Setting |
-| SYNO.Core.Notification.SMS.Conf |
-| SYNO.Core.Notification.Mail.Conf |
-| SYNO.Core.Notification.Push.Mail |
-| SYNO.Core.Notification.Push.Conf |
-| SYNO.Core.Hardware.BeepControl |
-| SYNO.Core.Hardware.FanSpeed |
-| SYNO.Core.Hardware.Hibernation |
-| SYNO.Core.ExternalDevice.UPS |
-| SYNO.Core.Hardware.PowerSchedule |
-| SYNO.Core.Terminal |
-| SYNO.Core.SNMP |
-| SYNO.Core.System.Process |
-| SYNO.Core.System.Utilization |
-| SYNO.Storage.CGI.Storage |
+| SYNO.Core.Network.VPN.OpenVPN         |
+| SYNO.Core.Network.VPN.L2TP            |
+| SYNO.Core.Directory.Domain.Schedule   |
+| SYNO.Core.Directory.LDAP              |
+| SYNO.Core.Directory.SSO               |
+| SYNO.Core.Upgrade.Server              |
+| SYNO.Core.Upgrade.Server.Download     |
+| SYNO.Core.Upgrade.Setting             |
+| SYNO.Core.Notification.SMS.Conf       |
+| SYNO.Core.Notification.Mail.Conf      |
+| SYNO.Core.Notification.Push.Mail      |
+| SYNO.Core.Notification.Push.Conf      |
+| SYNO.Core.Hardware.BeepControl        |
+| SYNO.Core.Hardware.FanSpeed           |
+| SYNO.Core.Hardware.Hibernation        |
+| SYNO.Core.ExternalDevice.UPS          |
+| SYNO.Core.Hardware.PowerSchedule      |
+| SYNO.Core.Terminal                    |
+| SYNO.Core.SNMP                        |
+| SYNO.Core.System.Process              |
+| SYNO.Core.System.Utilization          |
+| SYNO.Storage.CGI.Storage              |
 
-| Virtualization |
-| -------------- |
-| SYNO.Virtualization.API.Task.Info |
-| SYNO.Virtualization.API.Network |
-| SYNO.Virtualization.API.Storage |
-| SYNO.Virtualization.API.Host |
-| SYNO.Virtualization.API.Guest |
+| Virtualization                       |
+|--------------------------------------|
+| SYNO.Virtualization.API.Task.Info    |
+| SYNO.Virtualization.API.Network      |
+| SYNO.Virtualization.API.Storage      |
+| SYNO.Virtualization.API.Host         |
+| SYNO.Virtualization.API.Guest        |
 | SYNO.Virtualization.API.Guest.Action |
-| SYNO.Virtualization.API.Guest.Image |
+| SYNO.Virtualization.API.Guest.Image  |
 
-| core_backup |
-| ------ |
+| core_backup            |
+|------------------------|
 | SYNO.Backup.Repository |
-| SYNO.Backup.Task |
+| SYNO.Backup.Task       |
 
 | core_active_backup (Active Backup for Business) |
-| ------ |
-| SYNO.ActiveBackup.Inventory |
-| SYNO.ActiveBackup.Overview |
+|-------------------------------------------------|
+| SYNO.ActiveBackup.Inventory                     |
+| SYNO.ActiveBackup.Overview                      |
 
 #### FileStation Functions list
 
@@ -250,97 +253,101 @@ To explain the use of some function I will divide all the functions in two sets
 you can run the following set of functions at your will entering just the required data,
 
 
-| Function | Description |
-| --- | --- |
-| get_info() | Provide File Station information |
-| get_list_share() | List all shared folders.  |
-| get_file_list() | Enumerate files in a given folder  |
-| get_file_info() | Get information of file(s)  |
-| get_mount_point_list()  | List all mount point folders on one given type of virtual file system  |
-| get_favorite_list()  | List user’s favorites  |
-| add_a_favorite()  | Add a folder to user’s favorites  |
-| delete_a_favorite() | Delete a favorite in user’s favorites.  |
-| clear_broken_favorite()  | Delete all broken statuses of favorites.  |
-| edit_favorite_name() | Edit a favorite name  |
-| replace_all_favorite() | Replace multiple favorites of folders to the existed user’s favorites.  |
-| check_permission() | Check if a logged-in user has write permission to create new files/folders in a given folder  |
-| upload_file() | upload a file to the station (fix by @longyn) |
-| get_shared_link_info() | Get information of a sharing link by the sharing link ID  |
-| get_shared_link_list() | List user’s file sharing links.  |
-| create_sharing_link() | Generate one or more sharing link(s) by file/folder path(s)  |
-| delete_shared_link() | Delete one or more sharing links.  |
-| clear_invalid_shared_link() | Remove all expired and broken sharing links  |
-| edit_shared_link() | Edit sharing link(s)  |
-| create_folder() | Create folders.  |
-| rename_folder() | Rename a file/folder  |
-| delete_blocking_function() | Delete files/folders. This is a blocking method. The response is not returned until the deletion
-operation is completed. |
-| get_file_list_of_archive()  | List archived files contained in an archive  |
-| get_list_of_all_background_task()  | List all background tasks including copy, move, delete, compress and extract tasks  |
+| Function                          | Description                                                                                      |
+|-----------------------------------|--------------------------------------------------------------------------------------------------|
+| get_info()                        | Provide File Station information                                                                 |
+| get_list_share()                  | List all shared folders.                                                                         |
+| get_file_list()                   | Enumerate files in a given folder                                                                |
+| get_file_info()                   | Get information of file(s)                                                                       |
+| get_mount_point_list()            | List all mount point folders on one given type of virtual file system                            |
+| get_favorite_list()               | List user’s favorites                                                                            |
+| add_a_favorite()                  | Add a folder to user’s favorites                                                                 |
+| delete_a_favorite()               | Delete a favorite in user’s favorites.                                                           |
+| clear_broken_favorite()           | Delete all broken statuses of favorites.                                                         |
+| edit_favorite_name()              | Edit a favorite name                                                                             |
+| replace_all_favorite()            | Replace multiple favorites of folders to the existed user’s favorites.                           |
+| check_permission()                | Check if a logged-in user has write permission to create new files/folders in a given folder     |
+| upload_file()                     | upload a file to the station (fix by @longyn)                                                    |
+| get_shared_link_info()            | Get information of a sharing link by the sharing link ID                                         |
+| get_shared_link_list()            | List user’s file sharing links.                                                                  |
+| create_sharing_link()             | Generate one or more sharing link(s) by file/folder path(s)                                      |
+| delete_shared_link()              | Delete one or more sharing links.                                                                |
+| clear_invalid_shared_link()       | Remove all expired and broken sharing links                                                      |
+| edit_shared_link()                | Edit sharing link(s)                                                                             |
+| create_folder()                   | Create folders.                                                                                  |
+| rename_folder()                   | Rename a file/folder                                                                             |
+| delete_blocking_function()        | Delete files/folders. This is a blocking method. The response is not returned until the deletion |
+| operation is completed.           |                                                                                                  |
+| get_file_list_of_archive()        | List archived files contained in an archive                                                      |
+| get_list_of_all_background_task() | List all background tasks including copy, move, delete, compress and extract tasks               |
 
 To run the following functions you'll have to start the task with the start function
 
-| Function | Description |
-| --- | --- |
-| search_start()  | Search files according to given criteria.  |
-| get_search_list()  | List matched files in a search temporary database.  |
-| stop_search_task() | Stop the searching task |
-| stop_all_search_task() | Stop the all searching tasks |
-| start_dir_size_calc() | Start to calculate size for one or more file/folder paths. |
-| get_dir_status() | Get the status of the size calculating task |
-| stop_dir_size_calc() | Stop to calculate size |
-| start_copy_move() | Start to copy/move files |
-| get_copy_move_status() | Get the copying/moving status |
-| stop_copy_move_task() | Stop a copy/move task. |
-| start_delete_task() | Delete file(s)/folder(s). |
-| get_delete_status() | Get the deleting status |
-| stop_delete_task() | Stop a delete task |
-| start_extract_task() | Start to extract an archive. |
-| get_extract_status() | Get the extract task status |
-| stop_extract_task() | Stop the extract task |
-| start_file_compression() | Start to compress file(s)/folder(s). |
-| get_compress_status() | Get the compress task status |
-| stop_compress_task() | Stop the compress task |
-| get_file() | Download or open file |
+| Function                 | Description                                                |
+|--------------------------|------------------------------------------------------------|
+| search_start()           | Search files according to given criteria.                  |
+| get_search_list()        | List matched files in a search temporary database.         |
+| stop_search_task()       | Stop the searching task                                    |
+| stop_all_search_task()   | Stop the all searching tasks                               |
+| start_dir_size_calc()    | Start to calculate size for one or more file/folder paths. |
+| get_dir_status()         | Get the status of the size calculating task                |
+| stop_dir_size_calc()     | Stop to calculate size                                     |
+| start_copy_move()        | Start to copy/move files                                   |
+| get_copy_move_status()   | Get the copying/moving status                              |
+| stop_copy_move_task()    | Stop a copy/move task.                                     |
+| start_delete_task()      | Delete file(s)/folder(s).                                  |
+| get_delete_status()      | Get the deleting status                                    |
+| stop_delete_task()       | Stop a delete task                                         |
+| start_extract_task()     | Start to extract an archive.                               |
+| get_extract_status()     | Get the extract task status                                |
+| stop_extract_task()      | Stop the extract task                                      |
+| start_file_compression() | Start to compress file(s)/folder(s).                       |
+| get_compress_status()    | Get the compress task status                               |
+| stop_compress_task()     | Stop the compress task                                     |
+| get_file()               | Download or open file                                      |
 
 #### DownloadStations functions:
 
-| Function | Description |
-| --- | --- |
-| get_info()  | Download Station info  |
-| get_config()  | Download Station Settings info  |
-| set_server_config()  | Sets Download Station settings  |
-| schedule_info()  | Provides advanced schedule settings info  |
-| schedule_set_config()  | Sets advanced schedule settings.  |
-| tasks_list()  | Provides task listing  |
-| tasks_info()  | Provides detailed task information  |
-| create_task  | Create a download task |
-| delete_task()  | Delete a Task  |
-| pause_task()  | Pause a Task  |
-| resume_task()  | Resume a task  |
-| edit_task()  | Edit a Task  |
+| Function              | Description                              |
+|-----------------------|------------------------------------------|
+| get_info()            | Download Station info                    |
+| get_config()          | Download Station Settings info           |
+| set_server_config()   | Sets Download Station settings           |
+| schedule_info()       | Provides advanced schedule settings info |
+| schedule_set_config() | Sets advanced schedule settings.         |
+| tasks_list()          | Provides task listing                    |
+| tasks_info()          | Provides detailed task information       |
+| create_task           | Create a download task                   |
+| delete_task()         | Delete a Task                            |
+| pause_task()          | Pause a Task                             |
+| resume_task()         | Resume a task                            |
+| edit_task()           | Edit a Task                              |
 
 #### Photo functions:
 
-| Function |
-| --- |
-|get_userinfo()|
-|get_folder()|
-|list_folders()|
-|list_teams_folders()|
-|count_folders()|
-|count_team_folders()|
-|lookup_folder()|
-|lookup_team_folder()|
-|get_album()|
-|list_albums()|
-|suggest_condition()|
-|create_album()|
-|delete_album()|
-|set_album_condition()|
-|share_album()|
-|share_team_folder()|
-|list_shareable_users_and_groups()|
+| Function                          |
+|-----------------------------------|
+| get_userinfo()                    |
+| get_folder()                      |
+| list_folders()                    |
+| list_teams_folders()              |
+| count_folders()                   |
+| count_team_folders()              |
+| lookup_folder()                   |
+| lookup_team_folder()              |
+| get_album()                       |
+| list_albums()                     |
+| suggest_condition()               |
+| create_album()                    |
+| delete_album()                    |
+| set_album_condition()             |
+| share_album()                     |
+| share_team_folder()               |
+| list_shareable_users_and_groups() |
+| list_item_in_folders()            |
+| list_search_filters()             |
+| get_guest_settings()              |
+
 
 
 #### core_sys_info:
@@ -349,7 +356,7 @@ Although there is nothing you can set (yet), is possible to retrieve lots of
 DS info with below functions:
 
 | Functions                       |
-|---------------------------------| 
+|---------------------------------|
 | fileserv_smb()                  |  
 | fileserv_afp()                  |  
 | fileserv_nfs()                  |  
@@ -456,35 +463,35 @@ DS info with below functions:
 
 ### Virtualization
 
-| Functions |
-| --- | 
-| get_task_list() |
-| clear_task() |
-| get_taks_info() |
+| Functions                |
+|--------------------------|
+| get_task_list()          |
+| clear_task()             |
+| get_taks_info()          |
 | get_network_group_list() |
-| get_storage_operation() |
-| get_host_operation() |
-| get_vm_operation() |
-| get_specific_vm_info() |
-| set_vm_property() |
-| delete_vm() |
-| vm_power_on() |
-| vm_force_power_off() |
-| vm_shut_down() |
-| get_images_list() |
-| delete_image() |
-| create_image() |
+| get_storage_operation()  |
+| get_host_operation()     |
+| get_vm_operation()       |
+| get_specific_vm_info()   |
+| set_vm_property()        |
+| delete_vm()              |
+| vm_power_on()            |
+| vm_force_power_off()     |
+| vm_shut_down()           |
+| get_images_list()        |
+| delete_image()           |
+| create_image()           |
 
 ### core_backup Hyper Backup
 
-| Functions |  
-| --- | 
-| backup_repository_get() |
+| Functions                |
+|--------------------------|
+| backup_repository_get()  |
 | backup_repository_list() |
-| backup_task_list |
-| backup_task_status |
-| backup_task_get |
-| backup_task_result() |
+| backup_task_list         |
+| backup_task_status       |
+| backup_task_get          |
+| backup_task_result()     |
 
 ### core_backup Hyper Backup Vault
 
@@ -492,81 +499,81 @@ DS info with below functions:
 
 ### core_active_backup Active Backup for Business
 
-| Functions | Description |
-| --- | --- |
-| list_vm_hypervisor() | list of all configured hypervisors |
-| list_device_transfer_size() | list of all detected vms |
+| Functions                   | Description                        |
+|-----------------------------|------------------------------------|
+| list_vm_hypervisor()        | list of all configured hypervisors |
+| list_device_transfer_size() | list of all detected vms           |
 
 ### core_certificate tnx to @ajarzyn
 
-| Functions | Description |
-| --- | --- |
-| list_cert() | list certificates |
+| Functions          | Description             |
+|--------------------|-------------------------|
+| list_cert()        | list certificates       |
 | set_default_cert() | set default certificate |
-| upload_cert() | upload a certificate |
+| upload_cert()      | upload a certificate    |
 
 ### vpn
-| Functions | 
-| --- | 
-|settings_list()|
-|active_connections_list()|
-|log_list()|
-|network_interface_setting()|
-|security_autoblock_setting()|
-|permission_setting()|
-|pptp_settings_info()|
-|openvpn_settings_info()|
-|l2tp_settings_info()|
+| Functions                    |
+|------------------------------|
+| settings_list()              |
+| active_connections_list()    |
+| log_list()                   |
+| network_interface_setting()  |
+| security_autoblock_setting() |
+| permission_setting()         |
+| pptp_settings_info()         |
+| openvpn_settings_info()      |
+| l2tp_settings_info()         |
 
 ### oauth
-| Functions | 
-| --- |
-|clients()| 
-|tokens()| 
-|logs()| 
+| Functions |
+|-----------|
+| clients() | 
+| tokens()  | 
+| logs()    | 
 
 
 ### security_advisor
-| Functions | 
-| --- |
-|general_info()| 
-|security_scan()| 
-|checklist()| 
-|login_activity()| 
-|advisor_config()| 
-|scan_config()| 
+| Functions        | 
+|------------------|
+| general_info()   | 
+| security_scan()  | 
+| checklist()      | 
+| login_activity() | 
+| advisor_config() | 
+| scan_config()    | 
 
 
 ### dhcp_server
-| Functions | 
-| --- |
-|general_info()| 
-|vendor()| 
-|pxe()| 
-|tftp()| 
-|network_bond()| 
-|network_ethernet()| 
+| Functions          | 
+|--------------------|
+| general_info()     | 
+| vendor()           | 
+| pxe()              | 
+| tftp()             | 
+| network_bond()     | 
+| network_ethernet() | 
 
 
 ### usb_copy 
-| Functions | 
-| --- |
-|usb_copy_info()| 
-|toggle_usb_copy()| 
-|logs()| 
-|global_settings()| 
+| Functions         | 
+|-------------------|
+| usb_copy_info()   | 
+| toggle_usb_copy() | 
+| logs()            | 
+| global_settings() | 
 
 ### log_center
-| Functions | 
-| --- |
-|logcenter()| 
-|client_status_cnt()| 
-|client_status_eps()| 
-|remote_log_archives()|
-|display_logs()| 
-|setting_storage_list()| 
-|registry_send_list()| 
-|history()| 
+| Functions              | 
+|------------------------|
+| logcenter()            | 
+| client_status_cnt()    | 
+| client_status_eps()    | 
+| remote_log_archives()  |
+| display_logs()         | 
+| setting_storage_list() | 
+| registry_send_list()   | 
+| history()              | 
 
  
 #### What's still missing
@@ -574,11 +581,11 @@ DS info with below functions:
 There is still few missing function for the api supplied from Synology which is a work in progress:
 
 | Missing in FileStation |
-|----------------------|
-| SYNO.FileStation.Thumb  |  
+|------------------------|
+| SYNO.FileStation.Thumb |  
 
-| Missing in Virtualization |
-|---|
+| Missing in Virtualization            |
+|--------------------------------------|
 | SYNO.Virtualization.API.Guest create |
 
 ### Bugs

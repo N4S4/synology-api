@@ -240,3 +240,52 @@ class Photos:
                      'team_space_sharable_list': team_space_sharable_list}
 
         return self.request_data(api_name, api_path, req_param)
+
+    def list_item_in_folders(self, offset: int = 0, limit: int = 0, folder_id: int = 0, sort_by: str = 'filename',
+                    sort_direction: str = 'desc', type: str = None, passphrase: str = None,
+                    additional: list = None) -> dict[str, object] | str:
+
+        """List all items in all folders in Personal Space
+
+        Parameters
+        ----------
+        offset: int Required. Specify how many shared folders are skipped before beginning to return listed shared folders
+        limit: int Required. Number of shared folders requested. 0 lists all shared folders.
+        folder_id: int ID of folder
+        sort_by: str Optional filename, filesize, takentime, item_type
+        sort_direction: str Optional asc or desc
+        passphrase: str Optional Passphrase for a shared album
+        additional: list ["thumbnail","resolution", "orientation", "video_convert", "video_meta", "provider_user_id", "exif", "tag", "description", "gps", "geocoding_id", "address", "person"]
+        type: str 'Type of data photo: Photo video: Video live: iPhone live photos'
+        """
+
+        api_name = 'SYNO.Foto.Browse.Item'
+        info = self.photos_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'offset': offset, 'limit': limit,
+                     'folder_id': folder_id, 'sort_by': sort_by, 'sort_direction': sort_direction}
+
+        if type:
+            req_param['type'] = type
+        if passphrase:
+            req_param['passphrase']: passphrase
+        if additional:
+            req_param['additional']: additional
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def list_search_filters(self) -> dict[str, object] | str:
+        api_name = 'SYNO.Foto.Search.Filter'
+        info = self.photos_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_guest_settings(self) -> dict[str, object] | str:
+        api_name = 'SYNO.Foto.Setting.Guest'
+        info = self.photos_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
