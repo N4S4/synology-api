@@ -1,26 +1,39 @@
+from typing import Optional, Any
 from . import auth as syn
 import json
 
 
 class Photos:
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
-        self.session = syn.Authentication(ip_address, port, username, password, secure,  cert_verify, dsm_version, debug, otp_code)
+    def __init__(self,
+                 ip_address: str,
+                 port: str,
+                 username: str,
+                 password: str,
+                 secure: bool = False,
+                 cert_verify: bool = False,
+                 dsm_version: int = 7,
+                 debug: bool = True,
+                 otp_code: Optional[str] = None
+                 ) -> None:
+        self.session: syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify,
+                                                              dsm_version, debug, otp_code)
 
         self.session.login('Foto')
         self.session.get_api_list('Foto')
 
-        self.request_data = self.session.request_data
-        self.photos_list = self.session.app_api_list
-        self._sid = self.session.sid
-        self.base_url = self.session.base_url
+        self.request_data: Any = self.session.request_data
+        self.photos_list: Any = self.session.app_api_list
+        self._sid: str = self.session.sid
+        self.base_url: str = self.session.base_url
 
-        self._userinfo = None
+        self._userinfo: Any = None
 
-    def logout(self):
+    def logout(self) -> None:
         self.session.logout('Foto')
+        return
 
-    def get_userinfo(self):
+    def get_userinfo(self) -> Any:
         if self._userinfo is not None:
             return self._userinfo
 
@@ -32,7 +45,7 @@ class Photos:
 
         return self._userinfo
 
-    def get_folder(self, folder_id=0):
+    def get_folder(self, folder_id: int = 0) -> dict[str, object] | str:
         api_name = 'SYNO.Foto.Browse.Folder'
         info = self.photos_list[api_name]
         api_path = info['path']
@@ -40,13 +53,24 @@ class Photos:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def list_folders(self, folder_id=0, limit=1000, offset=0, additional=None):
+    def list_folders(self,
+                     folder_id: int = 0,
+                     limit: int = 1000,
+                     offset: int = 0,
+                     additional: str | list[str] = None
+                     ) -> dict[str, object] | str:
         return self._list_folders(folder_id, limit, offset, additional, 'SYNO.Foto.Browse.Folder')
 
-    def list_teams_folders(self, folder_id=0, limit=2000, offset=0, additional=None):
+    def list_teams_folders(self,
+                           folder_id: int = 0,
+                           limit: int = 2000,
+                           offset: int = 0,
+                           additional: Optional[str | list[str]] = None
+                           ) -> dict[str, object] | str:
         return self._list_folders(folder_id, limit, offset, additional, 'SYNO.FotoTeam.Browse.Folder')
 
-    def _list_folders(self, folder_id, limit, offset, additional, api_name):
+    def _list_folders(self, folder_id: int, limit: int, offset: int, additional: Optional[str | list[str]],
+                      api_name: str) -> Any:
         if additional is None:
             additional = []
         info = self.photos_list[api_name]
@@ -56,26 +80,26 @@ class Photos:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def count_folders(self, folder_id=0):
+    def count_folders(self, folder_id: int = 0) -> dict[str, object] | str:
         return self._count_folders(folder_id, 'SYNO.Foto.Browse.Folder')
 
-    def count_team_folders(self, folder_id=0):
+    def count_team_folders(self, folder_id: int = 0) -> dict[str, object] | str:
         return self._count_folders(folder_id, 'SYNO.FotoTeam.Browse.Folder')
 
-    def _count_folders(self, folder_id, api_name):
+    def _count_folders(self, folder_id: int, api_name: str) -> Any:
         info = self.photos_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'count', 'id': folder_id}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def lookup_folder(self, path):
+    def lookup_folder(self, path: str) -> dict[str, object] | str:
         return self._lookup_folder(path, 'SYNO.FotoBrowse.Folder', 'SYNO.Foto.Browse.Folder')
 
-    def lookup_team_folder(self, path):
+    def lookup_team_folder(self, path: str) -> dict[str, object] | str:
         return self._lookup_folder(path, 'SYNO.FotoTeam.Browse.Folder', 'SYNO.FotoTeam.Browse.Folder')
 
-    def _lookup_folder(self, path, api_name_count, api_name_list):
+    def _lookup_folder(self, path: str, api_name_count: str, api_name_list: str) -> Optional[dict[str, object]]:
         parent = 0
         found_path = ''
         folder = ''
@@ -99,7 +123,7 @@ class Photos:
                 return
         return folder
 
-    def get_album(self, album_id, additional=None):
+    def get_album(self, album_id: str, additional: Optional[str | list[str]] = None) -> dict[str, object] | str:
         if not isinstance(album_id, list):
             album_id = [album_id]
         if additional is None:
@@ -112,7 +136,7 @@ class Photos:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def list_albums(self, offset=0, limit=100):
+    def list_albums(self, offset: int = 0, limit: int = 100) -> dict[str, object] | str:
         api_name = 'SYNO.Foto.Browse.Album'
         info = self.photos_list[api_name]
         api_path = info['path']
@@ -120,7 +144,11 @@ class Photos:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def suggest_condition(self, keyword, condition=None, user_id=None):
+    def suggest_condition(self,
+                          keyword: str,
+                          condition: Optional[list[str]] = None,
+                          user_id: Optional[str] = None
+                          ) -> dict[str, object] | str:
         if condition is None:
             condition = ['general_tag']
         if user_id is None:
@@ -134,7 +162,7 @@ class Photos:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def create_album(self, name, condition):
+    def create_album(self, name: str, condition: list[str]) -> dict[str, object] | str:
         api_name = 'SYNO.Foto.Browse.ConditionAlbum'
         info = self.photos_list[api_name]
         api_path = info['path']
@@ -143,7 +171,7 @@ class Photos:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete_album(self, album_id):
+    def delete_album(self, album_id: str) -> dict[str, object] | str:
         if not isinstance(album_id, list):
             album_id = [album_id]
         api_name = 'SYNO.Foto.Browse.Album'
@@ -153,7 +181,7 @@ class Photos:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def set_album_condition(self, folder_id, condition):
+    def set_album_condition(self, folder_id: int, condition: list[str]) -> dict[str, object] | str:
         api_name = 'SYNO.Foto.Browse.ConditionAlbum'
         info = self.photos_list[api_name]
         api_path = info['path']
@@ -162,15 +190,31 @@ class Photos:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def share_album(self, album_id, permission=None, enabled=True, expiration=0):
+    def share_album(self,
+                    album_id: str,
+                    permission: Optional[str | list[str]] = None,
+                    enabled: bool = True,
+                    expiration: int | str = 0
+                    ) -> Any:
         self._share('SYNO.Foto.Sharing.Passphrase', policy='album', permission=permission, album_id=album_id,
                     enabled=enabled, expiration=expiration)
 
-    def share_team_folder(self, folder_id, permission=None, enabled=True, expiration=0):
+    def share_team_folder(self,
+                          folder_id: int,
+                          permission: Optional[str] = None,
+                          enabled: bool = True,
+                          expiration: int | str = 0
+                          ) -> Any:
         self._share('SYNO.FotoTeam.Sharing.Passphrase', policy='folder', permission=permission, folder_id=folder_id,
                     enabled=enabled, expiration=expiration)
 
-    def _share(self, api_name, policy, permission, expiration, **kwargs):
+    def _share(self,
+               api_name: str,
+               policy: str,
+               permission: str,
+               expiration: int | str,
+               **kwargs
+               ) -> dict[str, object] | Any:
         info = self.photos_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'set_shared', 'policy': policy, **kwargs}
@@ -188,11 +232,60 @@ class Photos:
                      'expiration': expiration, 'permission': json.dumps(permission)}
         return self.request_data(api_name, api_path, req_param)
 
-    def list_shareable_users_and_groups(self, team_space_sharable_list=False):
+    def list_shareable_users_and_groups(self, team_space_sharable_list: bool = False) -> dict[str, object] | str:
         api_name = 'SYNO.Foto.Sharing.Misc'
         info = self.photos_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'list_user_group',
                      'team_space_sharable_list': team_space_sharable_list}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def list_item_in_folders(self, offset: int = 0, limit: int = 0, folder_id: int = 0, sort_by: str = 'filename',
+                    sort_direction: str = 'desc', type: str = None, passphrase: str = None,
+                    additional: list = None) -> dict[str, object] | str:
+
+        """List all items in all folders in Personal Space
+
+        Parameters
+        ----------
+        offset: int Required. Specify how many shared folders are skipped before beginning to return listed shared folders
+        limit: int Required. Number of shared folders requested. 0 lists all shared folders.
+        folder_id: int ID of folder
+        sort_by: str Optional filename, filesize, takentime, item_type
+        sort_direction: str Optional asc or desc
+        passphrase: str Optional Passphrase for a shared album
+        additional: list ["thumbnail","resolution", "orientation", "video_convert", "video_meta", "provider_user_id", "exif", "tag", "description", "gps", "geocoding_id", "address", "person"]
+        type: str 'Type of data photo: Photo video: Video live: iPhone live photos'
+        """
+
+        api_name = 'SYNO.Foto.Browse.Item'
+        info = self.photos_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'offset': offset, 'limit': limit,
+                     'folder_id': folder_id, 'sort_by': sort_by, 'sort_direction': sort_direction}
+
+        if type:
+            req_param['type'] = type
+        if passphrase:
+            req_param['passphrase']: passphrase
+        if additional:
+            req_param['additional']: additional
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def list_search_filters(self) -> dict[str, object] | str:
+        api_name = 'SYNO.Foto.Search.Filter'
+        info = self.photos_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_guest_settings(self) -> dict[str, object] | str:
+        api_name = 'SYNO.Foto.Setting.Guest'
+        info = self.photos_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
 
         return self.request_data(api_name, api_path, req_param)

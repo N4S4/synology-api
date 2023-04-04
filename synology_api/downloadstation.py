@@ -1,27 +1,42 @@
+from typing import Optional, Any
 from . import auth as syn
 
 
 class DownloadStation:
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None, interactive_output=True):
+    def __init__(self,
+                 ip_address: str,
+                 port: str,
+                 username: str,
+                 password: str,
+                 secure: bool = False,
+                 cert_verify: bool = False,
+                 dsm_version: int = 7,
+                 debug: bool = True,
+                 otp_code: Optional[str] = None,
+                 interactive_output: bool = True
+                 ) -> None:
 
-        self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code)
-        self._bt_search_id = ''
-        self._bt_search_id_list = []
+        self.session: syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify,
+                                                              dsm_version, debug, otp_code)
+        self._bt_search_id: str = ''
+        self._bt_search_id_list: list[str] = []
         self.session.login('DownloadStation')
         self.session.get_api_list('DownloadStation')
 
-        self.request_data = self.session.request_data
-        self.download_list = self.session.app_api_list
-        self._sid = self.session.sid
-        self.base_url = self.session.base_url
+        self.request_data: Any = self.session.request_data
+        self.download_list: Any = self.session.app_api_list
+        self._sid: str = self.session.sid
+        self.base_url: str = self.session.base_url
 
-        self.interactive_output = interactive_output
+        self.interactive_output: bool = interactive_output
+        return
 
-    def logout(self):
+    def logout(self) -> None:
         self.session.logout('DownloadStation')
+        return
 
-    def get_info(self):
+    def get_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Info'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -29,7 +44,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_config(self):
+    def get_config(self) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Info'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -37,10 +52,19 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def set_server_config(self, bt_max_download=None, bt_max_upload=None, emule_max_download=None,
-                          emule_max_upload=None, nzb_max_download=None, http_max_download=None, ftp_max_download=None,
-                          emule_enabled=None, unzip_service_enabled=None, default_destination=None,
-                          emule_default_destination=None):
+    def set_server_config(self,
+                          bt_max_download: Optional[int] = None,
+                          bt_max_upload: Optional[int] = None,
+                          emule_max_download: Optional[int] = None,
+                          emule_max_upload: Optional[int] = None,
+                          nzb_max_download: Optional[int] = None,
+                          http_max_download: Optional[int] = None,
+                          ftp_max_download: Optional[int] = None,
+                          emule_enabled: Optional[bool] = None,
+                          unzip_service_enabled: Optional[bool] = None,
+                          default_destination: Optional[str] = None,
+                          emule_default_destination: Optional[str] = None
+                          ) -> dict[str, object] | str:
 
         api_name = 'SYNO.DownloadStation.Info'
         info = self.download_list[api_name]
@@ -54,7 +78,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def schedule_info(self):
+    def schedule_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Schedule'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -62,7 +86,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def schedule_set_config(self, enabled=False, emule_enabled=False):
+    def schedule_set_config(self, enabled: bool = False, emule_enabled: bool = False) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Schedule'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -74,11 +98,16 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def tasks_list(self, additional_param=None, offset=0, limit=-1):
+    def tasks_list(self,
+                   additional_param: Optional[str | list[str]] = None,
+                   offset: int = 0,
+                   limit: int = -1
+                   ) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': additional_param, 'limit': limit, 'offset': offset}
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': additional_param, 'limit': limit,
+                     'offset': offset}
 
         if additional_param is None:
             additional_param = ['detail', 'transfer', 'file', 'tracker', 'peer']
@@ -88,7 +117,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def tasks_info(self, task_id, additional_param=None):
+    def tasks_info(self, task_id, additional_param: Optional[str | list[str]] = None) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -105,7 +134,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def create_task(self, uri, additional_param=None):
+    def create_task(self, uri, additional_param: Optional[dict[str, object]] = None) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -117,7 +146,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete_task(self, task_id, force=False):
+    def delete_task(self, task_id: str, force: bool = False) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -129,7 +158,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def pause_task(self, task_id):
+    def pause_task(self, task_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -140,7 +169,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def resume_task(self, task_id):
+    def resume_task(self, task_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -151,7 +180,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def edit_task(self, task_id, destination='sharedfolder'):
+    def edit_task(self, task_id: str, destination: str = 'sharedfolder') -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -162,7 +191,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def get_statistic_info(self):
+    def get_statistic_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Statistic'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -170,7 +199,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def get_rss_info_list(self, offset=None, limit=None):
+    def get_rss_info_list(self, offset: Optional[int] = None, limit: Optional[int] = None) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.RSS.Site'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -183,7 +212,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def refresh_rss_site(self, rss_id=None):
+    def refresh_rss_site(self, rss_id: Optional[str] = None) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.RSS.Site'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -197,7 +226,11 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def rss_feed_list(self, rss_id=None, offset=None, limit=None):
+    def rss_feed_list(self,
+                      rss_id: Optional[str] = None,
+                      offset: Optional[int] = None,
+                      limit: Optional[int] = None
+                      ) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.RSS.Feed'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -216,7 +249,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def start_bt_search(self, keyword=None, module='all'):
+    def start_bt_search(self, keyword: Optional[str] = None, module: str = 'all') -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -243,8 +276,15 @@ class DownloadStation:
 
         return output
 
-    def get_bt_search_results(self, taskid=None, offset=None, limit=None, sort_by=None, sort_direction=None,
-                              filter_category=None, filter_title=None):
+    def get_bt_search_results(self,
+                              taskid: Optional[str] = None,
+                              offset: Optional[int] = None,
+                              limit: Optional[int] = None,
+                              sort_by: Optional[str] = None,
+                              sort_direction: Optional[str] = None,
+                              filter_category: Optional[str] = None,
+                              filter_title: Optional[str] = None
+                              ) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -262,7 +302,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def get_bt_search_category(self):
+    def get_bt_search_category(self) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -270,7 +310,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def clean_bt_search(self, taskid=None):
+    def clean_bt_search(self, taskid: Optional[str | list[str]] = None) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -287,7 +327,7 @@ class DownloadStation:
 
         return self.request_data(api_name, api_path, param)
 
-    def get_bt_module(self):
+    def get_bt_module(self) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']

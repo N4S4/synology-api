@@ -1,7 +1,6 @@
-'''directory_server.py works with base_api_core to provide AD capabilities.'''
+"""directory_server.py works with base_api_core to provide AD capabilities."""
 import json
-from typing import List, Optional
-from . import auth as syn
+from typing import List, Optional, Any
 from . import base_api_core
 
 
@@ -12,7 +11,7 @@ class DirectoryServer(base_api_core.Core):
     the request. Some are related to managing users in ways that are useful in the Directory Server context.  For
     example, sending a user password reset email, or updating the user information. This api works slightly
     differently than other similar APIs. There are multi-leveled calls where Synology makes requests on behalf of
-    the original request and relays information back.  Additionally the query-string api item is not used often in
+    the original request and relays information back. Additionally, the query-string api item is not used often in
     this class as API is defined within the actual request.
 
     The APIs in this class are tested working against the following scenarios:
@@ -32,12 +31,22 @@ class DirectoryServer(base_api_core.Core):
     - Perform an entry request to complete a Deletion
     """
 
-    def __init__(self, ip_address, port, username, password, secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None):
+    def __init__(self,
+                    ip_address: str,
+                    port: str,
+                    username: str,
+                    password: str,
+                    secure: bool = False,
+                    cert_verify: bool = False,
+                    dsm_version: int = 7,
+                    debug: bool = True,
+                    otp_code: Optional[str] = None
+                ) -> None:
         super(DirectoryServer, self).__init__(ip_address, port,
                                               username, password, secure, cert_verify, dsm_version, debug, otp_code)
 
-    def get_directory_info(self):
-        """"
+    def get_directory_info(self) -> dict[str, object] | str:
+        """
         Gets directory info.
 
         Returns
@@ -78,7 +87,12 @@ class DirectoryServer(base_api_core.Core):
                      'version': info['maxVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def list_directory_objects(self, basedn: str, offset: int = 0, limit: int = 40, objectCategory: str([]) = [ "person", "group", "organizationalUnit", "computer", "container", "builtinDomain"] ):
+    def list_directory_objects(self,
+                                basedn: str,
+                                offset: int = 0,
+                                limit: int = 40,
+                                objectCategory: list[str] = [ "person", "group", "organizationalUnit", "computer", "container", "builtinDomain"]
+                            ) -> dict[str, object] | str:
         """
         lists directory objects.
 
@@ -88,14 +102,14 @@ class DirectoryServer(base_api_core.Core):
             The Base DN for the search. eg. "CN=Users,CN=MY,CN=DOMAIN,CN=COM" or CN=MY,CN=DOMAIN,CN=COM
 
         offset : Optional, int
-            When searching large data, you may wish to start at a certain number, eg for 10 at a time one
+            When searching large data, you may wish to start at a certain number, e.g. for 10 at a time one
             would set the limit to 10 and the offset by multiples of 10 for each request.
             Default: 0
         limit : Optional, int
             The numeric the number of maximum objects to return.
             Default: 40
         objectCategory : Optional, str([])
-            The categories of items to search.  eg. ["organizationalUnit","container","builtinDomain"] for a list of
+            The categories of items to search.  e.g. ["organizationalUnit","container","builtinDomain"] for a list of
             base server containers, and ["person","group","organizationalUnit","computer"] for a list of contained objects.
             Default: ["person","group","organizationalUnit","computer","container","builtinDomain"]
 
@@ -161,12 +175,14 @@ class DirectoryServer(base_api_core.Core):
     ) -> List[str]:
         """Create a new user.
 
-        Please note that synchronization with Synology is a separate step.  The user can be created in AD, but not able to logon until the next synchronization occurs.
+        Please note that synchronization with Synology is a separate step.  The user can be created in AD, but not able to log on until the next synchronization occurs.
 
         Parameters
         ----------
         logon_name : str
             The desired username.  "jdoe"
+        email: str
+            The desired email
         password : str
             The plain-text password for the new user.  "Password123"
         located_dn : str
@@ -181,6 +197,8 @@ class DirectoryServer(base_api_core.Core):
             Set to 'true' if the user must change password on next logon (default is false)
         cannot_change_password : str, optional
             Set to 'true' if the user cannot change the password (default is false)
+        password_never_expire: str
+            Pwd Never Expire
 
         Returns
         -------
@@ -202,7 +220,7 @@ class DirectoryServer(base_api_core.Core):
         return self.request_data(api_name, api_path, req_param)
 
     def reset_password(self,
-                       username
+                       username: str,
                        ) -> List[str]:
         """
         Send a password reset email.
@@ -216,7 +234,7 @@ class DirectoryServer(base_api_core.Core):
         Parameters
         ----------
         username : str
-            The user name to reset.  Eg. "My Group"
+            The username to reset.  E.g. "My Group"
 
         Returns
         -------
@@ -237,7 +255,7 @@ class DirectoryServer(base_api_core.Core):
                      username+'"', 'version': newApi['maxVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def change_user_password(self, user_dn: str, password: str):
+    def change_user_password(self, user_dn: str, password: str) -> dict[str, object] | str:
         """
         Change the user's password.  This is a compound dual-level request where the synology API proxies your
         request to the Directory Server.
@@ -247,7 +265,7 @@ class DirectoryServer(base_api_core.Core):
         user_dn: str
             The user DN to be modified. eg. "CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM"
         password: str
-            The new password to be set. eg. "Password123"
+            The new password to be set. e.g. "Password123"
 
         Returns
         -------
@@ -302,7 +320,7 @@ class DirectoryServer(base_api_core.Core):
         Parameters
         ----------
         name : str
-            The name of the group.  Eg. "My Group"
+            The name of the group.  E.g. "My Group"
         located_dn : str
             The DN to place the group in.  eg. "CN=Groups,DC=MY,DC=DOMAIN,DC=COM"
         email : str, Optional
@@ -362,7 +380,7 @@ class DirectoryServer(base_api_core.Core):
                      'description': description, 'type': type, 'scope': scope, 'email': email, 'version': info['maxVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def add_user_to_group(self, userDn: str, groupDn: str):
+    def add_user_to_group(self, userDn: str, groupDn: str) -> dict[str, object] | str:
         """
         Adds a user as a member of a group.
 
@@ -372,9 +390,9 @@ class DirectoryServer(base_api_core.Core):
         userDn : str
             The fully qualified dn to add.  eg. "CN=jdoe,CN=Users,CN=MY,CN=DOMAIN,CN=COM"
 
-        group : str
+        groupDn : str
             the fully qualified dn of the group to which the user is to be added.
-            eg. "CN=My Group,CN=Groups,CN=MY,CN=DOMAIN,CN=COM"
+            e.g. "CN=My Group,CN=Groups,CN=MY,CN=DOMAIN,CN=COM"
 
         Returns
         -------
@@ -420,14 +438,14 @@ class DirectoryServer(base_api_core.Core):
                      'stop_when_error': stop_when_error, 'version': newApi['maxVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def does_dn_exist(self, groupName):
+    def does_dn_exist(self, groupName: str) -> dict[str, object] | str:
         """Checks if a container exists. This can be used to verifiy the username or group name is unique.  This will
         not check the container, only if a similarly named container already exists.
 
         Parameters
         ----------
         groupName : str
-            The user, or group's name. eg.  "jdoe" or "My Cool Group"
+            The user, or group's name. e.g.  "jdoe" or "My Cool Group"
             Fully Qualified Domain Name such as "CN=My Cool Group,CN=Groups,DC=MY,DC=DOMAIN,DC=COM" are not successful
             Improper case such as "my cool group" instead of "My Cool Group" are successful
 
@@ -454,7 +472,8 @@ class DirectoryServer(base_api_core.Core):
         initials: str = None,
         physicalDeliveryOfficeName: str = None,
         telephoneNumber: str = None,
-        web: str = None ):
+        web: str = None
+    ) -> Any:
         """
         Performs modification to user information within the Active Directory.
 
@@ -463,15 +482,15 @@ class DirectoryServer(base_api_core.Core):
         user_dn: str
             The user DN to be modified. eg. "CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM"
         firstName: Optional, str
-            The First name of the user. eg. "John"
+            The First name of the user. e.g. "John"
         lastName: Optional, str
-            The Last Name of the user. eg. "Doe"
+            The Last Name of the user. e.g. "Doe"
         displayName: Optional, str
-            The Display name of the user. eg. "John Doe"
+            The Display name of the user. e.g. "John Doe"
         description: Optional, str
-            The Descrition of the user. eg. "The guy who just came in"
+            The Descrition of the user. e.g. "The guy who just came in"
         initials: Optional, str
-            The Initials of the user.  eg. "JD"
+            The Initials of the user.  e.g. "JD"
         physicalDeliveryOfficeName: Optional, str
             The office location in the user's place of business
         telephoneNumber: Optional, str
@@ -543,12 +562,14 @@ class DirectoryServer(base_api_core.Core):
 
         return val
 
-    def setEntryRequest(self, modificationAPI: str, method: str, nameOfObject: str, jsonObject: str):
+    def setEntryRequest(self, modificationAPI: str, method: str, nameOfObject: str, jsonObject: Any) -> dict[str, object] | str:
         """
         Performs modification to an object within the Active Directory.
 
         Parameters
         ----------
+        modificationAPI: str
+        method: str
         nameOfObject: str
             The user DN to be modified. eg. "CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM"
         jsonObject: str: o
@@ -593,11 +614,11 @@ class DirectoryServer(base_api_core.Core):
         print (json.dumps(req_param))
         return self.request_data(api_name, api_path, req_param,"post")
 
-    def update_domain_records(self):
+    def update_domain_records(self) -> dict[str, object] | str:
         """
         Updates the Synology users and groups database with information from Directory Server.
 
-        This is a long-running and asynchronous task.  You are given back a task_id and you can
+        This is a long-running and asynchronous task.  You are given back a task_id, and you can
         use that task_id to check the status with the get_task_status(task_id) method.
 
         Returns
@@ -626,13 +647,13 @@ class DirectoryServer(base_api_core.Core):
                      'method': 'update_start', 'version': info['minVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def get_task_status(self, task_id):
+    def get_task_status(self, task_id: str) -> dict[str, object] | str:
         """
         Gets the current status of a task running on the Directory Domain object.
 
         This is used to ensure the task is completed.  For example, the primary utilization of this is
         when updating Synology's internal Domain user and group list.  Until this method reports
-        finish, the job is not completed and it is not safe to operate under the assumption that users
+        finish, the job is not completed, and it is not safe to operate under the assumption that users
         have been synchronized.
 
         Parameters
@@ -657,13 +678,13 @@ class DirectoryServer(base_api_core.Core):
                      'task_id': task_id, 'version': info['minVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def deleteItems(self, dnList: str([])):
+    def deleteItems(self, dnList: list[str]) -> dict[str, object] | str:
         """
         Deletes an array of DNs from AD.
 
         Parameters
         ----------
-        dn : str([])
+        dnList : str([])
             The fully qualified DN to be removed from the directory server.
             eg. ["CN=jdoe,CN=Users,CN=MY,CN=DOMAIN,CN=COM","CN=My Group,CN=Groups,CN=MY,CN=DOMAIN,CN=COM"]
 
@@ -712,15 +733,15 @@ class DirectoryServer(base_api_core.Core):
         while 'data' in returnValue['data']['result'][0] and notFinished:
             notFinished = False
             for resultItem in returnValue['data']['result']:
-                if resultItem['data']['finished'] == False:
+                if not resultItem['data']['finished']:
                     notFinished = True
-            if (notFinished == False):
+            if not notFinished:
                 break
             returnValue = self.entryRequest(task_id)
 
         return returnValue
 
-    def delete_item(self, dn):
+    def delete_item(self, dn: str) -> dict[str, object] | str:
         """
         Deletes a DN from AD.
 
@@ -767,7 +788,7 @@ class DirectoryServer(base_api_core.Core):
         items.append(dn)
         return self.deleteItems(items)
 
-    def entryRequest(self, task_id: str):
+    def entryRequest(self, task_id: str) -> Any:
         """
         Some requests require an entry.
 
