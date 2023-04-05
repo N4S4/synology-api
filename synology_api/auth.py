@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Optional
 import requests
 from .error_codes import error_codes, CODE_SUCCESS, download_station_error_codes, file_station_error_codes

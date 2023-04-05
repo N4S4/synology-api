@@ -3,6 +3,7 @@
 
 # NOTE: https://global.synologydownload.com/download/Document/Software/DeveloperGuide/Package/Calendar/2.4/enu
 # /Synology_Calendar_API_Guide_enu.pdf, Refers to common error code # 160, "Insufficient application privilege" Page 10.
+from __future__ import annotations
 
 CODE_SUCCESS = 0
 CODE_UNKNOWN = 9999
