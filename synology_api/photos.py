@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Optional, Any
 from . import auth as syn
 import json
