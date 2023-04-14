@@ -14,21 +14,20 @@ from synology_cli.webservice import FACTORY, SynoSession
 synophotos: Optional[SynoPhotos] = None
 
 @group( help='photos group' )
-@option( '-u', '--url', is_flag=False, required=False, help='URL' )
-@option( '-a', '--account', is_flag=False, required=False, help='Account' )
-@option( '-p', '--password', is_flag=False, required=False, help='Password' )
+@option( '-u', '--url', is_flag=False, required=False, hidden=True, help='URL' )
+@option( '-a', '--account', is_flag=False, required=False, hidden=True, help='Account' )
+@option( '-p', '--password', is_flag=False, required=False, hidden=True, help='Password' )
 @pass_context
 def cli_photos( ctx: Context, url: str, account: str, password: str ):
     # set context object to application context
     ctx.obj = appctx
 
-    # update account settings
-    url = url if url else ctx.obj.cfg.profile.get( 'url' )
-    account = account if account else ctx.obj.cfg.profile.get( 'account' )
-    password = password if password else ctx.obj.cfg.profile.get( 'password' )
-
     # create service and attempt to log in
-    ctx.obj.service = SynoPhotos( url=url, account=account, password=password )
+    ctx.obj.service = SynoPhotos(
+        url=url if url else ctx.obj.cfg.profile.get( 'url' ),
+        account=account if account else ctx.obj.cfg.profile.get( 'account' ),
+        password=password if password else ctx.obj.cfg.profile.get( 'password' )
+    )
 
     # load existing session
     syno_session = FACTORY.load( ctx.obj.cfg.session, SynoSession ) if ctx.obj.cfg.session else None
