@@ -1,4 +1,5 @@
 """directory_server.py works with base_api_core to provide AD capabilities."""
+from __future__ import annotations
 import json
 from typing import List, Optional, Any
 from . import base_api_core
