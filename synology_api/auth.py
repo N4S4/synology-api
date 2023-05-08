@@ -31,6 +31,7 @@ class Authentication:
         self._username: str = username
         self._password: str = password
         self._sid: Optional[str] = None
+        self._syno_token: Optional[str] = None
         self._session_expire: bool = True
         self._verify: bool = cert_verify
         self._version: int = dsm_version
@@ -51,7 +52,7 @@ class Authentication:
     def login(self, application: str) -> None:
         login_api = 'auth.cgi?api=SYNO.API.Auth'
         params = {'version': self._version, 'method': 'login', 'account': self._username,
-                  'passwd': self._password, 'session': application, 'format': 'cookie'}
+                  'passwd': self._password, 'session': application, 'format': 'cookie', 'enable_syno_token':'yes'}
         if self._otp_code:
             params['otp_code'] = self._otp_code
 
@@ -82,6 +83,7 @@ class Authentication:
             error_code = self._get_error_code(session_request_json)
             if not error_code:
                 self._sid = session_request_json['data']['sid']
+                self._syno_token = session_request_json['data']['synotoken']
                 self._session_expire = False
                 if self._debug is True:
                     print('User logged in, new session started!')
@@ -206,9 +208,9 @@ class Authentication:
             # Catch and raise our own errors:
             try:
                 if method == 'get':
-                    response = requests.get(url, req_param, verify=self._verify)
+                    response = requests.get(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
                 elif method == 'post':
-                    response = requests.post(url, req_param, verify=self._verify)
+                    response = requests.post(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
             except requests.exceptions.ConnectionError as e:
                 raise SynoConnectionError(error_message=e.args[0])
             except requests.exceptions.HTTPError as e:
@@ -216,9 +218,9 @@ class Authentication:
         else:
             # Will raise its own error:
             if method == 'get':
-                response = requests.get(url, req_param, verify=self._verify)
+                response = requests.get(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
             elif method == 'post':
-                response = requests.post(url, req_param, verify=self._verify)
+                response = requests.post(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
 
         # Check for error response from dsm:
         error_code = 0
