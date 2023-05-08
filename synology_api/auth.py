@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Optional
 import requests
+import json
 from .error_codes import error_codes, CODE_SUCCESS, download_station_error_codes, file_station_error_codes
 from .error_codes import auth_error_codes, virtualization_error_codes
 from urllib3 import disable_warnings
@@ -181,6 +182,49 @@ class Authentication:
         if print_check == 0:
             print('Not Found')
         return
+    
+    def request_multi_datas(self,
+                     compound: dict[object] = None,
+                     method: Optional[str] = None,
+                     response_json: bool = True
+                     ) -> dict[str, object] | str | list | requests.Response:  # 'post' or 'get'
+        
+        '''
+        Compound is a json structure that contains multiples requests, you can execute them sequential or parralelle
+        '''
+        api_path = self.full_api_list['SYNO.Entry.Request']['path']
+        api_version = self.full_api_list['SYNO.Entry.Request']['maxVersion']
+        url = f"{self._base_url}{api_path}"
+
+        req_param = {
+            "api": "SYNO.Entry.Request",
+            "method": "request",
+            "version": f"{api_version}",
+            "mode": "sequential",
+            "stop_when_error": "true",
+            "_sid": self._sid,
+            "compound": json.dumps(compound)
+        }
+
+        if method is None:
+            method = 'get'
+
+        
+        if method == 'get':
+            response = requests.get(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
+        elif method == 'post':
+            response = requests.post(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
+
+        
+
+
+
+        if response_json is True:
+            return response.json()
+        else:
+            return response
+
+
 
     def request_data(self,
                      api_name: str,
