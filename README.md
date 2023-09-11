@@ -246,6 +246,10 @@ This wrapper cover the following APIs for now:
 | SYNO.ActiveBackup.Inventory                     |
 | SYNO.ActiveBackup.Overview                      |
 
+| Snapshot Replication     |
+| -------------------------|
+| SYNO.Core.Share.Snapshot |
+
 #### FileStation Functions list
 
 To explain the use of some function I will divide all the functions in two sets
@@ -578,6 +582,14 @@ DS info with below functions:
 | setting_storage_list() | 
 | registry_send_list()   | 
 | history()              | 
+
+### snapshot (Snapshot Replication)
+| Functions           | 
+|---------------------|
+| list_snapshots()    | 
+| create_snapshot()   | 
+| delete_snapshots()  | 
+| set_snapshot_attr() |
 
  
 #### What's still missing
