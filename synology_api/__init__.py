@@ -20,4 +20,5 @@ from . import \
     photos,\
     usb_copy,\
     virtualization,\
-    universal_search
+    universal_search,\
+    snapshot
