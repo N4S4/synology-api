@@ -186,11 +186,21 @@ class Authentication:
     def request_multi_datas(self,
                      compound: dict[object] = None,
                      method: Optional[str] = None,
+                     mode: Optional[str] = "sequential", # "sequential" or "parallel"
                      response_json: bool = True
                      ) -> dict[str, object] | str | list | requests.Response:  # 'post' or 'get'
         
         '''
-        Compound is a json structure that contains multiples requests, you can execute them sequential or parralelle
+        Compound is a json structure that contains multiples requests, you can execute them sequential or parallel
+
+        Example of compound:
+        compound = [
+            {
+                "api": "SYNO.Core.User",
+                "method": "list",
+                "version": self.core_list["SYNO.Core.User"]
+            }
+        ]
         '''
         api_path = self.full_api_list['SYNO.Entry.Request']['path']
         api_version = self.full_api_list['SYNO.Entry.Request']['maxVersion']
@@ -200,7 +210,7 @@ class Authentication:
             "api": "SYNO.Entry.Request",
             "method": "request",
             "version": f"{api_version}",
-            "mode": "sequential",
+            "mode": mode,
             "stop_when_error": "true",
             "_sid": self._sid,
             "compound": json.dumps(compound)
@@ -209,7 +219,10 @@ class Authentication:
         if method is None:
             method = 'get'
 
-        
+        ## Request need some headers to work properly
+        # X-SYNO-TOKEN is the token that we get when we login
+        # We get it from the self._syno_token variable and by param 'enable_syno_token':'yes' in the login request
+
         if method == 'get':
             response = requests.get(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
         elif method == 'post':
