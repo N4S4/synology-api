@@ -240,13 +240,15 @@ class OAUTHError(SynoBaseException):
 class PhotosError(SynoBaseException):
     """Class for an error during a Photos request. NOTE: No error docs."""
 
-    def __init__(self, error_code: int, *args: object) -> None:
+    def __init__(self, error_code: int, error_message: str, *args: object) -> None:
         self.error_code = error_code
-        if error_code in error_codes.keys():
-            super().__init__(error_message=error_codes[error_code], *args)
+        if error_code in error_codes:
+            super().__init__(f'(err {self.error_code} [{error_codes[error_code]}]) {error_message}', *args)
         else:
-            super().__init__(error_message="Photos Error: %i" % error_code, *args)
-        return
+            super().__init__(f'(err {self.error_code}) {error_message}', *args)
+
+    def __str__(self):
+        return self.error_message
 
 
 class SecurityAdvisorError(SynoBaseException):
