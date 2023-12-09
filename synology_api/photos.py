@@ -56,6 +56,7 @@ class Photos:
     * list_albums
     * get_albums
     * count_albums
+    * count_photos_in_album
     * suggest_condition
     * create_normal_album
     * delete_album
@@ -433,9 +434,10 @@ class Photos:
     def get_folder(
         self, folder_id: int = 0, team: bool = False, **kwargs
     ) -> dict[str, object]:
-        """Get folder description
+        """Get folder description.
+        Return root folder for space when folder_id=0 or omitted
         ### Parameter
-            folder_id : folder identifier
+            folder_id : folder identifier.
             team : personal or shared space
         ### kwargs parameters
             offset, limit, sort_by, sort_direction, additionnal, ...
@@ -447,7 +449,7 @@ class Photos:
         return self._request_data(api_name, req_param)["data"]["folder"]
 
     def list_folders(
-        self, folder_id: int = 0, team: bool = False, **kwargs
+        self, folder_id: int, team: bool = False, **kwargs
     ) -> list[dict[str, object]]:
         """List sub-folders in folder
         ### Parameter
@@ -456,7 +458,7 @@ class Photos:
         ### kwargs parameters
             offset, limit, sort_by, sort_direction, additionnal, ...
         ### Return
-          folder dict
+          list of folder dict
         """
         api_name = "SYNO.FotoTeam.Browse.Folder" if team else "SYNO.Foto.Browse.Folder"
         req_param = dict({"id": folder_id}, **kwargs)
@@ -785,6 +787,13 @@ class Photos:
         }
 
         return self._request_data("SYNO.Foto.Sharing.Misc", req_param)
+
+    def count_photos_in_album(self, album_id: int) -> int:
+        """Count photo in an album
+        ### Return
+            photos count
+        """
+        return self._count("SYNO.Foto.Browse.Item", album_id=album_id)
 
     def photos_in_album(self, album_id: int = 0, **kwargs) -> dict[str, object]:
         """List photos in album
