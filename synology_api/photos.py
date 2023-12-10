@@ -1405,7 +1405,10 @@ class DatePhoto:
 
     def __init__(self, dateval: int | datetime | None):
         if isinstance(dateval, int):
-            self.date = datetime.fromtimestamp(dateval, pytz.timezone("UTC"))
+            if dateval >= 0:
+                self.date = datetime.fromtimestamp(dateval, pytz.timezone("UTC"))
+            else:
+                self.date = datetime(1970, 1, 1) + timedelta(seconds=dateval)
         else:
             self.date = dateval.replace(tzinfo=pytz.timezone("UTC"))
         self._fmt = "%d/%m/%Y-%H:%M:%S"
