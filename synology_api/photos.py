@@ -958,34 +958,37 @@ class Photos:
         self,
         photo_id: int,
         size: str,
-        thumbnail: dict | None = None,
+        cache_key: str | None = None,
         team: bool | None = None,
     ) -> bytes:
         """Thumbnail Download
         ### Parameters
             * photo_id: photo identifier
             * size: thumbnail size required in ["sm", "m", "xl"]
-            * thumbnail : None or thumbnail structure returned when `additional`=["thumbnail"] is requested in get_photo, photos_in_folder, ...
+            * cache_key : None or thumbnail cache_key returned when `additional`=["thumbnail"] is requested in get_photo, photos_in_folder, ...
             * team : None, False for personal space, or True for shared space
 
-        When thumbnail or team is None, a call to 'get_photos' is done for determine space and get thumbnail structure.
+        When cache_key or team is None, a call to 'get_photos' is done for determine space and get thumbnail structure.
         ### Return
             Raw image data
         """
 
-        if team is None or thumbnail is None:
+        if team is None or cache_key is None:
+            cache_key = None
             for team in [False, True]:
                 photos = self.get_photos(photo_id, team, additional=["thumbnail"])
                 if photos:
-                    thumbnail = photos[0]["additional"]["thumbnail"]
+                    cache_key = photos[0]["additional"]["thumbnail"]["cache_key"]
                     break
+            if not cache_key:
+                raise PhotosError(API_ERROR, f"photo {photo_id} not found)")
         api_name = "SYNO.FotoTeam.Thumbnail" if team else "SYNO.Foto.Thumbnail"
         req_param = {
             "method": "get",
             "id": photo_id,
             "size": size,
             "type": "unit",
-            "cache_key": thumbnail["cache_key"],
+            "cache_key": cache_key,
         }
         data = self._request_data(
             api_name, req_param, method="post", response_json=False
