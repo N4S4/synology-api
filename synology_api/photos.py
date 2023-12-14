@@ -520,7 +520,7 @@ class Photos:
                 return
         return folder
 
-    def count_photos_in_folder(self, folder_id: int = 0, team: bool = False) -> int:
+    def count_photos_in_folder(self, folder_id: int, team: bool = False) -> int:
         """Count items in folder
         ### Parameters
             folder_id : folder identifier
@@ -532,7 +532,7 @@ class Photos:
         return self._count(api_name, folder_id=folder_id)
 
     def photos_in_folder(
-        self, folder_id: int = 0, team: bool = False, **kwargs
+        self, folder_id: int, team: bool = False, **kwargs
     ) -> list[dict[str, object]]:
         """List photos in folder
         ### Parameters
