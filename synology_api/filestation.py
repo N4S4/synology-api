@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Optional, Any
 import os
+import io
 import time
 from datetime import datetime
 
@@ -1214,5 +1215,10 @@ class FileStation:
                     for chunk in r.iter_content(chunk_size=chunk_size):
                         if chunk:  # filter out keep-alive new chunks
                             f.write(chunk)
+
+        if mode == r'serve':
+            with session.get(url, stream=True, verify=verify) as r:
+                r.raise_for_status()
+                return io.BytesIO(r.content)
 
 # TODO SYNO.FileStation.Thumb to be done

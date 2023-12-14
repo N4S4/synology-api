@@ -92,11 +92,11 @@ class Certificate(base_api_core.Core):
         data_payload = {'id': cert_id or '', 'desc': desc or '', 'as_default': 'true' if set_as_default else 'false'}
 
         with open(serv_key, 'rb') as payload_serv_key, open(ser_cert, 'rb') as payload_ser_cert:
-            files = {'key': (serv_key, payload_serv_key, 'application/x-iwork-keynote-sffkey'),
-                     'cert': (ser_cert, payload_ser_cert, 'application/pkix-cert')}
+            files = {'key': (serv_key, payload_serv_key, 'application/x-x509-ca-cert'),
+                     'cert': (ser_cert, payload_ser_cert, 'application/x-x509-ca-cert')}
             if ca_cert:
                 with open(ca_cert, 'rb') as payload_ca_cert:
-                    files['inter_cert'] = (ca_cert, payload_ca_cert, 'application/pkix-cert')
+                    files['inter_cert'] = (ca_cert, payload_ca_cert, 'application/x-x509-ca-cert')
                     r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled())
             else:
                 r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled())
