@@ -490,6 +490,8 @@ class Photos:
         ### Return
           folder dict or None
         """
+        if root_folder == 0 and path == "/":
+            return self.get_folder(root_folder, team=team, **kwargs)
         if root_folder != 0:
             if path.startswith("/"):
                 path = path[1:]
