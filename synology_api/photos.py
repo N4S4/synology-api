@@ -1408,7 +1408,9 @@ class DatePhoto:
         ```
     """
 
-    def __init__(self, dateval: int | datetime | None):
+    def __init__(self, dateval: int | float | datetime | None):
+        if isinstance(dateval, float):
+            dateval = int(dateval)
         if isinstance(dateval, int):
             if dateval >= 0:
                 self.date = datetime.fromtimestamp(dateval, pytz.timezone("UTC"))
