@@ -282,15 +282,16 @@ class Authentication:
         # Check for error response from dsm:
         error_code = 0
         errors = None
-        if USE_EXCEPTIONS:
-            # Catch a JSON Decode error:
-            try:
+        if response_json:
+            if USE_EXCEPTIONS:
+                # Catch a JSON Decode error:
+                try:
+                    error_code, errors = self._get_error_code(response.json())
+                except requests.exceptions.JSONDecodeError:
+                    pass
+            else:
+                # Will raise its own error:
                 error_code, errors = self._get_error_code(response.json())
-            except requests.exceptions.JSONDecodeError:
-                pass
-        else:
-            # Will raise its own error:
-            error_code, errors = self._get_error_code(response.json())
 
         if error_code:
             if self._debug is True:
