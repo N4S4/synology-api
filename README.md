@@ -512,6 +512,7 @@ DS info with below functions:
 |-----------------------------|------------------------------------|
 | list_vm_hypervisor()        | list of all configured hypervisors |
 | list_device_transfer_size() | list of all detected vms           |
+| list_storage()              | list of all storages               |
 
 ### core_certificate tnx to @ajarzyn
 
