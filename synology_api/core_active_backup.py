@@ -54,3 +54,13 @@ class ActiveBackupBusiness(base_api_core.Core):
                     'load_result': 'true'}
 
         return self.request_data(api_name, api_path, req_param)
+
+    def list_storage(self) -> dict[str, object] | str:
+        api_name = 'SYNO.ActiveBackup.Share'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+
+        req_param = {'version': '1',
+                     'method': 'list_storage'}
+
+        return self.request_data(api_name, api_path, req_param)
