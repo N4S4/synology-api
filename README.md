@@ -246,6 +246,7 @@ This wrapper cover the following APIs for now:
 | SYNO.ActiveBackup.Inventory                     |
 | SYNO.ActiveBackup.Overview                      |
 | SYNO.ActiveBackup.Task                          |
+| SYNO.ActiveBackup.Share                         |
 
 | Snapshot Replication     |
 | -------------------------|
