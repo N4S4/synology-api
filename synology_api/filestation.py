@@ -775,7 +775,7 @@ class FileStation:
         elif path is not None:
             req_param['path'] = path
         else:
-            return 'Enter a valid path'
+            return 'Enter a valid folder path (folder path only ex. "/home/Drive/Downloads")'
 
         if type(name) is list:
             new_path = []
@@ -786,7 +786,7 @@ class FileStation:
         elif name is not None:
             req_param['name'] = name
         else:
-            return 'Enter a valid path'
+            return 'Enter a valid new folder name (new folder name only ex. "New Folder")'
 
         if additional is None:
             additional = ['real_path', 'size', 'owner', 'time']
