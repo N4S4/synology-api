@@ -246,6 +246,7 @@ This wrapper cover the following APIs for now:
 | SYNO.ActiveBackup.Inventory                     |
 | SYNO.ActiveBackup.Overview                      |
 | SYNO.ActiveBackup.Task                          |
+| SYNO.ActiveBackup.Share                         |
 
 | Snapshot Replication     |
 | -------------------------|
@@ -512,6 +513,7 @@ DS info with below functions:
 |-----------------------------|------------------------------------|
 | list_vm_hypervisor()        | list of all configured hypervisors |
 | list_device_transfer_size() | list of all detected vms           |
+| list_storage()              | list of all storages               |
 
 ### core_certificate tnx to @ajarzyn
 
