@@ -127,11 +127,16 @@ I will slowly implement more functions, Synology APIs are plenty, too many for m
 
 This wrapper cover the following APIs for now:
 
-| DownloadStation               |
-|-------------------------------|
-| SYNO.DownloadStation.Info     |
-| SYNO.DownloadStation.Schedule |
-| SYNO.DownloadStation.Task     |
+| DownloadStation                |
+|--------------------------------|
+| SYNO.DownloadStation.Info      |
+| SYNO.DownloadStation.Schedule  |
+| SYNO.DownloadStation.Task      |
+| SYNO.DownloadStation.Statistic |
+| SYNO.DownloadStation.RSS.Site  |
+| SYNO.DownloadStation.RSS.Feed  |
+| SYNO.DownloadStation.BTSearch  |
+
 
 | FileStation                      |
 |----------------------------------|
@@ -313,6 +318,10 @@ To run the following functions you'll have to start the task with the start func
 | get_file()               | Download or open file                                      |
 
 #### DownloadStations functions:
+
+For some of DownloadStation API there is the possibility to set version 2, ex. SYNO.DownloadStation.BTSearch,
+if you encounter problems you might set ```download_st_version = 2``` during initialization. 
+
 
 | Function              | Description                              |
 |-----------------------|------------------------------------------|
