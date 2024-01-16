@@ -75,7 +75,7 @@ class Photos:
     * list_search_filters
 
     #### methods on photos
-    * get_photos
+    * photos_from_ids
     * photo_download
     * thumbnail_download
 
@@ -85,8 +85,8 @@ class Photos:
 
     #### methods on tags (search in geolocalisation address, filename, description, identifier, ...?)
     * count_general_tags
-    * list_general_tags
-    * get_general_tag
+    * general_tags
+    * general_tag
     * count_photos_with_tag
     * photos_with_tag
 
@@ -339,7 +339,7 @@ class Photos:
         self.base_url: str = self.session.base_url
 
         self._userinfo: Any = None
-        self.general_tags = {False: None, True: None}
+        self._tags = {False: None, True: None}
         self.avail_filters = {False: None, True: None}
 
     def logout(self) -> None:
@@ -909,8 +909,8 @@ class Photos:
     # methods on photos
     #
 
-    def get_photos(
-        self, photo_ids: int | list, team: bool = False, **kwargs
+    def photos_from_ids(
+        self, photo_ids: int | list[int], team: bool = False, **kwargs
     ) -> list[dict[str, object]]:
         """Get photos list infos from identifiers
         ### Parameters
@@ -942,7 +942,7 @@ class Photos:
         """
         # determine if photo is in personal or shared space
         if team is None:
-            team = len(self.get_photos(photo_id, True)) > 0
+            team = len(self.photos_from_ids(photo_id, True)) > 0
         api_name = "SYNO.FotoTeam.Download" if team else "SYNO.Foto.Download"
         if isinstance(photo_id, int):
             photo_id = [photo_id]
@@ -950,7 +950,7 @@ class Photos:
         data = self._request_data(
             api_name, req_param, method="post", response_json=False
         )
-        if data.status_code != 200:
+        if data.text.startswith('{"error"'):
             raise PhotosError(
                 API_ERROR, f"Photo {data.reason} (code:{data.status_code})"
             )
@@ -970,7 +970,7 @@ class Photos:
             * cache_key : None or thumbnail cache_key returned when `additional`=["thumbnail"] is requested in get_photo, photos_in_folder, ...
             * team : None, False for personal space, or True for shared space
 
-        When cache_key or team is None, a call to 'get_photos' is done for determine space and get thumbnail structure.
+        When cache_key or team is None, a call to 'photos_from_ids' is done for determine space and get thumbnail structure.
         ### Return
             Raw image data
         """
@@ -978,7 +978,7 @@ class Photos:
         if team is None or cache_key is None:
             cache_key = None
             for team in [False, True]:
-                photos = self.get_photos(photo_id, team, additional=["thumbnail"])
+                photos = self.photos_from_ids(photo_id, team, additional=["thumbnail"])
                 if photos:
                     cache_key = photos[0]["additional"]["thumbnail"]["cache_key"]
                     break
@@ -995,7 +995,7 @@ class Photos:
         data = self._request_data(
             api_name, req_param, method="post", response_json=False
         )
-        if data.status_code != 200:
+        if data.text.startswith('{"error"'):
             raise PhotosError(
                 API_ERROR, f"Thumbnail {data.reason} (code:{data.status_code})"
             )
@@ -1041,9 +1041,9 @@ class Photos:
 
     def _load_tags(self, team: bool = False, force: bool = False):
         """internal load tags"""
-        if force or not self.general_tags[team]:
-            self.general_tags[team] = self.list_general_tags(team)
-        return self.general_tags[team]
+        if force or not self._tags[team]:
+            self._tags[team] = self.general_tags(team)
+        return self._tags[team]
 
     def count_general_tags(self, team: bool = False) -> int:
         """Count all tags (identifiers)
@@ -1057,7 +1057,7 @@ class Photos:
         )
         return self._count(api_name)
 
-    def list_general_tags(self, team: bool = False, **kwargs) -> dict[str, object]:
+    def general_tags(self, team: bool = False, **kwargs) -> dict[str, object]:
         """Get all tags (identifiers)
         ### Parameters
             * team : space to use: personal (`False`) or shared (`True`) space
@@ -1083,9 +1083,10 @@ class Photos:
         api_name = (
             "SYNO.FotoTeam.Browse.GeneralTag" if team else "SYNO.Foto.Browse.GeneralTag"
         )
-        return self._method_list(api_name, **kwargs)["data"]["list"]
+        self._tags[team] = self._method_list(api_name, **kwargs)["data"]["list"]
+        return self._tags[team]
 
-    def get_general_tag(
+    def general_tag(
         self, tag: int | list[int] | str, team: bool = False, **kwargs
     ) -> list[dict[str, object]] | None:
         """Get specific tag
@@ -1156,7 +1157,7 @@ class Photos:
 
         """
         api_name = "SYNO.FotoTeam.Browse.Item" if team else "SYNO.Foto.Browse.Item"
-        tags = self.get_general_tag(tag_name, team)
+        tags = self.general_tag(tag_name, team)
         if tags is None:
             return []
         req_param = dict({"general_tag_id": tags[0]["id"]}, **kwargs)
@@ -1411,7 +1412,7 @@ class DatePhoto:
     def __init__(self, dateval: int | float | datetime | None):
         if isinstance(dateval, float):
             dateval = int(dateval)
-        if isinstance(dateval, int):
+        elif isinstance(dateval, int):
             if dateval >= 0:
                 self.date = datetime.fromtimestamp(dateval, pytz.timezone("UTC"))
             else:
