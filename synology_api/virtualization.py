@@ -1,10 +1,9 @@
 from __future__ import annotations
 from typing import Optional, Any
-from . import auth as syn
+from . import base_api
 
 
-class Virtualization:
-
+class Virtualization(base_api.BaseApi):
     def __init__(self,
                  ip_address: str,
                  port: str,
@@ -17,10 +16,8 @@ class Virtualization:
                  otp_code: Optional[str] = None
                  ) -> None:
 
-        self.session: syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify,
-                                                              dsm_version, debug, otp_code)
-
-        self.request_data: Any = self.session.request_data
+        super(Virtualization, self).__init__(ip_address, port, username, password, secure, cert_verify,
+                                             dsm_version, debug, otp_code)
 
         self._taskid_list: Any = []
         self._network_group_list: Any = []
@@ -30,17 +27,9 @@ class Virtualization:
         self._vm_guest_name_list: Any = []
         self._vm_created_taskid_list: Any = []
 
-        self.session.login('Virtualization')
         self.session.get_api_list('Virtualization')
 
         self.file_station_list: Any = self.session.app_api_list
-        self._sid: str = self.session.sid
-        self.base_url: str = self.session.base_url
-        return
-
-    def logout(self) -> None:
-        self.session.logout('Virtualization')
-        return
 
     def get_task_list(self) -> list[str]:
         api_name = 'SYNO.Virtualization.API.Task.Info'

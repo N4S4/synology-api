@@ -1,7 +1,7 @@
 from . import \
     audiostation,\
     auth,\
-    base_api_core,\
+    base_api,\
     directory_server,\
     docker_api,\
     drive_admin_console,\

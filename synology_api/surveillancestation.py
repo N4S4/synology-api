@@ -1,23 +1,9 @@
 from __future__ import annotations
 from typing import Optional, Any
-from . import base_api_core
+from . import base_api
 
 
-class SurveillanceStation(base_api_core.Core):
-    def __init__(self,
-                 ip_address: str,
-                 port: str,
-                 username: str,
-                 password: str,
-                 secure: bool = False,
-                 cert_verify: bool = False,
-                 dsm_version: int = 7,
-                 debug: bool = True,
-                 otp_code: Optional[str] = None
-                 ) -> None:
-        super(SurveillanceStation, self).__init__(ip_address, port, username, password, secure, cert_verify,
-                                                  dsm_version, debug, otp_code)
-        return
+class SurveillanceStation(base_api.BaseApi):
 
     def surveillance_station_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Info'

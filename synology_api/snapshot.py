@@ -1,10 +1,10 @@
 from __future__ import annotations
 from typing import Optional
-from . import base_api_core
+from . import base_api
 import json
 
 
-class Snapshot(base_api_core.Core):
+class Snapshot(base_api.BaseApi):
     """Class for interacting with Snapshot APIs.
 
     This class implements APIs to manage snapshots.
@@ -30,21 +30,6 @@ class Snapshot(base_api_core.Core):
     >>> resp = ss.set_snapshot_attr('share_name', 'snapshot_name', description='new description', lock=True)
     >>> print(resp)
     """
-
-    def __init__(self,
-                 ip_address: str,
-                 port: str,
-                 username: str,
-                 password: str,
-                 secure: bool = False,
-                 cert_verify: bool = False,
-                 dsm_version: int = 7,
-                 debug: bool = True,
-                 otp_code: Optional[str] = None
-                 ) -> None:
-        super(Snapshot, self).__init__(ip_address, port, username, password,
-                                       secure, cert_verify, dsm_version, debug, otp_code)
-        return
 
     def list_snapshots(self,
                        share_name: str,
