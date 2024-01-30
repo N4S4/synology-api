@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import Optional
-from . import base_api_core
+from . import base_api
 
 
-class LogCenter(base_api_core.Core):
+class LogCenter(base_api.BaseApi):
     def __init__(self,
                  ip_address: str,
                  port: str,
@@ -15,9 +15,9 @@ class LogCenter(base_api_core.Core):
                  debug: bool = True,
                  otp_code: Optional[str] = None
                  ) -> None:
+
         super(LogCenter, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug,
                                         otp_code)
-        return
 
     def logcenter(self) -> dict[str, object] | str:
         api_name = 'SYNO.LogCenter.RecvRule'

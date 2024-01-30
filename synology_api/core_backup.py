@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import Optional
-from . import base_api_core
+from . import base_api
 
 
-class Backup(base_api_core.Core):
+class Backup(base_api.BaseApi):
     def __init__(self,
                  ip_address: str,
                  port: str,
@@ -17,7 +17,6 @@ class Backup(base_api_core.Core):
                  ) -> None:
         super(Backup, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug,
                                      otp_code)
-        return
 
     def backup_repository_get(self, taskid: str) -> dict[str, object] | str:
         api_name = 'SYNO.Backup.Repository'

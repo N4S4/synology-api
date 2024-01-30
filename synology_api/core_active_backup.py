@@ -1,11 +1,11 @@
 from __future__ import annotations
 from typing import Optional
-from . import base_api_core
+from . import base_api
 
 import time
 
 
-class ActiveBackupBusiness(base_api_core.Core):
+class ActiveBackupBusiness(base_api.BaseApi):
     def __init__(self,
                  ip_address: str,
                  port: str,
@@ -19,7 +19,6 @@ class ActiveBackupBusiness(base_api_core.Core):
                  ) -> None:
         super(ActiveBackupBusiness, self).__init__(ip_address, port, username, password, secure, cert_verify,
                                                    dsm_version, debug, otp_code)
-        return
 
     def list_vm_hypervisor(self) -> dict[str, object] | str:
         api_name = 'SYNO.ActiveBackup.Inventory'

@@ -2,10 +2,10 @@
 from __future__ import annotations
 import json
 from typing import List, Optional, Any
-from . import base_api_core
+from . import base_api
 
 
-class DirectoryServer(base_api_core.Core):
+class DirectoryServer(base_api.BaseApi):
     """The directory server API.
 
     Not all items within this class use the Active Directory API.  Some use the Synology Entry API which proxies

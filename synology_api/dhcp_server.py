@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import Optional
-from . import base_api_core
+from . import base_api
 
 
-class DhcpServer(base_api_core.Core):
+class DhcpServer(base_api.BaseApi):
     def __init__(self,
                  ip_address: str,
                  port: str,
@@ -17,7 +17,6 @@ class DhcpServer(base_api_core.Core):
                  ) -> None:
         super(DhcpServer, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug,
                                          otp_code)
-        return
 
     def general_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.Network.DHCPServer'

@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import Optional
-from . import base_api_core
+from . import base_api
 
 
-class Docker(base_api_core.Core):
+class Docker(base_api.BaseApi):
     def __init__(self,
                  ip_address: str,
                  port: str,
@@ -15,9 +15,9 @@ class Docker(base_api_core.Core):
                  debug: bool = True,
                  otp_code: Optional[int] = None
                  ) -> None:
+
         super(Docker, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug,
                                      otp_code)
-        return
 
     def containers(self) -> dict[str, object] | str:
         api_name = 'SYNO.Docker.Container'

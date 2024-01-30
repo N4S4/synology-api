@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import Optional, Any
-from . import auth as syn
+from . import base_api
 
 
-class DownloadStation:
+class DownloadStation(base_api.BaseApi):
 
     def __init__(self,
                  ip_address: str,
@@ -19,16 +19,15 @@ class DownloadStation:
                  download_st_version: int = None
                  ) -> None:
 
-        self.session: syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify,
-                                                              dsm_version, debug, otp_code)
+        super(DownloadStation, self).__init__(ip_address, port, username, password, secure, cert_verify,
+                                              dsm_version, debug, otp_code)
+
         self._bt_search_id: str = ''
         self._bt_search_id_list: list[str] = []
-        self.session.login('DownloadStation')
         self.session.get_api_list('DownloadStation')
 
         self.request_data: Any = self.session.request_data
         self.download_list: Any = self.session.app_api_list
-        self._sid: str = self.session.sid
         self.base_url: str = self.session.base_url
 
         self.interactive_output: bool = interactive_output
@@ -37,12 +36,6 @@ class DownloadStation:
             self.download_st_version = '2'
         else:
             self.download_st_version = ''
-
-        return
-
-    def logout(self) -> None:
-        self.session.logout('DownloadStation')
-        return
 
     def get_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Info'

@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import Optional
-from . import auth as syn
+from . import base_api
 
 
-class AudioStation:
+class AudioStation(base_api.BaseApi):
 
     def __init__(self,
                  ip_address: str,
@@ -16,32 +16,20 @@ class AudioStation:
                  debug: bool = True,
                  otp_code: Optional[str] = None
                  ) -> None:
-        self.session = syn.Authentication(ip_address, port, username, password, secure, cert_verify, dsm_version, debug,
-                                          otp_code)
 
-        self.session.login('AudioStation')
-        self.session.get_api_list('AudioStation')
-
-        self.request_data = self.session.request_data
-        self.audiostation_list = self.session.app_api_list
-        self._sid = self.session.sid
-        self.base_url = self.session.base_url
-        return
-
-    def logout(self) -> None:
-        self.session.logout('AudioStation')
-        return
+        super(AudioStation, self).__init__(ip_address, port, username, password, secure, cert_verify,
+                                           dsm_version, debug, otp_code)
 
     def get_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.AudioStation.Info'
-        info = self.audiostation_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'getinfo'}
         return self.request_data(api_name, api_path, req_param)
 
     def get_playlist_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.AudioStation.Playlist'
-        info = self.audiostation_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'method': 'list', 'library': 'all', 'limit': '100000', 'version': info['maxVersion']}
 
@@ -49,7 +37,7 @@ class AudioStation:
 
     def list_remote_player(self) -> dict[str, object] | str:
         api_name = 'SYNO.AudioStation.RemotePlayer'
-        info = self.audiostation_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'method': 'list', 'type': 'all', 'additional': 'subplayer_list', 'version': info['maxVersion']}
 
@@ -57,7 +45,7 @@ class AudioStation:
 
     def list_pinned_song(self) -> dict[str, object] | str:
         api_name = 'SYNO.AudioStation.Pin'
-        info = self.audiostation_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'method': 'list', 'version': info['maxVersion']}
 
@@ -65,7 +53,7 @@ class AudioStation:
 
     def device_id(self, device: str) -> dict[str, object] | str:
         api_name = 'SYNO.AudioStation.RemotePlayer'
-        info = self.audiostation_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'method': 'getplaylist', 'id': device, 'version': info['maxVersion']}
 
@@ -75,7 +63,7 @@ class AudioStation:
 
     def remote_play(self, device: str) -> dict[str, object] | str:
         api_name = 'SYNO.AudioStation.RemotePlayer'
-        info = self.audiostation_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'method': 'control', 'id': device, 'version': info['maxVersion'], 'action': 'play'}
 
@@ -83,7 +71,7 @@ class AudioStation:
 
     def remote_stop(self, device: str) -> dict[str, object] | str:
         api_name = 'SYNO.AudioStation.RemotePlayer'
-        info = self.audiostation_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'method': 'control', 'id': device, 'version': info['maxVersion'], 'action': 'stop'}
 
@@ -91,7 +79,7 @@ class AudioStation:
 
     def remote_next(self, device: str) -> dict[str, object] | str:
         api_name = 'SYNO.AudioStation.RemotePlayer'
-        info = self.audiostation_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'method': 'control', 'id': device, 'version': info['maxVersion'], 'action': 'next'}
 
@@ -99,7 +87,7 @@ class AudioStation:
 
     def remote_prev(self, device: str) -> dict[str, object] | str:
         api_name = 'SYNO.AudioStation.RemotePlayer'
-        info = self.audiostation_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'method': 'control', 'id': device, 'version': info['maxVersion'], 'action': 'prev'}
 

@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import Optional
-from . import base_api_core
+from . import base_api
 
 
-class SysInfo(base_api_core.Core):
+class SysInfo(base_api.BaseApi):
     def __init__(self,
                  ip_address: str,
                  port: str,
