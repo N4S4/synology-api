@@ -26,9 +26,7 @@ class DownloadStation(base_api.BaseApi):
         self._bt_search_id_list: list[str] = []
         self.session.get_api_list('DownloadStation')
 
-        self.request_data: Any = self.session.request_data
         self.download_list: Any = self.session.app_api_list
-        self.base_url: str = self.session.base_url
 
         self.interactive_output: bool = interactive_output
 

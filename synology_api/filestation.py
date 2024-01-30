@@ -44,12 +44,10 @@ class FileStation(base_api.BaseApi):
         self._extract_taskid_list: list[str] = []
         self._compress_taskid: str = ''
         self._compress_taskid_list: list[str] = []
-        self.request_data = self.session.request_data
 
         self.session.get_api_list('FileStation')
 
         self.file_station_list: Any = self.session.app_api_list
-        self.base_url: str = self.session.base_url
 
         self.interactive_output: bool = interactive_output
 

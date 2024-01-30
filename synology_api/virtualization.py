@@ -30,7 +30,6 @@ class Virtualization(base_api.BaseApi):
         self.session.get_api_list('Virtualization')
 
         self.file_station_list: Any = self.session.app_api_list
-        self.base_url: str = self.session.base_url
 
     def get_task_list(self) -> list[str]:
         api_name = 'SYNO.Virtualization.API.Task.Info'

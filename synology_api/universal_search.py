@@ -4,29 +4,10 @@ from . import base_api
 
 
 class UniversalSearch(base_api.BaseApi):
-    def __init__(self,
-                 ip_address: str,
-                 port: str,
-                 username: str,
-                 password: str,
-                 secure: bool = False,
-                 cert_verify: bool = False,
-                 dsm_version: int = 7,
-                 debug: bool = True,
-                 otp_code: Optional[str] = None
-                 ) -> None:
-
-        super(UniversalSearch, self).__init__(ip_address, port, username, password, secure, cert_verify,
-                                              dsm_version, debug, otp_code)
-
-        self.session.get_api_list('Finder')
-        self.request_data: Any = self.session.request_data
-        self.finder_list: Any = self.session.app_api_list
-        self.base_url: str = self.session.base_url
 
     def search(self, keyword: str) -> dict[str, object] | str:
         api_name = 'SYNO.Finder.FileIndexing.Search'
-        info = self.finder_list[api_name]
+        info = self.gen_list[api_name]
         api_path = info['path']
 
         req_param = {
