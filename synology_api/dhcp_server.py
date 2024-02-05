@@ -7,11 +7,11 @@ from . import base_api
 
 class DhcpServer(base_api.BaseApi):
 
-    def general_info(self) -> dict[str, object] | str:
+    def general_info(self, ifname:str = 'ovs_eth0') -> dict[str, object] | str:
         api_name = 'SYNO.Network.DHCPServer'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'ifname': 'ovs_eth0'}
+        req_param = {'version': info['maxVersion'], 'method': 'get', 'ifname': ifname}
 
         return self.request_data(api_name, api_path, req_param)
 
