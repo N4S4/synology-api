@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 from typing import Optional
+
 from . import base_api
 
 
@@ -50,5 +52,21 @@ class DhcpServer(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def dhcp_clientlist(self, ifname:str = 'bond0') -> dict[str, object] | str:
+        api_name = 'SYNO.Network.DHCPServer.ClientList'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'ifname': ifname}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def dhcp_reservations(self, ifname:str = 'bond0') -> dict[str, object] | str:
+        api_name = 'SYNO.Network.DHCPServer.Reservation'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get', 'ifname': ifname}
 
         return self.request_data(api_name, api_path, req_param)
