@@ -257,6 +257,70 @@ This wrapper cover the following APIs for now:
 | -------------------------|
 | SYNO.Core.Share.Snapshot |
 
+#
+### Not all Surveillance Station functions works.
+
+| Surveillance Station     |
+|--------------------------|
+| SYNO.SurveillanceStation.Info |
+| SYNO.SurveillanceStation.Camera |
+| SYNO.Surveillance.Camera.Event |
+| SYNO.SurveillanceStation.Camera.Group |
+| SYNO.SurveillanceStation.Camera.Import |
+| SYNO.SurveillanceStation.Camera.Wizard |
+| SYNO.SurveillanceStation.PTZ |
+| SYNO.SurveillanceStation.ExternalRecording. |
+| SYNO.SurveillanceStation.Recording |
+| SYNO.SurveillanceStation.Recording.Export |
+| SYNO.SurveillanceStation.Recording.Mount |
+| SYNO.SurveillanceStation.CMS |
+| SYNO.SurveillanceStation.CMS.GetDsStatus |
+| SYNO.SurveillanceStation.CMS.SlavedsWizard |
+| SYNO.SurveillanceStation.CMS.SlavedsList |
+| SYNO.SurveillanceStation.Log |
+| SYNO.SurveillanceStation.License |
+| SYNO.SurveillanceStation.Stream |
+| SYNO.SurveillanceStation.ActionRule |
+| SYNO.SurveillanceStation.Emap |
+| SYNO.SurveillanceStation.Emap.Image |
+| SYNO.SurveillanceStation.Notification |
+| SYNO.SurveillanceStation.Notification.SMS |
+| SYNO.SurveillanceStation.Notification.PushService |
+| SYNO.SurveillanceStation.Notification.Schedule |
+| SYNO.SurveillanceStation.Notification.Email |
+| SYNO.SurveillanceStation.Notification.Filter |
+| SYNO.SurveillanceStation.Notification.SMS.ServiceProvider |
+| SYNO.SurveillanceStation.Addons |
+| SYNO.SurveillanceStation.Alert |
+| SYNO.SurveillanceStation.Alert.Setting |
+| SYNO.SurveillanceStation.SnapShot |
+| SYNO.SurveillanceStation.VisualStation |
+| SYNO.SurveillanceStation.VisualStation.Layout |
+| SYNO.SurveillanceStation.VisualStation.Search |
+| SYNO.SurveillanceStation.AxisAcsCtrler |
+| SYNO.SurveillanceStation.AxisAcsCtrler.Search |
+| SYNO.SurveillanceStation.DigitalOutput |
+| SYNO.SurveillanceStation.ExternalEvent |
+| SYNO.SurveillanceStation.IOModule |
+| SYNO.SurveillanceStation.IOModuleSearch |
+| SYNO.SurveillanceStation.Camera.Status |
+| SYNO.SurveillanceStation.PTZ.Preset |
+| SYNO.SurveillanceStation.PTZ.Patrol. |
+| SYNO.SurveillanceStation.Camera.Search |
+| SYNO.SurveillanceStation.HomeMode |
+| SYNO.SurveillanceStation.Transactions.Device |
+| SYNO.SurveillanceStation.Transactions.Transaction |
+| SYNO.SurveillanceStation.Archiving.Pull |
+| SYNO.SurveillanceStation.YoutubeLive |
+| SYNO.SurveillanceStation.IVA |
+| SYNO.SurveillanceStation.IVA.Report |
+| SYNO.SurveillanceStation.IVA.Recording |
+| SYNO.SurveillanceStation.IVA.TaskGroup |
+| SYNO.SurveillanceStation.Face |
+| SYNO.SurveillanceStation.Face.Result |
+| SYNO.SurveillanceStation.Recording.Bookmark |
+
+
 #### FileStation Functions list
 
 To explain the use of some function I will divide all the functions in two sets
@@ -573,6 +637,8 @@ DS info with below functions:
 | tftp()             | 
 | network_bond()     | 
 | network_ethernet() | 
+| dhcp_clientlist() | 
+| dhcp_reservations() | 
 
 
 ### usb_copy 
