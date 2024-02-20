@@ -318,19 +318,9 @@ class Photos(base_api.BaseApi):
         otp_code: Optional[str] = None,
     ) -> None:
         """Constructor : Login in Synology Photo"""
-        self.session: syn.Authentication = syn.Authentication(
-            ip_address,
-            port,
-            username,
-            password,
-            secure,
-            cert_verify,
-            dsm_version,
-            debug,
-            otp_code,
-        )
-
-        self.session.login('Foto')
+        super(Photos, self).__init__(ip_address, port, username, password, secure, cert_verify,
+                                     dsm_version, debug, otp_code)
+        
         self.session.get_api_list('Foto')
 
         self.request_data: Any = self.session.request_data
