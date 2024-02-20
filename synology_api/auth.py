@@ -14,6 +14,16 @@ from .exceptions import UniversalSearchError, USBCopyError, VPNError, CoreSysInf
 
 USE_EXCEPTIONS: bool = True
 
+class APIError:
+    def __init__(self, code = 0, details: dict = None):
+        self._code = code
+        self._details = details
+
+    def code(self) -> int:
+        return self._code
+    
+    def details(self) -> dict:
+        return self._details
 
 class Authentication:
     def __init__(self,
@@ -81,8 +91,8 @@ class Authentication:
                 session_request_json = session_request.json()
 
             # Check dsm response for error:
-            error_code, errors = self._get_error_code(session_request_json)
-            if not error_code:
+            error = self._get_error_code(session_request_json)
+            if not error.code():
                 self._sid = session_request_json['data']['sid']
                 self._syno_token = session_request_json['data']['synotoken']
                 self._session_expire = False
@@ -91,9 +101,9 @@ class Authentication:
             else:
                 self._sid = None
                 if self._debug is True:
-                    print('Login failed: ' + self._get_error_message(error_code, errors, 'Auth'))
+                    print('Login failed: ' + self._get_error_message(error, 'Auth'))
                 if USE_EXCEPTIONS:
-                    raise LoginError(error_code=error_code)
+                    raise LoginError(error_code=error.code())
         return
 
     def logout(self, application: str) -> None:
@@ -105,7 +115,7 @@ class Authentication:
                 response = requests.get(self._base_url + logout_api, param, verify=self._verify)
                 response.raise_for_status()
                 response_json = response.json()
-                error_code, errors = self._get_error_code(response_json)
+                error = self._get_error_code(response_json)
             except requests.exceptions.ConnectionError as e:
                 raise SynoConnectionError(error_message=e.args[0])
             except requests.exceptions.HTTPError as e:
@@ -114,16 +124,16 @@ class Authentication:
                 raise JSONDecodeError(error_message=str(e.args))
         else:
             response = requests.get(self._base_url + logout_api, param, verify=self._verify)
-            error_code, errors = self._get_error_code(response.json())
+            error = self._get_error_code(response.json())
         self._session_expire = True
         self._sid = None
         if self._debug is True:
-            if not error_code:
+            if not error.code():
                 print('Successfully logged out.')
             else:
-                print('Logout failed: ' + self._get_error_message(error_code, errors, 'Auth'))
-        if USE_EXCEPTIONS and error_code:
-            raise LogoutError(error_code=error_code)
+                print('Logout failed: ' + self._get_error_message(error, 'Auth'))
+        if USE_EXCEPTIONS and error.code():
+            raise LogoutError(error_code=error.code())
 
         return
 
@@ -280,22 +290,22 @@ class Authentication:
                 response = requests.post(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
 
         # Check for error response from dsm:
-        error_code = 0
-        errors = None
+        error = APIError()
         if response_json:
             if USE_EXCEPTIONS:
                 # Catch a JSON Decode error:
                 try:
-                    error_code, errors = self._get_error_code(response.json())
+                    error = self._get_error_code(response.json())
                 except requests.exceptions.JSONDecodeError:
                     pass
             else:
                 # Will raise its own error:
-                error_code, errors = self._get_error_code(response.json())
-
+                error = self._get_error_code(response.json())
+        
+        error_code = error.code()
         if error_code:
             if self._debug is True:
-                print('Data request failed: ' + self._get_error_message(error_code, errors, api_name))
+                print('Data request failed: ' + self._get_error_message(error, api_name))
 
             if USE_EXCEPTIONS:
                 # Download station error:
@@ -342,7 +352,7 @@ class Authentication:
                     raise OAUTHError(error_code=error_code)
                 # Photo station error:
                 elif api_name.find('SYNO.Foto') > -1:
-                    raise PhotosError(error_code, self._get_error_message(error_code, errors, api_name))
+                    raise PhotosError(error_code, self._get_error_message(error, api_name))
                 # Security advisor error:
                 elif api_name.find('SecurityAdvisor') > -1:
                     raise SecurityAdvisorError(error_code=error_code)
@@ -375,24 +385,26 @@ class Authentication:
             return response
 
     @staticmethod
-    def _get_error_code(response: dict[str, object]) -> int:
+    def _get_error_code(response: dict[str, object]) -> APIError:
         if response.get('success'):
             code = CODE_SUCCESS
             errors = None
         else:
             code = response.get('error').get('code')
             errors = response.get('error').get('errors')
-        return (code, errors)
+        return APIError(code, errors)
 
     @staticmethod
-    def _get_error_message(code: int, errors: dict[str, str], api_name: str) -> str:
-        if api_name.find('Foto') > -1 and errors:
+    def _get_error_message(error: APIError, api_name: str) -> str:
+        code = error.code()
+        errors = error.details()
+        if api_name.find('Foto') > -1 and error.details():
             try:
                 message = f'"{errors["name"]}" : {errors["reason"]}'
             except KeyError:
                 message = f'details: "{str(errors)}"'
             return message
-        elif code in error_codes:
+        if code in error_codes:
             message = error_codes[code]
         elif api_name == 'Auth':
             message = auth_error_codes.get(code, "<Undefined.Auth.Error>")
