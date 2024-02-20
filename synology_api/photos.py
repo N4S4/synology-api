@@ -80,8 +80,8 @@ class Photos:
     * thumbnail_download
 
     #### methods on keywords (search in geolocalisation address, filename, description, identifier, ...?)
-    * count_keyword
-    * search_keyword
+    * count_photos_with_keyword
+    * photos_with_keyword
 
     #### methods on tags (search in geolocalisation address, filename, description, identifier, ...?)
     * count_general_tags
@@ -364,9 +364,7 @@ class Photos:
             if isinstance(v, list) or isinstance(v, dict):
                 req_param[k] = json.dumps(v)
 
-        return self.request_data(
-            api_name, info["path"], req_param, method, response_json
-        )
+        return self.request_data(api_name, info["path"], req_param, method, response_json)
 
     def get_userinfo(self) -> dict[str, object]:
         """Get logged user info
@@ -431,16 +429,14 @@ class Photos:
     # methods on folder
     #
 
-    def get_folder(
-        self, folder_id: int = 0, team: bool = False, **kwargs
-    ) -> dict[str, object]:
+    def get_folder(self, folder_id: int = 0, team: bool = False, **kwargs) -> dict[str, object]:
         """Get folder description.
         Return root folder for space when folder_id=0 or omitted
         ### Parameter
             folder_id : folder identifier.
             team : personal or shared space
         ### kwargs parameters
-            offset, limit, sort_by, sort_direction, additionnal, ...
+            offset, limit, sort_by, sort_direction, additional, ...
         ### Return
           folder dict
         """
@@ -448,23 +444,19 @@ class Photos:
         req_param = dict({"method": "get", "id": folder_id}, **kwargs)
         return self._request_data(api_name, req_param)["data"]["folder"]
 
-    def list_folders(
-        self, folder_id: int, team: bool = False, **kwargs
-    ) -> list[dict[str, object]]:
+    def list_folders(self, folder_id: int, team: bool = False, **kwargs) -> list[dict[str, object]]:
         """List sub-folders in folder
         ### Parameter
             folder_id : folder identifier
             team : personal or shared space
         ### kwargs parameters
-            offset, limit, sort_by, sort_direction, additionnal, ...
+            offset, limit, sort_by, sort_direction, additional, ...
         ### Return
           list of folder dict
         """
         api_name = "SYNO.FotoTeam.Browse.Folder" if team else "SYNO.Foto.Browse.Folder"
         req_param = dict({"id": folder_id}, **kwargs)
-        return self._method_list(api_name, http_method="post", **req_param)["data"][
-            "list"
-        ]
+        return self._method_list(api_name, http_method="post", **req_param)["data"]["list"]
 
     def count_folders(self, folder_id: int = 0, team: bool = False) -> int:
         """Count sub-folders in folder
@@ -477,16 +469,14 @@ class Photos:
         api_name = "SYNO.FotoTeam.Browse.Folder" if team else "SYNO.Foto.Browse.Folder"
         return self._count(api_name, id=folder_id)
 
-    def lookup_folder(
-        self, path: str, root_folder: int = 0, team: bool = False, **kwargs
-    ) -> dict[str, object] | None:
+    def lookup_folder(self, path: str, root_folder: int = 0, team: bool = False, **kwargs) -> dict[str, object] | None:
         """Lookup for folder
         ### Parameter
             path : path to lookup
             root_folder : starting folder id for lookup
             team : personal or shared space
         ### kwargs parameters
-            offset, limit, sort_by, sort_direction, additionnal, ...
+            offset, limit, sort_by, sort_direction, additional, ...
         ### Return
           folder dict or None
         """
@@ -531,31 +521,25 @@ class Photos:
         api_name = "SYNO.FotoTeam.Browse.Item" if team else "SYNO.Foto.Browse.Item"
         return self._count(api_name, folder_id=folder_id)
 
-    def photos_in_folder(
-        self, folder_id: int, team: bool = False, **kwargs
-    ) -> list[dict[str, object]]:
+    def photos_in_folder(self, folder_id: int, team: bool = False, **kwargs) -> list[dict[str, object]]:
         """List photos in folder
         ### Parameters
             folder_id : starting folder id for lookup
             team : personal or shared space
         ### kwargs parameters
-            offset, limit, sort_by, sort_direction, additionnal, ...
+            offset, limit, sort_by, sort_direction, additional, ...
         ### Return
           list of photo dict
         """
         api_name = "SYNO.FotoTeam.Browse.Item" if team else "SYNO.Foto.Browse.Item"
         req_param = dict({"folder_id": folder_id}, **kwargs)
-        return self._method_list(api_name, http_method="post", **req_param)["data"][
-            "list"
-        ]
+        return self._method_list(api_name, http_method="post", **req_param)["data"]["list"]
 
     #
     # methods on albums
     #
 
-    def get_albums(
-        self, album_ids: int | list[int] | str, **kwargs
-    ) -> list[dict[str, object]] | None:
+    def get_albums(self, album_ids: int | list[int] | str, **kwargs) -> list[dict[str, object]] | None:
         """Get albums descriptions from identifiers or name
         ### Parameter
             * album_ids :
@@ -592,7 +576,7 @@ class Photos:
 
             sort_direction: in ["asc", "desc"],
 
-            additionnal : list in ["sharing_info", "thumbnail", ... ]
+            additional : list in ["sharing_info", "thumbnail", ... ]
 
             category : in ["normal_share_with_me", "normal", "shared"]
 
@@ -601,9 +585,7 @@ class Photos:
         """
         if "sort_by" not in kwargs:
             kwargs["sort_by"] = "album_name"
-        return self._method_list(
-            "SYNO.Foto.Browse.Album", http_method="post", **kwargs
-        )["data"]["list"]
+        return self._method_list("SYNO.Foto.Browse.Album", http_method="post", **kwargs)["data"]["list"]
 
     def count_albums(self) -> int:
         """Count albums
@@ -633,9 +615,7 @@ class Photos:
 
         return self._request_data("SYNO.Foto.Browse.ConditionAlbum", req_param)
 
-    def create_normal_album(
-        self, name: str, id_photos: list[int] | int
-    ) -> dict[str, object]:
+    def create_normal_album(self, name: str, id_photos: list[int] | int) -> dict[str, object]:
         """create normal album (without condition)
         ### Parameter
             * name : album name
@@ -650,9 +630,7 @@ class Photos:
         }
         return self._request_data("SYNO.Foto.Browse.NormalAlbum", req_param)["data"]
 
-    def add_photos_to_album(
-        self, album_id, id_photos: list[int] | int
-    ) -> dict[str, object]:
+    def add_photos_to_album(self, album_id, id_photos: list[int] | int) -> dict[str, object]:
         """add photos to normal album
         ### Parameter
             * album_id : album identifier
@@ -667,9 +645,7 @@ class Photos:
         }
         return self._request_data("SYNO.Foto.Browse.NormalAlbum", req_param)["data"]
 
-    def delete_photos_from_album(
-        self, album_id, id_photos: list[int] | int
-    ) -> dict[str, object]:
+    def delete_photos_from_album(self, album_id, id_photos: list[int] | int) -> dict[str, object]:
         """delete photos from normal album
         ### Parameter
             * album_id : album identifier
@@ -686,9 +662,7 @@ class Photos:
         }
         return self._request_data("SYNO.Foto.Browse.NormalAlbum", req_param)
 
-    def create_conditional_album(
-        self, name: str, condition: list[str]
-    ) -> dict[str, object] | str:
+    def create_conditional_album(self, name: str, condition: list[str]) -> dict[str, object] | str:
         """create conditional album"""
         req_param = {"method": "create", "name": name, "condition": condition}
         return self._request_data("SYNO.Foto.Browse.ConditionAlbum", req_param)
@@ -706,9 +680,7 @@ class Photos:
         }
         return self._request_data("SYNO.Foto.Browse.Album", req_param)
 
-    def set_album_condition(
-        self, folder_id: int, condition: list[str]
-    ) -> dict[str, object] | str:
+    def set_album_condition(self, folder_id: int, condition: list[str]) -> dict[str, object] | str:
         """set conditions on album"""
         req_param = {
             "method": "set_condition",
@@ -779,9 +751,7 @@ class Photos:
         }
         return self._request_data(api_name, req_param)
 
-    def list_shareable_users_and_groups(
-        self, team_space_sharable_list: bool = False
-    ) -> dict[str, object] | str:
+    def list_shareable_users_and_groups(self, team_space_sharable_list: bool = False) -> dict[str, object] | str:
         """list shareable users and groups"""
         req_param = {
             "method": "list_user_group",
@@ -808,24 +778,20 @@ class Photos:
 
             sort_by : in ["filename", "filesize", "item_type", "takentime"],
 
-            additionnal : list in ["sharing_info", "thumbnail", ... ]
+            additional : list in ["sharing_info", "thumbnail", ... ]
         ### Return
             photo list
         """
         req_param = dict({"album_id": album_id}, **kwargs)
         if "id" in req_param:
             req_param["method"] = "get"
-        return self._method_list(
-            "SYNO.Foto.Browse.Item", http_method="post", **req_param
-        )["data"]["list"]
+        return self._method_list("SYNO.Foto.Browse.Item", http_method="post", **req_param)["data"]["list"]
 
     #
     # methods on filters
     #
 
-    def count_photos_with_filter(
-        self, folder_id: int, filters: dict[str, object], team: bool = False
-    ) -> int:
+    def count_photos_with_filter(self, folder_id: int, filters: dict[str, object], team: bool = False) -> int:
         """Count photos with filter
         ### Parameter
             folder_id : folder id
@@ -835,9 +801,7 @@ class Photos:
           photos count
         """
         api_name = "SYNO.FotoTeam.Browse.Item" if team else "SYNO.Foto.Browse.Item"
-        req_param = dict(
-            {"folder": [folder_id], "method": "count_with_filter"}, **filters
-        )
+        req_param = dict({"folder": [folder_id], "method": "count_with_filter"}, **filters)
         return self._request_data(api_name, req_param, method="post")["data"]["count"]
 
     def photos_with_filter(
@@ -850,7 +814,7 @@ class Photos:
             filters : filters
             team : personal or shared space
         ### kwargs parameters
-            offset, limit, sort_direction, additionnal
+            offset, limit, sort_direction, additional
 
             sort_by : in ["filename", "filesize", "item_type", "takentime"],
 
@@ -867,9 +831,7 @@ class Photos:
             **filters,
             **kwargs,
         )
-        return self._method_list(api_name, http_method="post", **req_param)["data"][
-            "list"
-        ]
+        return self._method_list(api_name, http_method="post", **req_param)["data"]["list"]
 
     def list_search_filters(
         self,
@@ -909,15 +871,13 @@ class Photos:
     # methods on photos
     #
 
-    def photos_from_ids(
-        self, photo_ids: int | list[int], team: bool = False, **kwargs
-    ) -> list[dict[str, object]]:
+    def photos_from_ids(self, photo_ids: int | list[int], team: bool = False, **kwargs) -> list[dict[str, object]]:
         """Get photos list infos from identifiers
         ### Parameters
             photo_ids : photo identifier, or list of folder identifier
             team : personal or shared space
         ### kwargs parameters
-            offset, limit, sort_by, sort_direction, additionnal, ...
+            offset, limit, sort_by, sort_direction, additional, ...
         ### Return
             photos list
         """
@@ -947,13 +907,9 @@ class Photos:
         if isinstance(photo_id, int):
             photo_id = [photo_id]
         req_param = {"method": "download", "unit_id": photo_id}
-        data = self._request_data(
-            api_name, req_param, method="post", response_json=False
-        )
-        if data.text.startswith('{"error"'):
-            raise PhotosError(
-                API_ERROR, f"Photo {data.reason} (code:{data.status_code})"
-            )
+        data = self._request_data(api_name, req_param, method="post", response_json=False)
+        if data._content[: len('{"error"')] == b'{"error"':
+            raise PhotosError(API_ERROR, f"Photo {data.reason} (code:{data.status_code})")
         return data.content
 
     def thumbnail_download(
@@ -992,20 +948,16 @@ class Photos:
             "type": "unit",
             "cache_key": cache_key,
         }
-        data = self._request_data(
-            api_name, req_param, method="post", response_json=False
-        )
-        if data.text.startswith('{"error"'):
-            raise PhotosError(
-                API_ERROR, f"Thumbnail {data.reason} (code:{data.status_code})"
-            )
+        data = self._request_data(api_name, req_param, method="post", response_json=False)
+        if data.status_code != 200 or data._content[: len('{"error"')] == b'{"error"':
+            raise PhotosError(API_ERROR, f"Thumbnail {data.reason} (code:{data.status_code})")
         return data.content
 
     #
     # methods on keywords
     #
 
-    def count_keyword(self, keyword: str, team: bool = False) -> int:
+    def count_photos_with_keyword(self, keyword: str, team: bool = False) -> int:
         """Count photos with keyword in geolocalisation address, filename, description, identifier, ...
         ### Parameters
             * keyword : keyword to search
@@ -1017,9 +969,7 @@ class Photos:
         req_param = {"method": "count_item", "keyword": keyword}
         return self._request_data(api_name, req_param, method="post")["data"]["count"]
 
-    def search_keyword(
-        self, keyword: str, team: bool = False, **kwargs
-    ) -> dict[str, object]:
+    def photos_with_keyword(self, keyword: str, team: bool = False, **kwargs) -> dict[str, object]:
         """Search photos with keyword in geolocalisation address, filename, description, identifier, ...
 
         Warning : the method is case sensitive
@@ -1027,7 +977,7 @@ class Photos:
             * keyword : keyword to search
             * team : space to use: personal (`False`) or shared (`True`) space
         ### kwargs parameters
-            offset, limit, sort_by, sort_direction, additionnal, ...
+            offset, limit, sort_by, sort_direction, additional, ...
         ### Return
             photo list
         """
@@ -1052,12 +1002,10 @@ class Photos:
         ### Return
             tags count
         """
-        api_name = (
-            "SYNO.FotoTeam.Browse.GeneralTag" if team else "SYNO.Foto.Browse.GeneralTag"
-        )
+        api_name = "SYNO.FotoTeam.Browse.GeneralTag" if team else "SYNO.Foto.Browse.GeneralTag"
         return self._count(api_name)
 
-    def general_tags(self, team: bool = False, **kwargs) -> dict[str, object]:
+    def general_tags(self, team: bool = False, **kwargs) -> list[dict[str, object]]:
         """Get all tags (identifiers)
         ### Parameters
             * team : space to use: personal (`False`) or shared (`True`) space
@@ -1080,15 +1028,11 @@ class Photos:
             ]
         ```
         """
-        api_name = (
-            "SYNO.FotoTeam.Browse.GeneralTag" if team else "SYNO.Foto.Browse.GeneralTag"
-        )
+        api_name = "SYNO.FotoTeam.Browse.GeneralTag" if team else "SYNO.Foto.Browse.GeneralTag"
         self._tags[team] = self._method_list(api_name, **kwargs)["data"]["list"]
         return self._tags[team]
 
-    def general_tag(
-        self, tag: int | list[int] | str, team: bool = False, **kwargs
-    ) -> list[dict[str, object]] | None:
+    def general_tag(self, tag: int | list[int] | str, team: bool = False, **kwargs) -> list[dict[str, object]] | None:
         """Get specific tag
         ### Parameters
             * tag : tag(s) to retrieve. Can be an id (int), a list of id (int) or a tag name (str)
@@ -1106,9 +1050,7 @@ class Photos:
             }, ]
         ```
         """
-        api_name = (
-            "SYNO.FotoTeam.Browse.GeneralTag" if team else "SYNO.Foto.Browse.GeneralTag"
-        )
+        api_name = "SYNO.FotoTeam.Browse.GeneralTag" if team else "SYNO.Foto.Browse.GeneralTag"
 
         if isinstance(tag, int):
             tag = [tag]
@@ -1121,9 +1063,7 @@ class Photos:
             return None
 
         req_param = dict({"method": "get", "id": tag}, **kwargs)
-        return self._request_data(api_name, req_param=req_param, method="post")["data"][
-            "list"
-        ]
+        return self._request_data(api_name, req_param=req_param, method="post")["data"]["list"]
 
     def count_photos_with_tag(self, tag: str, team: bool = False) -> int:
         """count photos with specific tag
@@ -1138,17 +1078,15 @@ class Photos:
         for tag_obj in tags:
             if tag_obj["name"].lower() == tag.lower():
                 return tag_obj["item_count"]
-        return None
+        return 0
 
-    def photos_with_tag(
-        self, tag_name: str, team: bool = False, **kwargs
-    ) -> list[dict[str, object]]:
+    def photos_with_tag(self, tag_name: str, team: bool = False, **kwargs) -> list[dict[str, object]]:
         """get photos list with specific tag
         ### Parameters
             * tag_name : tag to search
             * team : space to use: personal (`False`) or shared (`True`) space
         ### kwargs parameters
-            offset, limit, sort_by, sort_direction, additionnal, ...
+            offset, limit, sort_by, sort_direction, additional, ...
 
             sort_by : in ["filename", "filesize", "item_type", "takentime"],
 
@@ -1161,9 +1099,7 @@ class Photos:
         if tags is None:
             return []
         req_param = dict({"general_tag_id": tags[0]["id"]}, **kwargs)
-        return self._method_list(api_name, http_method="post", **req_param)["data"][
-            "list"
-        ]
+        return self._method_list(api_name, http_method="post", **req_param)["data"]["list"]
 
     def get_admin_settings(self) -> dict[str, object] | str:
         """### Get admin settings
@@ -1267,9 +1203,7 @@ class Photos:
                 vname = dict_idname["name"]
                 if vname.lower() == value.lower():
                     return dict_idname["id"]
-            raise PhotosError(
-                API_ERROR, f'Incorrect value for filter["{key}"] : {value}'
-            )
+            raise PhotosError(API_ERROR, f'Incorrect value for filter["{key}"] : {value}')
 
         filters = dict(filters)
         for key, values in filters.items():
@@ -1296,9 +1230,7 @@ class Photos:
                         if isinstance(item, dict):
                             continue  # no check for dict
                         elif isinstance(item, tuple) and len(item) == 2:
-                            if isinstance(item[0], datetime) and isinstance(
-                                item[1], datetime
-                            ):
+                            if isinstance(item[0], datetime) and isinstance(item[1], datetime):
                                 filters[key][index] = {
                                     "start_time": int(item[0].timestamp()),
                                     "end_time": int(item[1].timestamp()),
@@ -1309,9 +1241,7 @@ class Photos:
                                     "end_time": item[1],
                                 }
                         else:
-                            raise PhotosError(
-                                API_ERROR, 'Incorrect value type for filter["time"]'
-                            )
+                            raise PhotosError(API_ERROR, 'Incorrect value type for filter["time"]')
                 elif (
                     isinstance(values, tuple)
                     and len(values) == 2
@@ -1325,9 +1255,7 @@ class Photos:
                         }
                     ]
                 else:
-                    raise PhotosError(
-                        API_ERROR, 'Incorrect value type for filter["time"]'
-                    )
+                    raise PhotosError(API_ERROR, 'Incorrect value type for filter["time"]')
 
             elif key == "focal_length_group":
                 if isinstance(values, tuple) and len(values) == 2:
@@ -1349,9 +1277,7 @@ class Photos:
     # timeline methods
     #
 
-    def get_timeline(
-        self, unit: str, team: bool = False, **kwargs
-    ) -> list[dict[str, object]]:
+    def get_timeline(self, unit: str, team: bool = False, **kwargs) -> list[dict[str, object]]:
         """Get timeline
         ### Parameters
             * unit : group timeline by "day" or "month"
@@ -1360,9 +1286,7 @@ class Photos:
             * timeline section list
 
         """
-        api_name = (
-            "SYNO.FotoTeam.Browse.Timeline" if team else "SYNO.Foto.Browse.Timeline"
-        )
+        api_name = "SYNO.FotoTeam.Browse.Timeline" if team else "SYNO.Foto.Browse.Timeline"
         req_param = dict({"timeline_group_unit": unit, "method": "get"}, **kwargs)
         return self._request_data(api_name, req_param, method="post")["data"]["section"]
 
@@ -1375,7 +1299,7 @@ class Photos:
             * start_time, end_time : date range of photos to retrieve
             * team : space to use: personal (`False`) or shared (`True`) space
         ### kwargs parameters
-            offset, limit, sort_by, sort_direction, additionnal, ...
+            offset, limit, sort_by, sort_direction, additional, ...
         ### Return
             photos list
 
@@ -1464,11 +1388,7 @@ class DatePhoto:
         next_month = self.date.replace(day=28) + timedelta(days=4)
         # subtracting the number of the current day brings us back one month
         # return next_month - datetime.timedelta(days=next_month.day)
-        return DatePhoto(
-            (next_month - timedelta(days=next_month.day)).replace(
-                hour=23, minute=59, second=59
-            )
-        )
+        return DatePhoto((next_month - timedelta(days=next_month.day)).replace(hour=23, minute=59, second=59))
 
     def __eq__(self, other):
         if not isinstance(other, DatePhoto):
