@@ -2,7 +2,7 @@ from typing import Optional, Any
 from . import auth as syn
 
 
-class Core(object):
+class BaseApi(object):
     def __init__(self,
                  ip_address: str,
                  port: str,
@@ -14,6 +14,7 @@ class Core(object):
                  debug: bool = True,
                  otp_code: Optional[str] = None
                  ) -> None:
+
         self.session: syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify,
                                                               dsm_version, debug, otp_code)
         self.session.login('Core')

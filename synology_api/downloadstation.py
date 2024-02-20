@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import Optional, Any
-from . import auth as syn
+from . import base_api
 
 
-class DownloadStation:
+class DownloadStation(base_api.BaseApi):
 
     def __init__(self,
                  ip_address: str,
@@ -15,27 +15,25 @@ class DownloadStation:
                  dsm_version: int = 7,
                  debug: bool = True,
                  otp_code: Optional[str] = None,
-                 interactive_output: bool = True
+                 interactive_output: bool = True,
+                 download_st_version: int = None
                  ) -> None:
 
-        self.session: syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify,
-                                                              dsm_version, debug, otp_code)
+        super(DownloadStation, self).__init__(ip_address, port, username, password, secure, cert_verify,
+                                              dsm_version, debug, otp_code)
+
         self._bt_search_id: str = ''
         self._bt_search_id_list: list[str] = []
-        self.session.login('DownloadStation')
         self.session.get_api_list('DownloadStation')
 
-        self.request_data: Any = self.session.request_data
         self.download_list: Any = self.session.app_api_list
-        self._sid: str = self.session.sid
-        self.base_url: str = self.session.base_url
 
         self.interactive_output: bool = interactive_output
-        return
 
-    def logout(self) -> None:
-        self.session.logout('DownloadStation')
-        return
+        if download_st_version == 2:
+            self.download_st_version = '2'
+        else:
+            self.download_st_version = ''
 
     def get_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation.Info'
@@ -104,7 +102,7 @@ class DownloadStation:
                    offset: int = 0,
                    limit: int = -1
                    ) -> dict[str, object] | str:
-        api_name = 'SYNO.DownloadStation.Task'
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': additional_param, 'limit': limit,
@@ -119,7 +117,7 @@ class DownloadStation:
         return self.request_data(api_name, api_path, req_param)
 
     def tasks_info(self, task_id, additional_param: Optional[str | list[str]] = None) -> dict[str, object] | str:
-        api_name = 'SYNO.DownloadStation.Task'
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'getinfo', 'id': task_id, 'additional': additional_param}
@@ -136,7 +134,7 @@ class DownloadStation:
         return self.request_data(api_name, api_path, req_param)
 
     def create_task(self, uri, additional_param: Optional[dict[str, object]] = None) -> dict[str, object] | str:
-        api_name = 'SYNO.DownloadStation.Task'
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'create', 'uri': uri}
@@ -148,7 +146,7 @@ class DownloadStation:
         return self.request_data(api_name, api_path, req_param)
 
     def delete_task(self, task_id: str, force: bool = False) -> dict[str, object] | str:
-        api_name = 'SYNO.DownloadStation.Task'
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
         param = {'version': info['maxVersion'], 'method': 'delete', 'id': task_id,
@@ -160,7 +158,7 @@ class DownloadStation:
         return self.request_data(api_name, api_path, param)
 
     def pause_task(self, task_id: str) -> dict[str, object] | str:
-        api_name = 'SYNO.DownloadStation.Task'
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
         param = {'version': info['maxVersion'], 'method': 'pause', 'id': task_id}
@@ -171,7 +169,7 @@ class DownloadStation:
         return self.request_data(api_name, api_path, param)
 
     def resume_task(self, task_id: str) -> dict[str, object] | str:
-        api_name = 'SYNO.DownloadStation.Task'
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
         param = {'version': info['maxVersion'], 'method': 'resume', 'id': task_id}
@@ -182,7 +180,7 @@ class DownloadStation:
         return self.request_data(api_name, api_path, param)
 
     def edit_task(self, task_id: str, destination: str = 'sharedfolder') -> dict[str, object] | str:
-        api_name = 'SYNO.DownloadStation.Task'
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
         param = {'version': info['maxVersion'], 'method': 'edit', 'id': task_id, 'destination': destination}
@@ -232,7 +230,7 @@ class DownloadStation:
                       offset: Optional[int] = None,
                       limit: Optional[int] = None
                       ) -> dict[str, object] | str:
-        api_name = 'SYNO.DownloadStation.RSS.Feed'
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Feed'
         info = self.download_list[api_name]
         api_path = info['path']
         param = {'version': info['maxVersion'], 'method': 'list', 'id': rss_id}
@@ -251,7 +249,7 @@ class DownloadStation:
         return self.request_data(api_name, api_path, param)
 
     def start_bt_search(self, keyword: Optional[str] = None, module: str = 'all') -> dict[str, object] | str:
-        api_name = 'SYNO.DownloadStation.BTSearch'
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
         param = {'version': info['maxVersion'], 'method': 'start'}
@@ -286,7 +284,7 @@ class DownloadStation:
                               filter_category: Optional[str] = None,
                               filter_title: Optional[str] = None
                               ) -> dict[str, object] | str:
-        api_name = 'SYNO.DownloadStation.BTSearch'
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
         param = {'version': info['maxVersion'], 'method': 'list', 'taskid': taskid}
@@ -304,7 +302,7 @@ class DownloadStation:
         return self.request_data(api_name, api_path, param)
 
     def get_bt_search_category(self) -> dict[str, object] | str:
-        api_name = 'SYNO.DownloadStation.BTSearch'
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
         param = {'version': info['maxVersion'], 'method': 'get'}
@@ -312,7 +310,7 @@ class DownloadStation:
         return self.request_data(api_name, api_path, param)
 
     def clean_bt_search(self, taskid: Optional[str | list[str]] = None) -> dict[str, object] | str:
-        api_name = 'SYNO.DownloadStation.BTSearch'
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
         param = {'version': info['maxVersion'], 'method': 'clean', 'taskid': taskid}
@@ -329,7 +327,7 @@ class DownloadStation:
         return self.request_data(api_name, api_path, param)
 
     def get_bt_module(self) -> dict[str, object] | str:
-        api_name = 'SYNO.DownloadStation.BTSearch'
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
         param = {'version': info['maxVersion'], 'method': 'getModule'}

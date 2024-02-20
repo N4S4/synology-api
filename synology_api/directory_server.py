@@ -2,10 +2,10 @@
 from __future__ import annotations
 import json
 from typing import List, Optional, Any
-from . import base_api_core
+from . import base_api
 
 
-class DirectoryServer(base_api_core.Core):
+class DirectoryServer(base_api.BaseApi):
     """The directory server API.
 
     Not all items within this class use the Active Directory API.  Some use the Synology Entry API which proxies
@@ -31,20 +31,6 @@ class DirectoryServer(base_api_core.Core):
     - Delete a single item from the Directory Server
     - Perform an entry request to complete a Deletion
     """
-
-    def __init__(self,
-                    ip_address: str,
-                    port: str,
-                    username: str,
-                    password: str,
-                    secure: bool = False,
-                    cert_verify: bool = False,
-                    dsm_version: int = 7,
-                    debug: bool = True,
-                    otp_code: Optional[str] = None
-                ) -> None:
-        super(DirectoryServer, self).__init__(ip_address, port,
-                                              username, password, secure, cert_verify, dsm_version, debug, otp_code)
 
     def get_directory_info(self) -> dict[str, object] | str:
         """

@@ -55,7 +55,6 @@ class Authentication:
 
         self.full_api_list = {}
         self.app_api_list = {}
-        return
 
     def verify_cert_enabled(self) -> bool:
         return self._verify

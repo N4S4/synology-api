@@ -1,29 +1,17 @@
 from __future__ import annotations
+
 from typing import Optional
-from . import base_api_core
+
+from . import base_api
 
 
-class DhcpServer(base_api_core.Core):
-    def __init__(self,
-                 ip_address: str,
-                 port: str,
-                 username: str,
-                 password: str,
-                 secure: bool = False,
-                 cert_verify: bool = False,
-                 dsm_version: int = 7,
-                 debug: bool = True,
-                 otp_code: Optional[str] = None
-                 ) -> None:
-        super(DhcpServer, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug,
-                                         otp_code)
-        return
+class DhcpServer(base_api.BaseApi):
 
-    def general_info(self) -> dict[str, object] | str:
+    def general_info(self, ifname:str = 'ovs_eth0') -> dict[str, object] | str:
         api_name = 'SYNO.Network.DHCPServer'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'ifname': 'ovs_eth0'}
+        req_param = {'version': info['maxVersion'], 'method': 'get', 'ifname': ifname}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -64,5 +52,21 @@ class DhcpServer(base_api_core.Core):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def dhcp_clientlist(self, ifname:str = 'bond0') -> dict[str, object] | str:
+        api_name = 'SYNO.Network.DHCPServer.ClientList'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'ifname': ifname}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def dhcp_reservations(self, ifname:str = 'bond0') -> dict[str, object] | str:
+        api_name = 'SYNO.Network.DHCPServer.Reservation'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get', 'ifname': ifname}
 
         return self.request_data(api_name, api_path, req_param)

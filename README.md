@@ -127,11 +127,16 @@ I will slowly implement more functions, Synology APIs are plenty, too many for m
 
 This wrapper cover the following APIs for now:
 
-| DownloadStation               |
-|-------------------------------|
-| SYNO.DownloadStation.Info     |
-| SYNO.DownloadStation.Schedule |
-| SYNO.DownloadStation.Task     |
+| DownloadStation                |
+|--------------------------------|
+| SYNO.DownloadStation.Info      |
+| SYNO.DownloadStation.Schedule  |
+| SYNO.DownloadStation.Task      |
+| SYNO.DownloadStation.Statistic |
+| SYNO.DownloadStation.RSS.Site  |
+| SYNO.DownloadStation.RSS.Feed  |
+| SYNO.DownloadStation.BTSearch  |
+
 
 | FileStation                      |
 |----------------------------------|
@@ -245,10 +250,76 @@ This wrapper cover the following APIs for now:
 |-------------------------------------------------|
 | SYNO.ActiveBackup.Inventory                     |
 | SYNO.ActiveBackup.Overview                      |
+| SYNO.ActiveBackup.Task                          |
+| SYNO.ActiveBackup.Share                         |
 
 | Snapshot Replication     |
 | -------------------------|
 | SYNO.Core.Share.Snapshot |
+
+#
+### Not all Surveillance Station functions works.
+
+| Surveillance Station     |
+|--------------------------|
+| SYNO.SurveillanceStation.Info |
+| SYNO.SurveillanceStation.Camera |
+| SYNO.Surveillance.Camera.Event |
+| SYNO.SurveillanceStation.Camera.Group |
+| SYNO.SurveillanceStation.Camera.Import |
+| SYNO.SurveillanceStation.Camera.Wizard |
+| SYNO.SurveillanceStation.PTZ |
+| SYNO.SurveillanceStation.ExternalRecording. |
+| SYNO.SurveillanceStation.Recording |
+| SYNO.SurveillanceStation.Recording.Export |
+| SYNO.SurveillanceStation.Recording.Mount |
+| SYNO.SurveillanceStation.CMS |
+| SYNO.SurveillanceStation.CMS.GetDsStatus |
+| SYNO.SurveillanceStation.CMS.SlavedsWizard |
+| SYNO.SurveillanceStation.CMS.SlavedsList |
+| SYNO.SurveillanceStation.Log |
+| SYNO.SurveillanceStation.License |
+| SYNO.SurveillanceStation.Stream |
+| SYNO.SurveillanceStation.ActionRule |
+| SYNO.SurveillanceStation.Emap |
+| SYNO.SurveillanceStation.Emap.Image |
+| SYNO.SurveillanceStation.Notification |
+| SYNO.SurveillanceStation.Notification.SMS |
+| SYNO.SurveillanceStation.Notification.PushService |
+| SYNO.SurveillanceStation.Notification.Schedule |
+| SYNO.SurveillanceStation.Notification.Email |
+| SYNO.SurveillanceStation.Notification.Filter |
+| SYNO.SurveillanceStation.Notification.SMS.ServiceProvider |
+| SYNO.SurveillanceStation.Addons |
+| SYNO.SurveillanceStation.Alert |
+| SYNO.SurveillanceStation.Alert.Setting |
+| SYNO.SurveillanceStation.SnapShot |
+| SYNO.SurveillanceStation.VisualStation |
+| SYNO.SurveillanceStation.VisualStation.Layout |
+| SYNO.SurveillanceStation.VisualStation.Search |
+| SYNO.SurveillanceStation.AxisAcsCtrler |
+| SYNO.SurveillanceStation.AxisAcsCtrler.Search |
+| SYNO.SurveillanceStation.DigitalOutput |
+| SYNO.SurveillanceStation.ExternalEvent |
+| SYNO.SurveillanceStation.IOModule |
+| SYNO.SurveillanceStation.IOModuleSearch |
+| SYNO.SurveillanceStation.Camera.Status |
+| SYNO.SurveillanceStation.PTZ.Preset |
+| SYNO.SurveillanceStation.PTZ.Patrol. |
+| SYNO.SurveillanceStation.Camera.Search |
+| SYNO.SurveillanceStation.HomeMode |
+| SYNO.SurveillanceStation.Transactions.Device |
+| SYNO.SurveillanceStation.Transactions.Transaction |
+| SYNO.SurveillanceStation.Archiving.Pull |
+| SYNO.SurveillanceStation.YoutubeLive |
+| SYNO.SurveillanceStation.IVA |
+| SYNO.SurveillanceStation.IVA.Report |
+| SYNO.SurveillanceStation.IVA.Recording |
+| SYNO.SurveillanceStation.IVA.TaskGroup |
+| SYNO.SurveillanceStation.Face |
+| SYNO.SurveillanceStation.Face.Result |
+| SYNO.SurveillanceStation.Recording.Bookmark |
+
 
 #### FileStation Functions list
 
@@ -311,6 +382,10 @@ To run the following functions you'll have to start the task with the start func
 | get_file()               | Download or open file                                      |
 
 #### DownloadStations functions:
+
+For some of DownloadStation API there is the possibility to set version 2, ex. SYNO.DownloadStation.BTSearch,
+if you encounter problems you might set ```download_st_version = 2``` during initialization. 
+
 
 | Function              | Description                              |
 |-----------------------|------------------------------------------|
@@ -511,6 +586,7 @@ DS info with below functions:
 |-----------------------------|------------------------------------|
 | list_vm_hypervisor()        | list of all configured hypervisors |
 | list_device_transfer_size() | list of all detected vms           |
+| list_storage()              | list of all storages               |
 
 ### core_certificate tnx to @ajarzyn
 
@@ -561,6 +637,8 @@ DS info with below functions:
 | tftp()             | 
 | network_bond()     | 
 | network_ethernet() | 
+| dhcp_clientlist() | 
+| dhcp_reservations() | 
 
 
 ### usb_copy 

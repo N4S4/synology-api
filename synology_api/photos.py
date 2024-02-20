@@ -12,7 +12,7 @@ from typing import Optional, Any
 import json
 from datetime import datetime, timedelta
 import pytz
-from . import auth as syn
+from . import base_api
 from .exceptions import PhotosError
 
 
@@ -20,7 +20,7 @@ from .exceptions import PhotosError
 API_ERROR = 1212
 
 
-class Photos:
+class Photos(base_api.BaseApi):
     """Implements access to APIs Synology Photo (DSM 7)
 
     ### Notes :
@@ -330,12 +330,11 @@ class Photos:
             otp_code,
         )
 
-        self.session.login("Foto")
-        self.session.get_api_list("Foto")
+        self.session.login('Foto')
+        self.session.get_api_list('Foto')
 
         self.request_data: Any = self.session.request_data
         self.photos_list: Any = self.session.app_api_list
-        self._sid: str = self.session.sid
         self.base_url: str = self.session.base_url
 
         self._userinfo: Any = None
