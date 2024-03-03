@@ -6,6 +6,7 @@ from .error_codes import error_codes, CODE_SUCCESS, download_station_error_codes
 from .error_codes import auth_error_codes, virtualization_error_codes
 from urllib3 import disable_warnings
 from urllib3.exceptions import InsecureRequestWarning
+from .exceptions import APIError
 from .exceptions import SynoConnectionError, HTTPError, JSONDecodeError, LoginError, LogoutError, DownloadStationError
 from .exceptions import FileStationError, AudioStationError, ActiveBackupError, VirtualizationError, BackupError
 from .exceptions import CertificateError, DHCPServerError, DirectoryServerError, DockerError, DriveAdminError
@@ -13,17 +14,6 @@ from .exceptions import LogCenterError, NoteStationError, OAUTHError, PhotosErro
 from .exceptions import UniversalSearchError, USBCopyError, VPNError, CoreSysInfoError, UndefinedError
 
 USE_EXCEPTIONS: bool = True
-
-class APIError:
-    def __init__(self, code = 0, details: dict = None):
-        self._code = code
-        self._details = details
-
-    def code(self) -> int:
-        return self._code
-    
-    def details(self) -> dict:
-        return self._details
 
 class Authentication:
     def __init__(self,
@@ -55,6 +45,7 @@ class Authentication:
 
         self.full_api_list = {}
         self.app_api_list = {}
+        return
 
     def verify_cert_enabled(self) -> bool:
         return self._verify
@@ -300,6 +291,9 @@ class Authentication:
             else:
                 # Will raise its own error:
                 error = self._get_error_code(response.json())
+        else:
+            if response._content[: len('{"error"')] == b'{"error"':
+                error = self._get_error_code(json.loads(response._content.decode()))
         
         error_code = error.code()
         if error_code:
@@ -351,7 +345,7 @@ class Authentication:
                     raise OAUTHError(error_code=error_code)
                 # Photo station error:
                 elif api_name.find('SYNO.Foto') > -1:
-                    raise PhotosError(error_code, self._get_error_message(error, api_name))
+                    raise PhotosError(error)
                 # Security advisor error:
                 elif api_name.find('SecurityAdvisor') > -1:
                     raise SecurityAdvisorError(error_code=error_code)
@@ -396,13 +390,6 @@ class Authentication:
     @staticmethod
     def _get_error_message(error: APIError, api_name: str) -> str:
         code = error.code()
-        errors = error.details()
-        if api_name.find('Foto') > -1 and error.details():
-            try:
-                message = f'"{errors["name"]}" : {errors["reason"]}'
-            except KeyError:
-                message = f'details: "{str(errors)}"'
-            return message
         if code in error_codes:
             message = error_codes[code]
         elif api_name == 'Auth':

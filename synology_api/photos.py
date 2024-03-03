@@ -13,7 +13,7 @@ import json
 from datetime import datetime, timedelta
 import pytz
 from . import base_api
-from .exceptions import PhotosError
+from .exceptions import PhotosError, APIError
 
 
 # error code when raising PhotosError from this file
@@ -898,7 +898,7 @@ class Photos(base_api.BaseApi):
         req_param = {"method": "download", "unit_id": photo_id}
         data = self._request_data(api_name, req_param, method="post", response_json=False)
         if data._content[: len('{"error"')] == b'{"error"':
-            raise PhotosError(API_ERROR, f"Photo {data.reason} (code:{data.status_code})")
+            raise PhotosError(APIError(API_ERROR, f"Photo {data.reason} (code:{data.status_code})"))
         return data.content
 
     def thumbnail_download(
@@ -928,7 +928,7 @@ class Photos(base_api.BaseApi):
                     cache_key = photos[0]["additional"]["thumbnail"]["cache_key"]
                     break
             if not cache_key:
-                raise PhotosError(API_ERROR, f"photo {photo_id} not found)")
+                raise PhotosError(APIError(API_ERROR, f"photo {photo_id} not found"))
         api_name = "SYNO.FotoTeam.Thumbnail" if team else "SYNO.Foto.Thumbnail"
         req_param = {
             "method": "get",
@@ -939,7 +939,7 @@ class Photos(base_api.BaseApi):
         }
         data = self._request_data(api_name, req_param, method="post", response_json=False)
         if data.status_code != 200 or data._content[: len('{"error"')] == b'{"error"':
-            raise PhotosError(API_ERROR, f"Thumbnail {data.reason} (code:{data.status_code})")
+            raise PhotosError(APIError(API_ERROR, f"Thumbnail {data.reason} (code:{data.status_code})"))
         return data.content
 
     #
@@ -1192,7 +1192,7 @@ class Photos(base_api.BaseApi):
                 vname = dict_idname["name"]
                 if vname.lower() == value.lower():
                     return dict_idname["id"]
-            raise PhotosError(API_ERROR, f'Incorrect value for filter["{key}"] : {value}')
+            raise PhotosError(APIError(API_ERROR, f'Incorrect value for filter["{key}"] : {value}'))
 
         filters = dict(filters)
         for key, values in filters.items():
@@ -1208,9 +1208,10 @@ class Photos(base_api.BaseApi):
                 elif isinstance(values, int):
                     filters[key] = [values]
                 else:
-                    raise PhotosError(
+                    raise PhotosError(APIError(
                         API_ERROR,
                         f'Incorrect value type for filter["{key}"] : {type(values).__name__}',
+                        )
                     )
 
             elif key == "time":
@@ -1230,7 +1231,7 @@ class Photos(base_api.BaseApi):
                                     "end_time": item[1],
                                 }
                         else:
-                            raise PhotosError(API_ERROR, 'Incorrect value type for filter["time"]')
+                            raise PhotosError(APIError(API_ERROR, 'Incorrect value type for filter["time"]'))
                 elif (
                     isinstance(values, tuple)
                     and len(values) == 2
@@ -1244,7 +1245,7 @@ class Photos(base_api.BaseApi):
                         }
                     ]
                 else:
-                    raise PhotosError(API_ERROR, 'Incorrect value type for filter["time"]')
+                    raise PhotosError(APIError(API_ERROR, 'Incorrect value type for filter["time"]'))
 
             elif key == "focal_length_group":
                 if isinstance(values, tuple) and len(values) == 2:

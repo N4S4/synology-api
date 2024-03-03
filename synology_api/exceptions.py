@@ -2,6 +2,19 @@ from .error_codes import error_codes, auth_error_codes, download_station_error_c
 from .error_codes import virtualization_error_codes
 
 
+class APIError:
+    """Raw Error from APIs. Code, and details when available"""
+
+    def __init__(self, code = 0, details: dict = None):
+        self._code = code
+        self._details = details
+
+    def code(self) -> int:
+        return self._code
+
+    def details(self) -> dict:
+        return self._details
+
 # Base exception:
 class SynoBaseException(Exception):
     """Base class for an exception. Defines error_message."""
@@ -240,12 +253,18 @@ class OAUTHError(SynoBaseException):
 class PhotosError(SynoBaseException):
     """Class for an error during a Photos request. NOTE: No error docs."""
 
-    def __init__(self, error_code: int, error_message: str, *args: object) -> None:
-        self.error_code = error_code
-        if error_code in error_codes:
-            super().__init__(f'(err {self.error_code} [{error_codes[error_code]}]) {error_message}', *args)
+    def __init__(self, error: APIError, *args: object) -> None:
+        self.error_code = error.code()
+        message = ""
+        if error.details():
+            try:
+                message = f'"{error.details()["name"]}" : {error.details()["reason"]}'
+            except (KeyError, TypeError):
+                message = f'{str(error.details())}'
         else:
-            super().__init__(f'(err {self.error_code}) {error_message}', *args)
+            if error.code() in error_codes:
+                message = error_codes[error.code()]
+        super().__init__(f"Error {error.code()} {message}", *args)
 
     def __str__(self):
         return self.error_message
