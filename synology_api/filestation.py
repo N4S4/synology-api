@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Optional, Any
 import os
+import io
 import time
 from datetime import datetime
 
@@ -8,10 +9,10 @@ import requests
 import sys
 from urllib import parse
 
-from . import auth as syn
+from . import base_api
 
 
-class FileStation:
+class FileStation(base_api.BaseApi):
 
     def __init__(self,
                  ip_address: str,
@@ -26,8 +27,8 @@ class FileStation:
                  interactive_output: bool = True
                  ) -> None:
 
-        self.session: syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify,
-                                                              dsm_version, debug, otp_code)
+        super(FileStation, self).__init__(ip_address, port, username, password, secure, cert_verify,
+                                          dsm_version, debug, otp_code)
 
         self._dir_taskid: str = ''
         self._dir_taskid_list: list[str] = []
@@ -43,26 +44,18 @@ class FileStation:
         self._extract_taskid_list: list[str] = []
         self._compress_taskid: str = ''
         self._compress_taskid_list: list[str] = []
-        self.request_data = self.session.request_data
 
-        self.session.login('FileStation')
         self.session.get_api_list('FileStation')
 
         self.file_station_list: Any = self.session.app_api_list
-        self._sid: str = self.session.sid
-        self.base_url: str = self.session.base_url
 
         self.interactive_output: bool = interactive_output
-
-    def logout(self) -> None:
-        self.session.logout('FileStation')
-        return
 
     def get_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Info'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', '_sid': self._sid}
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -774,7 +767,7 @@ class FileStation:
         elif path is not None:
             req_param['path'] = path
         else:
-            return 'Enter a valid path'
+            return 'Enter a valid folder path (folder path only ex. "/home/Drive/Downloads")'
 
         if type(name) is list:
             new_path = []
@@ -785,7 +778,7 @@ class FileStation:
         elif name is not None:
             req_param['name'] = name
         else:
-            return 'Enter a valid path'
+            return 'Enter a valid new folder name (new folder name only ex. "New Folder")'
 
         if additional is None:
             additional = ['real_path', 'size', 'owner', 'time']
@@ -1214,5 +1207,10 @@ class FileStation:
                     for chunk in r.iter_content(chunk_size=chunk_size):
                         if chunk:  # filter out keep-alive new chunks
                             f.write(chunk)
+
+        if mode == r'serve':
+            with session.get(url, stream=True, verify=verify) as r:
+                r.raise_for_status()
+                return io.BytesIO(r.content)
 
 # TODO SYNO.FileStation.Thumb to be done

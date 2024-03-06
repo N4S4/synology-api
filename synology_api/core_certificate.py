@@ -2,14 +2,14 @@ from __future__ import annotations
 from io import BytesIO
 from typing import Optional
 
-from . import base_api_core
+from . import base_api
 
 import os
 import requests
 import json
 
 
-class Certificate(base_api_core.Core):
+class Certificate(base_api.BaseApi):
     def __init__(self,
                  ip_address: str,
                  port: str,
@@ -24,7 +24,6 @@ class Certificate(base_api_core.Core):
         super(Certificate, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug,
                                           otp_code)
         self._debug: bool = debug
-        return
 
     def _base_certificate_methods(self,
                                   method: str,
@@ -92,11 +91,11 @@ class Certificate(base_api_core.Core):
         data_payload = {'id': cert_id or '', 'desc': desc or '', 'as_default': 'true' if set_as_default else 'false'}
 
         with open(serv_key, 'rb') as payload_serv_key, open(ser_cert, 'rb') as payload_ser_cert:
-            files = {'key': (serv_key, payload_serv_key, 'application/x-iwork-keynote-sffkey'),
-                     'cert': (ser_cert, payload_ser_cert, 'application/pkix-cert')}
+            files = {'key': (serv_key, payload_serv_key, 'application/x-x509-ca-cert'),
+                     'cert': (ser_cert, payload_ser_cert, 'application/x-x509-ca-cert')}
             if ca_cert:
                 with open(ca_cert, 'rb') as payload_ca_cert:
-                    files['inter_cert'] = (ca_cert, payload_ca_cert, 'application/pkix-cert')
+                    files['inter_cert'] = (ca_cert, payload_ca_cert, 'application/x-x509-ca-cert')
                     r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled())
             else:
                 r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled())

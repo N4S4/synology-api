@@ -1,10 +1,10 @@
 from __future__ import annotations
 from typing import Optional, Any
-from . import auth as syn
+from . import base_api
 import json
 
 
-class Photos:
+class Photos(base_api.BaseApi):
 
     def __init__(self,
                  ip_address: str,
@@ -17,22 +17,17 @@ class Photos:
                  debug: bool = True,
                  otp_code: Optional[str] = None
                  ) -> None:
-        self.session: syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify,
-                                                              dsm_version, debug, otp_code)
 
-        self.session.login('Foto')
+        super(Photos, self).__init__(ip_address, port, username, password, secure, cert_verify,
+                                     dsm_version, debug, otp_code)
+
         self.session.get_api_list('Foto')
 
         self.request_data: Any = self.session.request_data
         self.photos_list: Any = self.session.app_api_list
-        self._sid: str = self.session.sid
         self.base_url: str = self.session.base_url
 
         self._userinfo: Any = None
-
-    def logout(self) -> None:
-        self.session.logout('Foto')
-        return
 
     def get_userinfo(self) -> Any:
         if self._userinfo is not None:
