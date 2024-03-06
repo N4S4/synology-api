@@ -592,7 +592,7 @@ class FileStation(base_api.BaseApi):
 
             files = {'file': (filename, payload, 'application/octet-stream')}
 
-            r = session.post(url, data=args, files=files, verify=verify)
+            r = session.post(url, data=args, files=files, verify=verify, headers={"X-SYNO-TOKEN":self.session._syno_token})
 
             if r.status_code == 200 and r.json()['success']:
                 return 'Upload Complete'
