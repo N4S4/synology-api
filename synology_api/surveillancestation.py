@@ -76,22 +76,36 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_camera_info(self,
-                        cameraIds: str = None,
-                        privCamType: int = None,
-                        blIncludeDeletedCam: bool = None,
-                        basic: bool = None,
-                        streamInfo: bool = None,
-                        optimize: bool = None,
-                        ptz: bool = None,
-                        eventDetection: bool = None,
-                        deviceOutCap: bool = None,
-                        fisheye: bool = None,
-                        camAppInfo: bool = None) -> dict[str, object] | str:  # TODO not working
+                        cameraIds: int = None,
+                        privCamType: int = 1, 
+                        blIncludeDeletedCam: bool = True,
+                        basic: bool = True,
+                        streamInfo: bool = True,
+                        optimize: bool = True,
+                        ptz: bool = True,
+                        eventDetection: bool = True,
+                        deviceOutCap: bool = True,
+                        fisheye: bool = True,
+                        camAppInfo: bool = True) -> dict[str, object] | str:
+        '''
+        This function return information about a camera.
+        
+        cameraIds : This parameter is named cameraIds in the API documentation but it refer to 1 camera ID
+        
+        privCamType: int = 1
+            SYNO.SS.CamPriv.LIVEVIEW = 1;
+            SYNO.SS.CamPriv.PLAYBACK = 2;
+            SYNO.SS.CamPriv.LENS = 4;
+            SYNO.SS.CamPriv.AUDIO = 8;
+            SYNO.SS.CamPriv.DIGIOUT = 16;
+        
+        All other parameters must be let to default value
+        '''
 
         api_name = 'SYNO.SurveillanceStation.Camera'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetInfo'}
+        req_param = {'version': info['minVersion'], 'method': 'GetInfo'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
