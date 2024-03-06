@@ -151,19 +151,33 @@ class SurveillanceStation(base_api.BaseApi):
         ## Return only the content of the response where binary data is stored
         return self.request_data(api_name, api_path, req_param, response_json=False).content
 
-    def enable_camera(self, idList: str = None) -> dict[str, object] | str:  # TODO not working
+    def enable_camera(self, 
+                      idList: str = None,
+                      blIncludeDeletedCam: bool = False) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'Enable'}
+        
+        for key, val in locals().items():
+            if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
+                if val is not None:
+                    req_param[str(key)] = val
 
         return self.request_data(api_name, api_path, req_param)
 
-    def disable_camera(self, idList: str = None) -> dict[str, object] | str:  # TODO not working
+    def disable_camera(self, 
+                       idList: str = None,
+                       blIncludeDeletedCam: bool = False) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'Disable'}
+        
+        for key, val in locals().items():
+            if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
+                if val is not None:
+                    req_param[str(key)] = val
 
         return self.request_data(api_name, api_path, req_param)
 
