@@ -120,8 +120,10 @@ class SurveillanceStation(base_api.BaseApi):
                           id: Any = None,
                           name: str = None,
                           dsld: int = None,
-                          profileType: int = None) -> dict[str, object] | str:  # TODO not working
-
+                          profileType: int = 1) -> str:
+        ''' By default, the profileType is 1, which is the default profile.
+        Binary data is returned, so the response is not a json object.
+        '''
         api_name = 'SYNO.SurveillanceStation.Camera'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -131,8 +133,9 @@ class SurveillanceStation(base_api.BaseApi):
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
                 if val is not None:
                     req_param[str(key)] = val
-
-        return self.request_data(api_name, api_path, req_param)
+        ## Make sure to disable json response, as the response is a binary file
+        ## Return only the content of the response where binary data is stored
+        return self.request_data(api_name, api_path, req_param, response_json=False).content
 
     def enable_camera(self, idList: str = None) -> dict[str, object] | str:  # TODO not working
         api_name = 'SYNO.SurveillanceStation.Camera'

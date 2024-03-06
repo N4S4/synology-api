@@ -1,7 +1,8 @@
 ## virtual env python
 .venv
 
-
+## Environment variables
+.env
 
 /build/
 /dist/
