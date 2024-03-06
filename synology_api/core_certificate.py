@@ -129,7 +129,7 @@ class Certificate(base_api.BaseApi):
             f"id={cert_id}"
         )
 
-        result = session.get(url, verify=self.session.verify_cert_enabled())
+        result = session.get(url, verify=self.session.verify_cert_enabled(), headers={"X-SYNO-TOKEN":self.session._syno_token})
 
         if result.status_code == 200:
             return BytesIO(result.content)
