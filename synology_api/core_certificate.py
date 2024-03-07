@@ -96,9 +96,9 @@ class Certificate(base_api.BaseApi):
             if ca_cert:
                 with open(ca_cert, 'rb') as payload_ca_cert:
                     files['inter_cert'] = (ca_cert, payload_ca_cert, 'application/x-x509-ca-cert')
-                    r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled())
+                    r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled(), headers={"X-SYNO-TOKEN":self.session._syno_token})
             else:
-                r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled())
+                r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled(), headers={"X-SYNO-TOKEN":self.session._syno_token})
 
         if 200 == r.status_code and r.json()['success']:
             if self._debug is True:
@@ -129,7 +129,7 @@ class Certificate(base_api.BaseApi):
             f"id={cert_id}"
         )
 
-        result = session.get(url, verify=self.session.verify_cert_enabled())
+        result = session.get(url, verify=self.session.verify_cert_enabled(), headers={"X-SYNO-TOKEN":self.session._syno_token})
 
         if result.status_code == 200:
             return BytesIO(result.content)
