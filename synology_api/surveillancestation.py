@@ -927,7 +927,7 @@ class SurveillanceStation(base_api.BaseApi):
                             id: int = None,
                             mountId: int = None,
                             offsetTimeMs: int = None,
-                            playTimeMs: int = None) -> dict[str, object] | str:  # TODO to adapt for download
+                            playTimeMs: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -938,7 +938,7 @@ class SurveillanceStation(base_api.BaseApi):
                 if val is not None:
                     req_param[str(key)] = val
 
-        return self.request_data(api_name, api_path, req_param)
+        return self.request_data(api_name, api_path, req_param, response_json=False)
 
     def check_if_recording_playable(self,
                             eventId: int = None,
