@@ -1,0 +1,10 @@
+#### COPY THIS FILE AND NAME IT config-test.json AND REPLACE WITH YOUR VALUES
+{
+  "synology_ip": "your_dsm_ip",
+  "synology_port": your_dsm_port_as_int,
+  "synology_user": "your_dsm_user",
+  "synology_password": "your_dsm_password",
+  "synology_secure": true_if_your_dsm_http_endpoint_is_https,
+  "dsm_version": your_dsm_version_as_int,
+  "otp_code": "your_dsm_otp_code"_or_null
+}
