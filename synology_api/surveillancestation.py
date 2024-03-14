@@ -706,7 +706,7 @@ class SurveillanceStation(base_api.BaseApi):
     def query_event_list_by_filter(self,
                                    offset: int = None,
                                    limit: int = None,
-                                   cameraId: str = None,
+                                   cameraIds: str = None,
                                    fromTime: int = None,
                                    toTime: int = None,
                                    dsld: int = None,
