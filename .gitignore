@@ -399,3 +399,6 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+# Test resources
+tests/resources/config-test.json
