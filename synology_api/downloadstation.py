@@ -133,6 +133,15 @@ class DownloadStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
+    def tasks_source(self, task_id) -> bytes:
+        # DownloadStation2 is required here
+        api_name = 'SYNO.DownloadStation2.Task.Source'
+        info = self.download_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'download', 'id': task_id}
+
+        return self.request_data(api_name, api_path, req_param, response_json=False).content
+
     def create_task(self, uri, additional_param: Optional[dict[str, object]] = None) -> dict[str, object] | str:
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
