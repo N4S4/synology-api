@@ -396,6 +396,7 @@ if you encounter problems you might set ```download_st_version = 2``` during ini
 | schedule_set_config() | Sets advanced schedule settings.         |
 | tasks_list()          | Provides task listing                    |
 | tasks_info()          | Provides detailed task information       |
+| tasks_source()        | Provides the original torrent file       |
 | create_task           | Create a download task                   |
 | delete_task()         | Delete a Task                            |
 | pause_task()          | Pause a Task                             |
