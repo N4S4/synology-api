@@ -40,6 +40,29 @@ class ActiveBackupBusiness(base_api.BaseApi):
                     'load_result': 'true'}
 
         return self.request_data(api_name, api_path, req_param)
+    
+    def backup_task_run(self, task_ids: list) -> dict[str, object] | str:
+        api_name = 'SYNO.ActiveBackup.Task'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+
+        req_param = {'version': '1',
+                     'method': 'backup',
+                     'task_ids': str(task_ids),
+                     'trigger_type': '1'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def backup_task_cancel(self, task_ids: list) -> dict[str, object] | str:
+        api_name = 'SYNO.ActiveBackup.Task'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+
+        req_param = {'version': '1',
+                     'method': 'cancel',
+                     'task_ids': str(task_ids)}
+        
+        return self.request_data(api_name, api_path, req_param)
 
     def list_storage(self) -> dict[str, object] | str:
         api_name = 'SYNO.ActiveBackup.Share'
@@ -50,3 +73,4 @@ class ActiveBackupBusiness(base_api.BaseApi):
                      'method': 'list_storage'}
 
         return self.request_data(api_name, api_path, req_param)
+    
