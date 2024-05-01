@@ -252,6 +252,8 @@ This wrapper cover the following APIs for now:
 | SYNO.ActiveBackup.Overview                      |
 | SYNO.ActiveBackup.Task                          |
 | SYNO.ActiveBackup.Share                         |
+| SYNO.ActiveBackup.Version                       | 
+| SYNO.ActiveBackup.Log                           |
 
 | Snapshot Replication     |
 | -------------------------|
@@ -583,11 +585,18 @@ DS info with below functions:
 
 ### core_active_backup Active Backup for Business
 
-| Functions                   | Description                        |
-|-----------------------------|------------------------------------|
-| list_vm_hypervisor()        | list of all configured hypervisors |
-| list_device_transfer_size() | list of all detected vms           |
-| list_storage()              | list of all storages               |
+| Functions                     | Description                                            |
+|-------------------------------|--------------------------------------------------------|
+| list_vm_hypervisor()          | list of all configured hypervisors                     |
+| list_device_transfer_size()   | list of all devices and their respective transfer size |
+| list_storage()                | list of all storages                                   |
+| list_logs()                   | list of logs                                           |
+| list_logs_details()           | detailed list of task logs                             |
+| backup_task_list()            | list of all tasks                                      |
+| backup_task_run()             | run given task(s)                                      |
+| backup_task_cancel()          | cancel given task(s)                                   |
+| backup_task_remove()          | remove given task(s)                                   |
+| backup_task_delete_versions() | delete given version(s)                                | 
 
 ### core_certificate tnx to @ajarzyn
 
