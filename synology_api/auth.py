@@ -27,6 +27,7 @@ class Authentication:
                  debug: bool = True,
                  otp_code: Optional[str] = None
                  ) -> None:
+
         self._ip_address: str = ip_address
         self._port: str = port
         self._username: str = username
@@ -38,9 +39,12 @@ class Authentication:
         self._version: int = dsm_version
         self._debug: bool = debug
         self._otp_code: Optional[str] = otp_code
+
         if self._verify is False:
             disable_warnings(InsecureRequestWarning)
+
         schema = 'https' if secure else 'http'
+
         self._base_url = '%s://%s:%s/webapi/' % (schema, self._ip_address, self._port)
 
         self.full_api_list = {}

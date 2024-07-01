@@ -20,7 +20,7 @@ class DownloadStation(base_api.BaseApi):
                  ) -> None:
 
         super(DownloadStation, self).__init__(ip_address, port, username, password, secure, cert_verify,
-                                              dsm_version, debug, otp_code)
+                                              dsm_version, debug, otp_code, 'DownloadStation')
 
         self._bt_search_id: str = ''
         self._bt_search_id_list: list[str] = []
