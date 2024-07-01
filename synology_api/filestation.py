@@ -28,7 +28,7 @@ class FileStation(base_api.BaseApi):
                  ) -> None:
 
         super(FileStation, self).__init__(ip_address, port, username, password, secure, cert_verify,
-                                          dsm_version, debug, otp_code)
+                                          dsm_version, debug, otp_code, 'FileStation')
 
         self._dir_taskid: str = ''
         self._dir_taskid_list: list[str] = []

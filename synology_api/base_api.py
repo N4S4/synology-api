@@ -12,13 +12,15 @@ class BaseApi(object):
                  cert_verify: bool = False,
                  dsm_version: int = 7,
                  debug: bool = True,
-                 otp_code: Optional[str] = None
+                 otp_code: Optional[str] = None,
+                 application: str = 'Core',
                  ) -> None:
 
+        self.application = application
         self.session: syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify,
                                                               dsm_version, debug, otp_code)
-        self.session.login('Core')
-        self.session.get_api_list('Core')
+        self.session.login(self.application)
+        self.session.get_api_list(self.application)
         self.session.get_api_list()
 
         self.request_data: Any = self.session.request_data
@@ -28,5 +30,5 @@ class BaseApi(object):
         self.base_url: str = self.session.base_url
 
     def logout(self) -> None:
-        self.session.logout('Core')
+        self.session.logout(self.application)
         return
