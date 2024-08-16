@@ -5,6 +5,9 @@ from . import base_api
 class Backup(base_api.BaseApi):
 
     def backup_repository_get(self, task_id: str) -> dict[str, object] | str:
+        '''
+        Get repository information for given task.   
+        '''
         api_name = 'SYNO.Backup.Repository'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -13,6 +16,9 @@ class Backup(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def backup_repository_list(self) -> dict[str, object] | str:
+        '''
+        Get a list of all present repositories in Hyper Backup.
+        '''
         api_name = 'SYNO.Backup.Repository'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -21,6 +27,9 @@ class Backup(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def backup_task_list(self) -> dict[str, object] | str:
+        '''
+        Get current restoring information and a list of present tasks in Hyper Backup.
+        '''
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -29,6 +38,9 @@ class Backup(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def backup_task_status(self, task_id: str) -> dict[str, object] | str:
+        '''
+        Get status and state of task.    
+        '''
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -37,6 +49,9 @@ class Backup(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def backup_task_get(self, task_id: str) -> dict[str, object] | str:
+        '''
+        Get detailed task information.  
+        '''
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -45,6 +60,9 @@ class Backup(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def backup_task_result(self, task_id: str) -> dict[str, object] | str:
+        '''
+        Get last result summary information of a task.
+        '''
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']

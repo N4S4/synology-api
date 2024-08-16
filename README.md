@@ -577,6 +577,7 @@ DS info with below functions:
 | backup_task_list()       | get current restoring information and list of present tasks    | 
 | backup_task_status()     | get status and state of task                                   |
 | backup_task_get()        | get task information                                           |
+| backup_task_result()     | get last result summary information of a task                  |
 | backup_task_run()        | run task                                                       |
 | backup_task_cancel()     | cancel ongoing task                                            |
 | backup_task_suspend()    | suspend ongoing task                                           |
