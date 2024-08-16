@@ -209,10 +209,88 @@ class Backup(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
 
-    def vault_target_list(self) -> dict[str, object]:  # TODO not working
+    def vault_target_list(self) -> dict[str, object]:  # Should be working now
+        '''
+        List all available targets in Vault.
+        '''
         api_name = 'SYNO.Backup.Service.VersionBackup.Target'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'version': info['minVersion'], 'method': 'list'}
 
+        return self.request_data(api_name, api_path, req_param)
+
+    def vault_concurrency_get(self) -> dict[str, object]:
+        '''
+        Get number of concurrent tasks allowed to run in HB Vault. Default value is 2.
+        '''
+        api_name = 'SYNO.Backup.Service.VersionBackup.Config'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'],
+            'method': 'get'
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def vault_concurrency_set(self, parallel_backup_limit: int = 2) -> dict[str, object]:
+        '''
+        Set number of concurrent tasks allowed to run in HB Vault. Default value is 2.
+        '''
+        api_name = 'SYNO.Backup.Service.VersionBackup.Config'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'],
+            'method': 'set',
+            'parallel_backup_limit': parallel_backup_limit
+        }
+        return self.request_data(api_name, api_path, req_param)
+    
+    def vault_target_settings_get(self, target_id: int) -> dict[str, object]:
+        '''
+        Get settings of target.
+        '''
+        api_name = 'SYNO.Backup.Service.VersionBackup.Target'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'],
+            'method': 'detail',
+            'target_id': target_id
+        }
+        return self.request_data(api_name, api_path, req_param)
+    
+    def vault_target_statistics_get(self, task_id: int) -> dict[str, object]:
+        '''
+        Get statistics for given task.
+        '''
+        api_name = 'SYNO.SDS.Backup.Server.Common.Statistic'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'],
+            'method': 'get',
+            'additional': '["volume_size"]',
+            'task_id': task_id
+        }
+        return self.request_data(api_name, api_path, req_param)
+    
+    def vault_target_logs_get(self, 
+                              target_id: int, 
+                              limit: int = 1000, 
+                              offset: int = 0) -> dict[str, object]:
+        '''
+        Get logs for given task.
+        '''
+        api_name = 'SYNO.SDS.Backup.Server.Common.Log'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'],
+            'method': 'list',
+            'limit': limit,
+            'offset': offset,
+            'filter_target_id': target_id
+        }
         return self.request_data(api_name, api_path, req_param)
