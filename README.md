@@ -592,11 +592,11 @@ DS info with below functions:
 | Functions                     | Description                                               | 
 |-------------------------------|-----------------------------------------------------------|
 | vault_target_list()           | list of all targets in Vault                              |
-| vault_concurrency_get         | get number of concurrent tasks allowed to run in HB Vault |
-| vault_concurrency_set         | get number of concurrent tasks allowed to run in HB Vault |
-| vault_target_settings_get     | get settings of target                                    |
-| vault_task_statistics_get     | get statistics from task                                  |
-| vault_target_logs_get         | get logs of specific target                               |
+| vault_concurrency_get()       | get number of concurrent tasks allowed to run in HB Vault |
+| vault_concurrency_set()       | get number of concurrent tasks allowed to run in HB Vault |
+| vault_target_settings_get()   | get settings of target                                    |
+| vault_task_statistics_get()   | get statistics from task                                  |
+| vault_target_logs_get()       | get logs of specific target                               |
 
 ### core_active_backup Active Backup for Business
 
