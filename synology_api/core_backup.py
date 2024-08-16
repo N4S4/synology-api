@@ -4,11 +4,11 @@ from . import base_api
 
 class Backup(base_api.BaseApi):
 
-    def backup_repository_get(self, taskid: str) -> dict[str, object] | str:
+    def backup_repository_get(self, task_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.Backup.Repository'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['minVersion'], 'method': 'get', 'task_id': taskid}
+        req_param = {'version': info['minVersion'], 'method': 'get', 'task_id': task_id}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -28,44 +28,44 @@ class Backup(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def backup_task_status(self, taskid: str) -> dict[str, object] | str:
+    def backup_task_status(self, task_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['minVersion'], 'method': 'status', 'task_id': taskid}
+        req_param = {'version': info['minVersion'], 'method': 'status', 'task_id': task_id}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def backup_task_get(self, taskid: str) -> dict[str, object] | str:
+    def backup_task_get(self, task_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['minVersion'], 'method': 'get', 'task_id': taskid}
+        req_param = {'version': info['minVersion'], 'method': 'get', 'task_id': task_id}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def backup_task_result(self, taskid: str) -> dict[str, object] | str:
+    def backup_task_result(self, task_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'version': info['minVersion'], 'method': 'status', 'blOnline': 'false',
                      'additional': '["last_bkp_time","next_bkp_time","last_bkp_result","is_modified","last_bkp_progress"]',
-                     'task_id': taskid}
+                     'task_id': task_id}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def backup_task_run(self, taskid: str) -> dict[str, object] | str:
+    def backup_task_run(self, task_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
             'version': info['minVersion'],
             'method': 'backup',
-            'task_id': taskid
+            'task_id': task_id
         }
         return self.request_data(api_name, api_path, req_param)
     
-    def backup_task_cancel(self, taskid: str) -> dict[str, object] | str:
+    def backup_task_cancel(self, task_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -73,11 +73,11 @@ class Backup(base_api.BaseApi):
             'version': info['minVersion'],
             'method': 'cancel',
             'task_state': 'backupable',
-            'task_id': taskid
+            'task_id': task_id
         }
         return self.request_data(api_name, api_path, req_param)
     
-    def backup_task_suspend(self, taskid: str) -> dict[str, object] | str:
+    def backup_task_suspend(self, task_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -85,45 +85,45 @@ class Backup(base_api.BaseApi):
             'version': info['minVersion'],
             'method': 'suspend',
             'task_state': 'backupable',
-            'task_id': taskid
+            'task_id': task_id
         }
         return self.request_data(api_name, api_path, req_param)
     
-    def backup_task_discard(self, taskid: str) -> dict[str, object] | str:
+    def backup_task_discard(self, task_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
             'version': info['minVersion'],
             'method': 'discard',
-            'task_id': taskid
+            'task_id': task_id
         }
         return self.request_data(api_name, api_path, req_param)
     
-    def backup_task_resume(self, taskid: str) -> dict[str, object] | str:
+    def backup_task_resume(self, task_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
             'version': info['minVersion'],
             'method': 'resume',
-            'task_id': taskid
+            'task_id': task_id
         }
         return self.request_data(api_name, api_path, req_param)
     
-    def backup_task_remove(self, task_id_list: list[int]) -> dict[str, object] | str:
+    def backup_task_remove(self, task_id_list: str) -> dict[str, object] | str:
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
             'version': info['minVersion'],
             'method': 'delete',
-            'is_remove_data': False,
+            'is_remove_data': 'false',
             'task_id_list': task_id_list
         }
         return self.request_data(api_name, api_path, req_param)
     
-    def integrity_check_run(self, taskid: str) -> dict[str, object] | str:
+    def integrity_check_run(self, task_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.Backup.Target'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -133,18 +133,18 @@ class Backup(base_api.BaseApi):
             'detect_data': True,
             'sessId': 'null',
             'sessKey': 'null',
-            'task_id': taskid
+            'task_id': task_id
         }
         return self.request_data(api_name, api_path, req_param)
     
-    def integrity_check_cancel(self, taskid: str) -> dict[str, object] | str:
+    def integrity_check_cancel(self, task_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.Backup.Target'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
             'version': info['minVersion'],
             'method': 'error_detect_cancel',
-            'task_id': taskid
+            'task_id': task_id
         }
         return self.request_data(api_name, api_path, req_param)
 
