@@ -261,7 +261,7 @@ class Backup(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
     
-    def vault_target_statistics_get(self, task_id: int) -> dict[str, object]:
+    def vault_task_statistics_get(self, task_id: int) -> dict[str, object]:
         '''
         Get statistics for given task.
         '''
