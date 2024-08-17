@@ -570,18 +570,33 @@ DS info with below functions:
 
 ### core_backup Hyper Backup
 
-| Functions                |
-|--------------------------|
-| backup_repository_get()  |
-| backup_repository_list() |
-| backup_task_list         |
-| backup_task_status       |
-| backup_task_get          |
-| backup_task_result()     |
+| Functions                | Description                                                    |
+|--------------------------|----------------------------------------------------------------|
+| backup_repository_get()  | get repository information for given task                      |
+| backup_repository_list() | list of present repositories                                   |
+| backup_task_list()       | get current restoring information and list of present tasks    | 
+| backup_task_status()     | get status and state of task                                   |
+| backup_task_get()        | get task information                                           |
+| backup_task_result()     | get last result summary information of a task                  |
+| backup_task_run()        | run task                                                       |
+| backup_task_cancel()     | cancel ongoing task                                            |
+| backup_task_suspend()    | suspend ongoing task                                           |
+| backup_task_discard()    | discard suspended task                                         |
+| backup_task_resume()     | resume suspended task                                          |
+| backup_task_remove()     | remove one or more tasks                                       |
+| integrity_check_run()    | run integrity check for given task                             |
+| integrity_check_cancel() | cancel ongoing integrity check                                 |
+| hb_logs_get()            | get Hyper Backup UI logs                                       |
 
 ### core_backup Hyper Backup Vault
-
-| vault_target_list() |
+| Functions                     | Description                                               | 
+|-------------------------------|-----------------------------------------------------------|
+| vault_target_list()           | list of all targets in Vault                              |
+| vault_concurrency_get()       | get number of concurrent tasks allowed to run in HB Vault |
+| vault_concurrency_set()       | set number of concurrent tasks allowed to run in HB Vault |
+| vault_target_settings_get()   | get settings of target                                    |
+| vault_task_statistics_get()   | get statistics from task                                  |
+| vault_target_logs_get()       | get logs of specific target                               |
 
 ### core_active_backup Active Backup for Business
 
