@@ -571,7 +571,8 @@ class FileStation(base_api.BaseApi):
                     file_path: str,
                     create_parents: bool = True,
                     overwrite: bool = True,
-                    verify: bool = False
+                    verify: bool = False,
+                    chunk_size: int = 8192
                     ) -> str | tuple[int, dict[str, object]]:
         api_name = 'SYNO.FileStation.Upload'
         info = self.file_station_list[api_name]
@@ -590,14 +591,19 @@ class FileStation(base_api.BaseApi):
                 'overwrite': str(overwrite).lower(),
             }
 
-            files = {'file': (filename, payload, 'application/octet-stream')}
+            # read the file in chunks and upload each chunk separately
+            for i in range(0, os.path.getsize(file_path), chunk_size):
+                chunk = payload.read(chunk_size)
+                files = {'file': (filename, chunk, 'application/octet-stream')}
 
-            r = session.post(url, data=args, files=files, verify=verify, headers={"X-SYNO-TOKEN":self.session._syno_token})
+                r = session.post(url, data=args, files=files, verify=verify,
+                                 headers={"X-SYNO-TOKEN": self.session._syno_token})
 
-            if r.status_code == 200 and r.json()['success']:
-                return 'Upload Complete'
-            else:
-                return r.status_code, r.json()
+                if r.status_code != 200 or not r.json()['success']:
+                    return r.status_code, r.json()
+
+            # if we get here, all chunks were uploaded successfully
+        return 'Upload Complete'
 
     def get_shared_link_info(self, link_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Sharing'
