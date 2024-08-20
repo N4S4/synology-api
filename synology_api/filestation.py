@@ -6,11 +6,11 @@ import time
 from datetime import datetime
 
 import requests
+from requests_toolbelt import MultipartEncoder
 import sys
 from urllib import parse
 
 from . import base_api
-
 
 class FileStation(base_api.BaseApi):
 
@@ -571,8 +571,7 @@ class FileStation(base_api.BaseApi):
                     file_path: str,
                     create_parents: bool = True,
                     overwrite: bool = True,
-                    verify: bool = False,
-                    chunk_size: int = 8192
+                    verify: bool = False
                     ) -> str | tuple[int, dict[str, object]]:
         api_name = 'SYNO.FileStation.Upload'
         info = self.file_station_list[api_name]
@@ -585,26 +584,26 @@ class FileStation(base_api.BaseApi):
             url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=upload&_sid=%s' % (
                 api_name, info['minVersion'], self._sid)
 
-            args = {
+            encoder = MultipartEncoder({
                 'path': dest_path,
                 'create_parents': str(create_parents).lower(),
                 'overwrite': str(overwrite).lower(),
-            }
+                'files': (filename, payload, 'application/octet-stream')
+            })
 
-            # read the file in chunks and upload each chunk separately
-            for i in range(0, os.path.getsize(file_path), chunk_size):
-                chunk = payload.read(chunk_size)
-                files = {'file': (filename, chunk, 'application/octet-stream')}
+            r = session.post(
+                url, 
+                data=encoder,
+                verify=verify,
+                headers={"X-SYNO-TOKEN": self.session._syno_token, 'Content-Type': encoder.content_type}
+            )
 
-                r = session.post(url, data=args, files=files, verify=verify,
-                                 headers={"X-SYNO-TOKEN": self.session._syno_token})
+        session.close()
+        if r.status_code != 200 or not r.json()['success']:
+            return r.status_code, r.json()
 
-                if r.status_code != 200 or not r.json()['success']:
-                    return r.status_code, r.json()
-
-            # if we get here, all chunks were uploaded successfully
-        return 'Upload Complete'
-
+        return r.json()
+    
     def get_shared_link_info(self, link_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
