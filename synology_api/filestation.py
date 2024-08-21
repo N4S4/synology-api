@@ -6,11 +6,13 @@ import time
 from datetime import datetime
 
 import requests
-from requests_toolbelt import MultipartEncoder
+import tqdm
+from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 import sys
 from urllib import parse
 
 from . import base_api
+
 
 class FileStation(base_api.BaseApi):
 
@@ -591,11 +593,21 @@ class FileStation(base_api.BaseApi):
                 'files': (filename, payload, 'application/octet-stream')
             })
 
+            bar = tqdm.tqdm(desc='Upload Progress',
+                            total=encoder.len,
+                            dynamic_ncols=True,
+                            unit='B',
+                            unit_scale=True,
+                            unit_divisor=1024
+                            )
+
+            monitor = MultipartEncoderMonitor(encoder, lambda monitor: bar.update(monitor.bytes_read - bar.n))
+
             r = session.post(
-                url, 
-                data=encoder,
+                url,
+                data=monitor,
                 verify=verify,
-                headers={"X-SYNO-TOKEN": self.session._syno_token, 'Content-Type': encoder.content_type}
+                headers={"X-SYNO-TOKEN": self.session._syno_token, 'Content-Type': monitor.content_type}
             )
 
         session.close()
@@ -603,7 +615,7 @@ class FileStation(base_api.BaseApi):
             return r.status_code, r.json()
 
         return r.json()
-    
+
     def get_shared_link_info(self, link_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
@@ -1197,14 +1209,14 @@ class FileStation(base_api.BaseApi):
             return 'Enter a valid mode (open / download)'
 
         if mode == r'open':
-            with session.get(url, stream=True, verify=verify, headers={"X-SYNO-TOKEN":self.session._syno_token}) as r:
+            with session.get(url, stream=True, verify=verify, headers={"X-SYNO-TOKEN": self.session._syno_token}) as r:
                 r.raise_for_status()
                 for chunk in r.iter_content(chunk_size=chunk_size):
                     if chunk:  # filter out keep-alive new chunks
                         sys.stdout.buffer.write(chunk)
 
         if mode == r'download':
-            with session.get(url, stream=True, verify=verify, headers={"X-SYNO-TOKEN":self.session._syno_token}) as r:
+            with session.get(url, stream=True, verify=verify, headers={"X-SYNO-TOKEN": self.session._syno_token}) as r:
                 r.raise_for_status()
                 if not os.path.isdir(dest_path):
                     os.makedirs(dest_path)
@@ -1214,7 +1226,7 @@ class FileStation(base_api.BaseApi):
                             f.write(chunk)
 
         if mode == r'serve':
-            with session.get(url, stream=True, verify=verify, headers={"X-SYNO-TOKEN":self.session._syno_token}) as r:
+            with session.get(url, stream=True, verify=verify, headers={"X-SYNO-TOKEN": self.session._syno_token}) as r:
                 r.raise_for_status()
                 return io.BytesIO(r.content)
 
