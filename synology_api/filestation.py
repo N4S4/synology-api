@@ -573,7 +573,8 @@ class FileStation(base_api.BaseApi):
                     file_path: str,
                     create_parents: bool = True,
                     overwrite: bool = True,
-                    verify: bool = False
+                    verify: bool = False,
+                    progress_bar: bool = True
                     ) -> str | tuple[int, dict[str, object]]:
         api_name = 'SYNO.FileStation.Upload'
         info = self.file_station_list[api_name]
@@ -593,22 +594,31 @@ class FileStation(base_api.BaseApi):
                 'files': (filename, payload, 'application/octet-stream')
             })
 
-            bar = tqdm.tqdm(desc='Upload Progress',
-                            total=encoder.len,
-                            dynamic_ncols=True,
-                            unit='B',
-                            unit_scale=True,
-                            unit_divisor=1024
-                            )
+            if progress_bar:
+                bar = tqdm.tqdm(desc='Upload Progress',
+                                total=encoder.len,
+                                dynamic_ncols=True,
+                                unit='B',
+                                unit_scale=True,
+                                unit_divisor=1024
+                                )
 
-            monitor = MultipartEncoderMonitor(encoder, lambda monitor: bar.update(monitor.bytes_read - bar.n))
+                monitor = MultipartEncoderMonitor(encoder, lambda monitor: bar.update(monitor.bytes_read - bar.n))
 
-            r = session.post(
-                url,
-                data=monitor,
-                verify=verify,
-                headers={"X-SYNO-TOKEN": self.session._syno_token, 'Content-Type': monitor.content_type}
-            )
+                r = session.post(
+                    url,
+                    data=monitor,
+                    verify=verify,
+                    headers={"X-SYNO-TOKEN": self.session._syno_token, 'Content-Type': monitor.content_type}
+                )
+
+            else:
+                r = session.post(
+                    url,
+                    data=encoder,
+                    verify=verify,
+                    headers={"X-SYNO-TOKEN": self.session._syno_token, 'Content-Type': encoder.content_type}
+                )
 
         session.close()
         if r.status_code != 200 or not r.json()['success']:
