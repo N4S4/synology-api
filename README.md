@@ -241,10 +241,15 @@ This wrapper cover the following APIs for now:
 | SYNO.Virtualization.API.Guest.Action |
 | SYNO.Virtualization.API.Guest.Image  |
 
-| core_backup            |
-|------------------------|
-| SYNO.Backup.Repository |
-| SYNO.Backup.Task       |
+| core_backup (Hyper Backup / Hyper Backup Vault) |
+|-------------------------------------------------|
+| SYNO.Backup.Repository                          |
+| SYNO.Backup.Task                                |
+| SYNO.SDS.Backup.Client.Common.Log               |
+| SYNO.SDS.Backup.Server.Common.Log               |
+| SYNO.SDS.Backup.Server.Common.Statistic         |
+| SYNO.Backup.Service.VersionBackup.Target        |
+| SYNO.Backup.Service.VersionBackup.Config        | 
 
 | core_active_backup (Active Backup for Business) |
 |-------------------------------------------------|
