@@ -8,7 +8,7 @@ from urllib3 import disable_warnings
 from urllib3.exceptions import InsecureRequestWarning
 from .exceptions import SynoConnectionError, HTTPError, JSONDecodeError, LoginError, LogoutError, DownloadStationError
 from .exceptions import FileStationError, AudioStationError, ActiveBackupError, VirtualizationError, BackupError
-from .exceptions import CertificateError, DHCPServerError, DirectoryServerError, DockerError, DriveAdminError
+from .exceptions import CertificateError, CloudSyncError, DHCPServerError, DirectoryServerError, DockerError, DriveAdminError
 from .exceptions import LogCenterError, NoteStationError, OAUTHError, PhotosError, SecurityAdvisorError
 from .exceptions import UniversalSearchError, USBCopyError, VPNError, CoreSysInfoError, UndefinedError
 
@@ -317,6 +317,9 @@ class Authentication:
                 # Syno backup error:
                 elif api_name.find('SYNO.Backup') > -1:
                     raise BackupError(error_code=error_code)
+                # CloudSync error:
+                elif api_name.find('CloudSync') > -1:
+                    raise CloudSyncError(error_code=error_code)
                 # Core certificate error:
                 elif api_name.find('Core.Certificate') > -1:
                     raise CertificateError(error_code=error_code)

@@ -5,6 +5,7 @@ from . import \
     directory_server, \
     docker_api, \
     drive_admin_console, \
+    cloud_sync, \
     core_active_backup, \
     core_backup, \
     core_certificate, \

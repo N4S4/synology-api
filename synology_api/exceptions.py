@@ -151,6 +151,17 @@ class CertificateError(SynoBaseException):
         else:
             super().__init__(error_message="Certificate Error: %i" % error_code, *args)
         return
+    
+class CloudSyncError(SynoBaseException):
+    """Class for an error during SYNO.CloudSync request. NOTE: Lacking documentation."""
+
+    def __init__(self, error_code: int, *args: object) -> None:
+        self.error_code = error_code
+        if error_code in error_codes.keys():
+            super().__init__(error_message=error_codes[error_code])
+        else:
+            super().__init__(error_message="Cloud Sync Error: %i" % error_code, *args)
+        return
 
 
 class DHCPServerError(SynoBaseException):
