@@ -1,3 +1,5 @@
 setuptools
 requests
 urllib3
+requests_toolbelt
+tqdm

@@ -6,6 +6,8 @@ import time
 from datetime import datetime
 
 import requests
+import tqdm
+from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 import sys
 from urllib import parse
 
@@ -571,7 +573,8 @@ class FileStation(base_api.BaseApi):
                     file_path: str,
                     create_parents: bool = True,
                     overwrite: bool = True,
-                    verify: bool = False
+                    verify: bool = False,
+                    progress_bar: bool = True
                     ) -> str | tuple[int, dict[str, object]]:
         api_name = 'SYNO.FileStation.Upload'
         info = self.file_station_list[api_name]
@@ -584,20 +587,44 @@ class FileStation(base_api.BaseApi):
             url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=upload&_sid=%s' % (
                 api_name, info['minVersion'], self._sid)
 
-            args = {
+            encoder = MultipartEncoder({
                 'path': dest_path,
                 'create_parents': str(create_parents).lower(),
                 'overwrite': str(overwrite).lower(),
-            }
+                'files': (filename, payload, 'application/octet-stream')
+            })
 
-            files = {'file': (filename, payload, 'application/octet-stream')}
+            if progress_bar:
+                bar = tqdm.tqdm(desc='Upload Progress',
+                                total=encoder.len,
+                                dynamic_ncols=True,
+                                unit='B',
+                                unit_scale=True,
+                                unit_divisor=1024
+                                )
 
-            r = session.post(url, data=args, files=files, verify=verify, headers={"X-SYNO-TOKEN":self.session._syno_token})
+                monitor = MultipartEncoderMonitor(encoder, lambda monitor: bar.update(monitor.bytes_read - bar.n))
 
-            if r.status_code == 200 and r.json()['success']:
-                return 'Upload Complete'
+                r = session.post(
+                    url,
+                    data=monitor,
+                    verify=verify,
+                    headers={"X-SYNO-TOKEN": self.session._syno_token, 'Content-Type': monitor.content_type}
+                )
+
             else:
-                return r.status_code, r.json()
+                r = session.post(
+                    url,
+                    data=encoder,
+                    verify=verify,
+                    headers={"X-SYNO-TOKEN": self.session._syno_token, 'Content-Type': encoder.content_type}
+                )
+
+        session.close()
+        if r.status_code != 200 or not r.json()['success']:
+            return r.status_code, r.json()
+
+        return r.json()
 
     def get_shared_link_info(self, link_id: str) -> dict[str, object] | str:
         api_name = 'SYNO.FileStation.Sharing'
@@ -1192,14 +1219,14 @@ class FileStation(base_api.BaseApi):
             return 'Enter a valid mode (open / download)'
 
         if mode == r'open':
-            with session.get(url, stream=True, verify=verify, headers={"X-SYNO-TOKEN":self.session._syno_token}) as r:
+            with session.get(url, stream=True, verify=verify, headers={"X-SYNO-TOKEN": self.session._syno_token}) as r:
                 r.raise_for_status()
                 for chunk in r.iter_content(chunk_size=chunk_size):
                     if chunk:  # filter out keep-alive new chunks
                         sys.stdout.buffer.write(chunk)
 
         if mode == r'download':
-            with session.get(url, stream=True, verify=verify, headers={"X-SYNO-TOKEN":self.session._syno_token}) as r:
+            with session.get(url, stream=True, verify=verify, headers={"X-SYNO-TOKEN": self.session._syno_token}) as r:
                 r.raise_for_status()
                 if not os.path.isdir(dest_path):
                     os.makedirs(dest_path)
@@ -1209,7 +1236,7 @@ class FileStation(base_api.BaseApi):
                             f.write(chunk)
 
         if mode == r'serve':
-            with session.get(url, stream=True, verify=verify, headers={"X-SYNO-TOKEN":self.session._syno_token}) as r:
+            with session.get(url, stream=True, verify=verify, headers={"X-SYNO-TOKEN": self.session._syno_token}) as r:
                 r.raise_for_status()
                 return io.BytesIO(r.content)
 
