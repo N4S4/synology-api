@@ -422,3 +422,80 @@ class CloudSync(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param) 
+    
+    def connection_pause(self, conn_id: int = 0) -> dict[str, object] | str:
+        '''
+        Pause one or all connections.
+
+        Pause all connections if connection ID is not specified.
+        '''
+        api_name = 'SYNO.CloudSync'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'], 
+            'method': 'pause'
+        }
+        
+        if conn_id > 0:
+            req_param['connection_id'] = conn_id
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def connection_resume(self, conn_id: int = 0) -> dict[str, object] | str:
+        '''
+        Resume one or all connections.
+
+        Resume all connections if connection ID is not specified.
+        '''
+        api_name = 'SYNO.CloudSync'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'], 
+            'method': 'resume'
+        }
+        
+        if conn_id > 0:
+            req_param['connection_id'] = conn_id
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def connection_remove(self, conn_id: int) -> dict[str, object] | str:
+        '''
+        Remove one given connection and all its tasks.
+
+        Data remains in both local and remote directories.
+        '''
+        api_name = 'SYNO.CloudSync'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'], 
+            'method': 'unlink_connection',
+            'connection_id': conn_id
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def task_remove(
+            self, 
+            conn_id: int,
+            sess_id: int
+        ) -> dict[str, object] | str:
+        '''
+        Remove one given task.
+
+        Data remains in both local and remote directories.
+        '''
+        api_name = 'SYNO.CloudSync'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'], 
+            'method': 'unlink_session',
+            'connection_id': conn_id,
+            'session_id': sess_id
+        }
+
+        return self.request_data(api_name, api_path, req_param)
