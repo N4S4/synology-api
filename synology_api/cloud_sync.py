@@ -308,14 +308,24 @@ class CloudSync(base_api.BaseApi):
             workers: int = 3,
             admin_mode: bool = True
         ) -> dict[str, object] | str:
-        '''
-        Set package settings.
+        """Set package configuration settings.
 
-        pkg_volume = str (where package data will be stored, eg "/volume1")
-        log_count = int (max number of logs retained in each connection, max is 100k)
-        workers = int (max number of concurrent uploads, min is 3, max is 20)
-        admin_mode = bool (defines whether admins can see all users tasks or not, default is True)
-        '''
+        Parameters
+        ----------
+        pkg_volume : str
+            The volume path where the package data will be stored (e.g., "/volume1").
+        log_count : int, optional
+            Maximum number of logs retained per connection. Default is 20000, max is 100000.
+        workers : int, optional
+            Number of concurrent uploads allowed. Default is 3, max is 20.
+        admin_mode : bool, optional
+            Whether all users' tasks are retrieved or not. Default is True.
+
+        Returns
+        -------
+        dict or str
+            A dictionary containing the result of the configuration update, or a string in case of an error.
+        """
         admin_mode = 'enable' if admin_mode else 'disable'
 
         api_name = 'SYNO.CloudSync'
@@ -333,16 +343,19 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param) 
     
     def set_relink_behavior(self, sync_mode: bool = False) -> dict[str, object] | str:
-        '''
-        Set personal user relinking behavior.
+        """Set the relinking behavior for personal user accounts.
 
-        Getter is `get_pkg_config()`.
+        Parameters
+        ----------
+        sync_mode : bool, optional
+            If False (default), locally deleted files will be re-fetched from the cloud.
+            If True, locally deleted files will also be removed from the cloud.
 
-        sync_mode = bool (
-            False => Locally deleted files will be re-fetched from your public cloud,
-            True => Locally deleted files will be removed from your public cloud
-        )
-        '''
+        Returns
+        -------
+        dict or str
+            A dictionary containing the relink behavior settings, or a string in case of an error.
+        """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
