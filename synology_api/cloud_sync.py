@@ -236,6 +236,8 @@ class CloudSync(base_api.BaseApi):
         workers = int (max number of concurrent uploads, min is 3, max is 20)
         admin_mode = bool (defines whether admins can see all users tasks or not, default is True)
         '''
+        admin_mode = 'enable' if admin_mode else 'disable'
+
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -271,5 +273,4 @@ class CloudSync(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param) 
-    
     
