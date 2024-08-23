@@ -21,7 +21,7 @@ class CloudSync(base_api.BaseApi):
         """Retrieve package settings.
 
         Returns:
-            (dict | str): A dictionary containing the result of the schedule configuration, or a string in case of an error.
+            dict|str : A dictionary containing the result of the schedule configuration, or a string in case of an error.
 
             Example return:
             {
@@ -74,7 +74,7 @@ class CloudSync(base_api.BaseApi):
                 Defaults to `'group_by_user'`.
 
         Returns:
-            (dict | str): A dictionary containing the list of cloud connections, or a string in case of an error.
+            dict|str : A dictionary containing the list of cloud connections, or a string in case of an error.
 
             Example return:
             {
@@ -91,7 +91,7 @@ class CloudSync(base_api.BaseApi):
                             "type_id": 2,
                             "unfinished_files": 0,
                             "user_id": "dbid:xxxxxxxxxxxxxxxxxx",
-                            "user_name": "jojo"
+                            "user_name": "username"
                         },
                         {
                             "id": 2,
@@ -104,7 +104,7 @@ class CloudSync(base_api.BaseApi):
                             "type_id": 22,
                             "unfinished_files": 2,
                             "user_id": "xxxxxx",
-                            "user_name": "jojo"
+                            "user_name": "username"
                         }
                     ],
                     "is_admin_mode": true,
@@ -131,15 +131,28 @@ class CloudSync(base_api.BaseApi):
     def get_connection_settings(self, conn_id: int) -> dict[str, object] | str:
         """Retrieve settings for a specific connection.
 
-        Parameters
-        ----------
-        conn_id : int
-            The ID of the connection, obtained from `get_connections()`.
+        Args:
+            conn_id (int): The ID of the connection, obtained from `get_connections()`.
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing the connection settings, or a string in case of an error.
+        Returns:
+            dict|str : A dictionary containing the connection settings, or a string in case of an error.
+
+            Example return:
+            {
+                "data": {
+                    "client_type": "db",
+                    "isSSE": false,
+                    "is_enabled_schedule": false,
+                    "max_download_speed": 0,
+                    "max_upload_speed": 0,
+                    "part_size": 0,
+                    "pull_event_period": 60,
+                    "schedule_info": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",  
+                    "storage_class": "",
+                    "task_name": "Dropbox"
+                },
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -155,15 +168,32 @@ class CloudSync(base_api.BaseApi):
     def get_connection_information(self, conn_id: int) -> dict[str, object] | str:
         """Retrieve information for a specific connection.
 
-        Parameters
-        ----------
-        conn_id : int
-            The ID of the connection, obtained from `get_connections()`.
+        Args:
+            conn_id(int): The ID of the connection, obtained from `get_connections()`.
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing connection information, or a string in case of an error.
+        Returns:
+            dict|str : A dictionary containing connection information, or a string in case of an error. 
+
+            Example return: 
+            {
+                "data": {
+                    "auth_version": "",
+                    "bucket_name": "",
+                    "container_name": "",
+                    "project_id": "",
+                    "public_url": "",
+                    "quota_total": 2147483648,
+                    "quota_used": 423330996,
+                    "region": "",
+                    "server_addr": "",
+                    "shared_drive_name": "",
+                    "storage_class": "",
+                    "type": "db",
+                    "type_id": 2,
+                    "user_name": "username"
+                },
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -179,15 +209,51 @@ class CloudSync(base_api.BaseApi):
     def get_connection_auth(self, conn_id: int) -> dict[str, object] | str:
         """Retrieve authentication information for a specific connection.
 
-        Parameters
-        ----------
-        conn_id : int
-            The ID of the connection, obtained from `get_connections()`.
+        Args:
+            conn_id (int): The ID of the connection, obtained from `get_connections()`.
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing the authentication details, or a string in case of an error.
+        Returns:
+            dict|str : A dictionary containing the authentication details, or a string in case of an error. 
+            
+            Example return: 
+            {
+                "data": {
+                    "access_key": "",
+                    "access_token": "xxxxxxxx",
+                    "auth_pass": "",
+                    "auth_scheme": 0,
+                    "auth_user": "",
+                    "bucket_id": "",
+                    "bucket_name": "",
+                    "client_id": "xxxxxxxx",
+                    "client_type": "db",
+                    "conn_id": 3,
+                    "container_name": "",
+                    "download_url": "",
+                    "openstack_api_key": "",
+                    "openstack_domain_id": "",
+                    "openstack_domain_name": "",
+                    "openstack_identity_service_url": "",
+                    "openstack_identity_service_version": "",
+                    "openstack_password": "",
+                    "openstack_proj_id": "",
+                    "openstack_region": "",
+                    "openstack_tenant_id": "",
+                    "openstack_tenant_name": "",
+                    "openstack_token": "",
+                    "public_url": "",
+                    "refresh_token": "xxxxxxxx",
+                    "resource": "",
+                    "root_folder_id": "",
+                    "root_folder_path": "/",
+                    "secret_key": "",
+                    "server_addr": "",
+                    "service_host": "",
+                    "unique_id": "dbid:xxxxxxxx",
+                    "user_name": "username"
+                },
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -213,41 +279,60 @@ class CloudSync(base_api.BaseApi):
         ) -> dict[str, object] | str:
         """Retrieve logs for a specific connection.
 
-        Parameters
-        ----------
-        conn_id : int
-            The ID of the connection, obtained from `get_connections()`.
-        keyword : str, optional
-            A keyword to filter logs. Default is an empty string.
-        date_from : int, optional
-            The starting date in epoch format. Default is 0.
-        date_to : int, optional
-            The ending date in epoch format. Default is 0.
-        log_level : int, optional
-            Log level filter. Default is -1 (All). Possible values:
-            - -1: All
-            - 0: Info
-            - 1: Warning
-            - 2: Error
-        action : int, optional
-            Action filter. Default is -1 (All). Possible values:
-            - -1: All
-            - 0: Delete Remote
-            - 1: Download
-            - 2: Upload
-            - 3: Delete Local
-            - 4: Rename Remote
-            - 8: Merge
-            - 9: Merge Deletion
-        offset : int, optional
-            Log offset for pagination. Default is 0.
-        limit : int, optional
-            Number of logs to retrieve. Default is 200.
+        Args:
+            conn_id (int): The ID of the connection, obtained from `get_connections()`.
+            keyword (str, optional): A keyword to filter logs. Default is an empty string.
+            date_from (int, optional): The starting date in epoch format. Default is 0.
+            date_to (int, optional): The ending date in epoch format. Default is 0.
+            log_level (int, optional): Log level filter. Default is -1 (All). Possible values:
+                - -1: All
+                - 0: Info
+                - 1: Warning
+                - 2: Error
+            action (int, optional): Action filter. Default is -1 (All). Possible values:
+                - -1: All
+                - 0: Delete Remote
+                - 1: Download
+                - 2: Upload
+                - 3: Delete Local
+                - 4: Rename Remote
+                - 8: Merge
+                - 9: Merge Deletion
+            offset (int, optional): Log offset for pagination. Default is 0.
+            limit (int, optional): Number of logs to retrieve. Default is 200.
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing the logs, or a string in case of an error.
+        Returns:
+            dict|str : A dictionary containing the logs, or a string in case of an error. 
+
+            Example return: 
+            {
+                "data": {
+                    "items": [
+                        {
+                            "action": 1,
+                            "error_code": -36,
+                            "file_name": "OCR Japanese extension.paper",
+                            "file_type": "file",
+                            "log_level": 2,
+                            "path": "/datastore/WebDAV test/subfolder/OCR Japanese extension.paper",
+                            "session_id": 4,
+                            "time": 1724418508
+                        },
+                        {
+                            "action": 1,
+                            "error_code": -36,
+                            "file_name": "OCR Japanese extension.paper",
+                            "file_type": "file",
+                            "log_level": 2,
+                            "path": "/datastore/WebDAV test/subfolder/OCR Japanese extension.paper",
+                            "session_id": 4,
+                            "time": 1724418119
+                        }
+                    ],
+                    "total": 2
+                },
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
