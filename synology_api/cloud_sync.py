@@ -17,7 +17,7 @@ class CloudSync(base_api.BaseApi):
        - DropBox
     '''
 
-    def get_config(self) -> dict[str, object] | str:
+    def get_pkg_config(self) -> dict[str, object] | str:
         '''
         Return package settings.
         '''
@@ -220,3 +220,56 @@ class CloudSync(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
+    
+    def set_pkg_config(
+            self, 
+            pkg_volume: str,
+            log_count: int = 20000,
+            workers: int = 3,
+            admin_mode: bool = True
+        ) -> dict[str, object] | str:
+        '''
+        Set package settings.
+
+        pkg_volume = str (where package data will be stored, eg "/volume1")
+        log_count = int (max number of logs retained in each connection, max is 100k)
+        workers = int (max number of concurrent uploads, min is 3, max is 20)
+        admin_mode = bool (defines whether admins can see all users tasks or not, default is True)
+        '''
+        api_name = 'SYNO.CloudSync'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'], 
+            'method': 'set_global_config',
+            'repo_vol_path': pkg_volume,
+            'log_count': log_count,
+            'worker_count': workers,
+            'admin_mode': admin_mode,
+        }
+
+        return self.request_data(api_name, api_path, req_param) 
+    
+    def set_relink_behavior(self, sync_mode: bool = False) -> dict[str, object] | str:
+        '''
+        Set personal user relinking behavior.
+
+        Getter is `get_pkg_config()`.
+
+        sync_mode = bool (
+            False => Locally deleted files will be re-fetched from your public cloud,
+            True => Locally deleted files will be removed from your public cloud
+        )
+        '''
+        api_name = 'SYNO.CloudSync'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'], 
+            'method': 'set_personal_config',
+            'sync_mode': sync_mode
+        }
+
+        return self.request_data(api_name, api_path, req_param) 
+    
+    
