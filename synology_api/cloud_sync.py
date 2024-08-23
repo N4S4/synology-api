@@ -21,7 +21,8 @@ class CloudSync(base_api.BaseApi):
         """Retrieve package settings.
 
         Returns:
-            dict|str : A dictionary containing the result of the schedule configuration, or a string in case of an error.
+            dict|str:
+                A dictionary containing the result of the schedule configuration, or a string in case of an error.
 
             Example return:
             {
@@ -70,10 +71,14 @@ class CloudSync(base_api.BaseApi):
         """Retrieve a list of current cloud connections.
 
         Args:
-            group_by (str, optional): Method to group the connections, by user or cloud type. Defaults to `'group_by_user'`.
+            group_by (str, optional): 
+                How to group the connection list, by user or cloud type. Defaults to `'group_by_user'`. Possible values:
+                - 'group_by_user': Group connection by owner user.
+                - 'group_by_cloud_type': Group connections by cloud provider.
 
         Returns:
-            dict|str : A dictionary containing the list of cloud connections, or a string in case of an error.
+            dict|str: 
+                A dictionary containing the list of cloud connections, or a string in case of an error.
 
             Example return:
             {
@@ -131,10 +136,12 @@ class CloudSync(base_api.BaseApi):
         """Retrieve settings for a specific connection.
 
         Args:
-            conn_id (int): The ID of the connection, obtained from `get_connections()`.
+            conn_id (int): 
+                The ID of the connection, obtained from `get_connections()`.
 
         Returns:
-            dict|str : A dictionary containing the connection settings, or a string in case of an error.
+            dict|str: 
+                A dictionary containing the connection settings, or a string in case of an error.
 
             Example return:
             {
@@ -168,10 +175,12 @@ class CloudSync(base_api.BaseApi):
         """Retrieve information for a specific connection.
 
         Args:
-            conn_id(int): The ID of the connection, obtained from `get_connections()`.
+            conn_id(int): 
+                The ID of the connection, obtained from `get_connections()`.
 
         Returns:
-            dict|str : A dictionary containing connection information, or a string in case of an error. 
+            dict|str: 
+                A dictionary containing connection information, or a string in case of an error. 
 
             Example return: 
             {
@@ -209,10 +218,12 @@ class CloudSync(base_api.BaseApi):
         """Retrieve authentication information for a specific connection.
 
         Args:
-            conn_id (int): The ID of the connection, obtained from `get_connections()`.
+            conn_id (int): 
+                The ID of the connection, obtained from `get_connections()`.
 
         Returns:
-            dict|str : A dictionary containing the authentication details, or a string in case of an error. 
+            dict|str: 
+                A dictionary containing the authentication details, or a string in case of an error. 
             
             Example return: 
             {
@@ -279,16 +290,22 @@ class CloudSync(base_api.BaseApi):
         """Retrieve logs for a specific connection.
 
         Args:
-            conn_id (int): The ID of the connection, obtained from `get_connections()`.
-            keyword (str, optional): A keyword to filter logs. Defaults to `''`.
-            date_from (int, optional): The starting date in epoch format. Defaults to `0`.
-            date_to (int, optional): The ending date in epoch format. Defaults to `0`.
-            log_level (int, optional): Log level filter. Defaults to `-1` (All). Possible values:
+            conn_id (int): 
+                The ID of the connection, obtained from `get_connections()`.
+            keyword (str, optional): 
+                A keyword to filter logs. Defaults to `''`.
+            date_from (int, optional): 
+                The starting date in epoch format. Defaults to `0`.
+            date_to (int, optional): 
+                The ending date in epoch format. Defaults to `0`.
+            log_level (int, optional):
+                Log level filter. Defaults to `-1`. Possible values:
                 - -1: All
                 - 0: Info
                 - 1: Warning
                 - 2: Error
-            action (int, optional): Action filter. Defaults to `-1` (All). Possible values:
+            action (int, optional): 
+                Action filter. Defaults to `-1`. Possible values:
                 - -1: All
                 - 0: Delete Remote
                 - 1: Download
@@ -297,11 +314,14 @@ class CloudSync(base_api.BaseApi):
                 - 4: Rename Remote
                 - 8: Merge
                 - 9: Merge Deletion
-            offset (int, optional): Log offset for pagination. Defaults to `0`.
-            limit (int, optional): Number of logs to retrieve. Defaults to `200`.
+            offset (int, optional): 
+                Log offset for pagination. Defaults to `0`.
+            limit (int, optional): 
+                Number of logs to retrieve. Defaults to `200`.
 
         Returns:
-            dict|str : A dictionary containing the logs, or a string in case of an error. 
+            dict|str: 
+                A dictionary containing the logs, or a string in case of an error. 
 
             Example return: 
             {
@@ -355,10 +375,12 @@ class CloudSync(base_api.BaseApi):
         """Retrieve a list of tasks related to a specific connection.
 
         Args:
-            conn_id (int): The ID of the connection, obtained from `get_connections()`.
+            conn_id (int): 
+                The ID of the connection, obtained from `get_connections()`.
 
         Returns:
-            dict|str : A dictionary containing the list of tasks, or a string in case of an error. 
+            dict|str: 
+                A dictionary containing the list of tasks, or a string in case of an error. 
 
             Example return: 
             {}
@@ -378,10 +400,12 @@ class CloudSync(base_api.BaseApi):
         """Retrieve filter information for a specific task.
 
         Args:
-            sess_id (int): The ID of the task, obtained from `get_tasks()`.
+            sess_id (int): 
+                The ID of the task, obtained from `get_tasks()`.
 
         Returns:
-            dict|str: A dictionary containing task filter information, or a string in case of an error. 
+            dict|str: 
+                A dictionary containing task filter information, or a string in case of an error. 
 
             Example return: 
             {}
@@ -406,12 +430,16 @@ class CloudSync(base_api.BaseApi):
         """Retrieve a list of child directories in the cloud for a specific task.
 
         Args:
-            sess_id (int): The ID of the task, obtained from `get_tasks()`.
-            remote_folder_id (str): The ID of the remote folder, obtained from `get_tasks()`.
-            path (str, optional): The folder path to retrieve the child directories from. Defaults to root `'/'`.
+            sess_id (int): 
+                The ID of the task, obtained from `get_tasks()`.
+            remote_folder_id (str): 
+                The ID of the remote folder, obtained from `get_tasks()`.
+            path (str, optional): 
+                The folder path to retrieve the child directories from. Defaults to root `'/'`.
 
         Returns:
-            dict|str: A dictionary containing the list of child directories, or a string in case of an error. 
+            dict|str: 
+                A dictionary containing the list of child directories, or a string in case of an error. 
 
             Example return: 
             {}
@@ -434,7 +462,8 @@ class CloudSync(base_api.BaseApi):
         """Retrieve the 5 latest modified files and the currently syncing items.
 
         Returns:
-            dict|str: A dictionary containing the recently modified files, or a string in case of an error. 
+            dict|str: 
+                A dictionary containing the recently modified files, or a string in case of an error. 
 
             Example return: 
             {}
@@ -458,21 +487,22 @@ class CloudSync(base_api.BaseApi):
         ) -> dict[str, object] | str:
         """Set package configuration settings.
 
-        Parameters
-        ----------
-        pkg_volume : str
-            The volume path where the package data will be stored (e.g., "/volume1").
-        log_count : int, optional
-            Maximum number of logs retained per connection. Default is 20000, max is 100000.
-        workers : int, optional
-            Number of concurrent uploads allowed. Default is 3, max is 20.
-        admin_mode : bool, optional
-            Whether all users' tasks are retrieved or not. Default is True.
+        Args:
+            pkg_volume (str): 
+                The volume path where the package data will be stored (e.g., `"/volume1"`).
+            log_count (int, optional): 
+                Maximum number of logs retained per connection. Defaults to `20000`, max is `100000`.
+            workers (int, optional): 
+                Number of concurrent uploads allowed. Defaults to `3`, max is `20`.
+            admin_mode (bool, optional): 
+                Whether all users' tasks are retrieved or not. Defaults to `True`.
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing the result of the configuration update, or a string in case of an error.
+        Returns:
+            dict|str: 
+                A dictionary containing the result of the configuration update, or a string in case of an error. 
+
+            Example return: 
+            {}
         """
         admin_mode = 'enable' if admin_mode else 'disable'
 
@@ -490,19 +520,20 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param) 
     
-    def set_relink_behavior(self, sync_mode: bool = False) -> dict[str, object] | str:
+    def set_relink_behavior(self, sync_mode: bool) -> dict[str, object] | str:
         """Set the relinking behavior for personal user accounts.
 
-        Parameters
-        ----------
-        sync_mode : bool, optional
-            If `False` (default), locally deleted files will be re-fetched from the cloud.
-            If `True`, locally deleted files will also be removed from the cloud.
+        Args:
+            sync_mode (bool): 
+                Set to `False` for "locally deleted files will be re-fetched from the cloud". 
+                Set to `True` for "locally deleted files will also be removed from the cloud".
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing the relink behavior settings, or a string in case of an error.
+        Returns:
+            dict|str: 
+                A dictionary containing the result of the relink behavior update, or a string in case of an error. 
+
+            Example return: 
+            {}
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -528,29 +559,30 @@ class CloudSync(base_api.BaseApi):
         ) -> dict[str, object] | str:
         """Set settings for a specific cloud connection.
 
-        Parameters
-        ----------
-        conn_id : int
-            The ID of the connection, obtained from `get_connections()`.
-        task_name : str
-            The name of the cloud sync task.
-        pull_event_period : int, optional
-            Frequency (in seconds) to pull event updates. Default is 60.
-        max_upload_speed : int, optional
-            Maximum upload speed in bytes. Default is 0 (unlimited).
-        max_download_speed : int, optional
-            Maximum download speed in bytes. Default is 0 (unlimited).
-        storage_class : str, optional
-            Cloud-specific storage class.
-        isSSE : bool, optional
-            Enable Security Service Edge (SSE) for compatible cloud storage. Default is False.
-        part_size : int, optional
-            Part size for file uploads, in megabytes. Default is 128.
+        Args:
+            conn_id (int): 
+                The ID of the connection, obtained from `get_connections()`.
+            task_name (str): 
+                The name of the cloud sync task.
+            pull_event_period (int, optional): 
+                Frequency (in seconds) to pull event updates. Defaults to `60`.
+            max_upload_speed (int, optional): 
+                Maximum upload speed in bytes. Defaults to `0` (unlimited).
+            max_download_speed (int, optional): 
+                Maximum download speed in bytes. Defaults to `0` (unlimited).
+            storage_class (str, optional): 
+                Cloud-specific storage class. Defaults to `''`. 
+            isSSE (bool, optional): 
+                Enable Security Service Edge (SSE) for compatible cloud storage. Defaults to `False`.
+            part_size (int, optional): 
+                Part size for file uploads, in megabytes. Defaults to `128`.
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing the updated connection settings, or a string in case of an error.
+        Returns:
+            dict|str: 
+                A dictionary containing the updated connection settings, or a string in case of an error. 
+
+            Example return: 
+            {}
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
