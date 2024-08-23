@@ -300,7 +300,7 @@ class CloudSync(base_api.BaseApi):
         api_path = info['path']
         req_param = {
             'version': info['minVersion'], 
-            'method': 'set_personal_config',
+            'method': 'set_connection_setting',
             'conn_id': conn_id,
             'task_name': task_name,
             'pull_event_period': pull_event_period,
@@ -351,7 +351,7 @@ class CloudSync(base_api.BaseApi):
         api_path = info['path']
         req_param = {
             'version': info['minVersion'], 
-            'method': 'set_personal_config',
+            'method': 'set_schedule_setting',
             'conn_id': conn_id,
             'is_enabled_schedule': enable,
             'schedule_info': schedule_info
@@ -359,4 +359,66 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
+    def set_task_settings(
+            self,
+            sess_id: int, 
+            sync_direction: str,
+            consistency_check: bool = True,
+            no_delete_on_cloud: bool = True,
+            convert_gd: bool = False
+        ) -> dict[str, object] | str:
+        '''
+        Set task settings.
+
+        sync_direction: str = "ONLY_UPLOAD" || "BIDIRECTION" || "ONLY_DOWNLOAD",
+        consistency_check: bool = True, (Enable advanced consistency check (more resources required))
+        no_delete_on_cloud: bool = True, (Don't remove files in the destination folder when they are removed in the source folder.)
+        convert_gd: bool = False (convert Google Drive Online documents to Microsoft Office)
+        '''
+        api_name = 'SYNO.CloudSync'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'], 
+            'method': 'set_session_setting',
+            'sess_id': sess_id,
+            'sync_direction': sync_direction,
+            'sync_attr_check_option': consistency_check,
+            'no_delete': no_delete_on_cloud,
+            'google_drive_convert_online_doc': convert_gd
+        }
+
+        return self.request_data(api_name, api_path, req_param) 
     
+    def set_task_filters(
+            self,
+            sess_id: int, 
+            filtered_paths: list[str] = [],
+            filtered_filenames: list[str] = [],
+            filtered_extensions: list[str] = [],
+            max_upload_size: int = 0
+        ) -> dict[str, object] | str:
+        '''
+        Set task settings.
+
+        filtered_paths: list[str] = [], ["/path name"]
+        filtered_names: list[str] = [], ["something"]
+        filtered_extensions: list[str] = [], ["mp3", "iso", "mkv"]
+        max_upload_size: int = 0, in bytes 
+        '''
+        api_name = 'SYNO.CloudSync'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'], 
+            'method': 'set_selective_sync_config',
+            'sess_id': sess_id,
+            'filtered_paths': filtered_paths,
+            'filtered_names': filtered_filenames,
+            'filtered_extensions': filtered_extensions,
+            'user_defined_names': '[]',         # Leave this empty cause the params have to be sent in filtered_names anyways
+            'user_defined_extensions': '[]',    # Leave this empty cause the params have to be sent in filtered_extensions anyways 
+            'filtered_max_upload_size': max_upload_size,
+        }
+
+        return self.request_data(api_name, api_path, req_param) 
