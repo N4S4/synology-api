@@ -21,7 +21,7 @@ class CloudSync(base_api.BaseApi):
         """Retrieve package settings.
 
         Returns:
-            (dict || str): A dictionary containing the result of the schedule configuration, or a string in case of an error.
+            (dict | str): A dictionary containing the result of the schedule configuration, or a string in case of an error.
 
             Example return:
             {
@@ -69,15 +69,52 @@ class CloudSync(base_api.BaseApi):
     def get_connections(self, group_by: str = 'group_by_user') -> dict[str, object] | str:
         """Retrieve a list of current cloud connections.
 
-        Parameters
-        ----------
-        group_by : str, optional
-            Method to group the connections, by user or cloud type. Default is `'group_by_user'`.
+        Args:
+            group_by (str, optional): Method to group the connections, by user or cloud type. 
+                Defaults to `'group_by_user'`.
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing the list of cloud connections, or a string in case of an error.
+        Returns:
+            (dict | str): A dictionary containing the list of cloud connections, or a string in case of an error.
+
+            Example return:
+            {
+                "data": {
+                    "conn": [
+                        {
+                            "id": 3,
+                            "link_status": 1,
+                            "resource": "",
+                            "status": "uptodate",
+                            "task_display_name": "Dropbox",
+                            "task_name": "Dropbox",
+                            "type": "db",
+                            "type_id": 2,
+                            "unfinished_files": 0,
+                            "user_id": "dbid:xxxxxxxxxxxxxxxxxx",
+                            "user_name": "jojo"
+                        },
+                        {
+                            "id": 2,
+                            "link_status": 1,
+                            "resource": "",
+                            "status": "syncing",
+                            "task_display_name": "Microsoft OneDrive",
+                            "task_name": "Microsoft OneDrive",
+                            "type": "od_v1",
+                            "type_id": 22,
+                            "unfinished_files": 2,
+                            "user_id": "xxxxxx",
+                            "user_name": "jojo"
+                        }
+                    ],
+                    "is_admin_mode": true,
+                    "is_pause": false,
+                    "notification": null,
+                    "total": 2,
+                    "tray_status": "syncing"
+                },
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
