@@ -610,38 +610,34 @@ class CloudSync(base_api.BaseApi):
         ) -> dict[str, object] | str:
         """Set the schedule for a specific connection.
 
-        Parameters
-        ----------
-        conn_id : int
-            The ID of the connection, obtained from `get_connections()`.
-        enable : bool
-            Whether the scheduling is enabled (`True`) or disabled (`False`).
-        schedule_info : list of str, optional
-            A list of 7 strings where each string represents a day of the week, going from Sunday to Saturday.
+        Args:
+            conn_id (int): 
+                The ID of the connection, obtained from `get_connections()`.
+            enable (bool): 
+                Whether the scheduling is enabled (`True`) or disabled (`False`).
+            schedule_info (list of str, optional): 
+                A list of 7 strings where each string represents a day of the week, going from Sunday to Saturday.
+                Each string is composed of 24 characters, where each character is either '1' (enabled) or '0' (disabled) for the respective hour of the day.
+                The default value (if `schedule_info` is not provided) enables all days and hours.
 
-            Each string is composed of 24 characters, where each character is either '1' (enabled) or '0' (disabled) for the respective hour of the day.
-            
-            The default value (if `schedule_info` is not provided) enables all days and hours.
+                Example format for enabling the schedule at every time and day:
+                # Keep this day order, Sunday to Saturday
+                days = [
+                    '111111111111111111111111', # sunday    - hours from 0 to 23
+                    '111111111111111111111111', # monday    - hours from 0 to 23
+                    '111111111111111111111111', # tuesday   - hours from 0 to 23
+                    '111111111111111111111111', # wednesday - hours from 0 to 23
+                    '111111111111111111111111', # thursday  - hours from 0 to 23
+                    '111111111111111111111111', # friday    - hours from 0 to 23
+                    '111111111111111111111111', # saturday  - hours from 0 to 23
+                ]
+                set_connection_schedule(task_id=2, enable=True, schedule_info=days)
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing the schedule settings, or a string in case of an error.
-        
-        Example
-        -------
-        Function usage for enabling the schedule at every time and day:
-        >>> # Keep this day order, Sunday to Saturday
-        ... days = [
-        ...     '111111111111111111111111', # sunday    - hours from 0 to 23
-        ...     '111111111111111111111111', # monday    - hours from 0 to 23
-        ...     '111111111111111111111111', # tuesday   - hours from 0 to 23
-        ...     '111111111111111111111111', # wednesday - hours from 0 to 23
-        ...     '111111111111111111111111', # thursday  - hours from 0 to 23
-        ...     '111111111111111111111111', # friday    - hours from 0 to 23
-        ...     '111111111111111111111111', # saturday  - hours from 0 to 23
-        ... ]
-        ... set_connection_schedule(task_id=2, enable=True, schedule_info=days)
+        Returns:
+            dict|str: A dictionary containing the schedule settings, or a string in case of an error. 
+
+            Example return: 
+            {}
         """
         if len(schedule_info) != 7 and len(''.join(schedule_info) != 168):
             schedule_info = '1' * 24 * 7
@@ -671,26 +667,27 @@ class CloudSync(base_api.BaseApi):
         ) -> dict[str, object] | str:
         """Set the task settings for a specific session.
 
-        Parameters
-        ----------
-        sess_id : int
-            The ID of the task, obtained from `get_tasks()`.
-        sync_direction : str
-            The synchronization direction. Possible values:
-            - "ONLY_UPLOAD": Upload local changes only.
-            - "BIDIRECTION": Sync both ways (upload and download).
-            - "ONLY_DOWNLOAD": Download remote changes only.
-        consistency_check : bool, optional
-            If True, enables advanced consistency check (requires more resources), by default True.
-        no_delete_on_cloud : bool, optional
-            If True, prevents deletion of files in the destination folder when removed from the source, by default True.
-        convert_gd : bool, optional
-            If True, converts Google Drive Online documents to Microsoft Office format, by default False.
+        Args:
+            sess_id (int): 
+                The ID of the task, obtained from `get_tasks()`.
+            sync_direction (str): 
+                The synchronization direction. Possible values:
+                - "ONLY_UPLOAD": Upload local changes only.
+                - "BIDIRECTION": Sync both ways (upload and download).
+                - "ONLY_DOWNLOAD": Download remote changes only.
+            consistency_check (bool, optional): 
+                If True, enables advanced consistency check (requires more resources). Defaults to `True`.
+            no_delete_on_cloud (bool, optional): 
+                If `True`, prevents deletion of files in the remote folder when removed from the local directory. Defaults to `True`.
+            convert_gd (bool, optional): 
+                If `True`, converts Google Drive Online documents to Microsoft Office format. Defaults to `False`.
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing the result of the task settings configuration, or a string in case of an error.
+        Returns:
+            dict|str: 
+                A dictionary containing the result of the task settings configuration, or a string in case of an error. 
+
+            Example return: 
+            {}
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -717,23 +714,23 @@ class CloudSync(base_api.BaseApi):
         ) -> dict[str, object] | str:
         """Set task filters for selective synchronization in a specific session.
 
-        Parameters
-        ----------
-        sess_id : int
-            The ID of the session, obtained from `get_tasks()`.
-        filtered_paths : list[str], optional
-            A list of paths (directories / subdirectories) to exclude from the synchronization process, by default an empty list.
-        filtered_filenames : list[str], optional
-            A list of filenames to exclude from synchronization, by default an empty list.
-        filtered_extensions : list[str], optional
-            A list of file extensions to exclude from synchronization, e.g., ['mp3', 'iso', 'mkv'], by default an empty list.
-        max_upload_size : int, optional
-            The maximum file size for uploads, in bytes. Files larger than this size will be excluded from synchronization, by default 0 (no size limit).
+        Args:
+            sess_id (int): 
+                The ID of the session, obtained from `get_tasks()`.
+            filtered_paths (list of str, optional): 
+                A list of paths (directories / subdirectories) to exclude from the synchronization process. Defaults to `[]`.
+            filtered_filenames (list of str, optional): 
+                A list of filenames to exclude from synchronization. Defaults to `[]`.
+            filtered_extensions (list of str, optional): 
+                A list of file extensions to exclude from synchronization, e.g., `['mp3', 'iso', 'mkv']`. Defaults to `[]`.
+            max_upload_size (int, optional): 
+                The maximum file size for uploads, in bytes. Files larger than this size will be excluded from synchronization. Defaults to `0` (no size limit).
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing the result of the task filters configuration, or a string in case of an error.
+        Returns:
+            dict|str: A dictionary containing the result of the task filters configuration, or a string in case of an error. 
+
+            Example return: 
+            {}
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -755,15 +752,16 @@ class CloudSync(base_api.BaseApi):
     def connection_pause(self, conn_id: int = -1) -> dict[str, object] | str:
         """Pause one or all connections.
 
-        Parameters
-        ----------
-        conn_id : int, optional
-            The ID of the connection to pause. If not specified or set to -1, all connections will be paused.
+        Args:
+            conn_id (int, optional): 
+                The ID of the connection to pause. If not specified or set to `-1`, all connections will be paused.
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing the result of the pause action, or a string in case of an error.
+        Returns:
+            dict|str: 
+                A dictionary containing the result of the pause action, or a string in case of an error. 
+
+            Example return: 
+            {}
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -781,15 +779,16 @@ class CloudSync(base_api.BaseApi):
     def connection_resume(self, conn_id: int = -1) -> dict[str, object] | str:
         """Resume one or all connections.
 
-        Parameters
-        ----------
-        conn_id : int, optional
-            The ID of the connection to resume. If not specified or set to -1, all connections will be resumed.
+        Args:
+            conn_id (int, optional): 
+                The ID of the connection to resume. If not specified or set to `-1`, all connections will be resumed.
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing the result of the resume action, or a string in case of an error.
+        Returns:
+            dict|str: 
+                A dictionary containing the result of the resume action, or a string in case of an error. 
+
+            Example return: 
+            {}
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -809,15 +808,16 @@ class CloudSync(base_api.BaseApi):
 
         The data will remain in both the local and remote directories.
 
-        Parameters
-        ----------
-        conn_id : int
-            The ID of the connection to be removed, obtained from `get_connections()`.
+        Args:
+            conn_id (int): 
+                The ID of the connection to be removed, obtained from `get_connections()`.
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing the result of the remove action, or a string in case of an error.
+        Returns:
+            dict|str: 
+                A dictionary containing the result of the remove action, or a string in case of an error. 
+
+            Example return: 
+            {}
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -839,17 +839,18 @@ class CloudSync(base_api.BaseApi):
 
         The data will remain in both the local and remote directories.
 
-        Parameters
-        ----------
-        conn_id : int
-            The ID of the connection associated with the task, obtained from `get_connections()`.
-        sess_id : int
-            The ID of the task to be removed, obtained from `get_tasks()`.
+        Args:
+            conn_id (int): 
+                The ID of the connection associated with the task, obtained from `get_connections()`.
+            sess_id (int): 
+                The ID of the task to be removed, obtained from `get_tasks()`.
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing the result of the task removal, or a string in case of an error.
+        Returns:
+            dict|str: 
+                A dictionary containing the result of the task removal, or a string in case of an error. 
+
+            Example return: 
+            {}
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
