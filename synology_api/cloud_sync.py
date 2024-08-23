@@ -20,10 +20,41 @@ class CloudSync(base_api.BaseApi):
     def get_pkg_config(self) -> dict[str, object] | str:
         """Retrieve package settings.
 
-        Returns
-        -------
-        dict or str
-            A dictionary containing package settings, or a string in case of an error.
+        Returns:
+            (dict || str): A dictionary containing the result of the schedule configuration, or a string in case of an error.
+
+            Example return:
+            {
+                "data": {
+                    "admin_mode": "enable",
+                    "log_count": 20000,
+                    "repo_vol_path": "/volume2",
+                    "sync_mode": false,
+                    "volume_count": 2,
+                    "volume_list": [
+                        {
+                            "desc": "",
+                            "display": "Volume 1 (Available capacity:  715.84 GB )",
+                            "mount_point": "/volume1",
+                            "size_free": "768625090560",
+                            "size_total": "955458760704",
+                            "value": "1",
+                            "vol_desc": ""
+                        },
+                        {
+                            "desc": "",
+                            "display": "Volume 2 (Available capacity:  1841.73 GB )",
+                            "mount_point": "/volume2",
+                            "size_free": "1977547526144",
+                            "size_total": "3835577597952",
+                            "value": "2",
+                            "vol_desc": ""
+                        }
+                    ],
+                    "worker_count": 20
+                },
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
