@@ -22,7 +22,7 @@ class CloudSync(base_api.BaseApi):
 
         Returns:
             dict|str:
-                A dictionary containing the result of the schedule configuration, or a string in case of an error.
+                A dictionary containing the result of package settings, or a string in case of an error.
 
             Example return:
             {
@@ -172,7 +172,7 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
     
     def get_connection_information(self, conn_id: int) -> dict[str, object] | str:
-        """Retrieve information for a specific connection.
+        """Retrieve cloud information for a specific connection.
 
         Args:
             conn_id(int): 
@@ -180,7 +180,7 @@ class CloudSync(base_api.BaseApi):
 
         Returns:
             dict|str: 
-                A dictionary containing connection information, or a string in case of an error. 
+                A dictionary containing cloud information, or a string in case of an error. 
 
             Example return: 
             {
@@ -223,7 +223,7 @@ class CloudSync(base_api.BaseApi):
 
         Returns:
             dict|str: 
-                A dictionary containing the authentication details, or a string in case of an error. 
+                A dictionary containing the connection authentication details, or a string in case of an error. 
             
             Example return: 
             {
@@ -321,7 +321,7 @@ class CloudSync(base_api.BaseApi):
 
         Returns:
             dict|str: 
-                A dictionary containing the logs, or a string in case of an error. 
+                A dictionary containing the connection logs, or a string in case of an error. 
 
             Example return: 
             {
@@ -333,7 +333,7 @@ class CloudSync(base_api.BaseApi):
                             "file_name": "OCR Japanese extension.paper",
                             "file_type": "file",
                             "log_level": 2,
-                            "path": "/datastore/WebDAV test/subfolder/OCR Japanese extension.paper",
+                            "path": "/test_share/WebDAV test/subfolder/OCR Japanese extension.paper",
                             "session_id": 4,
                             "time": 1724418508
                         },
@@ -343,7 +343,7 @@ class CloudSync(base_api.BaseApi):
                             "file_name": "OCR Japanese extension.paper",
                             "file_type": "file",
                             "log_level": 2,
-                            "path": "/datastore/WebDAV test/subfolder/OCR Japanese extension.paper",
+                            "path": "/test_share/WebDAV test/subfolder/OCR Japanese extension.paper",
                             "session_id": 4,
                             "time": 1724418119
                         }
@@ -383,7 +383,27 @@ class CloudSync(base_api.BaseApi):
                 A dictionary containing the list of tasks, or a string in case of an error. 
 
             Example return: 
-            {}
+            {
+                "data": {
+                    "sess": [
+                        {
+                            "cloud_type_str": "db",
+                            "conn_id": 3,
+                            "error": 0,
+                            "error_desc": "",
+                            "link_status": 1,
+                            "local_sync_path": "/test_share/WebDAV test/subfolder",
+                            "remote_folder_id": "id:xxxx",
+                            "remote_sync_path": "/docs",
+                            "sess_id": 4,
+                            "sync_direction": "ONLY_DOWNLOAD",
+                            "sync_status": "uptodate"
+                        }
+                    ],
+                    "total": 1
+                },
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -408,7 +428,30 @@ class CloudSync(base_api.BaseApi):
                 A dictionary containing task filter information, or a string in case of an error. 
 
             Example return: 
-            {}
+            {
+                "data": {
+                    "filtered_extensions": [
+                        "wbmp",
+                        "webdoc",
+                        "x3f",
+                        "xbm"
+                    ],
+                    "filtered_max_upload_size": 1048576,
+                    "filtered_names": [
+                        "test"
+                    ],
+                    "filtered_paths": [
+                        "/subfolder_1"
+                    ],
+                    "user_defined_extensions": [
+                        "iso"
+                    ],
+                    "user_defined_names": [
+                        "test"
+                    ]
+                },
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -427,7 +470,7 @@ class CloudSync(base_api.BaseApi):
             remote_folder_id: str,
             path: str = '/'
         ) -> dict[str, object] | str:
-        """Retrieve a list of child directories in the cloud for a specific task.
+        """Retrieve a list of children directories in the cloud for a specific task.
 
         Args:
             sess_id (int): 
@@ -439,10 +482,40 @@ class CloudSync(base_api.BaseApi):
 
         Returns:
             dict|str: 
-                A dictionary containing the list of child directories, or a string in case of an error. 
+                A dictionary containing the list of children directories, or a string in case of an error. 
 
             Example return: 
-            {}
+            {
+                "data": {
+                    "children": [
+                        {
+                            "exists_type": 1,
+                            "file_id": "",
+                            "path": "/subfolder_1",
+                            "text": "subfolder_1"
+                        },
+                        {
+                            "exists_type": 1,
+                            "file_id": "",
+                            "path": "/new folder",
+                            "text": "new folder"
+                        },
+                        {
+                            "exists_type": 3,
+                            "file_id": "id:xxxx",
+                            "path": "/test1",
+                            "text": "test1"
+                        },
+                        {
+                            "exists_type": 3,
+                            "file_id": "id:xxxx",
+                            "path": "/test2",
+                            "text": "test2"
+                        }
+                    ]
+                },
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -466,7 +539,77 @@ class CloudSync(base_api.BaseApi):
                 A dictionary containing the recently modified files, or a string in case of an error. 
 
             Example return: 
-            {}
+            {
+                "data": {
+                    "history_items": [
+                        {
+                            "action": 1,
+                            "base_name": "test_file.paper",
+                            "log_level": 2,
+                            "path": "/test_share/WebDAV test/subfolder/test_file.paper",
+                            "session_id": 4,
+                            "syncfolder_basename": "subfolder"
+                        },
+                        {
+                            "action": 1,
+                            "base_name": "perfect plan.paper",
+                            "log_level": 2,
+                            "path": "/test_share/WebDAV test/subfolder/perfect plan.paper",
+                            "session_id": 4,
+                            "syncfolder_basename": "subfolder"
+                        },
+                        {
+                            "action": 1,
+                            "base_name": "Untitled.paper",
+                            "log_level": 2,
+                            "path": "/test_share/WebDAV test/subfolder/Untitled.paper",
+                            "session_id": 4,
+                            "syncfolder_basename": "subfolder"
+                        },
+                        {
+                            "action": 1,
+                            "base_name": "translation hw.paper",
+                            "log_level": 2,
+                            "path": "/test_share/WebDAV test/subfolder/translation hw.paper",
+                            "session_id": 4,
+                            "syncfolder_basename": "subfolder"
+                        },
+                        {
+                            "action": 1,
+                            "base_name": "The Tao of Harp.paper",
+                            "log_level": 2,
+                            "path": "/test_share/WebDAV test/subfolder/song ideas/The Tao of Harp.paper",
+                            "session_id": 4,
+                            "syncfolder_basename": "subfolder"
+                        }
+                    ],
+                    "is_admin_mode": true,
+                    "processing_items": [
+                        {
+                            "base_name": "1111111111111111111111125.jpg",
+                            "bit_rate": 2114,
+                            "current_size": 65535,
+                            "path": "/test_share/WebDAV test/subfolder/test1/asd/1111111111111111.jpg",
+                            "session_id": 3,
+                            "status": "uploading",
+                            "total_size": 295493,
+                            "user_name": "username"
+                        },
+                        {
+                            "base_name": "ans1.3.png",
+                            "bit_rate": 1047,
+                            "current_size": 358122,
+                            "path": "/test_share/WebDAV test/subfolder/test2/ans1.3.png",
+                            "session_id": 3,
+                            "status": "uploading",
+                            "total_size": 358122,
+                            "user_name": "username"
+                        }
+                    ],
+                    "server_merge_items": []
+                },
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -502,7 +645,9 @@ class CloudSync(base_api.BaseApi):
                 A dictionary containing the result of the configuration update, or a string in case of an error. 
 
             Example return: 
-            {}
+            {
+                "success": true
+            }
         """
         admin_mode = 'enable' if admin_mode else 'disable'
 
@@ -520,11 +665,11 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param) 
     
-    def set_relink_behavior(self, sync_mode: bool) -> dict[str, object] | str:
+    def set_relink_behavior(self, delete_from_cloud: bool) -> dict[str, object] | str:
         """Set the relinking behavior for personal user accounts.
 
         Args:
-            sync_mode (bool): 
+            delete_from_cloud (bool): 
                 Set to `False` for "locally deleted files will be re-fetched from the cloud". 
                 Set to `True` for "locally deleted files will also be removed from the cloud".
 
@@ -533,7 +678,9 @@ class CloudSync(base_api.BaseApi):
                 A dictionary containing the result of the relink behavior update, or a string in case of an error. 
 
             Example return: 
-            {}
+            {
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -541,7 +688,7 @@ class CloudSync(base_api.BaseApi):
         req_param = {
             'version': info['minVersion'], 
             'method': 'set_personal_config',
-            'sync_mode': sync_mode
+            'sync_mode': delete_from_cloud
         }
 
         return self.request_data(api_name, api_path, req_param) 
