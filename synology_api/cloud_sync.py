@@ -435,9 +435,13 @@ class CloudSync(base_api.BaseApi):
         conn_id : int
             The ID of the connection, obtained from `get_connections()`.
         enable : bool
-            Whether to enable the schedule.
+            Whether the scheduling is enabled (`True`) or disabled (`False`).
         schedule_info : list of str, optional
-            List of schedule time strings. Default is an empty list.
+            A list of 7 strings where each string represents a day of the week, going from Sunday to Saturday.
+
+            Each string is composed of 24 characters, where each character is either '1' (enabled) or '0' (disabled) for the respective hour of the day.
+            
+            The default value (if `schedule_info` is not provided) enables all days and hours.
 
         Returns
         -------
@@ -448,16 +452,16 @@ class CloudSync(base_api.BaseApi):
         -------
         Function usage for enabling the schedule at every time and day:
         >>> # Keep this day order, Sunday to Saturday
-        >>> days = [
-        >>>     '111111111111111111111111', # sunday    - hours from 0 to 23
-        >>>     '111111111111111111111111', # monday    - hours from 0 to 23
-        >>>     '111111111111111111111111', # tuesday   - hours from 0 to 23
-        >>>     '111111111111111111111111', # wednesday - hours from 0 to 23
-        >>>     '111111111111111111111111', # thursday  - hours from 0 to 23
-        >>>     '111111111111111111111111', # friday    - hours from 0 to 23
-        >>>     '111111111111111111111111', # saturday  - hours from 0 to 23
-        >>> ]
-        >>>  set_connection_schedule(task_id=2, enable=True, schedule_info=days)
+        ... days = [
+        ...     '111111111111111111111111', # sunday    - hours from 0 to 23
+        ...     '111111111111111111111111', # monday    - hours from 0 to 23
+        ...     '111111111111111111111111', # tuesday   - hours from 0 to 23
+        ...     '111111111111111111111111', # wednesday - hours from 0 to 23
+        ...     '111111111111111111111111', # thursday  - hours from 0 to 23
+        ...     '111111111111111111111111', # friday    - hours from 0 to 23
+        ...     '111111111111111111111111', # saturday  - hours from 0 to 23
+        ... ]
+        ... set_connection_schedule(task_id=2, enable=True, schedule_info=days)
         """
         if len(schedule_info) != 7 and len(''.join(schedule_info) != 168):
             schedule_info = '1' * 24 * 7
