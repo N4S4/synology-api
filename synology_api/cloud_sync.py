@@ -274,3 +274,89 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param) 
     
+    def set_connection_settings(
+            self, 
+            conn_id: int,
+            task_name: str,
+            pull_event_period: int = 60,
+            max_upload_speed: int = 0,
+            max_download_speed: int = 0,
+            storage_class: str = '',
+            isSSE: bool = False,
+            part_size: int = 128
+        ) -> dict[str, object] | str:
+        '''
+        Set connection settings.
+
+        pull_event_period: int = 60, default cahnges from cloud to cloud
+        max_upload_speed: int = 0, in bytes
+        max_download_speed: int = 0, in bytes
+        storage_class: str = '',
+        isSSE: bool = False, for security service edge enabled clouds
+        part_size: int = 128
+        '''
+        api_name = 'SYNO.CloudSync'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'], 
+            'method': 'set_personal_config',
+            'conn_id': conn_id,
+            'task_name': task_name,
+            'pull_event_period': pull_event_period,
+            'max_upload_speed': max_upload_speed,
+            'max_download_speed': max_download_speed,
+            'storage_class': storage_class,
+            'isSSE': isSSE,
+            'part_size': part_size,
+        }
+
+        return self.request_data(api_name, api_path, req_param) 
+    
+    def set_connection_schedule(
+            self, 
+            conn_id: int,
+            enable: bool,
+            schedule_info: list[str] = []
+        ) -> dict[str, object] | str:
+        '''
+        Set connection schedule.
+
+        conn_id: int,
+        is_enabled_schedule: bool,
+        schedlue_info: list[str] Default value is all days and hours enabled. => A list of 7 strings, composed of 1 and 0, each digit represents an hour of a day. Each day is represented by 24 digits, 1 being enabled, 0 being disabled:
+
+        ```python
+        # Keep this day order, Sunday to Saturday
+        days = [
+            '111111111111111111111111', # sunday    - hours from 0 to 23
+            '111111111111111111111111', # monday    - hours from 0 to 23
+            '111111111111111111111111', # tuesday   - hours from 0 to 23
+            '111111111111111111111111', # wednesday - hours from 0 to 23
+            '111111111111111111111111', # thursday  - hours from 0 to 23
+            '111111111111111111111111', # friday    - hours from 0 to 23
+            '111111111111111111111111', # saturday  - hours from 0 to 23
+        ]
+        
+        set_connection_schedule(task_id=2, enable=True, schedule_info=days)
+        ```
+        '''
+        if len(schedule_info) != 7 and len(''.join(schedule_info) != 168):
+            schedule_info = '1' * 24 * 7
+        else:
+            schedule_info = ''.join(schedule_info)
+
+        api_name = 'SYNO.CloudSync'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['minVersion'], 
+            'method': 'set_personal_config',
+            'conn_id': conn_id,
+            'is_enabled_schedule': enable,
+            'schedule_info': schedule_info
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    
