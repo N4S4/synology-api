@@ -3,7 +3,7 @@ from . import base_api
 
 
 class CloudSync(base_api.BaseApi):
-    '''
+    """
        Cloud Sync API implementation.
 
        This API provides the functionality to get information related to the package settings and current connections and tasks. 
@@ -15,12 +15,16 @@ class CloudSync(base_api.BaseApi):
        - Google Drive  
        - OneDrive
        - DropBox
-    '''
+    """
 
     def get_pkg_config(self) -> dict[str, object] | str:
-        '''
-        Return package settings.
-        '''
+        """Retrieve package settings.
+
+        Returns
+        -------
+        dict or str
+            A dictionary containing package settings, or a string in case of an error.
+        """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -32,11 +36,18 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
     
     def get_connections(self, group_by: str = 'group_by_user') -> dict[str, object] | str:
-        '''
-        Return list of current cloud connections.
+        """Retrieve a list of current cloud connections.
 
-        group_by = 'group_by_user' ||  'group_by_cloud_type'
-        '''
+        Parameters
+        ----------
+        group_by : str, optional
+            Method to group the connections, by user or cloud type. Default is `'group_by_user'`.
+
+        Returns
+        -------
+        dict or str
+            A dictionary containing the list of cloud connections, or a string in case of an error.
+        """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -50,11 +61,18 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
     
     def get_connection_settings(self, conn_id: int) -> dict[str, object] | str:
-        '''
-        Return settings from a given connection.
+        """Retrieve settings for a specific connection.
 
-        conn_id = int from get_connections
-        '''
+        Parameters
+        ----------
+        conn_id : int
+            The ID of the connection, obtained from `get_connections()`.
+
+        Returns
+        -------
+        dict or str
+            A dictionary containing the connection settings, or a string in case of an error.
+        """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -67,11 +85,18 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
     
     def get_connection_information(self, conn_id: int) -> dict[str, object] | str:
-        '''
-        Return information from a given connection.
+        """Retrieve information for a specific connection.
 
-        conn_id = int from get_connections
-        '''
+        Parameters
+        ----------
+        conn_id : int
+            The ID of the connection, obtained from `get_connections()`.
+
+        Returns
+        -------
+        dict or str
+            A dictionary containing connection information, or a string in case of an error.
+        """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -84,11 +109,18 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
     
     def get_connection_auth(self, conn_id: int) -> dict[str, object] | str:
-        '''
-        Return authentication information from a given connection.
+        """Retrieve authentication information for a specific connection.
 
-        conn_id = int from get_connections
-        '''
+        Parameters
+        ----------
+        conn_id : int
+            The ID of the connection, obtained from `get_connections()`.
+
+        Returns
+        -------
+        dict or str
+            A dictionary containing the authentication details, or a string in case of an error.
+        """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -111,24 +143,44 @@ class CloudSync(base_api.BaseApi):
             offset: int = 0,
             limit: int = 200
         ) -> dict[str, object] | str:
-        '''
-        Return logs from a given connection.
+        """Retrieve logs for a specific connection.
 
-        conn_id = int from get_connections
-        date_from = int (epoch date)
-        date_to = int (epoch date)
-        log_level = int => (-1 => All, 0 => Info, 1=> Warning, 2 => Error)
-        action = int => (
-            -1 => All, 
-            0 => Delete Remote, 
-            1 => Download, 
-            2 => Upload,
-            3 => Delete Local,
-            4 => Rename Remote,
-            8 => Merge,
-            9 => Merge Deletion, 
-        )
-        '''
+        Parameters
+        ----------
+        conn_id : int
+            The ID of the connection, obtained from `get_connections()`.
+        keyword : str, optional
+            A keyword to filter logs. Default is an empty string.
+        date_from : int, optional
+            The starting date in epoch format. Default is 0.
+        date_to : int, optional
+            The ending date in epoch format. Default is 0.
+        log_level : int, optional
+            Log level filter. Default is -1 (All). Possible values:
+            - -1: All
+            - 0: Info
+            - 1: Warning
+            - 2: Error
+        action : int, optional
+            Action filter. Default is -1 (All). Possible values:
+            - -1: All
+            - 0: Delete Remote
+            - 1: Download
+            - 2: Upload
+            - 3: Delete Local
+            - 4: Rename Remote
+            - 8: Merge
+            - 9: Merge Deletion
+        offset : int, optional
+            Log offset for pagination. Default is 0.
+        limit : int, optional
+            Number of logs to retrieve. Default is 200.
+
+        Returns
+        -------
+        dict or str
+            A dictionary containing the logs, or a string in case of an error.
+        """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -148,11 +200,18 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_tasks(self, conn_id: int) -> dict[str, object] | str:
-        '''
-        Return list of tasks related to given cloud connection.
+        """Retrieve a list of tasks related to a specific connection.
 
-        conn_id = int from get_connections
-        '''
+        Parameters
+        ----------
+        conn_id : int
+            The ID of the connection, obtained from `get_connections()`.
+
+        Returns
+        -------
+        dict or str
+            A dictionary containing the list of tasks, or a string in case of an error.
+        """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -165,11 +224,18 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
     
     def get_task_filters(self, sess_id: int) -> dict[str, object] | str:
-        '''
-        Return filter information for given task.
+        """Retrieve filter information for a specific task.
 
-        sess_id = int from get_tasks
-        '''
+        Parameters
+        ----------
+        sess_id : int
+            The ID of the task, obtained from `get_tasks()`.
+
+        Returns
+        -------
+        dict or str
+            A dictionary containing task filter information, or a string in case of an error.
+        """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -187,12 +253,22 @@ class CloudSync(base_api.BaseApi):
             remote_folder_id: str,
             path: str = '/'
         ) -> dict[str, object] | str:
-        '''
-        Return list of children directories in Cloud for given task.
+        """Retrieve a list of child directories in the cloud for a specific task.
 
-        remote_folder_id = str from get_tasks
-        path = str (the folder from which we want the children, default is the task root path)
-        '''
+        Parameters
+        ----------
+        sess_id : int
+            The ID of the task, obtained from `get_tasks()`.
+        remote_folder_id : str
+            The ID of the remote folder, obtained from `get_tasks()`.
+        path : str, optional
+            The folder path to retrieve the child directories from. Default is root `'/'`.
+
+        Returns
+        -------
+        dict or str
+            A dictionary containing the list of child directories, or a string in case of an error.
+        """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -208,9 +284,13 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
     
     def get_recently_modified(self) -> dict[str, object] | str:
-        '''
-        Return a list of the 5 latest modified files and the currently syncing items.
-        '''
+        """Retrieve the 5 latest modified files and the currently syncing items.
+
+        Returns
+        -------
+        dict or str
+            A dictionary containing the recently modified files, or a string in case of an error.
+        """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
