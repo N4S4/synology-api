@@ -1,5 +1,6 @@
 from __future__ import annotations
 from . import base_api
+import requests
 
 
 class CloudSync(base_api.BaseApi):
@@ -695,7 +696,7 @@ class CloudSync(base_api.BaseApi):
     
     def set_connection_settings(
             self, 
-            conn_id: int,
+            conn_id: str,
             task_name: str,
             pull_event_period: int = 60,
             max_upload_speed: int = 0,
@@ -729,25 +730,37 @@ class CloudSync(base_api.BaseApi):
                 A dictionary containing the updated connection settings, or a string in case of an error. 
 
             Example return: 
-            {}
+            {
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
-        api_path = info['path']
-        req_param = {
-            'version': info['minVersion'], 
-            'method': 'set_connection_setting',
-            'conn_id': conn_id,
-            'task_name': task_name,
-            'pull_event_period': pull_event_period,
-            'max_upload_speed': max_upload_speed,
-            'max_download_speed': max_download_speed,
-            'storage_class': storage_class,
-            'isSSE': isSSE,
-            'part_size': part_size,
-        }
+        api_path = info['path']   
 
-        return self.request_data(api_name, api_path, req_param) 
+        # For some reason using request_data failed with error 120 every time. 
+        # No idea what could be causing that, but managing the request from here seems to work without issues.
+        url = (
+            f"{self.base_url}{api_path}?"
+            f"api=SYNO.CloudSync"
+            f"&version={info['minVersion']}"
+            f"&method=set_connection_setting"
+            f"&connection_id={conn_id}"
+            f"&task_name={task_name}"
+            f"&pull_event_period={pull_event_period}"
+            f"&max_upload_speed={max_upload_speed}"
+            f"&max_download_speed={max_download_speed}"
+            f"&storage_class=\"{storage_class}\""
+            f"&isSSE={str(isSSE).lower()}"
+            f"&part_size={part_size}"
+            f"&_sid={self._sid}"
+        )
+
+        response = requests.request("GET", url, headers={"X-SYNO-TOKEN": self.session._syno_token})
+        if response.status_code != 200 or not response.json()['success']:
+            return response.status_code, response.json()
+
+        return response.json()
     
     def set_connection_schedule(
             self, 
