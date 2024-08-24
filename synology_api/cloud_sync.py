@@ -738,29 +738,20 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']   
 
-        # For some reason using request_data failed with error 120 every time. 
-        # No idea what could be causing that, but managing the request from here seems to work without issues.
-        url = (
-            f"{self.base_url}{api_path}?"
-            f"api=SYNO.CloudSync"
-            f"&version={info['minVersion']}"
-            f"&method=set_connection_setting"
-            f"&connection_id={conn_id}"
-            f"&task_name={task_name}"
-            f"&pull_event_period={pull_event_period}"
-            f"&max_upload_speed={max_upload_speed}"
-            f"&max_download_speed={max_download_speed}"
-            f"&storage_class=\"{storage_class}\""
-            f"&isSSE={str(isSSE).lower()}"
-            f"&part_size={part_size}"
-            f"&_sid={self._sid}"
-        )
+        req_param = {
+            'version': info['minVersion'], 
+            'method': 'set_connection_setting',
+            'connection_id': conn_id,
+            'task_name': task_name,
+            'pull_event_period': pull_event_period,
+            'max_upload_speed': max_upload_speed,
+            'max_download_speed': max_download_speed,
+            'storage_class': f'\"{storage_class}\"',
+            'isSSE': isSSE,
+            'part_size': part_size,
+        }
 
-        response = requests.request("GET", url, headers={"X-SYNO-TOKEN": self.session._syno_token})
-        if response.status_code != 200 or not response.json()['success']:
-            return response.status_code, response.json()
-
-        return response.json()
+        return self.request_data(api_name, api_path, req_param) 
     
     def set_connection_schedule(
             self, 
@@ -777,7 +768,9 @@ class CloudSync(base_api.BaseApi):
                 Whether the scheduling is enabled (`True`) or disabled (`False`).
             schedule_info (list of str, optional): 
                 A list of 7 strings where each string represents a day of the week, going from Sunday to Saturday.
+
                 Each string is composed of 24 characters, where each character is either '1' (enabled) or '0' (disabled) for the respective hour of the day.
+
                 The default value (if `schedule_info` is not provided) enables all days and hours.
 
                 Example format for enabling the schedule at every time and day:
@@ -791,7 +784,7 @@ class CloudSync(base_api.BaseApi):
                     '111111111111111111111111', # friday    - hours from 0 to 23
                     '111111111111111111111111', # saturday  - hours from 0 to 23
                 ]
-                set_connection_schedule(task_id=2, enable=True, schedule_info=days)
+                set_connection_schedule(conn_id=3, enable=True, schedule_info=days)
 
         Returns:
             dict|str: A dictionary containing the schedule settings, or a string in case of an error. 
@@ -799,7 +792,7 @@ class CloudSync(base_api.BaseApi):
             Example return: 
             {}
         """
-        if len(schedule_info) != 7 and len(''.join(schedule_info) != 168):
+        if len(schedule_info) != 7 and len(''.join(schedule_info)) != 168:
             schedule_info = '1' * 24 * 7
         else:
             schedule_info = ''.join(schedule_info)
@@ -810,9 +803,9 @@ class CloudSync(base_api.BaseApi):
         req_param = {
             'version': info['minVersion'], 
             'method': 'set_schedule_setting',
-            'conn_id': conn_id,
+            'connection_id': conn_id,
             'is_enabled_schedule': enable,
-            'schedule_info': schedule_info
+            'schedule_info': f'\"{schedule_info}\"'
         }
 
         return self.request_data(api_name, api_path, req_param)
