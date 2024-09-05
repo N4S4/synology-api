@@ -875,7 +875,7 @@ class CloudSync(base_api.BaseApi):
             sess_id (int): 
                 The ID of the session, obtained from `get_tasks()`.
             filtered_paths (list of str, optional): 
-                A list of paths (directories / subdirectories) to exclude from the synchronization process. Defaults to `[]`.
+                A list of paths (directories / subdirectories) to exclude from the synchronization process, e.g, `['/images', '/videos/movies']`. Defaults to `[]`.
             filtered_filenames (list of str, optional): 
                 A list of filenames to exclude from synchronization. Defaults to `[]`.
             filtered_extensions (list of str, optional): 
@@ -891,7 +891,7 @@ class CloudSync(base_api.BaseApi):
                 "success": true
             }
         """
-        # Using json.dumps() to convert from list to str to match the '["text"]' the API is waiting for. Otherwise, error 120 is raised. 
+        # Using json.dumps() to convert from list to str to match the '["text"]' format the API is waiting for. Otherwise, error 120 is raised. 
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -921,7 +921,9 @@ class CloudSync(base_api.BaseApi):
                 A dictionary containing the result of the pause action, or a string in case of an error. 
 
             Example return: 
-            {}
+            {
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -948,7 +950,9 @@ class CloudSync(base_api.BaseApi):
                 A dictionary containing the result of the resume action, or a string in case of an error. 
 
             Example return: 
-            {}
+            {
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -977,7 +981,9 @@ class CloudSync(base_api.BaseApi):
                 A dictionary containing the result of the remove action, or a string in case of an error. 
 
             Example return: 
-            {}
+            {
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -1010,7 +1016,9 @@ class CloudSync(base_api.BaseApi):
                 A dictionary containing the result of the task removal, or a string in case of an error. 
 
             Example return: 
-            {}
+            {
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
