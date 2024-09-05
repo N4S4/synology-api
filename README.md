@@ -261,8 +261,12 @@ This wrapper cover the following APIs for now:
 | SYNO.ActiveBackup.Log                           |
 
 | Snapshot Replication     |
-| -------------------------|
+|--------------------------|
 | SYNO.Core.Share.Snapshot |
+
+| Cloud Sync     |
+|----------------|
+| SYNO.CloudSync |
 
 #
 ### Not all Surveillance Station functions works.
@@ -699,7 +703,28 @@ DS info with below functions:
 | set_snapshot_attr() |
 
 ### cloud_sync (Cloud Sync)
-
+| Functions                      | Description                                                    |
+|--------------------------------|----------------------------------------------------------------|
+| `get_pkg_config()`             | Retrieve the package configuration.                            |
+| `get_connections()`            | Get connection details.                                        |
+| `get_connection_settings()`    | Get settings for a specific connection.                        |
+| `get_connection_information()` | Get cloud information for a specific connection.               |
+| `get_connection_auth()`        | Retrieve authentication details for a connection.              |
+| `get_connection_logs()`        | Retrieve logs for a specific connection.                       |
+| `get_tasks()`                  | Get tasks associated with a specific connection.               |
+| `get_task_filters()`           | Retrieve filters applied to tasks for a specific session.      |
+| `get_task_cloud_folders()`     | Retrieve cloud folders associated with tasks.                  |
+| `get_recently_modified()`      | Retrieve recently modified resources.                          |
+| `set_pkg_config()`             | Set or update the package configuration.                       |
+| `set_relink_behavior()`        | Set behavior for relinking tasks.                              |
+| `set_connection_settings()`    | Set or update settings for a connection.                       |
+| `set_connection_schedule()`    | Define or update the schedule for a connection.                |
+| `set_task_settings()`          | Update task settings.                                          |
+| `set_task_filters()`           | Apply or modify filters to tasks.                              |
+| `connection_pause()`           | Pause a specific or all connections.                           |
+| `connection_resume()`          | Resume a paused or all connections.                            |
+| `connection_remove()`          | Remove a specific connection.                                  |
+| `task_remove()`                | Remove a specific task.                                        |
 
  
 #### What's still missing
