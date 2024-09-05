@@ -335,33 +335,32 @@ To explain the use of some function I will divide all the functions in two sets
 you can run the following set of functions at your will entering just the required data,
 
 
-| Function                          | Description                                                                                      |
-|-----------------------------------|--------------------------------------------------------------------------------------------------|
-| get_info()                        | Provide File Station information                                                                 |
-| get_list_share()                  | List all shared folders.                                                                         |
-| get_file_list()                   | Enumerate files in a given folder                                                                |
-| get_file_info()                   | Get information of file(s)                                                                       |
-| get_mount_point_list()            | List all mount point folders on one given type of virtual file system                            |
-| get_favorite_list()               | List user’s favorites                                                                            |
-| add_a_favorite()                  | Add a folder to user’s favorites                                                                 |
-| delete_a_favorite()               | Delete a favorite in user’s favorites.                                                           |
-| clear_broken_favorite()           | Delete all broken statuses of favorites.                                                         |
-| edit_favorite_name()              | Edit a favorite name                                                                             |
-| replace_all_favorite()            | Replace multiple favorites of folders to the existed user’s favorites.                           |
-| check_permission()                | Check if a logged-in user has write permission to create new files/folders in a given folder     |
-| upload_file()                     | upload a file to the station (fix by @longyn)                                                    |
-| get_shared_link_info()            | Get information of a sharing link by the sharing link ID                                         |
-| get_shared_link_list()            | List user’s file sharing links.                                                                  |
-| create_sharing_link()             | Generate one or more sharing link(s) by file/folder path(s)                                      |
-| delete_shared_link()              | Delete one or more sharing links.                                                                |
-| clear_invalid_shared_link()       | Remove all expired and broken sharing links                                                      |
-| edit_shared_link()                | Edit sharing link(s)                                                                             |
-| create_folder()                   | Create folders.                                                                                  |
-| rename_folder()                   | Rename a file/folder                                                                             |
-| delete_blocking_function()        | Delete files/folders. This is a blocking method. The response is not returned until the deletion |
-| operation is completed.           |                                                                                                  |
-| get_file_list_of_archive()        | List archived files contained in an archive                                                      |
-| get_list_of_all_background_task() | List all background tasks including copy, move, delete, compress and extract tasks               |
+| Function                          | Description                                                                                                              |
+|-----------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| get_info()                        | Provide File Station information                                                                                         |
+| get_list_share()                  | List all shared folders.                                                                                                 |
+| get_file_list()                   | Enumerate files in a given folder                                                                                        |
+| get_file_info()                   | Get information of file(s)                                                                                               |
+| get_mount_point_list()            | List all mount point folders on one given type of virtual file system                                                    |
+| get_favorite_list()               | List user’s favorites                                                                                                    |
+| add_a_favorite()                  | Add a folder to user’s favorites                                                                                         |
+| delete_a_favorite()               | Delete a favorite in user’s favorites.                                                                                   |
+| clear_broken_favorite()           | Delete all broken statuses of favorites.                                                                                 |
+| edit_favorite_name()              | Edit a favorite name                                                                                                     |
+| replace_all_favorite()            | Replace multiple favorites of folders to the existed user’s favorites.                                                   |
+| check_permission()                | Check if a logged-in user has write permission to create new files/folders in a given folder                             |
+| upload_file()                     | Upload a file to the station (fix by @longyn)                                                                            |
+| get_shared_link_info()            | Get information of a sharing link by the sharing link ID                                                                 |
+| get_shared_link_list()            | List user’s file sharing links.                                                                                          |
+| create_sharing_link()             | Generate one or more sharing link(s) by file/folder path(s)                                                              |
+| delete_shared_link()              | Delete one or more sharing links.                                                                                        |
+| clear_invalid_shared_link()       | Remove all expired and broken sharing links                                                                              |
+| edit_shared_link()                | Edit sharing link(s)                                                                                                     |
+| create_folder()                   | Create folders.                                                                                                          |
+| rename_folder()                   | Rename a file/folder                                                                                                     |
+| delete_blocking_function()        | Delete files/folders. This is a blocking method. The response is not returned until the deletion operation is completed. |
+| get_file_list_of_archive()        | List archived files contained in an archive                                                                              |
+| get_list_of_all_background_task() | List all background tasks including copy, move, delete, compress and extract tasks                                       |
 
 To run the following functions you'll have to start the task with the start function
 
@@ -577,54 +576,54 @@ DS info with below functions:
 
 | Functions                | Description                                                    |
 |--------------------------|----------------------------------------------------------------|
-| backup_repository_get()  | get repository information for given task                      |
-| backup_repository_list() | list of present repositories                                   |
-| backup_task_list()       | get current restoring information and list of present tasks    | 
-| backup_task_status()     | get status and state of task                                   |
-| backup_task_get()        | get task information                                           |
-| backup_task_result()     | get last result summary information of a task                  |
-| backup_task_run()        | run task                                                       |
-| backup_task_cancel()     | cancel ongoing task                                            |
-| backup_task_suspend()    | suspend ongoing task                                           |
-| backup_task_discard()    | discard suspended task                                         |
-| backup_task_resume()     | resume suspended task                                          |
-| backup_task_remove()     | remove one or more tasks                                       |
-| integrity_check_run()    | run integrity check for given task                             |
-| integrity_check_cancel() | cancel ongoing integrity check                                 |
-| hb_logs_get()            | get Hyper Backup UI logs                                       |
+| backup_repository_get()  | Get repository information for given task                      |
+| backup_repository_list() | List of present repositories                                   |
+| backup_task_list()       | Get current restoring information and list of present tasks    | 
+| backup_task_status()     | Get status and state of task                                   |
+| backup_task_get()        | Get task information                                           |
+| backup_task_result()     | Get last result summary information of a task                  |
+| backup_task_run()        | Run task                                                       |
+| backup_task_cancel()     | Cancel ongoing task                                            |
+| backup_task_suspend()    | Suspend ongoing task                                           |
+| backup_task_discard()    | Discard suspended task                                         |
+| backup_task_resume()     | Resume suspended task                                          |
+| backup_task_remove()     | Remove one or more tasks                                       |
+| integrity_check_run()    | Run integrity check for given task                             |
+| integrity_check_cancel() | Cancel ongoing integrity check                                 |
+| hb_logs_get()            | Get Hyper Backup UI logs                                       |
 
 ### core_backup Hyper Backup Vault
 | Functions                     | Description                                               | 
 |-------------------------------|-----------------------------------------------------------|
-| vault_target_list()           | list of all targets in Vault                              |
-| vault_concurrency_get()       | get number of concurrent tasks allowed to run in HB Vault |
-| vault_concurrency_set()       | set number of concurrent tasks allowed to run in HB Vault |
-| vault_target_settings_get()   | get settings of target                                    |
-| vault_task_statistics_get()   | get statistics from task                                  |
-| vault_target_logs_get()       | get logs of specific target                               |
+| vault_target_list()           | List of all targets in Vault                              |
+| vault_concurrency_get()       | Get number of concurrent tasks allowed to run in HB Vault |
+| vault_concurrency_set()       | Set number of concurrent tasks allowed to run in HB Vault |
+| vault_target_settings_get()   | Get settings of target                                    |
+| vault_task_statistics_get()   | Get statistics from task                                  |
+| vault_target_logs_get()       | Get logs of specific target                               |
 
 ### core_active_backup Active Backup for Business
 
 | Functions                     | Description                                            |
 |-------------------------------|--------------------------------------------------------|
-| list_vm_hypervisor()          | list of all configured hypervisors                     |
-| list_device_transfer_size()   | list of all devices and their respective transfer size |
-| list_storage()                | list of all storages                                   |
-| list_logs()                   | list of logs                                           |
-| list_logs_details()           | detailed list of task logs                             |
-| backup_task_list()            | list of all tasks                                      |
-| backup_task_run()             | run given task(s)                                      |
-| backup_task_cancel()          | cancel given task(s)                                   |
-| backup_task_remove()          | remove given task(s)                                   |
-| backup_task_delete_versions() | delete given version(s)                                | 
+| list_vm_hypervisor()          | List of all configured hypervisors                     |
+| list_device_transfer_size()   | List of all devices and their respective transfer size |
+| list_storage()                | List of all storages                                   |
+| list_logs()                   | List of logs                                           |
+| list_logs_details()           | Detailed list of task logs                             |
+| backup_task_list()            | List of all tasks                                      |
+| backup_task_run()             | Run given task(s)                                      |
+| backup_task_cancel()          | Cancel given task(s)                                   |
+| backup_task_remove()          | Remove given task(s)                                   |
+| backup_task_delete_versions() | Delete given version(s)                                | 
 
 ### core_certificate tnx to @ajarzyn
 
 | Functions          | Description             |
 |--------------------|-------------------------|
-| list_cert()        | list certificates       |
-| set_default_cert() | set default certificate |
-| upload_cert()      | upload a certificate    |
+| list_cert()        | List certificates       |
+| set_default_cert() | Set default certificate |
+| upload_cert()      | Upload a certificate    |
 
 ### vpn
 | Functions                    |
@@ -698,6 +697,9 @@ DS info with below functions:
 | create_snapshot()   | 
 | delete_snapshots()  | 
 | set_snapshot_attr() |
+
+### cloud_sync (Cloud Sync)
+
 
  
 #### What's still missing
