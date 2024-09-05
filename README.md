@@ -504,52 +504,52 @@ DS info with below functions:
 | file_index_resource()           |
 | cms_info()                      |
 | port_forwarding_rules()         |
-| port_forwarding_router_conf     |
-| disk_list                       |
-| ddns_provider_info              |
-| ddns_record_info                |
-| ddns_external_ip                |
-| ddns_synology                   |
-| iscsi_lun_info                  |
-| hddman                          |
-| ftp_security_info               |
-| bandwidth_control_info          |
-| directory_domain_info           |
-| ws_transfer_info                |
-| ref_link_copy_info              |
-| bonjour_service_info            |
-| users_info                      |
-| password_policy                 |
-| password_expiry                 |
-| personal_photo_enable           |
-| ftp_chroot_user                 |
-| server_pair                     |
-| groups_info                     |
-| ldap_info                       |
-| sso_iwa_info                    |
-| sso_info                        |
-| network_interface_info          |
-| proxy_info                      |
-| gateway_list                    |
-| firewall_info                   |
-| auto_upgrade_status             |
-| upgrade_server_check            |
-| set_fan_speed                   |
-| enable_zram                     |
-| enable_power_recovery           |
-| enable_beep_control             |
-| set_led_control                 |
-| set_hibernation                 |
-| enable_external_ups             |
-| get_system_info                 |
-| get_cpu_temp                    |
-| get_network_info                |
-| get_volume_info                 |
-| get_all_system_utilization      |
-| get_cpu_utilization             |
-| get_disk_utilization            |
-| get_memory_utilization          |
-| dsm_info                        |
+| port_forwarding_router_conf()   |
+| disk_list()                     |
+| ddns_provider_info()            |
+| ddns_record_info()              |
+| ddns_external_ip()              |
+| ddns_synology()                 |
+| iscsi_lun_info()                |
+| hddman()                        |
+| ftp_security_info()             |
+| bandwidth_control_info()        |
+| directory_domain_info()         |
+| ws_transfer_info()              |
+| ref_link_copy_info()            |
+| bonjour_service_info()          |
+| users_info()                    |
+| password_policy()               |
+| password_expiry()               |
+| personal_photo_enable()         |
+| ftp_chroot_user()               |
+| server_pair()                   |
+| groups_info()                   |
+| ldap_info()                     |
+| sso_iwa_info()                  |
+| sso_info()                      |
+| network_interface_info()        |
+| proxy_info()                    |
+| gateway_list()                  |
+| firewall_info()                 |
+| auto_upgrade_status()           |
+| upgrade_server_check()          |
+| set_fan_speed()                 |
+| enable_zram()                   |
+| enable_power_recovery()         |
+| enable_beep_control()           |
+| set_led_control()               |
+| set_hibernation()               |
+| enable_external_ups()           |
+| get_system_info()               |
+| get_cpu_temp()                  |
+| get_network_info()              |
+| get_volume_info()               |
+| get_all_system_utilization()    |
+| get_cpu_utilization()           |
+| get_disk_utilization()          |
+| get_memory_utilization()        |
+| dsm_info()                      |
 
 ### Virtualization
 
@@ -623,7 +623,7 @@ DS info with below functions:
 |--------------------|-------------------------|
 | list_cert()        | List certificates       |
 | set_default_cert() | Set default certificate |
-| upload_cert()      | Upload a certificate    |
+| `upload_cert()`      | Upload a certificate    |
 
 ### vpn
 | Functions                    |
