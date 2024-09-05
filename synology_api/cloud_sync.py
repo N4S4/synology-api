@@ -1,6 +1,6 @@
 from __future__ import annotations
 from . import base_api
-import requests
+import json
 
 
 class CloudSync(base_api.BaseApi):
@@ -790,7 +790,9 @@ class CloudSync(base_api.BaseApi):
             dict|str: A dictionary containing the schedule settings, or a string in case of an error. 
 
             Example return: 
-            {}
+            {
+                "success": true
+            }
         """
         if len(schedule_info) != 7 and len(''.join(schedule_info)) != 168:
             schedule_info = '1' * 24 * 7
@@ -840,7 +842,9 @@ class CloudSync(base_api.BaseApi):
                 A dictionary containing the result of the task settings configuration, or a string in case of an error. 
 
             Example return: 
-            {}
+            {
+                "success": true
+            }
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -848,7 +852,7 @@ class CloudSync(base_api.BaseApi):
         req_param = {
             'version': info['minVersion'], 
             'method': 'set_session_setting',
-            'sess_id': sess_id,
+            'session_id': sess_id,
             'sync_direction': sync_direction,
             'sync_attr_check_option': consistency_check,
             'no_delete': no_delete_on_cloud,
@@ -883,20 +887,23 @@ class CloudSync(base_api.BaseApi):
             dict|str: A dictionary containing the result of the task filters configuration, or a string in case of an error. 
 
             Example return: 
-            {}
+            {
+                "success": true
+            }
         """
+        # Using json.dumps() to convert from list to str to match the '["text"]' the API is waiting for. Otherwise, error 120 is raised. 
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
             'version': info['minVersion'], 
             'method': 'set_selective_sync_config',
-            'sess_id': sess_id,
-            'filtered_paths': filtered_paths,
-            'filtered_names': filtered_filenames,
-            'filtered_extensions': filtered_extensions,
-            'user_defined_names': '[]',         # Leave this empty cause the params have to be sent in filtered_names anyways
-            'user_defined_extensions': '[]',    # Leave this empty cause the params have to be sent in filtered_extensions anyways 
+            'session_id': sess_id,
+            'filtered_paths': json.dumps(filtered_paths),
+            'filtered_names': json.dumps(filtered_filenames),
+            'filtered_extensions': json.dumps(filtered_extensions),
+            'user_defined_names': json.dumps(filtered_filenames),
+            'user_defined_extensions': json.dumps(filtered_extensions),
             'filtered_max_upload_size': max_upload_size,
         }
 
