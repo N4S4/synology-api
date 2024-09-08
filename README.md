@@ -80,11 +80,11 @@ from synology_api import filestation, downloadstation
 
 fl = filestation.FileStation('Synology Ip', 'Synology Port', 'Username', 'Password', secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None)
 
-fl.get_info()
+fl.`get_info()`
 
 dwn = downloadstation.DownloadStation('Synology Ip', 'Synology Port', 'Username', 'Password', secure=False, cert_verify=False, dsm_version=7, debug=True, otp_code=None)
 
-dwn.get_info()
+dwn.`get_info()`
 
 ```
 
@@ -241,10 +241,15 @@ This wrapper cover the following APIs for now:
 | SYNO.Virtualization.API.Guest.Action |
 | SYNO.Virtualization.API.Guest.Image  |
 
-| core_backup            |
-|------------------------|
-| SYNO.Backup.Repository |
-| SYNO.Backup.Task       |
+| core_backup (Hyper Backup / Hyper Backup Vault) |
+|-------------------------------------------------|
+| SYNO.Backup.Repository                          |
+| SYNO.Backup.Task                                |
+| SYNO.SDS.Backup.Client.Common.Log               |
+| SYNO.SDS.Backup.Server.Common.Log               |
+| SYNO.SDS.Backup.Server.Common.Statistic         |
+| SYNO.Backup.Service.VersionBackup.Target        |
+| SYNO.Backup.Service.VersionBackup.Config        | 
 
 | core_active_backup (Active Backup for Business) |
 |-------------------------------------------------|
@@ -256,71 +261,75 @@ This wrapper cover the following APIs for now:
 | SYNO.ActiveBackup.Log                           |
 
 | Snapshot Replication     |
-| -------------------------|
+|--------------------------|
 | SYNO.Core.Share.Snapshot |
+
+| Cloud Sync     |
+|----------------|
+| SYNO.CloudSync |
 
 #
 ### Not all Surveillance Station functions works.
 
-| Surveillance Station     |
-|--------------------------|
-| SYNO.SurveillanceStation.Info |
-| SYNO.SurveillanceStation.Camera |
-| SYNO.Surveillance.Camera.Event |
-| SYNO.SurveillanceStation.Camera.Group |
-| SYNO.SurveillanceStation.Camera.Import |
-| SYNO.SurveillanceStation.Camera.Wizard |
-| SYNO.SurveillanceStation.PTZ |
-| SYNO.SurveillanceStation.ExternalRecording. |
-| SYNO.SurveillanceStation.Recording |
-| SYNO.SurveillanceStation.Recording.Export |
-| SYNO.SurveillanceStation.Recording.Mount |
-| SYNO.SurveillanceStation.CMS |
-| SYNO.SurveillanceStation.CMS.GetDsStatus |
-| SYNO.SurveillanceStation.CMS.SlavedsWizard |
-| SYNO.SurveillanceStation.CMS.SlavedsList |
-| SYNO.SurveillanceStation.Log |
-| SYNO.SurveillanceStation.License |
-| SYNO.SurveillanceStation.Stream |
-| SYNO.SurveillanceStation.ActionRule |
-| SYNO.SurveillanceStation.Emap |
-| SYNO.SurveillanceStation.Emap.Image |
-| SYNO.SurveillanceStation.Notification |
-| SYNO.SurveillanceStation.Notification.SMS |
-| SYNO.SurveillanceStation.Notification.PushService |
-| SYNO.SurveillanceStation.Notification.Schedule |
-| SYNO.SurveillanceStation.Notification.Email |
-| SYNO.SurveillanceStation.Notification.Filter |
+| Surveillance Station                                      |
+|-----------------------------------------------------------|
+| SYNO.SurveillanceStation.Info                             |
+| SYNO.SurveillanceStation.Camera                           |
+| SYNO.Surveillance.Camera.Event                            |
+| SYNO.SurveillanceStation.Camera.Group                     |
+| SYNO.SurveillanceStation.Camera.Import                    |
+| SYNO.SurveillanceStation.Camera.Wizard                    |
+| SYNO.SurveillanceStation.PTZ                              |
+| SYNO.SurveillanceStation.ExternalRecording.               |
+| SYNO.SurveillanceStation.Recording                        |
+| SYNO.SurveillanceStation.Recording.Export                 |
+| SYNO.SurveillanceStation.Recording.Mount                  |
+| SYNO.SurveillanceStation.CMS                              |
+| SYNO.SurveillanceStation.CMS.GetDsStatus                  |
+| SYNO.SurveillanceStation.CMS.SlavedsWizard                |
+| SYNO.SurveillanceStation.CMS.SlavedsList                  |
+| SYNO.SurveillanceStation.Log                              |
+| SYNO.SurveillanceStation.License                          |
+| SYNO.SurveillanceStation.Stream                           |
+| SYNO.SurveillanceStation.ActionRule                       |
+| SYNO.SurveillanceStation.Emap                             |
+| SYNO.SurveillanceStation.Emap.Image                       |
+| SYNO.SurveillanceStation.Notification                     |
+| SYNO.SurveillanceStation.Notification.SMS                 |
+| SYNO.SurveillanceStation.Notification.PushService         |
+| SYNO.SurveillanceStation.Notification.Schedule            |
+| SYNO.SurveillanceStation.Notification.Email               |
+| SYNO.SurveillanceStation.Notification.Filter              |
 | SYNO.SurveillanceStation.Notification.SMS.ServiceProvider |
-| SYNO.SurveillanceStation.Addons |
-| SYNO.SurveillanceStation.Alert |
-| SYNO.SurveillanceStation.Alert.Setting |
-| SYNO.SurveillanceStation.SnapShot |
-| SYNO.SurveillanceStation.VisualStation |
-| SYNO.SurveillanceStation.VisualStation.Layout |
-| SYNO.SurveillanceStation.VisualStation.Search |
-| SYNO.SurveillanceStation.AxisAcsCtrler |
-| SYNO.SurveillanceStation.AxisAcsCtrler.Search |
-| SYNO.SurveillanceStation.DigitalOutput |
-| SYNO.SurveillanceStation.ExternalEvent |
-| SYNO.SurveillanceStation.IOModule |
-| SYNO.SurveillanceStation.IOModuleSearch |
-| SYNO.SurveillanceStation.Camera.Status |
-| SYNO.SurveillanceStation.PTZ.Preset |
-| SYNO.SurveillanceStation.PTZ.Patrol. |
-| SYNO.SurveillanceStation.Camera.Search |
-| SYNO.SurveillanceStation.HomeMode |
-| SYNO.SurveillanceStation.Transactions.Device |
-| SYNO.SurveillanceStation.Transactions.Transaction |
-| SYNO.SurveillanceStation.Archiving.Pull |
-| SYNO.SurveillanceStation.YoutubeLive |
-| SYNO.SurveillanceStation.IVA |
-| SYNO.SurveillanceStation.IVA.Report |
-| SYNO.SurveillanceStation.IVA.Recording |
-| SYNO.SurveillanceStation.IVA.TaskGroup |
-| SYNO.SurveillanceStation.Face |
-| SYNO.SurveillanceStation.Face.Result |
-| SYNO.SurveillanceStation.Recording.Bookmark |
+| SYNO.SurveillanceStation.Addons                           |
+| SYNO.SurveillanceStation.Alert                            |
+| SYNO.SurveillanceStation.Alert.Setting                    |
+| SYNO.SurveillanceStation.SnapShot                         |
+| SYNO.SurveillanceStation.VisualStation                    |
+| SYNO.SurveillanceStation.VisualStation.Layout             |
+| SYNO.SurveillanceStation.VisualStation.Search             |
+| SYNO.SurveillanceStation.AxisAcsCtrler                    |
+| SYNO.SurveillanceStation.AxisAcsCtrler.Search             |
+| SYNO.SurveillanceStation.DigitalOutput                    |
+| SYNO.SurveillanceStation.ExternalEvent                    |
+| SYNO.SurveillanceStation.IOModule                         |
+| SYNO.SurveillanceStation.IOModuleSearch                   |
+| SYNO.SurveillanceStation.Camera.Status                    |
+| SYNO.SurveillanceStation.PTZ.Preset                       |
+| SYNO.SurveillanceStation.PTZ.Patrol.                      |
+| SYNO.SurveillanceStation.Camera.Search                    |
+| SYNO.SurveillanceStation.HomeMode                         |
+| SYNO.SurveillanceStation.Transactions.Device              |
+| SYNO.SurveillanceStation.Transactions.Transaction         |
+| SYNO.SurveillanceStation.Archiving.Pull                   |
+| SYNO.SurveillanceStation.YoutubeLive                      |
+| SYNO.SurveillanceStation.IVA                              |
+| SYNO.SurveillanceStation.IVA.Report                       |
+| SYNO.SurveillanceStation.IVA.Recording                    |
+| SYNO.SurveillanceStation.IVA.TaskGroup                    |
+| SYNO.SurveillanceStation.Face                             |
+| SYNO.SurveillanceStation.Face.Result                      |
+| SYNO.SurveillanceStation.Recording.Bookmark               |
 
 
 #### FileStation Functions list
@@ -330,58 +339,57 @@ To explain the use of some function I will divide all the functions in two sets
 you can run the following set of functions at your will entering just the required data,
 
 
-| Function                          | Description                                                                                      |
-|-----------------------------------|--------------------------------------------------------------------------------------------------|
-| get_info()                        | Provide File Station information                                                                 |
-| get_list_share()                  | List all shared folders.                                                                         |
-| get_file_list()                   | Enumerate files in a given folder                                                                |
-| get_file_info()                   | Get information of file(s)                                                                       |
-| get_mount_point_list()            | List all mount point folders on one given type of virtual file system                            |
-| get_favorite_list()               | List user’s favorites                                                                            |
-| add_a_favorite()                  | Add a folder to user’s favorites                                                                 |
-| delete_a_favorite()               | Delete a favorite in user’s favorites.                                                           |
-| clear_broken_favorite()           | Delete all broken statuses of favorites.                                                         |
-| edit_favorite_name()              | Edit a favorite name                                                                             |
-| replace_all_favorite()            | Replace multiple favorites of folders to the existed user’s favorites.                           |
-| check_permission()                | Check if a logged-in user has write permission to create new files/folders in a given folder     |
-| upload_file()                     | upload a file to the station (fix by @longyn)                                                    |
-| get_shared_link_info()            | Get information of a sharing link by the sharing link ID                                         |
-| get_shared_link_list()            | List user’s file sharing links.                                                                  |
-| create_sharing_link()             | Generate one or more sharing link(s) by file/folder path(s)                                      |
-| delete_shared_link()              | Delete one or more sharing links.                                                                |
-| clear_invalid_shared_link()       | Remove all expired and broken sharing links                                                      |
-| edit_shared_link()                | Edit sharing link(s)                                                                             |
-| create_folder()                   | Create folders.                                                                                  |
-| rename_folder()                   | Rename a file/folder                                                                             |
-| delete_blocking_function()        | Delete files/folders. This is a blocking method. The response is not returned until the deletion |
-| operation is completed.           |                                                                                                  |
-| get_file_list_of_archive()        | List archived files contained in an archive                                                      |
-| get_list_of_all_background_task() | List all background tasks including copy, move, delete, compress and extract tasks               |
+| Function                            | Description                                                                                                              |
+|-------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| `get_info()`                        | Provide File Station information.                                                                                        |
+| `get_list_share()`                  | List all shared folders.                                                                                                 |
+| `get_file_list()`                   | Enumerate files in a given folder.                                                                                       |
+| `get_file_info()`                   | Get information of file(s).                                                                                              |
+| `get_mount_point_list()`            | List all mount point folders on one given type of virtual file system.                                                   |
+| `get_favorite_list()`               | List user’s favorites.                                                                                                   |
+| `add_a_favorite()`                  | Add a folder to user’s favorites.                                                                                        |
+| `delete_a_favorite()`               | Delete a favorite in user’s favorites.                                                                                   |
+| `clear_broken_favorite()`           | Delete all broken statuses of favorites.                                                                                 |
+| `edit_favorite_name()`              | Edit a favorite name.                                                                                                    |
+| `replace_all_favorite()`            | Replace multiple favorites of folders to the existed user’s favorites.                                                   |
+| `check_permission()`                | Check if a logged-in user has write permission to create new files/folders in a given folder.                            |
+| `upload_file()`                     | Upload a file to the station. (fix by @longyn)                                                                           |
+| `get_shared_link_info()`            | Get information of a sharing link by the sharing link ID.                                                                |
+| `get_shared_link_list()`            | List user’s file sharing links.                                                                                          |
+| `create_sharing_link()`             | Generate one or more sharing link(s) by file/folder path(s).                                                             |
+| `delete_shared_link()`              | Delete one or more sharing links.                                                                                        |
+| `clear_invalid_shared_link()`       | Remove all expired and broken sharing links.                                                                             |
+| `edit_shared_link()`                | Edit sharing link(s).                                                                                                    |
+| `create_folder()`                   | Create folders.                                                                                                          |
+| `rename_folder()`                   | Rename a file/folder.                                                                                                    |
+| `delete_blocking_function()`        | Delete files/folders. This is a blocking method. The response is not returned until the deletion operation is completed. |
+| `get_file_list_of_archive()`        | List archived files contained in an archive.                                                                             |
+| `get_list_of_all_background_task()` | List all background tasks including copy, move, delete, compress and extract tasks.                                      |
 
 To run the following functions you'll have to start the task with the start function
 
-| Function                 | Description                                                |
-|--------------------------|------------------------------------------------------------|
-| search_start()           | Search files according to given criteria.                  |
-| get_search_list()        | List matched files in a search temporary database.         |
-| stop_search_task()       | Stop the searching task                                    |
-| stop_all_search_task()   | Stop the all searching tasks                               |
-| start_dir_size_calc()    | Start to calculate size for one or more file/folder paths. |
-| get_dir_status()         | Get the status of the size calculating task                |
-| stop_dir_size_calc()     | Stop to calculate size                                     |
-| start_copy_move()        | Start to copy/move files                                   |
-| get_copy_move_status()   | Get the copying/moving status                              |
-| stop_copy_move_task()    | Stop a copy/move task.                                     |
-| start_delete_task()      | Delete file(s)/folder(s).                                  |
-| get_delete_status()      | Get the deleting status                                    |
-| stop_delete_task()       | Stop a delete task                                         |
-| start_extract_task()     | Start to extract an archive.                               |
-| get_extract_status()     | Get the extract task status                                |
-| stop_extract_task()      | Stop the extract task                                      |
-| start_file_compression() | Start to compress file(s)/folder(s).                       |
-| get_compress_status()    | Get the compress task status                               |
-| stop_compress_task()     | Stop the compress task                                     |
-| get_file()               | Download or open file                                      |
+| Function                   | Description                                                |
+|----------------------------|------------------------------------------------------------|
+| `search_start()`           | Search files according to given criteria.                  |
+| `get_search_list()`        | List matched files in a search temporary database.         |
+| `stop_search_task()`       | Stop the searching task.                                   |
+| `stop_all_search_task()`   | Stop the all searching tasks.                              |
+| `start_dir_size_calc()`    | Start to calculate size for one or more file/folder paths. |
+| `get_dir_status()`         | Get the status of the size calculating task.               |
+| `stop_dir_size_calc()`     | Stop to calculate size.                                    |
+| `start_copy_move()`        | Start to copy/move files.                                  |
+| `get_copy_move_status()`   | Get the copying/moving status.                             |
+| `stop_copy_move_task()`    | Stop a copy/move task.                                     |
+| `start_delete_task()`      | Delete file(s)/folder(s).                                  |
+| `get_delete_status()`      | Get the deleting status.                                   |
+| `stop_delete_task()`       | Stop a delete task.                                        |
+| `start_extract_task()`     | Start to extract an archive.                               |
+| `get_extract_status()`     | Get the extract task status.                               |
+| `stop_extract_task()`      | Stop the extract task.                                     |
+| `start_file_compression()` | Start to compress file(s)/folder(s).                       |
+| `get_compress_status()`    | Get the compress task status.                              |
+| `stop_compress_task()`     | Stop the compress task.                                    |
+| `get_file()`               | Download or open file.                                     |
 
 #### DownloadStations functions:
 
@@ -389,46 +397,46 @@ For some of DownloadStation API there is the possibility to set version 2, ex. S
 if you encounter problems you might set ```download_st_version = 2``` during initialization. 
 
 
-| Function              | Description                              |
-|-----------------------|------------------------------------------|
-| get_info()            | Download Station info                    |
-| get_config()          | Download Station Settings info           |
-| set_server_config()   | Sets Download Station settings           |
-| schedule_info()       | Provides advanced schedule settings info |
-| schedule_set_config() | Sets advanced schedule settings.         |
-| tasks_list()          | Provides task listing                    |
-| tasks_info()          | Provides detailed task information       |
-| tasks_source()        | Provides the original torrent file       |
-| create_task           | Create a download task                   |
-| delete_task()         | Delete a Task                            |
-| pause_task()          | Pause a Task                             |
-| resume_task()         | Resume a task                            |
-| edit_task()           | Edit a Task                              |
+| Function                | Description                               |
+|-------------------------|-------------------------------------------|
+| `get_info()`            | Download Station info.                    |
+| `get_config()`          | Download Station Settings info.           |
+| `set_server_config()`   | Sets Download Station settings.           |
+| `schedule_info()`       | Provides advanced schedule settings info. |
+| `schedule_set_config()` | Sets advanced schedule settings.          |
+| `tasks_list()`          | Provides task listing.                    |
+| `tasks_info()`          | Provides detailed task information.       |
+| `tasks_source()`        | Provides the original torrent file.       |
+| `create_task`           | Create a download task.                   |
+| `delete_task()`         | Delete a Task.                            |
+| `pause_task()`          | Pause a Task.                             |
+| `resume_task()`         | Resume a task.                            |
+| `edit_task()`           | Edit a Task.                              |
 
 #### Photo functions:
 
-| Function                          |
-|-----------------------------------|
-| get_userinfo()                    |
-| get_folder()                      |
-| list_folders()                    |
-| list_teams_folders()              |
-| count_folders()                   |
-| count_team_folders()              |
-| lookup_folder()                   |
-| lookup_team_folder()              |
-| get_album()                       |
-| list_albums()                     |
-| suggest_condition()               |
-| create_album()                    |
-| delete_album()                    |
-| set_album_condition()             |
-| share_album()                     |
-| share_team_folder()               |
-| list_shareable_users_and_groups() |
-| list_item_in_folders()            |
-| list_search_filters()             |
-| get_guest_settings()              |
+| Function                            |
+|-------------------------------------|
+| `get_userinfo()`                    |
+| `get_folder()`                      |
+| `list_folders()`                    |
+| `list_teams_folders()`              |
+| `count_folders()`                   |
+| `count_team_folders()`              |
+| `lookup_folder()`                   |
+| `lookup_team_folder()`              |
+| `get_album()`                       |
+| `list_albums()`                     |
+| `suggest_condition()`               |
+| `create_album()`                    |
+| `delete_album()`                    |
+| `set_album_condition()`             |
+| `share_album()`                     |
+| `share_team_folder()`               |
+| `list_shareable_users_and_groups()` |
+| `list_item_in_folders()`            |
+| `list_search_filters()`             |
+| `get_guest_settings()`              |
 
 
 
@@ -437,262 +445,286 @@ if you encounter problems you might set ```download_st_version = 2``` during ini
 Although there is nothing you can set (yet), is possible to retrieve lots of 
 DS info with below functions:
 
-| Functions                       |
-|---------------------------------|
-| fileserv_smb()                  |  
-| fileserv_afp()                  |  
-| fileserv_nfs()                  |  
-| fileserv_ftp()                  |  
-| fileserv_sftp()                 |  
-| network_backup_info()           |  
-| bandwidth_control_protocol()    |  
-| shared_folders_info()           |  
-| services_status()               |  
-| services_discovery()            |  
-| file_transfer_status()          |  
-| network_status()                |  
-| web_status()                    |  
-| current_connection()            |
-| bandwidth_control_status()      |
-| sys_status()                    |
-| latest_logs()                   |
-| client_notify_settings_status() |
-| get_security_scan_info()        |
-| get_security_scan_rules()       |
-| get_security_scan_status()      |
-| get_user_list()                 |
-| quickconnect_info()             |
-| quickconnect_permissions()      |
-| network_topology()              |
-| network_wifi_client()           |
-| network_bond()                  |
-| network_bridge()                |
-| network_ethernet()              |
-| network_local_bridge()          |
-| network_usb_modem()             |
-| network_pppoe()                 |
-| network_ipv6tunnel()            |
-| network_vpn_pptp()              |
-| network_openvpn()               |
-| network_vpn_l2tp()              |
-| domain_schedule()               |
-| client_ldap()                   |
-| client_sso()                    |
-| sys_upgrade_check()             |
-| sys_upgrade_download()          |
-| sys_upgrade_setting()           |
-| notification_sms_conf()         |
-| notification_mail_conf()        |
-| notification_push_mail()        |
-| notification_push_conf()        |
-| hardware_beep_control()         |
-| hardware_fan_speed()            |
-| hardware_hibernation()          |
-| hardware_ups()                  |
-| hardware_power_schedule()       |
-| terminal_info()                 |
-| snmp_info()                     |
-| process()                       |
-| utilisation()                   |
-| storage()                       |
-| external_device_storage_usb()   |
-| external_device_storage_esata() |
-| file_index_resource()           |
-| cms_info()                      |
-| port_forwarding_rules()         |
-| port_forwarding_router_conf     |
-| disk_list                       |
-| ddns_provider_info              |
-| ddns_record_info                |
-| ddns_external_ip                |
-| ddns_synology                   |
-| iscsi_lun_info                  |
-| hddman                          |
-| ftp_security_info               |
-| bandwidth_control_info          |
-| directory_domain_info           |
-| ws_transfer_info                |
-| ref_link_copy_info              |
-| bonjour_service_info            |
-| users_info                      |
-| password_policy                 |
-| password_expiry                 |
-| personal_photo_enable           |
-| ftp_chroot_user                 |
-| server_pair                     |
-| groups_info                     |
-| ldap_info                       |
-| sso_iwa_info                    |
-| sso_info                        |
-| network_interface_info          |
-| proxy_info                      |
-| gateway_list                    |
-| firewall_info                   |
-| auto_upgrade_status             |
-| upgrade_server_check            |
-| set_fan_speed                   |
-| enable_zram                     |
-| enable_power_recovery           |
-| enable_beep_control             |
-| set_led_control                 |
-| set_hibernation                 |
-| enable_external_ups             |
-| get_system_info                 |
-| get_cpu_temp                    |
-| get_network_info                |
-| get_volume_info                 |
-| get_all_system_utilization      |
-| get_cpu_utilization             |
-| get_disk_utilization            |
-| get_memory_utilization          |
-| dsm_info                        |
+| Functions                         |
+|-----------------------------------|
+| `fileserv_smb()`                  |  
+| `fileserv_afp()`                  |  
+| `fileserv_nfs()`                  |  
+| `fileserv_ftp()`                  |  
+| `fileserv_sftp()`                 |  
+| `network_backup_info()`           |  
+| `bandwidth_control_protocol()`    |  
+| `shared_folders_info()`           |  
+| `services_status()`               |  
+| `services_discovery()`            |  
+| `file_transfer_status()`          |  
+| `network_status()`                |  
+| `web_status()`                    |  
+| `current_connection()`            |
+| `bandwidth_control_status()`      |
+| `sys_status()`                    |
+| `latest_logs()`                   |
+| `client_notify_settings_status()` |
+| `get_security_scan_info()`        |
+| `get_security_scan_rules()`       |
+| `get_security_scan_status()`      |
+| `get_user_list()`                 |
+| `quickconnect_info()`             |
+| `quickconnect_permissions()`      |
+| `network_topology()`              |
+| `network_wifi_client()`           |
+| `network_bond()`                  |
+| `network_bridge()`                |
+| `network_ethernet()`              |
+| `network_local_bridge()`          |
+| `network_usb_modem()`             |
+| `network_pppoe()`                 |
+| `network_ipv6tunnel()`            |
+| `network_vpn_pptp()`              |
+| `network_openvpn()`               |
+| `network_vpn_l2tp()`              |
+| `domain_schedule()`               |
+| `client_ldap()`                   |
+| `client_sso()`                    |
+| `sys_upgrade_check()`             |
+| `sys_upgrade_download()`          |
+| `sys_upgrade_setting()`           |
+| `notification_sms_conf()`         |
+| `notification_mail_conf()`        |
+| `notification_push_mail()`        |
+| `notification_push_conf()`        |
+| `hardware_beep_control()`         |
+| `hardware_fan_speed()`            |
+| `hardware_hibernation()`          |
+| `hardware_ups()`                  |
+| `hardware_power_schedule()`       |
+| `terminal_info()`                 |
+| `snmp_info()`                     |
+| `process()`                       |
+| `utilisation()`                   |
+| `storage()`                       |
+| `external_device_storage_usb()`   |
+| `external_device_storage_esata()` |
+| `file_index_resource()`           |
+| `cms_info()`                      |
+| `port_forwarding_rules()`         |
+| `port_forwarding_router_conf()`   |
+| `disk_list()`                     |
+| `ddns_provider_info()`            |
+| `ddns_record_info()`              |
+| `ddns_external_ip()`              |
+| `ddns_synology()`                 |
+| `iscsi_lun_info()`                |
+| `hddman()`                        |
+| `ftp_security_info()`             |
+| `bandwidth_control_info()`        |
+| `directory_domain_info()`         |
+| `ws_transfer_info()`              |
+| `ref_link_copy_info()`            |
+| `bonjour_service_info()`          |
+| `users_info()`                    |
+| `password_policy()`               |
+| `password_expiry()`               |
+| `personal_photo_enable()`         |
+| `ftp_chroot_user()`               |
+| `server_pair()`                   |
+| `groups_info()`                   |
+| `ldap_info()`                     |
+| `sso_iwa_info()`                  |
+| `sso_info()`                      |
+| `network_interface_info()`        |
+| `proxy_info()`                    |
+| `gateway_list()`                  |
+| `firewall_info()`                 |
+| `auto_upgrade_status()`           |
+| `upgrade_server_check()`          |
+| `set_fan_speed()`                 |
+| `enable_zram()`                   |
+| `enable_power_recovery()`         |
+| `enable_beep_control()`           |
+| `set_led_control()`               |
+| `set_hibernation()`               |
+| `enable_external_ups()`           |
+| `get_system_info()`               |
+| `get_cpu_temp()`                  |
+| `get_network_info()`              |
+| `get_volume_info()`               |
+| `get_all_system_utilization()`    |
+| `get_cpu_utilization()`           |
+| `get_disk_utilization()`          |
+| `get_memory_utilization()`        |
+| `dsm_info()`                      |
 
 ### Virtualization
 
-| Functions                |
-|--------------------------|
-| get_task_list()          |
-| clear_task()             |
-| get_taks_info()          |
-| get_network_group_list() |
-| get_storage_operation()  |
-| get_host_operation()     |
-| get_vm_operation()       |
-| get_specific_vm_info()   |
-| set_vm_property()        |
-| delete_vm()              |
-| vm_power_on()            |
-| vm_force_power_off()     |
-| vm_shut_down()           |
-| get_images_list()        |
-| delete_image()           |
-| create_image()           |
+| Functions                  |
+|----------------------------|
+| `get_task_list()`          |
+| `clear_task()`             |
+| `get_taks_info()`          |
+| `get_network_group_list()` |
+| `get_storage_operation()`  |
+| `get_host_operation()`     |
+| `get_vm_operation()`       |
+| `get_specific_vm_info()`   |
+| `set_vm_property()`        |
+| `delete_vm()`              |
+| `vm_power_on()`            |
+| `vm_force_power_off()`     |
+| `vm_shut_down()`           |
+| `get_images_list()`        |
+| `delete_image()`           |
+| `create_image()`           |
 
 ### core_backup Hyper Backup
 
-| Functions                | Description                                                    |
-|--------------------------|----------------------------------------------------------------|
-| backup_repository_get()  | get repository information for given task                      |
-| backup_repository_list() | list of present repositories                                   |
-| backup_task_list()       | get current restoring information and list of present tasks    | 
-| backup_task_status()     | get status and state of task                                   |
-| backup_task_get()        | get task information                                           |
-| backup_task_result()     | get last result summary information of a task                  |
-| backup_task_run()        | run task                                                       |
-| backup_task_cancel()     | cancel ongoing task                                            |
-| backup_task_suspend()    | suspend ongoing task                                           |
-| backup_task_discard()    | discard suspended task                                         |
-| backup_task_resume()     | resume suspended task                                          |
-| backup_task_remove()     | remove one or more tasks                                       |
-| integrity_check_run()    | run integrity check for given task                             |
-| integrity_check_cancel() | cancel ongoing integrity check                                 |
-| hb_logs_get()            | get Hyper Backup UI logs                                       |
+| Functions                  | Description                                                     |
+|----------------------------|-----------------------------------------------------------------|
+| `backup_repository_get()`  | Get repository information for given task.                      |
+| `backup_repository_list()` | List of present repositories.                                   |
+| `backup_task_list()`       | Get current restoring information and list of present tasks.    | 
+| `backup_task_status()`     | Get status and state of task.                                   |
+| `backup_task_get()`        | Get task information.                                           |
+| `backup_task_result()`     | Get last result summary information of a task.                  |
+| `backup_task_run()`        | Run task.                                                       |
+| `backup_task_cancel()`     | Cancel ongoing task.                                            |
+| `backup_task_suspend()`    | Suspend ongoing task.                                           |
+| `backup_task_discard()`    | Discard suspended task.                                         |
+| `backup_task_resume()`     | Resume suspended task.                                          |
+| `backup_task_remove()`     | Remove one or more tasks.                                       |
+| `integrity_check_run()`    | Run integrity check for given task.                             |
+| `integrity_check_cancel()` | Cancel ongoing integrity check.                                 |
+| `hb_logs_get()`            | Get Hyper Backup UI logs.                                       |
 
 ### core_backup Hyper Backup Vault
-| Functions                     | Description                                               | 
-|-------------------------------|-----------------------------------------------------------|
-| vault_target_list()           | list of all targets in Vault                              |
-| vault_concurrency_get()       | get number of concurrent tasks allowed to run in HB Vault |
-| vault_concurrency_set()       | set number of concurrent tasks allowed to run in HB Vault |
-| vault_target_settings_get()   | get settings of target                                    |
-| vault_task_statistics_get()   | get statistics from task                                  |
-| vault_target_logs_get()       | get logs of specific target                               |
+| Functions                       | Description                                                | 
+|---------------------------------|------------------------------------------------------------|
+| `vault_target_list()`           | List of all targets in Vault.                              |
+| `vault_concurrency_get()`       | Get number of concurrent tasks allowed to run in HB Vault. |
+| `vault_concurrency_set()`       | Set number of concurrent tasks allowed to run in HB Vault. |
+| `vault_target_settings_get()`   | Get settings of target.                                    |
+| `vault_task_statistics_get()`   | Get statistics from task.                                  |
+| `vault_target_logs_get()`       | Get logs of specific target.                               |
 
 ### core_active_backup Active Backup for Business
 
-| Functions                     | Description                                            |
-|-------------------------------|--------------------------------------------------------|
-| list_vm_hypervisor()          | list of all configured hypervisors                     |
-| list_device_transfer_size()   | list of all devices and their respective transfer size |
-| list_storage()                | list of all storages                                   |
-| list_logs()                   | list of logs                                           |
-| list_logs_details()           | detailed list of task logs                             |
-| backup_task_list()            | list of all tasks                                      |
-| backup_task_run()             | run given task(s)                                      |
-| backup_task_cancel()          | cancel given task(s)                                   |
-| backup_task_remove()          | remove given task(s)                                   |
-| backup_task_delete_versions() | delete given version(s)                                | 
+| Functions                     | Description                                               |
+|-------------------------------|-----------------------------------------------------------|
+| `list_vm_hypervisor()`          | List of all configured hypervisors.                     |
+| `list_device_transfer_size()`   | List of all devices and their respective transfer size. |
+| `list_storage()`                | List of all storages.                                   |
+| `list_logs()`                   | List of logs.                                           |
+| `list_logs_details()`           | Detailed list of task logs.                             |
+| `backup_task_list()`            | List of all tasks.                                      |
+| `backup_task_run()`             | Run given task(s).                                      |
+| `backup_task_cancel()`          | Cancel given task(s).                                   |
+| `backup_task_remove()`          | Remove given task(s).                                   |
+| `backup_task_delete_versions()` | Delete given version(s).                                | 
 
 ### core_certificate tnx to @ajarzyn
 
-| Functions          | Description             |
-|--------------------|-------------------------|
-| list_cert()        | list certificates       |
-| set_default_cert() | set default certificate |
-| upload_cert()      | upload a certificate    |
+| Functions            | Description              |
+|----------------------|--------------------------|
+| `list_cert()`        | List certificates.       |
+| `set_default_cert()` | Set default certificate. |
+| `upload_cert()`      | Upload a certificate.    |
 
 ### vpn
-| Functions                    |
-|------------------------------|
-| settings_list()              |
-| active_connections_list()    |
-| log_list()                   |
-| network_interface_setting()  |
-| security_autoblock_setting() |
-| permission_setting()         |
-| pptp_settings_info()         |
-| openvpn_settings_info()      |
-| l2tp_settings_info()         |
+| Functions                      |
+|--------------------------------|
+| `settings_list()`              |
+| `active_connections_list()`    |
+| `log_list()`                   |
+| `network_interface_setting()`  |
+| `security_autoblock_setting()` |
+| `permission_setting()`         |
+| `pptp_settings_info()`         |
+| `openvpn_settings_info()`      |
+| `l2tp_settings_info()`         |
 
 ### oauth
-| Functions |
-|-----------|
-| clients() | 
-| tokens()  | 
-| logs()    | 
+| Functions   |
+|-------------|
+| `clients()` | 
+| `tokens()`  | 
+| `logs()`    | 
 
 
 ### security_advisor
-| Functions        | 
-|------------------|
-| general_info()   | 
-| security_scan()  | 
-| checklist()      | 
-| login_activity() | 
-| advisor_config() | 
-| scan_config()    | 
+| Functions          | 
+|--------------------|
+| `general_info()`   | 
+| `security_scan()`  | 
+| `checklist()`      | 
+| `login_activity()` | 
+| `advisor_config()` | 
+| `scan_config()`    | 
 
 
 ### dhcp_server
-| Functions          | 
-|--------------------|
-| general_info()     | 
-| vendor()           | 
-| pxe()              | 
-| tftp()             | 
-| network_bond()     | 
-| network_ethernet() | 
-| dhcp_clientlist() | 
-| dhcp_reservations() | 
+| Functions             | 
+|-----------------------|
+| `general_info()`      | 
+| `vendor()`            | 
+| `pxe()`               | 
+| `tftp()`              | 
+| `network_bond()`      | 
+| `network_ethernet()`  | 
+| `dhcp_clientlist()`   | 
+| `dhcp_reservations()` | 
 
 
 ### usb_copy 
-| Functions         | 
-|-------------------|
-| usb_copy_info()   | 
-| toggle_usb_copy() | 
-| logs()            | 
-| global_settings() | 
-
-### log_center
-| Functions              | 
-|------------------------|
-| logcenter()            | 
-| client_status_cnt()    | 
-| client_status_eps()    | 
-| remote_log_archives()  |
-| display_logs()         | 
-| setting_storage_list() | 
-| registry_send_list()   | 
-| history()              | 
-
-### snapshot (Snapshot Replication)
 | Functions           | 
 |---------------------|
-| list_snapshots()    | 
-| create_snapshot()   | 
-| delete_snapshots()  | 
-| set_snapshot_attr() |
+| `usb_copy_info()`   | 
+| `toggle_usb_copy()` | 
+| `logs()`            | 
+| `global_settings()` | 
+
+### log_center
+| Functions                | 
+|--------------------------|
+| `logcenter()`            | 
+| `client_status_cnt()`    | 
+| `client_status_eps()`    | 
+| `remote_log_archives()`  |
+| `display_logs()`         | 
+| `setting_storage_list()` | 
+| `registry_send_list()`   | 
+| `history()`              | 
+
+### snapshot (Snapshot Replication)
+| Functions             | 
+|-----------------------|
+| `list_snapshots()`    | 
+| `create_snapshot()`   | 
+| `delete_snapshots()`  | 
+| `set_snapshot_attr()` |
+
+### cloud_sync (Cloud Sync)
+| Functions                      | Description                                                    |
+|--------------------------------|----------------------------------------------------------------|
+| `get_pkg_config()`             | Retrieve the package configuration.                            |
+| `get_connections()`            | Get connection details.                                        |
+| `get_connection_settings()`    | Get settings for a specific connection.                        |
+| `get_connection_information()` | Get cloud information for a specific connection.               |
+| `get_connection_auth()`        | Retrieve authentication details for a connection.              |
+| `get_connection_logs()`        | Retrieve logs for a specific connection.                       |
+| `get_tasks()`                  | Get tasks associated with a specific connection.               |
+| `get_task_filters()`           | Retrieve filters applied to tasks for a specific session.      |
+| `get_task_cloud_folders()`     | Retrieve cloud folders associated with tasks.                  |
+| `get_recently_modified()`      | Retrieve recently modified resources.                          |
+| `set_pkg_config()`             | Set or update the package configuration.                       |
+| `set_relink_behavior()`        | Set behavior for relinking tasks.                              |
+| `set_connection_settings()`    | Set or update settings for a connection.                       |
+| `set_connection_schedule()`    | Define or update the schedule for a connection.                |
+| `set_task_settings()`          | Update task settings.                                          |
+| `set_task_filters()`           | Apply or modify filters to tasks.                              |
+| `connection_pause()`           | Pause a specific or all connections.                           |
+| `connection_resume()`          | Resume a paused or all connections.                            |
+| `connection_remove()`          | Remove a specific connection.                                  |
+| `task_remove()`                | Remove a specific task.                                        |
 
  
 #### What's still missing
