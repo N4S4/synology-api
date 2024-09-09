@@ -272,6 +272,18 @@ class SecurityAdvisorError(SynoBaseException):
         return
 
 
+class TaskSchedulerError(SynoBaseException):
+    """Class for an error during TaskScheduler request. NOTE:... no docs on errors...."""
+
+    def __init__(self, error_code: int, *args: object) -> None:
+        self.error_code = error_code
+        if error_code in error_codes.keys():
+            super().__init__(error_message=error_codes[error_code], *args)
+        else:
+            super().__init__(error_message="TaskScheduler Error: %i" % error_code, *args)
+        return
+
+
 class UniversalSearchError(SynoBaseException):
     """Class for an error during UniversalSearch request. NOTE:... no docs on errors...."""
 
