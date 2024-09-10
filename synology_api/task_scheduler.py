@@ -25,6 +25,20 @@ class TaskScheduler(base_api.BaseApi):
        - Add retention settings for Recycle bin task set/create methods.
     """
 
+    def get_output_config(self) -> dict[str, object] | str:
+        """
+        """
+        api_name = 'SYNO.Core.EventScheduler'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': 1, 
+            'method': 'config_get',
+            'type': 'esynoscheduler'
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+
     def get_task_list(
             self,
             sort_by: str = 'next_trigger_time',
@@ -107,20 +121,6 @@ class TaskScheduler(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def get_output_config(self) -> dict[str, object] | str:
-        """
-        """
-        api_name = 'SYNO.Core.EventScheduler'
-        info = self.gen_list[api_name]
-        api_path = info['path']
-        req_param = {
-            'version': 1, 
-            'method': 'config_get',
-            'type': 'esynoscheduler'
-        }
-
-        return self.request_data(api_name, api_path, req_param)
-    
     def get_task_config(
             self,
             task_id: int,
@@ -154,7 +154,6 @@ class TaskScheduler(base_api.BaseApi):
             'version': 1, 
             'method': 'get_history_status_list',
             'id': task_id
-            
         }
 
         return self.request_data(api_name, api_path, req_param)
@@ -178,3 +177,120 @@ class TaskScheduler(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
+    def set_output_config(
+            self,
+            enable_output: bool,
+            output_path: str
+        ) -> dict[str, object] | str:
+        """
+        """
+        api_name = 'SYNO.Core.EventScheduler'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': 1, 
+            'method': 'config_set',
+            'type': 'esynoscheduler',
+            'output_path': output_path,
+            'enable_output': enable_output
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def set_task_settings(self) -> dict[str, object] | str:
+        # TODO
+        print()
+
+    def task_enable(
+            self,
+            task_id: int,
+            real_owner: str
+        ) -> dict[str, object] | str:
+        """
+        """
+        task_dict = {
+            'id': task_id,
+            'real_owner': real_owner,
+            'enable': 'true'
+        }
+
+        api_name = 'SYNO.Core.TaskScheduler'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': 2, 
+            'method': 'set_enable',
+            'status': f'[{json.dumps(task_dict)}]',
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def task_disable(
+            self,
+            task_id: int,
+            real_owner: str
+        ) -> dict[str, object] | str:
+        """
+        """
+        task_dict = {
+            'id': task_id,
+            'real_owner': real_owner,
+            'enable': 'false'
+        }
+
+        api_name = 'SYNO.Core.TaskScheduler'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': 2, 
+            'method': 'set_enable',
+            'status': f'[{json.dumps(task_dict)}]',
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def task_run(
+            self,
+            task_id: int,
+            real_owner: str
+        ) -> dict[str, object] | str:
+        """
+        """
+        task_dict = {
+            'id': task_id,
+            'real_owner': real_owner
+        }
+
+        api_name = 'SYNO.Core.TaskScheduler'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': 2, 
+            'method': 'run',
+            'tasks': f'[{json.dumps(task_dict)}]',
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def task_delete(
+            self,
+            task_id: int,
+            real_owner: str
+        ) -> dict[str, object] | str:
+        """
+        """
+        task_dict = {
+            'id': task_id,
+            'real_owner': real_owner
+        }
+
+        api_name = 'SYNO.Core.TaskScheduler'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': 2, 
+            'method': 'delete',
+            'tasks': f'[{json.dumps(task_dict)}]',
+        }
+
+        return self.request_data(api_name, api_path, req_param)
