@@ -9,7 +9,7 @@ class _Schedule():
             run_days: str = '0,1,2,3,4,5,6', # week_days
             run_date: str = '', # date
             repeat: str = 'Daily',
-            monthly_week = [],
+            monthly_week: list[str] = [],
             start_time_h: int = 0,
             start_time_m: int = 0,
             same_day_repeat_h: int = 0,
@@ -29,7 +29,7 @@ class _Schedule():
 
     def _generate_dict(self) -> dict:
         schedule_dict = {
-            'date_type': self.run_frequently,
+            'date_type': 0 if self.run_frequently else 1,
             'monthly_week': json.dumps(self.monthly_week),
             'hour': self.start_time_h,                    # Start time - Hour for the schedule
             'minute': self.start_time_m,                  # Start time - Minute for the schedule
@@ -40,25 +40,24 @@ class _Schedule():
         repeat_modality = -1
 
         if self.run_frequently:
-            if self.repeat == 'Daily':
+            if self.repeat == 'daily':
                 repeat_modality = 1001 
-            if self.repeat == 'Weekly':
+            if self.repeat == 'weekly':
                 repeat_modality = 1002
-            if self.repeat == 'Monthly':
+            if self.repeat == 'monthly':
                 repeat_modality = 1003
             
             schedule_dict['week_day'] = self.run_days
-        
-        if self.run_frequently == 1:
-            if self.repeat == 'No repeat':
+        else:
+            if self.repeat == 'no_repeat':
                 repeat_modality = 0 
-            if self.repeat == 'Monthly':
+            if self.repeat == 'monthly':
                 repeat_modality = 1
-            if self.repeat == 'Every 3 months':
+            if self.repeat == 'every_3_months':
                 repeat_modality = 5
-            if self.repeat == 'Every 6 months':
+            if self.repeat == 'every_6_months':
                 repeat_modality = 3
-            if self.repeat == 'Yearly':
+            if self.repeat == 'yearly':
                 repeat_modality = 2
             
             schedule_dict['date'] = self.run_date
@@ -369,26 +368,25 @@ class TaskScheduler(base_api.BaseApi):
             run_days: str = '0,1,2,3,4,5,6', # week_days
             run_date: str = '', # date
             repeat: str = 'Daily',
-            monthly_week = [],
+            monthly_week: list[str] = [],
             start_time_h: int = 0,
             start_time_m: int = 0,
             same_day_repeat_h: int = 0,
             same_day_repeat_m: int = 0,
             same_day_repeat_until: int = 0,
             notify_email: str = '',
-            notify_error: bool = False
+            notify_only_on_error: bool = False
         ) -> dict[str, object] | str:
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
                             same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
         
         schedule_dict = schedule._generate_dict()
-        print(schedule_dict)
 
         extra = {
             'notify_enable': 'true' if notify_email is not '' else 'false',
             'notify_mail': notify_email,
-            'notify_if_error': notify_error,
+            'notify_if_error': 'true' if notify_only_on_error else 'false',
             'script': script
         }
 
@@ -403,7 +401,8 @@ class TaskScheduler(base_api.BaseApi):
             'owner': owner,
             'enable': enable,
             'schedule': json.dumps(schedule_dict),
-            'extra': json.dumps(extra)
+            'extra': json.dumps(extra),
+            'type': 'script'
         }
 
         return self.request_data(api_name, api_path, req_param)
