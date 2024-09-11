@@ -1,9 +1,6 @@
 from __future__ import annotations
-import urllib.parse
 from . import base_api
 import json
-import requests
-import urllib
 
 class _Schedule():
     def __init__(
