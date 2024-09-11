@@ -80,7 +80,6 @@ class TaskScheduler(base_api.BaseApi):
        - Get all tasks
        - Get task information
        - Get task results
-       - Get task result log
        - Enable/Disable task
        - Run task
        - Delete task
@@ -93,7 +92,22 @@ class TaskScheduler(base_api.BaseApi):
     """  
 
     def get_output_config(self) -> dict[str, object] | str:
-        """
+        """Retrieve tasks output configuration.
+
+        Returns:
+            dict|str:
+                A dictionary containing a list of the tasks and information related to them, or a string in case of an error.
+
+            Example return:
+            {
+                "data": {
+                    "enable_output": true,
+                    "output_path": "share/scripts_output",
+                    "type": "esynoscheduler",
+                    "__docstring": [] # Ignore this field, it is to avoid the docstring format from breaking.
+                },
+                "success": true
+            }
         """
         api_name = 'SYNO.Core.EventScheduler'
         info = self.gen_list[api_name]
@@ -194,9 +208,62 @@ class TaskScheduler(base_api.BaseApi):
             real_owner: str,
             type: str = ''
         ) -> dict[str, object] | str:
+        """Retrieve the configuration for a specific task or list of all the available services and their corresponding IDs.
+
+        Args:
+            task_id (int): 
+                The ID of the task to retrieve the configuration for. Pass `-1` to get a list of all available services with their IDs.
+            real_owner (str): 
+                The owner of the task. From `get_task_list()`.
+            type (str, optional): 
+                The type of task (e.g., 'service'). Pass "service" to get a list of all available services with their IDs. Defaults to an empty string.
+
+        Returns:
+            dict|str:
+                A dictionary containing the task configuration or a string in case of an error.
+
+            Example return:
+                {
+                    "data": {
+                        "action": "Run: echo hello > /tmp/awacate.out",
+                        "can_edit_name": true,
+                        "can_edit_owner": true,
+                        "enable": true,
+                        "extra": {
+                            "notify_enable": false,
+                            "notify_if_error": false,
+                            "notify_mail": "",
+                            "script": "echo hello > /tmp/awacate.out"
+                        },
+                        "id": 11,
+                        "name": "TEST_CRONTAB",
+                        "owner": "root",
+                        "real_owner": "root",
+                        "schedule": {
+                            "date": "2024/9/11",
+                            "date_type": 0,
+                            "hour": 0,
+                            "last_work_hour": 0,
+                            "minute": 0,
+                            "monthly_week": [],
+                            "repeat_date": 1001,
+                            "repeat_hour": 0,
+                            "repeat_hour_store_config": [
+                                1..23
+                            ],
+                            "repeat_min": 0,
+                            "repeat_min_store_config": [
+                                1,
+                                ...
+                            ],
+                            "version": 4,
+                            "week_day": "0,1,2,3,4,5,6"
+                        },
+                        "type": "script"
+                    },
+                    "success": true
+                }
         """
-        """
-        # pass id=-1 and type=service to get a list of all available services with their corresponding IDs
         api_name = 'SYNO.Core.TaskScheduler'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -216,7 +283,36 @@ class TaskScheduler(base_api.BaseApi):
             self,
             task_id: int
         ) -> dict[str, object] | str:
-        """
+        """Retrieve the results list for a specific task.
+
+        Args:
+            task_id (int): 
+                The ID of the task to retrieve the results for.
+
+        Returns:
+            dict|str:
+                A dictionary containing the task results or a string in case of an error.
+
+            Example return:
+                {
+                    "data": [
+                        {
+                            "exit_code": 127,
+                            "exit_type": "by_signal",
+                            "start_time": "2024-09-11 00:00:01",
+                            "stop_time": "2024-09-11 00:00:06",
+                            "timestamp": "1726005601"
+                        },
+                        {
+                            "exit_code": 0,
+                            "exit_type": "normal",
+                            "start_time": "2024-06-01 00:00:01",
+                            "stop_time": "2024-06-01 00:00:02",
+                            "timestamp": "1717192801"
+                        }
+                    ],
+                    "success": true
+                }
         """
         api_name = 'SYNO.Core.TaskScheduler'
         info = self.gen_list[api_name]
@@ -229,31 +325,66 @@ class TaskScheduler(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def get_task_result_logs(
-            self,
-            task_id: int,
-            timestamp: int
-        ) -> dict[str, object] | str:
-        """
-        """
-        api_name = 'SYNO.Core.TaskScheduler'
-        info = self.gen_list[api_name]
-        api_path = info['path']
-        req_param = {
-            'version': 1, 
-            'method': 'get_history_log',
-            'timestamp': str(timestamp),
-            'id': task_id
-        }
+    ###### 
+    # For some reason it keeps returning error 4800, in /var/log/synoscgi.log it logs:
+    #   2024-09-11T21:27:56+02:00 xxx synowebapi_SYNO.Core.TaskScheduler_1_get_history_log[21830]: main.cpp:392 Invalid paramters.
+    #
+    # Tried with many combination of params but could not make it work so far.
+    ######
 
-        return self.request_data(api_name, api_path, req_param)
+    # def get_task_result_logs(
+    #         self,
+    #         task_id: int,
+    #         timestamp: int
+    #     ) -> dict[str, object] | str:
+    #     """Retrieve the log information for a specific task result.
+
+    #     Args:
+    #         task_id (int): 
+    #             The ID of the task to retrieve the log for.
+    #         timestamp (int): 
+    #             The timestamp of the result for which to retrieve the logs.
+
+    #     Returns:
+    #         dict|str:
+    #             A dictionary containing the log of the result, or a string in case of an error.
+
+    #         Example return:
+    #            {success: true}
+    #     """
+    #     api_name = 'SYNO.Core.TaskScheduler'
+    #     info = self.gen_list[api_name]
+    #     api_path = info['path']
+    #     req_param = {
+    #         'version': 1, 
+    #         'method': 'get_history_log',
+    #         'timestamp': str(timestamp)
+    #         'id': task_id
+    #     }
+
+    #     return self.request_data(api_name, api_path, req_param)
     
     def set_output_config(
             self,
             enable_output: bool,
-            output_path: str
+            output_path: str = ''
         ) -> dict[str, object] | str:
-        """
+        """Configure the output settings for tasks results.
+
+        Args:
+            enable_output (bool): 
+                Whether to enable result logging.
+            output_path (str, optional): 
+                The path where the result logs will be stored, e.g. `'share/scripts_output'`. Defaults to empty string.
+
+        Returns:
+            dict|str:
+                A dictionary containing the result of the output configuration or a string in case of an error.
+
+            Example return:
+                {
+                    "success": true
+                }
         """
         api_name = 'SYNO.Core.EventScheduler'
         info = self.gen_list[api_name]
@@ -277,12 +408,27 @@ class TaskScheduler(base_api.BaseApi):
             task_id: int,
             real_owner: str
         ) -> dict[str, object] | str:
-        """
+        """Enable a specific task.
+
+        Args:
+            task_id (int): 
+                The ID of the task to be enabled.
+            real_owner (str): 
+                The owner of the task. From `get_task_list()`.
+
+        Returns:
+            dict|str:
+                A dictionary containing the result of the task enabling or a string in case of an error.
+
+            Example return:
+                {
+                    "success": true
+                }
         """
         task_dict = {
             'id': task_id,
             'real_owner': real_owner,
-            'enable': 'true'
+            'enable': True
         }
 
         api_name = 'SYNO.Core.TaskScheduler'
@@ -301,12 +447,27 @@ class TaskScheduler(base_api.BaseApi):
             task_id: int,
             real_owner: str
         ) -> dict[str, object] | str:
-        """
+        """Disable a specific task.
+
+        Args:
+            task_id (int): 
+                The ID of the task to be disabled.
+            real_owner (str): 
+                The owner of the task. From `get_task_list()`.
+
+        Returns:
+            dict|str:
+                A dictionary containing the result of the task disabling or a string in case of an error.
+
+            Example return:
+                {
+                    "success": true
+                }
         """
         task_dict = {
             'id': task_id,
             'real_owner': real_owner,
-            'enable': 'false'
+            'enable': False
         }
 
         api_name = 'SYNO.Core.TaskScheduler'
@@ -325,7 +486,22 @@ class TaskScheduler(base_api.BaseApi):
             task_id: int,
             real_owner: str
         ) -> dict[str, object] | str:
-        """
+        """Run a specific task.
+
+        Args:
+            task_id (int): 
+                The ID of the task to be run.
+            real_owner (str): 
+                The owner of the task. From `get_task_list()`.
+
+        Returns:
+            dict|str:
+                A dictionary containing the result of the task execution or a string in case of an error.
+
+            Example return:
+                {
+                    "success": true
+                }
         """
         task_dict = {
             'id': task_id,
@@ -348,7 +524,22 @@ class TaskScheduler(base_api.BaseApi):
             task_id: int,
             real_owner: str
         ) -> dict[str, object] | str:
-        """
+        """Delete a specific task.
+
+        Args:
+            task_id (int): 
+                The ID of the task to be deleted.
+            real_owner (str): 
+                The owner of the task. From `get_task_list()`.
+
+        Returns:
+            dict|str:
+                A dictionary containing the result of the task deletion or a string in case of an error.
+
+        Example return:
+            {
+                "success": true
+            }
         """
         task_dict = {
             'id': task_id,
