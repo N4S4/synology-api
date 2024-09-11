@@ -33,9 +33,9 @@ class _Schedule():
             'monthly_week': json.dumps(self.monthly_week),
             'hour': self.start_time_h,                    # Start time - Hour for the schedule
             'minute': self.start_time_m,                  # Start time - Minute for the schedule
-            'repeat_hour': self.same_day_repeat_h,        # Continue running on the same day - Repeat each X hours 1..23 // 0 = disabled
+            'repeat_hour': self.same_day_repeat_h,        # Continue running on the same day - Repeat each X hours 0..23 
             'repeat_min': self.same_day_repeat_m,         # Continue running on the same day - Repeat every X minute [1, 5, 10, 15, 20, 30] // 0 = disabled
-            'last_work_hour': self.same_day_repeat_until, # Last run time
+            'last_work_hour': self.same_day_repeat_until if self.same_day_repeat_until > -1 else self.start_time_h, # Last run time, defaults to start time if not provided
         }
         repeat_modality = -1
 
@@ -65,6 +65,7 @@ class _Schedule():
         schedule_dict['repeat_date'] = repeat_modality
 
         return schedule_dict
+    
 
 class TaskScheduler(base_api.BaseApi):
     """
@@ -364,19 +365,88 @@ class TaskScheduler(base_api.BaseApi):
             owner: str,
             script: str,
             enable: bool = True,
-            run_frequently: bool = True, # date_type
-            run_days: str = '0,1,2,3,4,5,6', # week_days
-            run_date: str = '', # date
+            run_frequently: bool = True,
+            run_days: str = '0,1,2,3,4,5,6',
+            run_date: str = '',
             repeat: str = 'Daily',
             monthly_week: list[str] = [],
             start_time_h: int = 0,
             start_time_m: int = 0,
             same_day_repeat_h: int = 0,
             same_day_repeat_m: int = 0,
-            same_day_repeat_until: int = 0,
+            same_day_repeat_until: int = -1,
             notify_email: str = '',
             notify_only_on_error: bool = False
         ) -> dict[str, object] | str:
+        """Create a new script task with the provided schedule and notification settings.
+
+        Args:
+            task_name (str): 
+                The name of the task.
+            owner (str): 
+                The task owner.
+            script (str): 
+                The script to be executed.
+            enable (bool, optional): 
+                Whether the task should be enabled upon creation. Defaults to `True`.
+            run_frequently (bool, optional): 
+                Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.
+            run_days (str, optional): 
+                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list 
+                (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
+            run_date (str, optional): 
+                The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). 
+                Defaults to an empty string.
+            repeat (str, optional): 
+                How often the task should repeat. Possible values:
+                - "daily" -> Only when 'run_frequently=True'
+                - "weekly" -> Only when 'run_frequently=True'
+                - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
+                - "no_repeat" -> Only when 'run_frequently=False'
+                - "every_3_months" -> Only when 'run_frequently=False'
+                - "every_6_months" -> Only when 'run_frequently=False'
+                - "yearly" -> Only when 'run_frequently=False'
+                Defaults to 'daily'.
+            monthly_week (list[str], optional): 
+                If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
+                Defaults to an empty list.
+            start_time_h (int, optional): 
+                Hour at which the task should start. Defaults to `0`.
+            start_time_m (int, optional): 
+                Minute at which the task should start. Defaults to `0`.
+            same_day_repeat_h (int, optional): 
+                Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
+                Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
+
+                Possible values: `0..23`
+
+                The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
+            same_day_repeat_m (int, optional): 
+                Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
+                Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
+                
+                Posible values: `1`, `5`, `10`, `15`, `20`, `30`
+
+                The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
+            same_day_repeat_until (int, optional): 
+                Last hour of the day when the task can repeat. Defaults to `start_time_h`.
+            notify_email (str, optional): 
+                Email address to send notifications to. Defaults to an empty string, thus disabling the notification feature.
+            notify_only_on_error (bool, optional): 
+                If `True`, notifications are only sent when an error occurs. Defaults to `False`.
+
+        Returns:
+            dict|str:
+                A dictionary with the id of the created task, or a string if there is an error.
+
+        Example return:
+            {
+            "data": {
+                "id": 20
+            },
+            "success": true
+        }
+        """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
                             same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
