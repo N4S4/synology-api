@@ -32,6 +32,7 @@ class Authentication:
         self._port: str = port
         self._username: str = username
         self._password: str = password
+        self._secure: bool = secure
         self._sid: Optional[str] = None
         self._syno_token: Optional[str] = None
         self._session_expire: bool = True

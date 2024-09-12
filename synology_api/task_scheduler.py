@@ -1,5 +1,7 @@
 from __future__ import annotations
+from typing import Optional
 from . import base_api
+from .core_sys_info import SysInfo
 import json
 
 class _Schedule():
@@ -86,7 +88,7 @@ class TaskScheduler(base_api.BaseApi):
 
        To implement in the future:
        - Add retention settings for Recycle bin task set/create methods.
-    """  
+    """
 
     def get_output_config(self) -> dict[str, object] | str:
         """Retrieve tasks output configuration.
@@ -573,13 +575,15 @@ class TaskScheduler(base_api.BaseApi):
             notify_email: str = '',
             notify_only_on_error: bool = False
         ) -> dict[str, object] | str:
-        """Create a new Script task with the provided schedule and notification settings.
+        """Create a new Script task with the provided schedule and notification settings. 
+        
+        If the task needs to run with root privileges, please specify the owner as "root".
 
         Args:
             task_name (str): 
                 The name of the task.
             owner (str): 
-                The task owner.
+                The task owner. If the task needs to run with root privileges, please specify the owner as "root".
             script (str): 
                 The script to be executed.
             enable (bool, optional): 
@@ -642,7 +646,6 @@ class TaskScheduler(base_api.BaseApi):
             "success": true
         }
         """
-
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
                             same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
         
@@ -654,6 +657,14 @@ class TaskScheduler(base_api.BaseApi):
             'notify_if_error': 'true' if notify_only_on_error else 'false',
             'script': script
         }
+        root_token = ''
+        if owner == 'root':
+            sys_info = SysInfo(ip_address=self.session._ip_address, port=self.session._port, username=self.session._username, password=self.session._password,
+                               secure=self.session._secure, cert_verify=self.session._verify, dsm_version=self.session._version, debug=self.session._debug, 
+                               otp_code=self.session._otp_code, application=self.application)
+            response = sys_info.password_confirm(password=self.session._password)
+            if response['success']: 
+                root_token = response['data']['SynoConfirmPWToken']
 
         api_name = 'SYNO.Core.TaskScheduler'
         info = self.gen_list[api_name]
@@ -669,6 +680,10 @@ class TaskScheduler(base_api.BaseApi):
             'extra': json.dumps(extra),
             'type': 'script'
         }
+
+        if root_token != '':
+            api_name = 'SYNO.Core.TaskScheduler.Root'
+            req_param['SynoConfirmPWToken'] = root_token
 
         return self.request_data(api_name, api_path, req_param)
     
