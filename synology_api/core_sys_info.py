@@ -514,15 +514,15 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)['data']['memory']
 
-    def shutdown(self):
+    def shutdown(self, version: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.Core.System'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'shutdown'}
+        req_param = {'version': (info['maxVersion'] if version is None else version), 'method': 'shutdown'}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def reboot(self):
+    def reboot(self) -> dict[str, object] | str:
         api_name = 'SYNO.Core.System'
         info = self.core_list[api_name]
         api_path = info['path']
