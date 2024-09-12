@@ -794,6 +794,38 @@ class SysInfo(base_api.BaseApi):
         req_param = {'version': info['maxVersion'], 'method': 'get'}
 
         return self.request_data(api_name, api_path, req_param)
+    
+    def password_confirm(self, password: str) -> dict[str, object] | str:
+        """Issues a passowrd/session comparison to ensure the given password matches the auth of the current session.
+
+        This is needed by some APIs as a confirmation method, for example, when creating/modifying a scheduled task with root permissions. 
+        Please note that the password will be sent in plain text, just like in the base auth method.
+
+        Args:
+            password (str):
+                The password with which the session was initiated.
+
+        Returns:
+            dict|str:
+                A dictionary containing a `SynoConfirmPWToken`, or an error message.
+
+            Example return:
+            {
+                "data": {
+                    "SynoConfirmPWToken": "xxxxx"
+                },
+                "success": true
+            }
+        """
+        # There is a way to send the password encrypted, but could not figure out how the NAS wants the data to be encrypted.
+        # It wants an AES and RSA key sent to it under the field "__cIpHeRtExT", tried some ways of implementing it, 
+        # but kept getting decryption errors in /var/log/synoscgi.log, so just went through with the plain text password. 
+        api_name = 'SYNO.Core.User.PasswordConfirm'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': 2, 'method': 'auth', 'password': password}
+
+        return self.request_data(api_name, api_path, req_param)
 
     def personal_photo_enable(self) -> dict[str, object] | str:
         api_name = 'SYNO.Core.User.Home'
