@@ -711,15 +711,17 @@ class TaskScheduler(base_api.BaseApi):
         """Modify settings of a Script task. This method overwrites all the settings of the task, so if you only want to change one setting, 
         you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
 
+        If the task needs to run with root privileges, please specify the owner as "root".
+
         Args:
             task_id (int):
                 The ID of the task.
             task_name (str): 
                 The name of the task.
             owner (str): 
-                The task owner.
+                The task owner. If the task needs to run with root privileges, please specify the owner as "root".
             real_owner (str): 
-                The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.
+                The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`. 
             script (str): 
                 The script to be executed.
             enable (bool, optional): 
@@ -795,7 +797,14 @@ class TaskScheduler(base_api.BaseApi):
             'script': script
         }
 
-        print(json.dumps(schedule_dict))
+        root_token = ''
+        if owner == 'root':
+            sys_info = SysInfo(ip_address=self.session._ip_address, port=self.session._port, username=self.session._username, password=self.session._password,
+                               secure=self.session._secure, cert_verify=self.session._verify, dsm_version=self.session._version, debug=self.session._debug, 
+                               otp_code=self.session._otp_code, application=self.application)
+            response = sys_info.password_confirm(password=self.session._password)
+            if response['success']: 
+                root_token = response['data']['SynoConfirmPWToken']
 
         api_name = 'SYNO.Core.TaskScheduler'
         info = self.gen_list[api_name]
@@ -811,6 +820,10 @@ class TaskScheduler(base_api.BaseApi):
             'schedule': json.dumps(schedule_dict),
             'extra': json.dumps(extra)
         }
+
+        if root_token != '':
+            api_name = 'SYNO.Core.TaskScheduler.Root'
+            req_param['SynoConfirmPWToken'] = root_token
 
         return self.request_data(api_name, api_path, req_param)
     
