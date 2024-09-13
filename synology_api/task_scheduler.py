@@ -90,6 +90,16 @@ class TaskScheduler(base_api.BaseApi):
        - Add retention settings for Recycle bin task set/create methods.
     """
 
+    def __get_root_token(self) -> str:
+        sys_info = SysInfo(ip_address=self.session._ip_address, port=self.session._port, username=self.session._username, password=self.session._password,
+                            secure=self.session._secure, cert_verify=self.session._verify, dsm_version=self.session._version, debug=self.session._debug, 
+                            otp_code=self.session._otp_code, application=self.application)
+        response = sys_info.password_confirm(password=self.session._password)
+        if response['success']: 
+            return response['data']['SynoConfirmPWToken']
+        else:
+            return ''
+
     def get_output_config(self) -> dict[str, object] | str:
         """Retrieve tasks output configuration.
 
@@ -397,10 +407,6 @@ class TaskScheduler(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
-    def set_task_settings(self) -> dict[str, object] | str:
-        # TODO
-        print()
 
     def task_enable(
             self,
@@ -480,6 +486,41 @@ class TaskScheduler(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
+    def event_task_set_enable(
+            self,
+            task_name: str,
+            enable: bool
+        ) -> dict[str, object] | str:
+        """Enable or disable Event task.
+
+        Args
+            task_name (str):
+                Name of the Event task to enable/disable.
+            enable (bool):
+                Wheter to enable (`True`) or disable (`False`) the task.
+        
+        Returns
+            dict|str:
+                A dictionary containing the result of the action or a string in case of an error.
+
+            Example return:
+                {
+                    "success": true
+                }
+        
+        """
+        api_name = 'SYNO.Core.EventScheduler'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': 1, 
+            'method': 'set_enable',
+            'enable': enable,
+            'task_name': task_name
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+    
     def task_run(
             self,
             task_id: int,
@@ -514,6 +555,37 @@ class TaskScheduler(base_api.BaseApi):
             'version': 2, 
             'method': 'run',
             'tasks': f'[{json.dumps(task_dict)}]',
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def event_task_run(
+            self,
+            task_name: str
+        ) -> dict[str, object] | str:
+        """Run a specific Event task.
+
+        Args:
+            task_name (str): 
+                Name of the Event task to run.
+
+        Returns:
+            dict|str:
+                A dictionary containing the result of the task execution or a string in case of an error.
+
+            Example return:
+                {
+                    "success": true
+                }
+        """
+
+        api_name = 'SYNO.Core.EventScheduler'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': 1, 
+            'method': 'run',
+            'task_name': task_name
         }
 
         return self.request_data(api_name, api_path, req_param)
@@ -553,6 +625,120 @@ class TaskScheduler(base_api.BaseApi):
             'method': 'delete',
             'tasks': f'[{json.dumps(task_dict)}]',
         }
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def event_task_delete(
+            self,
+            task_name: str
+        ) -> dict[str, object] | str:
+        """Delete a specific Event task.
+
+        Args:
+            task_name (str): 
+                Name of the Event task to run.
+
+        Returns:
+            dict|str:
+                A dictionary containing the result of the task deletion or a string in case of an error.
+
+        Example return:
+            {
+                "success": true
+            }
+        """
+
+        api_name = 'SYNO.Core.EventScheduler'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': 1, 
+            'method': 'delete',
+            'task_name': task_name
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def event_task_do(
+            self,
+            action: str, # create || set
+            task_name: str,
+            owner: dict, # {"1026": "joel"} // {"UID":"USERNAME"}
+            trigger_event: str, # "shutdown" || "bootup"
+            script: str,
+            depend_on_task: list[str] = [], # list of task names that will be run before this task
+            enable: bool = True,
+            notify_email: str = '',
+            notify_only_on_error: bool = False
+        ) -> dict[str, object] | str:
+        """Create or modify an event-based task.
+
+        Args:
+            action (str): 
+                Action to perform on the task. Possible values:
+                - "create" -> Creates a new task.
+                - "set" -> Modify an existing task.
+            task_name (str): 
+                The name of the task.
+            owner (dict): 
+                Dictionary containing the owner's ID and name (e.g., `{"1026": "user1"}`). 
+                You can get the user UID by running `synouser --get your_user` in your NAS CLI.
+
+                For root privileges, pass `{"0":"root"}`.
+            trigger_event (str): 
+                The event that triggers the task. Possible values:
+                - "shutdown"
+                - "bootup"
+            script (str): 
+                The script to be executed when the task is triggered.
+            depend_on_task (list[str], optional): 
+                A list of event triggered task names that this task depends on (i.e., tasks that will be run before this one). Defaults to an empty list.
+            enable (bool, optional): 
+                Whether to enable the task. Defaults to `True`.
+            notify_email (str, optional): 
+                Email address to send notifications to. Defaults to an empty string. Defaults to an empty string, thus disabling the notification feature.
+            notify_only_on_error (bool, optional): 
+                If `True`, notifications are only sent when an error occurs. Defaults to `False`.
+
+        Returns:
+            dict|str:
+                A dictionary containing the result of the task creation or modification, or a strnig in case of an error.
+
+            Example return:
+                {
+                    "success": true
+                }
+        """
+        if action != 'create' and action != 'set':
+            return {'error': f'action <{action}> is not valid.'}
+        if trigger_event != 'shutdown' and trigger_event != 'bootup':
+            return {'error': f'trigger_event <{trigger_event}> is not valid.'} 
+        
+        pre_tasks = ''
+        for task in depend_on_task: # NAS expects "[Task Name 1][Task Name 2]"
+            pre_tasks += f'[{task}]'
+
+        api_name = 'SYNO.Core.EventScheduler'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': 1, 
+            'method': action,
+            'task_name': task_name,
+            'owner': json.dumps(owner),
+            'event': trigger_event,
+            'depend_on_task': pre_tasks,
+            'enable': enable,
+            'notify_enable': notify_email != '',
+            'notify_mail': f'"{notify_email}"', # Fails if not formatted with double quotes.
+            'notify_if_error':  notify_only_on_error,
+            'operation': script,
+            'operation_type': 'script'
+        }
+    
+        if owner['0'] == 'root':
+            api_name = 'SYNO.Core.EventScheduler.Root'
+            req_param['SynoConfirmPWToken'] = self.__get_root_token()
 
         return self.request_data(api_name, api_path, req_param)
     
