@@ -623,14 +623,6 @@ class TaskScheduler(base_api.BaseApi):
             'notify_if_error': 'true' if notify_only_on_error else 'false',
             'script': script
         }
-        root_token = ''
-        if owner == 'root':
-            sys_info = SysInfo(ip_address=self.session._ip_address, port=self.session._port, username=self.session._username, password=self.session._password,
-                               secure=self.session._secure, cert_verify=self.session._verify, dsm_version=self.session._version, debug=self.session._debug, 
-                               otp_code=self.session._otp_code, application=self.application)
-            response = sys_info.password_confirm(password=self.session._password)
-            if response['success']: 
-                root_token = response['data']['SynoConfirmPWToken']
 
         api_name = 'SYNO.Core.TaskScheduler'
         info = self.gen_list[api_name]
@@ -647,9 +639,9 @@ class TaskScheduler(base_api.BaseApi):
             'type': 'script'
         }
 
-        if root_token != '':
+        if owner == 'root':
             api_name = 'SYNO.Core.TaskScheduler.Root'
-            req_param['SynoConfirmPWToken'] = root_token
+            req_param['SynoConfirmPWToken'] = self.__get_root_token()
 
         return self.request_data(api_name, api_path, req_param)
     
@@ -763,15 +755,6 @@ class TaskScheduler(base_api.BaseApi):
             'script': script
         }
 
-        root_token = ''
-        if owner == 'root':
-            sys_info = SysInfo(ip_address=self.session._ip_address, port=self.session._port, username=self.session._username, password=self.session._password,
-                               secure=self.session._secure, cert_verify=self.session._verify, dsm_version=self.session._version, debug=self.session._debug, 
-                               otp_code=self.session._otp_code, application=self.application)
-            response = sys_info.password_confirm(password=self.session._password)
-            if response['success']: 
-                root_token = response['data']['SynoConfirmPWToken']
-
         api_name = 'SYNO.Core.TaskScheduler'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -787,9 +770,9 @@ class TaskScheduler(base_api.BaseApi):
             'extra': json.dumps(extra)
         }
 
-        if root_token != '':
+        if owner == 'root':
             api_name = 'SYNO.Core.TaskScheduler.Root'
-            req_param['SynoConfirmPWToken'] = root_token
+            req_param['SynoConfirmPWToken'] = self.__get_root_token()
 
         return self.request_data(api_name, api_path, req_param)
     
