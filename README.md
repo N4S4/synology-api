@@ -195,6 +195,9 @@ This wrapper cover the following APIs for now:
 | SYNO.Core.SecurityScan.Status         |
 | SYNO.Core.SecurityScan.Status         |
 | SYNO.Core.User                        |
+| SYNO.Core.User.PasswordExpiry         | 
+| SYNO.Core.User.PasswordPolicy         |
+| SYNO.Core.User.PasswordConfirm        |
 | SYNO.Core.QuickConnect                |
 | SYNO.Core.QuickConnect.Permission     |
 | SYNO.Core.Network.Router.Topology     |
@@ -267,6 +270,13 @@ This wrapper cover the following APIs for now:
 | Cloud Sync     |
 |----------------|
 | SYNO.CloudSync |
+
+| Task Scheduler / Event Scheduler |
+|----------------------------------|
+| SYNO.Core.TaskScheduler          |
+| SYNO.Core.TaskScheduler.Root     |
+| SYNO.Core.EventScheduler         |
+| SYNO.Core.EventScheduler.Root    |
 
 #
 ### Not all Surveillance Station functions works.
@@ -525,6 +535,7 @@ DS info with below functions:
 | `users_info()`                    |
 | `password_policy()`               |
 | `password_expiry()`               |
+| `password_confirm()`              |
 | `personal_photo_enable()`         |
 | `ftp_chroot_user()`               |
 | `server_pair()`                   |
@@ -726,6 +737,35 @@ DS info with below functions:
 | `connection_remove()`          | Remove a specific connection.                                  |
 | `task_remove()`                | Remove a specific task.                                        |
 
+### task_scheduler
+| Functions                       | Description                                                    |
+|---------------------------------|----------------------------------------------------------------|
+| `get_output_config()`           | Retrieve the task output configuration.                        |
+| `get_task_list()`               | Retrieve list of Scheduled and Event tasks.                    |
+| `get_task_config()`             | Get Scheduled task settings.                                   |
+| `get_task_results()`            | Get results of a Scheduled task.                               |
+| `set_output_config()`           | Set the task output configuration.                             |
+| `task_set_enable()`             | Enable or disable a Scheduled task.                            |
+| `task_run()`                    | Run a Scheduled task.                                          |
+| `task_delete()`                 | Delete a Scheduled task.                                       |
+| `create_script_task()`          | Create a "User defined script scheduled task".                 |
+| `modify_script_task()`          | Modify a "User defined script scheduled task".                 |
+| `create_beep_control_task()`    | Create a "Beep control scheduled task".                        |
+| `modify_beep_control_task()`    | Modify a "Beep control scheduled task".                        |
+| `create_service_control_task()` | Create a "Service scheduled task".                             |
+| `modify_service_control_task()` | Modify a "Service scheduled task".                             |
+| `create_recycle_bin_task()`     | Create a "Recycle Bin scheduled task".                         |
+| `modify_recycle_bin_task()`     | Modify a "Recycle Bin scheduled task".                         |
+
+### event_scheduler
+| Functions                      | Description                                                    |
+|--------------------------------|----------------------------------------------------------------|
+| `get_task_results()`           | Get results of a Event Triggered task.                         |
+| `get_result_output()`          | Get the output for a given result.                             |
+| `task_set_enable()`            | Enable or disable a Event Triggered task.                      |
+| `task_run()`                   | Run a Event Triggered task.                                    |
+| `task_delete()`                | Delete a Event Triggered task.                                 |
+| `task_create_or_set()`         | Create or modify a Event Triggered task.                       |
  
 #### What's still missing
 

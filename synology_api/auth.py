@@ -9,7 +9,7 @@ from urllib3.exceptions import InsecureRequestWarning
 from .exceptions import SynoConnectionError, HTTPError, JSONDecodeError, LoginError, LogoutError, DownloadStationError
 from .exceptions import FileStationError, AudioStationError, ActiveBackupError, VirtualizationError, BackupError
 from .exceptions import CertificateError, CloudSyncError, DHCPServerError, DirectoryServerError, DockerError, DriveAdminError
-from .exceptions import LogCenterError, NoteStationError, OAUTHError, PhotosError, SecurityAdvisorError
+from .exceptions import LogCenterError, NoteStationError, OAUTHError, PhotosError, SecurityAdvisorError, TaskSchedulerError, EventSchedulerError
 from .exceptions import UniversalSearchError, USBCopyError, VPNError, CoreSysInfoError, UndefinedError
 
 USE_EXCEPTIONS: bool = True
@@ -32,6 +32,7 @@ class Authentication:
         self._port: str = port
         self._username: str = username
         self._password: str = password
+        self._secure: bool = secure
         self._sid: Optional[str] = None
         self._syno_token: Optional[str] = None
         self._session_expire: bool = True
@@ -350,6 +351,12 @@ class Authentication:
                 # Security advisor error:
                 elif api_name.find('SecurityAdvisor') > -1:
                     raise SecurityAdvisorError(error_code=error_code)
+                # Task Scheduler error:
+                elif api_name.find('SYNO.Core.TaskScheduler') > -1:
+                    raise TaskSchedulerError(error_code=error_code)
+                # Event Scheduler error:
+                elif api_name.find('SYNO.Core.EventScheduler') > -1:
+                    raise EventSchedulerError(error_code=error_code)
                 # Universal search error:
                 elif api_name.find('SYNO.Finder') > -1:
                     raise UniversalSearchError(error_code=error_code)
