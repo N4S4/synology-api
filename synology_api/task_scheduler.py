@@ -618,9 +618,9 @@ class TaskScheduler(base_api.BaseApi):
         schedule_dict = schedule._generate_dict()
 
         extra = {
-            'notify_enable': 'true' if notify_email is not '' else 'false',
+            'notify_enable': notify_email != '',
             'notify_mail': notify_email,
-            'notify_if_error': 'true' if notify_only_on_error else 'false',
+            'notify_if_error': notify_only_on_error,
             'script': script
         }
 
@@ -749,9 +749,9 @@ class TaskScheduler(base_api.BaseApi):
         schedule_dict = schedule._generate_dict()
 
         extra = {
-            'notify_enable': 'true' if notify_email is not '' else 'false',
+            'notify_enable': notify_email != '',
             'notify_mail': notify_email,
-            'notify_if_error': 'true' if notify_only_on_error else 'false',
+            'notify_if_error': notify_only_on_error,
             'script': script
         }
 
