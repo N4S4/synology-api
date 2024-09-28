@@ -1092,7 +1092,7 @@ class CloudSync(base_api.BaseApi):
             'server_folder_id': server_folder_id,
             'part_size': '',
             'storage_class': storage_class,
-            'server_folder_meta_list': self.make_folder_meta_list_from_path(cloud_path),
+            'server_folder_meta_list': make_folder_meta_list_from_path(cloud_path),
             'filter_folder': [],
             'filter_changed': False,
             'no_delete': False,
@@ -1103,7 +1103,7 @@ class CloudSync(base_api.BaseApi):
         }
 
         # Merge authentication details with request parameters
-        return self.merge_dicts(auth['data'], create_session_request_params)
+        return merge_dicts(auth['data'], create_session_request_params)
 
     def test_task_setting(
             self,
@@ -1133,7 +1133,7 @@ class CloudSync(base_api.BaseApi):
             tuple: A tuple containing a boolean indicating success, and a dictionary or string with the result.
         """
         # Generate sync task parameters
-        config_params = self.generate_sync_task_s3_params(
+        creation_params = self.generate_sync_task_s3_params(
             conn_id,
             local_path,
             cloud_path,
@@ -1151,7 +1151,7 @@ class CloudSync(base_api.BaseApi):
             'api': api_name,
             'method': 'test_task_setting',
             'version': info['minVersion'],
-            'conn_info': config_params
+            'conn_info': creation_params
         }
 
         # Send request and get result
@@ -1160,10 +1160,10 @@ class CloudSync(base_api.BaseApi):
 
         # Check if the request was successful
         if result is not None and result['data']['has_fail'] == False:
-            print('Task setting is valid')
+            # print('Task setting is valid')
             return (True, result['data'])
         else:
-            print('Task setting is invalid')
+            # print('Task setting is invalid')
             return (False, 'Invalid task setting')
 
     def create_sync_task_s3(
@@ -1193,8 +1193,14 @@ class CloudSync(base_api.BaseApi):
         Returns:
             dict|str: A dictionary containing the result of the task creation, or a string in case of an error.
         """
+
+        # Validate is connection is Amazon S3
+        conn_info = self.get_connection_information(conn_id)
+        if conn_info['data']['type'] != 'az':
+            return (False, 'Connection is not Amazon S3')
+
         # Merge authentication details with request parameters
-        conn_info = self.generate_sync_task_s3_params(
+        creation_params = self.generate_sync_task_s3_params(
             conn_id,
             local_path,
             cloud_path,
@@ -1225,7 +1231,7 @@ class CloudSync(base_api.BaseApi):
             'api': api_name,
             'method': 'create_session',
             'version': info['minVersion'],
-            'conn_info': conn_info,
+            'conn_info': creation_params,
         }
         list_session_request = {
             'api': api_name,
