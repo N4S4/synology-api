@@ -1033,7 +1033,7 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def build_sync_task_list_s3_params(
+    def generate_sync_task_s3_params(
             self,
             conn_id: int,
             local_path: str,
@@ -1043,18 +1043,39 @@ class CloudSync(base_api.BaseApi):
             file_filter: list[str] = [],
             filter_max_upload_size: int = 0,
             filter_names: list[str] = [],
+            server_folder_id: str = '',
         ) -> dict[str, Any]:
+        """
+        Generate parameters for creating a sync task with S3.
+
+        Args:
+            conn_id (int): The ID of the connection.
+            local_path (str): The local path to sync.
+            cloud_path (str): The cloud path to sync.
+            sync_direction (str, optional): The synchronization direction. Defaults to 'BIDIRECTION'.
+            storage_class (str, optional): The storage class. Defaults to 'STANDARD'.
+            file_filter (list of str, optional): List of file extensions to filter. Defaults to [].
+            filter_max_upload_size (int, optional): Maximum upload size for files. Defaults to 0.
+            filter_names (list of str, optional): List of file names to filter. Defaults to [].
+
+        Returns:
+            dict[str, Any]: A dictionary containing the parameters for the sync task.
+        """
         # Validate local path format
         if local_path[0] != '/' or local_path.count('/') < 2:
-            raise Exception('Invalid local path, must be in format /<share_folder>/<sub_directory>')
+            raise ValueError('Invalid local path, must be in format /<share_folder>/<sub_directory>')
+
         # Validate cloud path format
         if cloud_path[0] != '/' or cloud_path[-1] == '/':
-            raise Exception('Invalid cloud path, must be started with / and not ended with /')
+            raise ValueError('Invalid cloud path, must be started with / and not ended with /')
+
         # Get connection authentication details
         auth = self.get_connection_auth(conn_id)
+
         # Extract path components
         path_share = local_path.split('/')[1]
         path_sync = local_path[local_path.index('/', 1):]
+
         # Build request parameters
         create_session_request_params = {
             'path': local_path,
@@ -1068,10 +1089,10 @@ class CloudSync(base_api.BaseApi):
             'sync_direction': sync_direction,
             'server_folder': cloud_path,
             'server_folder_path': cloud_path,
-            'server_folder_id': '',
+            'server_folder_id': server_folder_id,
             'part_size': '',
             'storage_class': storage_class,
-            'server_folder_meta_list': make_folder_meta_list_from_path(cloud_path),
+            'server_folder_meta_list': self.make_folder_meta_list_from_path(cloud_path),
             'filter_folder': [],
             'filter_changed': False,
             'no_delete': False,
@@ -1080,8 +1101,9 @@ class CloudSync(base_api.BaseApi):
             'sync_attr_check_option': True,
             'mode_add_session': True,
         }
+
         # Merge authentication details with request parameters
-        return merge_dicts(auth['data'], create_session_request_params)
+        return self.merge_dicts(auth['data'], create_session_request_params)
 
     def test_task_setting(
             self,
@@ -1093,8 +1115,25 @@ class CloudSync(base_api.BaseApi):
             file_filter: list[str] = [],
             filter_max_upload_size: int = 0,
             filter_names: list[str] = [],
-        ):
-        config_params = self.build_sync_task_list_s3_params(
+        ) -> tuple[bool, dict[str, object] | str]:
+        """
+        Test the task settings make sure they are valid.
+
+        Args:
+            conn_id (int): The ID of the connection.
+            local_path (str): The local path to sync.
+            cloud_path (str): The cloud path to sync.
+            sync_direction (str, optional): The synchronization direction. Defaults to 'BIDIRECTION'.
+            storage_class (str, optional): The storage class. Defaults to 'STANDARD'.
+            file_filter (list of str, optional): List of file extensions to filter. Defaults to [].
+            filter_max_upload_size (int, optional): Maximum upload size for files. Defaults to 0.
+            filter_names (list of str, optional): List of file names to filter. Defaults to [].
+
+        Returns:
+            tuple: A tuple containing a boolean indicating success, and a dictionary or string with the result.
+        """
+        # Generate sync task parameters
+        config_params = self.generate_sync_task_s3_params(
             conn_id,
             local_path,
             cloud_path,
@@ -1104,17 +1143,21 @@ class CloudSync(base_api.BaseApi):
             filter_max_upload_size,
             filter_names
         )
+
+        # Prepare API request data
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
-        api_path = info['path']
         request_params = {
             'api': api_name,
             'method': 'test_task_setting',
             'version': info['minVersion'],
             'conn_info': config_params
         }
-        compound_data = [ request_params ]
-        result = self.request_multi_data(compound_data, method='post')
+
+        # Send request and get result
+        compound_data = [request_params]
+        result = self.batch_request(compound_data, method='post')
+
         # Check if the request was successful
         if result is not None and result['data']['has_fail'] == False:
             print('Task setting is valid')
@@ -1151,7 +1194,7 @@ class CloudSync(base_api.BaseApi):
             dict|str: A dictionary containing the result of the task creation, or a string in case of an error.
         """
         # Merge authentication details with request parameters
-        conn_info = self.build_sync_task_list_s3_params(
+        conn_info = self.generate_sync_task_s3_params(
             conn_id,
             local_path,
             cloud_path,
@@ -1193,4 +1236,4 @@ class CloudSync(base_api.BaseApi):
         # Compound data
         compound_data = [ create_session_request, list_session_request ]
         # Send request and return response
-        return (True, self.request_multi_data(compound_data, method='post'))
+        return (True, self.batch_request(compound_data, method='post'))

@@ -186,14 +186,14 @@ class Authentication:
         if print_check == 0:
             print('Not Found')
         return
-    
+
     def request_multi_datas(self,
                      compound: dict[object] = None,
                      method: Optional[str] = None,
                      mode: Optional[str] = "sequential", # "sequential" or "parallel"
                      response_json: bool = True
                      ) -> dict[str, object] | str | list | requests.Response:  # 'post' or 'get'
-        
+
         '''
         Compound is a json structure that contains multiples requests, you can execute them sequential or parallel
 
@@ -231,10 +231,6 @@ class Authentication:
             response = requests.get(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
         elif method == 'post':
             response = requests.post(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
-
-        
-
-
 
         if response_json is True:
             return response.json()

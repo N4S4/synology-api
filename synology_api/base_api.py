@@ -24,7 +24,7 @@ class BaseApi(object):
         self.session.get_api_list()
 
         self.request_data: Any = self.session.request_data
-        self.request_multi_data = self.session.request_multi_datas
+        self.batch_request = self.session.request_multi_datas
         self.core_list: Any = self.session.app_api_list
         self.gen_list: Any = self.session.full_api_list
         self._sid: str = self.session.sid
