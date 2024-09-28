@@ -1166,17 +1166,17 @@ class CloudSync(base_api.BaseApi):
             print('Task setting is invalid')
             return (False, 'Invalid task setting')
 
-    def add_sync_task_list_s3(
+    def create_sync_task_s3(
             self,
             conn_id: int,
             local_path: str,
             cloud_path: str,
             sync_direction='BIDIRECTION',
             storage_class='STANDARD',
-            file_filter: list[str] = [],
             filter_max_upload_size: int = 0,
+            file_filter: list[str] = [],
             filter_names: list[str] = [],
-        ):
+        ) -> tuple[bool, Any]:
         """
         Add a new synchronization task.
 

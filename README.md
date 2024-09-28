@@ -735,6 +735,8 @@ DS info with below functions:
 | `connection_pause()`           | Pause a specific or all connections.                           |
 | `connection_resume()`          | Resume a paused or all connections.                            |
 | `connection_remove()`          | Remove a specific connection.                                  |
+| `create_sync_task_s3()`        | Add new task to connection(Only S3 tested).                    |
+| `test_task_setting()`          | Test a task configuration before adding it.                    |
 | `task_remove()`                | Remove a specific task.                                        |
 
 ### task_scheduler

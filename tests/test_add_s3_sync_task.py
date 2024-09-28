@@ -53,7 +53,7 @@ class TestSynologyCloudSync(TestCase):
             conn_id = conn['id']
 
             # Add a new S3 sync task
-            task = cs.add_sync_task_list_s3(
+            task = cs.create_sync_task_s3(
                 conn_id=conn_id,
                 local_path='/userData/1',
                 cloud_path='/1',
