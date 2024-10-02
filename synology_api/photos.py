@@ -264,9 +264,9 @@ class Photos(base_api.BaseApi):
         if type:
             req_param['type'] = type
         if passphrase:
-            req_param['passphrase']: passphrase
+            req_param['passphrase'] = passphrase
         if additional:
-            req_param['additional']: additional
+            req_param['additional'] = additional
 
         return self.request_data(api_name, api_path, req_param)
 
