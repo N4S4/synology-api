@@ -671,6 +671,13 @@ class FileStation(base_api.BaseApi):
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'create'}
 
+        if date_expired:
+            if str(date_expired)[0] != '"':
+                date_expired = '"' + str(date_expired) + '"'
+        if date_available:
+            if str(date_available)[0] != '"':
+                date_available = '"' + str(date_available) + '"'
+
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
                 if val is not None:
@@ -713,6 +720,13 @@ class FileStation(base_api.BaseApi):
         info = self.file_station_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'edit'}
+
+        if date_expired:
+            if str(date_expired)[0] != '"':
+                date_expired = '"' + str(date_expired) + '"'
+        if date_available:
+            if str(date_available)[0] != '"':
+                date_available = '"' + str(date_available) + '"'
 
         if link_id is None:
             return 'Enter a valid id'
