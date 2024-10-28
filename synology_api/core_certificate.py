@@ -88,7 +88,7 @@ class Certificate(base_api.BaseApi):
 
         if cert_id:
             print("update exist cert: " + cert_id)
-        data_payload = {'id': cert_id or '', 'desc': desc or '', 'as_default': 'true' if set_as_default else 'false'}
+        data_payload = {'id': cert_id or '', 'desc': desc or '', 'as_default': 'true' if set_as_default else ''}
 
         with open(serv_key, 'rb') as payload_serv_key, open(ser_cert, 'rb') as payload_ser_cert:
             files = {'key': (serv_key, payload_serv_key, 'application/x-x509-ca-cert'),
