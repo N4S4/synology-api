@@ -106,6 +106,84 @@ class Certificate(base_api.BaseApi):
 
         return r.status_code, r.json()
 
+    def set_certificate_for_service(self,
+                                    cert_id: str,
+                                    service_name: str = "DSM Desktop Service",
+                                    ) -> tuple[int, dict[str, object]]:
+        api_name = 'SYNO.Core.Certificate.Service'
+        info = self.session.app_api_list[api_name]
+        api_path = info['path']
+
+        # retrieve existing certificates
+        certs = self.list_cert()['data']['certificates']
+        old_certid = ""
+        for cert in certs:
+            for service in cert['services']:
+                # look for the previous cert
+                if service['display_name'] == service_name:
+                    old_certid = cert['id']
+                    break
+
+        # we need to abort, if the certificate is already set, otherwise DSM6 just removes the whole default service...
+        if old_certid == cert_id:
+            if self._debug is True:
+                print('Certificate already set, aborting')
+            return 200, "Certificate already set, aborting"
+
+        servicedatadict = {
+            "DSM Desktop Service": {
+                "display_name": "DSM Desktop Service",
+                "display_name_i18n": "common:web_desktop",
+                "isPkg": False,
+                "owner": "root",
+                "service": "default",
+                "subscriber": "system",
+            }
+        }
+
+        # needed for DSM7
+        servicedatadictdsm7 = {
+            "DSM Desktop Service": {
+                "multiple_cert": True,
+                "user_setable": True
+            }
+        }
+
+        # construct the payload
+        payloaddict = {
+            "settings": json.dumps([{
+                "service": {**servicedatadict[service_name],
+                            **(servicedatadictdsm7[service_name] if (self.session._version == 7) else {})},
+                "old_id": f"{old_certid}",
+                "id": f"{cert_id}"
+            }], separators=(',', ':')),
+            "api": f"{api_name}",
+            "version": f"{info['minVersion']}",
+            "method": "set"
+        }
+
+        paramdict = {
+            "_sid": self._sid,
+        }
+
+        session = requests.session()
+
+        url = ('%s%s' % (self.base_url, api_path))
+
+        headers = {
+            "X-SYNO-TOKEN": self.session._syno_token,
+        }
+
+        r = session.post(url, params=paramdict, data=payloaddict, verify=self.session.verify_cert_enabled(),
+                         headers=headers)
+
+        if 200 == r.status_code and r.json()['success']:
+            if self._debug is True:
+                print('Certificate set successfully.')
+
+        return r.status_code, r.json()
+
+
     def export_cert(self, cert_id: str) -> Optional[BytesIO]:
         """Export a certificate from the Synology NAS.
 
