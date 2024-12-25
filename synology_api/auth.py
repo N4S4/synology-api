@@ -25,7 +25,9 @@ class Authentication:
                  cert_verify: bool = False,
                  dsm_version: int = 7,
                  debug: bool = True,
-                 otp_code: Optional[str] = None
+                 otp_code: Optional[str] = None,
+                 device_id: Optional[str] = None,
+                 device_name: Optional[str] = None
                  ) -> None:
 
         self._ip_address: str = ip_address
@@ -40,6 +42,8 @@ class Authentication:
         self._version: int = dsm_version
         self._debug: bool = debug
         self._otp_code: Optional[str] = otp_code
+        self._device_id: Optional[str] = device_id
+        self._device_name: Optional[str] = device_name
 
         if self._verify is False:
             disable_warnings(InsecureRequestWarning)
@@ -60,6 +64,11 @@ class Authentication:
                   'passwd': self._password, 'session': application, 'format': 'cookie', 'enable_syno_token':'yes'}
         if self._otp_code:
             params['otp_code'] = self._otp_code
+        if self._device_id is not None and self._device_name is not None:
+            params['device_id'] = self._device_id
+            params['device_name'] = self._device_name
+        if self._device_id is not None and self._device_name is None or self._device_id is None and self._device_name is not None:
+            print("device_id and device_name must be set together")
 
         if not self._session_expire and self._sid is not None:
             self._session_expire = False

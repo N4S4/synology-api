@@ -13,12 +13,14 @@ class BaseApi(object):
                  dsm_version: int = 7,
                  debug: bool = True,
                  otp_code: Optional[str] = None,
+                 device_id: Optional[str] = None,
+                 device_name: Optional[str] = None,
                  application: str = 'Core',
                  ) -> None:
 
         self.application = application
         self.session: syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify,
-                                                              dsm_version, debug, otp_code)
+                                                              dsm_version, debug, otp_code, device_id, device_name)
         self.session.login(self.application)
         self.session.get_api_list(self.application)
         self.session.get_api_list()
