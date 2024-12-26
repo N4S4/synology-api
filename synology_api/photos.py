@@ -162,7 +162,7 @@ class Photos(base_api.BaseApi):
         api_name = 'SYNO.Foto.Browse.ConditionAlbum'
         info = self.photos_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'create', 'name': name,
+        req_param = {'version': info['maxVersion'], 'method': 'create', 'name': '"'+name+'"',
                      'condition': json.dumps(condition)}
 
         return self.request_data(api_name, api_path, req_param)
