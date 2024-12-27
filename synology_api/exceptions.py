@@ -318,6 +318,16 @@ class USBCopyError(SynoBaseException):
         else:
             super().__init__(error_message="USBCopy Error: %i" % error_code, *args)
 
+class CoreGroupError(SynoBaseException):
+    """Class for an error during a Core.Group request. NOTE: No docs on errors."""
+
+    def __init__(self, error_code: int, *args: object) -> None:
+        self.error_code = error_code
+        if error_code in error_codes.keys():
+            super().__init__(error_message=error_codes[error_code], *args)
+        else:
+            super().__init__(error_message="Core.Group Error: %i" % error_code, *args)
+
 
 class VPNError(SynoBaseException):
     """Class for an error during a VPN request. NOTE: No docs on errors."""
