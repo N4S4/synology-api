@@ -137,7 +137,6 @@ This wrapper cover the following APIs for now:
 | SYNO.DownloadStation.RSS.Feed  |
 | SYNO.DownloadStation.BTSearch  |
 
-
 | FileStation                      |
 |----------------------------------|
 | SYNO.FileStation.Info            |
@@ -171,68 +170,72 @@ This wrapper cover the following APIs for now:
 | SYNO.Foto.Search.Filter          |
 | SYNO.Foto.Setting.Guest          |
 
-| core_sys_info                         |
-|---------------------------------------|
-| SYNO.Core.System                      |
-| SYNO.Core.FileServ.SMB                |
-| SYNO.Core.FileServ.AFP                |
-| SYNO.Core.FileServ.NFS'               |
-| SYNO.Core.FileServ.FTP                |
-| SYNO.Core.FileServ.FTP.SFTP           |
-| SYNO.Backup.Service.NetworkBackup     |
-| SYNO.Core.BandwidthControl.Protocol   |
+| core_sys_info                         |  
+|---------------------------------------|  
+| SYNO.Backup.Service.NetworkBackup     |  
+| SYNO.Core.BandwidthControl            |  
+| SYNO.Core.BandwidthControl.Protocol   |  
+| SYNO.Core.BandwidthControl.Status     |  
+| SYNO.Core.CurrentConnection           |  
+| SYNO.Core.Directory.Domain.Schedule   |  
+| SYNO.Core.Directory.LDAP              |  
+| SYNO.Core.Directory.SSO               |  
+| SYNO.Core.ExternalDevice.UPS          |  
+| SYNO.Core.FileServ.AFP                |  
+| SYNO.Core.FileServ.FTP                |  
+| SYNO.Core.FileServ.FTP.SFTP           |  
+| SYNO.Core.FileServ.NFS                |  
+| SYNO.Core.FileServ.ServiceDiscovery   |  
+| SYNO.Core.FileServ.SMB                |  
+| SYNO.Core.Group                       | 
+| SYNO.Core.Group.Member                | 
+| SYNO.Core.Hardware.BeepControl        |  
+| SYNO.Core.Hardware.FanSpeed           |  
+| SYNO.Core.Hardware.Hibernation        |  
+| SYNO.Core.Hardware.PowerSchedule      |  
+| SYNO.Core.Network                     |  
+| SYNO.Core.Network.Bond                |  
+| SYNO.Core.Network.Bridge              |  
+| SYNO.Core.Network.Ethernet            |  
+| SYNO.Core.Network.IPv6Tunnel          |  
+| SYNO.Core.Network.LocalBridge         |  
+| SYNO.Core.Network.PPPoE               |  
+| SYNO.Core.Network.Router.Topology     |  
+| SYNO.Core.Network.USBModem            |  
+| SYNO.Core.Network.VPN.L2TP            |  
+| SYNO.Core.Network.VPN.OpenVPN         |  
+| SYNO.Core.Network.VPN.OpenVPNWithConf |  
+| SYNO.Core.Network.VPN.PPTP            |  
+| SYNO.Core.Network.Wifi.Client         |  
+| SYNO.Core.Notification.Mail.Conf      |  
+| SYNO.Core.Notification.Push.Conf      |  
+| SYNO.Core.Notification.Push.Mail      |  
+| SYNO.Core.Notification.SMS.Conf       |  
+| SYNO.Core.QuickConnect                |  
+| SYNO.Core.QuickConnect.Permission     |  
+| SYNO.Core.Quota                       |
+| SYNO.Core.SecurityScan.Conf           |  
+| SYNO.Core.SecurityScan.Status         |  
 | SYNO.Core.Share                       |
-| SYNO.Core.FileServ.ServiceDiscovery   |
-| SYNO.Core.SyslogClient.FileTransfer   |
-| SYNO.Core.Network                     |
-| SYNO.Core.Web.DSM                     |
-| SYNO.Core.CurrentConnection           |
-| SYNO.Core.BandwidthControl.Status     |
-| SYNO.Core.System.Status               |
-| SYNO.Core.SyslogClient.Status         |
-| SYNO.Core.SyslogClient.Setting.Notify |
-| SYNO.Core.SecurityScan.Conf           |
-| SYNO.Core.SecurityScan.Status         |
-| SYNO.Core.SecurityScan.Status         |
-| SYNO.Core.User                        |
-| SYNO.Core.User.PasswordExpiry         | 
-| SYNO.Core.User.PasswordPolicy         |
-| SYNO.Core.User.PasswordConfirm        |
-| SYNO.Core.QuickConnect                |
-| SYNO.Core.QuickConnect.Permission     |
-| SYNO.Core.Network.Router.Topology     |
-| SYNO.Core.Network.Wifi.Client         |
-| SYNO.Core.Network.Bond                |
-| SYNO.Core.Network.Bridge              |
-| SYNO.Core.Network.Ethernet            |
-| SYNO.Core.Network.LocalBridge         |
-| SYNO.Core.Network.USBModem            |
-| SYNO.Core.Network.PPPoE               |
-| SYNO.Core.Network.IPv6Tunnel          |
-| SYNO.Core.Network.VPN.PPTP            |
-| SYNO.Core.Network.VPN.OpenVPNWithConf |
-| SYNO.Core.Network.VPN.OpenVPN         |
-| SYNO.Core.Network.VPN.L2TP            |
-| SYNO.Core.Directory.Domain.Schedule   |
-| SYNO.Core.Directory.LDAP              |
-| SYNO.Core.Directory.SSO               |
-| SYNO.Core.Upgrade.Server              |
-| SYNO.Core.Upgrade.Server.Download     |
-| SYNO.Core.Upgrade.Setting             |
-| SYNO.Core.Notification.SMS.Conf       |
-| SYNO.Core.Notification.Mail.Conf      |
-| SYNO.Core.Notification.Push.Mail      |
-| SYNO.Core.Notification.Push.Conf      |
-| SYNO.Core.Hardware.BeepControl        |
-| SYNO.Core.Hardware.FanSpeed           |
-| SYNO.Core.Hardware.Hibernation        |
-| SYNO.Core.ExternalDevice.UPS          |
-| SYNO.Core.Hardware.PowerSchedule      |
-| SYNO.Core.Terminal                    |
-| SYNO.Core.SNMP                        |
-| SYNO.Core.System.Process              |
-| SYNO.Core.System.Utilization          |
-| SYNO.Storage.CGI.Storage              |
+| SYNO.Core.Share.Permission            |
+| SYNO.Core.SNMP                        |  
+| SYNO.Core.SyslogClient.FileTransfer   |  
+| SYNO.Core.SyslogClient.Setting.Notify |  
+| SYNO.Core.SyslogClient.Status         |  
+| SYNO.Core.System                      |  
+| SYNO.Core.System.Process              |  
+| SYNO.Core.System.Status               |  
+| SYNO.Core.System.Utilization          |  
+| SYNO.Core.Terminal                    |  
+| SYNO.Core.Upgrade.Server              |  
+| SYNO.Core.Upgrade.Server.Download     |  
+| SYNO.Core.Upgrade.Setting             |  
+| SYNO.Core.User                        |  
+| SYNO.Core.User.PasswordConfirm        |  
+| SYNO.Core.User.PasswordExpiry         |  
+| SYNO.Core.User.PasswordPolicy         |  
+| SYNO.Core.Web.DSM                     |  
+| SYNO.Storage.CGI.Storage              |  
 
 | Virtualization                       |
 |--------------------------------------|
@@ -278,9 +281,7 @@ This wrapper cover the following APIs for now:
 | SYNO.Core.EventScheduler         |
 | SYNO.Core.EventScheduler.Root    |
 
-#
 ### Not all Surveillance Station functions works.
-
 | Surveillance Station                                      |
 |-----------------------------------------------------------|
 | SYNO.SurveillanceStation.Info                             |
@@ -406,7 +407,6 @@ To run the following functions you'll have to start the task with the start func
 For some of DownloadStation API there is the possibility to set version 2, ex. SYNO.DownloadStation.BTSearch,
 if you encounter problems you might set ```download_st_version = 2``` during initialization. 
 
-
 | Function                | Description                               |
 |-------------------------|-------------------------------------------|
 | `get_info()`            | Download Station info.                    |
@@ -424,7 +424,6 @@ if you encounter problems you might set ```download_st_version = 2``` during ini
 | `edit_task()`           | Edit a Task.                              |
 
 #### Photo functions:
-
 | Function                            |
 |-------------------------------------|
 | `get_userinfo()`                    |
@@ -539,7 +538,6 @@ DS info with below functions:
 | `personal_photo_enable()`         |
 | `ftp_chroot_user()`               |
 | `server_pair()`                   |
-| `groups_info()`                   |
 | `ldap_info()`                     |
 | `sso_iwa_info()`                  |
 | `sso_info()`                      |
@@ -566,8 +564,24 @@ DS info with below functions:
 | `get_memory_utilization()`        |
 | `dsm_info()`                      |
 
-### Virtualization
+### core_group (DSM User Groups)
+| Functions                  | Description                                                     |
+|----------------------------|-----------------------------------------------------------------|
+| `get_groups()`             | Get all groups                                                  |
+| `get_users()`              | Get group members                                               |
+| `get_permissions()`        | Get group shares permissions                                    |
+| `get_quota()`              | Get group shares quota                                          |
+| `get_speed_limits()`       | Get group services speed limits                                 |
+| `set_group_info()`         | Set group name/description                                      |
+| `set_share_permissions()`  | Set group share permissions                                     |
+| `set_share_quota()`        | Set group share quotas.                                         |
+| `set_speed_limit()`        | Set group service speed limit                                   |
+| `add_users()`              | Add users to a group                                            |
+| `remove_users()`           | Remove users from a group                                       |
+| `create()`                 | Create new group                                                |
+| `delete()`                 | Delete specified groups                                         |
 
+### Virtualization
 | Functions                  |
 |----------------------------|
 | `get_task_list()`          |
@@ -588,7 +602,6 @@ DS info with below functions:
 | `create_image()`           |
 
 ### core_backup Hyper Backup
-
 | Functions                  | Description                                                     |
 |----------------------------|-----------------------------------------------------------------|
 | `backup_repository_get()`  | Get repository information for given task.                      |
@@ -618,7 +631,6 @@ DS info with below functions:
 | `vault_target_logs_get()`       | Get logs of specific target.                               |
 
 ### core_active_backup Active Backup for Business
-
 | Functions                     | Description                                               |
 |-------------------------------|-----------------------------------------------------------|
 | `list_vm_hypervisor()`          | List of all configured hypervisors.                     |
@@ -633,7 +645,6 @@ DS info with below functions:
 | `backup_task_delete_versions()` | Delete given version(s).                                | 
 
 ### core_certificate tnx to @ajarzyn
-
 | Functions            | Description              |
 |----------------------|--------------------------|
 | `list_cert()`        | List certificates.       |

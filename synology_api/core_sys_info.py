@@ -851,22 +851,6 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def groups_info(self, offset: int = 0, limit: int = -1, name_only: bool = False) -> dict[str, object] | str:
-        api_name = 'SYNO.Core.Group'
-        info = self.core_list[api_name]
-        api_path = info['path']
-
-        if name_only:
-            name_only = 'true'
-        elif not name_only:
-            name_only = 'false'
-        else:
-            return 'name_only must be True or False'
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'offset': offset, 'limit': limit,
-                     'name_only': name_only, 'type': 'local'}
-
-        return self.request_data(api_name, api_path, req_param)
-
     def ldap_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.Core.Directory.LDAP'
         info = self.core_list[api_name]

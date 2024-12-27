@@ -6,7 +6,7 @@ from .error_codes import error_codes, CODE_SUCCESS, download_station_error_codes
 from .error_codes import auth_error_codes, virtualization_error_codes
 from urllib3 import disable_warnings
 from urllib3.exceptions import InsecureRequestWarning
-from .exceptions import SynoConnectionError, HTTPError, JSONDecodeError, LoginError, LogoutError, DownloadStationError
+from .exceptions import CoreGroupError, SynoConnectionError, HTTPError, JSONDecodeError, LoginError, LogoutError, DownloadStationError
 from .exceptions import FileStationError, AudioStationError, ActiveBackupError, VirtualizationError, BackupError
 from .exceptions import CertificateError, CloudSyncError, DHCPServerError, DirectoryServerError, DockerError, DriveAdminError
 from .exceptions import LogCenterError, NoteStationError, OAUTHError, PhotosError, SecurityAdvisorError, TaskSchedulerError, EventSchedulerError
@@ -362,6 +362,9 @@ class Authentication:
                 # VPN Server error:
                 elif api_name.find('VPNServer') > -1:
                     raise VPNError(error_code=error_code)
+                # Core Sys Info:
+                elif api_name.find('SYNO.Core.Group') > -1:
+                    raise CoreGroupError(error_code=error_code)
                 # Core Sys Info:
                 elif api_name.find('SYNO.Core') > -1:
                     raise CoreSysInfoError(error_code=error_code)
