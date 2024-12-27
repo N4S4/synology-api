@@ -579,7 +579,7 @@ DS info with below functions:
 | `add_users()`              | Add users to a group                                            |
 | `remove_users()`           | Remove users from a group                                       |
 | `create()`                 | Create new group                                                |
-| `delete()`                 | Delete groups                                                   |
+| `delete()`                 | Delete specified groups                                         |
 
 ### Virtualization
 | Functions                  |
