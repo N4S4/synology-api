@@ -15,11 +15,13 @@ class Photos(base_api.BaseApi):
                  cert_verify: bool = False,
                  dsm_version: int = 7,
                  debug: bool = True,
-                 otp_code: Optional[str] = None
+                 otp_code: Optional[str] = None,
+                 device_id: Optional[str] = None,
+                 device_name: Optional[str] = None
                  ) -> None:
 
         super(Photos, self).__init__(ip_address, port, username, password, secure, cert_verify,
-                                     dsm_version, debug, otp_code, 'FotoStation')
+                                     dsm_version, debug, otp_code, device_id, device_name, 'FotoStation')
 
         self.session.get_api_list('Foto')
 
