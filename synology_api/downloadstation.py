@@ -15,12 +15,14 @@ class DownloadStation(base_api.BaseApi):
                  dsm_version: int = 7,
                  debug: bool = True,
                  otp_code: Optional[str] = None,
+                 device_id: Optional[str] = None,
+                 device_name: Optional[str] = None,
                  interactive_output: bool = True,
                  download_st_version: int = None
                  ) -> None:
 
         super(DownloadStation, self).__init__(ip_address, port, username, password, secure, cert_verify,
-                                              dsm_version, debug, otp_code, 'DownloadStation')
+                                              dsm_version, debug, otp_code, device_id, device_name, 'DownloadStation')
 
         self._bt_search_id: str = ''
         self._bt_search_id_list: list[str] = []
