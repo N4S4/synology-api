@@ -144,15 +144,12 @@ class DownloadStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param, response_json=False).content
 
-    def create_task(self, uri, additional_param: Optional[dict[str, object]] = None) -> dict[str, object] | str:
-        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
+    def create_task(self, url, destination) -> dict[str, object] | str:
+        api_name = 'SYNO.DownloadStation2.Task'
         info = self.download_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'create', 'uri': uri}
-
-        if type(additional_param) is dict:
-            for key in additional_param.keys():
-                req_param[key] = additional_param[key]
+        req_param = {'version': info['maxVersion'], 'method': 'create', 'type': 'url',
+                     'create_list': 'true', 'destination':f'"{destination}"', 'url': f'["{url}"]'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -229,7 +226,7 @@ class DownloadStation(base_api.BaseApi):
         param = {'version': info['maxVersion'], 'method': 'refresh', 'id': rss_id}
 
         if rss_id is None:
-            return 'Enter a valid ID check if you have any with get_rss_list()'
+            return 'Enter a valid ID check if you have any with get_rss_info_list()'
         elif type(rss_id) is list:
             rss_id = ','.join(rss_id)
             param['id'] = rss_id
@@ -247,7 +244,7 @@ class DownloadStation(base_api.BaseApi):
         param = {'version': info['maxVersion'], 'method': 'list', 'id': rss_id}
 
         if rss_id is None:
-            return 'Enter a valid ID check if you have any with get_rss_list()'
+            return 'Enter a valid ID check if you have any with get_rss_info_list()'
         elif type(rss_id) is list:
             rss_id = ','.join(rss_id)
             param['id'] = rss_id
