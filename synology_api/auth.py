@@ -1,4 +1,5 @@
 from __future__ import annotations
+from random import randint
 from typing import Optional
 import requests
 import json
@@ -11,6 +12,17 @@ from .exceptions import FileStationError, AudioStationError, ActiveBackupError, 
 from .exceptions import CertificateError, CloudSyncError, DHCPServerError, DirectoryServerError, DockerError, DriveAdminError
 from .exceptions import LogCenterError, NoteStationError, OAUTHError, PhotosError, SecurityAdvisorError, TaskSchedulerError, EventSchedulerError
 from .exceptions import UniversalSearchError, USBCopyError, VPNError, CoreSysInfoError, UndefinedError
+import hashlib
+from os import urandom
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.ciphers import algorithms, Cipher, modes
+from cryptography.hazmat.primitives.asymmetric import padding, rsa
+import base64
+import hashlib
+import urllib
+
+
+
 
 USE_EXCEPTIONS: bool = True
 
@@ -195,6 +207,71 @@ class Authentication:
         if print_check == 0:
             print('Not Found')
         return
+    
+    def _random_AES_passphrase(self, length):
+        available = ('0123456789'
+                     'abcdefghijklmnopqrstuvwxyz'
+                     'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                     '~!@#$%^&*()_+-/')
+        key = b''
+
+        while length > 0:
+            key += available[randint(0, len(available) - 1)].encode('utf-8')
+            length -= 1
+
+        return key
+
+    def _get_enc_info(self):
+        api_name = 'SYNO.API.Encryption'
+        req_params = {
+            "method": "getinfo",
+            "version": 1,
+            "format": "module"
+        }
+        response = self.request_data(api_name, "encryption.cgi", req_params)
+        return response["data"]
+
+    def _encrypt_RSA(self, modulus, passphrase, text):
+        public_numbers = rsa.RSAPublicNumbers(passphrase, modulus)
+        public_key = public_numbers.public_key(default_backend())
+
+        if isinstance(text, str):
+            text = text.encode('utf-8')
+
+        ciphertext = public_key.encrypt(
+            text,
+            padding.PKCS1v15()
+        )
+        return ciphertext
+
+    def _encrypt_AES(self, passphrase, text):
+        cipher = AESCipher(passphrase)
+
+        return cipher.encrypt(text)
+
+    def encrypt_params(self, params):
+        enc_info = self._get_enc_info()
+        public_key = enc_info["public_key"]
+        cipher_key = enc_info["cipherkey"]
+        cipher_token = enc_info["ciphertoken"]
+        server_time = enc_info["server_time"]
+        random_passphrase = self._random_AES_passphrase(501)
+
+        params[cipher_token] = server_time
+
+        encrypted_passphrase = self._encrypt_RSA(int(public_key, 16),
+                                                 int("10001", 16),
+                                                 random_passphrase)
+
+        encrypted_params = self._encrypt_AES(random_passphrase,
+                                             urllib.parse.urlencode(params))
+
+        enc_params = {
+            "rsa": base64.b64encode(encrypted_passphrase).decode("utf-8"),
+            "aes": base64.b64encode(encrypted_params).decode("utf-8")
+        }
+
+        return {cipher_key: enc_params}
 
     def request_multi_datas(self,
                      compound: dict[object] = None,
@@ -424,3 +501,42 @@ class Authentication:
     @property
     def base_url(self) -> str:
         return self._base_url
+
+
+
+class AESCipher(object):
+    """Encrypt with OpenSSL-compatible way"""
+
+    SALT_MAGIC = b'Salted__'
+
+    def __init__(self, password, key_length=32):
+        self._bs = 16
+        self._salt = urandom(self._bs - len(self.SALT_MAGIC))
+
+        self._key, self._iv = self._derive_key_and_iv(password,
+                                                      self._salt,
+                                                      key_length,
+                                                      self._bs)
+
+    def _pad(self, s):
+        bs = self._bs
+        return (s + (bs - len(s) % bs) * chr(bs - len(s) % bs)).encode('utf-8')
+
+    def _derive_key_and_iv(self, password, salt, key_length, iv_length):
+        d = d_i = b''
+        while len(d) < key_length + iv_length:
+            md5_str = d_i + password + salt
+            d_i = hashlib.md5(md5_str).digest()
+            d += d_i
+        return d[:key_length], d[key_length:key_length + iv_length]
+
+    def encrypt(self, text):
+        cipher = Cipher(
+            algorithms.AES(self._key),
+            modes.CBC(self._iv),
+            backend=default_backend()
+        )
+        encryptor = cipher.encryptor()
+        ciphertext = encryptor.update(self._pad(text)) + encryptor.finalize()
+
+        return self.SALT_MAGIC + self._salt + ciphertext

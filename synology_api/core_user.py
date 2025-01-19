@@ -146,23 +146,30 @@ class User(base_api.BaseApi):
             }
             ```
         """
-    
+        
         api_name = "SYNO.Core.User"
         info = self.core_list[api_name]
         api_path = info["path"]
+
         req_param = {
             "method": "create",
             "version": info['minVersion'],
             "name": name,
-            "password": password,
             "description": description,
             "email": email,
             "expired": expire,
             "cannot_chg_passwd": cannot_chg_passwd,
             "passwd_never_expire": passwd_never_expire,
             "notify_by_email": notify_by_email,
-            "send_password": send_password
+            "send_password": send_password,
         }
+        # Using https
+        if self.session._secure:
+            req_param.update({"password": password})
+        # Using http and self encrypted
+        else:
+            req_param.update(self.session.encrypt_params({"password": password}))
+    
         
         return self.request_data(api_name, api_path, req_param)
     
@@ -218,7 +225,6 @@ class User(base_api.BaseApi):
             "version": info['minVersion'],
             "name": name,
             "new_name": new_name,
-            "password": password,
             "description": description,
             "email": email,
             "expired": expire,
@@ -227,6 +233,13 @@ class User(base_api.BaseApi):
             "notify_by_email": notify_by_email,
             "send_password": send_password
         }
+        # Using https
+        if self.session._secure:
+            req_param.update({"password": password})
+        # Using http and self encrypted
+        else:
+            req_param.update(self.session.encrypt_params({"password": password}))
+            
         return self.request_data(api_name, api_path, req_param)
     
     def delete_user(self, name: str) -> dict[str, object] | str:
