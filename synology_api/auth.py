@@ -71,9 +71,16 @@ class Authentication:
         return self._verify
 
     def login(self, application: str) -> None:
-        login_api = 'auth.cgi?api=SYNO.API.Auth'
-        params = {'version': self._version, 'method': 'login', 'account': self._username,
-                  'passwd': self._password, 'session': application, 'format': 'cookie', 'enable_syno_token':'yes'}
+        login_api = 'auth.cgi'
+        params = {'api': "SYNO.API.Auth", 'version': self._version, 'method': 'login', 'enable_syno_token':'yes'}
+        
+        params_enc = {'account': self._username, 'passwd': self._password, 'session': application, 'format': 'cookie'}
+        if self._secure:
+            params.update(params_enc)
+        else:
+            encrypted_params = self.encrypt_params(params_enc)
+            params.update(encrypted_params)
+        
         if self._otp_code:
             params['otp_code'] = self._otp_code
         if self._device_id is not None and self._device_name is not None:
@@ -91,7 +98,7 @@ class Authentication:
             session_request_json: dict[str, object] = {}
             if USE_EXCEPTIONS:
                 try:
-                    session_request = requests.get(self._base_url + login_api, params, verify=self._verify)
+                    session_request = requests.post(self._base_url + login_api, data=params, verify=self._verify)
                     session_request.raise_for_status()
                     session_request_json = session_request.json()
                 except requests.exceptions.ConnectionError as e:
@@ -102,7 +109,7 @@ class Authentication:
                     raise JSONDecodeError(error_message=str(e.args))
             else:
                 # Will raise its own errors:
-                session_request = requests.get(self._base_url + login_api, params, verify=self._verify)
+                session_request = requests.post(self._base_url + login_api, data=params, verify=self._verify)
                 session_request_json = session_request.json()
 
             # Check dsm response for error:
@@ -271,7 +278,7 @@ class Authentication:
             "aes": base64.b64encode(encrypted_params).decode("utf-8")
         }
 
-        return {cipher_key: enc_params}
+        return {cipher_key: json.dumps(enc_params)}
 
     def request_multi_datas(self,
                      compound: dict[object] = None,

@@ -163,15 +163,19 @@ class User(base_api.BaseApi):
             "notify_by_email": notify_by_email,
             "send_password": send_password,
         }
+        param_enc = {
+            "password": password
+        }
         # Using https
         if self.session._secure:
-            req_param.update({"password": password})
+            req_param.update(param_enc)
         # Using http and self encrypted
         else:
-            req_param.update(self.session.encrypt_params({"password": password}))
+            encrypted_param = self.session.encrypt_params(param_enc)
+            req_param.update(encrypted_param)
     
         
-        return self.request_data(api_name, api_path, req_param)
+        return self.request_data(api_name, api_path, req_param, method="post")
     
     def modify_user(
         self, name: str, new_name: str, password: str = "", description: str = "", email: str = "", expire: str = "never", cannot_chg_passwd: bool = False,
@@ -240,7 +244,7 @@ class User(base_api.BaseApi):
         else:
             req_param.update(self.session.encrypt_params({"password": password}))
             
-        return self.request_data(api_name, api_path, req_param)
+        return self.request_data(api_name, api_path, req_param, method="post")
     
     def delete_user(self, name: str) -> dict[str, object] | str:
         """Delete a user.
