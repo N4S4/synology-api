@@ -559,3 +559,39 @@ class User(base_api.BaseApi):
             "never_expired_list": json.dumps(never_expired_list)
         }
         return self.request_data(api_name, api_path, req_param)
+    
+        
+    def password_confirm(self, password: str) -> dict[str, object] | str:
+        """Issues a passowrd/session comparison to ensure the given password matches the auth of the current session.
+
+        This is needed by some APIs as a confirmation method, for example, when creating/modifying a scheduled task with root permissions. 
+        Please note that the password will be sent in plain text, just like in the base auth method.
+
+        Args:
+            password (str):
+                The password with which the session was initiated.
+
+        Returns:
+            dict|str:
+                A dictionary containing a `SynoConfirmPWToken`, or an error message.
+
+            Example return:
+            {
+                "data": {
+                    "SynoConfirmPWToken": "xxxxx"
+                },
+                "success": true
+            }
+        """
+        api_name = 'SYNO.Core.User.PasswordConfirm'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'auth'}
+        # Using https
+        if self.session._secure:
+            req_param.update({"password": password})
+        # Using http and self encrypted
+        else:
+            req_param.update(self.session.encrypt_params({"password": password}))
+            
+        return self.request_data(api_name, api_path, req_param, method="post")
