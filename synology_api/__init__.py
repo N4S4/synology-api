@@ -10,6 +10,7 @@ from . import \
     core_backup, \
     core_certificate, \
     core_sys_info, \
+    core_group, \
     downloadstation, \
     log_center, \
     vpn, \
