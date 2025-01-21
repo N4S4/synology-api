@@ -272,6 +272,7 @@ This wrapper cover the following APIs for now:
 | SYNO.Core.User.Group          |
 | SYNO.Core.User.PasswordPolicy |
 | SYNO.Core.User.PasswordExpiry |
+| SYNO.Core.User.PasswordConfirm|
 
 | Snapshot Replication     |
 |--------------------------|
@@ -538,10 +539,6 @@ DS info with below functions:
 | `ws_transfer_info()`              |
 | `ref_link_copy_info()`            |
 | `bonjour_service_info()`          |
-| `users_info()`                    |
-| `password_policy()`               |
-| `password_expiry()`               |
-| `password_confirm()`              |
 | `personal_photo_enable()`         |
 | `ftp_chroot_user()`               |
 | `server_pair()`                   |
@@ -594,16 +591,17 @@ DS info with below functions:
 ### core_user (DSM User Settings)
 | Functions                  | Description                                                     |
 |----------------------------|-----------------------------------------------------------------|
-| `get_users()`             | Retrieve groups information                                                  |
-| `create_user()`              | Create a new user                                               |
-| `modify_user()`        | Modify a user                                    |
-| `delete_user()`              | Delete a user                                         |
-| `affect_groups()`       | Affect or disaffect groups to a user                                 |
-| `affect_groups_status()`         | Get the status of a join task                                     |
-| `get_password_policy()`  | Get the password policy                                     |
-| `set_password_policy()`        | Set the password policy                                         |
-| `get_password_expiry()`        | Get the password expiry                                   |
-| `set_password_expiry()`              | Set the password expiry                                            |
+| `get_users()`              | Retrieve groups information                                     |
+| `create_user()`            | Create a new user                                               |
+| `modify_user()`            | Modify a user                                                   |
+| `delete_user()`            | Delete a user                                                   |
+| `affect_groups()`          | Affect or disaffect groups to a user                            |
+| `affect_groups_status()`   | Get the status of a join task                                   |
+| `get_password_policy()`    | Get the password policy                                         |
+| `set_password_policy()`    | Set the password policy                                         |
+| `get_password_expiry()`    | Get the password expiry                                         |
+| `set_password_expiry()`    | Set the password expiry                                         |
+| `password_confirm()`       | Confirm password match with current logged user                 |
 
 ### Virtualization
 | Functions                  |
