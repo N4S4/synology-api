@@ -70,11 +70,20 @@ class Authentication:
     def verify_cert_enabled(self) -> bool:
         return self._verify
 
-    def login(self, application: str) -> None:
+    def login(self) -> None:
         login_api = 'auth.cgi'
-        params = {'api': "SYNO.API.Auth", 'version': self._version, 'method': 'login', 'enable_syno_token':'yes'}
-        
-        params_enc = {'account': self._username, 'passwd': self._password, 'session': application, 'format': 'cookie'}
+        params = {'api': "SYNO.API.Auth", 'version': self._version, 'method': 'login', 'enable_syno_token':'yes', 'client':'browser'}
+
+        params_enc = {
+            'account': self._username,
+            'enable_device_token': 'no',
+            'logintype': 'local',
+            'otp_code':'',
+            'rememberme': 0,
+            'passwd': self._password,
+            'session': 'webui', # Hardcoded for handle non administrator users API usage
+            'format': 'cookie'
+        }
         if self._secure:
             params.update(params_enc)
         else:
@@ -128,9 +137,9 @@ class Authentication:
                     raise LoginError(error_code=error_code)
         return
 
-    def logout(self, application: str) -> None:
+    def logout(self) -> None:
         logout_api = 'auth.cgi?api=SYNO.API.Auth'
-        param = {'version': self._version, 'method': 'logout', 'session': application}
+        param = {'version': self._version, 'method': 'logout', 'session': 'webui'}
 
         if USE_EXCEPTIONS:
             try:
