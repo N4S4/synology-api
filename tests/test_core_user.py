@@ -214,7 +214,7 @@ class TestCoreUser(TestCase):
             )
         except Exception as e:
             self.assertIsNotNone(e)
-            self.assertIsInstance(e, CoreError, "Exception has to be CoreSysInfoError")
+            self.assertIsInstance(e, CoreError, "Exception has to be Core Error")
         
         # Test create user with incorrect username
         try:
@@ -225,7 +225,7 @@ class TestCoreUser(TestCase):
         
         except Exception as e:
             self.assertIsNotNone(e)
-            self.assertIsInstance(e, CoreError, "Exception has to be CoreSysInfoError")
+            self.assertIsInstance(e, CoreError, "Exception has to be Core Error")
         
         
 
