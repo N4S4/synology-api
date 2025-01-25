@@ -4,8 +4,7 @@ from unittest import TestCase
 import unittest
 from synology_api.core_user import User
 from synology_api.exceptions import CoreError
-import os, pathlib, random, string
-
+import os, pathlib, random, string, time
 
 def parse_config(config_path) -> dict[str, str]:
     with open(config_path, 'r') as config_file:
@@ -194,6 +193,36 @@ class TestCoreUser(TestCase):
         
         self.assertIsNotNone(get_user_response['data']['users'][0]['uid'])
         self.assertNotEqual(get_user_response['data']['users'][0]['uid'], 0)
+        
+        # Test affect groups to user
+        assign_groups_response = self.user.affect_groups(name=test_username, join_groups=['admnistrators'])
+        self.api_response_base_assert(assign_groups_response)
+        
+        # Test affect groups to user status
+        assign_groups_status_response = self.user.affect_groups_status(task_id=assign_groups_response['data']['task_id'])
+        self.api_response_base_assert(assign_groups_status_response)
+        
+        while assign_groups_status_response['data']['finish'] == False:
+            assign_groups_status_response = self.user.affect_groups_status(task_id=assign_groups_response['data']['task_id'])
+            self.api_response_base_assert(assign_groups_status_response)
+            time.sleep(1)
+        
+        # Test leave groups to user
+        leave_groups_response = self.user.affect_groups(name=test_username, leave_groups=['admnistrators'])
+        self.api_response_base_assert(leave_groups_response)
+        
+        # Test leave groups to user status
+        leave_groups_status_response = self.user.affect_groups_status(task_id=leave_groups_response['data']['task_id'])
+        self.api_response_base_assert(leave_groups_status_response)
+        
+        while leave_groups_status_response['data']['finish'] == False:
+            leave_groups_status_response = self.user.affect_groups_status(task_id=leave_groups_response['data']['task_id'])
+            self.api_response_base_assert(leave_groups_status_response)
+            time.sleep(1)
+            
+        # Test confirm password of the current user
+        confirm_response = self.user.password_confirm(password=self.config["synology_password"])
+        self.api_response_base_assert(confirm_response)
         
         # Test update user
         new_test_username = generate_username()
