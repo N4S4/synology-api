@@ -3,7 +3,7 @@ import json
 from unittest import TestCase
 import unittest
 from synology_api.core_user import User
-from synology_api.exceptions import CoreSysInfoError
+from synology_api.exceptions import CoreError
 import os, pathlib, random, string
 
 
@@ -121,6 +121,7 @@ def generate_username():
     return letters + numbers
 
 class TestCoreUser(TestCase):
+    
     config: dict[str, str]
 
     def setUp(self):
@@ -213,7 +214,7 @@ class TestCoreUser(TestCase):
             )
         except Exception as e:
             self.assertIsNotNone(e)
-            self.assertIsInstance(e, CoreSysInfoError, "Exception has to be CoreSysInfoError")
+            self.assertIsInstance(e, CoreError, "Exception has to be CoreSysInfoError")
         
         # Test create user with incorrect username
         try:
@@ -224,7 +225,7 @@ class TestCoreUser(TestCase):
         
         except Exception as e:
             self.assertIsNotNone(e)
-            self.assertIsInstance(e, CoreSysInfoError, "Exception has to be CoreSysInfoError")
+            self.assertIsInstance(e, CoreError, "Exception has to be CoreSysInfoError")
         
         
 
