@@ -128,6 +128,16 @@ class ActiveBackupError(SynoBaseException):
         else:
             super().__init__(error_message='ActiveBackup Error: %i' % error_code, *args)
 
+class ActiveBackupMicrosoftError(SynoBaseException):
+    """Class for an error during ActiveBackupMicrosoft request. NOTE: I can't find any documentation on error codes or their
+    respective messages."""
+
+    def __init__(self, error_code: int, *args: object) -> None:
+        self.error_code = error_code
+        if error_code in error_codes.keys():
+            super().__init__(error_message=error_codes[error_code], *args)
+        else:
+            super().__init__(error_message='ActiveBackupMicrosoft Error: %i' % error_code, *args)
 
 class BackupError(SynoBaseException):
     """Class for an error during backup request. NOTE: Again I can't find error code documentation."""
