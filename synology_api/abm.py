@@ -6,7 +6,44 @@ from . import base_api
 class ActiveBackupMicrosoft(base_api.BaseApi):
     """
         Active Backup for Miscrosoft 365 Implementation.
+
+        Supported methods:
+        - Getters: 
+            - Get all tasks info
+            - Get task settings
+            - Get task logs
+            - Get package logs
+            - Get worker settings
+
+        - Setters:
+            - Set worker settings
+            - Set task schedule policy
+            - Set task retention policy
+        
+        - Actions:
+            - Run backup
+            - Cancel backup
+            - Delete task
+            - Relink task
     """
+    def __trim_task_info(self, task_info: dict[str, any]) -> dict[str, any]:
+        # Remove unnecessary / readonly fields
+        task_info.pop('app_permissions')
+        task_info.pop('administrator_account_email')
+        task_info.pop('application_id')
+        task_info.pop('tenant_id')
+
+        # This can be modified, but only if something is added, 
+        # e.g. for adding a user to the task, we would have to send the user_list array only with the new user.
+        task_info['user_list'] = []
+        task_info['group_list'] = []
+        task_info['all_site_list'] = []
+        task_info['general_site_list'] = []
+        task_info['my_site_list'] = []
+        task_info['team_list'] = []
+
+        return task_info
+    
     def get_tasks(self) -> dict[str, object] | str:
         """
             Retrieve all tasks.
@@ -585,21 +622,14 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         }
         ```
         """
-        # Avoid setting the worker count to a value higher than the maximum allowed by the NAS.
-        try: 
-            response = self.get_worker_count()
-            max_backup_job = response['data']['max_backup_job_worker_count']
-            max_event = response['data']['max_event_worker_count']
-        except Exception as e:
-            raise Exception(f"Error getting ABM worker count. {e}") 
-
-        if backup_job_workers > max_backup_job:
-            backup_job_workers = max_backup_job
-        if event_workers > max_event:
-            event_workers = max_event
-
         if backup_job_workers < 5 or event_workers < 5:
             raise Exception("The number of workers must be at least 5.")
+        
+        # Avoid setting the worker count to a value higher than the maximum allowed by the NAS.
+        response = self.get_worker_count()
+        
+        backup_job_workers = min(backup_job_workers, response['data']['max_backup_job_worker_count'])
+        event_workers = min(event_workers, response['data']['max_event_worker_count'])
 
         api_name = 'SYNO.ActiveBackupOffice365'
         info = self.gen_list[api_name]
@@ -622,12 +652,11 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             "start_minute": int,
             "last_run_hour": int,
             "repeat_every_hours": int,
-            "repeat_every_minutes": int,
             "run_days": list[int]
         ] = {"place_holder": None}
     ) -> dict[str, object] | str:
         """Set the schedule for a given task.
-        Note: If repeat_every_hours or repeat_every_minutes is set to 0, the backup will run once a day.
+        Note: If repeat_every_hours is set to 0, the backup will run once a day.
 
         ### Args:
             task_id (int):
@@ -647,7 +676,6 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
                     - `start_minute` (int): The start minute of the schedule.
                     - `last_run_hour` (int): The last run hour of the schedule.
                     - `repeat_every_hours` (int): Run the backup every X hours.
-                    - `repeat_every_minutes` (int): Run the backup every X minutes.
                     - `run_days` (list[int]): Run the backup at the specified days (Sunday = 0, Morning = 1, and so on...).
                 
                 Example, to run the backup every day hourly starting at 08:30 until 23:30.
@@ -657,7 +685,6 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
                     "start_minute": 30,
                     "last_run_hour": 23,
                     "repeat_every_hours": 1,
-                    "repeat_every_minutes": 0,
                     "run_days": [0, 1, 2, 3, 4, 5, 6]
                 }
                 ```
@@ -673,7 +700,6 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         }
         ```
         """
-        # Data validation
         if policy == 2 and "place_holder" in schedule:
             raise Exception("Received schedule policy, but no schedule was provided.")
         
@@ -682,42 +708,30 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             or "start_minute" not in schedule
             or "last_run_hour" not in schedule
             or "repeat_every_hours" not in schedule
-            or "repeat_every_minutes" not in schedule
             or "run_days" not in schedule
         ):
             raise Exception("Invalid schedule provided.")
         
-        try: 
-            response = self.get_task_setting(task_id)
-            task_info = response['data']['task_info']
-            task_info['user_list'] = []
-            task_info['group_list'] = []
-            task_info['all_site_list'] = []
-            task_info['general_site_list'] = []
-            task_info['my_site_list'] = []
-            task_info['team_list'] = []
-        except Exception as e:
-            raise Exception(f"Error getting the current task settings. {e}")
+        response = self.get_task_setting(task_id)
+        task_info = self.__trim_task_info(response['data']['task_info'])
         
         if policy != 2:
             task_info['backup_policy'] = policy
             task_info['enable_schedule'] = False
         else:
-            task_info['backup_policy'] = 1
+            task_info['backup_policy'] = 1 # Manual - needed for scheduled setting
             task_info['enable_schedule'] = True
-            task_info['schedule']['date_type'] = 0
-            task_info['schedule']['monthly_week'] = []
-            task_info['schedule']['repeat_hour_store_config'] = None
-            task_info['schedule']['repeat_minute_store_config'] = None
-            task_info['schedule']['repeat_date'] = 0
+            task_info['schedule']['date_type'] = 0 # Recurring backup
+            task_info['schedule']['monthly_week'] = [] # Not implemented
+            task_info['schedule']['repeat_hour_store_config'] = None # Unnecesary
+            task_info['schedule']['repeat_minute_store_config'] = None # Unnecesary
+            task_info['schedule']['repeat_date'] = 0 # Repeat Daily
+            task_info['schedule']['repeat_min'] = 0 # Not implemented
             task_info['schedule']['hour'] = schedule['start_hour']
             task_info['schedule']['minute'] = schedule['start_minute']
             task_info['schedule']['last_work_hour'] = schedule['last_run_hour']
             task_info['schedule']['repeat_hour'] = schedule['repeat_every_hours']
-            task_info['schedule']['repeat_min'] = schedule['repeat_every_minutes']
-            task_info['schedule']['run_days'] = ",".join(map(str,schedule['run_days']))
-            # doesn't seem to get the days right, check response to double check params, 
-            # maybe run_days is malformed or repeat_date has to be different than 0
+            task_info['schedule']['week_day'] = ",".join(map(str,schedule['run_days']))
 
         api_name = 'SYNO.ActiveBackupOffice365'
         info = self.gen_list[api_name]
@@ -753,18 +767,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         }
         ```
         """
-
-        try: 
-            response = self.get_task_setting(task_id=task_id)
-            task_info = response['data']['task_info']
-            task_info['user_list'] = []
-            task_info['group_list'] = []
-            task_info['all_site_list'] = []
-            task_info['general_site_list'] = []
-            task_info['my_site_list'] = []
-            task_info['team_list'] = []
-        except Exception as e:
-            raise Exception(f"Error getting the current task settings. {e}")
+        response = self.get_task_setting(task_id=task_id)
+        task_info = self.__trim_task_info(response['data']['task_info'])
         
         if days_to_keep == 0:
             task_info['rotation_policy'] = 0
@@ -834,15 +838,16 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         }
         ```
         """
-        try: 
-            response = self.get_tasks()
-            tasks = response['data']['tasks']
-            matching_task = next((task for task in tasks if task.get("task_id") == task_id), None)
-        except Exception as e:
-            raise Exception(f"Error getting ABM tasks. {e}")
+        response = self.get_tasks()
+        tasks = response['data']['tasks']
+        matching_task = next((task for task in tasks if task.get("task_id") == task_id), None)
         
-        if matching_task is None or matching_task['status'] != 4:
-            raise Exception("Wrong task ID or task is not running.")
+        if matching_task is None:
+            raise Exception(f"Task with ID {task_id} not found.")
+        
+        # Return if task is not running
+        if matching_task['status'] != 4:
+            return 
         
         api_name = 'SYNO.ActiveBackupOffice365'
         info = self.gen_list[api_name]
@@ -921,6 +926,9 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         ### Example return:
         ```json 
         {
+            "data": {
+                "task_id": 3
+            },
             "success": true
         }
         ```
@@ -945,5 +953,3 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-        
-        
