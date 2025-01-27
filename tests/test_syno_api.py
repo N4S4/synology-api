@@ -4,6 +4,7 @@ from unittest import TestCase
 import unittest
 from synology_api.filestation import FileStation
 from synology_api.surveillancestation import SurveillanceStation
+import os, pathlib
 
 
 def parse_config(config_path) -> dict[str, str]:
@@ -16,7 +17,15 @@ class TestSynoApi(TestCase):
     config: dict[str, str]
 
     def setUp(self):
-        self.config = parse_config('./resources/config-test.json')
+        self.config = parse_config(
+            os.path.realpath(
+                os.path.join(
+                    pathlib.Path(__file__).parent.resolve(),
+                    './resources/config-test.json'
+                )
+            )
+        )
+
 
     def test_syno_filestation_login(self):
         fs = FileStation(ip_address=self.config["synology_ip"], port=self.config["synology_port"],

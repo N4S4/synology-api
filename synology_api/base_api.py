@@ -21,7 +21,7 @@ class BaseApi(object):
         self.application = application
         self.session: syn.Authentication = syn.Authentication(ip_address, port, username, password, secure, cert_verify,
                                                               dsm_version, debug, otp_code, device_id, device_name)
-        self.session.login(self.application)
+        self.session.login()
         self.session.get_api_list(self.application)
         self.session.get_api_list()
 
@@ -33,5 +33,5 @@ class BaseApi(object):
         self.base_url: str = self.session.base_url
 
     def logout(self) -> None:
-        self.session.logout(self.application)
+        self.session.logout()
         return
