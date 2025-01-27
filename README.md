@@ -627,7 +627,7 @@ DS info with below functions:
 | `delete_image()`           |
 | `create_image()`           |
 
-### core_backup Hyper Backup
+### core_backup (Hyper Backup)
 | Functions                  | Description                                                     |
 |----------------------------|-----------------------------------------------------------------|
 | `backup_repository_get()`  | Get repository information for given task.                      |
@@ -646,7 +646,7 @@ DS info with below functions:
 | `integrity_check_cancel()` | Cancel ongoing integrity check.                                 |
 | `hb_logs_get()`            | Get Hyper Backup UI logs.                                       |
 
-### core_backup Hyper Backup Vault
+### core_backup (Hyper Backup Vault)
 | Functions                       | Description                                                | 
 |---------------------------------|------------------------------------------------------------|
 | `vault_target_list()`           | List of all targets in Vault.                              |
@@ -656,7 +656,7 @@ DS info with below functions:
 | `vault_task_statistics_get()`   | Get statistics from task.                                  |
 | `vault_target_logs_get()`       | Get logs of specific target.                               |
 
-### core_active_backup Active Backup for Business
+### core_active_backup (Active Backup for Business)
 | Functions                     | Description                                               |
 |-------------------------------|-----------------------------------------------------------|
 | `list_vm_hypervisor()`          | List of all configured hypervisors.                     |
@@ -670,7 +670,7 @@ DS info with below functions:
 | `backup_task_remove()`          | Remove given task(s).                                   |
 | `backup_task_delete_versions()` | Delete given version(s).                                |
 
-### abm Active Backup for Microsoft 365
+### abm (Active Backup for Microsoft 365)
 | Functions              | Description                                           |
 |------------------------|-------------------------------------------------------|
 | `get_tasks()`          | Retrieve the list of all tasks.                       |
