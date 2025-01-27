@@ -266,6 +266,10 @@ This wrapper cover the following APIs for now:
 | SYNO.ActiveBackup.Version                       | 
 | SYNO.ActiveBackup.Log                           |
 
+| abm (Active Backup for Microsoft 365) |
+|-------------------------------------------------|
+| SYNO.ActiveBackupOffice365                      |
+
 | Core User                     |
 |-------------------------------|
 | SYNO.Core.User                |
@@ -664,7 +668,24 @@ DS info with below functions:
 | `backup_task_run()`             | Run given task(s).                                      |
 | `backup_task_cancel()`          | Cancel given task(s).                                   |
 | `backup_task_remove()`          | Remove given task(s).                                   |
-| `backup_task_delete_versions()` | Delete given version(s).                                | 
+| `backup_task_delete_versions()` | Delete given version(s).                                |
+
+### abm Active Backup for Microsoft 365
+| Functions              | Description                                           |
+|------------------------|-------------------------------------------------------|
+| `get_tasks()`          | Retrieve the list of all tasks.                       |
+| `get_package_log()`    | Retrieve logs related to the package.                 |
+| `get_task_log()`       | Retrieve logs for a specific task.                    |
+| `get_task_setting()`   | Retrieve settings for a specific task.                |
+| `get_worker_count()`   | Retrieve the current worker count.                    |
+| `set_worker_count()`   | Set the number of workers.                            |
+| `set_task_schedule()`  | Set the schedule for a task.                          |
+| `set_rotation_policy()`| Set the rotation policy for backups.                  |
+| `run_backup()`         | Trigger a backup task.                                |
+| `cancel_backup()`      | Cancel an ongoing backup task.                        |
+| `delete_task()`        | Delete a specified task.                              |
+| `relink_task()`        | Relink a specified task.                              |
+
 
 ### core_certificate tnx to @ajarzyn
 | Functions            | Description              |
