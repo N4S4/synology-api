@@ -7,7 +7,8 @@ from .error_codes import error_codes, CODE_SUCCESS, download_station_error_codes
 from .error_codes import auth_error_codes, virtualization_error_codes
 from urllib3 import disable_warnings
 from urllib3.exceptions import InsecureRequestWarning
-from .exceptions import CoreGroupError, SynoConnectionError, HTTPError, JSONDecodeError, LoginError, LogoutError, DownloadStationError
+from .exceptions import CoreError
+from .exceptions import SynoConnectionError, HTTPError, JSONDecodeError, LoginError, LogoutError, DownloadStationError
 from .exceptions import FileStationError, AudioStationError, ActiveBackupError, VirtualizationError, BackupError
 from .exceptions import CertificateError, CloudSyncError, DHCPServerError, DirectoryServerError, DockerError, DriveAdminError
 from .exceptions import LogCenterError, NoteStationError, OAUTHError, PhotosError, SecurityAdvisorError, TaskSchedulerError, EventSchedulerError
@@ -70,11 +71,20 @@ class Authentication:
     def verify_cert_enabled(self) -> bool:
         return self._verify
 
-    def login(self, application: str) -> None:
+    def login(self) -> None:
         login_api = 'auth.cgi'
-        params = {'api': "SYNO.API.Auth", 'version': self._version, 'method': 'login', 'enable_syno_token':'yes'}
-        
-        params_enc = {'account': self._username, 'passwd': self._password, 'session': application, 'format': 'cookie'}
+        params = {'api': "SYNO.API.Auth", 'version': self._version, 'method': 'login', 'enable_syno_token':'yes', 'client':'browser'}
+
+        params_enc = {
+            'account': self._username,
+            'enable_device_token': 'no',
+            'logintype': 'local',
+            'otp_code':'',
+            'rememberme': 0,
+            'passwd': self._password,
+            'session': 'webui', # Hardcoded for handle non administrator users API usage
+            'format': 'cookie'
+        }
         if self._secure:
             params.update(params_enc)
         else:
@@ -128,9 +138,9 @@ class Authentication:
                     raise LoginError(error_code=error_code)
         return
 
-    def logout(self, application: str) -> None:
+    def logout(self) -> None:
         logout_api = 'auth.cgi?api=SYNO.API.Auth'
-        param = {'version': self._version, 'method': 'logout', 'session': application}
+        param = {'version': self._version, 'method': 'logout', 'session': 'webui'}
 
         if USE_EXCEPTIONS:
             try:
@@ -455,12 +465,10 @@ class Authentication:
                 # VPN Server error:
                 elif api_name.find('VPNServer') > -1:
                     raise VPNError(error_code=error_code)
-                # Core Sys Info:
-                elif api_name.find('SYNO.Core.Group') > -1:
-                    raise CoreGroupError(error_code=error_code)
-                # Core Sys Info:
+                # Core:
                 elif api_name.find('SYNO.Core') > -1:
-                    raise CoreSysInfoError(error_code=error_code)
+                    raise CoreError(error_code=error_code)
+                # Core Sys Info:
                 elif api_name.find('SYNO.Storage') > -1:
                     raise CoreSysInfoError(error_code=error_code)
                 elif api_name.find('SYNO.ResourceMonitor') > -1:

@@ -104,6 +104,58 @@ class User(base_api.BaseApi):
         
         return self.request_data(api_name, api_path, req_param)
     
+    def get_user(self, name: str, additional: list[str] = []) -> dict[str, object] | str:
+        """Retrieve a user information.
+
+        Args:
+            name (str):
+                The name of the user.
+            additional (list[str], optional):
+                Additional fields to retrieve. Defaults to `[]`.
+                All fields known are: `["description","email","expired","cannot_chg_passwd","passwd_never_expire","password_last_change","is_password_pending"]`.
+
+        Returns:
+            dict|str:
+                A dictionary containing the user information, or a string in case of an error.
+
+            Example return:
+            ```
+            {
+                "api": "SYNO.Core.User",
+                "data": {
+                    "users": [
+                        {
+                            "cannot_chg_passwd": false,
+                            "description": "",
+                            "email": "",
+                            "expired": "normal",
+                            "is_password_pending": false,
+                            "name": "test_api",
+                            "passwd_never_expire": true,
+                            "password_last_change": 19789,
+                            "uid": 1027
+                        }
+                    ]
+                },
+                "method": "get",
+                "success": true,
+                "version": 1
+            }
+            ```
+        """
+        api_name = "SYNO.Core.User"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "get",
+            "type": "local",
+            "version": info['minVersion'],
+            "name": name,
+            "additional": json.dumps(additional)
+        }
+        
+        return self.request_data(api_name, api_path, req_param)
+    
     def create_user(
         self, name: str, password: str, description: str = "", email: str = "", expire: str = "never", cannot_chg_passwd: bool = False,
         passwd_never_expire: bool = True, notify_by_email: bool = False, send_password: bool = False
@@ -595,3 +647,31 @@ class User(base_api.BaseApi):
             req_param.update(self.session.encrypt_params({"password": password}))
             
         return self.request_data(api_name, api_path, req_param, method="post")
+    
+    
+    def get_username_policy(self) -> dict[str, object] | str:
+        """Get the username policy (List of username that are not usable).
+
+        Returns:
+            dict|str:
+                A dictionary containing the username policy information, or a string in case of an error.
+
+            Example return:
+            ```
+            {
+                "api": "SYNO.Core.User.UsernamePolicy",
+                "data": ["root", "rootuser", "rootusr", "admin", "administrator", "adm", "adminuser", "adminusr", "user",…],
+                "method": "get",
+                "success": true,
+                "version": 1
+            }
+            ```
+        """
+        api_name = "SYNO.Core.User.UsernamePolicy"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "list",
+            "version": info['minVersion']
+        }
+        return self.request_data(api_name, api_path, req_param)

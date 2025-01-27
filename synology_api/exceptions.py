@@ -1,4 +1,4 @@
-from .error_codes import error_codes, auth_error_codes, download_station_error_codes, file_station_error_codes
+from .error_codes import error_codes, auth_error_codes, download_station_error_codes, file_station_error_codes, core_error_codes
 from .error_codes import virtualization_error_codes
 
 
@@ -318,17 +318,6 @@ class USBCopyError(SynoBaseException):
         else:
             super().__init__(error_message="USBCopy Error: %i" % error_code, *args)
 
-class CoreGroupError(SynoBaseException):
-    """Class for an error during a Core.Group request. NOTE: No docs on errors."""
-
-    def __init__(self, error_code: int, *args: object) -> None:
-        self.error_code = error_code
-        if error_code in error_codes.keys():
-            super().__init__(error_message=error_codes[error_code], *args)
-        else:
-            super().__init__(error_message="Core.Group Error: %i" % error_code, *args)
-
-
 class VPNError(SynoBaseException):
     """Class for an error during a VPN request. NOTE: No docs on errors."""
 
@@ -340,9 +329,20 @@ class VPNError(SynoBaseException):
             super().__init__(error_message="VPN Error: %i" % error_code, *args)
         return
 
+class CoreError(SynoBaseException):
+    """Class for an error during a SYNO.Core.*
+    """
+    
+    def __init__(self, error_code: int, *args: object) -> None:
+        self.error_code = error_code
+        if error_code in core_error_codes.keys():
+            super().__init__(error_message=core_error_codes[error_code], *args)
+        else:
+            super().__init__(error_message="Core Error: %i" % error_code, *args)
+        return
 
 class CoreSysInfoError(SynoBaseException):
-    """Class for an error during a SYNO.Core.*, 'SYNO.Backup.Service.NetworkBackup', SYNO.Storage.*,
+    """Class for an error during a 'SYNO.Backup.Service.NetworkBackup', SYNO.Storage.*,
             'SYNO.Finder.FileIndexing.Status', 'SYNO.S2S.Server.Pair', SYNO.ResourceMonitor.*
     """
 

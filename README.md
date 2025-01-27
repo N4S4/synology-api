@@ -266,13 +266,14 @@ This wrapper cover the following APIs for now:
 | SYNO.ActiveBackup.Version                       | 
 | SYNO.ActiveBackup.Log                           |
 
-| Core User                     |
-|-------------------------------|
-| SYNO.Core.User                |
-| SYNO.Core.User.Group          |
-| SYNO.Core.User.PasswordPolicy |
-| SYNO.Core.User.PasswordExpiry |
-| SYNO.Core.User.PasswordConfirm|
+| Core User                      |
+|--------------------------------|
+| SYNO.Core.User                 |
+| SYNO.Core.User.Group           |
+| SYNO.Core.User.PasswordPolicy  |
+| SYNO.Core.User.PasswordExpiry  |
+| SYNO.Core.User.PasswordConfirm |
+| SYNO.Core.User.UsernamePolicy  |
 
 | Snapshot Replication     |
 |--------------------------|
@@ -591,7 +592,8 @@ DS info with below functions:
 ### core_user (DSM User Settings)
 | Functions                  | Description                                                     |
 |----------------------------|-----------------------------------------------------------------|
-| `get_users()`              | Retrieve groups information                                     |
+| `get_users()`              | Retrieve users information                                      |
+| `get_user()`               | Retrieve user information                                       |
 | `create_user()`            | Create a new user                                               |
 | `modify_user()`            | Modify a user                                                   |
 | `delete_user()`            | Delete a user                                                   |
@@ -602,6 +604,7 @@ DS info with below functions:
 | `get_password_expiry()`    | Get the password expiry                                         |
 | `set_password_expiry()`    | Set the password expiry                                         |
 | `password_confirm()`       | Confirm password match with current logged user                 |
+| `get_username_policy()`    | Get the username policy (List of username that are not usable). |
 
 ### Virtualization
 | Functions                  |
