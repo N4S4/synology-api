@@ -9,7 +9,7 @@ from urllib3 import disable_warnings
 from urllib3.exceptions import InsecureRequestWarning
 from .exceptions import CoreError
 from .exceptions import SynoConnectionError, HTTPError, JSONDecodeError, LoginError, LogoutError, DownloadStationError
-from .exceptions import FileStationError, AudioStationError, ActiveBackupError, VirtualizationError, BackupError
+from .exceptions import FileStationError, AudioStationError, ActiveBackupError, ActiveBackupMicrosoftError, VirtualizationError, BackupError
 from .exceptions import CertificateError, CloudSyncError, DHCPServerError, DirectoryServerError, DockerError, DriveAdminError
 from .exceptions import LogCenterError, NoteStationError, OAUTHError, PhotosError, SecurityAdvisorError, TaskSchedulerError, EventSchedulerError
 from .exceptions import UniversalSearchError, USBCopyError, VPNError, CoreSysInfoError, UndefinedError
@@ -408,6 +408,9 @@ class Authentication:
                 # Audio station error:
                 elif api_name.find('AudioStation') > -1:
                     raise AudioStationError(error_code=error_code)
+                # ABM (ActiveBackupOffice365) error:
+                elif api_name.find('ActiveBackupOffice365') > -1:
+                    raise ActiveBackupMicrosoftError(error_code=error_code)
                 # Active backup error:
                 elif api_name.find('ActiveBackup') > -1:
                     raise ActiveBackupError(error_code=error_code)

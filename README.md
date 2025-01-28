@@ -266,6 +266,10 @@ This wrapper cover the following APIs for now:
 | SYNO.ActiveBackup.Version                       | 
 | SYNO.ActiveBackup.Log                           |
 
+| abm (Active Backup for Microsoft 365) |
+|-------------------------------------------------|
+| SYNO.ActiveBackupOffice365                      |
+
 | Core User                      |
 |--------------------------------|
 | SYNO.Core.User                 |
@@ -626,7 +630,7 @@ DS info with below functions:
 | `delete_image()`           |
 | `create_image()`           |
 
-### core_backup Hyper Backup
+### core_backup (Hyper Backup)
 | Functions                  | Description                                                     |
 |----------------------------|-----------------------------------------------------------------|
 | `backup_repository_get()`  | Get repository information for given task.                      |
@@ -645,7 +649,7 @@ DS info with below functions:
 | `integrity_check_cancel()` | Cancel ongoing integrity check.                                 |
 | `hb_logs_get()`            | Get Hyper Backup UI logs.                                       |
 
-### core_backup Hyper Backup Vault
+### core_backup (Hyper Backup Vault)
 | Functions                       | Description                                                | 
 |---------------------------------|------------------------------------------------------------|
 | `vault_target_list()`           | List of all targets in Vault.                              |
@@ -655,7 +659,7 @@ DS info with below functions:
 | `vault_task_statistics_get()`   | Get statistics from task.                                  |
 | `vault_target_logs_get()`       | Get logs of specific target.                               |
 
-### core_active_backup Active Backup for Business
+### core_active_backup (Active Backup for Business)
 | Functions                     | Description                                               |
 |-------------------------------|-----------------------------------------------------------|
 | `list_vm_hypervisor()`          | List of all configured hypervisors.                     |
@@ -667,7 +671,24 @@ DS info with below functions:
 | `backup_task_run()`             | Run given task(s).                                      |
 | `backup_task_cancel()`          | Cancel given task(s).                                   |
 | `backup_task_remove()`          | Remove given task(s).                                   |
-| `backup_task_delete_versions()` | Delete given version(s).                                | 
+| `backup_task_delete_versions()` | Delete given version(s).                                |
+
+### abm (Active Backup for Microsoft 365)
+| Functions              | Description                                           |
+|------------------------|-------------------------------------------------------|
+| `get_tasks()`          | Retrieve the list of all tasks.                       |
+| `get_package_log()`    | Retrieve logs related to the package.                 |
+| `get_task_log()`       | Retrieve logs for a specific task.                    |
+| `get_task_setting()`   | Retrieve settings for a specific task.                |
+| `get_worker_count()`   | Retrieve the current worker count.                    |
+| `set_worker_count()`   | Set the number of workers.                            |
+| `set_task_schedule()`  | Set the schedule for a task.                          |
+| `set_rotation_policy()`| Set the rotation policy for backups.                  |
+| `run_backup()`         | Trigger a backup task.                                |
+| `cancel_backup()`      | Cancel an ongoing backup task.                        |
+| `delete_task()`        | Delete a specified task.                              |
+| `relink_task()`        | Relink a specified task.                              |
+
 
 ### core_certificate tnx to @ajarzyn
 | Functions            | Description              |
