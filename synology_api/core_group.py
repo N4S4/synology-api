@@ -7,7 +7,7 @@ class Group(base_api.BaseApi):
     """
     Core Group API implementation.
 
-    Supported actions:
+    Supported methods:
         - Getters: 
             - Get all groups
             - Get group members
@@ -30,24 +30,28 @@ class Group(base_api.BaseApi):
 
     def get_groups(
         self, offset: int = 0, limit: int = -1, name_only: bool = False
-    ) -> dict[str, object] | str:
+    ) -> dict[str, object]:
         """Retrieve groups information.
 
-        Args:
-            offset (int, optional):
+            Parameters
+            ----------
+            offset : int, optional
                 The offset of the groups to retrieve. Defaults to `0`.
-            limit (int, optional):
-                The maximum number of groups to retrieve. Defaults to `-1` .
-            name_only (bool, optional):
-                If `True`, returns only group names. If `False`, returns full group information. Defaults to False.
 
+            limit : int, optional
+                The maximum number of groups to retrieve. Defaults to `-1` (all groups).
 
-        Returns:
-            dict|str:
-                A dictionary containing the groups information, or a string in case of an error.
+            name_only : bool, optional
+                If `True`, returns only group names. If `False`, returns full group information. Defaults to `False`.
 
-            Example return:
-            ```
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the groups information.
+
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "groups": [
@@ -101,21 +105,25 @@ class Group(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_users(self, group: str, in_group: bool = True) -> dict[str, object] | str:
-        """
-        Retrieve users members or not of a group.
+    def get_users(self, group: str, in_group: bool = True) -> dict[str, object]:
+        """Retrieve users members or not of a group.
 
-        Args:
-            group (str):
+            Parameters
+            ----------
+            group : str
                 The group to list users from.
-            in_group (bool, optional):
-                If `True`  (default), retrieves users who are members of the specified group. If `False`, retrieves users who are not members of the group.
 
-        Returns:
-            dict|str: A dictionary containing the result of the request, or a string in case of an error.
+            in_group : bool, optional
+                If `True`, retrieves users who are members of the specified group. If `False`, retrieves users who are not members of the group. Defaults to `True`.
 
-            Example return:
-            ```
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the request.
+
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "offset": 0,
@@ -154,18 +162,22 @@ class Group(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_speed_limits(self, group: str) -> dict[str, object] | str:
-        """
-        Retrieve bandwidth control settings for a given group.
+    def get_speed_limits(self, group: str) -> dict[str, object]:
+        """Retrieve bandwidth control settings for a given group.
 
-        Args:
-            group (str): The group to retrieve settings for.
+            Parameters
+            ----------
+            group : str 
+                The group to retrieve settings for.
 
-        Returns:
-            dict|str: A dictionary containing the result of the request, or a string in case of an error.
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the request.
 
-            Example return:
-            ```
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "bandwidths": [
@@ -197,18 +209,22 @@ class Group(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
 
-    def get_quota(self, group: str) -> dict[str, object] | str:
-        """
-        Retrieve quota settings for a given group.
+    def get_quota(self, group: str) -> dict[str, object]:
+        """Retrieve quota settings for a given group.
 
-        Args:
-            group (str): The group to retrieve quota settings for.
+            Parameters
+            ----------
+            group : str 
+                The group to retrieve quota settings for.
 
-        Returns:
-            dict|str: A dictionary containing the result of the request, or a string in case of an error.
+            Returns
+            ----------
+            dict[str, object] 
+                A dictionary containing the result of the request.
 
-            Example return:
-            ```
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "group_quota": [
@@ -243,19 +259,22 @@ class Group(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
 
-    def get_permissions(self, group: str) -> dict[str, object] | str:
-        """
-        Retrieve share permissions for a given group.
+    def get_permissions(self, group: str) -> dict[str, object]:
+        """Retrieve share permissions for a given group.
 
-        Args:
-            group (str):
+            Parameters
+            ----------
+            group : str
                 The group to list permissions for.
 
-        Returns:
-            dict|str: A dictionary containing the result of the request, or a string in case of an error.
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the request.
 
-            Example return:
-            ```
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "shares": [
@@ -295,23 +314,28 @@ class Group(base_api.BaseApi):
 
     def set_group_info(
         self, group: str, new_name: str = "", new_description: str = ""
-    ) -> dict[str, object] | str:
-        """
-        Change group name and/or description.
+    ) -> dict[str, object]:
+        """Change group name and/or description.
 
-        Args:
-            group (str):
+            Parameters
+            ----------
+            group : str
                 The group to set information for.
-            new_name (str, optional):
+
+            new_name : str, optional
                 The new name of the group. Defaults to current value.
-            new_description (str, optional):
+
+            new_description : str, optional
                 The new description of the group. Defaults to current value.
 
-        Returns:
-            dict|str: A dictionary containing the result of the request, or a string in case of an error.
+            Returns
+            ----------
+            dict[str, object] 
+                A dictionary containing the result of the request.
 
-            Example return:
-            ```
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "gid": 65536,
@@ -347,17 +371,19 @@ class Group(base_api.BaseApi):
 
     def set_share_quota(
         self, group: str, share_quotas: list[dict[str, Any]]
-    ) -> dict[str, object] | str:
-        """
-        Set group quota for a given share.
+    ) -> dict[str, object]:
+        """Set group quota for a given share.
 
-        Args:
-            group (str):
+            Parameters
+            ----------
+            group : str
                 The group to set the quota for.
+
             share_quotas (list[dict[str, Any]]):
                 The quotas to set for the group.
+
                 Example:
-                ```
+                ```python
                 [
                     {
                         "share": "web",
@@ -368,12 +394,16 @@ class Group(base_api.BaseApi):
                         "quota": 5120, # in MB
                     }
                 ]
+                ```
 
-        Returns:
-            dict|str: A dictionary containing the result of the request, or a string in case of an error.
+            Returns
+            ----------
+            dict[str, object] 
+                A dictionary containing the result of the request.
 
-            Example return:
-            ```
+            Example return
+            ----------
+            ```json
             {
                 "data": {},
                 "success": true
@@ -393,18 +423,20 @@ class Group(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_share_permissions(
-        self, group: str, permissions: list[dict[str, Any]]
-    ) -> dict[str, object] | str:
-        """
-        Set group permissions for a given share.
+        self, group: str, permissions: list[dict[str, object]]
+    ) -> dict[str, object]:
+        """Set group permissions for a given share.
 
-        Args:
-            group (str):
+            Parameters
+            ----------
+            group : str
                 The group to set the permissions for.
-            permissions (list[dict[str, Any]]):
+
+            permissions : list[dict[str, object]]:
                 The permissions to set for the group.
+                
                 Example:
-                ```
+                ```python
                 [
                     {
                         "name": "web",
@@ -421,11 +453,14 @@ class Group(base_api.BaseApi):
                 ]
                 ```
 
-        Returns:
-            dict|str: A dictionary containing the result of the request, or a string in case of an error.
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the request.
 
-            Example return:
-            ```
+            Example return
+            ----------
+            ```json
             {
                 "success": true
             }
@@ -450,30 +485,37 @@ class Group(base_api.BaseApi):
         upload_limit: int,
         download_limit: int,
         protocol: str,
-    ) -> dict[str, object] | str:
-        """
-        Set speed limit for a given share. Doesn't support scheduled speed limits, only on/off.
+    ) -> dict[str, object]:
+        """Set speed limit for a given share. Doesn't support scheduled speed limits, only on/off.
 
-        Args:
-            group (str):
+            Parameters
+            ----------
+            group : str
                 The group to set the speed limit for.
-            upload_limit (int):
+
+            upload_limit : int
                 The maximum upload speed in KB/s.
-            download_limit (int):
+
+            download_limit : int
                 The maximum download speed in KB/s.
-            protocol (str):
-                The protocol to set the speed limit for. Possible values:
+
+            protocol : str
+                The protocol to set the speed limit for. 
+                
+                Possible values:
                 - FileStation
                 - WebDAV
                 - FTP
                 - NetworkBackup (Rsync)
                 - CloudStation (Synology Drive)
 
-        Returns:
-            dict|str: A dictionary containing the result of the request, or a string in case of an error.
+            Returns
+            ----------
+            dict[str, object] A dictionary containing the result of the request.
 
-            Example return:
-            ```
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "results": [
@@ -505,19 +547,24 @@ class Group(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def add_users(self, group: str, users: list[str]) -> dict[str, object] | str:
-        """
-        Add users to a group.
+    def add_users(self, group: str, users: list[str]) -> dict[str, object]:
+        """Add users to a group.
 
-        Args:
-            group (str): The group to add users to.
-            users (list[str]): The users to add to the group.
+            Parameters
+            ----------
+            group : str 
+                The group to add users to.
 
-        Returns:
-            dict|str: A dictionary containing the result of the request, or a string in case of an error.
+            users : list[str]
+                The users to add to the group.
 
-            Example return:
-            ```
+            Returns
+            ----------
+            dict[str, object] A dictionary containing the result of the request.
+
+            Example return
+            ----------
+            ```json
             {
                 "data": {},
                 "success": true
@@ -537,19 +584,25 @@ class Group(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def remove_users(self, group: str, users: list[str]) -> dict[str, object] | str:
-        """
-        Remove users from a group.
+    def remove_users(self, group: str, users: list[str]) -> dict[str, object]:
+        """Remove users from a group.
 
-        Args:
-            group (str): The group to remove users from.
-            users (list[str]): The users to remove from the group.
+            Parameters
+            ----------
+            group : str 
+                The group to remove users from.
 
-        Returns:
-            dict|str: A dictionary containing the result of the request, or a string in case of an error.
+            users : list[str]
+                The users to remove from the group.
 
-            Example return:
-            ```
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the request.
+
+            Example return
+            ----------
+            ```json
             {
                 "data": {},
                 "success": true
@@ -569,21 +622,25 @@ class Group(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def create(self, name: str, description: str = "") -> dict[str, object] | str:
-        """
-        Create group.
+    def create(self, name: str, description: str = "") -> dict[str, object]:
+        """Create group.
 
-        Args:
-            name (str):
+            Parameters
+            ----------
+            name : str
                 Name to assign to the group.
-            description (str, optional):
+
+            description : str, optional
                 Description to assign to the group. Defaults to empty string.
 
-        Returns:
-            dict|str: A dictionary containing the result of the request, or a string in case of an error.
+            Returns
+            ----------
+            dict[str, object] 
+                A dictionary containing the result of the request.
 
-            Example return:
-            ```
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "gid": 65541,
@@ -606,19 +663,22 @@ class Group(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete(self, groups: list[str]) -> dict[str, object] | str:
-        """
-        Delete specified groups.
+    def delete(self, groups: list[str]) -> dict[str, object]:
+        """Delete specified groups.
 
-        Args:
-            groups (list[str]):
+            Parameters
+            ----------
+            groups : list[str]
                 The groups to delete.
 
-        Returns:
-            dict|str: A dictionary containing the result of the request, or a string in case of an error.
+            Returns
+            ----------
+            dict[str, object] 
+                A dictionary containing the result of the request.
 
-            Example return:
-            ```
+            Example return
+            ----------
+            ```json
             {
                 "data": {},
                 "success": true
