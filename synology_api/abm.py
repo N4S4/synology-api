@@ -4,8 +4,7 @@ import json
 from . import base_api
 
 class ActiveBackupMicrosoft(base_api.BaseApi):
-    """
-        Active Backup for Miscrosoft 365 Implementation.
+    """Active Backup for Microsoft 365 Implementation. 
 
         Supported methods:
         - Getters: 
@@ -54,7 +53,6 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
             Example return
             ----------
-    
             ```json
             {
                 "data": {
