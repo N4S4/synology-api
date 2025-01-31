@@ -269,6 +269,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             ----------
             offset : int
                 The offset of the logs to retrieve. Defaults to `0`.
+
             limit : int
                 The maximum number of logs to retrieve. Defaults to `200`.
 
@@ -340,10 +341,13 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             ----------
             task_id : int
                 The ID of the task.
+
             limit : int
                 The maximum number of logs to retrieve. Defaults to `200`.
+
             offset : int
                 The offset of the logs to retrieve. Defaults to `0`.
+
             key_word (str, optional):
                 A keyword to filter logs. Defaults to `''`.
 
@@ -617,6 +621,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             ----------
             backup_job_workers : int 
                 Maximum number of concurrent backup accounts. Defaults to `40`.
+
             event_workers : int 
                 Maximum number of concurrent backup files. Defaults to `40`.
 
@@ -672,20 +677,24 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             ----------
             task_id : int
                 The ID of the task.  
-            policy : int  
-                The schedule policy. Possible values:  
 
-                    - 0 = continuous  
-                    - 1 = manual  
-                    - 2 = scheduled  
+            policy : int  
+                The schedule policy. 
+                
+                Possible values:  
+                - 0 = continuous  
+                - 1 = manual  
+                - 2 = scheduled  
+
             schedule : dict  
                 A dictionary containing the schedule settings. 
                 
-                    - `start_hour` : int The start hour of the schedule.
-                    - `start_minute` : int The start minute of the schedule.
-                    - `last_run_hour` : int The last run hour of the schedule.
-                    - `repeat_every_hours` : int Run the backup every X hours.
-                    - `run_days` (list[int]): Run the backup at the specified days (Sunday = 0, Morning = 1, and so on...).
+                Possible values:
+                - `start_hour` : int The start hour of the schedule.
+                - `start_minute` : int The start minute of the schedule.
+                - `last_run_hour` : int The last run hour of the schedule.
+                - `repeat_every_hours` : int Run the backup every X hours.
+                - `run_days` (list[int]): Run the backup at the specified days (Sunday = 0, Morning = 1, and so on...).
                 
                 Example, to run the backup every day hourly starting at 08:30 until 23:30.
                 ```json
@@ -764,6 +773,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             ----------
             task_id : int  
                 The ID of the task.  
+
             days_to_keep : int  
                 The amount of days to keep previous versions. Defaults to `0` (keep all versions).
 
@@ -889,8 +899,9 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             ----------
             task_id : int 
                 The ID of the task.
+
             remove_data : bool 
-                Whether to remove the backup data in the NAS. If this is set to True, the task cannot be relinked in the future. Defaults to `False`.
+                Whether to remove the backup data in the NAS. If this is set to `True`, all task data in the NAS will be lost and the task cannot be relinked in the future. Defaults to `False`.
 
             Returns
             ----------
@@ -932,12 +943,20 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             ----------
             task_name : str
                 The name of the task.
+
             shared_folder : str
-                The name of the shared folder where the task is stored. Example: `ActiveBackupforBusiness`
+                The name of the shared folder where the task is stored. 
+                
+                Example: `ActiveBackupforBusiness`
+
             task_path : str
-                The relative path from the the shared folder where the task is stored. Example: `/ActiveBackupForMicrosoft365/task_1`
+                The relative path from the the shared folder where the task is stored. 
+                
+                Example: `/ActiveBackupForMicrosoft365/task_1`
+
             admin_email : str
                 The email of the Microsoft 365 administrator.
+                
             region : str
                 The region of the Microsoft 365 account. Defaults to `Microsoft 365`
 
