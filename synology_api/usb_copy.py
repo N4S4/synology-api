@@ -99,7 +99,7 @@ class USBCopy(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def get_task_settings(self, task_id: int) -> dict[str, object] | str:
+    def get_task_settings(self, task_id: int) -> dict[str, object]:
         """Retrieve task settings
 
             Parameters
@@ -159,14 +159,14 @@ class USBCopy(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def toggle_task(self, task_id: int, enable: bool = True) -> dict[str, object] | str:
+    def toggle_task(self, task_id: int, enable: bool = True) -> dict[str, object]:
         """Enable or disable USB Copy task
 
             Parameters
             ----------
             task_id : int
                 Task ID to apply the setting to.
-                
+
             enable : bool
                 Whether to enable (`True`) or disable (`False`) USB Copy. Defaults to `True`.
 
