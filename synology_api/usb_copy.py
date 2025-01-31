@@ -23,6 +23,7 @@ class USBCopy(base_api.BaseApi):
             ----------
             offset : int 
                 Defaults to `0`.
+
             limit : int 
                 Defaults to `200`.
 
@@ -59,6 +60,7 @@ class USBCopy(base_api.BaseApi):
             ----------
             offset : int
                 Defaults to `0`.
+
             limit : int
                 Defaults to `200`.
 
@@ -164,6 +166,7 @@ class USBCopy(base_api.BaseApi):
             ----------
             task_id : int
                 Task ID to apply the setting to.
+                
             enable : bool
                 Whether to enable (`True`) or disable (`False`) USB Copy. Defaults to `True`.
 
