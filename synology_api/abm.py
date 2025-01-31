@@ -44,15 +44,17 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
         return task_info
     
-    def get_tasks(self) -> dict[str, object] | str:
-        """
-            Retrieve all tasks.
+    def get_tasks(self) -> dict[str, object]:
+        """Retrieve all tasks.
 
-            ### Returns:
-                dict|str: 
-                    A dictionary containing the list of tasks, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the list of tasks.
 
-            ### Example return: 
+            Example return
+            ----------
+    
             ```json
             {
                 "data": {
@@ -262,21 +264,23 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def get_package_log(self, offset: int = 0, limit: int = 200) -> dict[str, object] | str:
-        """
-            Retrieve general logs.
+    def get_package_log(self, offset: int = 0, limit: int = 200) -> dict[str, object]:
+        """Retrieve general logs.
 
-            ### Args:
-                offset (int, optional):
-                    The offset of the logs to retrieve. Defaults to `0`.
-                limit (int, optional):
-                    The maximum number of logs to retrieve. Defaults to `200`.
+            Parameters
+            ----------
+            offset : int
+                The offset of the logs to retrieve. Defaults to `0`.
+            limit : int
+                The maximum number of logs to retrieve. Defaults to `200`.
 
-            ### Returns:
-                dict|str: 
-                    A dictionary containing the list of logs, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the list of logs.
 
-            ### Example return: 
+            Example return
+            ----------
             ```json
             {
                 "data": {
@@ -331,25 +335,27 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def get_task_log(self, task_id: int, limit: int = 200, offset: int = 0, key_word: str = '') -> dict[str, object] | str:
-        """
-            Retrieve all logs for a given task.
+    def get_task_log(self, task_id: int, limit: int = 200, offset: int = 0, key_word: str = '') -> dict[str, object]:
+        """Retrieve all logs for a given task.
 
-            ### Args:
-                task_id (int):
-                    The ID of the task.
-                limit (int, optional):
-                    The maximum number of logs to retrieve. Defaults to `200`.
-                offset (int, optional):
-                    The offset of the logs to retrieve. Defaults to `0`.
-                key_word (str, optional):
-                    A keyword to filter logs. Defaults to `''`.
+            Parameters
+            ----------
+            task_id : int
+                The ID of the task.
+            limit : int
+                The maximum number of logs to retrieve. Defaults to `200`.
+            offset : int
+                The offset of the logs to retrieve. Defaults to `0`.
+            key_word (str, optional):
+                A keyword to filter logs. Defaults to `''`.
 
-            ### Returns:
-                dict|str: 
-                    A dictionary containing the list of logs, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the list of logs.
 
-            ### Example return: 
+            Example return
+            ----------
             ```json
             {
                 "data": {
@@ -400,163 +406,166 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
         
-    def get_task_setting(self, task_id: int) -> dict[str, object] | str:
-        """
-        Retrieve the settings of a task.
+    def get_task_setting(self, task_id: int) -> dict[str, object]:
+        """Retrieve the settings of a task.
 
-        ### Args:
-            task_id (int): The ID of the task.
+            Parameters
+            ----------
+            task_id : int 
+                The ID of the task.
 
-        ### Returns:
-            dict|str: 
-                A dictionary containing the settings of the task, or a string in case of an error.
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the settings of the task.
 
-        ### Example return:
-        ```json
-        {
-            "data": {
-                "task_info": {
-                    "administrator_account_email": "username@xxxx.onmicrosoft.com",
-                    "app_permissions": [...],
-                    "application_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
-                    "backup_policy": 1,
-                    "enable_auto_add_archive_mail": false,
-                    "enable_auto_add_calendar": false,
-                    "enable_auto_add_contact": false,
-                    "enable_auto_add_drive": false,
-                    "enable_auto_add_mail": false,
-                    "enable_auto_discover_external_account": true,
-                    "enable_auto_discover_general_site": false,
-                    "enable_auto_discover_group_alias_archive_mail": false,
-                    "enable_auto_discover_group_alias_calendar": false,
-                    "enable_auto_discover_group_alias_contact": false,
-                    "enable_auto_discover_group_alias_drive": false,
-                    "enable_auto_discover_group_alias_mail": false,
-                    "enable_auto_discover_group_calendar": false,
-                    "enable_auto_discover_group_mail": false,
-                    "enable_auto_discover_my_site": false,
-                    "enable_auto_discover_teams": false,
-                    "enable_auto_discover_unlicensed_account": true,
-                    "enable_schedule": false,
-                    "enable_user_restore": true,
-                    "is_customized_app": true,
-                    "is_team_list_ready": true,
-                    "local_path": "/datastore/ActiveBackupForMicrosoft365/task_1",
-                    "preserve_day_number": 30,
-                    "region": 0,
-                    "rotation_policy": 0,
-                    "schedule": {
-                        "date": "2025/1/26",
-                        "date_type": 0,
-                        "hour": 0,
-                        "last_work_hour": 0,
-                        "minute": 0,
-                        "monthly_week": [],
-                        "repeat_date": 0,
-                        "repeat_hour": 0,
-                        "repeat_hour_store_config": null,
-                        "repeat_min": 0,
-                        "repeat_min_store_config": null,
-                        "week_day": "0,1,2,3,4,5,6"
+            Example return
+            ----------
+            ```json
+            {
+                "data": {
+                    "task_info": {
+                        "administrator_account_email": "username@xxxx.onmicrosoft.com",
+                        "app_permissions": [...],
+                        "application_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
+                        "backup_policy": 1,
+                        "enable_auto_add_archive_mail": false,
+                        "enable_auto_add_calendar": false,
+                        "enable_auto_add_contact": false,
+                        "enable_auto_add_drive": false,
+                        "enable_auto_add_mail": false,
+                        "enable_auto_discover_external_account": true,
+                        "enable_auto_discover_general_site": false,
+                        "enable_auto_discover_group_alias_archive_mail": false,
+                        "enable_auto_discover_group_alias_calendar": false,
+                        "enable_auto_discover_group_alias_contact": false,
+                        "enable_auto_discover_group_alias_drive": false,
+                        "enable_auto_discover_group_alias_mail": false,
+                        "enable_auto_discover_group_calendar": false,
+                        "enable_auto_discover_group_mail": false,
+                        "enable_auto_discover_my_site": false,
+                        "enable_auto_discover_teams": false,
+                        "enable_auto_discover_unlicensed_account": true,
+                        "enable_schedule": false,
+                        "enable_user_restore": true,
+                        "is_customized_app": true,
+                        "is_team_list_ready": true,
+                        "local_path": "/datastore/ActiveBackupForMicrosoft365/task_1",
+                        "preserve_day_number": 30,
+                        "region": 0,
+                        "rotation_policy": 0,
+                        "schedule": {
+                            "date": "2025/1/26",
+                            "date_type": 0,
+                            "hour": 0,
+                            "last_work_hour": 0,
+                            "minute": 0,
+                            "monthly_week": [],
+                            "repeat_date": 0,
+                            "repeat_hour": 0,
+                            "repeat_hour_store_config": null,
+                            "repeat_min": 0,
+                            "repeat_min_store_config": null,
+                            "week_day": "0,1,2,3,4,5,6"
+                        },
+                        "schedule_id": 4,
+                        "site_domain": "https://xxxx.sharepoint.com",
+                        "task_id": 1,
+                        "task_name": "test",
+                        "task_status": 2,
+                        "task_status_error_code": 0,
+                        "tenant_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
+                        "user_list": [
+                            {
+                                "account_status": 1,
+                                "account_type": 2,
+                                "email": "username@xxxx.onmicrosoft.com",
+                                "enable_archive_mail": false,
+                                "enable_calendar": false,
+                                "enable_contact": false,
+                                "enable_drive": false,
+                                "enable_mail": false,
+                                "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
+                                "local_used_storage": 0,
+                                "smtp_mail": "",
+                                "user_name": "username"
+                            }
+                        ],
+                        "group_list": [
+                            {
+                                "description": "test group",
+                                "display_name": "test group",
+                                "enable_calendar": false,
+                                "enable_group_alias_archive_mail": false,
+                                "enable_group_alias_calendar": false,
+                                "enable_group_alias_contact": false,
+                                "enable_group_alias_drive": false,
+                                "enable_group_alias_mail": false,
+                                "enable_mail": false,
+                                "group_status": 1,
+                                "group_type": 0,
+                                "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
+                                "local_used_storage": 0,
+                                "mail": "test_group@xxxx.onmicrosoft.com",
+                                "mail_nickname": "test group",
+                                "owners": [],
+                                "title": "test group",
+                                "visibility": "Private"
+                            },
+                        ],
+                        "team_list": [
+                            {
+                                "description": "test team",
+                                "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
+                                "local_used_storage": 0,
+                                "name": "test team",
+                                "selected": false,
+                                "team_status": 1,
+                                "visibility": 0,
+                                "web_url": "https://teams.microsoft.com/l/team/xxxx"
+                            },
+                        ],
+                        "my_site_list": [
+                            {
+                                "description": "",
+                                "id": 313,
+                                "local_used_storage": 0,
+                                "owner_type": 0,
+                                "parent_id": "",
+                                "primary_admin": "username@xxxx.onmicrosoft.com",
+                                "selected": false,
+                                "site_collection_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
+                                "site_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
+                                "site_name": "username",
+                                "site_root": "https://xxxx-my.sharepoint.com",
+                                "site_status": 1,
+                                "site_type": 1,
+                                "url": "https://xxxx-my.sharepoint.com/personal/username"
+                            },
+                        ],
+                        "general_site_list": [
+                            {
+                                "description": "",
+                                "id": 1,
+                                "local_used_storage": 0,
+                                "owner_type": 0,
+                                "parent_id": "",
+                                "primary_admin": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
+                                "selected": false,
+                                "site_collection_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
+                                "site_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
+                                "site_name": "test sharepoint",
+                                "site_root": "https://xxxx.sharepoint.com",
+                                "site_status": 1,
+                                "site_type": 0,
+                                "url": "https://xxxx.sharepoint.com"
+                            },
+                        ],
                     },
-                    "schedule_id": 4,
-                    "site_domain": "https://xxxx.sharepoint.com",
-                    "task_id": 1,
-                    "task_name": "test",
-                    "task_status": 2,
-                    "task_status_error_code": 0,
-                    "tenant_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
-                    "user_list": [
-                        {
-                            "account_status": 1,
-                            "account_type": 2,
-                            "email": "username@xxxx.onmicrosoft.com",
-                            "enable_archive_mail": false,
-                            "enable_calendar": false,
-                            "enable_contact": false,
-                            "enable_drive": false,
-                            "enable_mail": false,
-                            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
-                            "local_used_storage": 0,
-                            "smtp_mail": "",
-                            "user_name": "username"
-                        }
-                    ],
-                    "group_list": [
-                        {
-                            "description": "test group",
-                            "display_name": "test group",
-                            "enable_calendar": false,
-                            "enable_group_alias_archive_mail": false,
-                            "enable_group_alias_calendar": false,
-                            "enable_group_alias_contact": false,
-                            "enable_group_alias_drive": false,
-                            "enable_group_alias_mail": false,
-                            "enable_mail": false,
-                            "group_status": 1,
-                            "group_type": 0,
-                            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
-                            "local_used_storage": 0,
-                            "mail": "test_group@xxxx.onmicrosoft.com",
-                            "mail_nickname": "test group",
-                            "owners": [],
-                            "title": "test group",
-                            "visibility": "Private"
-                        },
-                    ],
-                    "team_list": [
-                        {
-                            "description": "test team",
-                            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
-                            "local_used_storage": 0,
-                            "name": "test team",
-                            "selected": false,
-                            "team_status": 1,
-                            "visibility": 0,
-                            "web_url": "https://teams.microsoft.com/l/team/xxxx"
-                        },
-                    ],
-                    "my_site_list": [
-                        {
-                            "description": "",
-                            "id": 313,
-                            "local_used_storage": 0,
-                            "owner_type": 0,
-                            "parent_id": "",
-                            "primary_admin": "username@xxxx.onmicrosoft.com",
-                            "selected": false,
-                            "site_collection_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
-                            "site_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
-                            "site_name": "username",
-                            "site_root": "https://xxxx-my.sharepoint.com",
-                            "site_status": 1,
-                            "site_type": 1,
-                            "url": "https://xxxx-my.sharepoint.com/personal/username"
-                        },
-                    ],
-                    "general_site_list": [
-                        {
-                            "description": "",
-                            "id": 1,
-                            "local_used_storage": 0,
-                            "owner_type": 0,
-                            "parent_id": "",
-                            "primary_admin": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
-                            "selected": false,
-                            "site_collection_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
-                            "site_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
-                            "site_name": "test sharepoint",
-                            "site_root": "https://xxxx.sharepoint.com",
-                            "site_status": 1,
-                            "site_type": 0,
-                            "url": "https://xxxx.sharepoint.com"
-                        },
-                    ],
                 },
-            },
-            "success": true
-        }
-        ```
+                "success": true
+            }
+            ```
         """
         api_name = 'SYNO.ActiveBackupOffice365'
         info = self.gen_list[api_name]
@@ -570,25 +579,27 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def get_worker_count(self) -> dict[str, object] | str:
+    def get_worker_count(self) -> dict[str, object]:
         """Get the number of workers for the Active Backup for Microsoft 365 package.
 
-        ### Returns:
-            dict[str, object] | str: 
-                A dictionary containing the number of workers, or a string in case of an error.
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the number of workers.
 
-        ### Example return:
-        ```json
-        {
-            "data": {
-                "backup_job_worker_count": 40,
-                "event_worker_count": 40,
-                "max_backup_job_worker_count": 40,
-                "max_event_worker_count": 40
-            },
-            "success": true
-        }
-        ```
+            Example return
+            ----------
+            ```json
+            {
+                "data": {
+                    "backup_job_worker_count": 40,
+                    "event_worker_count": 40,
+                    "max_backup_job_worker_count": 40,
+                    "max_event_worker_count": 40
+                },
+                "success": true
+            }
+            ```
         """
         api_name = 'SYNO.ActiveBackupOffice365'
         info = self.gen_list[api_name]
@@ -601,26 +612,28 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def set_worker_count(self, backup_job_workers: int = 40, event_workers: int = 40) -> dict[str, object] | str:
+    def set_worker_count(self, backup_job_workers: int = 40, event_workers: int = 40) -> dict[str, object]:
         """Set the number of workers for the Active Backup for Microsoft 365 package.
 
-        ### Args:
-            backup_job_workers (int): 
+            Parameters
+            ----------
+            backup_job_workers : int 
                 Maximum number of concurrent backup accounts. Defaults to `40`.
-
-            event_workers (int): 
+            event_workers : int 
                 Maximum number of concurrent backup files. Defaults to `40`.
 
-        ### Returns:
-            dict[str, object] | str: 
-                A dictionary containing the result of the worker count update, or a string in case of an error.
-        
-        ### Example return:
-        ```json
-        {
-            "success": true
-        }
-        ```
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the worker count update.
+            
+            Example return
+            ----------
+            ```json
+            {
+                "success": true
+            }
+            ```
         """
         if backup_job_workers < 5 or event_workers < 5:
             raise Exception("The number of workers must be at least 5.")
@@ -654,32 +667,30 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             "repeat_every_hours": int,
             "run_days": list[int]
         ] = {"place_holder": None}
-    ) -> dict[str, object] | str:
-        """Set the schedule for a given task.
-        Note: If repeat_every_hours is set to 0, the backup will run once a day.
+    ) -> dict[str, object]:
+        """Set the schedule for a given task. Note: If repeat_every_hours is set to 0, the backup will run once a day.
 
-        ### Args:
-            task_id (int):
+            Parameters
+            ----------
+            task_id : int
                 The ID of the task.  
-
-            policy (int):  
+            policy : int  
                 The schedule policy. Possible values:  
 
                     - 0 = continuous  
                     - 1 = manual  
                     - 2 = scheduled  
-
-            schedule (dict):  
+            schedule : dict  
                 A dictionary containing the schedule settings. 
                 
-                    - `start_hour` (int): The start hour of the schedule.
-                    - `start_minute` (int): The start minute of the schedule.
-                    - `last_run_hour` (int): The last run hour of the schedule.
-                    - `repeat_every_hours` (int): Run the backup every X hours.
+                    - `start_hour` : int The start hour of the schedule.
+                    - `start_minute` : int The start minute of the schedule.
+                    - `last_run_hour` : int The last run hour of the schedule.
+                    - `repeat_every_hours` : int Run the backup every X hours.
                     - `run_days` (list[int]): Run the backup at the specified days (Sunday = 0, Morning = 1, and so on...).
                 
                 Example, to run the backup every day hourly starting at 08:30 until 23:30.
-                ```
+                ```json
                 {
                     "start_hour": 8,
                     "start_minute": 30,
@@ -689,16 +700,18 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
                 }
                 ```
 
-        ### Returns:
-            dict[str, object] | str: 
-                A dictionary containing the result of the schedule update, or a string in case of an error.
-        
-        ### Example return:
-        ```json 
-        {
-            "success": true
-        }
-        ```
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the schedule update.
+            
+            Example return
+            ----------
+            ```json 
+            {
+                "success": true
+            }
+            ```
         """
         if policy == 2 and "place_holder" in schedule:
             raise Exception("Received schedule policy, but no schedule was provided.")
@@ -746,26 +759,28 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def set_rotation_policy(self, task_id: int, days_to_keep: int) -> dict[str, object] | str:
+    def set_rotation_policy(self, task_id: int, days_to_keep: int) -> dict[str, object]:
         """Set the rotation policy for a given task.
 
-        ### Args:
-            task_id (int):  
+            Parameters
+            ----------
+            task_id : int  
                 The ID of the task.  
-
-            days_to_keep (int):  
+            days_to_keep : int  
                 The amount of days to keep previous versions. Defaults to `0` (keep all versions).
 
-        ### Returns:
-            dict[str, object] | str: 
-                A dictionary containing the result of the rotation policy update, or a string in case of an error.
-        
-        ### Example return:
-        ```json 
-        {
-            "success": true
-        }
-        ```
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the rotation policy update.
+            
+            Example return
+            ----------
+            ```json 
+            {
+                "success": true
+            }
+            ```
         """
         response = self.get_task_setting(task_id=task_id)
         task_info = self.__trim_task_info(response['data']['task_info'])
@@ -789,23 +804,26 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def run_backup(self, task_id: int) -> dict[str, object] | str:
+    def run_backup(self, task_id: int) -> dict[str, object]:
         """Manually run backup for a given task id.
 
-        ### Args:
-            task_id (int): 
+            Parameters
+            ----------
+            task_id : int 
                 The ID of the task.
 
-        ### Returns:
-            dict[str, object] | str: 
-                A dictionary containing the result of the backup task, or a string in case of an error.
-        
-        ### Example return:
-        ```json
-        {
-            "success": true
-        }
-        ```
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the backup task.
+            
+            Example return
+            ----------
+            ```json
+            {
+                "success": true
+            }
+            ```
         """
 
         api_name = 'SYNO.ActiveBackupOffice365'
@@ -820,23 +838,26 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def cancel_backup(self, task_id: int) -> dict[str, object] | str:
+    def cancel_backup(self, task_id: int) -> dict[str, object]:
         """Cancel a running backup task.
 
-        ### Args:
-            task_id (int): 
+            Parameters
+            ----------
+            task_id : int 
                 The ID of the task.
 
-        ### Returns:
-            dict[str, object] | str: 
-                A dictionary containing the result of the task cancellation, or a string in case of an error.
-        
-        ### Example return:
-        ```json 
-        {
-            "success": true
-        }
-        ```
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the task cancellation.
+            
+            Example return
+            ----------
+            ```json 
+            {
+                "success": true
+            }
+            ```
         """
         response = self.get_tasks()
         tasks = response['data']['tasks']
@@ -863,26 +884,28 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def delete_task(self, task_id: int, remove_data: bool = False) -> dict[str, object] | str:
+    def delete_task(self, task_id: int, remove_data: bool = False) -> dict[str, object]:
         """Delete a task.
 
-        ### Args:
-            task_id (int): 
+            Parameters
+            ----------
+            task_id : int 
                 The ID of the task.
-
-            remove_data (bool): 
+            remove_data : bool 
                 Whether to remove the backup data in the NAS. If this is set to True, the task cannot be relinked in the future. Defaults to `False`.
 
-        ### Returns:
-            dict[str, object] | str: 
-                A dictionary containing the result of the task deletion, or a string in case of an error.
-        
-        ### Example return:
-        ```json 
-        {
-            "success": true
-        }
-        ```
+            Returns
+            ----------
+                dict[str, object]
+                    A dictionary containing the result of the task deletion.
+            
+            Example return
+            ----------
+            ```json 
+            {
+                "success": true
+            }
+            ```
         """
 
         api_name = 'SYNO.ActiveBackupOffice365'
@@ -904,34 +927,37 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         local_path: str, 
         admin_email: str,
         region: str = "Microsoft 365"
-    ) -> dict[str, object] | str:
+    ) -> dict[str, object]:
         """Relink a task.
 
-        ### Args:
-            task_name (str):
+            Parameters
+            ----------
+            task_name : str
                 The name of the task.
-            shared_folder (str):
+            shared_folder : str
                 The name of the shared folder where the task is stored. Example: `ActiveBackupforBusiness`
-            task_path (str):
+            task_path : str
                 The relative path from the the shared folder where the task is stored. Example: `/ActiveBackupForMicrosoft365/task_1`
-            admin_email (str):
+            admin_email : str
                 The email of the Microsoft 365 administrator.
-            region (str):
+            region : str
                 The region of the Microsoft 365 account. Defaults to `Microsoft 365`
 
-        ### Returns:
-            dict[str, object] | str:
-                A dictionary containing the result of the task relinking, or a string in case of an error.
-        
-        ### Example return:
-        ```json 
-        {
-            "data": {
-                "task_id": 3
-            },
-            "success": true
-        }
-        ```
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the task relinking.
+            
+            Example return
+            ----------
+            ```json 
+            {
+                "data": {
+                    "task_id": 3
+                },
+                "success": true
+            }
+            ```
         """
         task_info = {
             "selected": True,
