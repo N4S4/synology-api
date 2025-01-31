@@ -69,21 +69,27 @@ class _Schedule():
     
 
 class TaskScheduler(base_api.BaseApi):
-    """
-       Task Scheduler API implementation.
+    """Task Scheduler API implementation.
 
-       This API provides the functionality to get information related to the scheduler settings and current tasks.
+        This API provides the functionality to get information related to the scheduler settings and current tasks.
 
-       For the moment, the available actions with the API are:
-       - Get all tasks
-       - Get task information
-       - Get task results
-       - Enable/Disable task
-       - Run task
-       - Delete task
-       - Get/Set output path for task results
-       - Create task
-       - Set task settings 
+        Supported methods:
+        - Getters: 
+            - Get all tasks
+            - Get task information
+            - Get task results
+            - Get output path for task results
+
+        - Setters:
+            - Set output path for task results
+            - Set task settings 
+        
+        - Actions:
+            - Run task
+            - Create task
+            - Delete task
+            - Enable task
+            - Disable task
     """
 
     def __get_root_token(self) -> str:
@@ -96,23 +102,26 @@ class TaskScheduler(base_api.BaseApi):
         else:
             return ''
 
-    def get_output_config(self) -> dict[str, object] | str:
+    def get_output_config(self) -> dict[str, object]:
         """Retrieve tasks output configuration.
 
-        Returns:
-            dict|str:
-                A dictionary containing a list of the tasks and information related to them, or a string in case of an error.
-
-            Example return:
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary containing a list of the tasks and information related to them,.
+            
+            Example return  
+            -----------
+            ```json
             {
                 "data": {
                     "enable_output": true,
                     "output_path": "share/scripts_output",
                     "type": "esynoscheduler",
-                    "__docstring": [] # Ignore this field, it is to avoid the docstring format from breaking.
                 },
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.Core.EventScheduler'
         info = self.gen_list[api_name]
@@ -131,33 +140,41 @@ class TaskScheduler(base_api.BaseApi):
             sort_direction: str = 'ASC',
             offset: int = 0,
             limit: int = 50
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """List all present scheduled tasks and event triggered tasks.
 
-        Args:
-            sort_by (str, optional): 
+            Parameters
+            ----------- 
+            sort_by : str, optional 
                 The field to sort tasks by. Defaults to `"next_trigger_time"`.
+                
                 Possible values:
                 - "next_trigger_time"
                 - "name"
                 - "type"
                 - "action"
                 - "owner"
-            sort_direction (str, optional): 
+
+            sort_direction : str, optional 
                 The sort direction. Defaults to `"ASC"`.
+                
                 Possible values:
                 - "ASC"
                 - "DESC"
-            offset (int, optional): 
+
+            offset : int, optional 
                 Task offset for pagination. Defaults to `0`.
-            limit (int, optional): 
+            limit : int, optional 
                 Number of tasks to retrieve. Defaults to `50`.
 
-        Returns:
-            dict|str:
-                A dictionary containing a list of the tasks and information related to them, or a string in case of an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary containing a list of the tasks and information related to them,.
 
-            Example return:
+            Example return
+            -----------
+            ```json
             {
                 "data": {
                     "tasks": [
@@ -192,6 +209,7 @@ class TaskScheduler(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.Core.TaskScheduler'
         info = self.gen_list[api_name]
@@ -212,62 +230,67 @@ class TaskScheduler(base_api.BaseApi):
             task_id: int,
             real_owner: str,
             type: str = ''
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Retrieve the configuration for a specific task or list of all the available services and their corresponding IDs.
 
-        Args:
-            task_id (int): 
+            Parameters
+            ---------
+            task_id : int 
                 The ID of the task to retrieve the configuration for. Pass `-1` to get a list of all available services with their IDs.
-            real_owner (str): 
+            real_owner : str 
                 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.
-            type (str, optional): 
-                The type of task (e.g., 'service'). Pass "service" to get a list of all available services with their IDs. Defaults to an empty string.
+            type : str, optional 
+                The type of task (e.g., 'service'). Pass "service" to get a list of all available services with their IDs. Defaults to `""`.
 
-        Returns:
-            dict|str:
-                A dictionary containing the task configuration or a string in case of an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary containing the task configuration.
 
-            Example return:
-                {
-                    "data": {
-                        "action": "Run: echo hello > /tmp/awacate.out",
-                        "can_edit_name": true,
-                        "can_edit_owner": true,
-                        "enable": true,
-                        "extra": {
-                            "notify_enable": false,
-                            "notify_if_error": false,
-                            "notify_mail": "",
-                            "script": "echo hello > /tmp/awacate.out"
-                        },
-                        "id": 11,
-                        "name": "TEST_CRONTAB",
-                        "owner": "root",
-                        "real_owner": "root",
-                        "schedule": {
-                            "date": "2024/9/11",
-                            "date_type": 0,
-                            "hour": 0,
-                            "last_work_hour": 0,
-                            "minute": 0,
-                            "monthly_week": [],
-                            "repeat_date": 1001,
-                            "repeat_hour": 0,
-                            "repeat_hour_store_config": [
-                                1..23
-                            ],
-                            "repeat_min": 0,
-                            "repeat_min_store_config": [
-                                1,
-                                ...
-                            ],
-                            "version": 4,
-                            "week_day": "0,1,2,3,4,5,6"
-                        },
-                        "type": "script"
+            Example return
+            ---------
+            ```json
+            {
+                "data": {
+                    "action": "Run: echo hello > /tmp/awacate.out",
+                    "can_edit_name": true,
+                    "can_edit_owner": true,
+                    "enable": true,
+                    "extra": {
+                        "notify_enable": false,
+                        "notify_if_error": false,
+                        "notify_mail": "",
+                        "script": "echo hello > /tmp/awacate.out"
                     },
-                    "success": true
-                }
+                    "id": 11,
+                    "name": "TEST_CRONTAB",
+                    "owner": "root",
+                    "real_owner": "root",
+                    "schedule": {
+                        "date": "2024/9/11",
+                        "date_type": 0,
+                        "hour": 0,
+                        "last_work_hour": 0,
+                        "minute": 0,
+                        "monthly_week": [],
+                        "repeat_date": 1001,
+                        "repeat_hour": 0,
+                        "repeat_hour_store_config": [
+                            1..23
+                        ],
+                        "repeat_min": 0,
+                        "repeat_min_store_config": [
+                            1,
+                            ...
+                        ],
+                        "version": 4,
+                        "week_day": "0,1,2,3,4,5,6"
+                    },
+                    "type": "script"
+                },
+                "success": true
+            }
+            ```
         """
         api_name = 'SYNO.Core.TaskScheduler'
         info = self.gen_list[api_name]
@@ -287,37 +310,42 @@ class TaskScheduler(base_api.BaseApi):
     def get_task_results(
             self,
             task_id: int
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Retrieve the results list for a specific task.
 
-        Args:
-            task_id (int): 
+            Parameters
+            ---------
+            task_id : int 
                 The ID of the task to retrieve the results for.
 
-        Returns:
-            dict|str:
-                A dictionary containing the task results or a string in case of an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary containing the task results.
 
-            Example return:
-                {
-                    "data": [
-                        {
-                            "exit_code": 127,
-                            "exit_type": "by_signal",
-                            "start_time": "2024-09-11 00:00:01",
-                            "stop_time": "2024-09-11 00:00:06",
-                            "timestamp": "1726005601"
-                        },
-                        {
-                            "exit_code": 0,
-                            "exit_type": "normal",
-                            "start_time": "2024-06-01 00:00:01",
-                            "stop_time": "2024-06-01 00:00:02",
-                            "timestamp": "1717192801"
-                        }
-                    ],
-                    "success": true
-                }
+            Example return
+            ---------
+            ```json
+            {
+                "data": [
+                    {
+                        "exit_code": 127,
+                        "exit_type": "by_signal",
+                        "start_time": "2024-09-11 00:00:01",
+                        "stop_time": "2024-09-11 00:00:06",
+                        "timestamp": "1726005601"
+                    },
+                    {
+                        "exit_code": 0,
+                        "exit_type": "normal",
+                        "start_time": "2024-06-01 00:00:01",
+                        "stop_time": "2024-06-01 00:00:02",
+                        "timestamp": "1717192801"
+                    }
+                ],
+                "success": true
+            }
+            ```
         """
         api_name = 'SYNO.Core.TaskScheduler'
         info = self.gen_list[api_name]
@@ -341,21 +369,26 @@ class TaskScheduler(base_api.BaseApi):
     #         self,
     #         task_id: int,
     #         timestamp: int
-    #     ) -> dict[str, object] | str:
+    #     ) -> dict[str, object]:
     #     """Retrieve the log information for a specific task result.
 
-    #     Args:
-    #         task_id (int): 
+    #     Parameters
+	# 		---------
+    #         task_id : int 
     #             The ID of the task to retrieve the log for.
-    #         timestamp (int): 
+    #         timestamp : int 
     #             The timestamp of the result for which to retrieve the logs.
 
-    #     Returns:
-    #         dict|str:
-    #             A dictionary containing the log of the result, or a string in case of an error.
+    #     Returns
+	# 		---------
+    #         dict[str, object]
+    #             A dictionary containing the log of the result,.
 
-    #         Example return:
-    #            {success: true}
+    #         Example return
+	# 		---------
+	# 		```json
+	#		{}
+    #      ```
     #     """
     #     api_name = 'SYNO.Core.TaskScheduler'
     #     info = self.gen_list[api_name]
@@ -373,23 +406,28 @@ class TaskScheduler(base_api.BaseApi):
             self,
             enable_output: bool,
             output_path: str = ''
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Configure the output settings for tasks results.
 
-        Args:
-            enable_output (bool): 
+            Parameters
+            ---------
+            enable_output : bool 
                 Whether to enable result logging.
-            output_path (str, optional): 
+            output_path : str, optional 
                 The path where the result logs will be stored, e.g. `'share/scripts_output'`. Defaults to empty string.
 
-        Returns:
-            dict|str:
-                A dictionary containing the result of the output configuration or a string in case of an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary containing the result of the output configuration.
 
-            Example return:
-                {
-                    "success": true
-                }
+            Example return
+            ---------
+            ```json
+            {
+                "success": true
+            }
+            ```           
         """
         api_name = 'SYNO.Core.EventScheduler'
         info = self.gen_list[api_name]
@@ -409,25 +447,30 @@ class TaskScheduler(base_api.BaseApi):
             task_id: int,
             real_owner: str,
             enable: bool
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Enable or disable a task.
 
-        Args:
-            task_id (int): 
+            Parameters
+            ---------
+            task_id : int 
                 The ID of the task to be enabled.
-            real_owner (str): 
+            real_owner : str 
                 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.
-            enable (bool):
+            enable : bool
                 Wheter to enable (`True`) or disable (`False`) the task.
 
-        Returns:
-            dict|str:
-                A dictionary containing the result of the task enabling or a string in case of an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary containing the result of the task enabling.
 
-            Example return:
-                {
-                    "success": true
-                }
+            Example return
+            ---------
+            ```json
+            {
+                "success": true
+            }
+            ```
         """
         task_dict = {
             'id': task_id,
@@ -450,23 +493,28 @@ class TaskScheduler(base_api.BaseApi):
             self,
             task_id: int,
             real_owner: str
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Run a specific task.
 
-        Args:
-            task_id (int): 
+            Parameters
+            ---------
+            task_id : int 
                 The ID of the task to be run.
-            real_owner (str): 
+            real_owner : str 
                 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.
 
-        Returns:
-            dict|str:
-                A dictionary containing the result of the task execution or a string in case of an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary containing the result of the task execution.
 
-            Example return:
-                {
-                    "success": true
-                }
+            Example return
+            ---------
+            ```json
+            {
+                "success": true
+            }
+            ```
         """
         task_dict = {
             'id': task_id,
@@ -488,23 +536,28 @@ class TaskScheduler(base_api.BaseApi):
             self,
             task_id: int,
             real_owner: str
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Delete a specific task.
 
-        Args:
-            task_id (int): 
+            Parameters
+            ---------
+            task_id : int 
                 The ID of the task to be deleted.
-            real_owner (str): 
+            real_owner : str 
                 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.
 
-        Returns:
-            dict|str:
-                A dictionary containing the result of the task deletion or a string in case of an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary containing the result of the task deletion.
 
-        Example return:
+            Example return
+            ---------
+            ```json
             {
                 "success": true
             }
+            ```
         """
         task_dict = {
             'id': task_id,
@@ -540,30 +593,36 @@ class TaskScheduler(base_api.BaseApi):
             same_day_repeat_until: int = -1,
             notify_email: str = '',
             notify_only_on_error: bool = False
-        ) -> dict[str, object] | str:
-        """Create a new Script task with the provided schedule and notification settings. 
-        
-        If the task needs to run with root privileges, please specify the owner as "root".
+        ) -> dict[str, object]:
+        """Create a new Script task with the provided schedule and notification settings. If the task needs to run with root privileges, please specify the owner as "root".
 
-        Args:
-            task_name (str): 
+            Parameters
+            ---------
+            task_name : str 
                 The name of the task.
-            owner (str): 
+
+            owner : str 
                 The task owner. If the task needs to run with root privileges, please specify the owner as "root".
-            script (str): 
+
+            script : str 
                 The script to be executed.
-            enable (bool, optional): 
+
+            enable : bool, optional 
                 Whether the task should be enabled upon creation. Defaults to `True`.
-            run_frequently (bool, optional): 
-                Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.
-            run_days (str, optional): 
-                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list 
-                (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
-            run_date (str, optional): 
-                The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). 
-                Defaults to an empty string.
-            repeat (str, optional): 
-                How often the task should repeat. Possible values:
+
+            run_frequently : bool, optional 
+                Determines whether the task runs on a recurring schedule (`True`) or only on a specific date (`False`). Defaults to `True`.
+
+            run_days : str, optional 
+                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
+
+            run_date : str, optional 
+                The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.
+
+            repeat : str, optional 
+                How often the task should repeat. Defaults to `daily`.
+                
+                Possible values:
                 - "daily" -> Only when 'run_frequently=True'
                 - "weekly" -> Only when 'run_frequently=True'
                 - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
@@ -571,46 +630,59 @@ class TaskScheduler(base_api.BaseApi):
                 - "every_3_months" -> Only when 'run_frequently=False'
                 - "every_6_months" -> Only when 'run_frequently=False'
                 - "yearly" -> Only when 'run_frequently=False'
-                Defaults to 'daily'.
-            monthly_week (list[str], optional): 
+                
+            monthly_week : list[str], optional 
                 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
-                Defaults to an empty list.
-            start_time_h (int, optional): 
+                Defaults to `[]`.
+
+            start_time_h : int, optional 
                 Hour at which the task should start. Defaults to `0`.
-            start_time_m (int, optional): 
+
+            start_time_m : int, optional 
                 Minute at which the task should start. Defaults to `0`.
-            same_day_repeat_h (int, optional): 
+
+            same_day_repeat_h : int, optional 
                 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
+                
                 Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
 
                 Possible values: `0..23`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_m (int, optional): 
+
+            same_day_repeat_m : int, optional 
                 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
+                
                 Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
                 
                 Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_until (int, optional): 
+
+            same_day_repeat_until : int, optional 
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
-            notify_email (str, optional): 
-                Email address to send notifications to. Defaults to an empty string, thus disabling the notification feature.
-            notify_only_on_error (bool, optional): 
+
+            notify_email : str, optional 
+                Email address to send notifications to. Defaults to `""`, thus disabling the notification feature.
+
+            notify_only_on_error : bool, optional 
                 If `True`, notifications are only sent when an error occurs. Defaults to `False`.
 
-        Returns:
-            dict|str:
-                A dictionary with the id of the created task, or a string if there is an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary with the id of the created task.
 
-        Example return:
+            Example return
+            ---------
+            ```json
             {
-            "data": {
-                "id": 20
-            },
-            "success": true
-        }
+                "data": {
+                    "id": 20
+                },
+                "success": true
+            }
+            ```
         """
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
                             same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
@@ -665,35 +737,42 @@ class TaskScheduler(base_api.BaseApi):
             same_day_repeat_until: int = -1,
             notify_email: str = '',
             notify_only_on_error: bool = False
-        ) -> dict[str, object] | str:
-        """Modify settings of a Script task. This method overwrites all the settings of the task, so if you only want to change one setting, 
-        you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
+        ) -> dict[str, object]:
+        """Modify settings of a Script task. This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method. If the task needs to run with root privileges, please specify the owner as "root".
 
-        If the task needs to run with root privileges, please specify the owner as "root".
-
-        Args:
-            task_id (int):
+            Parameters
+            ---------
+            task_id : int
                 The ID of the task.
-            task_name (str): 
+
+            task_name : str 
                 The name of the task.
-            owner (str): 
+
+            owner : str 
                 The task owner. If the task needs to run with root privileges, please specify the owner as "root".
-            real_owner (str): 
+
+            real_owner : str 
                 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`. 
-            script (str): 
+
+            script : str 
                 The script to be executed.
-            enable (bool, optional): 
+
+            enable : bool, optional 
                 Whether the task should be enabled upon creation. Defaults to `True`.
-            run_frequently (bool, optional): 
+
+            run_frequently : bool, optional 
                 Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.
-            run_days (str, optional): 
-                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list 
-                (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
-            run_date (str, optional): 
-                The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). 
-                Defaults to an empty string.
-            repeat (str, optional): 
-                How often the task should repeat. Possible values:
+
+            run_days : str, optional 
+                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
+
+            run_date : str, optional 
+                The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.
+
+            repeat : str, optional 
+                How often the task should repeat. Defaults to `'daily'`.
+                
+                Possible values:
                 - "daily" -> Only when 'run_frequently=True'
                 - "weekly" -> Only when 'run_frequently=True'
                 - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
@@ -701,46 +780,56 @@ class TaskScheduler(base_api.BaseApi):
                 - "every_3_months" -> Only when 'run_frequently=False'
                 - "every_6_months" -> Only when 'run_frequently=False'
                 - "yearly" -> Only when 'run_frequently=False'
-                Defaults to 'daily'.
-            monthly_week (list[str], optional): 
-                If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
-                Defaults to an empty list.
-            start_time_h (int, optional): 
+
+            monthly_week : list[str], optional 
+                If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. Defaults to `[]`.
+
+            start_time_h : int, optional 
                 Hour at which the task should start. Defaults to `0`.
-            start_time_m (int, optional): 
+
+            start_time_m : int, optional 
                 Minute at which the task should start. Defaults to `0`.
-            same_day_repeat_h (int, optional): 
+
+            same_day_repeat_h : int, optional 
                 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
-                Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
+                Set to `0` to disable same-day repeats. Defaults to `0`.
 
                 Possible values: `0..23`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_m (int, optional): 
+
+            same_day_repeat_m : int, optional 
                 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
-                Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
+                Set to `0` to disable same-day repeats. Defaults to `0`.
                 
                 Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_until (int, optional): 
+
+            same_day_repeat_until : int, optional 
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
-            notify_email (str, optional): 
-                Email address to send notifications to. Defaults to an empty string, thus disabling the notification feature.
-            notify_only_on_error (bool, optional): 
+
+            notify_email : str, optional 
+                Email address to send notifications to. Defaults to `""`, thus disabling the notification feature.
+
+            notify_only_on_error : bool, optional 
                 If `True`, notifications are only sent when an error occurs. Defaults to `False`.
 
-        Returns:
-            dict|str:
-                A dictionary with the id of the created task, or a string if there is an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary with the id of the created task.
 
-        Example return:
+            Example return
+            ---------
+            ```json
             {
-            "data": {
-                "id": 20
-            },
-            "success": true
-        }
+                "data": {
+                    "id": 20
+                },
+                "success": true
+            }
+            ```
         """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
@@ -792,28 +881,36 @@ class TaskScheduler(base_api.BaseApi):
             same_day_repeat_h: int = 0,
             same_day_repeat_m: int = 0,
             same_day_repeat_until: int = -1
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Create a new Beep Control task with the provided schedule and beep duration.
 
-        Args:
-            task_name (str): 
+            Parameters
+            ---------
+            task_name : str 
                 The name of the task.
-            owner (str): 
+
+            owner : str 
                 The task owner.
-            beep_duration (int, optional): 
+
+            beep_duration : int, optional 
                 The amount of seconds the beep will be triggered for, in seconds. Defaults to `60`.
-            enable (bool, optional): 
+
+            enable : bool, optional 
                 Whether the task should be enabled upon creation. Defaults to `True`.
-            run_frequently (bool, optional): 
+
+            run_frequently : bool, optional 
                 Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.
-            run_days (str, optional): 
-                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list 
-                (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
-            run_date (str, optional): 
-                The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). 
-                Defaults to an empty string.
-            repeat (str, optional): 
-                How often the task should repeat. Possible values:
+
+            run_days : str, optional 
+                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
+
+            run_date : str, optional 
+                The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.
+
+            repeat : str, optional 
+                How often the task should repeat. Defaults to `'daily'`.
+                
+                Possible values:
                 - "daily" -> Only when 'run_frequently=True'
                 - "weekly" -> Only when 'run_frequently=True'
                 - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
@@ -821,42 +918,52 @@ class TaskScheduler(base_api.BaseApi):
                 - "every_3_months" -> Only when 'run_frequently=False'
                 - "every_6_months" -> Only when 'run_frequently=False'
                 - "yearly" -> Only when 'run_frequently=False'
-                Defaults to 'daily'.
-            monthly_week (list[str], optional): 
+                
+
+            monthly_week : list[str], optional 
                 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
-                Defaults to an empty list.
-            start_time_h (int, optional): 
+                Defaults to `[]`.
+
+            start_time_h : int, optional 
                 Hour at which the task should start. Defaults to `0`.
-            start_time_m (int, optional): 
+
+            start_time_m : int, optional 
                 Minute at which the task should start. Defaults to `0`.
-            same_day_repeat_h (int, optional): 
+
+            same_day_repeat_h : int, optional 
                 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
-                Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
+                Set to `0` to disable same-day repeats. Defaults to `0`.
 
                 Possible values: `0..23`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_m (int, optional): 
+
+            same_day_repeat_m : int, optional 
                 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
-                Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
+                Set to `0` to disable same-day repeats. Defaults to `0`. 
                 
                 Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_until (int, optional): 
+
+            same_day_repeat_until : int, optional 
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
 
-        Returns:
-            dict|str:
-                A dictionary with the id of the created task, or a string if there is an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary with the id of the created task.
 
-        Example return:
+            Example return
+            ---------
+            ```json
             {
-            "data": {
-                "id": 20
-            },
-            "success": true
-        }
+                "data": {
+                    "id": 20
+                },
+                "success": true
+            }
+            ```
         """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
@@ -901,29 +1008,36 @@ class TaskScheduler(base_api.BaseApi):
             same_day_repeat_h: int = 0,
             same_day_repeat_m: int = 0,
             same_day_repeat_until: int = -1
-        ) -> dict[str, object] | str:
-        """Modify settings of a Beep Control task. This method overwrites all the settings of the task, so if you only want to change one setting, 
-        you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
+        ) -> dict[str, object]:
+        """Modify settings of a Beep Control task. This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
 
-        Args:
-            task_name (str): 
+            Parameters
+            ---------
+            task_name : str 
                 The name of the task.
-            real_owner (str): 
+
+            real_owner : str 
                 The task owner.
-            beep_duration (int, optional): 
+
+            beep_duration : int, optional 
                 The amount of seconds the beep will be triggered for, in seconds. Defaults to `60`.
-            enable (bool, optional): 
+
+            enable : bool, optional 
                 Whether the task should be enabled upon creation. Defaults to `True`.
-            run_frequently (bool, optional): 
+
+            run_frequently : bool, optional 
                 Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.
-            run_days (str, optional): 
-                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list 
-                (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
-            run_date (str, optional): 
-                The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). 
-                Defaults to an empty string.
-            repeat (str, optional): 
-                How often the task should repeat. Possible values:
+
+            run_days : str, optional 
+                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
+
+            run_date : str, optional 
+                The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.
+
+            repeat : str, optional 
+                How often the task should repeat. Defaults to `'daily'`.
+                
+                Possible values:
                 - "daily" -> Only when 'run_frequently=True'
                 - "weekly" -> Only when 'run_frequently=True'
                 - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
@@ -931,42 +1045,50 @@ class TaskScheduler(base_api.BaseApi):
                 - "every_3_months" -> Only when 'run_frequently=False'
                 - "every_6_months" -> Only when 'run_frequently=False'
                 - "yearly" -> Only when 'run_frequently=False'
-                Defaults to 'daily'.
-            monthly_week (list[str], optional): 
-                If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
-                Defaults to an empty list.
-            start_time_h (int, optional): 
+
+            monthly_week : list[str], optional 
+                If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. Defaults to `[]`.
+
+            start_time_h : int, optional 
                 Hour at which the task should start. Defaults to `0`.
-            start_time_m (int, optional): 
+
+            start_time_m : int, optional 
                 Minute at which the task should start. Defaults to `0`.
-            same_day_repeat_h (int, optional): 
+
+            same_day_repeat_h : int, optional 
                 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
-                Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
+                Set to `0` to disable same-day repeats. Defaults to `0`.
 
                 Possible values: `0..23`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_m (int, optional): 
+
+            same_day_repeat_m : int, optional 
                 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
-                Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
+                Set to `0` to disable same-day repeats. Defaults to `0`.
                 
                 Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_until (int, optional): 
+
+            same_day_repeat_until : int, optional 
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
 
-        Returns:
-            dict|str:
-                A dictionary with the id of the created task, or a string if there is an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary with the id of the created task.
 
-        Example return:
+            Example return
+            ---------
+            ```json
             {
-            "data": {
-                "id": 20
-            },
-            "success": true
-        }
+                "data": {
+                    "id": 20
+                },
+                "success": true
+            }
+            ```
         """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
@@ -1011,40 +1133,50 @@ class TaskScheduler(base_api.BaseApi):
             same_day_repeat_h: int = 0,
             same_day_repeat_m: int = 0,
             same_day_repeat_until: int = -1
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Create a new Service Control task with the provided schedule and services to start/stop.
 
-        Args:
-            task_name (str): 
+            Parameters
+            ---------
+            task_name : str 
                 The name of the task.
-            owner (str): 
+
+            owner : str 
                 The task owner.
+
             services (list): 
                 A list containing the services and their type to be influenced by the specified action (start / stop).
 
                 To get a list of all the available services and their corresponding IDs, call `get_task_config(task_id=-1, real_owner=your_username, type='service')`. 
                 
                 E.g.:
+                ```python
                 [
                     {'id': 'AudioStation', 'type': 'package'},
                     {'id': 'HyperBackup', 'type': 'package'},
                     {'id': 'Samba', 'type': 'service'}
                 ]
+                ```
 
-            action (str): 
+            action : str 
                 The action to apply to the services. Either `'start'` or `'stop'`.
-            enable (bool, optional): 
+
+            enable : bool, optional 
                 Whether the task should be enabled upon creation. Defaults to `True`.
-            run_frequently (bool, optional): 
-                Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.
-            run_days (str, optional): 
-                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list 
-                (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
-            run_date (str, optional): 
-                The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). 
-                Defaults to an empty string.
-            repeat (str, optional): 
-                How often the task should repeat. Possible values:
+
+            run_frequently : bool, optional 
+                Determines whether the task runs on a recurring schedule (`True`) or only on a specific date (`False`). Defaults to `True`.
+
+            run_days : str, optional 
+                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
+
+            run_date : str, optional 
+                The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.
+
+            repeat : str, optional 
+                How often the task should repeat. Defaults to `'daily'`. 
+                
+                Possible values:
                 - "daily" -> Only when 'run_frequently=True'
                 - "weekly" -> Only when 'run_frequently=True'
                 - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
@@ -1052,42 +1184,50 @@ class TaskScheduler(base_api.BaseApi):
                 - "every_3_months" -> Only when 'run_frequently=False'
                 - "every_6_months" -> Only when 'run_frequently=False'
                 - "yearly" -> Only when 'run_frequently=False'
-                Defaults to 'daily'.
-            monthly_week (list[str], optional): 
-                If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
-                Defaults to an empty list.
-            start_time_h (int, optional): 
+
+            monthly_week : list[str], optional 
+                If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. Defaults to `[]`.
+
+            start_time_h : int, optional 
                 Hour at which the task should start. Defaults to `0`.
-            start_time_m (int, optional): 
+
+            start_time_m : int, optional 
                 Minute at which the task should start. Defaults to `0`.
-            same_day_repeat_h (int, optional): 
+
+            same_day_repeat_h : int, optional 
                 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
-                Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
+                Set to `0` to disable same-day repeats. Defaults to `0`. 
 
                 Possible values: `0..23`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_m (int, optional): 
+
+            same_day_repeat_m : int, optional 
                 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
-                Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
+                Set to `0` to disable same-day repeats. Defaults to `0`. 
                 
                 Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_until (int, optional): 
+
+            same_day_repeat_until : int, optional 
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
 
-        Returns:
-            dict|str:
-                A dictionary with the id of the created task, or a string if there is an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary with the id of the created task.
 
-        Example return:
+            Example return
+            ---------
+            ```json
             {
-            "data": {
-                "id": 20
-            },
-            "success": true
-        }
+                "data": {
+                    "id": 20
+                },
+                "success": true
+            }
+            ```
         """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
@@ -1143,43 +1283,55 @@ class TaskScheduler(base_api.BaseApi):
             same_day_repeat_h: int = 0,
             same_day_repeat_m: int = 0,
             same_day_repeat_until: int = -1
-        ) -> dict[str, object] | str:
-        """Modify settings of a Service Control task. This method overwrites all the settings of the task, so if you only want to change one setting, 
-        you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
+        ) -> dict[str, object]:
+        """Modify settings of a Service Control task. This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
 
-        Args:
-            task_id (int):
+            Parameters
+            ---------
+            task_id : int
                 The ID of the task.
-            task_name (str): 
+
+            task_name : str 
                 The name of the task.
-            real_owner (str): 
+
+            real_owner : str 
                 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.
+
             services (list): 
                 A list containing the services and their type to be influenced by the specified action (start / stop).
 
                 To get a list of all the available services and their corresponding IDs, call `get_task_config(task_id=-1, real_owner=your_username, type='service')`. 
                 
                 E.g.:
+                ```python
                 [
                     {'id': 'AudioStation', 'type': 'package'},
                     {'id': 'HyperBackup', 'type': 'package'},
                     {'id': 'Samba', 'type': 'service'}
                 ]
+                ```
 
-            action (str): 
+            action : str 
                 The action to apply to the services. Either `'start'` or `'stop'`.
-            enable (bool, optional): 
+
+            enable : bool, optional 
                 Whether the task should be enabled upon creation. Defaults to `True`.
-            run_frequently (bool, optional): 
+
+            run_frequently : bool, optional 
                 Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.
-            run_days (str, optional): 
+
+            run_days : str, optional 
                 Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list 
                 (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
-            run_date (str, optional): 
+
+            run_date : str, optional 
                 The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). 
-                Defaults to an empty string.
-            repeat (str, optional): 
-                How often the task should repeat. Possible values:
+                Defaults to `""`.
+
+            repeat : str, optional 
+                How often the task should repeat. Defaults to `'daily'`. 
+                
+                Possible values:
                 - "daily" -> Only when 'run_frequently=True'
                 - "weekly" -> Only when 'run_frequently=True'
                 - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
@@ -1187,42 +1339,51 @@ class TaskScheduler(base_api.BaseApi):
                 - "every_3_months" -> Only when 'run_frequently=False'
                 - "every_6_months" -> Only when 'run_frequently=False'
                 - "yearly" -> Only when 'run_frequently=False'
-                Defaults to 'daily'.
-            monthly_week (list[str], optional): 
+                
+            monthly_week : list[str], optional 
                 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
-                Defaults to an empty list.
-            start_time_h (int, optional): 
+                Defaults to `[]`.
+
+            start_time_h : int, optional 
                 Hour at which the task should start. Defaults to `0`.
-            start_time_m (int, optional): 
+
+            start_time_m : int, optional 
                 Minute at which the task should start. Defaults to `0`.
-            same_day_repeat_h (int, optional): 
+
+            same_day_repeat_h : int, optional 
                 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
-                Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
+                Set to `0` to disable same-day repeats. Defaults to `0`. 
 
                 Possible values: `0..23`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_m (int, optional): 
+
+            same_day_repeat_m : int, optional 
                 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
-                Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
+                Set to `0` to disable same-day repeats. Defaults to `0`. 
                 
                 Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_until (int, optional): 
+
+            same_day_repeat_until : int, optional 
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
 
-        Returns:
-            dict|str:
-                A dictionary with the id of the created task, or a string if there is an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary with the id of the created task.
 
-        Example return:
+            Example return
+            ---------
+            ```json
             {
-            "data": {
-                "id": 20
-            },
-            "success": true
-        }
+                "data": {
+                    "id": 20
+                },
+                "success": true
+            }
+            ```
         """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
@@ -1277,35 +1438,52 @@ class TaskScheduler(base_api.BaseApi):
             same_day_repeat_h: int = 0,
             same_day_repeat_m: int = 0,
             same_day_repeat_until: int = -1
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Create a new Recycle Bin Control task with the provided schedule and services to start/stop.
 
-        Args:
-            task_name (str): 
+            Parameters
+            ---------
+            task_name : str 
                 The name of the task.
-            owner (str): 
+
+            owner : str 
                 The task owner.
-            clean_all_shares (bool): 
+
+            clean_all_shares : bool 
                 Whether the task should empty the recycle bins of all shares or not, if set to `False`, shares must be specified.
-            shares (list, optional):
-                List of shares of which to clean the recycle bins. Pass only the name of the shares without slashes, e.g. `shares=['photo', 'web']`. Defaults to an empty list.
+
+            shares : list[str], optional
+                List of shares of which to clean the recycle bins. Pass only the name of the shares without slashes, e.g. `shares=['photo', 'web']`. Defaults to `[]`.
+
             policy (dict):
-                Determines what files will be deleted from the recycle bins. Possible values are:
-                - {"policy": "clean_all"} -> Clean all files
-                - {"policy": "time", "time": int} -> Clean all files older than X days, days being possed as value for "time" key.
-                - {"policy": "size", "size": int , "sort_type": int} -> Clean files until recycle bin size reaches given "size" in MB, delete files by "sort_type", "0 -> Delete bigger files first", "1 -> Delete older files first".
-            enable (bool, optional): 
+                Determines what files will be deleted from the recycle bins. 
+                
+                Possible values are:
+                - `{"policy": "clean_all"}` -> Clean all files
+                - `{"policy": "time", "time": int}` -> Clean all files older than X days, days being possed as value for "time" key.
+                - `{"policy": "size", "size": int , "sort_type": int}` -> Clean files until recycle bin size reaches given "size" in MB, delete files by "sort_type".
+                
+                Possible values for "sort_type" are:
+                - `0` -> Delete bigger files first
+                - `1` -> Delete older files first
+
+            enable : bool, optional 
                 Whether the task should be enabled upon creation. Defaults to `True`.
-            run_frequently (bool, optional): 
+
+            run_frequently : bool, optional 
                 Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.
-            run_days (str, optional): 
-                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list 
-                (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
-            run_date (str, optional): 
+
+            run_days : str, optional 
+                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
+
+            run_date : str, optional 
                 The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). 
-                Defaults to an empty string.
-            repeat (str, optional): 
-                How often the task should repeat. Possible values:
+                Defaults to `""`.
+
+            repeat : str, optional 
+                How often the task should repeat. Defaults to `'daily'`.
+                
+                Possible values:
                 - "daily" -> Only when 'run_frequently=True'
                 - "weekly" -> Only when 'run_frequently=True'
                 - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
@@ -1313,42 +1491,51 @@ class TaskScheduler(base_api.BaseApi):
                 - "every_3_months" -> Only when 'run_frequently=False'
                 - "every_6_months" -> Only when 'run_frequently=False'
                 - "yearly" -> Only when 'run_frequently=False'
-                Defaults to 'daily'.
-            monthly_week (list[str], optional): 
+
+            monthly_week : list[str], optional 
                 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
-                Defaults to an empty list.
-            start_time_h (int, optional): 
+                Defaults to `[]`.
+
+            start_time_h : int, optional 
                 Hour at which the task should start. Defaults to `0`.
-            start_time_m (int, optional): 
+
+            start_time_m : int, optional 
                 Minute at which the task should start. Defaults to `0`.
-            same_day_repeat_h (int, optional): 
+
+            same_day_repeat_h : int, optional 
                 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
                 Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
 
                 Possible values: `0..23`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_m (int, optional): 
+
+            same_day_repeat_m : int, optional 
                 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
                 Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
                 
                 Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_until (int, optional): 
+
+            same_day_repeat_until : int, optional 
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
 
-        Returns:
-            dict|str:
-                A dictionary with the id of the created task, or a string if there is an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary with the id of the created task.
 
-        Example return:
+            Example return
+            ---------
+            ```json
             {
-            "data": {
-                "id": 20
-            },
-            "success": true
-        }
+                "data": {
+                    "id": 20
+                },
+                "success": true
+            }
+            ```
         """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
@@ -1401,38 +1588,55 @@ class TaskScheduler(base_api.BaseApi):
             same_day_repeat_h: int = 0,
             same_day_repeat_m: int = 0,
             same_day_repeat_until: int = -1
-        ) -> dict[str, object] | str:
-        """Modify settings of a Recycle Bin Control task. This method overwrites all the settings of the task, so if you only want to change one setting, 
-        you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
+        ) -> dict[str, object]:
+        """Modify settings of a Recycle Bin Control task. This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
 
-        Args:
-            task_id (int):
+            Parameters
+            ---------
+            task_id : int
                 The ID of the task.
-            task_name (str): 
+
+            task_name : str 
                 The name of the task.
-            real_owner (str): 
+
+            real_owner : str 
                 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.
-            clean_all_shares (bool): 
+
+            clean_all_shares : bool 
                 Whether the task should empty the recycle bins of all shares or not, if set to `False`, shares must be specified.
-            shares (list, optional):
-                List of shares of which to clean the recycle bins. Pass only the name of the shares without slashes, e.g. `shares=['photo', 'web']`. Defaults to an empty list.
+
+            shares : list[str], optional
+                List of shares of which to clean the recycle bins. Pass only the name of the shares without slashes, e.g. `shares=['photo', 'web']`. Defaults to `[]`.
+
             policy (dict):
-                Determines what files will be deleted from the recycle bins. Possible values are:
-                - {"policy": "clean_all"} -> Clean all files
-                - {"policy": "time", "time": int} -> Clean all files older than X days, days being possed as value for "time" key.
-                - {"policy": "size", "size": int , "sort_type": int} -> Clean files until recycle bin size reaches given "size" in MB, delete files by "sort_type", "0 -> Delete bigger files first", "1 -> Delete older files first".
-            enable (bool, optional): 
+                Determines what files will be deleted from the recycle bins. 
+                
+                Possible values are:
+                - `{"policy": "clean_all"}` -> Clean all files
+                - `{"policy": "time", "time": int}` -> Clean all files older than X days, days being possed as value for "time" key.
+                - `{"policy": "size", "size": int , "sort_type": int}` -> Clean files until recycle bin size reaches given "size" in MB, delete files by "sort_type".
+                
+                Possible values for "sort_type" are:
+                - `0` -> Delete bigger files first
+                - `1` -> Delete older files first
+
+            enable : bool, optional 
                 Whether the task should be enabled upon creation. Defaults to `True`.
-            run_frequently (bool, optional): 
+
+            run_frequently : bool, optional 
                 Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.
-            run_days (str, optional): 
-                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list 
-                (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
-            run_date (str, optional): 
+
+            run_days : str, optional 
+                Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).
+
+            run_date : str, optional 
                 The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). 
-                Defaults to an empty string.
-            repeat (str, optional): 
-                How often the task should repeat. Possible values:
+                Defaults to `""`.
+
+            repeat : str, optional 
+                How often the task should repeat. Defaults to `'daily'`.
+                
+                Possible values:
                 - "daily" -> Only when 'run_frequently=True'
                 - "weekly" -> Only when 'run_frequently=True'
                 - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
@@ -1440,42 +1644,51 @@ class TaskScheduler(base_api.BaseApi):
                 - "every_3_months" -> Only when 'run_frequently=False'
                 - "every_6_months" -> Only when 'run_frequently=False'
                 - "yearly" -> Only when 'run_frequently=False'
-                Defaults to 'daily'.
-            monthly_week (list[str], optional): 
+
+            monthly_week : list[str], optional 
                 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
-                Defaults to an empty list.
-            start_time_h (int, optional): 
+                Defaults to `[]`.
+
+            start_time_h : int, optional 
                 Hour at which the task should start. Defaults to `0`.
-            start_time_m (int, optional): 
+
+            start_time_m : int, optional 
                 Minute at which the task should start. Defaults to `0`.
-            same_day_repeat_h (int, optional): 
+
+            same_day_repeat_h : int, optional 
                 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
                 Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
 
                 Possible values: `0..23`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_m (int, optional): 
+                
+            same_day_repeat_m : int, optional 
                 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
                 Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
                 
                 Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 
                 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
-            same_day_repeat_until (int, optional): 
+
+            same_day_repeat_until : int, optional 
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
 
-        Returns:
-            dict|str:
-                A dictionary with the id of the created task, or a string if there is an error.
+            Returns
+            ---------
+            dict[str, object]
+                A dictionary with the id of the created task.
 
-        Example return:
+            Example return
+            ---------
+            ```json
             {
-            "data": {
-                "id": 20
-            },
-            "success": true
-        }
+                "data": {
+                    "id": 20
+                },
+                "success": true
+            }
+            ```
         """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
