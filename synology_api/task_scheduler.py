@@ -1,6 +1,6 @@
 from __future__ import annotations
 from . import base_api
-from .core_sys_info import SysInfo
+from .core_user import User
 import json
 
 class _Schedule():
@@ -93,10 +93,10 @@ class TaskScheduler(base_api.BaseApi):
     """
 
     def __get_root_token(self) -> str:
-        sys_info = SysInfo(ip_address=self.session._ip_address, port=self.session._port, username=self.session._username, password=self.session._password,
+        user_api = User(ip_address=self.session._ip_address, port=self.session._port, username=self.session._username, password=self.session._password,
                             secure=self.session._secure, cert_verify=self.session._verify, dsm_version=self.session._version, debug=self.session._debug, 
                             otp_code=self.session._otp_code, application=self.application)
-        response = sys_info.password_confirm(password=self.session._password)
+        response = user_api.password_confirm(password=self.session._password)
         if response['success']: 
             return response['data']['SynoConfirmPWToken']
         else:
