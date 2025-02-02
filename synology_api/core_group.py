@@ -114,7 +114,11 @@ class Group(base_api.BaseApi):
                 The group to list users from.
 
             in_group : bool, optional
-                If `True`, retrieves users who are members of the specified group. If `False`, retrieves users who are not members of the group. Defaults to `True`.
+                Defaults to `True`.
+
+                If `True`, retrieves users who are members of the specified group. 
+                
+                If `False`, retrieves users who are not members of the group. 
 
             Returns
             ----------
@@ -486,7 +490,9 @@ class Group(base_api.BaseApi):
         download_limit: int,
         protocol: str,
     ) -> dict[str, object]:
-        """Set speed limit for a given share. Doesn't support scheduled speed limits, only on/off.
+        """Set speed limit for a given share. 
+        
+            Info: Doesn't support **scheduled** speed limits, only on/off.
 
             Parameters
             ----------

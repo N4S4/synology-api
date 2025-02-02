@@ -261,14 +261,15 @@ class EventScheduler(base_api.BaseApi):
                 Action to perform on the task. 
                 
                 Possible values:
-                - "create" -> Creates a new task.
-                - "set" -> Modify an existing task.
+                - `create` -> Creates a new task.
+                - `set` -> Modify an existing task.
 
             task_name : str 
                 The name of the task.
 
             owner : dict[str, str]
                 Dictionary containing the owner's ID and name (e.g., `{"1026": "user1"}`). 
+
                 You can get the user UID by running `synouser --get your_user` in your NAS CLI.
 
                 For root privileges, pass `{"0":"root"}`.
@@ -277,14 +278,14 @@ class EventScheduler(base_api.BaseApi):
                 The event that triggers the task. 
                 
                 Possible values:
-                - "shutdown"
-                - "bootup"
+                - `shutdown`
+                - `bootup`
 
             script : str 
                 The script to be executed when the task is triggered.
 
             depend_on_task : list[str], optional
-                A list of event triggered task names that this task depends on (i.e., tasks that will be run before this one). Defaults to an empty list.
+                A list of event triggered task names that this task depends on (i.e., tasks that will be run before this one). Defaults to `[]`.
 
             enable : bool, optional
                 Whether to enable the task. Defaults to `True`.

@@ -79,11 +79,9 @@ class TaskScheduler(base_api.BaseApi):
             - Get task information
             - Get task results
             - Get output path for task results
-
         - Setters:
             - Set output path for task results
             - Set task settings 
-        
         - Actions:
             - Run task
             - Create task
@@ -108,7 +106,7 @@ class TaskScheduler(base_api.BaseApi):
             Returns
             ---------
             dict[str, object]
-                A dictionary containing a list of the tasks and information related to them,.
+                A dictionary containing a list of the tasks and information related to them.
             
             Example return  
             -----------
@@ -164,13 +162,14 @@ class TaskScheduler(base_api.BaseApi):
 
             offset : int, optional 
                 Task offset for pagination. Defaults to `0`.
+
             limit : int, optional 
                 Number of tasks to retrieve. Defaults to `50`.
 
             Returns
             ---------
             dict[str, object]
-                A dictionary containing a list of the tasks and information related to them,.
+                A dictionary containing a list of the tasks and information related to them.
 
             Example return
             -----------
@@ -237,8 +236,10 @@ class TaskScheduler(base_api.BaseApi):
             ---------
             task_id : int 
                 The ID of the task to retrieve the configuration for. Pass `-1` to get a list of all available services with their IDs.
+
             real_owner : str 
                 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.
+
             type : str, optional 
                 The type of task (e.g., 'service'). Pass "service" to get a list of all available services with their IDs. Defaults to `""`.
 
@@ -412,9 +413,10 @@ class TaskScheduler(base_api.BaseApi):
             Parameters
             ---------
             enable_output : bool 
-                Whether to enable result logging.
+                Whether to enable result logging or not.
+
             output_path : str, optional 
-                The path where the result logs will be stored, e.g. `'share/scripts_output'`. Defaults to empty string.
+                The path where the result logs will be stored, e.g. `share/scripts_output'`. Defaults to `""`.
 
             Returns
             ---------
@@ -454,8 +456,10 @@ class TaskScheduler(base_api.BaseApi):
             ---------
             task_id : int 
                 The ID of the task to be enabled.
+
             real_owner : str 
                 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.
+
             enable : bool
                 Wheter to enable (`True`) or disable (`False`) the task.
 
@@ -500,6 +504,7 @@ class TaskScheduler(base_api.BaseApi):
             ---------
             task_id : int 
                 The ID of the task to be run.
+
             real_owner : str 
                 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.
 
@@ -543,6 +548,7 @@ class TaskScheduler(base_api.BaseApi):
             ---------
             task_id : int 
                 The ID of the task to be deleted.
+
             real_owner : str 
                 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.
 
@@ -594,7 +600,9 @@ class TaskScheduler(base_api.BaseApi):
             notify_email: str = '',
             notify_only_on_error: bool = False
         ) -> dict[str, object]:
-        """Create a new Script task with the provided schedule and notification settings. If the task needs to run with root privileges, please specify the owner as "root".
+        """Create a new Script task with the provided schedule and notification settings. 
+        
+            Tip: If the task needs to run with root privileges, please specify the owner as "root".
 
             Parameters
             ---------
@@ -623,16 +631,17 @@ class TaskScheduler(base_api.BaseApi):
                 How often the task should repeat. Defaults to `daily`.
                 
                 Possible values:
-                - "daily" -> Only when 'run_frequently=True'
-                - "weekly" -> Only when 'run_frequently=True'
-                - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
-                - "no_repeat" -> Only when 'run_frequently=False'
-                - "every_3_months" -> Only when 'run_frequently=False'
-                - "every_6_months" -> Only when 'run_frequently=False'
-                - "yearly" -> Only when 'run_frequently=False'
+                - `daily` -> Only when 'run_frequently=True'
+                - `weekly` -> Only when 'run_frequently=True'
+                - `monthly` -> Works for both 'run_frequently=True' and 'run_frequently=False'
+                - `no_repeat` -> Only when 'run_frequently=False'
+                - `every_3_months` -> Only when 'run_frequently=False'
+                - `every_6_months` -> Only when 'run_frequently=False'
+                - `yearly` -> Only when 'run_frequently=False'
                 
             monthly_week : list[str], optional 
                 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
+
                 Defaults to `[]`.
 
             start_time_h : int, optional 
@@ -738,7 +747,11 @@ class TaskScheduler(base_api.BaseApi):
             notify_email: str = '',
             notify_only_on_error: bool = False
         ) -> dict[str, object]:
-        """Modify settings of a Script task. This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method. If the task needs to run with root privileges, please specify the owner as "root".
+        """Modify settings of a Script task. 
+        
+            Warning: This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
+             
+            Tip: If the task needs to run with root privileges, please specify the owner as "root".
 
             Parameters
             ---------
@@ -773,13 +786,13 @@ class TaskScheduler(base_api.BaseApi):
                 How often the task should repeat. Defaults to `'daily'`.
                 
                 Possible values:
-                - "daily" -> Only when 'run_frequently=True'
-                - "weekly" -> Only when 'run_frequently=True'
-                - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
-                - "no_repeat" -> Only when 'run_frequently=False'
-                - "every_3_months" -> Only when 'run_frequently=False'
-                - "every_6_months" -> Only when 'run_frequently=False'
-                - "yearly" -> Only when 'run_frequently=False'
+                - `daily` -> Only when 'run_frequently=True'
+                - `weekly` -> Only when 'run_frequently=True'
+                - `monthly` -> Works for both 'run_frequently=True' and 'run_frequently=False'
+                - `no_repeat` -> Only when 'run_frequently=False'
+                - `every_3_months` -> Only when 'run_frequently=False'
+                - `every_6_months` -> Only when 'run_frequently=False'
+                - `yearly` -> Only when 'run_frequently=False'
 
             monthly_week : list[str], optional 
                 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. Defaults to `[]`.
@@ -911,13 +924,13 @@ class TaskScheduler(base_api.BaseApi):
                 How often the task should repeat. Defaults to `'daily'`.
                 
                 Possible values:
-                - "daily" -> Only when 'run_frequently=True'
-                - "weekly" -> Only when 'run_frequently=True'
-                - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
-                - "no_repeat" -> Only when 'run_frequently=False'
-                - "every_3_months" -> Only when 'run_frequently=False'
-                - "every_6_months" -> Only when 'run_frequently=False'
-                - "yearly" -> Only when 'run_frequently=False'
+                - `daily` -> Only when 'run_frequently=True'
+                - `weekly` -> Only when 'run_frequently=True'
+                - `monthly` -> Works for both 'run_frequently=True' and 'run_frequently=False'
+                - `no_repeat` -> Only when 'run_frequently=False'
+                - `every_3_months` -> Only when 'run_frequently=False'
+                - `every_6_months` -> Only when 'run_frequently=False'
+                - `yearly` -> Only when 'run_frequently=False'
                 
 
             monthly_week : list[str], optional 
@@ -1009,7 +1022,9 @@ class TaskScheduler(base_api.BaseApi):
             same_day_repeat_m: int = 0,
             same_day_repeat_until: int = -1
         ) -> dict[str, object]:
-        """Modify settings of a Beep Control task. This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
+        """Modify settings of a Beep Control task. 
+        
+            Warning: This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
 
             Parameters
             ---------
@@ -1038,13 +1053,13 @@ class TaskScheduler(base_api.BaseApi):
                 How often the task should repeat. Defaults to `'daily'`.
                 
                 Possible values:
-                - "daily" -> Only when 'run_frequently=True'
-                - "weekly" -> Only when 'run_frequently=True'
-                - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
-                - "no_repeat" -> Only when 'run_frequently=False'
-                - "every_3_months" -> Only when 'run_frequently=False'
-                - "every_6_months" -> Only when 'run_frequently=False'
-                - "yearly" -> Only when 'run_frequently=False'
+                - `daily` -> Only when 'run_frequently=True'
+                - `weekly` -> Only when 'run_frequently=True'
+                - `monthly` -> Works for both 'run_frequently=True' and 'run_frequently=False'
+                - `no_repeat` -> Only when 'run_frequently=False'
+                - `every_3_months` -> Only when 'run_frequently=False'
+                - `every_6_months` -> Only when 'run_frequently=False'
+                - `yearly` -> Only when 'run_frequently=False'
 
             monthly_week : list[str], optional 
                 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. Defaults to `[]`.
@@ -1057,19 +1072,21 @@ class TaskScheduler(base_api.BaseApi):
 
             same_day_repeat_h : int, optional 
                 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
+
                 Set to `0` to disable same-day repeats. Defaults to `0`.
 
                 Possible values: `0..23`
 
-                The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
+                Info: The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
 
             same_day_repeat_m : int, optional 
                 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
+
                 Set to `0` to disable same-day repeats. Defaults to `0`.
                 
                 Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 
-                The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
+                Info: The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
 
             same_day_repeat_until : int, optional 
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
@@ -1177,13 +1194,13 @@ class TaskScheduler(base_api.BaseApi):
                 How often the task should repeat. Defaults to `'daily'`. 
                 
                 Possible values:
-                - "daily" -> Only when 'run_frequently=True'
-                - "weekly" -> Only when 'run_frequently=True'
-                - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
-                - "no_repeat" -> Only when 'run_frequently=False'
-                - "every_3_months" -> Only when 'run_frequently=False'
-                - "every_6_months" -> Only when 'run_frequently=False'
-                - "yearly" -> Only when 'run_frequently=False'
+                - `daily` -> Only when 'run_frequently=True'
+                - `weekly` -> Only when 'run_frequently=True'
+                - `monthly` -> Works for both 'run_frequently=True' and 'run_frequently=False'
+                - `no_repeat` -> Only when 'run_frequently=False'
+                - `every_3_months` -> Only when 'run_frequently=False'
+                - `every_6_months` -> Only when 'run_frequently=False'
+                - `yearly` -> Only when 'run_frequently=False'
 
             monthly_week : list[str], optional 
                 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. Defaults to `[]`.
@@ -1196,19 +1213,21 @@ class TaskScheduler(base_api.BaseApi):
 
             same_day_repeat_h : int, optional 
                 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
+
                 Set to `0` to disable same-day repeats. Defaults to `0`. 
 
                 Possible values: `0..23`
 
-                The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
+                Info: The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
 
             same_day_repeat_m : int, optional 
                 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
+
                 Set to `0` to disable same-day repeats. Defaults to `0`. 
                 
                 Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 
-                The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
+                Info: The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
 
             same_day_repeat_until : int, optional 
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
@@ -1284,7 +1303,9 @@ class TaskScheduler(base_api.BaseApi):
             same_day_repeat_m: int = 0,
             same_day_repeat_until: int = -1
         ) -> dict[str, object]:
-        """Modify settings of a Service Control task. This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
+        """Modify settings of a Service Control task. 
+        
+            Warning: This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
 
             Parameters
             ---------
@@ -1332,13 +1353,13 @@ class TaskScheduler(base_api.BaseApi):
                 How often the task should repeat. Defaults to `'daily'`. 
                 
                 Possible values:
-                - "daily" -> Only when 'run_frequently=True'
-                - "weekly" -> Only when 'run_frequently=True'
-                - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
-                - "no_repeat" -> Only when 'run_frequently=False'
-                - "every_3_months" -> Only when 'run_frequently=False'
-                - "every_6_months" -> Only when 'run_frequently=False'
-                - "yearly" -> Only when 'run_frequently=False'
+                - `daily` -> Only when 'run_frequently=True'
+                - `weekly` -> Only when 'run_frequently=True'
+                - `monthly` -> Works for both 'run_frequently=True' and 'run_frequently=False'
+                - `no_repeat` -> Only when 'run_frequently=False'
+                - `every_3_months` -> Only when 'run_frequently=False'
+                - `every_6_months` -> Only when 'run_frequently=False'
+                - `yearly` -> Only when 'run_frequently=False'
                 
             monthly_week : list[str], optional 
                 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
@@ -1352,19 +1373,21 @@ class TaskScheduler(base_api.BaseApi):
 
             same_day_repeat_h : int, optional 
                 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
+
                 Set to `0` to disable same-day repeats. Defaults to `0`. 
 
                 Possible values: `0..23`
 
-                The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
+                Info: The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
 
             same_day_repeat_m : int, optional 
                 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
+
                 Set to `0` to disable same-day repeats. Defaults to `0`. 
                 
                 Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 
-                The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
+                Info: The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
 
             same_day_repeat_until : int, optional 
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
@@ -1484,16 +1507,17 @@ class TaskScheduler(base_api.BaseApi):
                 How often the task should repeat. Defaults to `'daily'`.
                 
                 Possible values:
-                - "daily" -> Only when 'run_frequently=True'
-                - "weekly" -> Only when 'run_frequently=True'
-                - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
-                - "no_repeat" -> Only when 'run_frequently=False'
-                - "every_3_months" -> Only when 'run_frequently=False'
-                - "every_6_months" -> Only when 'run_frequently=False'
-                - "yearly" -> Only when 'run_frequently=False'
+                - `daily` -> Only when 'run_frequently=True'
+                - `weekly` -> Only when 'run_frequently=True'
+                - `monthly` -> Works for both 'run_frequently=True' and 'run_frequently=False'
+                - `no_repeat` -> Only when 'run_frequently=False'
+                - `every_3_months` -> Only when 'run_frequently=False'
+                - `every_6_months` -> Only when 'run_frequently=False'
+                - `yearly` -> Only when 'run_frequently=False'
 
             monthly_week : list[str], optional 
                 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
+
                 Defaults to `[]`.
 
             start_time_h : int, optional 
@@ -1504,19 +1528,21 @@ class TaskScheduler(base_api.BaseApi):
 
             same_day_repeat_h : int, optional 
                 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
+
                 Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
 
                 Possible values: `0..23`
 
-                The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
+                Info: The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
 
             same_day_repeat_m : int, optional 
                 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
+
                 Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
                 
                 Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 
-                The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
+                Info: The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
 
             same_day_repeat_until : int, optional 
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
@@ -1589,7 +1615,9 @@ class TaskScheduler(base_api.BaseApi):
             same_day_repeat_m: int = 0,
             same_day_repeat_until: int = -1
         ) -> dict[str, object]:
-        """Modify settings of a Recycle Bin Control task. This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
+        """Modify settings of a Recycle Bin Control task. 
+        
+            Warning: This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
 
             Parameters
             ---------
@@ -1637,16 +1665,17 @@ class TaskScheduler(base_api.BaseApi):
                 How often the task should repeat. Defaults to `'daily'`.
                 
                 Possible values:
-                - "daily" -> Only when 'run_frequently=True'
-                - "weekly" -> Only when 'run_frequently=True'
-                - "monthly" -> Works for both 'run_frequently=True' and 'run_frequently=False'
-                - "no_repeat" -> Only when 'run_frequently=False'
-                - "every_3_months" -> Only when 'run_frequently=False'
-                - "every_6_months" -> Only when 'run_frequently=False'
-                - "yearly" -> Only when 'run_frequently=False'
+                - `daily` -> Only when 'run_frequently=True'
+                - `weekly` -> Only when 'run_frequently=True'
+                - `monthly` -> Works for both 'run_frequently=True' and 'run_frequently=False'
+                - `no_repeat` -> Only when 'run_frequently=False'
+                - `every_3_months` -> Only when 'run_frequently=False'
+                - `every_6_months` -> Only when 'run_frequently=False'
+                - `yearly` -> Only when 'run_frequently=False'
 
             monthly_week : list[str], optional 
                 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
+
                 Defaults to `[]`.
 
             start_time_h : int, optional 
@@ -1657,19 +1686,21 @@ class TaskScheduler(base_api.BaseApi):
 
             same_day_repeat_h : int, optional 
                 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
+
                 Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
 
                 Possible values: `0..23`
 
-                The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
+                Info: The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
                 
             same_day_repeat_m : int, optional 
                 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
+
                 Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat). 
                 
                 Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 
-                The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
+                Info: The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.
 
             same_day_repeat_until : int, optional 
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.

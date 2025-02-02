@@ -698,7 +698,7 @@ class User(base_api.BaseApi):
     def password_confirm(self, password: str) -> dict[str, object]:
         """Issues a passowrd/session comparison to ensure the given password matches the auth of the current session.
 
-            Note: This is needed by some APIs as a confirmation method, for example, when creating/modifying a scheduled task with root permissions.
+            Note: This is needed by some APIs as a confirmation method, for example, when creating/modifying a scheduled task with root permissions, seldom needed by end users.
 
             Parameters
             ----------

@@ -348,7 +348,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             offset : int
                 The offset of the logs to retrieve. Defaults to `0`.
 
-            key_word (str, optional):
+            key_word : str, optional
                 A keyword to filter logs. Defaults to `''`.
 
             Returns
@@ -671,7 +671,9 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             "run_days": list[int]
         ] = {"place_holder": None}
     ) -> dict[str, object]:
-        """Set the schedule for a given task. Note: If repeat_every_hours is set to 0, the backup will run once a day.
+        """Set the schedule for a given task. 
+        
+            Note: If repeat_every_hours is set to 0, the backup will run once a day.
 
             Parameters
             ----------
@@ -690,10 +692,10 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
                 A dictionary containing the schedule settings. 
                 
                 Possible values:
-                - `start_hour` : int The start hour of the schedule.
-                - `start_minute` : int The start minute of the schedule.
-                - `last_run_hour` : int The last run hour of the schedule.
-                - `repeat_every_hours` : int Run the backup every X hours.
+                - `start_hour` (int): The start hour of the schedule.
+                - `start_minute` (int): The start minute of the schedule.
+                - `last_run_hour` (int): The last run hour of the schedule.
+                - `repeat_every_hours` (int): Run the backup every X hours.
                 - `run_days` (list[int]): Run the backup at the specified days (Sunday = 0, Morning = 1, and so on...).
                 
                 Example, to run the backup every day hourly starting at 08:30 until 23:30.
@@ -895,13 +897,17 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
     def delete_task(self, task_id: int, remove_data: bool = False) -> dict[str, object]:
         """Delete a task.
 
+            Warning: Miss-use of this action may lead to data loss.
+
             Parameters
             ----------
             task_id : int 
                 The ID of the task.
 
             remove_data : bool 
-                Whether to remove the backup data in the NAS. If this is set to `True`, all task data in the NAS will be lost and the task cannot be relinked in the future. Defaults to `False`.
+                Whether to remove the backup data in the NAS. Defaults to `False`.
+                
+                Warning: If this is set to `True`, all task data in the NAS will be lost and the task cannot be relinked in the future. 
 
             Returns
             ----------
