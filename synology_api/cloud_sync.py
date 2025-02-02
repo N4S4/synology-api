@@ -5,8 +5,7 @@ import json
 from .utils import merge_dicts, make_folder_meta_list_from_path
 
 class CloudSync(base_api.BaseApi):
-    """
-       Cloud Sync API implementation.
+    """Cloud Sync API implementation.
 
        This API provides the functionality to get information related to the package settings and current connections and tasks. 
        It also provides functionalities to set most of the settings for tasks and package configuration, as well as manage the current syncing processes.
@@ -17,16 +16,48 @@ class CloudSync(base_api.BaseApi):
        - Google Drive  
        - OneDrive
        - DropBox
+       - Amazon S3 (task creation)
+
+       Supported methods:
+            - Getters: 
+               - Get package settings
+               - Get connections
+               - Get connections settings
+               - Get connection information
+               - Get connection auth information
+               - Get connection logs
+               - Get connection tasks
+               - Get task filters
+               - Get task synced remote directories
+               - Get recently modified & currently syncing files
+            - Setters: 
+               - Set package settings
+               - Set relink behavior
+               - Set connection settings
+               - Set connection schedule settings
+               - Set task settings
+               - Set task filters
+            - Actions:
+               - Pause connection
+               - Resume connection
+               - Delete connection
+               - Delete task
+               - Validate task settings
+               - Create S3 task
+            
     """
 
-    def get_pkg_config(self) -> dict[str, object] | str:
+    def get_pkg_config(self) -> dict[str, object]:
         """Retrieve package settings.
 
-        Returns:
-            dict|str:
-                A dictionary containing the result of package settings, or a string in case of an error.
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of package settings.
 
-            Example return:
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "admin_mode": "enable",
@@ -58,6 +89,7 @@ class CloudSync(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -69,20 +101,26 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def get_connections(self, group_by: str = 'group_by_user') -> dict[str, object] | str:
+    def get_connections(self, group_by: str = 'group_by_user') -> dict[str, object]:
         """Retrieve a list of current cloud connections.
 
-        Args:
-            group_by (str, optional): 
-                How to group the connection list, by user or cloud type. Defaults to `'group_by_user'`. Possible values:
-                - 'group_by_user': Group connection by owner user.
-                - 'group_by_cloud_type': Group connections by cloud provider.
+            Parameters
+            ----------
+            group_by : str, optional 
+                How to group the connection list, by user or cloud type. Defaults to `"group_by_user"`. 
+                
+                Possible values:
+                - `group_by_user`: Group connection by owner user.
+                - `group_by_cloud_type`: Group connections by cloud provider.
 
-        Returns:
-            dict|str: 
-                A dictionary containing the list of cloud connections, or a string in case of an error.
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the list of cloud connections.
 
-            Example return:
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "conn": [
@@ -121,6 +159,7 @@ class CloudSync(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -134,18 +173,22 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def get_connection_settings(self, conn_id: int) -> dict[str, object] | str:
+    def get_connection_settings(self, conn_id: int) -> dict[str, object]:
         """Retrieve settings for a specific connection.
 
-        Args:
-            conn_id (int): 
+            Parameters
+            ----------
+            conn_id : int 
                 The ID of the connection, obtained from `get_connections()`.
 
-        Returns:
-            dict|str: 
-                A dictionary containing the connection settings, or a string in case of an error.
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the connection settings.
 
-            Example return:
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "client_type": "db",
@@ -161,6 +204,7 @@ class CloudSync(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -173,18 +217,22 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def get_connection_information(self, conn_id: int) -> dict[str, object] | str:
+    def get_connection_information(self, conn_id: int) -> dict[str, object]:
         """Retrieve cloud information for a specific connection.
 
-        Args:
-            conn_id(int): 
+            Parameters
+            ----------
+            conn_id : int 
                 The ID of the connection, obtained from `get_connections()`.
 
-        Returns:
-            dict|str: 
-                A dictionary containing cloud information, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing cloud information. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "auth_version": "",
@@ -204,6 +252,7 @@ class CloudSync(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -216,18 +265,22 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def get_connection_auth(self, conn_id: int) -> dict[str, object] | str:
+    def get_connection_auth(self, conn_id: int) -> dict[str, object]:
         """Retrieve authentication information for a specific connection.
 
-        Args:
-            conn_id (int): 
+            Parameters
+            ----------
+            conn_id : int 
                 The ID of the connection, obtained from `get_connections()`.
 
-        Returns:
-            dict|str: 
-                A dictionary containing the connection authentication details, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the connection authentication details. 
             
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "access_key": "",
@@ -266,6 +319,7 @@ class CloudSync(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -288,44 +342,59 @@ class CloudSync(base_api.BaseApi):
             action: int = -1,
             offset: int = 0,
             limit: int = 200
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Retrieve logs for a specific connection.
 
-        Args:
-            conn_id (int): 
+            Parameters
+            ----------
+            conn_id : int 
                 The ID of the connection, obtained from `get_connections()`.
-            keyword (str, optional): 
+
+            keyword : str, optional 
                 A keyword to filter logs. Defaults to `''`.
-            date_from (int, optional): 
+
+            date_from : int, optional 
                 The starting date in epoch format. Defaults to `0`.
-            date_to (int, optional): 
+
+            date_to : int, optional 
                 The ending date in epoch format. Defaults to `0`.
-            log_level (int, optional):
-                Log level filter. Defaults to `-1`. Possible values:
-                - -1: All
-                - 0: Info
-                - 1: Warning
-                - 2: Error
-            action (int, optional): 
-                Action filter. Defaults to `-1`. Possible values:
-                - -1: All
-                - 0: Delete Remote
-                - 1: Download
-                - 2: Upload
-                - 3: Delete Local
-                - 4: Rename Remote
-                - 8: Merge
-                - 9: Merge Deletion
-            offset (int, optional): 
+
+            log_level : int, optional
+                Log level filter. Defaults to `-1`. 
+                
+                Possible values:
+                - `-1`: All
+                - `0`: Info
+                - `1`: Warning
+                - `2`: Error
+
+            action : int, optional 
+                Action filter. Defaults to `-1`. 
+                
+                Possible values:
+                - `-1`: All
+                - `0`: Delete Remote
+                - `1`: Download
+                - `2`: Upload
+                - `3`: Delete Local
+                - `4`: Rename Remote
+                - `8`: Merge
+                - `9`: Merge Deletion
+
+            offset : int, optional 
                 Log offset for pagination. Defaults to `0`.
-            limit (int, optional): 
+
+            limit : int, optional 
                 Number of logs to retrieve. Defaults to `200`.
 
-        Returns:
-            dict|str: 
-                A dictionary containing the connection logs, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the connection logs. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "items": [
@@ -354,6 +423,7 @@ class CloudSync(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -373,18 +443,22 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_tasks(self, conn_id: int) -> dict[str, object] | str:
+    def get_tasks(self, conn_id: int) -> dict[str, object]:
         """Retrieve a list of tasks related to a specific connection.
 
-        Args:
-            conn_id (int): 
+            Parameters
+            ----------
+            conn_id : int 
                 The ID of the connection, obtained from `get_connections()`.
 
-        Returns:
-            dict|str: 
-                A dictionary containing the list of tasks, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the list of tasks. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "sess": [
@@ -406,6 +480,7 @@ class CloudSync(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -418,18 +493,22 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def get_task_filters(self, sess_id: int) -> dict[str, object] | str:
+    def get_task_filters(self, sess_id: int) -> dict[str, object]:
         """Retrieve filter information for a specific task.
 
-        Args:
-            sess_id (int): 
+            Parameters
+            ----------
+            sess_id : int 
                 The ID of the task, obtained from `get_tasks()`.
 
-        Returns:
-            dict|str: 
-                A dictionary containing task filter information, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing task filter information. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "filtered_extensions": [
@@ -454,6 +533,7 @@ class CloudSync(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -471,22 +551,28 @@ class CloudSync(base_api.BaseApi):
             sess_id: int,
             remote_folder_id: str,
             path: str = '/'
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Retrieve a list of children directories in the cloud for a specific task.
 
-        Args:
-            sess_id (int): 
+            Parameters
+            ----------
+            sess_id : int 
                 The ID of the task, obtained from `get_tasks()`.
-            remote_folder_id (str): 
+
+            remote_folder_id : str 
                 The ID of the remote folder, obtained from `get_tasks()`.
-            path (str, optional): 
+
+            path : str, optional 
                 The folder path to retrieve the child directories from. Defaults to root `'/'`.
 
-        Returns:
-            dict|str: 
-                A dictionary containing the list of children directories, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the list of children directories. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "children": [
@@ -518,6 +604,7 @@ class CloudSync(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -533,14 +620,17 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def get_recently_modified(self) -> dict[str, object] | str:
+    def get_recently_modified(self) -> dict[str, object]:
         """Retrieve the 5 latest modified files and the currently syncing items.
 
-        Returns:
-            dict|str: 
-                A dictionary containing the recently modified files, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the recently modified files. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "data": {
                     "history_items": [
@@ -612,6 +702,7 @@ class CloudSync(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -629,27 +720,35 @@ class CloudSync(base_api.BaseApi):
             log_count: int = 20000,
             workers: int = 3,
             admin_mode: bool = True
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Set package configuration settings.
 
-        Args:
-            pkg_volume (str): 
-                The volume path where the package data will be stored (e.g., `"/volume1"`).
-            log_count (int, optional): 
+            Parameters
+            ----------
+            pkg_volume : str 
+                The volume path where the package data will be stored (e.g., `/volume1`).
+
+            log_count : int, optional 
                 Maximum number of logs retained per connection. Defaults to `20000`, max is `100000`.
-            workers (int, optional): 
+
+            workers : int, optional 
                 Number of concurrent uploads allowed. Defaults to `3`, max is `20`.
-            admin_mode (bool, optional): 
+
+            admin_mode : bool, optional 
                 Whether all users' tasks are retrieved or not. Defaults to `True`.
 
-        Returns:
-            dict|str: 
-                A dictionary containing the result of the configuration update, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the configuration update. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "success": true
             }
+            ```
         """
         admin_mode = 'enable' if admin_mode else 'disable'
 
@@ -667,22 +766,30 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param) 
     
-    def set_relink_behavior(self, delete_from_cloud: bool) -> dict[str, object] | str:
+    def set_relink_behavior(self, delete_from_cloud: bool) -> dict[str, object]:
         """Set the relinking behavior for personal user accounts.
 
-        Args:
-            delete_from_cloud (bool): 
-                Set to `False` for "locally deleted files will be re-fetched from the cloud". 
+            Warning: Miss-configuration of this action may lead to data loss.
+        
+            Parameters
+            ----------
+            delete_from_cloud : bool 
+                Set to `False` for "locally deleted files will be re-fetched from the cloud".
+
                 Set to `True` for "locally deleted files will also be removed from the cloud".
 
-        Returns:
-            dict|str: 
-                A dictionary containing the result of the relink behavior update, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the relink behavior update. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -705,35 +812,47 @@ class CloudSync(base_api.BaseApi):
             storage_class: str = '',
             isSSE: bool = False,
             part_size: int = 128
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Set settings for a specific cloud connection.
 
-        Args:
-            conn_id (int): 
+            Parameters
+            ----------
+            conn_id : int 
                 The ID of the connection, obtained from `get_connections()`.
-            task_name (str): 
+
+            task_name : str 
                 The name of the cloud sync task.
-            pull_event_period (int, optional): 
+
+            pull_event_period : int, optional 
                 Frequency (in seconds) to pull event updates. Defaults to `60`.
-            max_upload_speed (int, optional): 
+
+            max_upload_speed : int, optional 
                 Maximum upload speed in bytes. Defaults to `0` (unlimited).
-            max_download_speed (int, optional): 
+
+            max_download_speed : int, optional 
                 Maximum download speed in bytes. Defaults to `0` (unlimited).
-            storage_class (str, optional): 
+
+            storage_class : str, optional 
                 Cloud-specific storage class. Defaults to `''`. 
-            isSSE (bool, optional): 
+
+            isSSE : bool, optional 
                 Enable Security Service Edge (SSE) for compatible cloud storage. Defaults to `False`.
-            part_size (int, optional): 
+
+            part_size : int, optional 
                 Part size for file uploads, in megabytes. Defaults to `128`.
 
-        Returns:
-            dict|str: 
-                A dictionary containing the updated connection settings, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the updated connection settings. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -759,15 +878,18 @@ class CloudSync(base_api.BaseApi):
             conn_id: int,
             enable: bool,
             schedule_info: list[str] = []
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Set the schedule for a specific connection.
 
-        Args:
-            conn_id (int): 
+            Parameters
+            ----------
+            conn_id : int 
                 The ID of the connection, obtained from `get_connections()`.
-            enable (bool): 
+
+            enable : bool 
                 Whether the scheduling is enabled (`True`) or disabled (`False`).
-            schedule_info (list of str, optional): 
+
+            schedule_info : list[str], optional 
                 A list of 7 strings where each string represents a day of the week, going from Sunday to Saturday.
 
                 Each string is composed of 24 characters, where each character is either '1' (enabled) or '0' (disabled) for the respective hour of the day.
@@ -775,6 +897,7 @@ class CloudSync(base_api.BaseApi):
                 The default value (if `schedule_info` is not provided) enables all days and hours.
 
                 Example format for enabling the schedule at every time and day:
+                ```python
                 # Keep this day order, Sunday to Saturday
                 days = [
                     '111111111111111111111111', # sunday    - hours from 0 to 23
@@ -786,14 +909,20 @@ class CloudSync(base_api.BaseApi):
                     '111111111111111111111111', # saturday  - hours from 0 to 23
                 ]
                 set_connection_schedule(conn_id=3, enable=True, schedule_info=days)
+                ```
 
-        Returns:
-            dict|str: A dictionary containing the schedule settings, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the schedule settings. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "success": true
             }
+            ```
         """
         if len(schedule_info) != 7 and len(''.join(schedule_info)) != 168:
             schedule_info = '1' * 24 * 7
@@ -820,32 +949,43 @@ class CloudSync(base_api.BaseApi):
             consistency_check: bool = True,
             no_delete_on_cloud: bool = True,
             convert_gd: bool = False
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Set the task settings for a specific session.
 
-        Args:
-            sess_id (int): 
+            Parameters
+            ----------
+            sess_id : int 
                 The ID of the task, obtained from `get_tasks()`.
-            sync_direction (str): 
-                The synchronization direction. Possible values:
-                - "ONLY_UPLOAD": Upload local changes only.
-                - "BIDIRECTION": Sync both ways (upload and download).
-                - "ONLY_DOWNLOAD": Download remote changes only.
-            consistency_check (bool, optional): 
+
+            sync_direction : str 
+                The synchronization direction. 
+                
+                Possible values:
+                - `ONLY_UPLOAD`: Upload local changes only.
+                - `BIDIRECTION`: Sync both ways (upload and download).
+                - `ONLY_DOWNLOAD`: Download remote changes only.
+
+            consistency_check : bool, optional 
                 If True, enables advanced consistency check (requires more resources). Defaults to `True`.
-            no_delete_on_cloud (bool, optional): 
+                
+            no_delete_on_cloud : bool, optional 
                 If `True`, prevents deletion of files in the remote folder when removed from the local directory. Defaults to `True`.
-            convert_gd (bool, optional): 
+
+            convert_gd : bool, optional 
                 If `True`, converts Google Drive Online documents to Microsoft Office format. Defaults to `False`.
 
-        Returns:
-            dict|str: 
-                A dictionary containing the result of the task settings configuration, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the task settings configuration. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -869,28 +1009,37 @@ class CloudSync(base_api.BaseApi):
             filtered_filenames: list[str] = [],
             filtered_extensions: list[str] = [],
             max_upload_size: int = 0
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Set task filters for selective synchronization in a specific session.
 
-        Args:
-            sess_id (int): 
+            Parameters
+            ----------
+            sess_id : int 
                 The ID of the session, obtained from `get_tasks()`.
-            filtered_paths (list of str, optional): 
+
+            filtered_paths : list[str], optional 
                 A list of paths (directories / subdirectories) to exclude from the synchronization process, e.g, `['/images', '/videos/movies']`. Defaults to `[]`.
-            filtered_filenames (list of str, optional): 
+
+            filtered_filenames : list[str], optional 
                 A list of filenames to exclude from synchronization. Defaults to `[]`.
-            filtered_extensions (list of str, optional): 
+
+            filtered_extensions : list[str], optional 
                 A list of file extensions to exclude from synchronization, e.g., `['mp3', 'iso', 'mkv']`. Defaults to `[]`.
-            max_upload_size (int, optional): 
+            max_upload_size : int, optional 
                 The maximum file size for uploads, in bytes. Files larger than this size will be excluded from synchronization. Defaults to `0` (no size limit).
 
-        Returns:
-            dict|str: A dictionary containing the result of the task filters configuration, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the task filters configuration. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "success": true
             }
+            ```
         """
         # Using json.dumps() to convert from list to str to match the '["text"]' format the API is waiting for. Otherwise, error 120 is raised. 
         api_name = 'SYNO.CloudSync'
@@ -910,21 +1059,26 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param) 
     
-    def connection_pause(self, conn_id: int = -1) -> dict[str, object] | str:
+    def connection_pause(self, conn_id: int = -1) -> dict[str, object]:
         """Pause one or all connections.
 
-        Args:
-            conn_id (int, optional): 
+            Parameters
+            ----------
+            conn_id : int, optional 
                 The ID of the connection to pause. If not specified or set to `-1`, all connections will be paused.
 
-        Returns:
-            dict|str: 
-                A dictionary containing the result of the pause action, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the pause action. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -939,21 +1093,26 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def connection_resume(self, conn_id: int = -1) -> dict[str, object] | str:
+    def connection_resume(self, conn_id: int = -1) -> dict[str, object]:
         """Resume one or all connections.
 
-        Args:
-            conn_id (int, optional): 
+            Parameters
+            ----------
+            conn_id : int, optional 
                 The ID of the connection to resume. If not specified or set to `-1`, all connections will be resumed.
 
-        Returns:
-            dict|str: 
-                A dictionary containing the result of the resume action, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the resume action. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -968,23 +1127,28 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def connection_remove(self, conn_id: int) -> dict[str, object] | str:
+    def connection_remove(self, conn_id: int) -> dict[str, object]:
         """Remove a specific connection and all associated tasks.
 
-        The data will remain in both the local and remote directories.
+            The data will remain in both the local and remote directories.
 
-        Args:
-            conn_id (int): 
+            Parameters
+            ----------
+            conn_id : int 
                 The ID of the connection to be removed, obtained from `get_connections()`.
 
-        Returns:
-            dict|str: 
-                A dictionary containing the result of the remove action, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the remove action. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -1001,25 +1165,30 @@ class CloudSync(base_api.BaseApi):
             self, 
             conn_id: int,
             sess_id: int
-        ) -> dict[str, object] | str:
+        ) -> dict[str, object]:
         """Remove a specific task.
 
-        The data will remain in both the local and remote directories.
+            The data will remain in both the local and remote directories.
 
-        Args:
-            conn_id (int): 
+            Parameters
+            ----------
+            conn_id : int 
                 The ID of the connection associated with the task, obtained from `get_connections()`.
-            sess_id (int): 
+            sess_id : int 
                 The ID of the task to be removed, obtained from `get_tasks()`.
 
-        Returns:
-            dict|str: 
-                A dictionary containing the result of the task removal, or a string in case of an error. 
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the task removal. 
 
-            Example return: 
+            Example return
+            ----------
+            ```json
             {
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
@@ -1033,7 +1202,7 @@ class CloudSync(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def generate_sync_task_s3_params(
+    def __generate_sync_task_s3_params(
             self,
             conn_id: int,
             local_path: str,
@@ -1045,21 +1214,38 @@ class CloudSync(base_api.BaseApi):
             filter_names: list[str] = [],
             server_folder_id: str = '',
         ) -> dict[str, Any]:
-        """
-        Generate parameters for creating a sync task with S3.
+        """Generate parameters for creating a sync task with S3.
 
-        Args:
-            conn_id (int): The ID of the connection.
-            local_path (str): The local path to sync.
-            cloud_path (str): The cloud path to sync.
-            sync_direction (str, optional): The synchronization direction. Defaults to 'BIDIRECTION'.
-            storage_class (str, optional): The storage class. Defaults to 'STANDARD'.
-            file_filter (list of str, optional): List of file extensions to filter. Defaults to [].
-            filter_max_upload_size (int, optional): Maximum upload size for files. Defaults to 0.
-            filter_names (list of str, optional): List of file names to filter. Defaults to [].
+            Parameters
+            ----------
+            conn_id : int 
+                The ID of the connection.
 
-        Returns:
-            dict[str, Any]: A dictionary containing the parameters for the sync task.
+            local_path : str 
+                The local path to sync.
+
+            cloud_path : str 
+                The cloud path to sync.
+
+            sync_direction : str, optional 
+                The synchronization direction. Defaults to `'BIDIRECTION'`.
+
+            storage_class : str, optional 
+                The storage class. Defaults to `'STANDARD'`.
+
+            file_filter : list[str], optional 
+                List of file extensions to filter. Defaults to `[]`.
+
+            filter_max_upload_size : int, optional 
+                Maximum upload size for files. Defaults to `0`.
+
+            filter_names : list[str], optional 
+                List of file names to filter. Defaults to `[]`.
+
+            Returns
+            ----------
+            dict[str, Any]
+                A dictionary containing the parameters for the sync task.
         """
         # Validate local path format
         if local_path[0] != '/' or local_path.count('/') < 2:
@@ -1116,21 +1302,39 @@ class CloudSync(base_api.BaseApi):
             filter_max_upload_size: int = 0,
             filter_names: list[str] = [],
         ) -> tuple[bool, dict[str, object] | str]:
-        """
-        Test the task settings make sure they are valid.
+        """Test the task settings make sure they are valid.
 
-        Args:
-            conn_id (int): The ID of the connection.
-            local_path (str): The local path to sync.
-            cloud_path (str): The cloud path to sync.
-            sync_direction (str, optional): The synchronization direction. Defaults to 'BIDIRECTION'.
-            storage_class (str, optional): The storage class. Defaults to 'STANDARD'.
-            file_filter (list of str, optional): List of file extensions to filter. Defaults to [].
-            filter_max_upload_size (int, optional): Maximum upload size for files. Defaults to 0.
-            filter_names (list of str, optional): List of file names to filter. Defaults to [].
+            Parameters
+            ----------
+            conn_id : int 
+                The ID of the connection.
 
-        Returns:
-            tuple: A tuple containing a boolean indicating success, and a dictionary or string with the result.
+            local_path : str 
+                The local path to sync.
+
+            cloud_path : str 
+                The cloud path to sync.
+
+            sync_direction : str, optional 
+                The synchronization direction. Defaults to `'BIDIRECTION'`.
+
+            storage_class : str, optional 
+                The storage class. Defaults to `'STANDARD'`.
+
+            file_filter : list[str], optional 
+                List of file extensions to filter. Defaults to `[]`.
+
+            filter_max_upload_size : int, optional 
+                Maximum upload size for files. Defaults to `0`.
+
+            filter_names : list[str], optional 
+                List of file names to filter. Defaults to `[]`.
+
+
+            Returns
+            ----------
+            tuple
+                A tuple containing a boolean indicating success, and a dictionary or string with the result.
         """
         # Generate sync task parameters
         creation_params = self.generate_sync_task_s3_params(
@@ -1177,21 +1381,39 @@ class CloudSync(base_api.BaseApi):
             file_filter: list[str] = [],
             filter_names: list[str] = [],
         ) -> tuple[bool, Any]:
-        """
-        Add a new synchronization task.
+        """Add a new synchronization task.
 
-        Args:
-            conn_id (int): The ID of the connection.
-            local_path (str): The local path to sync.
-            cloud_path (str): The cloud path to sync.
-            sync_direction (str, optional): The synchronization direction. Defaults to 'BIDIRECTION'.
-            storage_class (str, optional): The storage class. Defaults to 'STANDARD'.
-            file_filter (list of str, optional): List of file extensions to filter. Defaults to [].
-            filter_max_upload_size (int, optional): Maximum upload size for files. Defaults to 0.
-            filter_names (list of str, optional): List of file names to filter. Defaults to [].
+            Parameters
+            ----------
+            conn_id : int 
+                The ID of the connection.
 
-        Returns:
-            dict|str: A dictionary containing the result of the task creation, or a string in case of an error.
+            local_path : str 
+                The local path to sync.
+
+            cloud_path : str 
+                The cloud path to sync.
+
+            sync_direction : str, optional 
+                The synchronization direction. Defaults to `'BIDIRECTION'`.
+
+            storage_class : str, optional 
+                The storage class. Defaults to `'STANDARD'`.
+
+            file_filter : list[str], optional 
+                List of file extensions to filter. Defaults to `[]`.
+
+            filter_max_upload_size : int, optional
+                Maximum upload size for files. Defaults to `0`.
+
+            filter_names : list[str], optional 
+                List of file names to filter. Defaults to `[]`.
+
+
+            Returns
+            ----------
+            dict[str, object]
+                A dictionary containing the result of the task creation.
         """
 
         # Validate is connection is Amazon S3
@@ -1200,7 +1422,7 @@ class CloudSync(base_api.BaseApi):
             return (False, 'Connection is not Amazon S3')
 
         # Merge authentication details with request parameters
-        creation_params = self.generate_sync_task_s3_params(
+        creation_params = self.__generate_sync_task_s3_params(
             conn_id,
             local_path,
             cloud_path,
