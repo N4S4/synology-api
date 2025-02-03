@@ -517,7 +517,8 @@ class Group(base_api.BaseApi):
 
             Returns
             ----------
-            dict[str, object] A dictionary containing the result of the request.
+            dict[str, object]
+                A dictionary containing the result of the request.
 
             Example return
             ----------

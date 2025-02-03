@@ -1166,11 +1166,11 @@ class SurveillanceStation(base_api.BaseApi):
                                      dsId: int = None,
                                      webAPI: Any = None) -> dict[str, object] | str:  # TODO not working
 
-        """webAPI Array of <webAPI_info>
+        """webAPI Array of `webAPI_info`
 
            Example:
-           webAPI={"api": "SYNO.SurveillanceStation.AddOns", "version": 1, "method":
-           "List"} """
+           `webAPI={"api": "SYNO.SurveillanceStation.AddOns", "version": 1, "method":
+           "List"}` """
 
         api_name = 'SYNO.SurveillanceStation.CMS'
         info = self.gen_list[api_name]

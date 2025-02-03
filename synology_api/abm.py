@@ -673,14 +673,14 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
     ) -> dict[str, object]:
         """Set the schedule for a given task. 
         
-            Note: If repeat_every_hours is set to 0, the backup will run once a day.
+            Note: If `repeat_every_hours` is set to 0, the backup will run once a day.
 
             Parameters
             ----------
             task_id : int
                 The ID of the task.  
 
-            policy : int  
+            policy : int
                 The schedule policy. 
                 
                 Possible values:  
@@ -688,7 +688,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
                 - 1 = manual  
                 - 2 = scheduled  
 
-            schedule : dict  
+            schedule : dict
                 A dictionary containing the schedule settings. 
                 
                 Possible values:
@@ -773,10 +773,10 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
             Parameters
             ----------
-            task_id : int  
+            task_id : int
                 The ID of the task.  
 
-            days_to_keep : int  
+            days_to_keep : int
                 The amount of days to keep previous versions. Defaults to `0` (keep all versions).
 
             Returns
@@ -819,7 +819,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
             Parameters
             ----------
-            task_id : int 
+            task_id : int
                 The ID of the task.
 
             Returns
@@ -853,7 +853,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
             Parameters
             ----------
-            task_id : int 
+            task_id : int
                 The ID of the task.
 
             Returns
@@ -901,10 +901,10 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
             Parameters
             ----------
-            task_id : int 
+            task_id : int
                 The ID of the task.
 
-            remove_data : bool 
+            remove_data : bool
                 Whether to remove the backup data in the NAS. Defaults to `False`.
                 
                 Warning: If this is set to `True`, all task data in the NAS will be lost and the task cannot be relinked in the future. 

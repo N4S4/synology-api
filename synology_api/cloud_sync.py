@@ -1330,10 +1330,9 @@ class CloudSync(base_api.BaseApi):
             filter_names : list[str], optional 
                 List of file names to filter. Defaults to `[]`.
 
-
             Returns
             ----------
-            tuple
+            tuple[bool, dict[str, object] | str]
                 A tuple containing a boolean indicating success, and a dictionary or string with the result.
         """
         # Generate sync task parameters
@@ -1412,8 +1411,8 @@ class CloudSync(base_api.BaseApi):
 
             Returns
             ----------
-            dict[str, object]
-                A dictionary containing the result of the task creation.
+            tuple[bool, Any]
+                A tuple containing the result of the task creation.
         """
 
         # Validate is connection is Amazon S3

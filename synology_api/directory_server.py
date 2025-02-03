@@ -297,6 +297,7 @@ class DirectoryServer(base_api.BaseApi):
 
             Returns
             -------
+            dict[str, object]
                 The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
 
                 The first level is the success to the AD server.  The second Data level is the status of the actual request.
@@ -406,6 +407,7 @@ class DirectoryServer(base_api.BaseApi):
 
             Returns
             -------
+            dict[str, object]
                 A success object, and data object containing the new dn and the netbios name of the group.
             
             Example return
@@ -559,6 +561,7 @@ class DirectoryServer(base_api.BaseApi):
 
             Returns
             -------
+            dict[str, object]
                 The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
 
                 The first level is the success to the AD server. The second Data level is the status of the actual request.
@@ -646,6 +649,7 @@ class DirectoryServer(base_api.BaseApi):
 
             Returns
             -------
+            dict[str, object]
                 The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
 
                 The first level is the success to the AD server.  The second Data level is the status of the actual request.
@@ -746,8 +750,8 @@ class DirectoryServer(base_api.BaseApi):
             Returns
             -------
             dict[str, object]
-                The 'data' object contains the 'status' used to determine the current status. 'status'
-                will be 'updating' or 'finish' if the job was started.
+                The 'data' object contains the 'status' used to determine the current status. 'status' will be 'updating' or 'finish' if the job was started.
+                T
                 The 'success' object will be true if the operation was successful. or false if failed.
             
             Example return
@@ -780,11 +784,12 @@ class DirectoryServer(base_api.BaseApi):
 
             Returns
             -------
-            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
+            dict[str, object]
+                The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
 
-            The first level is the success to the AD server.  The second Data level is the status of the actual request.
+                The first level is the success to the AD server.  The second Data level is the status of the actual request.
 
-            Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.  
+                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.  
 
             Example return
             ---------
@@ -847,11 +852,12 @@ class DirectoryServer(base_api.BaseApi):
 
             Returns
             -------
-            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
+            dict[str, object]
+                The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
 
-            The first level is the success to the AD server.  The second Data level is the status of the actual request.
+                The first level is the success to the AD server.  The second Data level is the status of the actual request.
 
-            Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
+                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
 
             Example return
             ---------
