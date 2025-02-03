@@ -24,22 +24,30 @@ class Snapshot(base_api.BaseApi):
         Examples
         --------
         List snapshots for a share:
-        >>> from synology_api import snapshot
-        >>> ss = snapshot.Snapshot('IP', 'PORT', 'USER', 'PASSWORD')
-        >>> resp = ss.list_snapshots('share_name')
-        >>> print(resp)
+        ```python
+        from synology_api import snapshot
+        ss = snapshot.Snapshot('IP', 'PORT', 'USER', 'PASSWORD')
+        resp = ss.list_snapshots('share_name')
+        print(resp)
+        ```
 
         Create a snapshot for a share:
-        >>> resp = ss.create_snapshot('share_name')
-        >>> print(resp)
+        ```python
+        resp = ss.create_snapshot('share_name')
+        print(resp)
+        ```
 
         Delete snapshots for a share:
-        >>> resp = ss.delete_snapshots('share_name', ['snapshot_name'])
-        >>> print(resp)
+        ```python
+        resp = ss.delete_snapshots('share_name', ['snapshot_name'])
+        print(resp)
+        ```
 
         Set attributes for a snapshot:
-        >>> resp = ss.set_snapshot_attr('share_name', 'snapshot_name', description='new description', lock=True)
-        >>> print(resp)
+        ```python
+        resp = ss.set_snapshot_attr('share_name', 'snapshot_name', description='new description', lock=True)
+        print(resp)
+        ```
     """
 
     def list_snapshots(self,
@@ -54,27 +62,29 @@ class Snapshot(base_api.BaseApi):
             ----------
             share_name : str
                 Name of the share to list snapshots for
+
             attribute_filter : list[str], optional
                 List of attributes filter to apply. Defaults to `[]` (no filter).
 
-                Each attribute filter is a string in the format of "attr==value" or "attr=value" and
-                optionally prefixed with "!" to negate the filter.
-                The following are examples of valid attribute filters:
+                Each attribute filter is a string in the format of `"attr==value"` or `"attr=value"` and optionally prefixed with `!` to negate the filter.
 
-                    - ["!hide==true", "desc==abc"] # hide is not true and desc is exactly abc
-                    - ["desc=abc"]                 # desc has abc in it
+                The following are examples of valid attribute filters:
+                    - `["!hide==true", "desc==abc"]` -> hide is not true and desc is exactly abc
+                    - `["desc=abc"]` -> desc has abc in it
+
             additional_attribute : list[str], optional
                 List of snapshot attributes whose values are included in the response.
                 Defaults to `[]` (only time is returned).
 
                 Note that not all attributes are available via API. The following are confirmed to work:
-
                     - desc
                     - lock
                     - worm_lock
                     - schedule_snapshot
+
             offset : int, optional
                 Offset to start listing from. Defaults to `0`.
+
             limit : int, optional
                 Number of snapshots to return. Defaults to `-1` (all).
 
@@ -134,12 +144,16 @@ class Snapshot(base_api.BaseApi):
             ----------
             share_name : str
                 Name of the share to create a snapshot for.
+
             description : str, optional
                 Description of the snapshot. Defaults to `""`.
+
             lock : bool, optional
                 Whether to lock the snapshot. Defaults to `False`.
+
             immutable : bool, optional
                 Whether to make the snapshot immutable. Defaults to `False`.
+
             immutable_days : int, optional
                 Number of days to make the snapshot immutable for. Defaults to `7`.
                 Must be greater than `0`. Mandatory if immutable is `True`.
@@ -189,6 +203,7 @@ class Snapshot(base_api.BaseApi):
             ----------
             share_name : str
                 Name of the share to delete snapshots for
+
             snapshots : list[str]
                 List of snapshots to delete
 
@@ -231,14 +246,19 @@ class Snapshot(base_api.BaseApi):
             ----------
             share_name : str
                 Name of the share to set attributes for
+
             snapshot : str
                 Name of the snapshot to set attributes for
+
             description : str, optional
                 Description of the snapshot. Defaults to `None` (no change).
+
             lock : bool, optional
                 Whether to lock the snapshot. Defaults to `None` (no change).
+
             immutable : bool, optional
                 Whether to make the snapshot immutable. Defaults to `None` (no change).
+
             immutable_days : int, optional
                 Number of days to make the snapshot immutable for. Defaults to `None` (no change).
                 Must be greater than `0`. Mandatory if immutable is `True`.
