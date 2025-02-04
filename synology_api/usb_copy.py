@@ -19,20 +19,12 @@ class USBCopy(base_api.BaseApi):
     def get_package_settings(self) -> dict[str, object]:
         """Retrieve package settings.
 
-            Parameters
-            ----------
-            offset : int 
-                Defaults to `0`.
-
-            limit : int 
-                Defaults to `200`.
-
             Returns
             -------
             dict[str, object]
                 Parsed JSON into `dict`
 
-            Example return:
+            Example return
             --------------
             ```python
             {
@@ -69,7 +61,7 @@ class USBCopy(base_api.BaseApi):
             dict[str, object]
                 Parsed response JSON into `dict`
 
-            Example return:
+            Example return
             --------------
             ```python
             {
@@ -112,7 +104,7 @@ class USBCopy(base_api.BaseApi):
             dict[str, object]
                 Parsed response JSON into `dict`
 
-            Example return:
+            Example return
             --------------
             ```python
             {
@@ -175,7 +167,7 @@ class USBCopy(base_api.BaseApi):
             dict[str, object]
                 Parsed response JSON into `dict`
 
-            Example return:
+            Example return
             --------------
             ```python
             {

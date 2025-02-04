@@ -44,12 +44,12 @@ class EventScheduler(base_api.BaseApi):
                 Name of the Event task to enable/disable.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the task results.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": [
@@ -100,12 +100,12 @@ class EventScheduler(base_api.BaseApi):
                 ID of the result to retrieve. From `get_task_results()`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result output.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -144,12 +144,12 @@ class EventScheduler(base_api.BaseApi):
                 Wheter to enable (`True`) or disable (`False`) the task.
         
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the action.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true
@@ -181,12 +181,12 @@ class EventScheduler(base_api.BaseApi):
                 Name of the Event task to run.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the task execution.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true
@@ -217,7 +217,7 @@ class EventScheduler(base_api.BaseApi):
                 Name of the Event task to run.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the task deletion.
 
@@ -297,12 +297,12 @@ class EventScheduler(base_api.BaseApi):
                 If `True`, notifications are only sent when an error occurs. Defaults to `False`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the task creation or modification, or a strnig in case of an error.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true

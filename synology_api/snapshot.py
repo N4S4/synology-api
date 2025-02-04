@@ -94,7 +94,7 @@ class Snapshot(base_api.BaseApi):
                 API response if successful, error message if not
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -164,7 +164,7 @@ class Snapshot(base_api.BaseApi):
                 API response if successful, error message if not
 
             Example return
-            ----------
+            --------------
             ```json:
             {
                 "data": "GMT+09-2023.09.12-00.33.20",
@@ -213,7 +213,7 @@ class Snapshot(base_api.BaseApi):
                 API response if successful, error message if not
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true
@@ -269,7 +269,7 @@ class Snapshot(base_api.BaseApi):
                 API response if successful, error message if not
 
             Example return
-            ----------
+            --------------
             ```json	
             {
                 "success": true

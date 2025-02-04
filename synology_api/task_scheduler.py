@@ -104,7 +104,7 @@ class TaskScheduler(base_api.BaseApi):
         """Retrieve tasks output configuration.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary containing a list of the tasks and information related to them.
             
@@ -142,7 +142,7 @@ class TaskScheduler(base_api.BaseApi):
         """List all present scheduled tasks and event triggered tasks.
 
             Parameters
-            ----------- 
+            ----------
             sort_by : str, optional 
                 The field to sort tasks by. Defaults to `"next_trigger_time"`.
                 
@@ -167,12 +167,12 @@ class TaskScheduler(base_api.BaseApi):
                 Number of tasks to retrieve. Defaults to `50`.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary containing a list of the tasks and information related to them.
 
             Example return
-            -----------
+            --------------
             ```json
             {
                 "data": {
@@ -233,7 +233,7 @@ class TaskScheduler(base_api.BaseApi):
         """Retrieve the configuration for a specific task or list of all the available services and their corresponding IDs.
 
             Parameters
-            ---------
+            ----------
             task_id : int 
                 The ID of the task to retrieve the configuration for. Pass `-1` to get a list of all available services with their IDs.
 
@@ -244,12 +244,12 @@ class TaskScheduler(base_api.BaseApi):
                 The type of task (e.g., 'service'). Pass "service" to get a list of all available services with their IDs. Defaults to `""`.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary containing the task configuration.
 
             Example return
-            ---------
+            --------------
             ```json
             {
                 "data": {
@@ -315,17 +315,17 @@ class TaskScheduler(base_api.BaseApi):
         """Retrieve the results list for a specific task.
 
             Parameters
-            ---------
+            ----------
             task_id : int 
                 The ID of the task to retrieve the results for.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary containing the task results.
 
             Example return
-            ---------
+            --------------
             ```json
             {
                 "data": [
@@ -411,7 +411,7 @@ class TaskScheduler(base_api.BaseApi):
         """Configure the output settings for tasks results.
 
             Parameters
-            ---------
+            ----------
             enable_output : bool 
                 Whether to enable result logging or not.
 
@@ -419,12 +419,12 @@ class TaskScheduler(base_api.BaseApi):
                 The path where the result logs will be stored, e.g. `share/scripts_output'`. Defaults to `""`.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary containing the result of the output configuration.
 
             Example return
-            ---------
+            --------------
             ```json
             {
                 "success": true
@@ -453,7 +453,7 @@ class TaskScheduler(base_api.BaseApi):
         """Enable or disable a task.
 
             Parameters
-            ---------
+            ----------
             task_id : int 
                 The ID of the task to be enabled.
 
@@ -464,12 +464,12 @@ class TaskScheduler(base_api.BaseApi):
                 Wheter to enable (`True`) or disable (`False`) the task.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary containing the result of the task enabling.
 
             Example return
-            ---------
+            --------------
             ```json
             {
                 "success": true
@@ -501,7 +501,7 @@ class TaskScheduler(base_api.BaseApi):
         """Run a specific task.
 
             Parameters
-            ---------
+            ----------
             task_id : int 
                 The ID of the task to be run.
 
@@ -509,12 +509,12 @@ class TaskScheduler(base_api.BaseApi):
                 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary containing the result of the task execution.
 
             Example return
-            ---------
+            --------------
             ```json
             {
                 "success": true
@@ -545,7 +545,7 @@ class TaskScheduler(base_api.BaseApi):
         """Delete a specific task.
 
             Parameters
-            ---------
+            ----------
             task_id : int 
                 The ID of the task to be deleted.
 
@@ -553,12 +553,12 @@ class TaskScheduler(base_api.BaseApi):
                 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary containing the result of the task deletion.
 
             Example return
-            ---------
+            --------------
             ```json
             {
                 "success": true
@@ -605,7 +605,7 @@ class TaskScheduler(base_api.BaseApi):
             Tip: If the task needs to run with root privileges, please specify the owner as "root".
 
             Parameters
-            ---------
+            ----------
             task_name : str 
                 The name of the task.
 
@@ -678,12 +678,12 @@ class TaskScheduler(base_api.BaseApi):
                 If `True`, notifications are only sent when an error occurs. Defaults to `False`.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary with the id of the created task.
 
             Example return
-            ---------
+            --------------
             ```json
             {
                 "data": {
@@ -754,7 +754,7 @@ class TaskScheduler(base_api.BaseApi):
             Tip: If the task needs to run with root privileges, please specify the owner as "root".
 
             Parameters
-            ---------
+            ----------
             task_id : int
                 The ID of the task.
 
@@ -829,12 +829,12 @@ class TaskScheduler(base_api.BaseApi):
                 If `True`, notifications are only sent when an error occurs. Defaults to `False`.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary with the id of the created task.
 
             Example return
-            ---------
+            --------------
             ```json
             {
                 "data": {
@@ -898,7 +898,7 @@ class TaskScheduler(base_api.BaseApi):
         """Create a new Beep Control task with the provided schedule and beep duration.
 
             Parameters
-            ---------
+            ----------
             task_name : str 
                 The name of the task.
 
@@ -963,12 +963,12 @@ class TaskScheduler(base_api.BaseApi):
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary with the id of the created task.
 
             Example return
-            ---------
+            --------------
             ```json
             {
                 "data": {
@@ -1027,7 +1027,7 @@ class TaskScheduler(base_api.BaseApi):
             Warning: This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
 
             Parameters
-            ---------
+            ----------
             task_name : str 
                 The name of the task.
 
@@ -1092,12 +1092,12 @@ class TaskScheduler(base_api.BaseApi):
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary with the id of the created task.
 
             Example return
-            ---------
+            --------------
             ```json
             {
                 "data": {
@@ -1154,7 +1154,7 @@ class TaskScheduler(base_api.BaseApi):
         """Create a new Service Control task with the provided schedule and services to start/stop.
 
             Parameters
-            ---------
+            ----------
             task_name : str 
                 The name of the task.
 
@@ -1233,12 +1233,12 @@ class TaskScheduler(base_api.BaseApi):
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary with the id of the created task.
 
             Example return
-            ---------
+            --------------
             ```json
             {
                 "data": {
@@ -1308,7 +1308,7 @@ class TaskScheduler(base_api.BaseApi):
             Warning: This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
 
             Parameters
-            ---------
+            ----------
             task_id : int
                 The ID of the task.
 
@@ -1393,12 +1393,12 @@ class TaskScheduler(base_api.BaseApi):
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary with the id of the created task.
 
             Example return
-            ---------
+            --------------
             ```json
             {
                 "data": {
@@ -1465,7 +1465,7 @@ class TaskScheduler(base_api.BaseApi):
         """Create a new Recycle Bin Control task with the provided schedule and services to start/stop.
 
             Parameters
-            ---------
+            ----------
             task_name : str 
                 The name of the task.
 
@@ -1548,12 +1548,12 @@ class TaskScheduler(base_api.BaseApi):
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary with the id of the created task.
 
             Example return
-            ---------
+            --------------
             ```json
             {
                 "data": {
@@ -1620,7 +1620,7 @@ class TaskScheduler(base_api.BaseApi):
             Warning: This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
 
             Parameters
-            ---------
+            ----------
             task_id : int
                 The ID of the task.
 
@@ -1706,12 +1706,12 @@ class TaskScheduler(base_api.BaseApi):
                 Last hour of the day when the task can repeat. Defaults to `start_time_h`.
 
             Returns
-            ---------
+            -------
             dict[str, object]
                 A dictionary with the id of the created task.
 
             Example return
-            ---------
+            --------------
             ```json
             {
                 "data": {

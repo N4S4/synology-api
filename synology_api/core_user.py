@@ -48,12 +48,12 @@ class User(base_api.BaseApi):
 
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the groups information.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -124,12 +124,12 @@ class User(base_api.BaseApi):
                 All fields known are: `["description","email","expired","cannot_chg_passwd","passwd_never_expire","password_last_change","is_password_pending"]`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the user information.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "api": "SYNO.Core.User",
@@ -203,12 +203,12 @@ class User(base_api.BaseApi):
                 Whether to send the password. Defaults to `False`.
             
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the user information.
 
             Example return
-            ----------
+            --------------
             ```json
             { 
                 "data":
@@ -290,12 +290,12 @@ class User(base_api.BaseApi):
                 Whether to send the password. Defaults to `False`.
             
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the user information.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data":{
@@ -341,12 +341,12 @@ class User(base_api.BaseApi):
                 The name of the user to delete.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the user information.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -386,12 +386,12 @@ class User(base_api.BaseApi):
                 
                 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the task id to check the status of the join task. Use `affect_groups_status` func to check the status of the task.   
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "api": "SYNO.Core.User.Group",
@@ -426,12 +426,12 @@ class User(base_api.BaseApi):
                 The task id of the join task.
                 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the status of the join task.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -471,12 +471,12 @@ class User(base_api.BaseApi):
         """Get the password policy.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the password policy information.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "api": "SYNO.Core.User.PasswordPolicy",
@@ -549,12 +549,12 @@ class User(base_api.BaseApi):
                 Defaults to `False`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary indicating the success of the operation.
             
             Example return
-            ----------
+            --------------
             ```json
                 {
                     "api": "SYNO.Core.User.PasswordPolicy",
@@ -591,12 +591,12 @@ class User(base_api.BaseApi):
         """Get the password expiry.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the password expiry information.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "api": "SYNO.Core.User.PasswordExpiry",
@@ -660,12 +660,12 @@ class User(base_api.BaseApi):
                 List of users that should never expire.
             
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary indicating the success of the operation.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "api": "SYNO.Core.User.PasswordExpiry",
@@ -706,12 +706,12 @@ class User(base_api.BaseApi):
                 The password with which the session was initiated.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing a `SynoConfirmPWToken`, or an error message.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -739,12 +739,12 @@ class User(base_api.BaseApi):
         """Get the username policy (List of username that are not usable).
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the username policy information.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "api": "SYNO.Core.User.UsernamePolicy",

@@ -51,12 +51,12 @@ class CloudSync(base_api.BaseApi):
         """Retrieve package settings.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of package settings.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -114,12 +114,12 @@ class CloudSync(base_api.BaseApi):
                 - `group_by_cloud_type`: Group connections by cloud provider.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the list of cloud connections.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -182,12 +182,12 @@ class CloudSync(base_api.BaseApi):
                 The ID of the connection, obtained from `get_connections()`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the connection settings.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -226,12 +226,12 @@ class CloudSync(base_api.BaseApi):
                 The ID of the connection, obtained from `get_connections()`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing cloud information. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -274,12 +274,12 @@ class CloudSync(base_api.BaseApi):
                 The ID of the connection, obtained from `get_connections()`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the connection authentication details. 
             
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -388,12 +388,12 @@ class CloudSync(base_api.BaseApi):
                 Number of logs to retrieve. Defaults to `200`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the connection logs. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -452,12 +452,12 @@ class CloudSync(base_api.BaseApi):
                 The ID of the connection, obtained from `get_connections()`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the list of tasks. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -502,12 +502,12 @@ class CloudSync(base_api.BaseApi):
                 The ID of the task, obtained from `get_tasks()`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing task filter information. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -566,12 +566,12 @@ class CloudSync(base_api.BaseApi):
                 The folder path to retrieve the child directories from. Defaults to root `'/'`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the list of children directories. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -624,12 +624,12 @@ class CloudSync(base_api.BaseApi):
         """Retrieve the 5 latest modified files and the currently syncing items.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the recently modified files. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -738,12 +738,12 @@ class CloudSync(base_api.BaseApi):
                 Whether all users' tasks are retrieved or not. Defaults to `True`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the configuration update. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true
@@ -779,12 +779,12 @@ class CloudSync(base_api.BaseApi):
                 Set to `True` for "locally deleted files will also be removed from the cloud".
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the relink behavior update. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true
@@ -842,12 +842,12 @@ class CloudSync(base_api.BaseApi):
                 Part size for file uploads, in megabytes. Defaults to `128`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the updated connection settings. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true
@@ -912,12 +912,12 @@ class CloudSync(base_api.BaseApi):
                 ```
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the schedule settings. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true
@@ -975,12 +975,12 @@ class CloudSync(base_api.BaseApi):
                 If `True`, converts Google Drive Online documents to Microsoft Office format. Defaults to `False`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the task settings configuration. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true
@@ -1029,12 +1029,12 @@ class CloudSync(base_api.BaseApi):
                 The maximum file size for uploads, in bytes. Files larger than this size will be excluded from synchronization. Defaults to `0` (no size limit).
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the task filters configuration. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true
@@ -1068,12 +1068,12 @@ class CloudSync(base_api.BaseApi):
                 The ID of the connection to pause. If not specified or set to `-1`, all connections will be paused.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the pause action. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true
@@ -1102,12 +1102,12 @@ class CloudSync(base_api.BaseApi):
                 The ID of the connection to resume. If not specified or set to `-1`, all connections will be resumed.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the resume action. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true
@@ -1138,12 +1138,12 @@ class CloudSync(base_api.BaseApi):
                 The ID of the connection to be removed, obtained from `get_connections()`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the remove action. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true
@@ -1178,12 +1178,12 @@ class CloudSync(base_api.BaseApi):
                 The ID of the task to be removed, obtained from `get_tasks()`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the task removal. 
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true
@@ -1243,7 +1243,7 @@ class CloudSync(base_api.BaseApi):
                 List of file names to filter. Defaults to `[]`.
 
             Returns
-            ----------
+            -------
             dict[str, Any]
                 A dictionary containing the parameters for the sync task.
         """
@@ -1331,7 +1331,7 @@ class CloudSync(base_api.BaseApi):
                 List of file names to filter. Defaults to `[]`.
 
             Returns
-            ----------
+            -------
             tuple[bool, dict[str, object] | str]
                 A tuple containing a boolean indicating success, and a dictionary or string with the result.
         """
@@ -1410,7 +1410,7 @@ class CloudSync(base_api.BaseApi):
 
 
             Returns
-            ----------
+            -------
             tuple[bool, Any]
                 A tuple containing the result of the task creation.
         """

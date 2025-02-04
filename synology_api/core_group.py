@@ -45,12 +45,12 @@ class Group(base_api.BaseApi):
                 If `True`, returns only group names. If `False`, returns full group information. Defaults to `False`.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the groups information.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -121,12 +121,12 @@ class Group(base_api.BaseApi):
                 If `False`, retrieves users who are not members of the group. 
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the request.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -175,12 +175,12 @@ class Group(base_api.BaseApi):
                 The group to retrieve settings for.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the request.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -222,12 +222,12 @@ class Group(base_api.BaseApi):
                 The group to retrieve quota settings for.
 
             Returns
-            ----------
+            -------
             dict[str, object] 
                 A dictionary containing the result of the request.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -272,12 +272,12 @@ class Group(base_api.BaseApi):
                 The group to list permissions for.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the request.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -333,12 +333,12 @@ class Group(base_api.BaseApi):
                 The new description of the group. Defaults to current value.
 
             Returns
-            ----------
+            -------
             dict[str, object] 
                 A dictionary containing the result of the request.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -401,12 +401,12 @@ class Group(base_api.BaseApi):
                 ```
 
             Returns
-            ----------
+            -------
             dict[str, object] 
                 A dictionary containing the result of the request.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {},
@@ -458,12 +458,12 @@ class Group(base_api.BaseApi):
                 ```
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the request.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "success": true
@@ -516,12 +516,12 @@ class Group(base_api.BaseApi):
                 - CloudStation (Synology Drive)
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the request.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -566,11 +566,11 @@ class Group(base_api.BaseApi):
                 The users to add to the group.
 
             Returns
-            ----------
+            -------
             dict[str, object] A dictionary containing the result of the request.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {},
@@ -603,12 +603,12 @@ class Group(base_api.BaseApi):
                 The users to remove from the group.
 
             Returns
-            ----------
+            -------
             dict[str, object]
                 A dictionary containing the result of the request.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {},
@@ -641,12 +641,12 @@ class Group(base_api.BaseApi):
                 Description to assign to the group. Defaults to empty string.
 
             Returns
-            ----------
+            -------
             dict[str, object] 
                 A dictionary containing the result of the request.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {
@@ -679,12 +679,12 @@ class Group(base_api.BaseApi):
                 The groups to delete.
 
             Returns
-            ----------
+            -------
             dict[str, object] 
                 A dictionary containing the result of the request.
 
             Example return
-            ----------
+            --------------
             ```json
             {
                 "data": {},
