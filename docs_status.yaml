@@ -11,7 +11,7 @@
 - AudioStation:
     status: not_started
 - BaseApi:
-    status: partial
+    status: finished
 - Backup:
     status: partial
 - Certificate:
