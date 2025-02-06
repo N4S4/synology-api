@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 title: Supported APIs
 ---
 
@@ -8,7 +8,7 @@ title: Supported APIs
 <!-- -------------------------------------------- -->
   
 # Supported APIs
-At the moment there are quite a few APIs implemented. They could be totally or partically implemented, for specific documentation about an API in particular, please see  [APIs](category/api-classes).  
+At the moment there are quite a few APIs implemented. They could be totally or partically implemented, for specific documentation about an API in particular, please see  [APIs](./category/api-classes).  
 ### ActiveBackupMicrosoft
 - `SYNO.ActiveBackupOffice365`  
   
@@ -149,7 +149,6 @@ At the moment there are quite a few APIs implemented. They could be totally or p
   
 ### User
 - `SYNO.Core.User`  
-- `post`  
 - `SYNO.Core.User.Group`  
 - `SYNO.Core.User.PasswordPolicy`  
 - `SYNO.Core.User.PasswordExpiry`  
@@ -186,12 +185,12 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 ### DownloadStation
 - `SYNO.DownloadStation.Info`  
 - `SYNO.DownloadStation.Schedule`  
-- `SYNO.DownloadStation' + self.download_st_version + '.Task`  
+- `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task`  
 - `SYNO.DownloadStation2.Task.Source`  
 - `SYNO.DownloadStation.Statistic`  
 - `SYNO.DownloadStation.RSS.Site`  
-- `SYNO.DownloadStation' + self.download_st_version + '.RSS.Feed`  
-- `SYNO.DownloadStation' + self.download_st_version + '.BTSearch`  
+- `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.RSS.Feed`  
+- `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.BTSearch`  
   
 ### AdminConsole
 - `SYNO.SynologyDrive`  

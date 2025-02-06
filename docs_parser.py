@@ -12,8 +12,8 @@ from docstring_extractor import get_docstrings
 ####################
 DOCS_TRACKER = './docs_status.yaml'
 PARSE_DIR = './synology_api'
-API_LIST_FILE='./documentation/docs/api-list.md'
-DOCS_DIR = './documentation/docs/apis/'
+API_LIST_FILE='./documentation/docs/apis/readme.md'
+DOCS_DIR = './documentation/docs/apis/classes/'
 EXCLUDED_FILES = {'__init__.py', 'auth.py', 'base_api.py', 'error_codes.py', 'exceptions.py', 'utils.py'}
 
 ####################
@@ -30,7 +30,9 @@ ADMONITIONS = [
     {'pattern': r'(Danger:)(.*)', 'level': 'danger'},
 ]
 EXAMPLE_RETURN_PATTERN = r'(?s)(Example return\n-.*)(```.*```)'
-API_NAME_PATTERN = r'(api_name.*=\s?)[\'"](.*)[\'"]'
+API_NAME_PATTERN = r'api_name\s*=\s*f?[\'"](.*)[\'"]'
+API_NAME_CONCAT_PATTERN = r'(.*)([\'"]\s*\+.*\+\s*[\'"])(.*)'
+API_NAME_CONCAT_PATTERN_FSTR = r'(.*)(\{.*\})(.*)'
 AUTO_GEN_TAG = '\n<!-- ' + '-'*44 + ' -->\n'
 AUTO_GEN_MESSAGE = '<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->'
 AUTO_GEN_DISCLAIMER= AUTO_GEN_TAG + AUTO_GEN_MESSAGE + AUTO_GEN_TAG + NEWLINE
@@ -145,7 +147,7 @@ def init_parser() -> argparse.ArgumentParser:
                         help='Parse specified files. This overrides the excluded files.')  
     parser.add_argument('-l', '--api-list',
                         action='store_true',
-                        help='Parses APIs used by the class and generates api-list.md. To use only with --all as the whole api-list.md file will be overwritten with the parsed files.')
+                        help='Parses APIs used by the class and generates MD for Supported APIs page.')
     parser.add_argument('-e', '--excluded',
                         action='store_true',
                         help='Show a list of the excluded files to parse.')
@@ -168,12 +170,12 @@ def validate_args(parser: argparse.ArgumentParser) -> tuple[list[str], bool]:
             print(file)
         sys.exit(1)
 
-    if args.all:
+    if args.all or args.api_list:
         files = get_files_to_parse()
     elif args.file:
         files = args.file
 
-    return (files, args.api_list and args.all)
+    return (files, args.api_list, args.all or args.file)
 
 def validate_str(context: str, strs: list[str]):
     for current in strs:
@@ -204,12 +206,30 @@ def gen_supported_apis() -> str:
 
     return content
 
+def check_concatenation(api_name: str) -> str:
+    match_p1 = re.search(API_NAME_CONCAT_PATTERN, api_name)
+    match_p2 = re.search(API_NAME_CONCAT_PATTERN_FSTR, api_name)
+    match_concat = match_p1 or match_p2
+
+    if match_concat:
+        concatenation = match_concat.group(2).replace('self.', '')
+        concatenation = concatenation.replace('\'', '')
+        concatenation = concatenation.replace('"', '')
+        concatenation = concatenation.replace('+', '')
+        concatenation = concatenation.strip()
+        concatenation = concatenation.upper()
+        api_name = match_concat.group(1) + '{' + concatenation + '}' + match_concat.group(3)
+
+    return api_name
+
 def parse_used_apis(class_name: str, file_content: str) -> str:
     matches = re.findall(API_NAME_PATTERN, file_content)
     section = header('h3', class_name)
-    for match in matches:
-        if section.find(match[1]) == -1: # Don't add duplicates
-            section += list_item(match[1], ['code'])
+    for api_name in matches:
+        api_name = check_concatenation(api_name)
+
+        if section.find(api_name) == -1: # Don't add duplicates
+            section += list_item(api_name, ['code'])
     return section + NEWLINE
 
 def gen_header(class_name: str, docstring: str) -> str:
@@ -280,7 +300,7 @@ def write(path: str, content: str):
 
 def main():
     parser = init_parser()
-    files, parse_api_list = validate_args(parser)
+    files, parse_api_list, parse_docs = validate_args(parser)
 
     ### Generation for Getting Started/Supported APIs with all the APIs user per class.
     if parse_api_list:
@@ -309,8 +329,9 @@ def main():
                     if is_private(method['name']):
                         continue
                     doc_content += gen_method(method)
-          
-        write(DOCS_DIR + file_name.replace('.py', '.md'), doc_content)
+
+        if parse_docs: 
+            write(DOCS_DIR + file_name.replace('.py', '.md'), doc_content)
         print('='*20)
     if parse_api_list:
         write(API_LIST_FILE, supported_apis)
