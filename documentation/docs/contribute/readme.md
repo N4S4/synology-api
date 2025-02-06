@@ -12,10 +12,10 @@ The **very** little guidelines written in here would be just the basis on how to
 As I say the following are just _guidelines_ so do not feel obligated, **except for the docs, please _follow_ the docs guidelines :)**
 
 ## 📝 Documentation
-Documentation is **important**, specially in this end-user focused package, so please take look at the [Documentation Guidelines](docs_guidelines)
+Documentation is **important**, specially in this end-user focused package, so please take look at the [Documentation Guidelines](contribute/docs_guidelines)
 
 ## 😁 Be cool
-Take a moment to check out our [Code of Conduct](conduct_code)
+Take a moment to check out our [Code of Conduct](contribute/conduct_code)
 
 ## 🛠️ Testing
 You should **test your code** on your Synology NAS (_if you own one_), this would save us plenty of time before merging any of your pull request.  
