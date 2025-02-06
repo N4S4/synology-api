@@ -1,11 +1,93 @@
 import json
 from typing import List
+import copy
 from . import base_api
+from .core_share_permission import SharePermission
+from .core_share_keymanager import KeyManager
 
 class Share(base_api.BaseApi):
     """
     Core Share API implementation.
     """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._permission: SharePermission = None
+        self._keymanager: KeyManager = None
+        
+    @property
+    def permission(self) -> SharePermission:
+        if self._permission is None:
+            self._permission = SharePermission.__new__(SharePermission)
+            self._permission.__dict__ = self.__dict__
+        return self._permission
+        
+    @property
+    def keymanager(self) -> KeyManager:
+        if self._keymanager is None:
+            self._keymanager = KeyManager.__new__(KeyManager)
+            self._keymanager.__dict__ = self.__dict__
+        return self._keymanager
+        
+
+    
+    def validate_set(self, name: str, vol_path: str, desc: str = "", enable_share_compress: bool = False, enable_share_cow: bool = False, enc_passwd: str = "", encryption: bool = False) -> dict:
+        """
+        Args:
+            name (str):
+                Share name.
+            vol_path (str):
+                Volume path.
+            desc (str, optional):
+                Share description. Defaults to `""`.
+            enable_share_compress (bool, optional):
+                Enable share compress. Defaults to `False`.
+            enable_share_cow (bool, optional):
+                Enable share cow. Defaults to `False`.
+            enc_passwd (str, optional):
+                Encrypted password. Defaults to `""`.
+            encryption (bool, optional):
+                Enable encryption. Defaults to `False`.
+        Returns:
+            dict|str:
+                A dictionary containing the groups information.
+
+            Example return:
+            ```json
+            {
+                "success": true,
+            }
+            ```
+        """
+        api_name = "SYNO.Core.Share"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "validate_set",
+            "version": info['maxVersion'],
+            "name": name,
+        }
+        
+        req_param_encrypted = {
+            "shareinfo": json.dumps({
+                "name": name,
+                "vol_path": vol_path,
+                "desc": desc,
+                "enable_share_compress": enable_share_compress,
+                "enable_share_cow": enable_share_cow,
+                "enc_passwd": enc_passwd,
+                "encryption": encryption,
+            })
+        }
+        
+        # If using https don't use encryption
+        if self.session._secure:
+            req_param.update(req_param_encrypted)
+        else:
+            encrypted_params = self.session.encrypt_params(req_param_encrypted)
+            req_param.update(encrypted_params)
+        
+        
+        return self.request_data(api_name, api_path, req_param, method="post")
     
     def list_folders(self, share_type: str = "all", additional: list = []) -> dict:
         """
