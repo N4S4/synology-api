@@ -196,7 +196,7 @@ def insert_admonitions(content: str) -> str:
 
 def gen_supported_apis() -> str:
     content = META_TAG
-    content += f'sidebar_position: 2\n'
+    content += f'sidebar_position: 1\n'
     content += f'title: Supported APIs\n'
     content += META_TAG
     content += AUTO_GEN_DISCLAIMER
