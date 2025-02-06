@@ -36,7 +36,7 @@ function HomepageHeader() {
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className="center-content">
           <Link
-            className="custom-btn"
+            className="custom-btn padding--md margin--md"
             to="https://github.com/N4S4/synology-api"
           >
             <span className="center-content">
@@ -49,7 +49,7 @@ function HomepageHeader() {
             </span>
           </Link>
           <Link
-            className="custom-btn"
+            className="custom-btn padding--md margin--md"
             to="https://github.com/sponsors/N4S4"
           >
             Sponsor ❤️

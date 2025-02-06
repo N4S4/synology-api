@@ -1,5 +1,6 @@
 import { getRepoContributors } from "@site/src/services/api";
 import React, { useEffect, useState, MouseEvent } from "react";
+import { isMobile } from "react-device-detect";
 import { ImSpinner9 } from "react-icons/im";
 
 interface CardProps {
@@ -28,8 +29,8 @@ const Card: React.FC<CardProps> = ({ username, avatar_url }) => {
   return (
     <div
       className="avatar avatar__photo avatar__photo--lg margin--sm"
-      onMouseEnter={handleMoseEnter}
-      onMouseLeave={handleMoseLeave}
+      onMouseEnter={isMobile ? () => (false) : handleMoseEnter}
+      onMouseLeave={isMobile ? () => (false) : handleMoseLeave}
     >
       <img
         alt={`${username} Profile`}

@@ -10,11 +10,6 @@ const octokit = new OctokitThrottled({
         `Request quota exhausted for request ${options.method} ${options.url}`,
       );
 
-      if (retryCount < 1) {
-        octokit.log.info(`Retrying after ${retryAfter} seconds!`);
-        return true;
-      }
-
       throw new Error("Request quota exhausted");
     },
     onSecondaryRateLimit: (retryAfter, options, octokit) => {
@@ -44,7 +39,7 @@ export const getRepoStars = async () => {
 
     const jsonData = {
       "count": data.length,
-      "expires": Date.now() + 60000 // Expires in 1 minute
+      "expires": Date.now() + 180000 // Expires in 3 minutes
     }
 
     localStorage.setItem('stars', JSON.stringify(jsonData));
@@ -80,7 +75,7 @@ export const getRepoContributors = async () => {
 
     const jsonData = {
       "data": data,
-      "expires": Date.now() + 60000 // Expires in 1 minute
+      "expires": Date.now() + 180000 // Expires in 3 minutes
     }
 
     localStorage.setItem('contributors', JSON.stringify(jsonData));

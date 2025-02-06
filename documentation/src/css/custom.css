@@ -78,7 +78,7 @@
 
 	--ifm-code-font-size: 95%;
 	--docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-	--ifm-navbar-height: 4.75rem;
+	--ifm-navbar-height: 6rem;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -190,8 +190,7 @@ html[data-theme="dark"] .header-github-link:before {
 }
 
 .custom-btn {
-	margin-inline: 1rem;
-	padding: 1rem;
+	min-width: fit-content;
 	border-radius: 5rem;
 	font-size: medium;
 	font-weight: bold;
@@ -258,21 +257,51 @@ html[data-theme="dark"] .header-github-link:before {
 	color: white;
 }
 
-.avatar__photo--lg:hover {
-	width: 5rem;
-	height: 5rem;
-	z-index: 10;
-}
-
-.avatar__photo--lg:hover .user-info {
-	opacity: 1;
-}
-
-.avatar__photo--lg:hover .user-info p,
-.avatar__photo--lg:hover .user-info a {
-	opacity: 1;
-}
-
 .avatar-hovered {
 	scale: 2;
+}
+
+/* Avoid touch in mobile to trigger hover */
+@media (hover: hover) { 
+	.avatar__photo--lg:hover {
+		width: 5rem;
+		height: 5rem;
+		z-index: 10;
+	}
+
+	.avatar__photo--lg:hover .user-info {
+		opacity: 1;
+	}
+
+	.avatar__photo--lg:hover .user-info p,
+	.avatar__photo--lg:hover .user-info a {
+		opacity: 1;
+	}
+}
+
+@media screen and (max-width: 996px) {
+	.navbar-sidebar__brand {
+		height: 8rem;
+	}
+
+	.navbar__logo {
+		height: 4.5rem;
+	}
+
+	.navbar__title {
+		font-size: 1.25rem;
+	} 
+
+	.header-github-link:before {
+		height: 48px;
+		width: 48px;
+	}
+
+	.menu__link {
+		font-size: xx-large;
+	}
+
+	.theme-doc-sidebar-menu a {
+		font-size: large;
+	}
 }
