@@ -20,10 +20,6 @@ function HomepageHeader() {
   useEffect(() => {
     const init = async () => {
       const stars = await getRepoStars();
-      if (!stars) {
-        setRepoStars(0);
-        setLoading(false);
-      }
       setRepoStars(stars);
       setLoading(false);
     };
@@ -48,7 +44,7 @@ function HomepageHeader() {
               {loading ? 
                 <ImSpinner9 className="loading-icon" size={20} /> 
                   : 
-                repoStars
+                repoStars ? repoStars : ''
               }
             </span>
           </Link>

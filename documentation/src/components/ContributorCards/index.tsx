@@ -1,5 +1,6 @@
 import { getRepoContributors } from "@site/src/services/api";
 import React, { useEffect, useState, MouseEvent } from "react";
+import { ImSpinner9 } from "react-icons/im";
 
 interface CardProps {
   username: string;
@@ -25,8 +26,8 @@ const Card: React.FC<CardProps> = ({ username, avatar_url }) => {
   }
 
   return (
-    <div 
-      className="avatar avatar__photo avatar__photo--lg margin--sm" 
+    <div
+      className="avatar avatar__photo avatar__photo--lg margin--sm"
       onMouseEnter={handleMoseEnter}
       onMouseLeave={handleMoseLeave}
     >
@@ -36,9 +37,9 @@ const Card: React.FC<CardProps> = ({ username, avatar_url }) => {
       />
       <div className="user-info">
         <p className="margin-bottom--none text--break text--bold">{username}</p>
-        <a 
-          href={`https://github.com/N4S4/synology-api/commits?author=${username}`} 
-          target="_blank" 
+        <a
+          href={`https://github.com/N4S4/synology-api/commits?author=${username}`}
+          target="_blank"
           rel="noreferrer"
           className="text--light"
         >
@@ -50,13 +51,14 @@ const Card: React.FC<CardProps> = ({ username, avatar_url }) => {
 }
 
 const ContributorCards = () => {
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
 
   useEffect(() => {
     const init = async () => {
       const contributors = await getRepoContributors();
       setData(contributors);
-      console.log(data);
+      setLoading(false);
     };
 
     init();
@@ -64,12 +66,21 @@ const ContributorCards = () => {
 
   return (
     <div className="container">
-      <h2>Built by the community:</h2>
-      <div className="row center-content margin-bottom--lg">
-        {data && data.map((item) => (
-          <Card key={item.id} username={item.login} avatar_url={item.avatar_url} />
-        ))}
-      </div>
+      {loading && (
+        <div className="row center-content margin-bottom--lg">
+          <ImSpinner9 className="loading-icon" size={20} /> 
+        </div>
+      )}
+      {!loading && data?.length > 0 && (
+        <>
+          <h2>Built by the community:</h2>
+          <div className="row center-content margin-bottom--lg">
+            {data && data.map((item) => (
+              <Card key={item.id} username={item.login} avatar_url={item.avatar_url} />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

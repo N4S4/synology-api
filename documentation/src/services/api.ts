@@ -35,7 +35,7 @@ export const getRepoStars = async () => {
 
   try {
     let data: object[] = [];
-    data = await octokit.paginate("GET /repos/N4S4/synology-api/stargazes", {
+    data = await octokit.paginate("GET /repos/N4S4/synology-api/stargazers", {
       per_page: 100,
       headers: {
         "X-GitHub-Api-Version": "2022-11-28",
