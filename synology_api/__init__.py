@@ -11,6 +11,8 @@ from . import \
     core_certificate, \
     core_sys_info, \
     core_group, \
+    core_user, \
+    core_share, \
     downloadstation, \
     log_center, \
     vpn, \
