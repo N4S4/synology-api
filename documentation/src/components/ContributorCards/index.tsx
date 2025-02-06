@@ -1,6 +1,5 @@
 import { getRepoContributors } from "@site/src/services/api";
-import React, { useEffect, useState } from "react";
-import styles from './styles.module.css';
+import React, { useEffect, useState, MouseEvent } from "react";
 
 interface CardProps {
   username: string;
@@ -8,14 +7,43 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ username, avatar_url }) => {
+  let hoverTimeout: NodeJS.Timeout;
+
+  const handleMoseEnter = (event: MouseEvent) => {
+    const element = event.currentTarget as HTMLDivElement;
+    hoverTimeout = setTimeout(() => {
+      element.classList.add('avatar-hovered');
+      element.classList.add('shadow--tl');
+    }, 500);
+  }
+
+  const handleMoseLeave = (event: MouseEvent) => {
+    clearTimeout(hoverTimeout);
+    const element = event.currentTarget as HTMLDivElement;
+    element.classList.remove('avatar-hovered');
+    element.classList.remove('shadow--tl');
+  }
+
   return (
-    <div className="avatar avatar__photo avatar__photo--lg margin--sm">
+    <div 
+      className="avatar avatar__photo avatar__photo--lg margin--sm" 
+      onMouseEnter={handleMoseEnter}
+      onMouseLeave={handleMoseLeave}
+    >
       <img
         alt={`${username} Profile`}
         src={avatar_url}
       />
       <div className="user-info">
-
+        <p className="margin-bottom--none text--break text--bold">{username}</p>
+        <a 
+          href={`https://github.com/N4S4/synology-api/commits?author=${username}`} 
+          target="_blank" 
+          rel="noreferrer"
+          className="text--light"
+        >
+          See contributions
+        </a>
       </div>
     </div>
   );
@@ -37,7 +65,7 @@ const ContributorCards = () => {
   return (
     <div className="container">
       <h2>Built by the community:</h2>
-      <div className="row center-content">
+      <div className="row center-content margin-bottom--lg">
         {data && data.map((item) => (
           <Card key={item.id} username={item.login} avatar_url={item.avatar_url} />
         ))}

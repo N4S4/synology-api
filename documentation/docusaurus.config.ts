@@ -41,7 +41,6 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/N4S4/synology-api/tree/master/documentation/',
@@ -59,13 +58,12 @@ const config: Config = {
       disableSwitch: false,
       respectPrefersColorScheme: true,
     },
-    // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/syno-api.jpg',
     navbar: {
       title: 'Synology API',
       logo: {
         alt: 'Synology API Logo',
-        src: 'img/syno-api.jpg',
+        src: 'img/logo-round.png',
       },
       items: [
         {
@@ -76,7 +74,8 @@ const config: Config = {
         },
         {
           href: 'https://github.com/N4S4/synology-api',
-          label: 'GitHub',
+          className: 'header-github-link',
+          "aria-label": 'GitHub repository',
           position: 'right',
         },
       ],
@@ -92,11 +91,15 @@ const config: Config = {
             },
             {
               label: 'Supported APIs',
-              to: '/docs/api-list',
+              to: '/docs/apis/',
             },
             {
               label: 'APIs Classes',
               to: '/docs/category/api-classes',
+            },
+            {
+              label: 'Contribute',
+              to: '/docs/category/contribute',
             },
           ],
         },
@@ -113,12 +116,16 @@ const config: Config = {
           title: 'Github',
           items: [
             {
+              label: 'Create a discussion',
+              to: 'https://github.com/N4S4/synology-api/discussions',
+            },
+            {
               label: 'Report an issue',
               to: 'https://github.com/N4S4/synology-api/issues',
             },
             {
-              label: 'Create a discussion',
-              to: 'https://github.com/N4S4/synology-api/discussions',
+              label: 'Sponsor',
+              to: 'https://github.com/sponsors/N4S4',
             },
           ],
         },

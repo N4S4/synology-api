@@ -27,46 +27,73 @@ const octokit = new OctokitThrottled({
 
 export const getRepoStars = async () => {
   const cachedData = localStorage.getItem('stars');
-  if (cachedData && JSON.parse(cachedData)?.expires > Date.now()) {
-    return JSON.parse(localStorage.getItem('stars')!).count;
+  const cachedJson = JSON.parse(cachedData);
+  if (cachedJson?.expires > Date.now()) {
+    console.debug('[getRepoStars] Using cached data');
+    return cachedJson.count;
   }
 
-  let data: object[] = [];
-  data = await octokit.paginate("GET /repos/N4S4/synology-api/stargazers", {
-    per_page: 100,
-    headers: {
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-  });
+  try {
+    let data: object[] = [];
+    data = await octokit.paginate("GET /repos/N4S4/synology-api/stargazes", {
+      per_page: 100,
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    });
 
-  const jsonData = {
-    "count": data.length,
-    "expires": Date.now() + 600000 // Expires in 10 minutes
+    const jsonData = {
+      "count": data.length,
+      "expires": Date.now() + 600000 // Expires in 10 minutes
+    }
+
+    localStorage.setItem('stars', JSON.stringify(jsonData));
+    return data.length;
+  } catch (error) {
+    console.error(error);
+
+    if (cachedJson) {
+      console.debug('[getRepoStars] Using cached data');
+      return cachedJson.count;
+    }
+
+    return 0;
   }
-
-  localStorage.setItem('stars', JSON.stringify(jsonData));
-  return data.length;
 }
 
 export const getRepoContributors = async () => {
   const cachedData = localStorage.getItem('contributors');
-  if (cachedData && JSON.parse(cachedData)?.expires > Date.now()) {
-    return JSON.parse(localStorage.getItem('contributors')!).data;
-  }
-  
-  let data: object[] = [];
-  data = await octokit.paginate("GET /repos/N4S4/synology-api/contributors", {
-    per_page: 100,
-    headers: {  
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-  });
-
-  const jsonData = {
-    "data": data,
-    "expires": Date.now() + 600000 // Expires in 10 minutes
+  const cachedJson = JSON.parse(cachedData);
+  if (cachedJson?.expires > Date.now()) {
+    console.debug('[getRepoStars] Using cached data');
+    return cachedJson.data;
   }
 
-  localStorage.setItem('contributors', JSON.stringify(jsonData));
-  return data;
+  try {
+    let data: object[] = [];
+    data = await octokit.paginate("GET /repos/N4S4/synology-api/contributors", {
+      per_page: 100,
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    });
+
+    const jsonData = {
+      "data": data,
+      "expires": Date.now() + 600000 // Expires in 10 minutes
+    }
+
+    localStorage.setItem('contributors', JSON.stringify(jsonData));
+    return data;
+  }
+  catch (error) {
+    console.error(error);
+
+    if (cachedJson) {
+      console.debug('[getRepoContributors] Using cached data');
+      return cachedJson.data;
+    }
+
+    return 0;
+  }
 }

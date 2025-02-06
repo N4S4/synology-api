@@ -38,9 +38,9 @@ function HomepageHeader() {
           {siteConfig.title}
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
+        <div className="center-content">
           <Link
-            className="button button--secondary button--lg"
+            className="custom-btn"
             to="https://github.com/N4S4/synology-api"
           >
             <span className="center-content">
@@ -51,7 +51,12 @@ function HomepageHeader() {
                 repoStars
               }
             </span>
-           
+          </Link>
+          <Link
+            className="custom-btn"
+            to="https://github.com/sponsors/N4S4"
+          >
+            Sponsor ❤️
           </Link>
         </div>
       </div>
