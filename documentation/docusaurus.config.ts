@@ -23,7 +23,8 @@ const config: Config = {
   // projectName: 'synology-api', // Usually your repo name.
   organizationName: 'joeperpetua', // Usually your GitHub org/user name.
   projectName: 'synology-api', // Usually your repo name.
-
+  
+  trailingSlash: false,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 

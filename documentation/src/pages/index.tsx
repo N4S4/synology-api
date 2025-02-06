@@ -69,7 +69,8 @@ export default function Home(): ReactNode {
   return (
     <Layout
       title={`Home`}
-      description="A Python wrapper around Synology API">
+      description="A Python wrapper around Synology API"
+    >
       <HomepageHeader />
       <main>
         <HomepageFeatures />
