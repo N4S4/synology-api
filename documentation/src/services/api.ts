@@ -44,7 +44,7 @@ export const getRepoStars = async () => {
 
     const jsonData = {
       "count": data.length,
-      "expires": Date.now() + 600000 // Expires in 10 minutes
+      "expires": Date.now() + 60000 // Expires in 1 minute
     }
 
     localStorage.setItem('stars', JSON.stringify(jsonData));
@@ -80,7 +80,7 @@ export const getRepoContributors = async () => {
 
     const jsonData = {
       "data": data,
-      "expires": Date.now() + 600000 // Expires in 10 minutes
+      "expires": Date.now() + 60000 // Expires in 1 minute
     }
 
     localStorage.setItem('contributors', JSON.stringify(jsonData));

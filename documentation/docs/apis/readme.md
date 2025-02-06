@@ -8,7 +8,7 @@ title: Supported APIs
 <!-- -------------------------------------------- -->
   
 # Supported APIs
-At the moment there are quite a few APIs implemented. They could be totally or partically implemented, for specific documentation about an API in particular, please see  [APIs](./category/api-classes).  
+At the moment there are quite a few APIs implemented. They could be totally or partically implemented, for specific documentation about an API in particular, please see  [APIs](../category/api-classes).  
 ### ActiveBackupMicrosoft
 - `SYNO.ActiveBackupOffice365`  
   

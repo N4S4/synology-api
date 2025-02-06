@@ -103,4 +103,4 @@ The response data would be a `JSON` object parsed into a `Dict`:
 ```
 
 :::note
-For more information about the initialization params, refer to [BaseApi](../apis/base_api)
+For more information about the initialization params, refer to [BaseApi](../apis/classes/base_api)
