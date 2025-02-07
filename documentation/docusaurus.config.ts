@@ -10,8 +10,8 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  // url: 'https://N4S4.github.io/',
-  url: 'https://joeperpetua.github.io/',
+  url: 'https://N4S4.github.io/',
+  // url: 'https://joeperpetua.github.io/',
 
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
@@ -19,9 +19,8 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  // organizationName: 'N4S4', // Usually your GitHub org/user name.
-  // projectName: 'synology-api', // Usually your repo name.
-  organizationName: 'joeperpetua', // Usually your GitHub org/user name.
+  organizationName: 'N4S4', // Usually your GitHub org/user name.
+  // organizationName: 'joeperpetua', // Usually your GitHub org/user name.
   projectName: 'synology-api', // Usually your repo name.
   
   trailingSlash: false,
@@ -54,10 +53,16 @@ const config: Config = {
   ],
 
   themeConfig: {
+    metadata: [
+      {
+        name: 'google-site-verification', // Google Search Console
+        content: 'MYQkGNflCIc_-YFbk3DnMu1sFRDAEZ0sd3JGPX5l89s'
+      }
+    ],
     colorMode: {
       defaultMode: 'dark',
       disableSwitch: false,
-      respectPrefersColorScheme: true,
+      respectPrefersColorScheme: false,
     },
     image: 'img/syno-api.jpg',
     navbar: {
