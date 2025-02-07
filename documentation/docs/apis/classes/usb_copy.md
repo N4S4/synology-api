@@ -24,6 +24,11 @@ USB Copy Implementation.
 ### `get_package_settings`
 Retrieve package settings.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.USBCopy` 
+</div>
+  
 #### Returns
 <div class="padding-left--md">
 `dict[str, object]`  
@@ -52,6 +57,11 @@ Parsed JSON into `dict`
 
 ### `get_package_logs`
 Retrieve package logs.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.USBCopy` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -99,6 +109,11 @@ Parsed response JSON into `dict`
 
 ### `get_task_settings`
 Retrieve task settings  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.USBCopy` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -161,6 +176,11 @@ Parsed response JSON into `dict`
 
 ### `toggle_task`
 Enable or disable USB Copy task  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.USBCopy` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">

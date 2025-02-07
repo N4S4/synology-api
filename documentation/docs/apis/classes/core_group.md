@@ -35,6 +35,11 @@ Core Group API implementation.
 ### `get_groups`
 Retrieve groups information.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Group` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_offset_** `int`  
@@ -98,6 +103,11 @@ A dictionary containing the groups information.
 ### `get_users`
 Retrieve users members or not of a group.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Group.Member` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_group_** `str`  
@@ -155,6 +165,11 @@ A dictionary containing the result of the request.
 ### `get_speed_limits`
 Retrieve bandwidth control settings for a given group.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.BandwidthControl` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_group_** `str `  
@@ -176,6 +191,11 @@ A dictionary containing the result of the request.
 
 ### `get_quota`
 Retrieve quota settings for a given group.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Quota` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -225,6 +245,11 @@ A dictionary containing the result of the request.
 ### `get_permissions`
 Retrieve share permissions for a given group.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Share.Permission` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_group_** `str`  
@@ -273,6 +298,11 @@ A dictionary containing the result of the request.
 ### `set_group_info`
 Change group name and/or description.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Group` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_group_** `str`  
@@ -313,6 +343,11 @@ A dictionary containing the result of the request.
 
 ### `set_share_quota`
 Set group quota for a given share.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Quota` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -361,6 +396,11 @@ A dictionary containing the result of the request.
 
 ### `set_share_permissions`
 Set group permissions for a given share.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Share.Permission` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -418,6 +458,11 @@ Set speed limit for a given share.
  
 :::
 
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.BandwidthControl` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_group_** `str`  
@@ -469,6 +514,11 @@ A dictionary containing the result of the request.
 ### `add_users`
 Add users to a group.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Group.Member` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_group_** `str `  
@@ -504,6 +554,11 @@ A dictionary containing the result of the request.
 ### `remove_users`
 Remove users from a group.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Group.Member` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_group_** `str `  
@@ -538,6 +593,11 @@ A dictionary containing the result of the request.
 
 ### `create`
 Create group.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Group` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -576,6 +636,11 @@ A dictionary containing the result of the request.
 
 ### `delete`
 Delete specified groups.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Group` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">

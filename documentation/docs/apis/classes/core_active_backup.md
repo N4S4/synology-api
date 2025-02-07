@@ -19,6 +19,11 @@ This API is partially documented or under construction.
 ### `list_vm_hypervisor`
 This function returns a list of list of all configured hypervisors present in ABB.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackup.Inventory` 
+</div>
+  
 
 
 
@@ -27,6 +32,11 @@ This function returns a list of list of all configured hypervisors present in AB
 
 ### `list_device_transfer_size`
 This function returns a list of all devices and their respective transfer size for the given time frame. Default value is 24 hours.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackup.Overview` 
+</div>
   
 
 
@@ -44,6 +54,11 @@ filter: dict[str, any] = {}
     "limit": int,
     "is_snapshot": bool,
     etc..  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackup.Task` 
+</div>
+  
 
 
 
@@ -52,6 +67,11 @@ filter: dict[str, any] = {}
 
 ### `backup_task_run`
 This function will trigger a backup event for the given tasks. Even if only one task is specified, a list has to be passed as argument.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackup.Task` 
+</div>
   
 
 
@@ -62,6 +82,11 @@ This function will trigger a backup event for the given tasks. Even if only one 
 ### `backup_task_cancel`
 This function will trigger a cancel backup event for the given tasks. Even if only one task is specified, a list has to be passed as argument.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackup.Task` 
+</div>
+  
 
 
 
@@ -71,6 +96,11 @@ This function will trigger a cancel backup event for the given tasks. Even if on
 ### `backup_task_remove`
 This function will trigger a task deletion event for the given tasks. Even if only one task is specified, a list has to be passed as argument.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackup.Task` 
+</div>
+  
 
 
 
@@ -79,6 +109,11 @@ This function will trigger a task deletion event for the given tasks. Even if on
 
 ### `backup_task_delete_versions`
 This function will trigger a version deletion event for the given version. Even if only one version is specified, a list has to be passed as argument.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackup.Version` 
+</div>
   
 
 
@@ -96,6 +131,11 @@ filter: dict[str, any] = {}
     "limit": int,
     "is_snapshot": bool,
     etc..  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackup.Log` 
+</div>
+  
 
 
 
@@ -105,6 +145,11 @@ filter: dict[str, any] = {}
 ### `list_logs_details`
 This function returns a dictionary of the logs of a given task event. `result_id` can be retrieved from `list_logs()` function.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackup.Log` 
+</div>
+  
 
 
 
@@ -113,6 +158,11 @@ This function returns a dictionary of the logs of a given task event. `result_id
 
 ### `list_storage`
 This function returns a dictionary of the current storages being used by ABB.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackup.Share` 
+</div>
   
 
 
