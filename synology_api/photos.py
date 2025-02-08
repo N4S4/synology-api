@@ -245,16 +245,40 @@ class Photos(base_api.BaseApi):
 
         """List all items in all folders in Personal Space
 
-        Parameters
-        ----------
-        offset: int Required. Specify how many shared folders are skipped before beginning to return listed shared folders
-        limit: int Required. Number of shared folders requested. 0 lists all shared folders.
-        folder_id: int ID of folder
-        sort_by: str Optional filename, filesize, takentime, item_type
-        sort_direction: str Optional asc or desc
-        passphrase: str Optional Passphrase for a shared album
-        additional: list ["thumbnail","resolution", "orientation", "video_convert", "video_meta", "provider_user_id", "exif", "tag", "description", "gps", "geocoding_id", "address", "person"]
-        type: str 'Type of data photo: Photo video: Video live: iPhone live photos'
+            Parameters
+            ----------
+            offset : int
+                Specify how many shared folders are skipped before beginning to return listed shared folders.
+
+            limit : int 
+                Number of shared folders requested. Set to `0` to list all shared folders.
+
+            folder_id : int
+                ID of folder
+
+            sort_by : str, optional
+                Possible values: 
+                - `filename`
+                - `filesize`
+                - `takentime`
+                - `item_type`
+
+            sort_direction : str, optional 
+                Possible values: `asc` or `desc`. Defaults to: `desc`
+
+            passphrase : str, optional
+                Passphrase for a shared album
+
+            additional : list[str]
+                Possible values:
+                `["thumbnail","resolution", "orientation", "video_convert", "video_meta", "provider_user_id", "exif", "tag", "description", "gps", "geocoding_id", "address", "person"]`
+                
+            type : str 
+                Possible values:
+                - `photo`: Photo 
+                - `video`: Video 
+                - `live`: iPhone live photos'
+
         """
 
         api_name = 'SYNO.Foto.Browse.Item'

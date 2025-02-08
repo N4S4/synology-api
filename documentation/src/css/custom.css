@@ -1,0 +1,307 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+	--text: #02252c;
+	--background: #f1fbfe;
+	--primary: #05697f;
+	--secondary: #6359f8;
+	--accent: #620ae6;
+
+	--ifm-color-emphasis-0: var(--background);
+	--ifm-color-emphasis-100: #d9f3f9;
+	--ifm-color-emphasis-200: #c2eaf5;
+	--ifm-color-emphasis-300: #a8e0ef;
+	--ifm-color-emphasis-400: #8dd5e9;
+	--ifm-color-emphasis-500: #72c9e2;
+	--ifm-color-emphasis-600: #56bddb;
+	--ifm-color-emphasis-700: #0b7494;
+	--ifm-color-emphasis-800: #0d5d77;
+	--ifm-color-emphasis-900: #024453;
+	--ifm-color-emphasis-1000: var(--text);
+
+	--ifm-background-color: var(--background);
+	--ifm-background-surface-color: #e0f4fa;
+
+	--ifm-hover-overlay: rgba(5, 105, 127, 0.1);
+
+	--ifm-color-content: var(--text);
+	--ifm-color-content-secondary: rgba(2, 37, 44, 0.8);
+	--ifm-heading-color: var(--text);
+	--ifm-footer-link-color: var(--text);
+	--ifm-hero-text-color: var(--text);
+
+	--ifm-breadcrumb-separator-filter: invert(18%) sepia(15%) saturate(200%)
+		hue-rotate(180deg) brightness(90%) contrast(100%);
+
+	--ifm-code-background: rgba(99, 89, 248, 0.1);
+
+	--ifm-scrollbar-track-background-color: #d2f2f9;
+	--ifm-scrollbar-thumb-background-color: #94dbe7;
+	--ifm-scrollbar-thumb-hover-background-color: #72c9e2;
+
+	--ifm-table-stripe-background: rgba(5, 105, 127, 0.05);
+	--ifm-toc-border-color: var(--ifm-color-emphasis-200);
+
+	--ifm-color-primary-contrast-background: #d9f3f9;
+	--ifm-color-primary-contrast-foreground: #02252c;
+	--ifm-color-secondary-contrast-background: #e5e2ff;
+	--ifm-color-secondary-contrast-foreground: #5439db;
+	--ifm-color-success-contrast-background: #c7f7c7;
+	--ifm-color-success-contrast-foreground: #024602;
+	--ifm-color-info-contrast-background: #c5f1fa;
+	--ifm-color-info-contrast-foreground: #02252c;
+	--ifm-color-warning-contrast-background: #ffeec5;
+	--ifm-color-warning-contrast-foreground: #5c3f00;
+	--ifm-color-danger-contrast-background: #fbd3d4;
+	--ifm-color-danger-contrast-foreground: #530d0e;
+
+	--ifm-color-primary: var(--primary);
+	--ifm-color-primary-dark: #055e73;
+	--ifm-color-primary-darker: #04596d;
+	--ifm-color-primary-darkest: #04495a;
+	--ifm-color-primary-light: #06738d;
+	--ifm-color-primary-lighter: #067993;
+	--ifm-color-primary-lightest: #067d98;
+
+	--ifm-color-secondary: var(--secondary);
+	--ifm-color-secondary-dark: #4539f7;
+	--ifm-color-secondary-darker: #3528f6;
+	--ifm-color-secondary-darkest: #170ae2;
+	--ifm-color-secondary-light: #8179f9;
+	--ifm-color-secondary-lighter: #918afa;
+	--ifm-color-secondary-lightest: #bebafc;
+
+	--ifm-code-font-size: 95%;
+	--docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+	--ifm-navbar-height: 6rem;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme="dark"] {
+	--text: #d3f6fd;
+	--background: #010b0e;
+	--primary: #80e3fa;
+	--secondary: #1207a6;
+	--accent: #7119f5;
+
+	--ifm-color-emphasis-0: var(--background);
+	--ifm-color-emphasis-100: #0a1a1e;
+	--ifm-color-emphasis-200: #12272c;
+	--ifm-color-emphasis-300: #1b363c;
+	--ifm-color-emphasis-400: #24464c;
+	--ifm-color-emphasis-500: #2e5660;
+	--ifm-color-emphasis-600: #3a6c77;
+	--ifm-color-emphasis-700: #4a8490;
+	--ifm-color-emphasis-800: #5ea1ad;
+	--ifm-color-emphasis-900: #7cc3d1;
+	--ifm-color-emphasis-1000: var(--text);
+
+	--ifm-background-color: var(--background);
+	--ifm-background-surface-color: #081418;
+
+	--ifm-hover-overlay: rgba(128, 227, 250, 0.15);
+
+	--ifm-color-content: var(--text);
+	--ifm-color-content-secondary: rgba(211, 246, 253, 0.8);
+
+	--ifm-breadcrumb-separator-filter: invert(75%) sepia(10%) saturate(300%)
+		hue-rotate(180deg) brightness(90%) contrast(100%);
+	--ifm-code-background: rgba(18, 7, 166, 0.2);
+
+	--ifm-scrollbar-track-background-color: #0f2027;
+	--ifm-scrollbar-thumb-background-color: #18434f;
+	--ifm-scrollbar-thumb-hover-background-color: #1f5d6a;
+
+	--ifm-table-stripe-background: rgba(128, 227, 250, 0.08);
+	--ifm-toc-border-color: var(--ifm-color-emphasis-200);
+
+	--ifm-color-primary-contrast-background: #011a20;
+	--ifm-color-primary-contrast-foreground: #d3f6fd;
+	--ifm-color-secondary-contrast-background: #0b0566;
+	--ifm-color-secondary-contrast-foreground: #e0e0ff;
+	--ifm-color-success-contrast-background: #004400;
+	--ifm-color-success-contrast-foreground: #e6ffe6;
+	--ifm-color-info-contrast-background: #0c3741;
+	--ifm-color-info-contrast-foreground: #d3f6fd;
+	--ifm-color-warning-contrast-background: #5c3f00;
+	--ifm-color-warning-contrast-foreground: #fff8d6;
+	--ifm-color-danger-contrast-background: #530d0e;
+	--ifm-color-danger-contrast-foreground: #ffdadb;
+
+	--ifm-color-primary: var(--primary);
+	--ifm-color-primary-dark: #5cdbf9;
+	--ifm-color-primary-darker: #49d7f8;
+	--ifm-color-primary-darkest: #13cbf6;
+	--ifm-color-primary-light: #a4ebfb;
+	--ifm-color-primary-lighter: #b7effc;
+	--ifm-color-primary-lightest: #c5f2fd;
+
+	--ifm-color-secondary: var(--secondary);
+	--ifm-color-secondary-dark: #100695;
+	--ifm-color-secondary-darker: #0f068d;
+	--ifm-color-secondary-darkest: #0d0574;
+	--ifm-color-secondary-light: #1408b7;
+	--ifm-color-secondary-lighter: #1508bf;
+	--ifm-color-secondary-lightest: #1709d8;
+
+	--docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+.button.button--secondary {
+	color: var(--background) !important;
+}
+
+[data-theme="dark"] .button.button--secondary {
+	color: var(--ifm-color-secondary-contrast-foreground) !important;
+}
+
+.navbar__logo {
+	height: 3.5rem;
+}
+
+.header-github-link:hover {
+	opacity: 0.6;
+}
+
+.header-github-link:before {
+	background: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E")
+		no-repeat;
+	content: "";
+	display: flex;
+	height: 24px;
+	width: 24px;
+}
+
+html[data-theme="dark"] .header-github-link:before {
+	background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E")
+		no-repeat;
+}
+
+.center-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
+
+.custom-btn {
+	min-width: fit-content;
+	border-radius: 5rem;
+	font-size: medium;
+	font-weight: bold;
+	background-color: var(--text);
+	color: var(--background);
+	text-decoration: none;
+}
+
+.custom-btn:hover {
+	color: var(--background);
+	text-decoration: none;
+}
+
+.loading-icon {
+	color: var(--ifm-color-primary);
+	margin: 0 0.25rem;
+	font-size: 2rem;
+	animation: spin 2s infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(720deg);
+	}
+}
+
+.avatar__photo--lg {
+	cursor: default;
+	position: relative;
+	width: 4rem;
+	height: 4rem;
+	scale: 1;
+	transition: width 0.3s ease, height 0.3s ease,
+		scale 0.3s cubic-bezier(0.36, -0.04, 0, 1.08);
+}
+
+.user-info {
+	position: absolute;
+	background: rgba(0, 0, 0, 0.75);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	font-size: 0.5rem;
+	padding: 0.5rem;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	transition: opacity 0.3s cubic-bezier(0.36, -0.04, 0, 1.08);
+	transition-delay: 0.5s;
+	color: white;
+}
+
+.user-info p,
+.user-info a {
+	opacity: 0;
+	transition: opacity 0.3s ease-in-out;
+	transition-delay: 0.6s;
+	color: white;
+}
+
+.avatar-hovered {
+	scale: 2;
+}
+
+/* Avoid touch in mobile to trigger hover */
+@media (hover: hover) { 
+	.avatar__photo--lg:hover {
+		width: 5rem;
+		height: 5rem;
+		z-index: 10;
+	}
+
+	.avatar__photo--lg:hover .user-info {
+		opacity: 1;
+	}
+
+	.avatar__photo--lg:hover .user-info p,
+	.avatar__photo--lg:hover .user-info a {
+		opacity: 1;
+	}
+}
+
+@media screen and (max-width: 996px) {
+	.navbar-sidebar__brand {
+		height: 8rem;
+	}
+
+	.navbar__logo {
+		height: 4.5rem;
+	}
+
+	.navbar__title {
+		font-size: 1.25rem;
+	} 
+
+	.header-github-link:before {
+		height: 48px;
+		width: 48px;
+	}
+
+	.menu__link {
+		font-size: xx-large;
+	}
+
+	.theme-doc-sidebar-menu a {
+		font-size: large;
+	}
+}

@@ -4,50 +4,57 @@ from . import base_api
 
 
 class User(base_api.BaseApi):
-    """
-    Core User API implementation.
+    """Core User API implementation.
 
-    Supported actions:
-        - Getters: 
-            - Get all users
-            - Password policies
-            - Password expiry
+        Supported actions:
+            - Getters: 
+                - Get all users
+                - Password policies
+                - Password expiry
 
-        - Setters:
-            - Set user password policy
-        
-        - Actions:
-            - Create new user
-            - Modify user
-            - Delete user
-            - User join/leave group
+            - Setters:
+                - Set user password policy
+            
+            - Actions:
+                - Create new user
+                - Modify user
+                - Delete user
+                - User join/leave group
     """
     
     def get_users(
         self, offset: int = 0, limit: int = -1, sort_by: str = "name", sort_direction: str = "ASC", additional: list[str] = []
-    ) -> dict[str, object] | str:
+    ) -> dict[str, object]:
         """Retrieve groups information.
 
-        Args:
-            offset (int, optional):
+            Parameters
+            ----------
+            offset : int, optional
                 The offset of the groups to retrieve. Defaults to `0`.
-            limit (int, optional):
+
+            limit : int, optional
                 The maximum number of groups to retrieve. Defaults to `-1` .
-            sort_by (str, optional):
+
+            sort_by : str, optional
                 Sort by a specific field. Defaults to `"name"`.
-            sort_direction (str, optional):
+
+            sort_direction : str, optional
                 The sort direction. Defaults to `"ASC"` else `"DESC"`.
-            additional (list[str], optional):
+                
+            additional : list[str], optional
                 Additional fields to retrieve. Defaults to `[]`.
+                
                 All fields known are: `["description","email","expired","cannot_chg_passwd","passwd_never_expire","password_last_change", "groups", "2fa_status"]`.
 
 
-        Returns:
-            dict|str:
-                A dictionary containing the groups information, or a string in case of an error.
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the groups information.
 
-            Example return:
-            ```
+            Example return
+            --------------
+            ```json
             {
                 "data": {
                     "offset": 0,
@@ -85,7 +92,6 @@ class User(base_api.BaseApi):
                 },
                 "success": true
             }
-
             ```
         """
         api_name = "SYNO.Core.User"
@@ -104,22 +110,27 @@ class User(base_api.BaseApi):
         
         return self.request_data(api_name, api_path, req_param)
     
-    def get_user(self, name: str, additional: list[str] = []) -> dict[str, object] | str:
+    def get_user(self, name: str, additional: list[str] = []) -> dict[str, object]:
         """Retrieve a user information.
 
-        Args:
-            name (str):
+            Parameters
+            ----------
+            name : str
                 The name of the user.
-            additional (list[str], optional):
+
+            additional : list[str], optional
                 Additional fields to retrieve. Defaults to `[]`.
+
                 All fields known are: `["description","email","expired","cannot_chg_passwd","passwd_never_expire","password_last_change","is_password_pending"]`.
 
-        Returns:
-            dict|str:
-                A dictionary containing the user information, or a string in case of an error.
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the user information.
 
-            Example return:
-            ```
+            Example return
+            --------------
+            ```json
             {
                 "api": "SYNO.Core.User",
                 "data": {
@@ -159,35 +170,46 @@ class User(base_api.BaseApi):
     def create_user(
         self, name: str, password: str, description: str = "", email: str = "", expire: str = "never", cannot_chg_passwd: bool = False,
         passwd_never_expire: bool = True, notify_by_email: bool = False, send_password: bool = False
-    ) -> dict[str, object] | str:
+    ) -> dict[str, object]:
         """Create a new user.
 
-        Args:
-            name (str):
+            Parameters
+            ----------
+            name : str
                 The name of the user.
-            password (str):
+
+            password : str
                 The password of the user.
-            description (str, optional):
+
+            description : str, optional
                 The description of the user. Defaults to `""`.
-            email (str, optional):
+
+            email : str, optional
                 The email of the user. Defaults to `""`.
-            expire (str, optional):
+
+            expire : str, optional
                 The expiration date of the user. Defaults to `"never"`.
-            cannot_chg_passwd (bool, optional):
+
+            cannot_chg_passwd : bool, optional
                 Whether the password can be changed. Defaults to `False`.
-            passwd_never_expire (bool, optional):
+
+            passwd_never_expire : bool, optional
                 Whether the password should never expire. Defaults to `True`.
-            notify_by_email (bool, optional):
+
+            notify_by_email : bool, optional
                 Whether to notify by email. Defaults to `False`.
-            send_password (bool, optional):
+
+            send_password : bool, optional
                 Whether to send the password. Defaults to `False`.
             
-        Returns:
-            dict|str:
-                A dictionary containing the user information, or a string in case of an error.
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the user information.
 
-            Example return:
-            ```
+            Example return
+            --------------
+            ```json
             { 
                 "data":
                 {
@@ -232,37 +254,49 @@ class User(base_api.BaseApi):
     def modify_user(
         self, name: str, new_name: str, password: str = "", description: str = "", email: str = "", expire: str = "never", cannot_chg_passwd: bool = False,
         passwd_never_expire: bool = True, notify_by_email: bool = False, send_password: bool = False
-    ) -> dict[str, object] | str:
+    ) -> dict[str, object]:
         """Modify a user.
 
-        Args:
-            name (str):
+            Parameters
+            ----------
+            name : str
                 The name of the actual user.
-            new_name (str):
+
+            new_name : str
                 The new name of the user.
-            password (str, optional):
+
+            password : str, optional
                 The password of the user. Defaults to `""`.
-            description (str, optional):
+
+            description : str, optional
                 The description of the user. Defaults to `""`.
-            email (str, optional):
+
+            email : str, optional
                 The email of the user. Defaults to `""`.
-            expire (str, optional):
+
+            expire : str, optional
                 The expiration date of the user. Defaults to `"never"`.
-            cannot_chg_passwd (bool, optional):
+
+            cannot_chg_passwd : bool, optional
                 Whether the password can be changed. Defaults to `False`.
-            passwd_never_expire (bool, optional):
+
+            passwd_never_expire : bool, optional
                 Whether the password should never expire. Defaults to `True`.
-            notify_by_email (bool, optional):
+
+            notify_by_email : bool, optional
                 Whether to notify by email. Defaults to `False`.
-            send_password (bool, optional):
+
+            send_password : bool, optional
                 Whether to send the password. Defaults to `False`.
             
-        Returns:
-            dict|str:
-                A dictionary containing the user information, or a string in case of an error.
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the user information.
 
-            Example return:
-            ```
+            Example return
+            --------------
+            ```json
             {
                 "data":{
                     "name": "test_user2",
@@ -298,19 +332,22 @@ class User(base_api.BaseApi):
             
         return self.request_data(api_name, api_path, req_param, method="post")
     
-    def delete_user(self, name: str) -> dict[str, object] | str:
+    def delete_user(self, name: str) -> dict[str, object]:
         """Delete a user.
 
-        Args:
-            name (str):
+            Parameters
+            ----------
+            name : str
                 The name of the user to delete.
 
-        Returns:
-            dict|str:
-                A dictionary containing the user information, or a string in case of an error.
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the user information.
 
-            Example return:
-            ```
+            Example return
+            --------------
+            ```json
             {
                 "data": {
                     "name": "toto",
@@ -331,22 +368,31 @@ class User(base_api.BaseApi):
         
         return self.request_data(api_name, api_path, req_param)
     
-    def affect_groups(self, name: str, join_groups: list[str] = [], leave_groups: list[str] = []) -> dict[str, object] | str:
+    def affect_groups(self, name: str, join_groups: list[str] = [], leave_groups: list[str] = []) -> dict[str, object]:
         """Affect or disaffect groups to a user.
-        This request is asynchronous and will return a task id to check the status of the join task. Use `affect_groups_status` func to check the status of the task.
 
-        Args:    
-            name (str):
+            Tip: This request is asynchronous and will return a task id to check the status of the join task. Use `affect_groups_status` func to check the status of the task.
+
+            Parameters
+            ----------
+            name : str
                 The name of the user.
-            join_groups (list[str]):
+
+            join_groups : list[str]
                 The names of the groups to join.
-            leave_groups (list[str]):
+
+            leave_groups : list[str]
                 The names of the groups to leave.
                 
                 
-        Returns:
-            Example return:
-            ```
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the task id to check the status of the join task. Use `affect_groups_status` func to check the status of the task.   
+
+            Example return
+            --------------
+            ```json
             {
                 "api": "SYNO.Core.User.Group",
                 "data": {
@@ -374,13 +420,19 @@ class User(base_api.BaseApi):
     def affect_groups_status(self, task_id:str):
         """Get the status of a join task.
         
-        Args:
-            task_id (str):
+            Parameters
+            ----------
+            task_id : str
                 The task id of the join task.
                 
-        Returns:
-            Example return:
-            ```
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the status of the join task.
+
+            Example return
+            --------------
+            ```json
             {
                 "data": {
                     "auto_remove": false,
@@ -415,15 +467,17 @@ class User(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
     
-    def get_password_policy(self) -> dict[str, object] | str:
+    def get_password_policy(self) -> dict[str, object]:
         """Get the password policy.
 
-        Returns:
-            dict|str:
-                A dictionary containing the password policy information, or a string in case of an error.
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the password policy information.
 
-            Example return:
-            ```
+            Example return
+            --------------
+            ```json
             {
                 "api": "SYNO.Core.User.PasswordPolicy",
                 "data": {
@@ -459,34 +513,49 @@ class User(base_api.BaseApi):
         exclude_username: bool = True, included_numeric_char: bool = True, included_special_char: bool = False,
         min_length: int = 8, min_length_enable: bool = True, mixed_case: bool = True,
         exclude_common_password: bool = False, exclude_history: bool = False
-    ) -> dict[str, object] | str:
+    ) -> dict[str, object]:
         """Set the password policy.
-        Args:
-            - enable_reset_passwd_by_email (bool, optional): 
-                Defaults to False.
-            - password_must_change (bool, optional): 
-                Defaults to False.
-            - exclude_username (bool, optional): 
-                Defaults to True.
-            - included_numeric_char (bool, optional): 
-                Defaults to True.
-            - included_special_char (bool, optional): 
-                Defaults to False.
-            - min_length (int, optional): 
-                Defaults to 8.
-            - min_length_enable (bool, optional): 
-                Defaults to True.
-            - mixed_case (bool, optional): 
-                Defaults to True.
-            - exclude_common_password (bool, optional): 
-                Defaults to False.
-            - exclude_history (bool, optional): 
-                Defaults to False.
 
-        Returns:
-            dict[str, object] | str:
-             Example return:
-            ```
+            Parameters
+            ----------
+            enable_reset_passwd_by_email : bool, optional 
+                Defaults to `False`.
+
+            password_must_change : bool, optional 
+                Defaults to `False`.
+
+            exclude_username : bool, optional 
+                Defaults to `True`.
+
+            included_numeric_char : bool, optional 
+                Defaults to `True`.
+
+            included_special_char : bool, optional 
+                Defaults to `False`.
+
+            min_length : int, optional 
+                Defaults to `8`.
+
+            min_length_enable : bool, optional 
+                Defaults to `True`.
+
+            mixed_case : bool, optional 
+                Defaults to `True`.
+
+            exclude_common_password : bool, optional 
+                Defaults to `False`.
+
+            exclude_history : bool, optional 
+                Defaults to `False`.
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary indicating the success of the operation.
+            
+            Example return
+            --------------
+            ```json
                 {
                     "api": "SYNO.Core.User.PasswordPolicy",
                     "data": {},
@@ -518,15 +587,17 @@ class User(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
     
-    def get_password_expiry(self) -> dict[str, object] | str:
+    def get_password_expiry(self) -> dict[str, object]:
         """Get the password expiry.
 
-        Returns:
-            dict|str:
-                A dictionary containing the password expiry information, or a string in case of an error.
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the password expiry information.
 
-            Example return:
-            ```
+            Example return
+            --------------
+            ```json
             {
                 "api": "SYNO.Core.User.PasswordExpiry",
                 "data": {
@@ -556,35 +627,46 @@ class User(base_api.BaseApi):
         self, password_expire_enable: bool = False, max_age: int = 30, min_age_enable: bool = False, min_age: int = 1,
         enable_login_prompt: bool = False, login_prompt_days: int = 1, allow_reset_after_expired: bool = True,
         enable_mail_notification: bool = False, never_expired_list: list[str] = []
-    ) -> dict[str, object] | str:
-        
+    ) -> dict[str, object]:
         """Set the password expiry.
         
-        Args:
-        
-            - password_expire_enable (bool, optional):
-                Enable password expiry. Defaults to False.
-            - max_age (int, optional):
-                Maximum time before password expiry. Defaults to 30.
-            - min_age_enable (bool, optional):
-                Enable minimum time before password expiry. Defaults to False.
-            - min_age (int, optional):
-                Minimum time before password expiry. Defaults to 1.
-            - enable_login_prompt (bool, optional):
-                Enable login prompt. Defaults to False.
-            - login_prompt_days (int, optional):
-                Days before login prompt. Defaults to 1.
-            - allow_reset_after_expired (bool, optional):
-                Allow reset after password expiry. Defaults to True.
-            - enable_mail_notification (bool, optional):
-                Enable mail notification. Defaults to False.
-            - never_expired_list (list[str], optional):
+            Parameters
+            ----------
+            password_expire_enable : bool, optional
+                Enable password expiry. Defaults to `False`.
+
+            max_age : int, optional
+                Maximum time before password expiry. Defaults to `30`.
+
+            min_age_enable : bool, optional
+                Enable minimum time before password expiry. Defaults to `False`.
+
+            min_age : int, optional
+                Minimum time before password expiry. Defaults to `1`.
+
+            enable_login_prompt : bool, optional
+                Enable login prompt. Defaults to `False`.
+
+            login_prompt_days : int, optional
+                Days before login prompt. Defaults to `1`.
+
+            allow_reset_after_expired : bool, optional
+                Allow reset after password expiry. Defaults to `True`.
+
+            enable_mail_notification : bool, optional
+                Enable mail notification. Defaults to `False`.
+
+            never_expired_list : list[str], optional
                 List of users that should never expire.
             
-        Returns:
-            dict[str, object] | str:
-            Example return:
-            ```
+            Returns
+            -------
+            dict[str, object]
+                A dictionary indicating the success of the operation.
+
+            Example return
+            --------------
+            ```json
             {
                 "api": "SYNO.Core.User.PasswordExpiry",
                 "method": "set",
@@ -613,27 +695,31 @@ class User(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
     
         
-    def password_confirm(self, password: str) -> dict[str, object] | str:
+    def password_confirm(self, password: str) -> dict[str, object]:
         """Issues a passowrd/session comparison to ensure the given password matches the auth of the current session.
 
-        This is needed by some APIs as a confirmation method, for example, when creating/modifying a scheduled task with root permissions. 
-        Please note that the password will be sent in plain text, just like in the base auth method.
+            Note: This is needed by some APIs as a confirmation method, for example, when creating/modifying a scheduled task with root permissions, seldom needed by end users.
 
-        Args:
-            password (str):
+            Parameters
+            ----------
+            password : str
                 The password with which the session was initiated.
 
-        Returns:
-            dict|str:
+            Returns
+            -------
+            dict[str, object]
                 A dictionary containing a `SynoConfirmPWToken`, or an error message.
 
-            Example return:
+            Example return
+            --------------
+            ```json
             {
                 "data": {
                     "SynoConfirmPWToken": "xxxxx"
                 },
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.Core.User.PasswordConfirm'
         info = self.core_list[api_name]
@@ -649,15 +735,17 @@ class User(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method="post")
     
     
-    def get_username_policy(self) -> dict[str, object] | str:
+    def get_username_policy(self) -> dict[str, object]:
         """Get the username policy (List of username that are not usable).
 
-        Returns:
-            dict|str:
-                A dictionary containing the username policy information, or a string in case of an error.
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the username policy information.
 
-            Example return:
-            ```
+            Example return
+            --------------
+            ```json
             {
                 "api": "SYNO.Core.User.UsernamePolicy",
                 "data": ["root", "rootuser", "rootusr", "admin", "administrator", "adm", "adminuser", "adminusr", "user",…],

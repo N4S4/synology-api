@@ -4,19 +4,22 @@ from .core_sys_info import SysInfo
 import json
 
 class EventScheduler(base_api.BaseApi):
-    """
-       Event Scheduler API implementation.
+    """Event Scheduler API implementation.
 
-       This API provides functionality solely related to Event Tasks. For scheduled tasks, check `TaskScheduler`.
+        This API provides functionality solely related to Event Tasks. For scheduled tasks, check `TaskScheduler`.
 
-       For the moment, the available actions with the API are:
-       - Get task results
-       - Get result output
-       - Enable/Disable task
-       - Run task
-       - Delete task
-       - Create task
-       - Set task settings 
+        Supported methods:
+        - Getters:
+            - Get task results
+            - Get result output
+        - Setters:
+            - Set task settings 
+        - Actions:
+            - Enable task
+            - Disable task
+            - Run task
+            - Delete task
+            - Create task
     """
 
     def __get_root_token(self) -> str:
@@ -35,35 +38,40 @@ class EventScheduler(base_api.BaseApi):
         ) -> dict[str, object] | str:
         """Retrieve the results list for a specific task.
 
-        Args:
-            task_name (str):
+            Parameters
+            ----------
+            task_name : str
                 Name of the Event task to enable/disable.
 
-        Returns:
-            dict|str:
-                A dictionary containing the task results or a string in case of an error.
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the task results.
 
-            Example return:
-                {
-                    "data": [
-                        {
-                            "event_fire_time": "2024-09-13 03:17:47",
-                            "exit_info": {
-                                "exit_code": 0,
-                                "exit_type": "stop"
-                            },
-                            "extra": {},
-                            "pid": 16058,
-                            "result_id": 115,
-                            "run_time_env": {},
-                            "start_time": "2024-09-13 03:17:47",
-                            "stop_time": "2024-09-13 03:17:47",
-                            "task_name": "asd",
-                            "trigger_event": "on_demand"
-                        }
-                    ],
-                    "success": true
-                }
+            Example return
+            --------------
+            ```json
+            {
+                "data": [
+                    {
+                        "event_fire_time": "2024-09-13 03:17:47",
+                        "exit_info": {
+                            "exit_code": 0,
+                            "exit_type": "stop"
+                        },
+                        "extra": {},
+                        "pid": 16058,
+                        "result_id": 115,
+                        "run_time_env": {},
+                        "start_time": "2024-09-13 03:17:47",
+                        "stop_time": "2024-09-13 03:17:47",
+                        "task_name": "asd",
+                        "trigger_event": "on_demand"
+                    }
+                ],
+                "success": true
+            }
+            ```
         """
         api_name = 'SYNO.Core.EventScheduler'
         info = self.gen_list[api_name]
@@ -83,24 +91,30 @@ class EventScheduler(base_api.BaseApi):
         ) -> dict[str, object] | str:
         """Retrieve the output for a given result.
 
-        Args:
-            task_name (str):
+            Parameters
+            ----------
+            task_name : str
                 Name of the Event task to enable/disable.
-            result_id (int):
+
+            result_id : int
                 ID of the result to retrieve. From `get_task_results()`.
 
-        Returns:
-            dict|str:
-                A dictionary containing the result output or a string in case of an error.
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the result output.
 
-            Example return:
-                {
-                    "data": {
-                        "script_in": "hello",
-                        "script_out": "/volume3/datastore/scripts_output/asd/1726190267/script.log: line 1: hello: command not found\n"
-                    },
-                    "success": true
-                }
+            Example return
+            --------------
+            ```json
+            {
+                "data": {
+                    "script_in": "hello",
+                    "script_out": "/volume3/datastore/scripts_output/asd/1726190267/script.log: line 1: hello: command not found\n"
+                },
+                "success": true
+            }
+            ```
         """
         api_name = 'SYNO.Core.EventScheduler'
         info = self.gen_list[api_name]
@@ -121,20 +135,26 @@ class EventScheduler(base_api.BaseApi):
         ) -> dict[str, object] | str:
         """Enable or disable Event task.
 
-        Args:
-            task_name (str):
+            Parameters
+            ----------
+            task_name : str
                 Name of the Event task to enable/disable.
+
             enable (bool):
                 Wheter to enable (`True`) or disable (`False`) the task.
         
-        Returns:
-            dict|str:
-                A dictionary containing the result of the action or a string in case of an error.
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the result of the action.
 
-            Example return:
-                {
-                    "success": true
-                }
+            Example return
+            --------------
+            ```json
+            {
+                "success": true
+            }
+            ```
         
         """
         api_name = 'SYNO.Core.EventScheduler'
@@ -155,18 +175,23 @@ class EventScheduler(base_api.BaseApi):
         ) -> dict[str, object] | str:
         """Run a specific Event task.
 
-        Args:
-            task_name (str): 
+            Parameters
+            ----------
+            task_name : str 
                 Name of the Event task to run.
 
-        Returns:
-            dict|str:
-                A dictionary containing the result of the task execution or a string in case of an error.
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the result of the task execution.
 
-            Example return:
-                {
-                    "success": true
-                }
+            Example return
+            --------------
+            ```json
+            {
+                "success": true
+            }
+            ```
         """
 
         api_name = 'SYNO.Core.EventScheduler'
@@ -186,18 +211,23 @@ class EventScheduler(base_api.BaseApi):
         ) -> dict[str, object] | str:
         """Delete a specific Event task.
 
-        Args:
-            task_name (str): 
+            Parameters
+            ----------
+            task_name : str 
                 Name of the Event task to run.
 
-        Returns:
-            dict|str:
-                A dictionary containing the result of the task deletion or a string in case of an error.
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the result of the task deletion.
 
-            Example return:
-                {
-                    "success": true
-                }
+            Example return
+            ```json
+            ----------
+            {
+                "success": true
+            }
+            ```
         """
 
         api_name = 'SYNO.Core.EventScheduler'
@@ -225,41 +255,59 @@ class EventScheduler(base_api.BaseApi):
         ) -> dict[str, object] | str:
         """Create or modify an event-based task.
 
-        Args:
-            action (str): 
-                Action to perform on the task. Possible values:
-                - "create" -> Creates a new task.
-                - "set" -> Modify an existing task.
-            task_name (str): 
+            Parameters
+            ----------
+            action : str 
+                Action to perform on the task. 
+                
+                Possible values:
+                - `create` -> Creates a new task.
+                - `set` -> Modify an existing task.
+
+            task_name : str 
                 The name of the task.
-            owner (dict): 
+
+            owner : dict[str, str]
                 Dictionary containing the owner's ID and name (e.g., `{"1026": "user1"}`). 
+
                 You can get the user UID by running `synouser --get your_user` in your NAS CLI.
 
                 For root privileges, pass `{"0":"root"}`.
-            trigger_event (str): 
-                The event that triggers the task. Possible values:
-                - "shutdown"
-                - "bootup"
-            script (str): 
+
+            trigger_event : str 
+                The event that triggers the task. 
+                
+                Possible values:
+                - `shutdown`
+                - `bootup`
+
+            script : str 
                 The script to be executed when the task is triggered.
-            depend_on_task (list[str], optional): 
-                A list of event triggered task names that this task depends on (i.e., tasks that will be run before this one). Defaults to an empty list.
-            enable (bool, optional): 
+
+            depend_on_task : list[str], optional
+                A list of event triggered task names that this task depends on (i.e., tasks that will be run before this one). Defaults to `[]`.
+
+            enable : bool, optional
                 Whether to enable the task. Defaults to `True`.
-            notify_email (str, optional): 
-                Email address to send notifications to. Defaults to an empty string. Defaults to an empty string, thus disabling the notification feature.
-            notify_only_on_error (bool, optional): 
+
+            notify_email : str, optional
+                Email address to send notifications to. Defaults to `""`, thus disabling the notification feature.
+
+            notify_only_on_error : bool, optional
                 If `True`, notifications are only sent when an error occurs. Defaults to `False`.
 
-        Returns:
-            dict|str:
+            Returns
+            -------
+            dict[str, object]
                 A dictionary containing the result of the task creation or modification, or a strnig in case of an error.
 
-            Example return:
-                {
-                    "success": true
-                }
+            Example return
+            --------------
+            ```json
+            {
+                "success": true
+            }
+            ```
         """
         if action != 'create' and action != 'set':
             return {'error': f'action <{action}> is not valid.'}
