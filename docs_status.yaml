@@ -1,0 +1,62 @@
+---
+# This file is used to track the documentation status of the different API classes.
+# It should be manually updated by the maintainers.
+
+- ActiveBackupBusiness:
+    status: partial
+- ActiveBackupMicrosoft:
+    status: finished
+- AdminConsole:
+    status: not_started
+- AudioStation:
+    status: not_started
+- BaseApi:
+    status: finished
+- Backup:
+    status: partial
+- Certificate:
+    status: not_started
+- CloudSync:
+    status: finished
+- DhcpServer:
+    status: not_started
+- DirectoryServer:
+    status: finished
+- Docker:
+    status: not_started
+- DownloadStation:
+    status: not_started
+- EventScheduler:
+    status: finished
+- FileStation:
+    status: not_started
+- Group:
+    status: finished
+- LogCenter:
+    status: not_started
+- NoteStation:
+    status: not_started
+- OAuth:
+    status: not_started
+- Photos:
+    status: partial
+- SecurityAdvisor:
+    status: not_started
+- Snapshot:
+    status: finished
+- SurveillanceStation:
+    status: not_started
+- SysInfo:
+    status: not_started
+- TaskScheduler:
+    status: finished
+- UniversalSearch:
+    status: not_started
+- USBCopy:
+    status: finished
+- User:
+    status: finished
+- VPN:
+    status: not_started
+- Virtualization:
+    status: not_started

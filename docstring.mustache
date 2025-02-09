@@ -1,0 +1,35 @@
+{{! Numpy Docstring Template }}
+{{summaryPlaceholder}}
+    {{#parametersExist}}
+
+    Parameters
+    ----------
+    {{#args}}
+    {{var}} : {{typePlaceholder}}
+        {{descriptionPlaceholder}}
+    {{/args}}
+    {{#kwargs}}
+    {{var}} : {{typePlaceholder}}, optional
+        {{descriptionPlaceholder}}. Defaults to `{{&default}}`
+    {{/kwargs}}
+    {{/parametersExist}}
+    {{#returnsExist}}
+
+    Returns
+    -------
+    {{#returns}}
+    {{typePlaceholder}}
+        {{descriptionPlaceholder}}
+    {{/returns}}
+    {{/returnsExist}}
+
+    Example return
+    ----------
+    ```json
+    {
+        "data": {
+            "template": "data"
+        },
+        "success": true
+    }
+    ```

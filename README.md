@@ -772,12 +772,12 @@ DS info with below functions:
 
 
 ### usb_copy 
-| Functions           | 
-|---------------------|
-| `usb_copy_info()`   | 
-| `toggle_usb_copy()` | 
-| `logs()`            | 
-| `global_settings()` | 
+| Functions                | 
+|--------------------------|
+| `get_package_settings()` | 
+| `get_package_logs()`     | 
+| `get_task_settings()`    | 
+| `toggle_task()`          | 
 
 ### log_center
 | Functions                | 

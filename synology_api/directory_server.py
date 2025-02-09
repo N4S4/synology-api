@@ -1,7 +1,7 @@
 """directory_server.py works with base_api_core to provide AD capabilities."""
 from __future__ import annotations
 import json
-from typing import List, Optional, Any
+from typing import Optional, Any
 from . import base_api
 
 
@@ -16,55 +16,63 @@ class DirectoryServer(base_api.BaseApi):
     this class as API is defined within the actual request.
 
     The APIs in this class are tested working against the following scenarios:
-    - Get Active Directory information
-    - List objects within a Base DN on the Active Directory Server
-    - Create an AD user
-    - Set the user's AD password
-    - Send a password reset email to any Synology user
-    - Create a new AD group
-    - Add an AD user to an AD group
-    - Check if an AD object within your Directory Server
-    - Update user information within the Directory Server
-    - Update Synology's awareness of the current state of the Domain
-    - Get the status of a running task such as the Domain status update
-    - Delete a list of items from the Directory Server
-    - Delete a single item from the Directory Server
-    - Perform an entry request to complete a Deletion
+    - Getters:
+        - Get Active Directory information
+        - List objects within a Base DN on the Active Directory Server
+        - Check if an AD object within your Directory Server
+        - Get the status of a running task such as the Domain status update
+    - Setters:
+        - Set the user's AD password
+        - Update user information within the Directory Server
+        - Update Synology's awareness of the current state of the Domain
+    - Actions:
+        - Create an AD user
+        - Add an AD user to an AD group
+        - Create a new AD group
+        - Send a password reset email to any Synology user
+        - Delete a list of items from the Directory Server
+        - Delete a single item from the Directory Server
+        - Perform an entry request to complete a Deletion
     """
 
-    def get_directory_info(self) -> dict[str, object] | str:
-        """
-        Gets directory info.
+    def get_directory_info(self) -> dict[str, object]:
+        """Gets directory info.
 
-        Returns
-        -------
-        Information about your domain. Example below.
-        {
-            "data": {
+            Returns
+            -------
+            dict[str, object]
+                Information about your domain.
+
+            Example return
+            --------------
+            ```json
+            {
                 "data": {
-                "domainBasicInfo": {
-                    "realm": "MY.DOMAIN.COM",
-                    "workgroup": "NETBIOSNAME"
-                },
-                "domainControllers": [
-                    {
-                    "cn": "AD",
-                    "dn": "CN=AD,OU=Domain Controllers,DC=MY,DC=DOMAIN,DC=COM",
-                    "dnshostname": "AD.MY.DOMAIN.COM",
-                    "roles": [
-                        "pdc",
-                        "rid",
-                        "schema",
-                        "naming",
-                        "infrastructure"
+                    "data": {
+                    "domainBasicInfo": {
+                        "realm": "MY.DOMAIN.COM",
+                        "workgroup": "NETBIOSNAME"
+                    },
+                    "domainControllers": [
+                        {
+                        "cn": "AD",
+                        "dn": "CN=AD,OU=Domain Controllers,DC=MY,DC=DOMAIN,DC=COM",
+                        "dnshostname": "AD.MY.DOMAIN.COM",
+                        "roles": [
+                            "pdc",
+                            "rid",
+                            "schema",
+                            "naming",
+                            "infrastructure"
+                        ]
+                        }
                     ]
-                    }
-                ]
+                    },
+                    "status": "running"
                 },
-                "status": "running"
-            },
-            "success": true
-        }
+                "success": true
+            }
+            ```
         """
         api_name = 'SYNO.ActiveDirectory.Info'
         info = {'maxVersion': 3, 'minVersion': 1,
@@ -79,34 +87,40 @@ class DirectoryServer(base_api.BaseApi):
                                 offset: int = 0,
                                 limit: int = 40,
                                 objectCategory: list[str] = [ "person", "group", "organizationalUnit", "computer", "container", "builtinDomain"]
-                            ) -> dict[str, object] | str:
-        """
-        lists directory objects.
+                            ) -> dict[str, object]:
+        """lists directory objects.
 
-        Parameters
-        ----------
-        basedn : str
-            The Base DN for the search. eg. "CN=Users,CN=MY,CN=DOMAIN,CN=COM" or CN=MY,CN=DOMAIN,CN=COM
+            Parameters
+            ----------
+            basedn : str
+                The Base DN for the search. eg. `CN=Users,CN=MY,CN=DOMAIN,CN=COM" or CN=MY,CN=DOMAIN,CN=COM`
 
-        offset : Optional, int
-            When searching large data, you may wish to start at a certain number, e.g. for 10 at a time one
-            would set the limit to 10 and the offset by multiples of 10 for each request.
-            Default: 0
-        limit : Optional, int
-            The numeric the number of maximum objects to return.
-            Default: 40
-        objectCategory : Optional, str([])
-            The categories of items to search.  e.g. ["organizationalUnit","container","builtinDomain"] for a list of
-            base server containers, and ["person","group","organizationalUnit","computer"] for a list of contained objects.
-            Default: ["person","group","organizationalUnit","computer","container","builtinDomain"]
+            offset : int, optional
+                When searching large data, you may wish to start at a certain number, e.g. for 10 at a time one
+                would set the limit to 10 and the offset by multiples of 10 for each request.
+                Defaults to `0`
 
-        Returns
-        -------
-        dictionary
-            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
-            The first level is the success to the AD server.  The second Data level is the status of the actual request.
-            Since this is a compound request, the data contains an object with it's own request and results contained
-            within. The object will explain any issues with the request.  The data structure is as follows:
+            limit : int, optional
+                The numeric the number of maximum objects to return.
+                Defaults to `40`
+
+            objectCategory : optional, list[str]
+                The categories of items to search.  e.g. `["organizationalUnit","container","builtinDomain"]` for a list of
+                base server containers, and `["person","group","organizationalUnit","computer"]` for a list of contained objects.
+                Defaults to `["person","group","organizationalUnit","computer","container","builtinDomain"]`
+
+            Returns
+            -------
+            dict[str, object]
+                The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
+
+                The first level is the success to the AD server.  The second Data level is the status of the actual request.
+
+                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
+
+            Example return
+            --------------
+            ```json
             {
                 "data": {
                     "data": [
@@ -135,6 +149,7 @@ class DirectoryServer(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         action = '"enum"'
         scope = '"one"'
@@ -159,41 +174,61 @@ class DirectoryServer(base_api.BaseApi):
             cannot_change_password: str = 'false',
             change_password_next_logon: str = 'null',
             password_never_expire: str = 'true'
-    ) -> List[str]:
-        """Create a new user.
+    ) -> dict[str, object]:
+        """Create a new user. 
+        
+            Note: The user can be created in AD, but not able to log on until the next synchronization occurs.
+        
+            Note: Please note that synchronization with Synology is a separate step. 
 
-        Please note that synchronization with Synology is a separate step.  The user can be created in AD, but not able to log on until the next synchronization occurs.
+            Parameters
+            ----------
+            logon_name : str
+                The desired username. E.g `jdoe`.
 
-        Parameters
-        ----------
-        logon_name : str
-            The desired username.  "jdoe"
-        email: str
-            The desired email
-        password : str
-            The plain-text password for the new user.  "Password123"
-        located_dn : str
-            The DN for the user.  "CN=Users,CN=MY,CN=DOMAIN,CN=COM"
-        description : str, optional
-            A description for the user
-        account_is_disabled : str
-            Set to 'true' if the account should be disabled (default is false)
-        cannot_change_password : str, optional
-            Set to 'true' if the user cannot change the password (default is false)
-        change_password_next_logon : str, optional
-            Set to 'true' if the user must change password on next logon (default is false)
-        cannot_change_password : str, optional
-            Set to 'true' if the user cannot change the password (default is false)
-        password_never_expire: str
-            Pwd Never Expire
+            email: str
+                The desired email.
 
-        Returns
-        -------
-        dictionary
-            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. The
-            data dictionary contains an 'error', or it contains a 'dn' and a 'name'. here is an example of a successful
-            result.
-            {'data': {'dn': 'CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM', 'name': 'NETBIOSNAME\\ababab'}, 'success': True}
+            password : str
+                The plain-text password for the new user. E.g `Password123`.
+
+            located_dn : str
+                The DN for the user. E.g `CN=Users,CN=MY,CN=DOMAIN,CN=COM`.
+
+            description : str, optional
+                A description for the user.
+
+            account_is_disabled : str
+                Set to 'true' if the account should be disabled Defaults to `False`.
+
+            cannot_change_password : str, optional
+                Set to 'true' if the user cannot change the password Defaults to `False`.
+
+            change_password_next_logon : str, optional
+                Set to 'true' if the user must change password on next logon Defaults to `False`.
+
+            cannot_change_password : str, optional
+                Set to 'true' if the user cannot change the password Defaults to `False`.
+
+            password_never_expire: str
+                Pwd Never Expire
+
+            Returns
+            -------
+            dict[str, object]
+                The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. The data dictionary contains an 'error', or it contains a 'dn' and a 'name'. 
+
+            Example return
+            --------------
+            ```json
+            {
+                'data': {
+                    'dn': 'CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM', 
+                    'name': 'NETBIOSNAME\\ababab'
+                }, 
+                'success': true
+            }
+            ```
         """
 
         api_name = "SYNO.ActiveDirectory.User"
@@ -208,29 +243,34 @@ class DirectoryServer(base_api.BaseApi):
 
     def reset_password(self,
                        username: str,
-                       ) -> List[str]:
-        """
-        Send a password reset email.
+                       ) -> dict[str, object]:
+        """Send a password reset email.
 
-        This will trigger the password reset email from
-        Control Panel>Notification>Rules>System>Reset password for your account to be sent
-        to the user. In order to use this,
-        Control Panel>User & Group>Advanced>"Allow non-administrator users to reset forgotten passwords via email"
-        must be enabled.
+            This will trigger the password reset email from
+            Control Panel>Notification>Rules>System>Reset password for your account to be sent to the user. 
+        
+            Info: In order to use this, Control Panel>User & Group>Advanced>"Allow non-administrator users to reset forgotten passwords via email" must be enabled.
 
-        Parameters
-        ----------
-        username : str
-            The username to reset.  E.g. "My Group"
+            Parameters
+            ----------
+            username : str
+                The username to reset.  E.g. `My Group`
 
-        Returns
-        -------
-        dictionary
-           The return object can be checked for the "success" to be a true or false.
-           True indicates a successful operation.
+            Returns
+            -------
+            dict[str, object]
+                The return object can be checked for the "success" to be a true or false.
 
-            {"data": {"msg": 3}, "success": true}
-
+            Example return
+            --------------
+            ```json
+            {
+                "data": {
+                    "msg": 3
+                }, 
+                "success": true
+            }
+            ```
         """
 
         api_name = 'SYNO.Auth.ForgotPwd'
@@ -242,26 +282,33 @@ class DirectoryServer(base_api.BaseApi):
                      username+'"', 'version': newApi['maxVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def change_user_password(self, user_dn: str, password: str) -> dict[str, object] | str:
-        """
-        Change the user's password.  This is a compound dual-level request where the synology API proxies your
-        request to the Directory Server.
+    def change_user_password(self, user_dn: str, password: str) -> dict[str, object]:
+        """Change the user's password. 
+            
+            Info: This is a compound dual-level request where the synology API proxies your request to the Directory Server.
 
-        Parameters
-        ----------
-        user_dn: str
-            The user DN to be modified. eg. "CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM"
-        password: str
-            The new password to be set. e.g. "Password123"
+            Parameters
+            ----------
+            user_dn: str
+                The user DN to be modified. eg. `CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM`
 
-        Returns
-        -------
-            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
-            The first level is the success to the AD server.  The second Data level is the status of the actual request.
-            Since this is a compound request, the data contains an object with it's own request and results contained
-            within. The object will explain any issues with the request.  The data structure is as follows:
+            password: str
+                The new password to be set. e.g. `Password123`
+
+            Returns
+            -------
+            dict[str, object]
+                The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
+
+                The first level is the success to the AD server.  The second Data level is the status of the actual request.
+
+                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
+            
+            Example return
+            --------------
+            ```json
             {
-                 "data": {
+                "data": {
                     "has_fail": false,
                     "result": [
                     {
@@ -280,6 +327,7 @@ class DirectoryServer(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
 
         """
         api_name = "SYNO.Entry.Request"
@@ -300,64 +348,79 @@ class DirectoryServer(base_api.BaseApi):
             description: Optional[str] = '',
             type: Optional[str] = 'security',
             scope: Optional[str] = 'global'
-    ) -> List[str]:
-        """
-        Create a new AD group.
+    ) -> dict[str, object]:
+        """Create a new AD group.
 
-        Parameters
-        ----------
-        name : str
-            The name of the group.  E.g. "My Group"
-        located_dn : str
-            The DN to place the group in.  eg. "CN=Groups,DC=MY,DC=DOMAIN,DC=COM"
-        email : str, Optional
-            The email address used to reference this group.
-            Default: ""
-        description : str, Optional
-            A description of the AD Group.
-            Default: Empty
-        type : str, Optional
-            Example Options: security, distribution
+            Parameters
+            ----------
+            name : str
+                The name of the group.  E.g. `My Group`
 
-            (definitions from
-            https://docs.microsoft.com/en-us/microsoft-365/admin/create-groups/compare-groups?view=o365-worldwide
-            )
-                - distribution (Distribution groups) are used for sending email
-                notifications to a group of people.
-                - security - Security groups are used for granting access to resources
-                such as SharePoint sites.
+            located_dn : str
 
-            Default: security
-        scope : str, Optional
-            Example Options : local, global, universal
-            (Definitions from
-            https://www.netwrix.com/active_directory_group_management.html )
-                - local (Domain Local Groups) should be used to manage permissions to
-                resources because this group can be applied everywhere in the domain.
-                A domain local group can include members of any type in the domain and
-                members from trusted domains. For example, suppose you need access
-                management for a collection of folders on one or more servers that
-                contain information for managers. The group you create for that purpose
-                should be a domain local group (ex. “DL_Managers_Modify”).
-                - global (Global Groups) are used primarily to define collections of
-                domain objects (users, other global groups and computers) based on
-                business roles, which means that they mostly serve as role groups.
-                Role-based groups of users (such as “HR” or “Marketing”) and role-based
-                groups of computers (such as a “Marketing Workstations”) areusually
-                global groups.
-                - universal (Universal Groups) in Active Directory are useful in
-                multi-domain forests. They enable you to define roles or manage
-                resources that span more than one domain. Each universal group is
-                stored in the domain of where it was created, but its group membership
-                is stored in the Global Catalog and replicated forest-wide. Don’t use
-                universal groups if you have only one domain.
+                The DN to place the group in.  eg. `CN=Groups,DC=MY,DC=DOMAIN,DC=COM`
+            email : str, optional
+                The email address used to reference this group.
+                Defaults to `""`
 
-            Default: global
+            description : str, optional
+                A description of the AD Group.
+                Defaults to `""`
 
-        Returns
-        -------
-            A success object, and data object containing the new dn and the netbios name of the group.
-            {'data': {'dn': 'CN=My Group,CN=Groups,DC=MY,DC=DOMAIN,DC=COM', 'name': 'NETBIOSNAME\\My Group'}, 'success': True}
+            type : str, optional
+                Example Options: `security`, `distribution`
+
+                (definitions from https://docs.microsoft.com/en-us/microsoft-365/admin/create-groups/compare-groups?view=o365-worldwide )
+                    - `distribution` (Distribution groups) are used for sending email
+                    notifications to a group of people.
+                    - `security` - Security groups are used for granting access to resources
+                    such as SharePoint sites.
+
+                Defaults to `"security"`
+
+            scope : str, optional
+                Example Options : `local`, `global`, `universal`
+
+                (Definitions from
+                https://www.netwrix.com/active_directory_group_management.html )
+                    - `local` (Domain Local Groups) should be used to manage permissions to
+                    resources because this group can be applied everywhere in the domain.
+                    A domain local group can include members of any type in the domain and
+                    members from trusted domains. For example, suppose you need access
+                    management for a collection of folders on one or more servers that
+                    contain information for managers. The group you create for that purpose
+                    should be a domain local group (ex. “DL_Managers_Modify”).
+                    - `global` (Global Groups) are used primarily to define collections of
+                    domain objects (users, other global groups and computers) based on
+                    business roles, which means that they mostly serve as role groups.
+                    Role-based groups of users (such as “HR” or “Marketing”) and role-based
+                    groups of computers (such as a “Marketing Workstations”) areusually
+                    global groups.
+                    - `universal` (Universal Groups) in Active Directory are useful in
+                    multi-domain forests. They enable you to define roles or manage
+                    resources that span more than one domain. Each universal group is
+                    stored in the domain of where it was created, but its group membership
+                    is stored in the Global Catalog and replicated forest-wide. Don’t use
+                    universal groups if you have only one domain.
+
+                Defaults to `"global"`
+
+            Returns
+            -------
+            dict[str, object]
+                A success object, and data object containing the new dn and the netbios name of the group.
+            
+            Example return
+            --------------
+            ```json
+            {
+                'data': {
+                    'dn': 'CN=My Group,CN=Groups,DC=MY,DC=DOMAIN,DC=COM', 
+                    'name': 'NETBIOSNAME\\My Group'
+                }, 
+                'success': true
+            }
+            ```
         """
         api_name = 'SYNO.ActiveDirectory.Group'
         info = {'maxVersion': 1, 'minVersion': 1,
@@ -367,27 +430,29 @@ class DirectoryServer(base_api.BaseApi):
                      'description': description, 'type': type, 'scope': scope, 'email': email, 'version': info['maxVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def add_user_to_group(self, userDn: str, groupDn: str) -> dict[str, object] | str:
-        """
-        Adds a user as a member of a group.
+    def add_user_to_group(self, userDn: str, groupDn: str) -> dict[str, object]:
+        """Adds a user as a member of a group.
 
+            Parameters
+            ----------
+            userDn : str
+                The fully qualified dn to add.  eg. `CN=jdoe,CN=Users,CN=MY,CN=DOMAIN,CN=COM`
 
-        Parameters
-        ----------
-        userDn : str
-            The fully qualified dn to add.  eg. "CN=jdoe,CN=Users,CN=MY,CN=DOMAIN,CN=COM"
+            groupDn : str
+                the fully qualified dn of the group to which the user is to be added. e.g. `CN=My Group,CN=Groups,CN=MY,CN=DOMAIN,CN=COM`
 
-        groupDn : str
-            the fully qualified dn of the group to which the user is to be added.
-            e.g. "CN=My Group,CN=Groups,CN=MY,CN=DOMAIN,CN=COM"
+            Returns
+            -------
+            dict[str, object]
+                The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
 
-        Returns
-        -------
-        dictionary
-            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
-            The first level is the success to the AD server.  The second Data level is the status of the actual request.
-            Since this is a compound request, the data contains an object with it's own request and results contained
-            within. The object will explain any issues with the request.  The data structure is as follows:
+                The first level is the success to the AD server.  The second Data level is the status of the actual request.
+
+                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request. 
+                
+            Example return
+            --------------
+            ```json
             {
                 "data": {
                     "has_fail": false,
@@ -407,8 +472,7 @@ class DirectoryServer(base_api.BaseApi):
                 },
                 "success": true
             }
-
-
+            ```
         """
 
         api_name = 'SYNO.Entry.Request'
@@ -425,21 +489,24 @@ class DirectoryServer(base_api.BaseApi):
                      'stop_when_error': stop_when_error, 'version': newApi['maxVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def does_dn_exist(self, groupName: str) -> dict[str, object] | str:
-        """Checks if a container exists. This can be used to verifiy the username or group name is unique.  This will
-        not check the container, only if a similarly named container already exists.
+    def does_dn_exist(self, groupName: str) -> dict[str, object]:
+        """Checks if a container exists. This can be used to verifiy the username or group name is unique. 
+            
+            Info: This will not check the container, only if a similarly named container already exists.
 
-        Parameters
-        ----------
-        groupName : str
-            The user, or group's name. e.g.  "jdoe" or "My Cool Group"
-            Fully Qualified Domain Name such as "CN=My Cool Group,CN=Groups,DC=MY,DC=DOMAIN,DC=COM" are not successful
-            Improper case such as "my cool group" instead of "My Cool Group" are successful
+            Parameters
+            ----------
+            groupName : str
+                The user, or group's name. e.g.  `jdoe` or `My Cool Group`
+                
+                Fully Qualified Domain Name such as `CN=My Cool Group,CN=Groups,DC=MY,DC=DOMAIN,DC=COM` are not successful.
 
-        Returns
-        -------
-        boolean
-            True if the group exists.  False if the group does not exist
+                Improper case such as `my cool group` instead of `My Cool Group` are successful
+
+            Returns
+            -------
+            dict[str, object]
+                `True` if the group exists. `False` if the group does not exist
         """
 
         api_name = 'SYNO.ActiveDirectory.Group'
@@ -460,37 +527,50 @@ class DirectoryServer(base_api.BaseApi):
         physicalDeliveryOfficeName: str = None,
         telephoneNumber: str = None,
         web: str = None
-    ) -> Any:
-        """
-        Performs modification to user information within the Active Directory.
+    ) -> dict[str, object]:
+        """Performs modification to user information within the Active Directory.
 
-        Parameters
-        ----------
-        user_dn: str
-            The user DN to be modified. eg. "CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM"
-        firstName: Optional, str
-            The First name of the user. e.g. "John"
-        lastName: Optional, str
-            The Last Name of the user. e.g. "Doe"
-        displayName: Optional, str
-            The Display name of the user. e.g. "John Doe"
-        description: Optional, str
-            The Descrition of the user. e.g. "The guy who just came in"
-        initials: Optional, str
-            The Initials of the user.  e.g. "JD"
-        physicalDeliveryOfficeName: Optional, str
-            The office location in the user's place of business
-        telephoneNumber: Optional, str
-            The user's telephone number.
-        web: Optional, str
-            The user's website or location on the web where information can be obtained.
+            Parameters
+            ----------
+            user_dn : str
+                The user DN to be modified. eg. `CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM`
 
-        Returns
-        -------
-            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
-            The first level is the success to the AD server.  The second Data level is the status of the actual request.
-            Since this is a compound request, the data contains an object with it's own request and results contained
-            within. The object will explain any issues with the request.  The data structure is as follows:
+            firstName : str, optional
+                The First name of the user. e.g. `John`
+
+            lastName : str, optional
+                The Last Name of the user. e.g. `Doe`
+
+            displayName : str, optional
+                The Display name of the user. e.g. `John Doe`
+
+            description : str, optional
+                The Descrition of the user. e.g. `The guy who just came in`
+
+            initials : str, optional
+                The Initials of the user.  e.g. `JD`
+
+            physicalDeliveryOfficeName : str, optional
+                The office location in the user's place of business
+
+            telephoneNumber : str, optional
+                The user's telephone number.
+
+            web : str, optional
+                The user's website or location on the web where information can be obtained.
+
+            Returns
+            -------
+            dict[str, object]
+                The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
+
+                The first level is the success to the AD server. The second Data level is the status of the actual request.
+
+                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
+
+            Example return
+            --------------
+            ```json
             {
                 "data": {
                     "has_fail": true,
@@ -514,6 +594,7 @@ class DirectoryServer(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         class Person:
             firstName
@@ -549,25 +630,35 @@ class DirectoryServer(base_api.BaseApi):
 
         return val
 
-    def setEntryRequest(self, modificationAPI: str, method: str, nameOfObject: str, jsonObject: Any) -> dict[str, object] | str:
-        """
-        Performs modification to an object within the Active Directory.
+    def setEntryRequest(self, modificationAPI: str, method: str, nameOfObject: str, jsonObject: Any) -> dict[str, object]:
+        """Performs modification to an object within the Active Directory.
 
-        Parameters
-        ----------
-        modificationAPI: str
-        method: str
-        nameOfObject: str
-            The user DN to be modified. eg. "CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM"
-        jsonObject: str: o
-            the json Object to be added, eg, a user object where the
+            Parameters
+            ----------
+            modificationAPI : str
+                API to be used
 
-        Returns
-        -------
-            The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
-            The first level is the success to the AD server.  The second Data level is the status of the actual request.
-            Since this is a compound request, the data contains an object with it's own request and results contained
-            within. The object will explain any issues with the request.  The data structure is as follows:
+            method : str
+                Method to be called
+
+            nameOfObject : str
+                The user DN to be modified. eg. `"CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM"`
+
+            jsonObject : str
+                The json Object to be added, eg, a user object where the
+
+            Returns
+            -------
+            dict[str, object]
+                The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
+
+                The first level is the success to the AD server.  The second Data level is the status of the actual request.
+
+                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.  
+                
+            Example return
+            --------------
+            ```json
             {
                 "data": {
                     "has_fail": true,
@@ -591,6 +682,7 @@ class DirectoryServer(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         compound = [{"api":modificationAPI,"method":  method,"version":2,nameOfObject:[jsonObject]}]
         api_name = "SYNO.Entry.Request"
@@ -601,31 +693,40 @@ class DirectoryServer(base_api.BaseApi):
         print (json.dumps(req_param))
         return self.request_data(api_name, api_path, req_param,"post")
 
-    def update_domain_records(self) -> dict[str, object] | str:
-        """
-        Updates the Synology users and groups database with information from Directory Server.
+    def update_domain_records(self) -> dict[str, object]:
+        """Updates the Synology users and groups database with information from Directory Server.
 
-        This is a long-running and asynchronous task.  You are given back a task_id, and you can
-        use that task_id to check the status with the get_task_status(task_id) method.
+            This is a long-running and asynchronous task.  You are given back a task_id, and you can use that task_id to check the status with the get_task_status(task_id) method.
 
-        Returns
-        -------
-        dictionary
-            The 'data' object contains the 'task_id' used to track with the getTaskStatus() method.
-            The 'success' object will be true if the operation was successful. or false if failed.
+            Returns
+            -------
+            dict[str, object]
+                The 'data' object contains the 'task_id' used to track with the getTaskStatus() method.
 
-            {"data": {"task_id": "@administrators/DomainUpdate6146195136397F2"}, "success": true}
+                The 'success' object will be true if the operation was successful. or false if failed.
+            
+            Example return
+            --------------
+            ```json
+            {
+                "data": {
+                    "task_id": "@administrators/DomainUpdate6146195136397F2"
+                }, 
+                "success": true
+            }
+            ```
 
-        Note
-        ----
-        Typical utilization of Update Domain requires starting the update job and waiting for
-        completion. Waiting involves using the getTaskStatus and can be accomplished via a busy-wait
-        method such as the following:
+            Note
+            ----
+            Typical utilization of Update Domain requires starting the update job and waiting for
+            completion. Waiting involves using the getTaskStatus and can be accomplished via a busy-wait method such as the following:
 
-            updateResponse=directory.updateDomain()
-            status=directory.getTaskStatus(updateResponse['data']['task_id'])
-            while status['data']['status'] == 'updating' :
-                status=directory.getTaskStatus(updateResponse['data']['task_id'])
+                ```python
+                updateResponse=directory.updateDomain()
+                status = directory.getTaskStatus(updateResponse['data']['task_id'])
+                while status['data']['status'] == 'updating':
+                    status=directory.getTaskStatus(updateResponse['data']['task_id'])
+                ```
         """
         api_name = 'SYNO.Core.Directory.Domain'
         info = self.core_list[api_name]
@@ -634,28 +735,35 @@ class DirectoryServer(base_api.BaseApi):
                      'method': 'update_start', 'version': info['minVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def get_task_status(self, task_id: str) -> dict[str, object] | str:
-        """
-        Gets the current status of a task running on the Directory Domain object.
+    def get_task_status(self, task_id: str) -> dict[str, object]:
+        """Gets the current status of a task running on the Directory Domain object.
 
-        This is used to ensure the task is completed.  For example, the primary utilization of this is
-        when updating Synology's internal Domain user and group list.  Until this method reports
-        finish, the job is not completed, and it is not safe to operate under the assumption that users
-        have been synchronized.
+            This is used to ensure the task is completed.  For example, the primary utilization of this is when updating Synology's internal Domain user and group list.  
+            
+            Until this method reports finish, the job is not completed, and it is not safe to operate under the assumption that users have been synchronized.
 
-        Parameters
-        ----------
-        task_id : str
-            The task ID to be tracked for status.
+            Parameters
+            ----------
+            task_id : str
+                The task ID to be tracked for status.
 
-        Returns
-        -------
-        dictionary
-            The 'data' object contains the 'status' used to determine the current status. 'status'
-            will be 'updating' or 'finish' if the job was started.
-            The 'success' object will be true if the operation was successful. or false if failed.
-
-            {'data': {'status': 'updating'}, 'success': True}
+            Returns
+            -------
+            dict[str, object]
+                The 'data' object contains the 'status' used to determine the current status. 'status' will be 'updating' or 'finish' if the job was started.
+                T
+                The 'success' object will be true if the operation was successful. or false if failed.
+            
+            Example return
+            --------------
+            ```json
+            {
+                'data': {
+                    'status': 'updating'
+                }, 
+                'success': true
+            }
+            ```
         """
 
         api_name = 'SYNO.Core.Directory.Domain'
@@ -665,23 +773,27 @@ class DirectoryServer(base_api.BaseApi):
                      'task_id': task_id, 'version': info['minVersion']}
         return self.request_data(api_name, api_path, req_param)
 
-    def deleteItems(self, dnList: list[str]) -> dict[str, object] | str:
-        """
-        Deletes an array of DNs from AD.
+    def deleteItems(self, dnList: list[str]) -> dict[str, object]:
+        """Deletes an array of DNs from AD.
 
-        Parameters
-        ----------
-        dnList : str([])
-            The fully qualified DN to be removed from the directory server.
-            eg. ["CN=jdoe,CN=Users,CN=MY,CN=DOMAIN,CN=COM","CN=My Group,CN=Groups,CN=MY,CN=DOMAIN,CN=COM"]
+            Parameters
+            ----------
+            dnList : list[str]
+                The fully qualified DN to be removed from the directory server.
+                eg. `["CN=jdoe,CN=Users,CN=MY,CN=DOMAIN,CN=COM","CN=My Group,CN=Groups,CN=MY,CN=DOMAIN,CN=COM"]`
 
-        Returns
-        -------
-        The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
-        The first level is the success to the AD server.  The second Data level is the status of the actual request.
-        Since this is a compound request, the data contains an object with it's own request and results contained
-        within. The object will explain any issues with the request.  The data structure is as follows:
+            Returns
+            -------
+            dict[str, object]
+                The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
 
+                The first level is the success to the AD server.  The second Data level is the status of the actual request.
+
+                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.  
+
+            Example return
+            --------------
+            ```json
             {
                 "data": {
                     "has_fail": false,
@@ -706,6 +818,7 @@ class DirectoryServer(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         api_name = 'SYNO.ActiveDirectory.Directory'
         info = {'maxVersion': 2, 'minVersion': 1,
@@ -728,24 +841,27 @@ class DirectoryServer(base_api.BaseApi):
 
         return returnValue
 
-    def delete_item(self, dn: str) -> dict[str, object] | str:
-        """
-        Deletes a DN from AD.
+    def delete_item(self, dn: str) -> dict[str, object]:
+        """Deletes a DN from AD.
 
-        Parameters
-        ----------
-        dn : str
-            The fully qualified DN to be removed from the directory server.
-            eg. "CN=jdoe,CN=Users,CN=MY,CN=DOMAIN,CN=COM" or
-            "CN=My Group,CN=Groups,CN=MY,CN=DOMAIN,CN=COM"
+            Parameters
+            ----------
+            dn : str
+                The fully qualified DN to be removed from the directory server.
+                eg. `CN=jdoe,CN=Users,CN=MY,CN=DOMAIN,CN=COM` or `CN=My Group,CN=Groups,CN=MY,CN=DOMAIN,CN=COM`
 
-        Returns
-        -------
-        The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
-        The first level is the success to the AD server.  The second Data level is the status of the actual request.
-        Since this is a compound request, the data contains an object with it's own request and results contained
-        within. The object will explain any issues with the request.  The data structure is as follows:
+            Returns
+            -------
+            dict[str, object]
+                The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
 
+                The first level is the success to the AD server.  The second Data level is the status of the actual request.
+
+                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
+
+            Example return
+            --------------
+            ```json
             {
                 "data": {
                     "has_fail": false,
@@ -770,23 +886,24 @@ class DirectoryServer(base_api.BaseApi):
                 },
                 "success": true
             }
+            ```
         """
         items = []
         items.append(dn)
         return self.deleteItems(items)
 
     def entryRequest(self, task_id: str) -> Any:
-        """
-        Some requests require an entry.
+        """Some requests require an entry.
 
-        Delete for example requires an entry.  If an entry is required, the task will not
-        complete without an Entry Request.
+            Delete for example requires an entry.  If an entry is required, the task will not complete without an Entry Request.
 
-        Parameters
-        ----------
-        task_id: str
-            The ID of the task to be checked. This is provided when making a request. An example Task ID may look like this
-            "@administrators/Synoads_SYNO.ActiveDirectory.Directory_delete6145EA17C4F03DA9"
+            Parameters
+            ----------
+            task_id: str
+                The ID of the task to be checked. This is provided when making a request. 
+                
+                An example Task ID may look like this
+                `@administrators/Synoads_SYNO.ActiveDirectory.Directory_delete6145EA17C4F03DA9`
         """
         api_name = 'SYNO.Entry.Request'
         info = {'maxVersion': 1, 'minVersion': 1,

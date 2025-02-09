@@ -187,8 +187,15 @@ class Certificate(base_api.BaseApi):
     def export_cert(self, cert_id: str) -> Optional[BytesIO]:
         """Export a certificate from the Synology NAS.
 
-        :param cert_id: The certificate ID to export. This can be found in the list_cert() method.
-        :return: A BytesIO object containing the certificate archive.
+            Parameters
+            ----------
+            cert_id : str
+                The certificate ID to export. This can be found in the list_cert() method.
+            
+            Returns
+            -------
+            Optional[BytesIO]
+                A BytesIO object containing the certificate archive.
         """
 
         api_name = "SYNO.Core.Certificate"
