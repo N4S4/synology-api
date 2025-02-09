@@ -13,6 +13,7 @@ from . import \
     core_group, \
     core_user, \
     core_share, \
+    core_package, \
     downloadstation, \
     log_center, \
     vpn, \
