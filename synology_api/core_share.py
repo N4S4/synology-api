@@ -11,31 +11,31 @@ class Share(base_api.BaseApi):
         """Validate set of parameter for a new / modified shared folder
             Parameters
             ----------
-                name : str
-                    Share name.
-                    
-                vol_path : str
-                    Volume path.
-                    
-                desc : str, optional
-                    Share description. Defaults to `""`.
-                    
-                enable_share_compress : bool, optional
-                    Enable share compress. Defaults to `False`.
-                    
-                enable_share_cow : bool, optional
-                    Enable share cow. Defaults to `False`.
-                    
-                enc_passwd : str, optional
-                    Encrypted password. Defaults to `""`.
-                    
-                encryption : bool, optional
-                    Enable encryption. Defaults to `False`.
+            name : str
+                Share name.
+                
+            vol_path : str
+                Volume path.
+                
+            desc : str, optional
+                Share description. Defaults to `""`.
+                
+            enable_share_compress : bool, optional
+                Enable share compress. Defaults to `False`.
+                
+            enable_share_cow : bool, optional
+                Enable share cow. Defaults to `False`.
+                
+            enc_passwd : str, optional
+                Encrypted password. Defaults to `""`.
+                
+            encryption : bool, optional
+                Enable encryption. Defaults to `False`.
                     
             Returns
             -------
-                dict
-                    Success.
+            dict
+                Success.
 
             Example return
             --------------
@@ -80,23 +80,23 @@ class Share(base_api.BaseApi):
         """List all folders informations
             Parameters
             ----------
-                share_type : str, optional
-                    Share type. Defaults to `all`.
-                    
-                additional : list[str], optional
-                    Additional fields to retrieve. Defaults to `[]`.
-                    All fields known are: `[
-                        "hidden","encryption","is_aclmode","unite_permission","is_support_acl","is_sync_share","is_force_readonly","force_readonly_reason",
-                        "recyclebin","is_share_moving","is_cluster_share","is_exfat_share","is_c2_share","is_cold_storage_share","is_missing_share",
-                        "is_offline_share","support_snapshot","share_quota","enable_share_compress","enable_share_cow","enable_share_tiering",
-                        "load_worm_attr","include_cold_storage_share","is_cold_storage_share","include_missing_share","is_missing_share",
-                        "include_offline_share","is_offline_share","include_worm_share"
-                    ]`.
+            share_type : str, optional
+                Share type. Defaults to `all`.
+                
+            additional : list[str], optional
+                Additional fields to retrieve. Defaults to `[]`.
+                All fields known are: `[
+                    "hidden","encryption","is_aclmode","unite_permission","is_support_acl","is_sync_share","is_force_readonly","force_readonly_reason",
+                    "recyclebin","is_share_moving","is_cluster_share","is_exfat_share","is_c2_share","is_cold_storage_share","is_missing_share",
+                    "is_offline_share","support_snapshot","share_quota","enable_share_compress","enable_share_cow","enable_share_tiering",
+                    "load_worm_attr","include_cold_storage_share","is_cold_storage_share","include_missing_share","is_missing_share",
+                    "include_offline_share","is_offline_share","include_worm_share"
+                ]`.
                     
             Returns
             -------
-                dict
-                    A dictionary containing the shared folders information.
+            dict
+                A dictionary containing the shared folders information.
 
             Example return
             --------------
@@ -134,17 +134,17 @@ class Share(base_api.BaseApi):
         """Get a folder by name
             Parameters
             ----------
-                name : str
-                    Share name.
-                    
-                additional : list, optional
-                    Additional fields to retrieve. Defaults to `[]`.
-                    All fields known are: `["disable_list","disable_modify","disable_download","unite_permission","is_aclmode"]`.
+            name : str
+                Share name.
+                
+            additional : list, optional
+                Additional fields to retrieve. Defaults to `[]`.
+                All fields known are: `["disable_list","disable_modify","disable_download","unite_permission","is_aclmode"]`.
                     
             Returns
             -------
-                dict
-                    A dictionary containing the shared folder information.
+            dict
+                A dictionary containing the shared folder information.
 
             Example return
             --------------
@@ -186,43 +186,43 @@ class Share(base_api.BaseApi):
         """Create a new shared folder
             Parameters
             ----------
-                name : str
-                    Share name.
-                    
-                vol_path : str
-                    Volume path.
-                    
-                desc : str, optional
-                    Share description. Defaults to `""`.
-                    
-                hidden : bool, optional
-                    Hide share. Defaults to `False`.
-                    
-                enable_recycle_bin : bool, optional
-                    Enable recycle bin. Defaults to `True`.
-                    
-                recycle_bin_admin_only : bool, optional
-                    Recycle bin admin only. Defaults to `True`.
-                    
-                hide_unreadable : bool, optional
-                    Hide unreadable. Defaults to `False`.
-                    
-                enable_share_cow : bool, optional
-                    Enable share cow. Defaults to `False`.
-                    
-                enable_share_compress : bool, optional
-                    Enable share compress. Defaults to `False`.
-                    
-                share_quota : int, optional 
-                    Share quota. Defaults to `0`.
-                    
-                name_org : str, optional 
-                    Defaults to `""`.
+            name : str
+                Share name.
+                
+            vol_path : str
+                Volume path.
+                
+            desc : str, optional
+                Share description. Defaults to `""`.
+                
+            hidden : bool, optional
+                Hide share. Defaults to `False`.
+                
+            enable_recycle_bin : bool, optional
+                Enable recycle bin. Defaults to `True`.
+                
+            recycle_bin_admin_only : bool, optional
+                Recycle bin admin only. Defaults to `True`.
+                
+            hide_unreadable : bool, optional
+                Hide unreadable. Defaults to `False`.
+                
+            enable_share_cow : bool, optional
+                Enable share cow. Defaults to `False`.
+                
+            enable_share_compress : bool, optional
+                Enable share compress. Defaults to `False`.
+                
+            share_quota : int, optional 
+                Share quota. Defaults to `0`.
+                
+            name_org : str, optional 
+                Defaults to `""`.
                     
             Returns
             -------
-                dict
-                    Name of the created shared folder
+            dict
+                Name of the created shared folder
 
             Example return
             ---------------
@@ -271,13 +271,13 @@ class Share(base_api.BaseApi):
         """Delete folder(s) by name(s)
             Parameters
             ----------
-                name List[str]
-                    Share names.
+            name List[str]
+                Share names.
                     
             Returns
             -------
-                dict
-                    Success.
+            dict
+                Success.
 
             Example return
             --------------
@@ -307,44 +307,44 @@ class Share(base_api.BaseApi):
         """Clone existing shared folder.
             Parameters
             ----------
-                name : str
-                    New shared folder name.
-                    
-                name_org : str
-                    Original shared folder name.
-                    
-                vol_path : str
-                    Volume path.
-                    
-                desc : str, optional
-                    Shared folder description. Defaults to `""`.
-                    
-                hidden : bool, optional
-                    Hide shared folder. Defaults to `False`.
-                    
-                enable_recycle_bin : bool, optional
-                    Enable recycle bin. Defaults to `True`.
-                    
-                recycle_bin_admin_only : bool, optional
-                    Recycle bin admin only. Defaults to `True`.
-                    
-                hide_unreadable : bool, optional
-                    Hide unreadable. Defaults to `False`.
-                    
-                enable_share_cow : bool, optional
-                    Enable share cow. Defaults to `False`.
-                    
-                enable_share_compress : bool, optional
-                    Enable share compress. Defaults to `False`.
-                    
-                share_quota : int, optional
-                    Share quota. Defaults to `0`.
+            name : str
+                New shared folder name.
+                
+            name_org : str
+                Original shared folder name.
+                
+            vol_path : str
+                Volume path.
+                
+            desc : str, optional
+                Shared folder description. Defaults to `""`.
+                
+            hidden : bool, optional
+                Hide shared folder. Defaults to `False`.
+                
+            enable_recycle_bin : bool, optional
+                Enable recycle bin. Defaults to `True`.
+                
+            recycle_bin_admin_only : bool, optional
+                Recycle bin admin only. Defaults to `True`.
+                
+            hide_unreadable : bool, optional
+                Hide unreadable. Defaults to `False`.
+                
+            enable_share_cow : bool, optional
+                Enable share cow. Defaults to `False`.
+                
+            enable_share_compress : bool, optional
+                Enable share compress. Defaults to `False`.
+                
+            share_quota : int, optional
+                Share quota. Defaults to `0`.
                     
             Returns
             -------
-                dict|str
-                    Name of the created shared folder
-                    
+            dict
+                Name of the created shared folder
+                
             Example return
             --------------
             ```json
@@ -401,32 +401,32 @@ class SharePermission(base_api.BaseApi):
         """Retrieve share permissions for a given folder filtered by permission name (sub string)
             Parameters
             ----------
-                name : str
-                    The folder name to list permissions for.
-                    
-                permission_substr : str
-                    The substring to search for in the permissions.
-                    
-                offset : int, optional
-                    The offset to start at. Defaults to `0`.
-                    
-                limit : int, optional
-                    The maximum number of results to return. Defaults to `50`.
-                    
-                is_unite_permission : bool, optional
-                    Whether to return unified permissions. Defaults to `False`.
-                    
-                with_inherit : bool, optional
-                    Whether to include inherited permissions. Defaults to `False`.
-                    
-                user_group_type : str, optional
-                    The type of user group to list permissions for. Defaults to `"local_user"`.
-                    All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
+            name : str
+                The folder name to list permissions for.
+                
+            permission_substr : str
+                The substring to search for in the permissions.
+                
+            offset : int, optional
+                The offset to start at. Defaults to `0`.
+                
+            limit : int, optional
+                The maximum number of results to return. Defaults to `50`.
+                
+            is_unite_permission : bool, optional
+                Whether to return unified permissions. Defaults to `False`.
+                
+            with_inherit : bool, optional
+                Whether to include inherited permissions. Defaults to `False`.
+                
+            user_group_type : str, optional
+                The type of user group to list permissions for. Defaults to `"local_user"`.
+                All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
             
             Returns
             -------
-                dict 
-                    List of permission(s) on the folder
+            dict 
+                List of permission(s) on the folder
                 
             Example return
             --------------
@@ -475,29 +475,29 @@ class SharePermission(base_api.BaseApi):
         """Retrieve share permissions for a given folder.
             Parameters
             ----------
-                name : str
-                    The folder name to list permissions for.
-                    
-                offset : int, optional
-                    The offset to start at. Defaults to `0`.
-                    
-                limit : int, optional
-                    The maximum number of results to return. Defaults to `50`.
-                    
-                is_unite_permission : bool, optional
-                    Whether to return unified permissions. Defaults to `False`.
-                    
-                with_inherit : bool, optional
-                    Whether to include inherited permissions. Defaults to `False`.
-                    
-                user_group_type : str, optional
-                    The type of user group to list permissions for. Defaults to `"local_user"`.
-                    All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
+            name : str
+                The folder name to list permissions for.
+                
+            offset : int, optional
+                The offset to start at. Defaults to `0`.
+                
+            limit : int, optional
+                The maximum number of results to return. Defaults to `50`.
+                
+            is_unite_permission : bool, optional
+                Whether to return unified permissions. Defaults to `False`.
+                
+            with_inherit : bool, optional
+                Whether to include inherited permissions. Defaults to `False`.
+                
+            user_group_type : str, optional
+                The type of user group to list permissions for. Defaults to `"local_user"`.
+                All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
 
             Returns
             -------
-                dict
-                    All permissions on the folder
+            dict
+                All permissions on the folder
 
             Example return
             ----------
@@ -568,32 +568,32 @@ class SharePermission(base_api.BaseApi):
         """Set folder permissions for a given folder.
             Parameters
             ----------
-                name : str
-                    The folder name to set permissions for.
-                    
-                user_group_type : str
-                    The type of user group to set permissions for.
-                    All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
-                    
-                permissions : dict
-                    The permissions to set for the folder.
-                    Example:
-                    ```json
-                    [
-                        {
-                            "name":"guest",
-                            "is_readonly":false,
-                            "is_writable":true,
-                            "is_deny":false,
-                            "is_custom":false
-                        }
-                    ]
-                    ```
+            name : str
+                The folder name to set permissions for.
+                
+            user_group_type : str
+                The type of user group to set permissions for.
+                All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
+                
+            permissions : dict
+                The permissions to set for the folder.
+                Example:
+                ```json
+                [
+                    {
+                        "name":"guest",
+                        "is_readonly":false,
+                        "is_writable":true,
+                        "is_deny":false,
+                        "is_custom":false
+                    }
+                ]
+                ```
                     
             Returns
             -------
-                dict 
-                    Success
+            dict 
+                Success
                     
             Example return
             --------------
@@ -619,13 +619,13 @@ class SharePermission(base_api.BaseApi):
         """Retrieve share permissions for a given group.
             Parameters
             ----------
-                group : str
-                    The group to list permissions for.
+            group : str
+                The group to list permissions for.
 
             Returns
             -------
-                dict
-                    Permissions of a group on Shared folders
+            dict
+                Permissions of a group on Shared folders
 
             Example return
             --------------
@@ -673,33 +673,33 @@ class SharePermission(base_api.BaseApi):
         """Set group permissions for a given share.
             Parameters
             ----------
-                group : str
-                    The group to set the permissions for.
-                    
-                permissions : list[dict[str, Any]]
-                    The permissions to set for the group.
-                    Example:
-                    ```
-                    [
-                        {
-                            "name": "web",
-                            "is_readonly": False,
-                            "is_writable": False,
-                            "is_deny": True
-                        },
-                        {
-                            "name": "ActiveBackupforBusiness",
-                            "is_readonly": False,
-                            "is_writable": True,
-                            "is_deny": False
-                        }
-                    ]
-                    ```
+            group : str
+                The group to set the permissions for.
+                
+            permissions : list[dict[str, Any]]
+                The permissions to set for the group.
+                Example:
+                ```
+                [
+                    {
+                        "name": "web",
+                        "is_readonly": False,
+                        "is_writable": False,
+                        "is_deny": True
+                    },
+                    {
+                        "name": "ActiveBackupforBusiness",
+                        "is_readonly": False,
+                        "is_writable": True,
+                        "is_deny": False
+                    }
+                ]
+                ```
 
             Returns
             -------
-                dict
-                    Success
+            dict
+                Success
 
             Example return
             --------------
@@ -786,8 +786,8 @@ class KeyManagerStore(base_api.BaseApi):
         """Explore KeyManagerStore API. Get list of existing stores
             Returns
             -------
-                dict
-                    List of stores existing on the NAS
+            dict
+                List of stores existing on the NAS
                     
             Example return
             --------------
@@ -819,8 +819,8 @@ class KeyManagerAutoKey(base_api.BaseApi):
         """List KeyManagerStore API.
             Returns
             -------
-                dict
-                    List of keys in the manager
+            dict
+                List of keys in the manager
                     
             Example return
             --------------
