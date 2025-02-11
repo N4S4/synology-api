@@ -38,6 +38,8 @@
     status: not_started
 - OAuth:
     status: not_started
+- Package:
+    status: partial
 - Photos:
     status: partial
 - SecurityAdvisor:
