@@ -31,7 +31,7 @@ function HomepageHeader() {
     <header className={clsx('hero', styles.heroBanner)}>
       <div className="container">
         <Heading as="h1" className="hero__title content">
-          {siteConfig.title}
+          Synology API
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className="center-content">
@@ -61,11 +61,10 @@ function HomepageHeader() {
 }
 
 export default function Home(): ReactNode {
-  const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
       title={`Home`}
-      description="A Python wrapper around Synology API"
+      description="Community built open source Python wrapper around Synology NAS API, trusted by over 100k users."
     >
       <HomepageHeader />
       <main>
