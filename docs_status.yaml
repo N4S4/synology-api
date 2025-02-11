@@ -32,6 +32,10 @@
     status: not_started
 - Group:
     status: finished
+- KeyManagerStore:
+    status: not_started
+- KeyManagerAutoKey:
+    status: not_started
 - LogCenter:
     status: not_started
 - NoteStation:
@@ -44,6 +48,10 @@
     status: partial
 - SecurityAdvisor:
     status: not_started
+- Share:
+    status: partial
+- SharePermission:
+    status: partial
 - Snapshot:
     status: finished
 - SurveillanceStation:
