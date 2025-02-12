@@ -11,6 +11,7 @@ import { ImSpinner9 } from "react-icons/im";
 
 import { getRepoStars } from '../services/api';
 import ContributorCards from '../components/ContributorCards';
+import DownloadCount from '../components/DownloadCount';
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
@@ -69,6 +70,7 @@ export default function Home(): ReactNode {
       <HomepageHeader />
       <main>
         <HomepageFeatures />
+        <DownloadCount />
         <ContributorCards />
       </main>
     </Layout>
