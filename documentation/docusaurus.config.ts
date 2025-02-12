@@ -80,7 +80,7 @@ const config: Config = {
     },
     image: 'img/syno-api.jpg',
     navbar: {
-      title: 'Synology NAS API Python Documentation',
+      title: 'Synology API',
       logo: {
         alt: 'Synology API Logo',
         src: 'img/logo-round.png',

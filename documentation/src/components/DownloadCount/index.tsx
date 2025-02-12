@@ -70,7 +70,7 @@ const DownloadCount = () => {
             style={{ gap: '6vw' }}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: .5 }}
+            viewport={{ once: true, amount: .8 }}
             variants={fade}
             transition={{ staggerChildren: 0.4 }}
           >
