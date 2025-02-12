@@ -1,4 +1,4 @@
-import React, {useEffect, useState, type ReactNode} from 'react';
+import React, { useEffect, useState, type ReactNode } from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
@@ -11,9 +11,12 @@ import { ImSpinner9 } from "react-icons/im";
 
 import { getRepoStars } from '../services/api';
 import ContributorCards from '../components/ContributorCards';
+import DownloadCount from '../components/DownloadCount';
+import { motion } from 'motion/react';
+import { fade, slideDown } from '../motion/variants';
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext();
   const [loading, setLoading] = useState(true);
   const [repoStars, setRepoStars] = useState<number | null>(null);
 
@@ -29,47 +32,71 @@ function HomepageHeader() {
 
   return (
     <header className={clsx('hero', styles.heroBanner)}>
-      <div className="container">
-        <Heading as="h1" className="hero__title content">
-          {siteConfig.title}
-        </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
+      <motion.div
+        className="container"
+        initial="hidden"
+        animate="visible"
+        variants={fade}
+        transition={{ staggerChildren: 0.5 }}
+      >
+        <motion.div
+          variants={slideDown}
+          transition={{ duration: 0.5 }}
+        >
+          <Heading as="h1" className="hero__title content">
+            Synology API
+          </Heading>
+        </motion.div>
+        <motion.p
+          className="hero__subtitle"
+          variants={slideDown}
+        >
+          {siteConfig.tagline}
+        </motion.p>
         <div className="center-content">
-          <Link
-            className="custom-btn padding--md margin--md"
-            to="https://github.com/N4S4/synology-api"
+          <motion.div
+            variants={slideDown}
+            transition={{ duration: 0.5 }}
           >
-            <span className="center-content">
+            <Link
+              className="custom-btn padding--md margin--md"
+              to="https://github.com/N4S4/synology-api"
+            >
               Star on GH ⭐
-              {loading ? 
-                <ImSpinner9 className="loading-icon" size={20} /> 
-                  : 
+              {loading ?
+                <ImSpinner9 className="loading-icon" size={20} />
+                :
                 repoStars ? repoStars : ''
               }
-            </span>
-          </Link>
-          <Link
-            className="custom-btn padding--md margin--md"
-            to="https://github.com/sponsors/N4S4"
+            </Link>
+          </motion.div>
+          <motion.div
+            variants={slideDown}
+            transition={{ duration: 0.5 }}
           >
-            Sponsor ❤️
-          </Link>
+            <Link
+              className="custom-btn padding--md margin--md"
+              to="https://github.com/sponsors/N4S4"
+            >
+              Sponsor ❤️
+            </Link>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </header>
   );
 }
 
 export default function Home(): ReactNode {
-  const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
       title={`Home`}
-      description="A Python wrapper around Synology API"
+      description="Community built open source Python wrapper around Synology NAS API, trusted by over 100k users."
     >
       <HomepageHeader />
       <main>
         <HomepageFeatures />
+        <DownloadCount />
         <ContributorCards />
       </main>
     </Layout>

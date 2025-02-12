@@ -1,8 +1,10 @@
 import { Octokit } from "octokit";
 import { throttling } from "@octokit/plugin-throttling";
+import { CacheService } from "./cache";
+
+const cache = new CacheService();
 
 const OctokitThrottled = Octokit.plugin(throttling);
-
 const octokit = new OctokitThrottled({
   throttle: {
     onRateLimit: (retryAfter, options, octokit, retryCount) => {
@@ -21,11 +23,10 @@ const octokit = new OctokitThrottled({
 });
 
 export const getRepoStars = async () => {
-  const cachedData = localStorage.getItem('stars');
-  const cachedJson = JSON.parse(cachedData);
-  if (cachedJson?.expires > Date.now()) {
-    console.debug('[getRepoStars] Using cached data');
-    return cachedJson.count;
+  const data = cache.get('stars');
+  if (data) {
+    console.debug(`[getRepoStars] Using cache`);
+    return data.length;
   }
 
   try {
@@ -37,19 +38,14 @@ export const getRepoStars = async () => {
       },
     });
 
-    const jsonData = {
-      "count": data.length,
-      "expires": Date.now() + 180000 // Expires in 3 minutes
-    }
-
-    localStorage.setItem('stars', JSON.stringify(jsonData));
+    cache.set('stars', data);
     return data.length;
   } catch (error) {
     console.error(error);
 
-    if (cachedJson) {
-      console.debug('[getRepoStars] Using cached data');
-      return cachedJson.count;
+    if (cache.getExpired('stars')) {
+      console.debug(`[getRepoStars] Using expired cache`);
+      return cache.getExpired('stars').length;
     }
 
     return 0;
@@ -57,11 +53,10 @@ export const getRepoStars = async () => {
 }
 
 export const getRepoContributors = async () => {
-  const cachedData = localStorage.getItem('contributors');
-  const cachedJson = JSON.parse(cachedData);
-  if (cachedJson?.expires > Date.now()) {
-    console.debug('[getRepoStars] Using cached data');
-    return cachedJson.data;
+  const data = cache.get('contributors');
+  if (data) {
+    console.debug(`[getRepoContributors] Using cache`);
+    return data;
   }
 
   try {
@@ -73,20 +68,61 @@ export const getRepoContributors = async () => {
       },
     });
 
-    const jsonData = {
-      "data": data,
-      "expires": Date.now() + 180000 // Expires in 3 minutes
-    }
-
-    localStorage.setItem('contributors', JSON.stringify(jsonData));
+    cache.set('contributors', data);
     return data;
   }
   catch (error) {
     console.error(error);
 
-    if (cachedJson) {
-      console.debug('[getRepoContributors] Using cached data');
-      return cachedJson.data;
+    if (cache.getExpired('contributors')) {
+      console.debug(`[getRepoContributors] Using expired cache`);
+      return cache.getExpired('contributors');
+    }
+
+    return {};
+  }
+}
+
+const _parseSVG = (text: string) => {
+  const parsed = new DOMParser().parseFromString(text, "text/html");
+  const svg = parsed.querySelector('svg');
+  const textElements = svg.querySelectorAll("text");
+
+  return textElements[textElements.length - 1].textContent;
+}
+
+export const getDownloadCount = async () => {
+  const data = cache.get('downloads');
+  if (data) {
+    console.debug(`[getDownloadCount] Using cache`);
+    return data;
+  }
+
+  try {
+    const urls = {
+      week: 'https://static.pepy.tech/badge/synology-api/week',
+      month: 'https://static.pepy.tech/badge/synology-api/month',
+      all: 'https://static.pepy.tech/badge/synology-api'
+    };
+
+    const responses = await Promise.all(
+      Object.entries(urls).map(async ([key, url]) => {
+        const res = await fetch(url);
+        const text = await res.text();
+        return [key, _parseSVG(text)];
+      })
+    );
+
+    const downloadPeriods = Object.fromEntries(responses);
+    cache.set('downloads', downloadPeriods);
+
+    return downloadPeriods;
+  } catch (error) {
+    console.error(error);
+
+    if (cache.getExpired('downloads')) {
+      console.debug(`[getDownloadCount] Using expired cache`);
+      return cache.getExpired('downloads');
     }
 
     return 0;

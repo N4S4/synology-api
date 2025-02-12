@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
 import React from 'react';
+import { motion } from 'motion/react';
+import { fade, slideDown } from '@site/src/motion/variants';
 
 type FeatureItem = {
   title: string;
@@ -31,10 +33,19 @@ const FeatureList: FeatureItem[] = [
 function Feature({title, description}: FeatureItem) {
   return (
     <div className={clsx('col col--5')}>
-      <div className="text--center padding-horiz--md">
-        <Heading as="h3">{title}</Heading>
-        <p>{description}</p>
-      </div>
+      <motion.div 
+        className="text--center padding-horiz--md"
+        variants={slideDown}
+        transition={{ delayChildren: 0.3, duration: .5 }}
+      >
+        <Heading as="h2">{title}</Heading>
+        <motion.p
+          variants={slideDown}
+          transition={{ duration: 0.5 }}
+        >
+          {description}
+        </motion.p>
+      </motion.div>
     </div>
   );
 }
@@ -43,11 +54,21 @@ export default function HomepageFeatures(): ReactNode {
   return (
     <section className={styles.features}>
       <div className="container">
-        <div className="row center-content">
+        <motion.div 
+          className="row center-content"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 1 }}
+          variants={fade}
+          transition={{
+            staggerChildren: 0.6, 
+            duration: .5 
+          }}
+        >
           {FeatureList.map((props, idx) => (
             <Feature key={idx} {...props} />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
