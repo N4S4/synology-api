@@ -138,6 +138,11 @@ This API is partially documented or under construction.
 ### `list_item_in_folders`
 List all items in all folders in Personal Space  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Foto.Browse.Item` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_offset_** `int`  

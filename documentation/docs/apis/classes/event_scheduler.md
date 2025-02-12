@@ -30,6 +30,11 @@ This API provides functionality solely related to Event Tasks. For scheduled tas
 ### `get_task_results`
 Retrieve the results list for a specific task.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.EventScheduler` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_name_** `str`  
@@ -99,6 +104,11 @@ Parameters
                 "success": true
             }
             ```  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.EventScheduler` 
+</div>
+  
 
 
 
@@ -107,6 +117,11 @@ Parameters
 
 ### `task_set_enable`
 Enable or disable Event task.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.EventScheduler` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -142,6 +157,11 @@ A dictionary containing the result of the action.
 ### `task_run`
 Run a specific Event task.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.EventScheduler` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_name_** `str `  
@@ -173,6 +193,11 @@ A dictionary containing the result of the task execution.
 ### `task_delete`
 Delete a specific Event task.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.EventScheduler` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_name_** `str `  
@@ -194,6 +219,11 @@ A dictionary containing the result of the task deletion.
 
 ### `task_create_or_set`
 Create or modify an event-based task.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.EventScheduler` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">

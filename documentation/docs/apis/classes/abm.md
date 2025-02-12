@@ -34,6 +34,11 @@ Active Backup for Microsoft 365 Implementation.
 ### `get_tasks`
 Retrieve all tasks.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackupOffice365` 
+</div>
+  
 #### Returns
 <div class="padding-left--md">
 `dict[str, object]`  
@@ -250,6 +255,11 @@ A dictionary containing the list of tasks.
 ### `get_package_log`
 Retrieve general logs.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackupOffice365` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_offset_** `int`  
@@ -319,6 +329,11 @@ A dictionary containing the list of logs.
 ### `get_task_log`
 Retrieve all logs for a given task.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackupOffice365` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_id_** `int`  
@@ -387,6 +402,11 @@ A dictionary containing the list of logs.
 
 ### `get_task_setting`
 Retrieve the settings of a task.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackupOffice365` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -559,6 +579,11 @@ A dictionary containing the settings of the task.
 ### `get_worker_count`
 Get the number of workers for the Active Backup for Microsoft 365 package.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackupOffice365` 
+</div>
+  
 #### Returns
 <div class="padding-left--md">
 `dict[str, object]`  
@@ -588,6 +613,11 @@ A dictionary containing the number of workers.
 
 ### `set_worker_count`
 Set the number of workers for the Active Backup for Microsoft 365 package.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackupOffice365` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -622,6 +652,11 @@ A dictionary containing the result of the worker count update.
 
 ### `set_task_schedule`
 Set the schedule for a given task.   
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackupOffice365` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -686,6 +721,11 @@ A dictionary containing the result of the schedule update.
 ### `set_rotation_policy`
 Set the rotation policy for a given task.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackupOffice365` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_id_** `int`  
@@ -720,6 +760,11 @@ A dictionary containing the result of the rotation policy update.
 ### `run_backup`
 Manually run backup for a given task id.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackupOffice365` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_id_** `int`  
@@ -750,6 +795,11 @@ A dictionary containing the result of the backup task.
 
 ### `cancel_backup`
 Cancel a running backup task.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackupOffice365` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -787,6 +837,11 @@ Delete a task.
  
 :::
 
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackupOffice365` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_id_** `int`  
@@ -826,6 +881,11 @@ A dictionary containing the result of the task deletion.
 
 ### `relink_task`
 Relink a task.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveBackupOffice365` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">

@@ -40,6 +40,11 @@ The APIs in this class are tested working against the following scenarios:
 ### `get_directory_info`
 Gets directory info.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveDirectory.Info` 
+</div>
+  
 #### Returns
 <div class="padding-left--md">
 `dict[str, object]`  
@@ -86,6 +91,11 @@ Information about your domain.
 
 ### `list_directory_objects`
 lists directory objects.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveDirectory.User` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -170,6 +180,11 @@ Create a new user.
  
 :::
 
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveDirectory.User` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_logon_name_** `str`  
@@ -239,6 +254,11 @@ Control Panel>Notification>Rules>System>Reset password for your account to be se
  
 :::
 
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Auth.ForgotPwd` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_username_** `str`  
@@ -278,6 +298,11 @@ Change the user's password.
  
 :::
 
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Entry.Request` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_user_dn_** `str`  
@@ -330,6 +355,11 @@ Since this is a compound request, the data contains an object with it's own requ
 
 ### `create_new_group`
 Create a new AD group.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveDirectory.Group` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -411,6 +441,11 @@ A success object, and data object containing the new dn and the netbios name of 
 ### `add_user_to_group`
 Adds a user as a member of a group.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Entry.Request` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_userDn_** `str`  
@@ -468,6 +503,11 @@ Checks if a container exists. This can be used to verifiy the username or group 
  
 :::
 
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveDirectory.Group` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_groupName_** `str`  
@@ -491,6 +531,11 @@ Improper case such as `my cool group` instead of `My Cool Group` are successful
 
 ### `modify_user_info`
 Performs modification to user information within the Active Directory.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Entry.Request` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -569,6 +614,11 @@ Since this is a compound request, the data contains an object with it's own requ
 ### `setEntryRequest`
 Performs modification to an object within the Active Directory.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Entry.Request` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_modificationAPI_** `str`  
@@ -631,6 +681,11 @@ Since this is a compound request, the data contains an object with it's own requ
 ### `update_domain_records`
 Updates the Synology users and groups database with information from Directory Server.  
 This is a long-running and asynchronous task.  You are given back a task_id, and you can use that task_id to check the status with the get_task_status(task_id) method.  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Directory.Domain` 
+</div>
+  
 #### Returns
 <div class="padding-left--md">
 `dict[str, object]`  
@@ -658,6 +713,11 @@ The 'success' object will be true if the operation was successful. or false if f
 Gets the current status of a task running on the Directory Domain object.  
 This is used to ensure the task is completed.  For example, the primary utilization of this is when updating Synology's internal Domain user and group list.    
 Until this method reports finish, the job is not completed, and it is not safe to operate under the assumption that users have been synchronized.  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Directory.Domain` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_id_** `str`  
@@ -693,6 +753,11 @@ The 'success' object will be true if the operation was successful. or false if f
 
 ### `deleteItems`
 Deletes an array of DNs from AD.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.ActiveDirectory.Directory` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -749,6 +814,11 @@ Since this is a compound request, the data contains an object with it's own requ
 ### `delete_item`
 Deletes a DN from AD.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Entry.Request` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_dn_** `str`  
@@ -804,6 +874,11 @@ Since this is a compound request, the data contains an object with it's own requ
 ### `entryRequest`
 Some requests require an entry.  
 Delete for example requires an entry.  If an entry is required, the task will not complete without an Entry Request.  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Entry.Request` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_id_** `str`  

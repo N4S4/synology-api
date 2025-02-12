@@ -57,6 +57,11 @@ print(resp)
 ### `list_snapshots`
 List snapshots for a share.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Share.Snapshot` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_share_name_** `str`  
@@ -125,6 +130,11 @@ API response if successful, error message if not
 ### `create_snapshot`
 Create a snapshot for a share.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Share.Snapshot` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_share_name_** `str`  
@@ -170,6 +180,11 @@ API response if successful, error message if not
 ### `delete_snapshots`
 Delete snapshots for a share.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Share.Snapshot` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_share_name_** `str`  
@@ -203,6 +218,11 @@ API response if successful, error message if not
 
 ### `set_snapshot_attr`
 Set attributes for a snapshot.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Share.Snapshot` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">

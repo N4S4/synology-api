@@ -54,6 +54,11 @@ This API is not documented yet.
 ### `export_cert`
 Export a certificate from the Synology NAS.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Certificate` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_cert_id_** `str`  

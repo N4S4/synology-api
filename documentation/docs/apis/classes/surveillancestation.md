@@ -47,6 +47,11 @@ privCamType: int = 1
     SYNO.SS.CamPriv.AUDIO = 8;
     SYNO.SS.CamPriv.DIGIOUT = 16;  
 All other parameters must be let to default value  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.SurveillanceStation.Camera` 
+</div>
+  
 
 
 
@@ -63,6 +68,11 @@ All other parameters must be let to default value
 ### `get_snapshot`
 By default, the profileType is 1, which is the default profile.  
 Binary data is returned, so the response is not a json object.  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.SurveillanceStation.Camera` 
+</div>
+  
 
 
 
@@ -457,6 +467,11 @@ After receiving progress 100, use OnRangeExportDone method to download exported 
 minutes.
 If you want to cancel range export task, just do not send GetRangeExportProgress method or
 OnRangeExportDone method. System will cleanup processed files itself.  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.SurveillanceStation.Recording` 
+</div>
+  
 
 
 
@@ -484,6 +499,11 @@ Code Description
 405 CMS server connection failed.
 414 Some events not exist.
 439 Too many items selected.  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.SurveillanceStation.Recording` 
+</div>
+  
 
 
 
@@ -544,6 +564,11 @@ webAPI Array of `webAPI_info`
 Example:
 `webAPI={"api": "SYNO.SurveillanceStation.AddOns", "version": 1, "method":
 "List"}`  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.SurveillanceStation.CMS` 
+</div>
+  
 
 
 
@@ -682,6 +707,11 @@ Code Description
 400 Execution failed.
 401 Invalid parameter.
 415 message connect failed.  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.SurveillanceStation.CMS.GetDsStatus` 
+</div>
+  
 
 
 

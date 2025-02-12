@@ -22,6 +22,14 @@ EXCLUDED_FILES = {'__init__.py', 'auth.py', 'base_api.py', 'error_codes.py', 'ex
 META_TAG = '---\n'
 SEPARATOR = '\n\n\n---\n\n\n'
 NEWLINE = '  \n'
+AUTO_GEN_TAG = '\n<!-- ' + '-'*44 + ' -->\n'
+AUTO_GEN_MESSAGE = '<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->'
+AUTO_GEN_DISCLAIMER= AUTO_GEN_TAG + AUTO_GEN_MESSAGE + AUTO_GEN_TAG + NEWLINE
+
+##################
+# RegEx Patterns #
+##################
+# Match admonitions, level in group 1 and message in group 2
 ADMONITIONS = [
     {'pattern': r'(Note:)(.*)', 'level': 'note'},
     {'pattern': r'(Info:)(.*)', 'level': 'info'},
@@ -29,43 +37,38 @@ ADMONITIONS = [
     {'pattern': r'(Warning:)(.*)', 'level': 'warning'},
     {'pattern': r'(Danger:)(.*)', 'level': 'danger'},
 ]
+
+# Match example return block, header in group 1 and content in group 2
 EXAMPLE_RETURN_PATTERN = r'(?s)(Example return\n-.*)(```.*```)'
-API_NAME_PATTERN = r'api_name\s*=\s*f?[\'"](.*)[\'"]'
+
+# Match API name in string, API name in group 1
+CLASS_API_NAME_PATTERN = r'api_name\s*=\s*f?[\'"](.*)[\'"]'
+
+# Match first API name after provided method name, API name in group 1
+def METHOD_API_NAME_PATTERN(method_name: str) -> str:
+    return rf"(?s)def {method_name}\(.*?api_name\s*=\s*f?['\"]([^'\"]+)"
+
+# Match concatenated string in API name, prefix in group 1, concatenation in group 2, suffix in group 3
+# Applies for 'prefix' + 'concatenation' + 'suffix'
 API_NAME_CONCAT_PATTERN = r'(.*)([\'"]\s*\+.*\+\s*[\'"])(.*)'
+
+# Match concatenated f-string in API name, prefix in group 1, concatenation in group 2, suffix in group 3
+# Applies for f'prefix{concatenation}suffix'
 API_NAME_CONCAT_PATTERN_FSTR = r'(.*)(\{.*\})(.*)'
-AUTO_GEN_TAG = '\n<!-- ' + '-'*44 + ' -->\n'
-AUTO_GEN_MESSAGE = '<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->'
-AUTO_GEN_DISCLAIMER= AUTO_GEN_TAG + AUTO_GEN_MESSAGE + AUTO_GEN_TAG + NEWLINE
 
 ####################
 # Style Generators #
 ###################
 def __stylize(text: str, styles: list[str]) -> str:
+    style_map = {'code': '`', 'bold': '**', 'italic': '_', 'underline': '___'}
     content = ''
     for style_str in styles:
-        if style_str == 'code':
-            content += '`'
-        elif style_str == 'bold':
-            content += '**'
-        elif style_str == 'italic':
-            content += '_'
-        elif style_str == 'underline':
-            content += '___'
-        else:
+        if style_str not in style_map:
             warnings.warn(f'Unknown style: {style_str}', UserWarning)
-        
+        content += style_map.get(style_str, '')
     content += text
-
     for style_str in reversed(styles):
-        if style_str == 'code':
-            content += '`'
-        elif style_str == 'bold':
-            content += '**'
-        elif style_str == 'italic':
-            content += '_'
-        elif style_str == 'underline':
-            content += '___'
-        
+        content += style_map.get(style_str, '')
     return content
 
 def header(level: str, text: str, styles: list[str] = []) -> str:
@@ -222,14 +225,25 @@ def check_concatenation(api_name: str) -> str:
 
     return api_name
 
-def parse_used_apis(class_name: str, file_content: str) -> str:
-    matches = re.findall(API_NAME_PATTERN, file_content)
+def parse_class_apis(class_name: str, file_content: str) -> str:
+    matches = re.findall(CLASS_API_NAME_PATTERN, file_content)
     section = header('h3', class_name)
     for api_name in matches:
         api_name = check_concatenation(api_name)
 
         if section.find(api_name) == -1: # Don't add duplicates
             section += list_item(api_name, ['code'])
+    return section + NEWLINE
+
+def parse_method_api(method_name: str, file_content: str) -> str:
+    match = re.search(METHOD_API_NAME_PATTERN(method_name), file_content)
+    section = ''
+    if match: 
+        api_name = check_concatenation(match.group(1))
+        section = header('h4', 'Internal API')
+        section += div(text(api_name, ['code']), 'padding', 'left', 'md')
+    else:
+        warnings.warn(f'Failed to parse API name for {method_name}', UserWarning)
     return section + NEWLINE
 
 def gen_header(class_name: str, docstring: str) -> str:
@@ -248,7 +262,7 @@ def gen_header(class_name: str, docstring: str) -> str:
 
     return content
 
-def gen_method(method: dict) -> str:
+def gen_method(method: dict, file_content: str) -> str:
     content = header('h3', method['name'], ['code'])
     docstring = method['docstring']
     if docstring is None:
@@ -257,6 +271,8 @@ def gen_method(method: dict) -> str:
     description = text(docstring.short_description or '', newline=True)
     description += text(docstring.long_description or '', newline=True)
     description = dedup_newlines(description)
+
+    internal_api = parse_method_api(method['name'], file_content)
 
     parameters = ''
     if docstring.params:
@@ -285,6 +301,7 @@ def gen_method(method: dict) -> str:
         example_return += details(summary='Click to expand', content=example_match.group(2))
 
     content += description
+    content += internal_api
     content += parameters
     content += returns
     content += example_return
@@ -303,8 +320,7 @@ def main():
     files, parse_api_list, parse_docs = validate_args(parser)
 
     ### Generation for Getting Started/Supported APIs with all the APIs user per class.
-    if parse_api_list:
-        supported_apis = gen_supported_apis()
+    supported_apis = gen_supported_apis()
 
     for file_name in files:
         doc_content = ''
@@ -320,19 +336,20 @@ def main():
             for class_type in docstrings["content"]:
                 if is_private(class_type['name']):
                     continue
-                if parse_api_list:
-                    supported_apis += parse_used_apis(class_type['name'], file_content)
 
+                supported_apis += parse_class_apis(class_type['name'], file_content)
                 doc_content += gen_header(class_type['name'], class_type['docstring_text'])
 
                 for method in class_type['content']:
                     if is_private(method['name']):
                         continue
-                    doc_content += gen_method(method)
+                    doc_content += gen_method(method, file_content)
 
+        # Write to md files if the args were set
         if parse_docs: 
             write(DOCS_DIR + file_name.replace('.py', '.md'), doc_content)
         print('='*20)
+    # Write to md files if the args were set
     if parse_api_list:
         write(API_LIST_FILE, supported_apis)
         

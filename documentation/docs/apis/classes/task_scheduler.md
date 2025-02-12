@@ -33,6 +33,11 @@ This API provides the functionality to get information related to the scheduler 
 ### `get_output_config`
 Retrieve tasks output configuration.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.EventScheduler` 
+</div>
+  
 #### Returns
 <div class="padding-left--md">
 `dict[str, object]`  
@@ -47,6 +52,11 @@ A dictionary containing a list of the tasks and information related to them.
 
 ### `get_task_list`
 List all present scheduled tasks and event triggered tasks.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.TaskScheduler` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -128,6 +138,11 @@ A dictionary containing a list of the tasks and information related to them.
 ### `get_task_config`
 Retrieve the configuration for a specific task or list of all the available services and their corresponding IDs.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.TaskScheduler` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_id_** `int `  
@@ -202,6 +217,11 @@ A dictionary containing the task configuration.
 ### `get_task_results`
 Retrieve the results list for a specific task.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.TaskScheduler` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_id_** `int `  
@@ -249,6 +269,11 @@ A dictionary containing the task results.
 ### `set_output_config`
 Configure the output settings for tasks results.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.EventScheduler` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_enable_output_** `bool `  
@@ -282,6 +307,11 @@ A dictionary containing the result of the output configuration.
 
 ### `task_set_enable`
 Enable or disable a task.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.TaskScheduler` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -320,6 +350,11 @@ A dictionary containing the result of the task enabling.
 ### `task_run`
 Run a specific task.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.TaskScheduler` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_id_** `int `  
@@ -353,6 +388,11 @@ A dictionary containing the result of the task execution.
 
 ### `task_delete`
 Delete a specific task.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.TaskScheduler` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -393,6 +433,11 @@ Create a new Script task with the provided schedule and notification settings.
  
 :::
 
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.TaskScheduler` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_name_** `str `  
@@ -499,6 +544,11 @@ Modify settings of a Script task.
  
 :::
 
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.TaskScheduler` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_id_** `int`  
@@ -598,6 +648,11 @@ A dictionary with the id of the created task.
 ### `create_beep_control_task`
 Create a new Beep Control task with the provided schedule and beep duration.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.TaskScheduler` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_name_** `str `  
@@ -691,6 +746,11 @@ Modify settings of a Beep Control task.
  
 :::
 
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.TaskScheduler` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_name_** `str `  
@@ -787,6 +847,11 @@ A dictionary with the id of the created task.
 
 ### `create_service_control_task`
 Create a new Service Control task with the provided schedule and services to start/stop.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.TaskScheduler` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -902,6 +967,11 @@ Modify settings of a Service Control task.
  
 :::
 
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.TaskScheduler` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_id_** `int`  
@@ -1016,6 +1086,11 @@ A dictionary with the id of the created task.
 
 ### `create_recycle_bin_task`
 Create a new Recycle Bin Control task with the provided schedule and services to start/stop.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.TaskScheduler` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -1134,6 +1209,11 @@ Modify settings of a Recycle Bin Control task.
  
 :::
 
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.TaskScheduler` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_task_id_** `int`  

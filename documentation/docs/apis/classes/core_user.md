@@ -29,6 +29,11 @@ Supported actions:
 ### `get_users`
 Retrieve groups information.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.User` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_offset_** `int`  
@@ -107,6 +112,11 @@ A dictionary containing the groups information.
 ### `get_user`
 Retrieve a user information.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.User` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_name_** `str`  
@@ -159,6 +169,11 @@ A dictionary containing the user information.
 
 ### `create_user`
 Create a new user.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.User` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -219,6 +234,11 @@ A dictionary containing the user information.
 
 ### `modify_user`
 Modify a user.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.User` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -283,6 +303,11 @@ A dictionary containing the user information.
 ### `delete_user`
 Delete a user.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.User` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_name_** `str`  
@@ -323,6 +348,11 @@ Affect or disaffect groups to a user.
  
 :::
 
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.User.Group` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_name_** `str`  
@@ -365,6 +395,11 @@ A dictionary containing the task id to check the status of the join task. Use `a
 
 ### `affect_groups_status`
 Get the status of a join task.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.User.Group` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -416,6 +451,11 @@ A dictionary containing the status of the join task.
 ### `get_password_policy`
 Get the password policy.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.User.PasswordPolicy` 
+</div>
+  
 #### Returns
 <div class="padding-left--md">
 `dict[str, object]`  
@@ -455,6 +495,11 @@ A dictionary containing the password policy information.
 
 ### `set_password_policy`
 Set the password policy.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.User.PasswordPolicy` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -518,6 +563,11 @@ A dictionary indicating the success of the operation.
 ### `get_password_expiry`
 Get the password expiry.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.User.PasswordExpiry` 
+</div>
+  
 #### Returns
 <div class="padding-left--md">
 `dict[str, object]`  
@@ -552,6 +602,11 @@ A dictionary containing the password expiry information.
 
 ### `set_password_expiry`
 Set the password expiry.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.User.PasswordExpiry` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -616,6 +671,11 @@ Issues a passowrd/session comparison to ensure the given password matches the au
  
 :::
 
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.User.PasswordConfirm` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_password_** `str`  
@@ -649,6 +709,11 @@ A dictionary containing a `SynoConfirmPWToken`, or an error message.
 
 ### `get_username_policy`
 Get the username policy (List of username that are not usable).  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.User.UsernamePolicy` 
+</div>
   
 #### Returns
 <div class="padding-left--md">

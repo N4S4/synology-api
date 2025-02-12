@@ -54,6 +54,11 @@ The tested clouds so far are:
 ### `get_pkg_config`
 Retrieve package settings.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
+  
 #### Returns
 <div class="padding-left--md">
 `dict[str, object]`  
@@ -105,6 +110,11 @@ A dictionary containing the result of package settings.
 
 ### `get_connections`
 Retrieve a list of current cloud connections.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -175,6 +185,11 @@ A dictionary containing the list of cloud connections.
 ### `get_connection_settings`
 Retrieve settings for a specific connection.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_conn_id_** `int `  
@@ -217,6 +232,11 @@ A dictionary containing the connection settings.
 
 ### `get_connection_information`
 Retrieve cloud information for a specific connection.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -264,6 +284,11 @@ A dictionary containing cloud information.
 
 ### `get_connection_auth`
 Retrieve authentication information for a specific connection.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -330,6 +355,11 @@ A dictionary containing the connection authentication details.
 
 ### `get_connection_logs`
 Retrieve logs for a specific connection.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -422,6 +452,11 @@ A dictionary containing the connection logs.
 ### `get_tasks`
 Retrieve a list of tasks related to a specific connection.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_conn_id_** `int `  
@@ -470,6 +505,11 @@ A dictionary containing the list of tasks.
 
 ### `get_task_filters`
 Retrieve filter information for a specific task.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -522,6 +562,11 @@ A dictionary containing task filter information.
 
 ### `get_task_cloud_folders`
 Retrieve a list of children directories in the cloud for a specific task.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -587,6 +632,11 @@ A dictionary containing the list of children directories.
 
 ### `get_recently_modified`
 Retrieve the 5 latest modified files and the currently syncing items.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
   
 #### Returns
 <div class="padding-left--md">
@@ -680,6 +730,11 @@ A dictionary containing the recently modified files.
 ### `set_pkg_config`
 Set package configuration settings.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_pkg_volume_** `str `  
@@ -725,6 +780,11 @@ Set the relinking behavior for personal user accounts.
  
 :::
 
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_delete_from_cloud_** `bool `  
@@ -756,6 +816,11 @@ A dictionary containing the result of the relink behavior update.
 
 ### `set_connection_settings`
 Set settings for a specific cloud connection.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -808,6 +873,11 @@ A dictionary containing the updated connection settings.
 
 ### `set_connection_schedule`
 Set the schedule for a specific connection.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -862,6 +932,11 @@ A dictionary containing the schedule settings.
 ### `set_task_settings`
 Set the task settings for a specific session.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_sess_id_** `int `  
@@ -909,6 +984,11 @@ A dictionary containing the result of the task settings configuration.
 ### `set_task_filters`
 Set task filters for selective synchronization in a specific session.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_sess_id_** `int `  
@@ -952,6 +1032,11 @@ A dictionary containing the result of the task filters configuration.
 ### `connection_pause`
 Pause one or all connections.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_conn_id_** `int, optional `  
@@ -982,6 +1067,11 @@ A dictionary containing the result of the pause action.
 
 ### `connection_resume`
 Resume one or all connections.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -1014,6 +1104,11 @@ A dictionary containing the result of the resume action.
 ### `connection_remove`
 Remove a specific connection and all associated tasks.  
 The data will remain in both the local and remote directories.  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_conn_id_** `int `  
@@ -1045,6 +1140,11 @@ A dictionary containing the result of the remove action.
 ### `task_remove`
 Remove a specific task.  
 The data will remain in both the local and remote directories.  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
+  
 #### Parameters
 <div class="padding-left--md">
 **_conn_id_** `int `  
@@ -1078,6 +1178,11 @@ A dictionary containing the result of the task removal.
 
 ### `test_task_setting`
 Test the task settings make sure they are valid.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -1121,6 +1226,11 @@ A tuple containing a boolean indicating success, and a dictionary or string with
 
 ### `create_sync_task_s3`
 Add a new synchronization task.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">

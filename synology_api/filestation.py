@@ -10,7 +10,7 @@ import tqdm
 from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 import sys
 from urllib import parse
-
+from treelib import Tree
 from . import base_api
 
 
@@ -1255,5 +1255,33 @@ class FileStation(base_api.BaseApi):
             with session.get(url, stream=True, verify=verify, headers={"X-SYNO-TOKEN": self.session._syno_token}) as r:
                 r.raise_for_status()
                 return io.BytesIO(r.content)
+            
+    def generate_file_tree(self, folder_path: str, tree: Tree) -> None:
+        """Generate the file tree based on the folder path you give, you need to create the root node before call this function
+        
+            Parameters
+            ----------
+            folder_path : str
+                Folder path to generate file tree
+            tree : Tree
+                Instance of the Tree of lib "Treelib"
+        
+        """
+        data: dict = self.get_file_list(
+            folder_path=folder_path
+        ).get("data")
+
+        files = data.get("files")
+        file: dict
+        for file in files:
+            file_name: str = file.get("name")
+            file_path: str = file.get("path")
+            if file.get("isdir"):
+                
+                tree.create_node(file_name, file_path, parent=folder_path)
+                self.generate_file_tree(file_path, tree)
+            else:
+                tree.create_node(file_name, file_path, parent=folder_path)
+    
 
 # TODO SYNO.FileStation.Thumb to be done
