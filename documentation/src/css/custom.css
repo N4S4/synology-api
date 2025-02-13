@@ -201,11 +201,14 @@ html[data-theme="dark"] .header-github-link:before {
 	font-size: medium;
 	font-weight: bold;
 	background-color: var(--text);
+}
+
+.custom-btn a {
 	color: var(--background);
 	text-decoration: none;
 }
 
-.custom-btn:hover {
+.custom-btn:hover a {
 	color: var(--background);
 	text-decoration: none;
 }
