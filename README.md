@@ -192,7 +192,6 @@ This wrapper cover the following APIs for now:
 | SYNO.Core.Hardware.BeepControl        |  
 | SYNO.Core.Hardware.FanSpeed           |  
 | SYNO.Core.Hardware.Hibernation        |  
-| SYNO.Core.Hardware.PowerSchedule      |  
 | SYNO.Core.Network                     |  
 | SYNO.Core.Network.Bond                |  
 | SYNO.Core.Network.Bridge              |  
@@ -300,6 +299,7 @@ This wrapper cover the following APIs for now:
 | SYNO.Core.TaskScheduler.Root     |
 | SYNO.Core.EventScheduler         |
 | SYNO.Core.EventScheduler.Root    |
+| SYNO.Core.Hardware.PowerSchedule |  
 
 ### Not all Surveillance Station functions works.
 | Surveillance Station                                      |
@@ -526,7 +526,6 @@ DS info with below functions:
 | `hardware_fan_speed()`            |
 | `hardware_hibernation()`          |
 | `hardware_ups()`                  |
-| `hardware_power_schedule()`       |
 | `terminal_info()`                 |
 | `snmp_info()`                     |
 | `process()`                       |
@@ -854,6 +853,8 @@ DS info with below functions:
 | `task_run()`                   | Run a Event Triggered task.                                    |
 | `task_delete()`                | Delete a Event Triggered task.                                 |
 | `task_create_or_set()`         | Create or modify a Event Triggered task.                       |
+| `set_power_schedule()`         | Set the power schedule, poweron tasks and poweroff tasks       |
+| `get_power_schedule()`         | Load the power schedule, poweron tasks and poweroff tasks      |
  
 #### What's still missing
 
