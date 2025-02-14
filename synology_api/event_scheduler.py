@@ -2,6 +2,7 @@ from __future__ import annotations
 from . import base_api
 from .core_sys_info import SysInfo
 import json
+from typing import List
 
 class EventScheduler(base_api.BaseApi):
     """Event Scheduler API implementation.
@@ -14,6 +15,7 @@ class EventScheduler(base_api.BaseApi):
             - Get result output
         - Setters:
             - Set task settings 
+            - Set power schedule
         - Actions:
             - Enable task
             - Disable task
@@ -339,5 +341,108 @@ class EventScheduler(base_api.BaseApi):
         if owner['0'] == 'root':
             api_name = 'SYNO.Core.EventScheduler.Root'
             req_param['SynoConfirmPWToken'] = self.__get_root_token()
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def set_power_schedule(self, poweron_tasks: List[dict] = [], poweroff_tasks: List[dict] = []) -> dict:
+        """Set the power schedule, poweron tasks and poweroff tasks
+        
+            Parameters
+            ----------
+            poweron_tasks : List[dict], optional
+                List of tasks for power on. Defaults to `[]`
+                Example of a task:
+                ```python
+                {
+                    "enabled": True, # Enable or not the task
+                    "hour": 13, # Hour 0-23
+                    "min": 59, # Minutes 0-59
+                    "weekdays": "0,1,2,3,4,5,6" # All days of the week (Sunday, Monday, Tuesday, Wednesday, Thrusday, Friday, Saturday)
+                }
+                ```
+            poweroff_tasks : List[dict], optional
+                List of tasks for power off. Defaults to `[]`
+                Example of a task:
+                ```python
+                {
+                    "enabled": True, # Enable or not the task
+                    "hour": 13, # Hour 0-23
+                    "min": 59, # Minutes 0-59
+                    "weekdays": "0,1,2,3,4,5,6" # All days of the week (Sunday, Monday, Tuesday, Wednesday, Thrusday, Friday, Saturday)
+                }
+                ```
+            Returns
+            -------
+            dict
+                List of tasks in power schedule
+        
+            Example return
+            ----------
+            ```json
+            {
+                "data": {
+                    "poweroff_tasks": [],
+                    "poweron_tasks": [
+                        {
+                            "enabled": true,
+                            "hour": 0,
+                            "min": 0,
+                            "weekdays": "1,2,3,4,5"
+                        }
+                    ]
+                },
+                "success": true
+            }
+            ```
+        """
+        
+        api_name = 'SYNO.Core.Hardware.PowerSchedule'
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "save",
+            "poweron_tasks": json.dumps(poweron_tasks),
+            "poweroff_tasks": json.dumps(poweroff_tasks)
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+
+
+    def load_power_schedule(self) -> dict:
+        """Load the power schedule, poweron tasks and poweroff tasks
+        
+            Returns
+            -------
+            dict
+                List of tasks in power schedule
+        
+            Example return
+            ----------
+            ```json
+            {
+                "data": {
+                    "poweroff_tasks": [],
+                    "poweron_tasks": [
+                        {
+                            "enabled": true,
+                            "hour": 0,
+                            "min": 0,
+                            "weekdays": "1,2,3,4,5"
+                        }
+                    ]
+                },
+                "success": true
+            }
+            ```
+        """
+        
+        api_name = 'SYNO.Core.Hardware.PowerSchedule'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'load'
+        }
 
         return self.request_data(api_name, api_path, req_param)
