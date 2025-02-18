@@ -53,13 +53,13 @@ function HomepageHeader() {
         >
           {siteConfig.tagline}
         </motion.p>
-        <div className="center-content">
+        <div className="row center-content">
           <motion.div
+            className="custom-btn padding--md margin--md"
             variants={slideDown}
             transition={{ duration: 0.5 }}
           >
             <Link
-              className="custom-btn padding--md margin--md"
               to="https://github.com/N4S4/synology-api"
             >
               Star on GH ⭐
@@ -71,11 +71,11 @@ function HomepageHeader() {
             </Link>
           </motion.div>
           <motion.div
+            className="custom-btn padding--md margin--md"
             variants={slideDown}
             transition={{ duration: 0.5 }}
           >
             <Link
-              className="custom-btn padding--md margin--md"
               to="https://github.com/sponsors/N4S4"
             >
               Sponsor ❤️

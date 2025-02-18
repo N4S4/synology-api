@@ -269,9 +269,10 @@ class Share(base_api.BaseApi):
     
     def delete_folders(self, name: List[str]) -> dict:
         """Delete folder(s) by name(s)
+        
             Parameters
             ----------
-            name List[str]
+            name : List[str]
                 Share names.
                     
             Returns
