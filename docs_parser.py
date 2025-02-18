@@ -129,6 +129,13 @@ def status_disclaimer(status: str) -> str:
         return admonition('warning', 'This API is not documented yet.')
     return ''
 
+def multi_class_disclaimer(classes: list[str]) -> str:
+    """Return tip informing about all classes documented on the page"""
+    content = f'This page contains documentation for the `{classes[0]}` class and its subclasses:  \n'
+    for i, class_name in enumerate(classes[1:], start=1):
+        content += list_item(link(class_name, f'#{class_name.lower()}'))
+    return admonition('tip', content)
+
 def dedup_newlines(text: str) -> str:
     return re.sub(r'\n{2}', '  \n', text)
 
@@ -225,9 +232,9 @@ def check_concatenation(api_name: str) -> str:
 
     return api_name
 
-def parse_class_apis(class_name: str, file_content: str) -> str:
+def parse_class_apis(class_name: str, file_content: str, file_path: str) -> str:
     matches = re.findall(CLASS_API_NAME_PATTERN, file_content)
-    section = header('h3', class_name)
+    section = header('h3', link(class_name, f'./apis/classes/{file_path.replace(".py", "")}'))
     for api_name in matches:
         api_name = check_concatenation(api_name)
 
@@ -243,12 +250,19 @@ def parse_method_api(method_name: str, file_content: str) -> str:
         section = header('h4', 'Internal API')
         section += div(text(api_name, ['code']), 'padding', 'left', 'md')
     else:
-        warnings.warn(f'Failed to parse API name for {method_name}', UserWarning)
+        warnings.warn(f'Method {method_name} seems to not be directly calling any internal API, this is expected for utility methods that use other calls in the class.', UserWarning)
     return section + NEWLINE
 
-def gen_header(class_name: str, docstring: str) -> str:
-    content, docs_status = metadata(class_name)
-    content += header('h1', class_name)
+def gen_header(class_name: str, docstring: str, classes: list[str]) -> str:
+    content = ''
+    docs_status = ''
+
+    if class_name == classes[0]:
+        content, docs_status = metadata(class_name)
+        if len(classes) > 1:
+            content += multi_class_disclaimer(classes)
+
+    content += header('h1', class_name) if class_name == classes[0] else header('h2', class_name)
     content += status_disclaimer(docs_status)
     content += header('h2', 'Overview')
 
@@ -333,16 +347,18 @@ def main():
                 warnings.warn(f'Failed to parse {file_name}', UserWarning)
                 continue
 
-            for class_type in docstrings["content"]:
-                if is_private(class_type['name']):
-                    continue
+            classes = [c for c in docstrings["content"] if not is_private(c['name'])]
+            classes_names = [c['name'] for c in classes]
+            for i, class_item in enumerate(classes):
+                supported_apis += parse_class_apis(class_item['name'], file_content, file_name)
+                doc_content += gen_header(
+                    class_item['name'], 
+                    class_item['docstring_text'],
+                    classes=classes_names
+                )
 
-                supported_apis += parse_class_apis(class_type['name'], file_content)
-                doc_content += gen_header(class_type['name'], class_type['docstring_text'])
-
-                for method in class_type['content']:
-                    if is_private(method['name']):
-                        continue
+                methods = [m for m in class_item['content'] if not is_private(m['name'])]
+                for method in methods:
                     doc_content += gen_method(method, file_content)
 
         # Write to md files if the args were set
