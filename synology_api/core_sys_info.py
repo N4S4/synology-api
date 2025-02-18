@@ -1,6 +1,7 @@
 from __future__ import annotations
-from typing import Optional
+from typing import Optional, List
 from . import base_api
+import json
 
 
 class SysInfo(base_api.BaseApi):
@@ -568,15 +569,7 @@ class SysInfo(base_api.BaseApi):
         req_param = {'version': info['maxVersion'], 'method': 'get'}
 
         return self.request_data(api_name, api_path, req_param)
-
-    def hardware_power_schedule(self) -> dict[str, object] | str:
-        api_name = 'SYNO.Core.Hardware.PowerSchedule'
-        info = self.core_list[api_name]
-        api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'load'}
-
-        return self.request_data(api_name, api_path, req_param)
-
+    
     def terminal_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.Core.Terminal'
         info = self.core_list[api_name]

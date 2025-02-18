@@ -75,7 +75,7 @@ ds_info = ds.get_info()
 
 ## Available Functions
 
-At the moment there are around +300 APIs implemented, the majority is not documented, but some are.  
+At the moment there are around +300 APIs implemented with countless methods for each, the majority is not documented, but some are.  
 
 You can find a exhaustive list here:  
 [APIs - Supported APIs](https://n4s4.github.io/synology-api/docs/apis) 
