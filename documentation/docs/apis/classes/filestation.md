@@ -345,3 +345,23 @@ This API is not documented yet.
 ---
 
 
+### `generate_file_tree`
+Generate the file tree based on the folder path you give, you need to create the root node before call this function  
+  
+  
+#### Parameters
+<div class="padding-left--md">
+**_folder_path_** `str`  
+Folder path to generate file tree  
+  
+**_tree_** `Tree`  
+Instance of the Tree of lib "Treelib"  
+  
+
+</div>
+
+
+
+---
+
+

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 26
+sidebar_position: 31
 title: 🚧 UniversalSearch
 ---
 
