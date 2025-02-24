@@ -1,10 +1,10 @@
 
 ![synology-api](https://user-images.githubusercontent.com/33936751/100731387-99fffc00-33cb-11eb-833c-b6ab87177651.jpg)
-<img alt="Pepy Total Downloads" src="https://img.shields.io/pepy/dt/synology-api?color=blue">
-<img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fn4s4.github.io%2Fsynology-api&label=docs&color=green">
+<a href="https://pepy.tech/projects/synology-api" rel="noreferrer" target="_blank"><img alt="Pepy Total Downloads" src="https://img.shields.io/pepy/dt/synology-api?color=blue"></a>
+<a href="https://n4s4.github.io/synology-api" rel="noreferrer" target="_blank"><img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fn4s4.github.io%2Fsynology-api&label=docs&color=green"></a>
 
-<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/n4s4/synology-api">
-<img alt="GitHub License" src="https://img.shields.io/github/license/n4s4/synology-api">
+<a href="https://github.com/N4S4/synology-api/commits/master/" rel="noreferrer" target="_blank"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/n4s4/synology-api"></a>
+<a href="https://github.com/N4S4/synology-api/blob/master/LICENSE.txt" rel="noreferrer" target="_blank"><img alt="GitHub License" src="https://img.shields.io/github/license/n4s4/synology-api"></a>
 
 
 # Synology Wrapper
