@@ -33,6 +33,18 @@ const config: Config = {
     locales: ['en'],
   },
 
+  headTags: [
+    { 
+      tagName: 'link', 
+      attributes: { 
+        rel: 'sitemap', 
+        href: '/synology-api/sitemap.xml',
+        type: 'application/xml',
+        title: 'Sitemap'
+      }
+    }
+  ],
+
   presets: [
     [
       'classic',

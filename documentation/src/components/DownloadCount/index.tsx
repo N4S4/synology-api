@@ -18,7 +18,7 @@ const Counter: React.FC<CounterProps> = ({ title, count }) => {
   }
   return (
     <motion.div 
-      className="col center-content-col" 
+      className="col center-content-col margin-bottom--lg" 
       style={{ gap: '1rem' }}
       variants={slideDown}
       transition={{ delayChildren: 0.3 }}
@@ -60,14 +60,13 @@ const DownloadCount = () => {
       {!loading && data && (
         <div className="col ">
           <div style={{ display: 'flex' }}>
-            <h2 className="margin-right--sm">Download Trends</h2>
+            <h2 className="margin-right--md">Download Trends</h2>
             <a href="https://pepy.tech/projects/synology-api" target="_blank" rel="notarget">
               <FiExternalLink />
             </a>
           </div>
           <motion.div
             className="row center-content margin-bottom--lg"
-            style={{ gap: '6vw' }}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: .8 }}
