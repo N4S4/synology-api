@@ -389,7 +389,6 @@ class SharedFolder(base_api.BaseApi):
             
         return self.request_data(api_name, api_path, req_param, method="post")
     
-    
     def get_folder_permission_by_name(self, 
                 name: str, permission_substr: str, offset: int = 0, limit: int = 50, is_unite_permission: bool = False, with_inherit: bool = False,
                 user_group_type: str = "local_user"
