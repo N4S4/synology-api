@@ -172,15 +172,13 @@ class FileStation(base_api.BaseApi):
                 All possible direction are: `["asc","desc"]`
             pattern : Optional[list[str]], optional
                 Given glob pattern(s) to find files whose names and extensions match a case insensitive glob pattern. Defaults to `None`
-                Note:
-                1. If the pattern doesn't contain any glob syntax (? and *), * of glob syntax will be added at begin and end of the string automatically for partially matching the pattern.
+                Note: 1. If the pattern doesn't contain any glob syntax (? and *), * of glob syntax will be added at begin and end of the string automatically for partially matching the pattern.
             filetype : Optional[str], optional
                 "file": only enumerate regular files; "dir": only enumerate folders; "all" enumerate regular files and folders. Defaults to `None`
                 All fields know are: `["file","dir","all"]`
             goto_path : Optional[str], optional
                 Folder path starting with a shared folder. Return all files and sub-folders within folder_path path until goto_path path recursively. Defaults to `None`
-                Note:
-                goto_path is only valid with parameter "additional" contains real_path. 
+                Note: goto_path is only valid with parameter "additional" contains real_path. 
             additional : Optional[list[str]], optional
                 Additionnal field to retrieve from file. Defaults to `None`
                 All fields known are: `["real_path","size","owner","time","perm","type","mount_point_type"]`.
@@ -300,8 +298,7 @@ class FileStation(base_api.BaseApi):
                 If searching files within a folder and subfolders recursively or not. Defaults to `None`
             pattern : Optional[list[str]], optional
                 Given glob pattern(s) to find files whose names and extensions match a case insensitive glob pattern. Defaults to `None`
-                Note:
-                1. If the pattern doesn't contain any glob syntax (? and *), * of glob syntax will be added at begin and end of the string automatically for partially matching the pattern.. Defaults to `None`
+                Note: 1. If the pattern doesn't contain any glob syntax (? and *), * of glob syntax will be added at begin and end of the string automatically for partially matching the pattern.. Defaults to `None`
             extension : Optional[list[str]], optional
                 Search for files whose extensions match a file type pattern in a case-insensitive glob pattern. If you give this criterion, folders aren't matched. Defaults to `None`
             filetype : Optional[str], optional
@@ -399,8 +396,7 @@ class FileStation(base_api.BaseApi):
                 All possible direction are: `["asc","desc"]`
             pattern : Optional[list[str]], optional
                 Given glob pattern(s) to find files whose names and extensions match a case insensitive glob pattern. Defaults to `None`
-                Note:
-                1. If the pattern doesn't contain any glob syntax (? and *), * of glob syntax will be added at begin and end of the string automatically for partially matching the pattern.
+                Note: 1. If the pattern doesn't contain any glob syntax (? and *), * of glob syntax will be added at begin and end of the string automatically for partially matching the pattern.
             filetype : Optional[str], optional
                 "file": only enumerate regular files; "dir": only enumerate folders; "all" enumerate regular files and folders. Defaults to `None`
                 All fields know are: `["file","dir","all"]`
@@ -854,14 +850,14 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_thumbnail(self, path: str, size: Optional[str] = "small", rotate: Optional[int] = None) -> bytes:
-        """Get a thumbnail of a file.
+        """ Get a thumbnail of a file.
         
             Parameters
             ----------
             path : str
                 A file path starting with a shared folder.
             size : str
-                The size of the thumbnail. Defaults to `None`
+                The size of the thumbnail. Defaults to `small`
                 All fields known are: `["small","medium","large","original"]`
             rotate : Optional[int], optional
                 The angle of the thumbnail. Defaults to `None`
@@ -872,12 +868,8 @@ class FileStation(base_api.BaseApi):
             bytes
                 The thumbnail of the file. If the file is not found, it will raise an exception.
                 
-            Example return
-            ----------
-            ```json
-            b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR
-            ```
         """
+        
         api_name = 'SYNO.FileStation.Thumb'
         info = self.gen_list[api_name]
         api_path = info['path']
