@@ -87,7 +87,7 @@ class VPN(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def openvpn_export_configuration(self, as_zip_file=False) -> bytes:
+    def openvpn_export_configuration(self, as_zip_file=False) -> bytes | ZipFile:
         api_name = 'SYNO.VPNServer.Settings.Certificate'
         info = self.gen_list[api_name]
         api_path = info['path']
