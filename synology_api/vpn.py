@@ -87,9 +87,6 @@ class VPN(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    # This will download the VPNConfig.ovpn file in bytes
-    """This will download the VPNConfig.ovpn file in bytes
-	"""
     def openvpn_export_configuration(self, as_zip_file=False) -> bytes:
         api_name = 'SYNO.VPNServer.Settings.Certificate'
         info = self.gen_list[api_name]
