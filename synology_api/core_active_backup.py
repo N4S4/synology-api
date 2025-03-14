@@ -199,7 +199,9 @@ class ActiveBackupBusiness(base_api.BaseApi):
     def set_concurrent_devices(self, value: int) -> dict[str, object]:
         """Set the maximum number of concurrent devices that can be backed up at the same time.
 
-            Note: Concurrent backup devices can only be run up to the maximum number you set when the RAM usage limit for your NAS is not exceeded. \nThis setting will be effective from the next backup.
+            Note: You can run multiple concurrent backup devices, but only up to the maximum limit you set—provided that your NAS's RAM usage does not exceed its limit.
+            
+            Note: This setting will be effective starting from the next backup.
         
             Parameters
             ----------
@@ -282,7 +284,9 @@ class ActiveBackupBusiness(base_api.BaseApi):
         ) -> dict[str, object]:
         """Set the global bandwidth control and IP range bandwidth control.
 
-            Note: Applies only for PC, Physical Server and NAS devices. \nWhen multiple tasks run simultaneously, the system will evenly distribute the throttled traffic.
+            Note: Applies only to PC, Physical Server and NAS devices. 
+            
+            Note: When multiple tasks run simultaneously, the system will evenly distribute the throttled traffic.
 
             Parameters
             ----------
@@ -412,9 +416,10 @@ class ActiveBackupBusiness(base_api.BaseApi):
             Parameters
             ----------
             time_start : int, optional
-                Time window start time. Defaults to 24 hours ago.
+                Time window start time. Format must be epoch date in seconds. Defaults to 24 hours ago.
+                
             time_end : int, optional
-                Time window end time. Defaults to current time.
+                Time window end time. Format must be epoch date in seconds. Defaults to current time.
         
             Returns
             -------
@@ -565,7 +570,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 - `"file_server"`
                 - `"nas"`
 
-                Note that values are different when returned by the API.
+
+                Note that values are different when returned by the API.  
 
                 Return values mappings:
                 - `1` -> `vm`
@@ -812,9 +818,9 @@ class ActiveBackupBusiness(base_api.BaseApi):
             offset: int = 0, 
             limit: int = 200,
         ) -> dict[str, object]:
-        """Get logs from the package, tasks and devices. From [Activities -> Log] screen in ABB.
+        """Get logs from the package, tasks and devices. From `[Activities -> Log]` screen in ABB.
 
-            For specific task logs [Task List -> Details -> Log], specify `task_id` parameter.
+            For specific task logs `[Task List -> Details -> Log]`, specify `task_id` parameter.
 
             Parameters
             ----------
@@ -829,6 +835,7 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 - `"warning"`
                 - `"information"`
 
+                
                 Note that values are different when returned by the API. 
                 
                 Return values mappings:
@@ -937,6 +944,7 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 - `"fail"`
                 - `"cancel"`
 
+                
                 Note that values are different when returned by the API. 
                 
                 Return values mappings:
@@ -955,6 +963,7 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 - `"file_server"`
                 - `"nas"`
 
+                
                 Note that values are different when returned by the API. 
                 
                 Return values mappings:
@@ -978,6 +987,7 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 - `"relink"`
                 - `"create_task"`
 
+                
                 Note that values are different when returned by the API. 
                 
                 Return values mappings:
@@ -1343,6 +1353,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
     
     def backup_task_delete_versions(self, task_id: int, versions_ids: list[int]) -> dict[str, object]:
         """Delete the specified versions from a task.
+
+            Warning: This will remove the specified versions from the NAS. The corresponding versions data will not be preserved after this operation.  
         
             Parameters
             ----------
