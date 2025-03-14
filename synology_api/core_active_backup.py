@@ -124,6 +124,106 @@ class ActiveBackupBusiness(base_api.BaseApi):
         
         return self.request_data(api_name, api_path, req_param)
     
+    def list_activity_logs(
+            self, 
+            offset: int = 0, 
+            limit: int = 200,
+            log_level: int = -1,
+            keyword: str = "",
+            from_date: int = 0,
+            to_date: int = 0
+        ) -> dict[str, object]:
+        """Get package general logs.
+
+            Parameters
+            ----------
+            offset : int, optional
+                Offset results by this value. Defaults to `0`.
+            
+            limit : int, optional
+                Amount of results to be returned. Defaults to `200`.
+            
+            log_level : int, optional
+                Type of logs to return. Defaults to `-1` (all types).
+
+                Possible values:  
+                - `0` -> Error
+                - `1` -> Warning
+                - `2` -> Information
+
+            keyword : str, optional
+                Keyword used to filter the results. Defaults to `""`.
+
+            from_date : int, optional
+                Date from which the results will start. Format must be epoch date in seconds. Defaults to `0` (no time limit).
+            
+            to_date : int, optional
+                Date until which the results will start. Format must be epoch date in seconds. Defaults to `0` (no time limit).
+
+            Returns
+            -------
+            dict[str, object]
+                Disctionary containing a list of logs.
+
+            Example return
+            --------------
+            ```json
+            {
+                "count": 1,
+                "logs": [
+                    {
+                        "backup_type": 4,
+                        "device_id": 6,
+                        "device_name": "xxxx",
+                        "error_code": 0,
+                        "log_id": 5525,
+                        "log_level": 0,
+                        "log_time": 1741897498,
+                        "log_type": 1104,
+                        "other_params": {
+                            "backup_type": 4,
+                            "device_id": 6,
+                            "device_name": "xxxx",
+                            "platform_type": 0,
+                            "task_id": 8,
+                            "task_name": "xxxxxxxx",
+                            "user_id": 0,
+                            "user_name": ""
+                        },
+                        "result_id": 592,
+                        "task_id": 8,
+                        "task_name": "xxxxxxxx",
+                        "user_id": 0,
+                        "user_name": ""
+                    }
+                ]
+            }
+            ```
+        """
+        filter = {}
+        if keyword != "":
+            filter['key_word'] = keyword
+        if log_level > -1:
+            filter['log_level'] = log_level
+        if from_date > 0: 
+            filter['from_timestamp'] = from_date
+        if to_date > 0: 
+            filter['to_timestamp'] = to_date
+
+        api_name = 'SYNO.ActiveBackup.Log'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+
+        req_param = {
+            'version': '1',
+            'method': 'list_log',
+            'offset': offset,
+            'limit': limit,
+            'filter': json.dumps(filter)
+        }
+        
+        return self.request_data(api_name, api_path, req_param)
+    
     def list_logs(self, filter: dict[str, any] = {}) -> dict[str, object] | str:
         '''
         This function returns a dictionary of the logs of all tasks.
