@@ -5,6 +5,27 @@ import time
 import json
 
 class ActiveBackupBusiness(base_api.BaseApi):
+    """Active Backup for Business API Implementation.
+
+        This class provides methods to interact with the Active Backup for Business package.
+
+        Supported methods:
+            - Getters: 
+                - Get tasks information
+                - Get tasks versions information
+                - Get devices information
+                - Get devices transfer size
+                - Get hypervisors information
+                - Get package / devices / tasks logs
+                - Get task history
+                - Get task result details
+                - Get storage information 
+            - Actions:
+                - Run backup
+                - Cancel backup
+                - Remove task
+                - Remove version
+    """
 
     def __create_filter(
             self,
@@ -75,33 +96,161 @@ class ActiveBackupBusiness(base_api.BaseApi):
 
         return filter
 
-    def list_vm_hypervisor(self) -> dict[str, object] | str:
-        '''
-        This function returns a list of list of all configured hypervisors present in ABB.
-        '''
+    def list_vm_hypervisor(self) -> dict[str, object]:
+        """Get a list of all configured hypervisors present in ABB.
+        
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing a list of hypervisors.
+        """
+        # TODO: Add return example to docstring
+
         api_name = 'SYNO.ActiveBackup.Inventory'
         info = self.gen_list[api_name]
         api_path = info['path']
 
-        req_param = {'version': '1',
-                     'method': 'list'}
+        req_param = {
+            'version': '1',
+            'method': 'list'
+        }
 
         return self.request_data(api_name, api_path, req_param)
 
-    def list_device_transfer_size(self, 
-                                  time_start: int = int(time.time() - 86400), 
-                                  time_end: int = int(time.time())) -> dict[str, object] | str:
-        '''
-        This function returns a list of all devices and their respective transfer size for the given time frame. Default value is 24 hours.
-        '''
+    def list_device_transfer_size(
+            self, 
+            time_start: int = int(time.time() - 86400), 
+            time_end: int = int(time.time())
+        ) -> dict[str, object]:
+        """Get a list of all devices and their respective transfer size for the given time frame.
+        
+            Parameters
+            ----------
+            time_start : int, optional
+                Time window start time. Defaults to 24 hours ago.
+            time_end : int, optional
+                Time window end time. Defaults to current time.
+        
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing a list of devices and their transfer size.
+        
+            Example return
+            ----------
+            ```json
+            {
+                "data" : {
+                    "device_list" : [
+                        {
+                            "device" : {
+                                "agent_token" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                                "agentless_auth_policy" : 0,
+                                "auto_discovery" : false,
+                                "backup_type" : 2,
+                                "create_time" : 1709413484,
+                                "device_id" : 5,
+                                "device_uuid" : "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx",
+                                "dsm_model" : "",
+                                "dsm_unique" : "",
+                                "host_ip" : "192.168.0.63",
+                                "host_name" : "xxxxx",
+                                "host_port" : 0,
+                                "hypervisor_id" : "",
+                                "inventory_id" : 0,
+                                "login_password" : "",
+                                "login_time" : 1709413493,
+                                "login_user" : "xxxx",
+                                "login_user_id" : 1026,
+                                "os_name" : "Windows 11(64-bit)",
+                                "vm_moid_path" : ""
+                            },
+                            "transfer_list" : [
+                                {
+                                    "config_device_id" : 5,
+                                    "device_name" : "xxxxx",
+                                    "device_result_id" : 342,
+                                    "processed_bytes" : 0,
+                                    "result_id" : 587,
+                                    "status" : 5,
+                                    "time_end" : 1741895385,
+                                    "time_start" : 1741894511,
+                                    "transfered_bytes" : 1523580928
+                                },
+                                {
+                                    "config_device_id" : 5,
+                                    "device_name" : "xxxxx",
+                                    "device_result_id" : 343,
+                                    "processed_bytes" : 0,
+                                    "result_id" : 589,
+                                    "status" : 5,
+                                    "time_end" : 1741896408,
+                                    "time_start" : 1741896176,
+                                    "transfered_bytes" : 6909067264
+                                },
+                                {
+                                    "config_device_id" : 5,
+                                    "device_name" : "xxxxx",
+                                    "device_result_id" : 344,
+                                    "processed_bytes" : 0,
+                                    "result_id" : 590,
+                                    "status" : 5,
+                                    "time_end" : 1741896716,
+                                    "time_start" : 1741896624,
+                                    "transfered_bytes" : 444596224
+                                },
+                                {
+                                    "config_device_id" : 5,
+                                    "device_name" : "xxxxx",
+                                    "device_result_id" : 346,
+                                    "processed_bytes" : 0,
+                                    "result_id" : 591,
+                                    "status" : 2,
+                                    "time_end" : 1741901184,
+                                    "time_start" : 1741896737,
+                                    "transfered_bytes" : 482689236992
+                                },
+                                {
+                                    "config_device_id" : 5,
+                                    "device_name" : "xxxxx",
+                                    "device_result_id" : 347,
+                                    "processed_bytes" : 0,
+                                    "result_id" : 593,
+                                    "status" : 2,
+                                    "time_end" : 1741946439,
+                                    "time_start" : 1741946267,
+                                    "transfered_bytes" : 2122801152
+                                },
+                                {
+                                    "config_device_id" : 5,
+                                    "device_name" : "xxxxx",
+                                    "device_result_id" : 348,
+                                    "processed_bytes" : 0,
+                                    "result_id" : 595,
+                                    "status" : 2,
+                                    "time_end" : 1741972250,
+                                    "time_start" : 1741971826,
+                                    "transfered_bytes" : 8208736256
+                                }
+                            ]
+                        },
+                    ],
+                    "total" : 1
+                },
+                "success" : true
+            }
+            ```
+        """
         api_name = 'SYNO.ActiveBackup.Overview'
         info = self.gen_list[api_name]
         api_path = info['path']
 
-        req_param = {'version': '1',
-                     'method': 'list_device_transfer_size',
-                     'time_start': time_start,
-                     'time_end': time_end}
+        req_param = {
+            'version': '1',
+            'method': 'list_device_transfer_size',
+            'time_start': time_start,
+            'time_end': time_end
+        }
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -125,11 +274,11 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 Return only tasks matching the device type provided. Defaults to `""` (all device types).
 
                 Possible values:
-                - `vm`
-                - `pc`
-                - `physical_server`
-                - `file_server`
-                - `nas`
+                - `"vm"`
+                - `"pc"`
+                - `"physical_server"`
+                - `"file_server"`
+                - `"nas"`
 
                 Note that values are different when returned by the API.
 
@@ -144,10 +293,10 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 Return only tasks matching the status provided. Defaults to `""` (all status).
 
                 Possible values:
-                - `backingup`
-                - `waiting`
-                - `deleting`
-                - `unscheduled`
+                - `"backingup"`
+                - `"waiting"`
+                - `"deleting"`
+                - `"unscheduled"`
 
             from_date : int, optional
                 Only include tasks for which last backup is greater or equal to this date. Format must be epoch date in seconds. Defaults to `0` (no time limit).
@@ -378,7 +527,9 @@ class ActiveBackupBusiness(base_api.BaseApi):
             offset: int = 0, 
             limit: int = 200,
         ) -> dict[str, object]:
-        """Get package general logs.
+        """Get logs from the package, tasks and devices. From [Activities -> Log] screen in ABB.
+
+            For specific task logs [Task List -> Details -> Log], specify `task_id` parameter.
 
             Parameters
             ----------
@@ -389,9 +540,9 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 Type of logs to return. Defaults to `""` (all types).
 
                 Possible values:  
-                - `error`
-                - `warning`
-                - `information`
+                - `"error"`
+                - `"warning"`
+                - `"information"`
 
                 Note that values are different when returned by the API. 
                 
@@ -496,10 +647,10 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 Return only tasks matching the status provided. Defaults to `""` (all status).
 
                 Possible values:  
-                - `success`
-                - `partial_success`
-                - `fail`
-                - `cancel`
+                - `"success"`
+                - `"partial_success"`
+                - `"fail"`
+                - `"cancel"`
 
                 Note that values are different when returned by the API. 
                 
@@ -513,11 +664,11 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 Return only tasks matching the device type provided. Defaults to `""` (all device types).
 
                 Possible values:  
-                - `vm`
-                - `pc`
-                - `physical_server`
-                - `file_server`
-                - `nas`
+                - `"vm"`
+                - `"pc"`
+                - `"physical_server"`
+                - `"file_server"`
+                - `"nas"`
 
                 Note that values are different when returned by the API. 
                 
@@ -532,15 +683,15 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 Return only tasks matching the task type provided. Defaults to `""` (all task types).
 
                 Possible values:  
-                - `backup`
-                - `dedup_data`
-                - `restore`
-                - `migrate`
-                - `delete_targe`
-                - `delete_version`
-                - `delete_host`
-                - `relink`
-                - `create_task`
+                - `"backup"`
+                - `"dedup_data"`
+                - `"restore"`
+                - `"migrate"`
+                - `"delete_targe"`
+                - `"delete_version"`
+                - `"delete_host"`
+                - `"relink"`
+                - `"create_task"`
 
                 Note that values are different when returned by the API. 
                 
@@ -642,9 +793,76 @@ class ActiveBackupBusiness(base_api.BaseApi):
             order_by: str = "log_level", 
             direction: str = "ASC"
         ) -> dict[str, object]:
-        '''
-        This function returns a dictionary of the logs of a given task event. `result_id` can be retrieved from `list_task_logs()` function.
-        '''
+        """Get details of a task result log. `result_id` can be retrieved from `list_logs()` function.
+        
+            Parameters
+            ----------
+            result_id : int
+                ID of the result to get details from.
+
+            limit : int, optional
+                Amount of results to be returned. Defaults to `500`.
+
+            order_by : str, optional
+                What to order the results by. Defaults to `"log_level"`.
+
+                Possible values:
+                - `"log_level"`
+                - `"log_time"`
+
+            direction : str, optional
+                Direction of the order. Defaults to `"ASC"`.
+
+                Possible values:
+                - `"ASC"`
+                - `"DESC"`
+        
+            Returns
+            -------
+            dict[str, object]
+                Dictionary containing a list of result details.
+        
+            Example return
+            ----------
+            ```json
+            {
+                "data": {
+                    "count": 2,
+                    "result_detail_list": [
+                        {
+                            "error_code": 0,
+                            "log_level": 0,
+                            "log_time": 1741897456,
+                            "log_type": 6002,
+                            "other_params": {
+                                "fs_error": -65,
+                                "os_name": "smb",
+                                "path": "/D",
+                                "task_id": 8
+                            },
+                            "result_detail_id": 9526,
+                            "result_id": 592
+                        },
+                        {
+                            "error_code": 0,
+                            "log_level": 0,
+                            "log_time": 1741897498,
+                            "log_type": 1104,
+                            "other_params": {
+                                "os_name": "smb",
+                                "path": "",
+                                "task_id": 8,
+                                "task_name": "SMB LAPTOP"
+                            },
+                            "result_detail_id": 9527,
+                            "result_id": 592
+                        }
+                    ]
+                },
+                "success": true
+            }
+            ```
+        """
         api_name = 'SYNO.ActiveBackup.Log'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -660,10 +878,65 @@ class ActiveBackupBusiness(base_api.BaseApi):
         
         return self.request_data(api_name, api_path, req_param)
     
-    def list_storage(self) -> dict[str, object] | str:
-        '''
-        This function returns a dictionary of the current storages being used by ABB.
-        '''
+    def list_storage(self) -> dict[str, object]:
+        """Get a list of all storage devices present in ABB.
+        
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing a list of storage devices.
+        
+            Example return
+            ----------
+            ```json
+            {
+                "data" : {
+                    "storages" : [
+                        {
+                            "automount_iv" : "",
+                            "automount_location" : "",
+                            "backup_tasks" : [],
+                            "compacting" : false,
+                            "compacting_percentage" : 0,
+                            "compressed_size" : 0,
+                            "dedup_size" : 1617010274304,
+                            "delete_tasks" : [],
+                            "delete_versions" : [],
+                            "device_count" : 4,
+                            "device_info" : {
+                            "agentless_count" : 1,
+                            "agentless_size" : 0,
+                            "dsm_count" : 0,
+                            "dsm_size" : 0,
+                            "pc_count" : 2,
+                            "pc_size" : 6128863440896,
+                            "server_count" : 1,
+                            "server_size" : 0,
+                            "vm_count" : 0,
+                            "vm_size" : 0
+                            },
+                            "fs_name" : "btrfs",
+                            "fs_type" : 3,
+                            "mounted" : true,
+                            "relink_state" : {
+                            "alive" : false,
+                            "owner" : true,
+                            "state" : 0
+                            },
+                            "repo_dir" : "@ActiveBackup",
+                            "share_name" : "ActiveBackupforBusiness",
+                            "storage_compress_algorithm" : 0,
+                            "storage_encrypt_algorithm" : 0,
+                            "storage_id" : 1,
+                            "vol_name" : "Volume 3",
+                            "volume_path" : "/volume3"
+                        }
+                    ]
+                },
+                "success" : true
+                }
+            ```
+        """
         api_name = 'SYNO.ActiveBackup.Share'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -675,60 +948,147 @@ class ActiveBackupBusiness(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
     
-    def backup_task_run(self, task_ids: list[int]) -> dict[str, object] | str:
-        '''
-        This function will trigger a backup event for the given tasks. Even if only one task is specified, a list has to be passed as argument.
-        '''
+    def backup_task_run(self, task_ids: list[int]) -> dict[str, object]:
+        """Trigger a backup event for the given tasks. 
+        
+            Parameters
+            ----------
+            task_ids : list[int]
+                List of task IDs to trigger the backup event. 
+                
+                Even if only one task is specified, a list has to be passed as argument.
+        
+            Returns
+            -------
+            dict[str, object]
+                Dictionary containing the result of the operation.
+        
+            Example return
+            ----------
+            ```json
+            {
+                "success": true
+            }
+            ```
+        """
         api_name = 'SYNO.ActiveBackup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
 
-        req_param = {'version': '1',
-                     'method': 'backup',
-                     'task_ids': str(task_ids),
-                     'trigger_type': '1'}
+        req_param = {
+            'version': '1',
+            'method': 'backup',
+            'task_ids': str(task_ids),
+            'trigger_type': '1'
+        }
 
         return self.request_data(api_name, api_path, req_param)
 
-    def backup_task_cancel(self, task_ids: list[int]) -> dict[str, object] | str:
-        '''
-        This function will trigger a cancel backup event for the given tasks. Even if only one task is specified, a list has to be passed as argument.
-        '''
+    def backup_task_cancel(self, task_ids: list[int]) -> dict[str, object]:
+        """Cancel specified ongoing task.
+        
+            Parameters
+            ----------
+            task_ids : list[int]
+                List of task IDs to trigger the cancellation event. 
+                
+                Even if only one task is specified, a list has to be passed as argument.
+        
+            Returns
+            -------
+            dict[str, object]
+                Dictionary containing the result of the operation.
+        
+            Example return
+            ----------
+            ```json
+            {
+                "success": true
+            }
+            ```
+        """
         api_name = 'SYNO.ActiveBackup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
 
-        req_param = {'version': '1',
-                     'method': 'cancel',
-                     'task_ids': str(task_ids)}
+        req_param = {
+            'version': '1',
+            'method': 'cancel',
+            'task_ids': str(task_ids)
+        }
         
         return self.request_data(api_name, api_path, req_param)
     
-    def backup_task_remove(self, task_ids: list[int]) -> dict[str, object] | str:
-        '''
-        This function will trigger a task deletion event for the given tasks. Even if only one task is specified, a list has to be passed as argument.
-        '''
+    def backup_task_remove(self, task_ids: list[int]) -> dict[str, object]:
+        """Remove the given tasks from ABB.
+
+            Warning: This will remove the task and all its versions from the NAS. The backed up data will not be preserved after this operation.  
+        
+            Parameters
+            ----------
+            task_ids : list[int]
+                List of task IDs to remove. 
+                
+                Even if only one task is specified, a list has to be passed as argument.
+        
+            Returns
+            -------
+            dict[str, object]
+                Dictionary containing the result of the operation.
+        
+            Example return
+            ----------
+            ```json
+            {
+                "success": true
+            }
+            ```
+        """
         api_name = 'SYNO.ActiveBackup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
 
-        req_param = {'version': '1',
-                     'method': 'remove',
-                     'task_ids': str(task_ids)}
+        req_param = {
+            'version': '1',
+            'method': 'remove',
+            'task_ids': str(task_ids)
+        }
         
         return self.request_data(api_name, api_path, req_param)
     
-    def backup_task_delete_versions(self, task_id: int, versions_ids: list[int]) -> dict[str, object] | str:
-        '''
-        This function will trigger a version deletion event for the given version. Even if only one version is specified, a list has to be passed as argument.
-        '''
+    def backup_task_delete_versions(self, task_id: int, versions_ids: list[int]) -> dict[str, object]:
+        """Delete the specified versions from a task.
+        
+            Parameters
+            ----------
+            task_id : int
+                Task ID from which to delete the versions.
+
+            versions_ids : list[int]
+                List of version IDs to delete.
+        
+            Returns
+            -------
+            dict[str, object]
+                Dictionary containing the result of the operation.
+        
+            Example return
+            ----------
+            ```json
+            {
+                "success": true
+            }
+            ```
+        """
         api_name = 'SYNO.ActiveBackup.Version'
         info = self.gen_list[api_name]
         api_path = info['path']
 
-        req_param = {'version': '1',
-                     'method': 'delete',
-                     'task_id': task_id,
-                     'version_ids': str(versions_ids)}
+        req_param = {
+            'version': '1',
+            'method': 'delete',
+            'task_id': task_id,
+            'version_ids': str(versions_ids)
+        }
         
         return self.request_data(api_name, api_path, req_param)
