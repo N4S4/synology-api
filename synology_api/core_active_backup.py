@@ -11,6 +11,7 @@ class ActiveBackupBusiness(base_api.BaseApi):
 
         Supported methods:
             - Getters: 
+                - Get package settings
                 - Get tasks information
                 - Get tasks versions information
                 - Get devices information
@@ -20,6 +21,11 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 - Get task history
                 - Get task result details
                 - Get storage information 
+            - Setters:
+                - Set maximum concurrent devices
+                - Set retention policy execution time
+                - Set bandwidth control
+                - Set use package certificate
             - Actions:
                 - Run backup
                 - Cancel backup
@@ -95,6 +101,285 @@ class ActiveBackupBusiness(base_api.BaseApi):
             filter['job_action'] = action_type_map[action_type]
 
         return filter
+
+    def get_settings(self) -> dict[str, object]:
+        """Get the package settings including certificate information.
+        
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the current settings.
+            
+            Example return
+            --------------
+            ```json
+            {
+                "data": {
+                    "cert_info": {
+                        "cert_from_dsm": {
+                            "cert_common_name": "xxxxx.myds.me",
+                            "cert_issuer": "R10",
+                            "cert_san": [
+                                "*.xxxxx.myds.me",
+                                "xxxxx.myds.me"
+                            ],
+                            "cert_tillTime": "May 29 18:54:13 2025 GMT"
+                        },
+                        "cert_from_package": {
+                            "cert_common_name": "Active Backup for Business",
+                            "cert_issuer": "Synology Active Backup for Business",
+                            "cert_san": [
+                                "Active Backup for Business"
+                            ],
+                            "cert_tillTime": "Apr 17 19:14:52 2034 GMT"
+                        },
+                        "cert_use_package": true
+                    },
+                    "settings": [
+                        {
+                            "id": 1,
+                            "name": "max_concurrent_devices",
+                            "value": "5"
+                        },
+                        {
+                            "id": 2,
+                            "name": "memory_usage_limit_percentage",
+                            "value": "75"
+                        },
+                        {
+                            "id": 3,
+                            "name": "package_cert_id",
+                            "value": "dyAaL7"
+                        },
+                        {
+                            "id": 4,
+                            "name": "enable_global_bandwidth_control",
+                            "value": "false"
+                        },
+                        {
+                            "id": 5,
+                            "name": "global_backup_bandwidth_number",
+                            "value": "0"
+                        },
+                        {
+                            "id": 6,
+                            "name": "enable_ip_range_bandwidth_control",
+                            "value": "false"
+                        },
+                        {
+                            "id": 7,
+                            "name": "full_backup_task_ids",
+                            "value": "2"
+                        },
+                        {
+                            "name": "retention_run_hour",
+                            "value": "14"
+                        },
+                        {
+                            "name": "retention_run_min",
+                            "value": "50"
+                        }
+                    ]
+                },
+                "success": true
+            }
+            ```
+        """
+        api_name = 'SYNO.ActiveBackup.Setting'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+
+        req_param = {
+            'version': '1',
+            'method': 'list'
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def set_concurrent_devices(self, value: int) -> dict[str, object]:
+        """Set the maximum number of concurrent devices that can be backed up at the same time.
+
+            Note: Concurrent backup devices can only be run up to the maximum number you set when the RAM usage limit for your NAS is not exceeded. \nThis setting will be effective from the next backup.
+        
+            Parameters
+            ----------
+            value : int
+                Maximum number of concurrent devices.
+        
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the result of the operation.
+        
+            Example return
+            ----------
+            ```json
+            {
+                "success": true
+            }
+            ```
+        """
+        api_name = 'SYNO.ActiveBackup.Setting'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        settings = [{
+            'name': 'max_concurrent_devices',
+            'value': str(value)
+        }]
+
+        req_param = {
+            'version': '1',
+            'method': 'set',
+            'settings': json.dumps(settings)
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def set_retention_policy_exec_time(self, hour: int, minute: int) -> dict[str, object]:
+        """Set the time of day when the retention policy will be executed.
+        
+            Parameters
+            ----------
+            hour : int
+                Hour in 24-hour format (0 - 23) when the retention policy will be executed.
+
+            minute : int
+                Minute (0 - 59) when the retention policy will be executed
+        
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the result of the operation.
+        
+            Example return
+            ----------
+            ```json
+            {
+                "success": true
+            }
+            ```
+        """
+        api_name = 'SYNO.ActiveBackup.Setting'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        settings = [
+            { 'name': 'retention_run_hour', 'value': str(hour) },
+            { 'name': 'retention_run_min', 'value': str(minute) }
+        ]
+
+        req_param = {
+            'version': '1',
+            'method': 'set',
+            'settings': json.dumps(settings)
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def set_traffic_throttle(
+            self,
+            traffic_control: dict[str, object] = { "enable": False, "bandwidth": 0 },
+            ip_range: list[str] = ["", ""]
+        ) -> dict[str, object]:
+        """Set the global bandwidth control and IP range bandwidth control.
+
+            Note: Applies only for PC, Physical Server and NAS devices. \nWhen multiple tasks run simultaneously, the system will evenly distribute the throttled traffic.
+
+            Parameters
+            ----------
+            traffic_control : dict[str, object], optional
+                Traffic control settings. 
+                
+                Defaults to `{ 'enable': False, 'bandwidth': 0 }` (disable traffic throttling).
+
+                Bandwidth should be specified in MB/s.
+
+            ip_range : list[str], optional
+                If specified, traffic control will only be applied to this IP range. 
+                
+                Defaults to `["", ""]` (disable IP range bandwidth control).
+                
+                First index should contain the IP range start, second index the IP range end. Only supports IPv4 format.
+
+                Example: 
+                ```python
+                ["192.168.0.1", "192.168.0.10"]
+                ```
+        
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the result of the operation.
+        
+            Example return
+            ----------
+            ```json
+            {
+                "success": true
+            }
+            ```
+        """
+        api_name = 'SYNO.ActiveBackup.Setting'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        settings = []
+
+        def item(key: str, value: str) -> dict[str, str]:
+            return { 'name': key, 'value': value }
+
+        if traffic_control['enable'] and traffic_control['bandwidth'] > -1:
+            settings.append(item('enable_global_bandwidth_control', 'true'))
+            settings.append(item('global_backup_bandwidth_number', str(traffic_control['bandwidth'])))
+
+            if ip_range[0] and ip_range[1]:
+                settings.append(item('enable_ip_range_bandwidth_control', 'true'))
+                settings.append(item('bandwidth_control_ip_start', ip_range[0]))
+                settings.append(item('bandwidth_control_ip_end', ip_range[1]))
+            else: 
+                settings.append(item('enable_ip_range_bandwidth_control', 'false'))
+        else:
+            settings.append(item('enable_global_bandwidth_control', 'false'))
+
+        req_param = {
+            'version': '1',
+            'method': 'set',
+            'settings': json.dumps(settings)
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+    
+    def set_use_pkg_cert(self, use_package_cert: bool) -> dict[str, object]:	
+        """Set whether to use the self signed certificate provided by the package.
+        
+            Parameters
+            ----------
+            use_package_cert : bool
+                Use the certificate provided by the package.
+        
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the result of the operation.
+        
+            Example return
+            ----------
+            ```json
+            {
+                "success": true
+            }
+            ```
+        """	
+        api_name = 'SYNO.ActiveBackup.Setting'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+
+        req_param = {
+            'version': '1',
+            'method': 'set',
+            'settings': '[]',
+            'cert_use_package': use_package_cert
+        }
+
+        return self.request_data(api_name, api_path, req_param)
 
     def list_vm_hypervisor(self) -> dict[str, object]:
         """Get a list of all configured hypervisors present in ABB.
