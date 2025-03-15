@@ -22,12 +22,13 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.CloudSync`  
   
 ###  [ActiveBackupBusiness](./apis/classes/core_active_backup) 
+- `SYNO.ActiveBackup.Setting`  
 - `SYNO.ActiveBackup.Inventory`  
 - `SYNO.ActiveBackup.Overview`  
 - `SYNO.ActiveBackup.Task`  
-- `SYNO.ActiveBackup.Version`  
 - `SYNO.ActiveBackup.Log`  
 - `SYNO.ActiveBackup.Share`  
+- `SYNO.ActiveBackup.Version`  
   
 ###  [Backup](./apis/classes/core_backup) 
 - `SYNO.Backup.Repository`  
@@ -139,7 +140,6 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.Core.ExternalDevice.UPS`  
 - `SYNO.Core.System.Utilization`  
 - `SYNO.DSM.Info`  
-- `SYNO.Core.Hardware.PowerSchedule`  
 - `SYNO.Core.Terminal`  
 - `SYNO.Core.SNMP`  
 - `SYNO.Core.System.Process`  
@@ -244,6 +244,7 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 ###  [EventScheduler](./apis/classes/event_scheduler) 
 - `SYNO.Core.EventScheduler`  
 - `SYNO.Core.EventScheduler.Root`  
+- `SYNO.Core.Hardware.PowerSchedule`  
   
 ###  [FileStation](./apis/classes/filestation) 
 - `SYNO.FileStation.Info`  
@@ -391,4 +392,5 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.VPNServer.Management.Interface`  
 - `SYNO.Core.Security.AutoBlock`  
 - `SYNO.VPNServer.Management.Account`  
+- `SYNO.VPNServer.Settings.Certificate`  
   
