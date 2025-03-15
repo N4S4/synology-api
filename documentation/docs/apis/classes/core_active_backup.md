@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-title: 🚧 ActiveBackupBusiness
+title: ✅ ActiveBackupBusiness
 ---
 
 <!-- -------------------------------------------- -->
@@ -8,11 +8,6 @@ title: 🚧 ActiveBackupBusiness
 <!-- -------------------------------------------- -->
   
 # ActiveBackupBusiness
-:::warning
- 
-This API is partially documented or under construction.
- 
-:::
 ## Overview
 Active Backup for Business API Implementation.
 
