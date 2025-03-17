@@ -3,7 +3,7 @@
 # It should be manually updated by the maintainers.
 
 - ActiveBackupBusiness:
-    status: partial
+    status: finished
 - ActiveBackupMicrosoft:
     status: finished
 - AdminConsole:
