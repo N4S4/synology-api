@@ -88,7 +88,7 @@ class BaseApi(object):
     def logout(self) -> None:
         """Close current session."""
         if self.session:
-            self.session.logout(self.application)
+            self.session.logout()
             if BaseApi.shared_session == self.session:
                 BaseApi.shared_session = None
         return
