@@ -7,6 +7,9 @@ import json
 class Snapshot(base_api.BaseApi):
     """Class for interacting with Snapshot Replication APIs.
 
+        This class implements APIs to manage snapshots.
+        There is no documentation for these APIs, so the implementation is based on network inspection.
+
         Supported methods:
             - Getters: 
                 - Get all share/LUN snapshots
@@ -20,9 +23,6 @@ class Snapshot(base_api.BaseApi):
                 - Create share/LUN snapshot (WORM support only for share snaps ATM)
                 - Delete share/LUN snapshot
                 - Sync replication
-
-        This class implements APIs to manage snapshots.
-        There is no documentation for these APIs, so the implementation is based on network inspection.
 
         Examples
         --------
@@ -73,26 +73,28 @@ class Snapshot(base_api.BaseApi):
             Parameters
             ----------
             share_name : str
-                Name of the share to list snapshots for
+                Name of the share to list snapshots for.
 
             attribute_filter : list[str], optional
                 List of attributes filter to apply. Defaults to `[]` (no filter).
 
+
                 Each attribute filter is a string in the format of `"attr==value"` or `"attr=value"` and optionally prefixed with `!` to negate the filter.
 
+
                 The following are examples of valid attribute filters:
-                    - `["!hide==true", "desc==abc"]` -> hide is not true and desc is exactly abc
-                    - `["desc=abc"]` -> desc has abc in it
+                    - `["!hide==true", "desc==abc"]` -> hide is not true and desc is exactly abc.
+                    - `["desc=abc"]` -> desc has abc in it.
 
             additional_attribute : list[str], optional
-                List of snapshot attributes whose values are included in the response.
-                Defaults to `[]` (only time is returned).
+                List of snapshot attributes whose values are included in the response. Defaults to `[]` (only time is returned).
 
+                
                 Note that not all attributes are available via API. The following are confirmed to work:
-                    - desc
-                    - lock
-                    - worm_lock
-                    - schedule_snapshot
+                    - `"desc"`
+                    - `"lock"`
+                    - `"worm_lock"`
+                    - `"schedule_snapshot"`
 
             offset : int, optional
                 Offset to start listing from. Defaults to `0`.
@@ -103,7 +105,7 @@ class Snapshot(base_api.BaseApi):
             Returns
             -------
             dict[str, object]
-                API response if successful, error message if not
+                API response if successful, error message if not.
 
             Example return
             --------------
@@ -157,13 +159,14 @@ class Snapshot(base_api.BaseApi):
             Parameters
             ----------
             src_lun_uuid : str
-                UUID of the source LUN to list snapshots for
+                UUID of the source LUN to list snapshots for.
 
             additional : list[str], optional
-                Additional fields to retrieve. 
+                Additional fields to retrieve. Specify `[]` to get only basic information. 
                 
                 Defaults to `["locked_app_keys", "is_worm_locked"]`
 
+                
                 Possible values:
                 - `"locked_app_keys"` -> If snapshot is preserved by the system, the locking package key will be returned.
                 - `"is_worm_locked"` -> Whether the snapshot is locked by WORM. 
@@ -280,8 +283,10 @@ class Snapshot(base_api.BaseApi):
             types : list[str], optional
                Type of LUNS to retrieve.
 
-                Defaults to `[ "BLOCK", "FILE", "THIN", "ADV", "SINK", "CINDER", "CINDER_BLUN", "CINDER_BLUN_THICK", "BLUN", "BLUN_THICK", "BLUN_SINK", "BLUN_THICK_SINK" ]`
+               
+                Defaults to `[ "BLOCK", "FILE", "THIN", "ADV", "SINK", "CINDER", "CINDER_BLUN", "CINDER_BLUN_THICK", "BLUN", "BLUN_THICK", "BLUN_SINK", "BLUN_THICK_SINK" ]`.
 
+                
                 Possible values:
                 - `"BLOCK"`
                 - `"FILE"`
@@ -297,10 +302,12 @@ class Snapshot(base_api.BaseApi):
                 - `"BLUN_THICK_SINK"`
 
             additional_info : list[str], optional
-                Additional LUN information to include in the response.
+                Additional LUN information to include in the response. Specify `[]` to get only basic information.
 
-                Defaults to `[ "is_action_locked", "is_mapped", "extent_size", "allocated_size", "status", "allow_bkpobj", "flashcache_status", "family_config", "snapshot_info" ]`
+                
+                Defaults to `[ "is_action_locked", "is_mapped", "extent_size", "allocated_size", "status", "allow_bkpobj", "flashcache_status", "family_config", "snapshot_info" ]`.
 
+                
                 Possible values:
                 - `"is_action_locked"`
                 - `"is_mapped"`
@@ -486,19 +493,21 @@ class Snapshot(base_api.BaseApi):
             additional_info : list[str], optional
                 List of additional information to include in the response. Specify `[]` to get only basic information.
                 
+
                 Defaults to `["sync_policy", "sync_report", "main_site_info", "dr_site_info", "can_do", "op_info", "last_op_info", "topology", "testfailover_info", "retention_lock_report"]`.
 
+                
                 Possible values:
                     - `"sync_policy"` -> Information about the sync policy as schedule, retention, lock, etc.
-                    - `"sync_report"` -> Information about the previous runs and their results / error count
-                    - `"main_site_info"` -> Information about the main site
-                    - `"dr_site_info"` -> Information about the destination site
-                    - `"can_do"` -> Information about the actions that can be performed on the replication plan
-                    - `"op_info"` -> Information about the current operation (restoring / syncing / etc.)
-                    - `"last_op_info"` -> Information about the last operation
-                    - `"topology"` -> Information about the replication topology (main / dr site & plan information)
-                    - `"testfailover_info"` -> Information about the previous test failover operation
-                    - `"retention_lock_report"` -> Information about the first / last snapshot
+                    - `"sync_report"` -> Information about the previous runs and their results / error count.
+                    - `"main_site_info"` -> Information about the main site.
+                    - `"dr_site_info"` -> Information about the destination site.
+                    - `"can_do"` -> Information about the actions that can be performed on the replication plan.
+                    - `"op_info"` -> Information about the current operation (restoring / syncing / etc.).
+                    - `"last_op_info"` -> Information about the last operation.
+                    - `"topology"` -> Information about the replication topology (main / dr site & plan information).
+                    - `"testfailover_info"` -> Information about the previous test failover operation.
+                    - `"retention_lock_report"` -> Information about the first / last snapshot.
 
             Returns
             -------
@@ -579,7 +588,7 @@ class Snapshot(base_api.BaseApi):
                                 "mode": 2,
                                 "next_trigger_time": 1742770800,
                                 "notify_time_in_min": 720,
-                                "readable_next_trigger_time": "Mon Mar 24 00:00:00 2025\n",
+                                "readable_next_trigger_time": "Mon Mar 24 00:00:00 2025",
                                 "schedule": {
                                     "date_type": 0,
                                     "hour": 0,
@@ -625,8 +634,8 @@ class Snapshot(base_api.BaseApi):
                                         "is_stopped": false,
                                         "is_success": true,
                                         "main_site": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-                                        "readable_begin_time": "Sun Mar 23 15:17:40 2025\n",
-                                        "readable_finish_time": "Sun Mar 23 15:18:17 2025\n",
+                                        "readable_begin_time": "Sun Mar 23 15:17:40 2025",
+                                        "readable_finish_time": "Sun Mar 23 15:18:17 2025",
                                         "snapshot_version": "GMT+01-2025.03.23-15.17.39",
                                         "sync_size_byte": 750513392,
                                         "total_size_byte": 750513392,
@@ -650,8 +659,8 @@ class Snapshot(base_api.BaseApi):
                                         "is_stopped": false,
                                         "is_success": true,
                                         "main_site": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-                                        "readable_begin_time": "Sun Mar 23 15:18:48 2025\n",
-                                        "readable_finish_time": "Sun Mar 23 15:19:16 2025\n",
+                                        "readable_begin_time": "Sun Mar 23 15:18:48 2025",
+                                        "readable_finish_time": "Sun Mar 23 15:19:16 2025",
                                         "snapshot_version": "GMT+01-2025.03.23-15.18.46",
                                         "sync_size_byte": 8210,
                                         "total_size_byte": 8210,
@@ -689,7 +698,7 @@ class Snapshot(base_api.BaseApi):
                                                         "mode": 2,
                                                         "next_trigger_time": 1742770800,
                                                         "notify_time_in_min": 720,
-                                                        "readable_next_trigger_time": "Mon Mar 24 00:00:00 2025\n",
+                                                        "readable_next_trigger_time": "Mon Mar 24 00:00:00 2025",
                                                         "schedule": {
                                                             "date_type": 0,
                                                             "hour": 0,
@@ -742,7 +751,7 @@ class Snapshot(base_api.BaseApi):
                                                         "mode": 2,
                                                         "next_trigger_time": 1742770800,
                                                         "notify_time_in_min": 720,
-                                                        "readable_next_trigger_time": "Mon Mar 24 00:00:00 2025\n",
+                                                        "readable_next_trigger_time": "Mon Mar 24 00:00:00 2025",
                                                         "schedule": {
                                                             "date_type": 0,
                                                             "hour": 0,
@@ -842,12 +851,13 @@ class Snapshot(base_api.BaseApi):
 
             immutable_days : int, optional
                 Number of days to make the snapshot immutable for. Defaults to `7`.
+
                 Must be greater than `0`. Mandatory if immutable is `True`.
 
             Returns
             -------
             dict[str, object]
-                API response if successful, error message if not
+                API response if successful, error message if not.
 
             Example return
             --------------
@@ -895,15 +905,15 @@ class Snapshot(base_api.BaseApi):
             Parameters
             ----------
             share_name : str
-                Name of the share to delete snapshots for
+                Name of the share to delete snapshots for.
 
             snapshots : list[str]
-                List of snapshots to delete
+                List of snapshots to delete.
 
             Returns
             -------
             dict[str, object]
-                API response if successful, error message if not
+                API response if successful, error message if not.
 
             Example return
             --------------
@@ -962,7 +972,7 @@ class Snapshot(base_api.BaseApi):
             Returns
             -------
             dict[str, object]
-                API response if successful, error message if not
+                API response if successful, error message if not.
 
             Example return
             --------------
@@ -1015,13 +1025,13 @@ class Snapshot(base_api.BaseApi):
             Parameters
             ----------
             plan_id : str
-                ID of the replication plan to sync
+                ID of the replication plan to sync.
 
             lock_snapshot : bool, optional
-                Whether to lock the snapshot to prevent rotation. Defaults to `True`
+                Whether to lock the snapshot to prevent rotation. Defaults to `True`.
 
             description : str, optional
-                Description of the snapshot. Defaults to `Snapshot taken by [Synology API]`
+                Description of the snapshot. Defaults to `Snapshot taken by [Synology API]`.
 
             Returns
             -------
@@ -1076,13 +1086,13 @@ class Snapshot(base_api.BaseApi):
                 ID of the LUN to create a snapshot for
 
             description : str, optional
-                Description of the snapshot. Defaults to `Snapshot taken by [Synology API]`
+                Description of the snapshot. Defaults to `Snapshot taken by [Synology API]`.
 
             lock : bool, optional
-                Whether to lock the snapshot. Defaults to `True`
+                Whether to lock the snapshot. Defaults to `True`.
 
             app_aware : bool, optional
-                Whether to make the snapshot application aware. Defaults to `True`
+                Whether to make the snapshot application aware. Defaults to `True`.
 
             Returns
             -------
@@ -1125,13 +1135,14 @@ class Snapshot(base_api.BaseApi):
             Parameters
             ----------
             snapshot_uuids : list[str]
-                List of UUIDs of the snapshots to delete
+                List of UUIDs of the snapshots to delete.
 
             Returns
             -------
             dict[str, object]
                 API response if successful. 
                 
+
                 If deletion fails, an error code is returned alonside the snapshot uuid:
                 ```json
                 {
