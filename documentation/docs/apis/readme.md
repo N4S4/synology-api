@@ -307,6 +307,8 @@ At the moment there are quite a few APIs implemented. They could be totally or p
   
 ###  [Snapshot](./apis/classes/snapshot) 
 - `SYNO.Core.Share.Snapshot`  
+- `SYNO.Core.ISCSI.LUN`  
+- `SYNO.DR.Plan`  
   
 ###  [SurveillanceStation](./apis/classes/surveillancestation) 
 - `SYNO.SurveillanceStation.Info`  
