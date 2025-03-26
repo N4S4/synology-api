@@ -283,7 +283,15 @@ def gen_method(method: dict, file_content: str) -> str:
         return content + SEPARATOR
     
     description = text(docstring.short_description or '', newline=True)
-    description += text(docstring.long_description or '', newline=True)
+    # In some cases, the whole docstring text will be parsed in the long_description.
+    # Avoid appending it in that case.
+    if isinstance(docstring.long_description, str) and docstring.long_description.find('Parameters') != -1:
+        print(docstring.params)
+        print('========>', docstring.long_description)
+        warnings.warn(f'[{method["name"]}] failed to parse docstrings. Make sure the format is correct. Check guidelines if needed.', UserWarning)
+    else: 
+        description += text(docstring.long_description or '', newline=True)
+        
     description = dedup_newlines(description)
 
     internal_api = parse_method_api(method['name'], file_content)
