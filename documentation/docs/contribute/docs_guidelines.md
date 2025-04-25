@@ -45,6 +45,7 @@ We use the [numpy convention](https://numpydoc.readthedocs.io/en/latest/format.h
 - Always use double quotes for the docstrings
 - Always use backticks (`) to display data types or objects, you can use code blocks specifying the language.
 - Don't use HTML tags, or keywords enclosed by gt/lt, instead use backticks.
+- Sometimes, return objects contain strings with `\n` inside of them, please remove them as they may avoid the docstring to be parsed.
 
 #### Information
 - Try to keep the first line of the description brief. You can add more information in new lines.

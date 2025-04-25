@@ -1,4 +1,6 @@
 from __future__ import annotations
+from io import BytesIO
+from zipfile import ZipFile
 from typing import Optional
 from . import base_api
 
@@ -84,6 +86,24 @@ class VPN(base_api.BaseApi):
         req_param = {'version': info['maxVersion'], 'method': 'load', 'serv_type': 'l2tp'}
 
         return self.request_data(api_name, api_path, req_param)
+
+    def openvpn_export_configuration(self, as_zip_file=False) -> bytes | ZipFile:
+        """Downloads the openvpn.zip containing the VPNConfig.ovpn file
+        Args:    
+            as_zip_file (bool):
+                If the bytes should be converted to a ZipFile
+                
+        Returns:
+            Either openvpn.zip as a ZipFile or the bytes version of the ZipFile
+        """
+        api_name = 'SYNO.VPNServer.Settings.Certificate'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'export', 'serv_type': 'openvpn'}
+        zip_as_bytes = self.request_data(api_name, api_path, req_param, response_json=False).content
+        if as_zip_file:
+            return ZipFile(BytesIO(zip_as_bytes))
+        return zip_as_bytes
 
     # TODO not working {'error': {'code': 600}, 'success': False} response
     '''def pptp_settings_setup(self, serv_type='pptp', serv_enable=True, serv_ip='10.0.0.0', serv_range=5, auth_type=2,
