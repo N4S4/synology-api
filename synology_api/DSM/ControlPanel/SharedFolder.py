@@ -3,8 +3,25 @@ import json
 from typing import List, Any
 
 class SharedFolder(base_api.BaseApi):
-    """
-    Core Share API implementation.
+    """Core Share API implementation.
+    
+        Supported methods:
+        - Getters:
+            - Validate set of parameters for a new/modified shared folder
+            - List all folders information
+            - Get a folder by name
+            - Retrieve share permissions for a given folder filtered by permission name (sub string)
+            - Retrieve share permissions for a given folder
+            - Retrieve share permissions for a given group
+            
+        - Setters:
+            - Create a new shared folder
+            - Set folder permissions for a given folder
+            - Set group permissions for a given share
+            
+        - Actions:
+            - Delete folder(s) by name(s)
+            - Clone existing shared folder
     """
     
     def validate_set(self, name: str, vol_path: str, desc: str = "", enable_share_compress: bool = False, enable_share_cow: bool = False, enc_passwd: str = "", encryption: bool = False) -> dict:
