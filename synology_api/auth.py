@@ -340,8 +340,6 @@ class Authentication:
         else:
             return response
 
-
-
     def request_data(self,
                      api_name: str,
                      api_path: str,
@@ -519,6 +517,10 @@ class Authentication:
     @property
     def base_url(self) -> str:
         return self._base_url
+
+    @property
+    def syno_token(self) -> str:
+        return self._syno_token
 
 
 
