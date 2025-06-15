@@ -224,7 +224,36 @@ class Docker(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
+    # TODO: rename to export_container_profile_and_content?
     def export_container(self, container : str = None, path : str = None) -> dict[str, object] | str:
+        """Export container profile and content to a specified path on Synology nas.
+
+            archive <container>.syno.txz will be created in the specified path.
+
+            Parameters
+            ----------
+            container : str
+                The name of the container
+
+            path : str
+                The path on filesystem of Synology NAS where the container settings will be exported.
+                For example: `/docker/nging`
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the result of the export operation.
+
+            Example return
+            --------------
+            ```json
+                {
+                   "data" : {},
+                   "httpd_restart" : false,
+                   "success" : true
+                }
+            ```
+        """
         api_name = 'SYNO.Docker.Container'
         info = self.gen_list[api_name]
         api_path = info['path']
