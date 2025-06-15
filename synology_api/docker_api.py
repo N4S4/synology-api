@@ -9,6 +9,8 @@ from . import base_api
 class Docker(base_api.BaseApi):
     """Docker API implementation.
 
+        This class provides methods to interact with Docker containers, images, registries, and projects on a Synology NAS.
+
         Supported actions:
             - Getters:
                 - Get list of containers
