@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Optional
+import json
 
 import synology_api.auth
 from . import base_api
@@ -275,12 +276,59 @@ class Docker(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def downloaded_images(self) -> dict[str, object] | str:
+    # TODO: rename to list_downloaded_images?
+    def downloaded_images(self, limit : int = -1, offset : int = 0, show_dsm : bool = False) -> dict[str, object] | str:
+        """List of docker images available on Synology NAS.
+
+            Parameters
+            ----------
+            limit : int, optional
+                The maximum number of docker images to return. Defaults -1 (all).
+
+            offset : int, optional
+                The offset for pagination. Defaults to 0.
+
+            show_dsm : bool, optional
+                Defaults to False.
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the list of downloaded images.
+
+            Example return
+            --------------
+            ```json
+            {
+               "data" : {
+                  "images" : [
+                     {
+                        "created" : 1745034718,
+                        "description" : "",
+                        "digest" : "",
+                        "id" : "sha256:14300de7e087290520999f00d6a12b61385d1fe780ea83f38eabb7e8be66225f",
+                        "remote_digest" : "",
+                        "repository" : "caddy",
+                        "size" : 50509416,
+                        "tags" : [ "alpine" ],
+                        "upgradable" : false,
+                        "virtual_size" : 50509416
+                     }
+                  ],
+                  "limit" : 1,
+                  "offset" : 0,
+                  "total" : 1
+               },
+               "httpd_restart" : false,
+               "success" : true
+            }
+            ```
+        """
         api_name = 'SYNO.Docker.Image'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'limit': '-1', 'offset': '0',
-                     "show_dsm": 'false'}
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'limit': limit, 'offset': offset,
+                     "show_dsm": json.dumps(show_dsm)}
 
         return self.request_data(api_name, api_path, req_param)
 
