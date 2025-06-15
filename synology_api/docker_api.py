@@ -93,7 +93,47 @@ class Docker(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
+    # TODO: rename to containers_resources?
     def container_resources(self) -> dict[str, object] | str:
+        """Get resources of all containers.
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the resources information of the containers.
+
+            Example return
+            --------------
+            ```json
+                {
+                    "data": {
+                        "resources": [
+                            {
+                                "cpu": 0,
+                                "memory": 21106688,
+                                "memoryPercent": 0.517403244972229,
+                                "name": "container1"
+                            },
+                            {
+                                "cpu": 0,
+                                "memory": 0,
+                                "memoryPercent": 0,
+                                "name": "container2"
+                            },
+                            {
+                                "cpu": 0,
+                                "memory": 0,
+                                "memoryPercent": 0,
+                                "name": "stopped_container"
+                            }
+                        ]
+                    },
+                    "httpd_restart": false,
+                    "success": true
+                }
+            ```
+        """
+
         api_name = 'SYNO.Docker.Container.Resource'
         info = self.gen_list[api_name]
         api_path = info['path']
