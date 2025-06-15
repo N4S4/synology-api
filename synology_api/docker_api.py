@@ -431,6 +431,64 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_projects(self) -> dict[str, object] | str:
+        """Get list of projects.
+
+            Example return
+            --------------
+            ```json
+            {
+               "data" : {
+                  "187b2816-fd6c-4f87-b178-6d94806c7404" : {
+                     "containerIds" : [ "21bbe0c6a5d3b246f347367826a78db47f0f334a44bd6621e084f68f0ad63044" ],
+                     "created_at" : "2025-03-14T14:07:04.874304Z",
+                     "enable_service_portal" : true,
+                     "id" : "187b2816-fd6c-4f87-b178-6d94806c7404",
+                     "is_package" : false,
+                     "name" : "project1",
+                     "path" : "/volume1/docker/project1",
+                     "service_portal_name" : "project1",
+                     "service_portal_port" : 53,
+                     "service_portal_protocol" : "http",
+                     "services" : [
+                        {
+                           "display_name" : "project1 (project)",
+                           "id" : "Docker-Project-187b2816-fd6c-4f87-b178-6d94806c7404",
+                           "proxy_target" : "http://127.0.0.1:53",
+                           "service" : "Docker-Project-187b2816-fd6c-4f87-b178-6d94806c7404",
+                           "type" : "reverse_proxy"
+                        }
+                     ],
+                     "share_path" : "/docker/project1",
+                     "state" : "",
+                     "status" : "STOPPED",
+                     "updated_at" : "2025-03-14T15:17:31.840634Z",
+                     "version" : 2
+                  },
+                  "3c091e8b-f68f-4161-97a3-fc3db3f4bdc9" : {
+                     "containerIds" : [ "ee220111cff2d2e7b9d764a4b781f9e23faa3cd7f3048d315aa6c95d48f0a1e4" ],
+                     "created_at" : "2025-05-27T08:33:03.213407Z",
+                     "enable_service_portal" : false,
+                     "id" : "3c091e8b-f68f-4161-97a3-fc3db3f4bdc9",
+                     "is_package" : false,
+                     "name" : "project2",
+                     "path" : "/volume1/docker/project2",
+                     "service_portal_name" : "",
+                     "service_portal_port" : 0,
+                     "service_portal_protocol" : "",
+                     "services" : [],
+                     "share_path" : "/docker/project2",
+                     "state" : "",
+                     "status" : "RUNNING",
+                     "updated_at" : "2025-06-15T10:38:52.247951Z",
+                     "version" : 2
+                  }
+               },
+               "httpd_restart" : false,
+               "success" : true
+            }
+            ```
+        """
+
         api_name = 'SYNO.Docker.Project'
         info = self.gen_list[api_name]
         api_path = info['path']
