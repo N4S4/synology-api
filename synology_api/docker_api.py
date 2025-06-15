@@ -301,6 +301,122 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method="post")
 
     def docker_stats(self) -> dict[str, object] | str:
+        """Get containers resource usage statistics.
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the resource usage statistics of the containers.
+
+            Example return
+            --------------
+            ```json
+                {
+                   "data" : {
+                      "ee220111cff2d2e7b9d764a4b781f9e23faa3cd7f3048d315aa6c95d48f0a1e4" : {
+                         "blkio_stats" : {
+                            "io_merged_recursive" : [],
+                            "io_queue_recursive" : [],
+                            "io_service_bytes_recursive" : [],
+                            "io_service_time_recursive" : [],
+                            "io_serviced_recursive" : [],
+                            "io_time_recursive" : [],
+                            "io_wait_time_recursive" : [],
+                            "sectors_recursive" : []
+                         },
+                         "cpu_stats" : {
+                            "cpu_usage" : {
+                               "percpu_usage" : [ 286394951, 245078386, 304613157, 186566695 ],
+                               "total_usage" : 1022653189,
+                               "usage_in_kernelmode" : 380000000,
+                               "usage_in_usermode" : 580000000
+                            },
+                            "online_cpus" : 4,
+                            "system_cpu_usage" : 990015100000000,
+                            "throttling_data" : {
+                               "periods" : 0,
+                               "throttled_periods" : 0,
+                               "throttled_time" : 0
+                            }
+                         },
+                         "id" : "ee220111cff2d2e7b9d764a4b781f9e23faa3cd7f3048d315aa6c95d48f0a1e4",
+                         "memory_stats" : {
+                            "limit" : 4079349760,
+                            "max_usage" : 22630400,
+                            "stats" : {
+                               "active_anon" : 5500928,
+                               "active_file" : 1294336,
+                               "cache" : 15626240,
+                               "dirty" : 0,
+                               "hierarchical_memory_limit" : 9223372036854771712,
+                               "hierarchical_memsw_limit" : 9223372036854771712,
+                               "inactive_anon" : 0,
+                               "inactive_file" : 14331904,
+                               "mapped_file" : 11005952,
+                               "pgfault" : 43383,
+                               "pgmajfault" : 6,
+                               "pgpgin" : 33405,
+                               "pgpgout" : 28247,
+                               "rss" : 5500928,
+                               "rss_huge" : 0,
+                               "total_active_anon" : 5500928,
+                               "total_active_file" : 1294336,
+                               "total_cache" : 15626240,
+                               "total_dirty" : 0,
+                               "total_inactive_anon" : 0,
+                               "total_inactive_file" : 14331904,
+                               "total_mapped_file" : 11005952,
+                               "total_pgfault" : 43383,
+                               "total_pgmajfault" : 6,
+                               "total_pgpgin" : 33405,
+                               "total_pgpgout" : 28247,
+                               "total_rss" : 5500928,
+                               "total_rss_huge" : 0,
+                               "total_unevictable" : 0,
+                               "total_writeback" : 0,
+                               "unevictable" : 0,
+                               "writeback" : 0
+                            },
+                            "usage" : 21127168
+                         },
+                         "name" : "/glance",
+                         "networks" : {
+                            "eth0" : {
+                               "rx_bytes" : 876,
+                               "rx_dropped" : 0,
+                               "rx_errors" : 0,
+                               "rx_packets" : 10,
+                               "tx_bytes" : 0,
+                               "tx_dropped" : 0,
+                               "tx_errors" : 0,
+                               "tx_packets" : 0
+                            }
+                         },
+                         "num_procs" : 0,
+                         "pids_stats" : {},
+                         "precpu_stats" : {
+                            "cpu_usage" : {
+                               "total_usage" : 0,
+                               "usage_in_kernelmode" : 0,
+                               "usage_in_usermode" : 0
+                            },
+                            "throttling_data" : {
+                               "periods" : 0,
+                               "throttled_periods" : 0,
+                               "throttled_time" : 0
+                            }
+                         },
+                         "preread" : "0001-01-01T00:00:00Z",
+                         "read" : "2025-06-15T14:11:00.431111646Z",
+                         "storage_stats" : {}
+                      }
+                   },
+                   "httpd_restart" : false,
+                   "success" : true
+                }
+
+            ```
+        """
         api_name = 'SYNO.Docker.Container'
         info = self.gen_list[api_name]
         api_path = info['path']
