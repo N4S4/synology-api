@@ -822,6 +822,35 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def start_container(self, container : str = None) -> dict[str, object] | str:
+        """Start a container by its name.
+
+            Parameters
+            ----------
+            container : str
+                The name of the container
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the result of the export operation.
+
+            Example return
+            --------------
+            ```json
+            {
+               "data" : {
+                  "cpu" : 0,
+                  "memory" : 21241856,
+                  "memoryPercent" : 0.52071672677993774,
+                  "name" : "glance",
+                  "start_dependent_container" : false
+               },
+               "httpd_restart" : false,
+               "success" : true
+            }
+            ```
+        """
+
         api_name = 'SYNO.Docker.Container'
         info = self.gen_list[api_name]
         api_path = info['path']
