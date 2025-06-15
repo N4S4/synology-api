@@ -192,15 +192,73 @@ class Docker(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    #TODO not working
-    def get_logs(self) -> dict[str, object] | str:
-        api_name = 'SYNO.Docker.Log'
+    def get_logs(self, name : str = None, from_date : str = None, to_date : str = None,
+                 level : str = None, keyword : str = None, sort_dir : str = 'DESC', offset : int = 0,
+                 limit: int = 1000
+                 ) -> dict[str, object] | str:
+        """Get list of container logs.
+
+            Parameters
+            ----------
+            name : str
+                The name of the container
+
+            from_date : str, optional
+                The start date for the logs. Defaults to None.
+
+            to_date : str, optional
+                The end date for the logs. Defaults to None.
+
+            level : str, optional
+                The log level to filter by. Defaults to None.
+
+            keyword : str, optional
+                Keyword to filter logs. Defaults to None.
+
+            sort_dir : str, optional
+                Sort direction for the logs, either 'ASC' or 'DESC'. Defaults to 'DESC'.
+
+            offset : int, optional
+                The offset for pagination. Defaults to 0.
+
+            limit : int, optional
+                The maximum number of logs to return. Defaults to 1000.
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the logs from the specified container.
+
+            Example return
+            --------------
+            ```json
+                {
+                    "data": {
+                        "limit": 1,
+                        "logs": [
+                            {
+                                "created": "2025-06-15T10:38:55.869358659Z",
+                                "docid": "1",
+                                "stream": "stderr",
+                                "text": "2025/06/15 10:38:55 Starting server on :8080 (base-url: \"\", assets-path: \"\")\n"
+                            }
+                        ],
+                        "offset": 0,
+                        "total": 1
+                    },
+                    "success": true
+                }
+            ```
+        """
+
+        api_name = 'SYNO.Docker.Container.Log'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}#, 'action': '"load"', 'offset': 0, 'limit': 1000,
-                     #'sort_by': 'time', 'sort_dir': 'DESC', 'datefrom': 0, 'dateto': 0}
+        req_param = {'version': info['maxVersion'], 'method': 'get',
+                     'name': name, 'from': from_date, 'to': to_date, 'level': level, 'keyword': keyword,
+                     'sort_dir': sort_dir, 'offset': offset, 'limit': limit}
 
-        return self.request_data(api_name, api_path, req_param)
+        return self.request_data(api_name, api_path, req_param, method="post")
 
     def docker_stats(self) -> dict[str, object] | str:
         api_name = 'SYNO.Docker.Container'
