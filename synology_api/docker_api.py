@@ -332,7 +332,35 @@ class Docker(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
+    # TODO: rename to list_registries?
     def images_registry_resources(self) -> dict[str, object] | str:
+        """Get list of docker registries.
+
+            Example return
+            --------------
+            ```json
+            {
+               "data" : {
+                  "offset" : 0,
+                  "registries" : [
+                     {
+                        "enable_registry_mirror" : false,
+                        "enable_trust_SSC" : true,
+                        "mirror_urls" : [],
+                        "name" : "Docker Hub",
+                        "syno" : true,
+                        "url" : "https://registry.hub.docker.com"
+                     }
+                  ],
+                  "total" : 1,
+                  "using" : "Docker Hub"
+               },
+               "httpd_restart" : false,
+               "success" : true
+            }
+            ```
+        """
+
         api_name = 'SYNO.Docker.Registry'
         info = self.gen_list[api_name]
         api_path = info['path']
