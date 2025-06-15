@@ -141,7 +141,133 @@ class Docker(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
+    # TODO: move to code_sys_utilization?
     def system_resources(self) -> dict[str, object] | str:
+        """Get system resources
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the system resources information.
+
+            Example return
+            --------------
+            ```json
+            {
+               "data" : {
+                  "cpu" : {
+                     "15min_load" : 14,
+                     "1min_load" : 29,
+                     "5min_load" : 16,
+                     "device" : "System",
+                     "other_load" : 2,
+                     "system_load" : 0,
+                     "user_load" : 1
+                  },
+                  "disk" : {
+                     "disk" : [
+                        {
+                           "device" : "sata2",
+                           "display_name" : "Drive 2",
+                           "read_access" : 0,
+                           "read_byte" : 0,
+                           "type" : "internal",
+                           "utilization" : 0,
+                           "write_access" : 0,
+                           "write_byte" : 0
+                        },
+                        {
+                           "device" : "sata1",
+                           "display_name" : "Drive 1",
+                           "read_access" : 0,
+                           "read_byte" : 0,
+                           "type" : "internal",
+                           "utilization" : 0,
+                           "write_access" : 0,
+                           "write_byte" : 0
+                        }
+                     ],
+                     "total" : {
+                        "device" : "total",
+                        "read_access" : 0,
+                        "read_byte" : 0,
+                        "utilization" : 0,
+                        "write_access" : 0,
+                        "write_byte" : 0
+                     }
+                  },
+                  "lun" : [],
+                  "memory" : {
+                     "avail_real" : 444840,
+                     "avail_swap" : 4163752,
+                     "buffer" : 21716,
+                     "cached" : 2658180,
+                     "device" : "Memory",
+                     "memory_size" : 4194304,
+                     "real_usage" : 21,
+                     "si_disk" : 0,
+                     "so_disk" : 0,
+                     "swap_usage" : 7,
+                     "total_real" : 3983740,
+                     "total_swap" : 4489140
+                  },
+                  "network" : [
+                     {
+                        "device" : "total",
+                        "rx" : 6822,
+                        "tx" : 6336
+                     },
+                     {
+                        "device" : "eth0",
+                        "rx" : 0,
+                        "tx" : 0
+                     },
+                     {
+                        "device" : "eth1",
+                        "rx" : 0,
+                        "tx" : 0
+                     },
+                     {
+                        "device" : "eth2",
+                        "rx" : 6822,
+                        "tx" : 6336
+                     }
+                  ],
+                  "nfs" : [],
+                  "smb" : {
+                     "smb_cmd" : [],
+                     "smb_cpu" : [],
+                     "smb_rwpkt" : []
+                  },
+                  "space" : {
+                     "total" : {
+                        "device" : "total",
+                        "read_access" : 0,
+                        "read_byte" : 0,
+                        "utilization" : 0,
+                        "write_access" : 0,
+                        "write_byte" : 0
+                     },
+                     "volume" : [
+                        {
+                           "device" : "dm-1",
+                           "display_name" : "volume1",
+                           "read_access" : 0,
+                           "read_byte" : 0,
+                           "utilization" : 0,
+                           "write_access" : 0,
+                           "write_byte" : 0
+                        }
+                     ]
+                  },
+                  "time" : 1749998465
+               },
+               "httpd_restart" : false,
+               "success" : true
+            }
+            ```
+        """
+
         api_name = 'SYNO.Core.System.Utilization'
         info = self.gen_list[api_name]
         api_path = info['path']
