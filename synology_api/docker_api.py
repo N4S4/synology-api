@@ -7,7 +7,27 @@ from . import base_api
 
 
 class Docker(base_api.BaseApi):
+    """Docker API implementation.
 
+        Supported actions:
+            - Getters:
+                - Get list of containers
+                - Get resources of all containers
+                - Get system resources
+                - List of docker images
+                - Get list of docker registries
+                - Get list of container logs
+                - Get containers resource usage statistics
+                - Search for docker image in all available registries.
+                - Get list of projects.
+
+            - Setters:
+                -
+
+            - Actions:
+                - Export container profile
+                - Export container profile and content
+    """
     def containers(self) -> dict[str, object] | str:
         """Get list of containers.
 
