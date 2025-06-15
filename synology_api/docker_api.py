@@ -216,7 +216,37 @@ class Docker(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
+    # TODO: rename to export_container_profile?
     def export_container_settings(self, container : str = None, path : str = None) -> dict[str, object] | str:
+        """Export container profile
+
+            file <container>.syno.json will be created in the specified path.
+
+            Parameters
+            ----------
+            container : str
+                The name of the container
+
+            path : str, optional
+                The path on filesystem of Synology NAS where the container settings will be exported.
+                If not specified, the file will be offered as a download through the browser.
+                For example: `/docker/nging`
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the result of the export operation.
+
+            Example return
+            --------------
+            ```json
+                {
+                   "data" : {},
+                   "httpd_restart" : false,
+                   "success" : true
+                }
+            ```
+        """
         api_name = 'SYNO.Docker.Container.Profile'
         info = self.gen_list[api_name]
         api_path = info['path']
