@@ -879,6 +879,34 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def stop_container(self, container : str = None) -> dict[str, object] | str:
+        """Stop a container by its name.
+
+            Parameters
+            ----------
+            container : str
+                The name of the container
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the result of the stop operation.
+
+            Example return
+            --------------
+            ```json
+            {
+               "data" : {
+                  "cpu" : 0,
+                  "memory" : 0,
+                  "memoryPercent" : 0,
+                  "name" : "glance"
+               },
+               "httpd_restart" : false,
+               "success" : true
+            }
+            ```
+        """
+
         api_name = 'SYNO.Docker.Container'
         info = self.gen_list[api_name]
         api_path = info['path']
