@@ -376,12 +376,57 @@ class Docker(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    #TODO not working
+    # TODO: rename search_images_in_registries?
     def search_image(self, query : str = None) -> dict[str, object] | str:
+        """Search for docker image in all available registries.
+
+            Parameters
+            ----------
+            query : str
+                name of the docker image to search for. Defaults to None.
+
+            Example return
+            --------------
+            ```json
+            {
+               "data" : {
+                  "data" : [
+                     {
+                        "description" : "Caddy 2 is a powerful, enterprise-ready, open source web server with automatic HTTPS written in Go.",
+                        "downloads" : 650989718,
+                        "is_automated" : false,
+                        "is_official" : true,
+                        "name" : "caddy",
+                        "registry" : "https://registry.hub.docker.com",
+                        "star_count" : 881
+                     },
+                     {
+                        "description" : "Caddy is a lightweight, general-purpose web server.",
+                        "downloads" : 111974910,
+                        "is_automated" : true,
+                        "is_official" : false,
+                        "name" : "abiosoft/caddy",
+                        "registry" : "https://registry.hub.docker.com",
+                        "star_count" : 289
+                     },
+                     ...
+                  ],
+                  "limit" : 50,
+                  "offset" : 0,
+                  "page_size" : 50,
+                  "total" : 6647
+               },
+               "httpd_restart" : false,
+               "success" : true
+            }
+            ```
+        """
         api_name = 'SYNO.Docker.Registry'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'search', 'offset': 0, 'limit': 50, 'page_size': 50, 'q': query}
+        # version 1 contains methods: search, tags, get, create, set, using, delete
+        # version 2 contains methods: tags
+        req_param = {'version': 1, 'method': 'search', 'offset': 0, 'limit': 50, 'page_size': 50, 'q': query}
 
         return self.request_data(api_name, api_path, req_param)
 
