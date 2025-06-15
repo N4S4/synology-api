@@ -18,8 +18,9 @@ class Docker(base_api.BaseApi):
                 - Get list of docker registries
                 - Get list of container logs
                 - Get containers resource usage statistics
-                - Search for docker image in all available registries.
-                - Get list of projects.
+                - Search for docker image in all available registries
+                - Get list of projects
+                - Get list of docker networks
 
             - Setters:
                 -
@@ -389,6 +390,42 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def network(self) -> dict[str, object] | str:
+        """Get list of docker networks.
+
+            Example return
+            --------------
+            ```json
+            {
+               "data" : {
+                  "network" : [
+                     {
+                        "containers" : [ "vault" ],
+                        "driver" : "bridge",
+                        "enable_ipv6" : false,
+                        "gateway" : "172.22.0.1",
+                        "id" : "b741915823aacdffc8ab806ab348e198c2c486b4dd5df2627b0d586259926b1a",
+                        "iprange" : "",
+                        "name" : "vault_default",
+                        "subnet" : "172.22.0.0/16"
+                     },
+                     {
+                        "containers" : [],
+                        "driver" : "host",
+                        "enable_ipv6" : false,
+                        "gateway" : "",
+                        "id" : "2fc7ebae3901359e7bc9d7b50fad1f6aa2f8c1076474cadc9f83b3256f921ff3",
+                        "iprange" : "",
+                        "name" : "host",
+                        "subnet" : ""
+                     }
+                  ]
+               },
+               "httpd_restart" : false,
+               "success" : true
+            }
+            ```
+        """
+
         api_name = 'SYNO.Docker.Network'
         info = self.gen_list[api_name]
         api_path = info['path']
