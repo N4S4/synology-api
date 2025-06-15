@@ -8,6 +8,84 @@ from . import base_api
 class Docker(base_api.BaseApi):
 
     def containers(self) -> dict[str, object] | str:
+        """Get list of containers.
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the containers information.
+
+            Example return
+            --------------
+            ```json
+            {
+                "data": {
+                    "1111aaaa-22bb-33cc-44dd-555555eeeeee": {
+                        "containerIds": [
+                            "21bbe0c6a5d3b246f347367826a78db47f0f334a44bd6621e084f68f0ad63044"
+                        ],
+                        "created_at": "2025-03-14T14:07:04.874304Z",
+                        "enable_service_portal": true,
+                        "id": "187b2816-fd6c-4f87-b178-6d94806c7404",
+                        "is_package": false,
+                        "name": "pihole",
+                        "path": "/volume1/docker/test",
+                        "service_portal_name": "test",
+                        "service_portal_port": 53,
+                        "service_portal_protocol": "http",
+                        "services": [
+                            {
+                                "display_name": "test (project)",
+                                "id": "Docker-Project-187b2816-fd6c-4f87-b178-6d94806c7404",
+                                "proxy_target": "http://127.0.0.1:53",
+                                "service": "Docker-Project-187b2816-fd6c-4f87-b178-6d94806c7404",
+                                "type": "reverse_proxy"
+                            }
+                        ],
+                        "share_path": "/docker/test",
+                        "state": "",
+                        "status": "STOPPED",
+                        "updated_at": "2025-03-14T15:17:31.840634Z",
+                        "version": 2
+                    },
+                    "2222bbbb-33cc-44dd-55ee-666666ffffff": {
+                        "containerIds": [
+                            "d9301fc3aa925514760e7714a489cc2d14a26ed6e8169479ac6c356de6b5a7d9",
+                            "89d63c6c3c4e299c82c2dcc4ba353c4c1e6c1c938b572153fe9f615646edc4f6",
+                            "4a37c7a4a5cab34658071972c2c2bc3ff89dc6dc1407fd98751c7f227574a088",
+                            "6df4151b6e24ea3b68b62851d65c8a830e342085f6f9cf0cfdf1e6f98357d9b1",
+                            "1a1088cdf8d56e2443c22fa5c6f5658384ba894fe050d82b9214fb84342b0d93",
+                            "36984528684d20c775ac67b3a286e48a5aa8ba73a36f58cfd062a8649d457328"
+                        ],
+                        "created_at": "2024-07-21T11:01:31.019924Z",
+                        "enable_service_portal": true,
+                        "id": "d787e5ac-1b6a-4dd4-a2d9-35bcd5ad9577",
+                        "is_package": false,
+                        "name": "test2",
+                        "path": "/volume1/docker/test2",
+                        "service_portal_name": "test2-server",
+                        "service_portal_port": 2283,
+                        "service_portal_protocol": "http",
+                        "services": [
+                            {
+                                "display_name": "test2 (project)",
+                                "id": "Docker-Project-d787e5ac-1b6a-4dd4-a2d9-35bcd5ad9577",
+                                "proxy_target": "http://127.0.0.1:2283",
+                                "service": "Docker-Project-d787e5ac-1b6a-4dd4-a2d9-35bcd5ad9577",
+                                "type": "reverse_proxy"
+                            }
+                        ],
+                        "share_path": "/docker/test2",
+                        "state": "",
+                        "status": "ERROR",
+                        "updated_at": "2025-06-12T14:48:08.127657Z",
+                        "version": 2
+                    }
+                },
+                "success": true
+            }
+            ```
+        """
         api_name = 'SYNO.Docker.Container'
         info = self.gen_list[api_name]
         api_path = info['path']
