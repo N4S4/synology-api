@@ -444,6 +444,11 @@ class Docker(base_api.BaseApi):
             query : str
                 name of the docker image to search for. Defaults to None.
 
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the search results for the docker image.
+
             Example return
             --------------
             ```json
@@ -561,8 +566,11 @@ class Docker(base_api.BaseApi):
             ----------
             project_id : str
                 ID of the project to get information about. Defaults to None.
-                IDs of projects can be obtained from the `list_projects` method.
 
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the project information.
 
             Example return
             --------------
@@ -849,7 +857,7 @@ class Docker(base_api.BaseApi):
                         }
                      }
                   ],
-                  "content" : "services:\n  vault:\n    image: hashicorp/vault:latest\n    container_name: vault\n    hostname: vault\n    mem_limit: 512m\n    cpu_shares: 768\n    security_opt:\n      - no-new-privileges:true\n    cap_add:\n      - IPC_LOCK\n    entrypoint: vault server -config=/vault/file/\n    healthcheck:\n      test: [\"CMD\", \"vault\", \"status\"]\n      interval: 30s\n      timeout: 10s\n      retries: 5\n    ports:\n      - 8205:8200\n    volumes:\n      - /volume1/docker/vault/logs:/vault/logs:rw\n      - /volume1/docker/vault/data:/vault/file:rw\n      - /volume1/docker/vault/config:/vault/config:rw\n      - /volume1/docker/vault/plugins:/vault/plugins:rw\n      - /etc/localtime:/etc/localtime:ro\n    environment:\n      VAULT_DEV_LISTEN_ADDRESS: 0.0.0.0:8200\n      VAULT_RAFT_PATH: /vault/file\n      \n    restart: on-failure:5",
+                  "content" : "docker-compose.yml contet",
                   "created_at" : "2025-05-25T17:31:00.875402Z",
                   "enable_service_portal" : false,
                   "id" : "b4d44e6c-5ab4-45f7-b380-481ef9839df1",
@@ -956,7 +964,7 @@ class Docker(base_api.BaseApi):
     def export_container_settings(self, container : str = None, path : str = None) -> dict[str, object] | str:
         """Export container profile
 
-            file <container>.syno.json will be created in the specified path.
+            file \<container\>.syno.json will be created in the specified path.
 
             Parameters
             ----------
@@ -994,7 +1002,7 @@ class Docker(base_api.BaseApi):
     def export_container(self, container : str = None, path : str = None) -> dict[str, object] | str:
         """Export container profile and content to a specified path on Synology nas.
 
-            archive <container>.syno.txz will be created in the specified path.
+            archive \<container\>.syno.txz will be created in the specified path.
 
             Parameters
             ----------
@@ -1075,7 +1083,7 @@ class Docker(base_api.BaseApi):
                                 "created": "2025-06-15T10:38:55.869358659Z",
                                 "docid": "1",
                                 "stream": "stderr",
-                                "text": "2025/06/15 10:38:55 Starting server on :8080 (base-url: \"\", assets-path: \"\")\n"
+                                "text": "2025/06/15 10:38:55 Starting server on :8080"
                             }
                         ],
                         "offset": 0,
