@@ -467,8 +467,7 @@ class Docker(base_api.BaseApi):
                         "name" : "abiosoft/caddy",
                         "registry" : "https://registry.hub.docker.com",
                         "star_count" : 289
-                     },
-                     ...
+                     }
                   ],
                   "limit" : 50,
                   "offset" : 0,
