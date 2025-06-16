@@ -1,6 +1,6 @@
 ---
 sidebar_position: 12
-title: 🚧 Docker
+title: ✅ Docker
 ---
 
 <!-- -------------------------------------------- -->
@@ -8,11 +8,6 @@ title: 🚧 Docker
 <!-- -------------------------------------------- -->
   
 # Docker
-:::warning
- 
-This API is not documented yet.
- 
-:::
 ## Overview
 Docker API implementation.
 
@@ -535,52 +530,12 @@ Search for docker image in all available registries.
 **_query_** `str`  
 name of the docker image to search for. Defaults to None.  
   
-**_Example return_** ``  
-  
-  
-**_--------------_** ``  
-  
-  
-**_```json_** ``  
-  
-  
-**_{_** ``  
-"data" : {
-   "data" : [
-      {
-         "description" : "Caddy 2 is a powerful, enterprise-ready, open source web server with automatic HTTPS written in Go.",
-         "downloads" : 650989718,
-         "is_automated" : false,
-         "is_official" : true,
-         "name" : "caddy",
-         "registry" : "https://registry.hub.docker.com",
-         "star_count" : 881
-      },
-      {
-         "description" : "Caddy is a lightweight, general-purpose web server.",
-         "downloads" : 111974910,
-         "is_automated" : true,
-         "is_official" : false,
-         "name" : "abiosoft/caddy",
-         "registry" : "https://registry.hub.docker.com",
-         "star_count" : 289
-      },
-      ...
-   ],
-   "limit" : 50,
-   "offset" : 0,
-   "page_size" : 50,
-   "total" : 6647
-},
-"httpd_restart" : false,
-"success" : true  
-  
-**_}_** ``  
-  
-  
-**_```_** ``  
-  
-  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object]`  
+A dictionary containing the search results for the docker image.  
 
 </div>
 #### Example return
@@ -607,8 +562,7 @@ name of the docker image to search for. Defaults to None.
             "name" : "abiosoft/caddy",
             "registry" : "https://registry.hub.docker.com",
             "star_count" : 289
-         },
-         ...
+         }
       ],
       "limit" : 50,
       "offset" : 0,
@@ -751,11 +705,333 @@ Example return
 
 ### `get_project_info`
 Get information about a specific project.  
+  
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Docker.Project` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_project_id_** `str`  
+ID of the project to get information about. Defaults to None.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object]`  
+A dictionary containing the project information.  
+
+</div>
+#### Example return
+<details>
+<summary>Click to expand</summary>
+```json
+{
+   "data" : {
+      "containerIds" : [ "1f2aa674d7942c25789c144c1e4ea04388e5a914e1ed3d7a1b8978f8f2f81ebf" ],
+      "containers" : [
+         {
+            "AppArmorProfile" : "docker-default",
+            "Args" : [ "server", "-config=/vault/file/" ],
+            "Config" : {
+               "AttachStderr" : true,
+               "AttachStdin" : false,
+               "AttachStdout" : true,
+               "Cmd" : null,
+               "Domainname" : "",
+               "Entrypoint" : [ "vault", "server", "-config=/vault/file/" ],
+               "Env" : [
+                  "VAULT_RAFT_PATH=/vault/file",
+                  "VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200",
+                  "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                  "NAME=vault",
+                  "VERSION="
+               ],
+               "ExposedPorts" : {
+                  "8200/tcp" : {}
+               },
+               "Healthcheck" : {
+                  "Interval" : 30000000000,
+                  "Retries" : 5,
+                  "Test" : [ "CMD", "vault", "status" ],
+                  "Timeout" : 10000000000
+               },
+               "Hostname" : "vault",
+               "Image" : "hashicorp/vault:latest",
+               "Labels" : {
+                  "com.docker.compose.config-hash" : "6a08fb0e6d57f8ad25b3d78cac40d369be831be5cf98406520e514d68aa03251",
+                  "com.docker.compose.container-number" : "1",
+                  "com.docker.compose.depends_on" : "",
+                  "com.docker.compose.image" : "sha256:2006f053b116f3a57dad1d8fff9d19c13f3e801e594dcbd58e219d4ccb654337",
+                  "com.docker.compose.oneoff" : "False",
+                  "com.docker.compose.project" : "vault",
+                  "com.docker.compose.project.config_files" : "/volume1/docker/vault/compose.yaml",
+                  "com.docker.compose.project.working_dir" : "/volume1/docker/vault",
+                  "com.docker.compose.replace" : "1153d033ece9eb4242926f805a211daed65922652fdf73ffcf8147e20e4c0ce2",
+                  "com.docker.compose.service" : "vault",
+                  "com.docker.compose.version" : "2.20.1",
+                  "description" : "Vault is a tool for securely accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, certificates, and more. Vault provides a unified interface to any secret, while providing tight access control and recording a detailed audit log.",
+                  "maintainer" : "Vault Team <vault@hashicorp.com>",
+                  "name" : "Vault",
+                  "release" : "322786e236e268532e4b189845971ba67b5cbb23",
+                  "revision" : "322786e236e268532e4b189845971ba67b5cbb23",
+                  "summary" : "Vault is a tool for securely accessing secrets.",
+                  "vendor" : "HashiCorp",
+                  "version" : "1.19.4"
+               },
+               "OnBuild" : null,
+               "OpenStdin" : false,
+               "StdinOnce" : false,
+               "Tty" : false,
+               "User" : "",
+               "Volumes" : {
+                  "/vault/file" : {},
+                  "/vault/logs" : {}
+               },
+               "WorkingDir" : "/"
+            },
+            "Created" : "2025-05-25T17:57:06.296933361Z",
+            "Driver" : "btrfs",
+            "ExecIDs" : null,
+            "GraphDriver" : {
+               "Data" : null,
+               "Name" : "btrfs"
+            },
+            "HostConfig" : {
+               "AutoRemove" : false,
+               "Binds" : [
+                  "/volume1/docker/vault/data:/vault/file:rw",
+                  "/volume1/docker/vault/logs:/vault/logs:rw",
+                  "/volume1/docker/vault/config:/vault/config:rw",
+                  "/volume1/docker/vault/plugins:/vault/plugins:rw",
+                  "/etc/localtime:/etc/localtime:ro"
+               ],
+               "BlkioDeviceReadBps" : null,
+               "BlkioDeviceReadIOps" : null,
+               "BlkioDeviceWriteBps" : null,
+               "BlkioDeviceWriteIOps" : null,
+               "BlkioWeight" : 0,
+               "BlkioWeightDevice" : null,
+               "CapAdd" : [ "IPC_LOCK" ],
+               "CapDrop" : null,
+               "Cgroup" : "",
+               "CgroupParent" : "",
+               "CgroupnsMode" : "host",
+               "ConsoleSize" : [ 0, 0 ],
+               "ContainerIDFile" : "",
+               "CpuCount" : 0,
+               "CpuPercent" : 0,
+               "CpuPeriod" : 0,
+               "CpuQuota" : 0,
+               "CpuRealtimePeriod" : 0,
+               "CpuRealtimeRuntime" : 0,
+               "CpuShares" : 768,
+               "CpusetCpus" : "",
+               "CpusetMems" : "",
+               "DeviceCgroupRules" : null,
+               "DeviceRequests" : null,
+               "Devices" : null,
+               "Dns" : [],
+               "DnsOptions" : [],
+               "DnsSearch" : [],
+               "ExtraHosts" : [],
+               "GroupAdd" : null,
+               "IOMaximumBandwidth" : 0,
+               "IOMaximumIOps" : 0,
+               "IpcMode" : "private",
+               "Isolation" : "",
+               "Links" : null,
+               "LogConfig" : {
+                  "Config" : {},
+                  "Type" : "db"
+               },
+               "MaskedPaths" : [
+                  "/proc/asound",
+                  "/proc/acpi",
+                  "/proc/kcore",
+                  "/proc/keys",
+                  "/proc/latency_stats",
+                  "/proc/timer_list",
+                  "/proc/timer_stats",
+                  "/proc/sched_debug",
+                  "/proc/scsi",
+                  "/sys/firmware"
+               ],
+               "Memory" : 536870912,
+               "MemoryReservation" : 0,
+               "MemorySwap" : 1073741824,
+               "MemorySwappiness" : null,
+               "NanoCpus" : 0,
+               "NetworkMode" : "vault_default",
+               "OomKillDisable" : false,
+               "OomScoreAdj" : 0,
+               "PidMode" : "",
+               "PidsLimit" : null,
+               "PortBindings" : {
+                  "8200/tcp" : [
+                     {
+                        "HostIp" : "",
+                        "HostPort" : "8205"
+                     }
+                  ]
+               },
+               "Privileged" : false,
+               "PublishAllPorts" : false,
+               "ReadonlyPaths" : [
+                  "/proc/bus",
+                  "/proc/fs",
+                  "/proc/irq",
+                  "/proc/sys",
+                  "/proc/sysrq-trigger"
+               ],
+               "ReadonlyRootfs" : false,
+               "RestartPolicy" : {
+                  "MaximumRetryCount" : 5,
+                  "Name" : "on-failure"
+               },
+               "Runtime" : "runc",
+               "SecurityOpt" : [ "no-new-privileges:true" ],
+               "ShmSize" : 67108864,
+               "UTSMode" : "",
+               "Ulimits" : null,
+               "UsernsMode" : "",
+               "VolumeDriver" : "",
+               "VolumesFrom" : null
+            },
+            "HostnamePath" : "/volume1/@docker/containers/1f2aa674d7942c25789c144c1e4ea04388e5a914e1ed3d7a1b8978f8f2f81ebf/hostname",
+            "HostsPath" : "/volume1/@docker/containers/1f2aa674d7942c25789c144c1e4ea04388e5a914e1ed3d7a1b8978f8f2f81ebf/hosts",
+            "Id" : "1f2aa674d7942c25789c144c1e4ea04388e5a914e1ed3d7a1b8978f8f2f81ebf",
+            "Image" : "sha256:2006f053b116f3a57dad1d8fff9d19c13f3e801e594dcbd58e219d4ccb654337",
+            "LogPath" : "/volume1/@docker/containers/1f2aa674d7942c25789c144c1e4ea04388e5a914e1ed3d7a1b8978f8f2f81ebf/log.db",
+            "MountLabel" : "",
+            "Mounts" : [
+               {
+                  "Destination" : "/vault/plugins",
+                  "Mode" : "rw",
+                  "Propagation" : "rprivate",
+                  "RW" : true,
+                  "Source" : "/volume1/docker/vault/plugins",
+                  "Type" : "bind"
+               },
+               {
+                  "Destination" : "/etc/localtime",
+                  "Mode" : "ro",
+                  "Propagation" : "rprivate",
+                  "RW" : false,
+                  "Source" : "/etc/localtime",
+                  "Type" : "bind"
+               },
+               {
+                  "Destination" : "/vault/config",
+                  "Mode" : "rw",
+                  "Propagation" : "rprivate",
+                  "RW" : true,
+                  "Source" : "/volume1/docker/vault/config",
+                  "Type" : "bind"
+               },
+               {
+                  "Destination" : "/vault/file",
+                  "Mode" : "rw",
+                  "Propagation" : "rprivate",
+                  "RW" : true,
+                  "Source" : "/volume1/docker/vault/data",
+                  "Type" : "bind"
+               },
+               {
+                  "Destination" : "/vault/logs",
+                  "Mode" : "rw",
+                  "Propagation" : "rprivate",
+                  "RW" : true,
+                  "Source" : "/volume1/docker/vault/logs",
+                  "Type" : "bind"
+               }
+            ],
+            "Name" : "/vault",
+            "NetworkSettings" : {
+               "Bridge" : "",
+               "EndpointID" : "",
+               "Gateway" : "",
+               "GlobalIPv6Address" : "",
+               "GlobalIPv6PrefixLen" : 0,
+               "HairpinMode" : false,
+               "IPAddress" : "",
+               "IPPrefixLen" : 0,
+               "IPv6Gateway" : "",
+               "LinkLocalIPv6Address" : "",
+               "LinkLocalIPv6PrefixLen" : 0,
+               "MacAddress" : "",
+               "Networks" : {
+                  "vault_default" : {
+                     "Aliases" : [ "vault", "vault", "1f2aa674d794" ],
+                     "DriverOpts" : null,
+                     "EndpointID" : "",
+                     "Gateway" : "",
+                     "GlobalIPv6Address" : "",
+                     "GlobalIPv6PrefixLen" : 0,
+                     "IPAMConfig" : null,
+                     "IPAddress" : "",
+                     "IPPrefixLen" : 0,
+                     "IPv6Gateway" : "",
+                     "Links" : null,
+                     "MacAddress" : "",
+                     "NetworkID" : "b741915823aacdffc8ab806ab348e198c2c486b4dd5df2627b0d586259926b1a"
+                  }
+               },
+               "Ports" : {},
+               "SandboxID" : "d523ddff9d90b2ecc74f20c33db7b4898fa2869f10899ccc6567febd64d7142c",
+               "SandboxKey" : "/var/run/docker/netns/d523ddff9d90",
+               "SecondaryIPAddresses" : null,
+               "SecondaryIPv6Addresses" : null
+            },
+            "Path" : "vault",
+            "Platform" : "linux",
+            "ProcessLabel" : "",
+            "ResolvConfPath" : "/volume1/@docker/containers/1f2aa674d7942c25789c144c1e4ea04388e5a914e1ed3d7a1b8978f8f2f81ebf/resolv.conf",
+            "RestartCount" : 5,
+            "State" : {
+               "Dead" : false,
+               "Error" : "",
+               "ExitCode" : 1,
+               "FinishedAt" : "2025-05-25T17:57:30.266770048Z",
+               "Health" : {
+                  "FailingStreak" : 0,
+                  "Log" : [],
+                  "Status" : "unhealthy"
+               },
+               "OOMKilled" : false,
+               "Paused" : false,
+               "Pid" : 0,
+               "Restarting" : false,
+               "Running" : false,
+               "StartedAt" : "2025-05-25T17:57:30.184237615Z",
+               "Status" : "exited"
+            }
+         }
+      ],
+      "content" : "docker-compose.yml contet",
+      "created_at" : "2025-05-25T17:31:00.875402Z",
+      "enable_service_portal" : false,
+      "id" : "b4d44e6c-5ab4-45f7-b380-481ef9839df1",
+      "is_package" : false,
+      "name" : "vault",
+      "path" : "/volume1/docker/vault",
+      "service_portal_name" : "",
+      "service_portal_port" : 0,
+      "service_portal_protocol" : "",
+      "services" : null,
+      "share_path" : "/docker/vault",
+      "state" : "",
+      "status" : "STOPPED",
+      "updated_at" : "2025-05-25T17:57:06.257863Z",
+      "version" : 2
+   },
+   "httpd_restart" : false,
+   "success" : true
+}
+```
+</details>
 
 
 
@@ -851,7 +1127,7 @@ A dictionary containing the result of the stop operation.
 
 ### `export_container_settings`
 Export container profile  
-file <container>.syno.json will be created in the specified path.  
+file \<container\>.syno.json will be created in the specified path.  
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Docker.Container.Profile` 
@@ -894,7 +1170,7 @@ A dictionary containing the result of the export operation.
 
 ### `export_container`
 Export container profile and content to a specified path on Synology nas.  
-archive <container>.syno.txz will be created in the specified path.  
+archive \<container\>.syno.txz will be created in the specified path.  
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Docker.Container` 
@@ -936,11 +1212,68 @@ A dictionary containing the result of the export operation.
 
 ### `get_logs`
 Get list of container logs.  
+  
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Docker.Container.Log` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_name_** `str`  
+The name of the container  
+  
+**_from_date_** `str`  
+The start date for the logs. Defaults to None.  
+  
+**_to_date_** `str`  
+The end date for the logs. Defaults to None.  
+  
+**_level_** `str`  
+The log level to filter by. Defaults to None.  
+  
+**_keyword_** `str`  
+Keyword to filter logs. Defaults to None.  
+  
+**_sort_dir_** `str`  
+Sort direction for the logs, either 'ASC' or 'DESC'. Defaults to 'DESC'.  
+  
+**_offset_** `int`  
+The offset for pagination. Defaults to 0.  
+  
+**_limit_** `int`  
+The maximum number of logs to return. Defaults to 1000.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object]`  
+A dictionary containing the logs from the specified container.  
+
+</div>
+#### Example return
+<details>
+<summary>Click to expand</summary>
+```json
+    {
+        "data": {
+            "limit": 1,
+            "logs": [
+                {
+                    "created": "2025-06-15T10:38:55.869358659Z",
+                    "docid": "1",
+                    "stream": "stderr",
+                    "text": "2025/06/15 10:38:55 Starting server on :8080"
+                }
+            ],
+            "offset": 0,
+            "total": 1
+        },
+        "success": true
+    }
+```
+</details>
 
 
 
