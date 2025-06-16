@@ -1,0 +1,40 @@
+name: Auto Generate Docs
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install -r requirements.txt
+      - name: Get all changed api files
+        id: changed-api-files
+        uses: tj-actions/changed-files@v46
+        with:
+          # Avoid using single or double quotes for multiline patterns
+          files: |
+            synology_api/**.py
+
+      - name: List all changed files markdown files
+        if: steps.changed-api-files.outputs.any_changed == 'true'
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-api-files.outputs.all_changed_files }}
+        run: |
+          for file in ${ALL_CHANGED_FILES}; do
+            echo "$file was changed"
+          
+            python3 docs_parser.py -f "$(basename "$file")"
+          done
+      - name: Commit & Push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          message: 'chore: autogenerate docs'
+          branch: "${{ github.head_ref }}"
