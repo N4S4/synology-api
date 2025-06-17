@@ -87,6 +87,7 @@ class BaseApi(object):
 
     def logout(self) -> None:
         """Close current session."""
+        api_name = 'hotfix' # fix for docs_parser.py issue
         if self.session:
             self.session.logout()
             if BaseApi.shared_session == self.session:
