@@ -737,7 +737,7 @@ class Package(base_api.BaseApi):
             ```json
             {
                 "data": {
-                    "message": "<br><strong><p style='color:blue'><big><b>Installation Successful!</big></p>\n<br><p style='color:blue'>Note: If Plex cannot access your media, verify user <strong>PlexMediaServer</strong> is granted permission in <strong>Control Panel</strong>.</p><br>\nSet access to your media share(s) by performing the following steps:<br><br>\n1. Open <strong>Control Panel</strong> and select <strong>Shared Folder</strong><br>\n2. Select the share which contains your media and click <strong>Edit</strong><br>\n3. Click the <strong>Permissions</strong> tab<br>\n4. Change the dropdown from <strong>Local Users</strong> to <strong>System internal user</strong><br>\n5. Check the <strong>Read/Write</strong> checkbox for the <strong>PlexMediaServer</strong> user<br>\n6. Click <strong>Save</strong> to confirm the new permissions<br>\n7. Repeat steps 2-6 for each share you want Plex Media Server to access<br>\n",
+                    "message": "message",
                     "packageName": "Plex Media Server",
                     "worker_message": []
                 },
@@ -927,7 +927,7 @@ class Package(base_api.BaseApi):
         return package_infos != None
 
     def easy_install(self, package_id: str, volume_path: str, install_dependencies: bool = True) -> dict:
-        """Execute an "easy" installation process of the package
+        """Execute an easy installation process of the package
 
             Parameters
             ----------
@@ -936,12 +936,12 @@ class Package(base_api.BaseApi):
             volume_path : str
                 Volume path where you want to install the package
             install_dependencies : bool, optional
-                If you want to install dependencies. Defaults to `True`
+                If you want to install dependencies. Defaults to True
 
             Returns
             -------
-            dict
-                Information about installation, same as `install_package` function
+            dict[str, object]
+                Information about installation, same as install_package function
 
             Example return
             ----------
@@ -997,6 +997,7 @@ class Package(base_api.BaseApi):
             }
             ```
         """
+        api_name = 'hotfix' # fix for docs_parser.py issue
 
         # Package already installed
         if self._is_package_already_installed(package_id):

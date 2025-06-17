@@ -99,7 +99,7 @@ class EventScheduler(base_api.BaseApi):
                 Name of the Event task to enable/disable.
 
             result_id : int
-                ID of the result to retrieve. From `get_task_results()`.
+                ID of the result to retrieve. From get_task_results().
 
             Returns
             -------
@@ -112,7 +112,7 @@ class EventScheduler(base_api.BaseApi):
             {
                 "data": {
                     "script_in": "hello",
-                    "script_out": "/volume3/datastore/scripts_output/asd/1726190267/script.log: line 1: hello: command not found\n"
+                    "script_out": "/volume3/datastore/scripts_output/asd/1726190267/script.log: line 1: hello: command not found\\n"
                 },
                 "success": true
             }

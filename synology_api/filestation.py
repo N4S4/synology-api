@@ -1264,9 +1264,12 @@ class FileStation(base_api.BaseApi):
             folder_path : str
                 Folder path to generate file tree
             tree : Tree
-                Instance of the Tree of lib "Treelib"
+                Instance of the Tree of lib \"Treelib\"
 
         """
+
+        api_name = 'hotfix' # fix for docs_parser.py issue
+
         data: dict = self.get_file_list(
             folder_path=folder_path
         ).get("data")
