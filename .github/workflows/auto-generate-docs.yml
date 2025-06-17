@@ -10,12 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Get Python version from .tool-versions
-        id: node-version
-        run: echo "PYTHON_VERSION=$(cat .tool-versions | egrep python | awk '{print $2}' | xargs)" >> $GITHUB_ENV
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
+          python-version: '3.13'
       - run: pip install -r requirements.txt
       - name: Get all changed api files
         id: changed-api-files
