@@ -42,3 +42,10 @@ tasks:
     cmds:
       - task: docs-parser
       - task: docs-build
+
+  pre-commit:
+    desc: Run all pre-commit hooks
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Running pre-commit hooks..."
+      - pre-commit run --all-files

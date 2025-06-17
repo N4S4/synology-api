@@ -14,11 +14,11 @@ If you find yourself here, most probably you are trying to develop something for
 I would like to specify that I do this for hobby as is my passion and in my little free time.
 
 Said this, there is no warranties chained and this library is provided "As Is", you will find many things can be simplified, and I slowly will but feel free to [Contribute](https://n4s4.github.io/synology-api/docs/contribute).
- 
+
 ## Premise
 
-I've tried this wrapper only with `python3`.  
-I do not know if it actually runs with previous versions 
+I've tried this wrapper only with `python3`.
+I do not know if it actually runs with previous versions
 
 Before opening an issue make sure you do your own research, if you are not sure, write me.
 
@@ -75,10 +75,10 @@ ds_info = ds.get_info()
 
 ## Available Functions
 
-At the moment there are around +300 APIs implemented with countless methods for each, the majority is not documented, but some are.  
+At the moment there are around +300 APIs implemented with countless methods for each, the majority is not documented, but some are.
 
-You can find a exhaustive list here:  
-[APIs - Supported APIs](https://n4s4.github.io/synology-api/docs/apis) 
+You can find a exhaustive list here:
+[APIs - Supported APIs](https://n4s4.github.io/synology-api/docs/apis)
 
 ## Feeling kind?
 If this code helps and you wish to support me:
@@ -97,7 +97,7 @@ If you want to show your project in this section, write me.
 
 ## Bugs
 
-Maybe? 
+Maybe?
 
 I hate bugs..
 
@@ -111,7 +111,7 @@ The code is probably in some parts twisted, I will try to optimize it at best.
 
 ## Contributing
 
-Just Don't Be Scared.  
+Just Don't Be Scared.
 Check [Contribute - Contribution 101](https://n4s4.github.io/synology-api/docs/contribute) for useful information.
 
 ## Author

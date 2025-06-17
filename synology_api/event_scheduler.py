@@ -14,7 +14,7 @@ class EventScheduler(base_api.BaseApi):
             - Get task results
             - Get result output
         - Setters:
-            - Set task settings 
+            - Set task settings
             - Set power schedule
         - Actions:
             - Enable task
@@ -26,14 +26,14 @@ class EventScheduler(base_api.BaseApi):
 
     def __get_root_token(self) -> str:
         sys_info = SysInfo(ip_address=self.session._ip_address, port=self.session._port, username=self.session._username, password=self.session._password,
-                            secure=self.session._secure, cert_verify=self.session._verify, dsm_version=self.session._version, debug=self.session._debug, 
+                            secure=self.session._secure, cert_verify=self.session._verify, dsm_version=self.session._version, debug=self.session._debug,
                             otp_code=self.session._otp_code, application=self.application)
         response = sys_info.password_confirm(password=self.session._password)
-        if response['success']: 
+        if response['success']:
             return response['data']['SynoConfirmPWToken']
         else:
             return ''
-        
+
     def get_task_results(
             self,
             task_name: str
@@ -79,13 +79,13 @@ class EventScheduler(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': 1, 
+            'version': 1,
             'method': 'result_list',
             'task_name': task_name
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_result_output(
             self,
             task_name: str,
@@ -99,7 +99,7 @@ class EventScheduler(base_api.BaseApi):
                 Name of the Event task to enable/disable.
 
             result_id : int
-                ID of the result to retrieve. From `get_task_results()`.
+                ID of the result to retrieve. From get_task_results().
 
             Returns
             -------
@@ -112,7 +112,7 @@ class EventScheduler(base_api.BaseApi):
             {
                 "data": {
                     "script_in": "hello",
-                    "script_out": "/volume3/datastore/scripts_output/asd/1726190267/script.log: line 1: hello: command not found\n"
+                    "script_out": "/volume3/datastore/scripts_output/asd/1726190267/script.log: line 1: hello: command not found\\n"
                 },
                 "success": true
             }
@@ -122,14 +122,14 @@ class EventScheduler(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': 1, 
+            'version': 1,
             'method': 'result_get_file',
             'task_name': task_name,
             'result_id': result_id
         }
 
         return self.request_data(api_name, api_path, req_param)
-        
+
     def task_set_enable(
             self,
             task_name: str,
@@ -144,7 +144,7 @@ class EventScheduler(base_api.BaseApi):
 
             enable (bool):
                 Wheter to enable (`True`) or disable (`False`) the task.
-        
+
             Returns
             -------
             dict[str, object]
@@ -157,20 +157,20 @@ class EventScheduler(base_api.BaseApi):
                 "success": true
             }
             ```
-        
+
         """
         api_name = 'SYNO.Core.EventScheduler'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': 1, 
+            'version': 1,
             'method': 'set_enable',
             'enable': enable,
             'task_name': task_name
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def task_run(
             self,
             task_name: str
@@ -179,7 +179,7 @@ class EventScheduler(base_api.BaseApi):
 
             Parameters
             ----------
-            task_name : str 
+            task_name : str
                 Name of the Event task to run.
 
             Returns
@@ -200,13 +200,13 @@ class EventScheduler(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': 1, 
+            'version': 1,
             'method': 'run',
             'task_name': task_name
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def task_delete(
             self,
             task_name: str
@@ -215,7 +215,7 @@ class EventScheduler(base_api.BaseApi):
 
             Parameters
             ----------
-            task_name : str 
+            task_name : str
                 Name of the Event task to run.
 
             Returns
@@ -236,19 +236,19 @@ class EventScheduler(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': 1, 
+            'version': 1,
             'method': 'delete',
             'task_name': task_name
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def task_create_or_set(
             self,
-            action: str, 
+            action: str,
             task_name: str,
-            owner: dict, 
-            trigger_event: str, 
+            owner: dict,
+            trigger_event: str,
             script: str,
             depend_on_task: list[str] = [],
             enable: bool = True,
@@ -259,31 +259,31 @@ class EventScheduler(base_api.BaseApi):
 
             Parameters
             ----------
-            action : str 
-                Action to perform on the task. 
-                
+            action : str
+                Action to perform on the task.
+
                 Possible values:
                 - `create` -> Creates a new task.
                 - `set` -> Modify an existing task.
 
-            task_name : str 
+            task_name : str
                 The name of the task.
 
             owner : dict[str, str]
-                Dictionary containing the owner's ID and name (e.g., `{"1026": "user1"}`). 
+                Dictionary containing the owner's ID and name (e.g., `{"1026": "user1"}`).
 
                 You can get the user UID by running `synouser --get your_user` in your NAS CLI.
 
                 For root privileges, pass `{"0":"root"}`.
 
-            trigger_event : str 
-                The event that triggers the task. 
-                
+            trigger_event : str
+                The event that triggers the task.
+
                 Possible values:
                 - `shutdown`
                 - `bootup`
 
-            script : str 
+            script : str
                 The script to be executed when the task is triggered.
 
             depend_on_task : list[str], optional
@@ -314,8 +314,8 @@ class EventScheduler(base_api.BaseApi):
         if action != 'create' and action != 'set':
             return {'error': f'action <{action}> is not valid.'}
         if trigger_event != 'shutdown' and trigger_event != 'bootup':
-            return {'error': f'trigger_event <{trigger_event}> is not valid.'} 
-        
+            return {'error': f'trigger_event <{trigger_event}> is not valid.'}
+
         pre_tasks = ''
         for task in depend_on_task: # NAS expects "[Task Name 1][Task Name 2]"
             pre_tasks += f'[{task}]'
@@ -324,7 +324,7 @@ class EventScheduler(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': 1, 
+            'version': 1,
             'method': action,
             'task_name': task_name,
             'owner': json.dumps(owner),
@@ -337,16 +337,16 @@ class EventScheduler(base_api.BaseApi):
             'operation': script,
             'operation_type': 'script'
         }
-    
+
         if owner['0'] == 'root':
             api_name = 'SYNO.Core.EventScheduler.Root'
             req_param['SynoConfirmPWToken'] = self.__get_root_token()
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def set_power_schedule(self, poweron_tasks: List[dict] = [], poweroff_tasks: List[dict] = []) -> dict:
         """Set the power schedule, poweron tasks and poweroff tasks
-        
+
             Parameters
             ----------
             poweron_tasks : List[dict], optional
@@ -375,7 +375,7 @@ class EventScheduler(base_api.BaseApi):
             -------
             dict
                 List of tasks in power schedule
-        
+
             Example return
             ----------
             ```json
@@ -395,7 +395,7 @@ class EventScheduler(base_api.BaseApi):
             }
             ```
         """
-        
+
         api_name = 'SYNO.Core.Hardware.PowerSchedule'
         info = self.core_list[api_name]
         api_path = info["path"]
@@ -411,12 +411,12 @@ class EventScheduler(base_api.BaseApi):
 
     def load_power_schedule(self) -> dict:
         """Load the power schedule, poweron tasks and poweroff tasks
-        
+
             Returns
             -------
             dict
                 List of tasks in power schedule
-        
+
             Example return
             ----------
             ```json
@@ -436,7 +436,7 @@ class EventScheduler(base_api.BaseApi):
             }
             ```
         """
-        
+
         api_name = 'SYNO.Core.Hardware.PowerSchedule'
         info = self.core_list[api_name]
         api_path = info['path']

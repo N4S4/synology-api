@@ -225,10 +225,10 @@ Enable share cow. Defaults to `False`.
 **_enable_share_compress_** `bool`  
 Enable share compress. Defaults to `False`.  
   
-**_share_quota_** `int, optional `  
+**_share_quota_** `int`  
 Share quota. Defaults to `0`.  
   
-**_name_org_** `str, optional `  
+**_name_org_** `str`  
 Defaults to `""`.  
   
 
@@ -400,7 +400,7 @@ All known values are: `["system", "local_user", "local_group", "ldap_user", "lda
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict `  
+`dict`  
 List of permission(s) on the folder  
 
 </div>
@@ -562,7 +562,7 @@ Example:
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict `  
+`dict`  
 Success  
 
 </div>
@@ -625,7 +625,7 @@ Permissions of a group on Shared folders
         "total": 1
     },
     "success": true
-}     
+}
 ```
 </details>
 

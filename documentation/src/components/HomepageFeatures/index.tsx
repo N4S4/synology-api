@@ -24,7 +24,7 @@ const FeatureList: FeatureItem[] = [
     title: '📈 Continuous Growth',
     description: (
       <>
-        With 300+ APIs and 25+ implementations, we provide a rich set of features to interact with your NAS. We're continuously expanding the package, adding new APIs and enhancements to keep up with the latest updates and user needs. 
+        With 300+ APIs and 25+ implementations, we provide a rich set of features to interact with your NAS. We're continuously expanding the package, adding new APIs and enhancements to keep up with the latest updates and user needs.
       </>
     ),
   },
@@ -33,7 +33,7 @@ const FeatureList: FeatureItem[] = [
 function Feature({title, description}: FeatureItem) {
   return (
     <div className={clsx('col col--5')}>
-      <motion.div 
+      <motion.div
         className="text--center padding-horiz--md"
         variants={slideDown}
         transition={{ delayChildren: 0.3, duration: .5 }}
@@ -54,15 +54,15 @@ export default function HomepageFeatures(): ReactNode {
   return (
     <section className={styles.features}>
       <div className="container">
-        <motion.div 
+        <motion.div
           className="row center-content"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 1 }}
           variants={fade}
           transition={{
-            staggerChildren: 0.6, 
-            duration: .5 
+            staggerChildren: 0.6,
+            duration: .5
           }}
         >
           {FeatureList.map((props, idx) => (

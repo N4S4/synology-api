@@ -18,12 +18,12 @@ Documentation is **important**, specially in this end-user focused package, so p
 Take a moment to check out our [Code of Conduct](contribute/conduct_code)
 
 ## 🛠️ Testing
-You should **test your code** on your Synology NAS (_if you own one_), this would save us plenty of time before merging any of your pull request.  
+You should **test your code** on your Synology NAS (_if you own one_), this would save us plenty of time before merging any of your pull request.
 
 It does not mean that we will not test it before but makes the process a lot easier and creates less open pull requests which means less hassle and review.
 
 ## 🌐 Pull Request
-Check if there is an active branch in progress and **always** make sure you are pulling into the right branch.  
+Check if there is an active branch in progress and **always** make sure you are pulling into the right branch.
 
 Before creating a **PR** make sure to do not change setup, License and any other non code related file.
 Changing them would only slow down the process with consequently need of modifying the PR.

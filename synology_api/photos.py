@@ -250,20 +250,20 @@ class Photos(base_api.BaseApi):
             offset : int
                 Specify how many shared folders are skipped before beginning to return listed shared folders.
 
-            limit : int 
+            limit : int
                 Number of shared folders requested. Set to `0` to list all shared folders.
 
             folder_id : int
                 ID of folder
 
             sort_by : str, optional
-                Possible values: 
+                Possible values:
                 - `filename`
                 - `filesize`
                 - `takentime`
                 - `item_type`
 
-            sort_direction : str, optional 
+            sort_direction : str, optional
                 Possible values: `asc` or `desc`. Defaults to: `desc`
 
             passphrase : str, optional
@@ -272,11 +272,11 @@ class Photos(base_api.BaseApi):
             additional : list[str]
                 Possible values:
                 `["thumbnail","resolution", "orientation", "video_convert", "video_meta", "provider_user_id", "exif", "tag", "description", "gps", "geocoding_id", "address", "person"]`
-                
-            type : str 
+
+            type : str
                 Possible values:
-                - `photo`: Photo 
-                - `video`: Video 
+                - `photo`: Photo
+                - `video`: Video
                 - `live`: iPhone live photos'
 
         """

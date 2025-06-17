@@ -561,9 +561,7 @@ Code Description
 
 ### `redirect_webapi_to_target_ds`
 webAPI Array of `webAPI_info`  
-Example:
-`webAPI={"api": "SYNO.SurveillanceStation.AddOns", "version": 1, "method":
-"List"}`  
+  
 #### Internal API
 <div class="padding-left--md">
 `SYNO.SurveillanceStation.CMS` 

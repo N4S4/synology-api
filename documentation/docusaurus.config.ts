@@ -20,7 +20,7 @@ const config: Config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'N4S4', // Usually your GitHub org/user name.
   projectName: 'synology-api', // Usually your repo name.
-  
+
   trailingSlash: false,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -34,10 +34,10 @@ const config: Config = {
   },
 
   headTags: [
-    { 
-      tagName: 'link', 
-      attributes: { 
-        rel: 'sitemap', 
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'sitemap',
         href: '/synology-api/sitemap.xml',
         type: 'application/xml',
         title: 'Sitemap'

@@ -11,20 +11,20 @@ title: ✅ CloudSync
 ## Overview
 Cloud Sync API implementation.
 
-This API provides the functionality to get information related to the package settings and current connections and tasks. 
+This API provides the functionality to get information related to the package settings and current connections and tasks.
 It also provides functionalities to set most of the settings for tasks and package configuration, as well as manage the current syncing processes.
 
 Due to the vast amount of public clouds available in the project, the API was not tested for every cloud scenario, so some params request may be missing in specific not tested clouds.
 
 The tested clouds so far are:
-- Google Drive  
+- Google Drive
 - OneDrive
 - DropBox
 - Amazon S3 (task creation)
 
 ### Supported methods
 
-     - **Getters** : 
+     - **Getters** :
         - Get package settings
         - Get connections
         - Get connections settings
@@ -35,7 +35,7 @@ The tested clouds so far are:
         - Get task filters
         - Get task synced remote directories
         - Get recently modified & currently syncing files
-     - **Setters** : 
+     - **Setters** :
         - Set package settings
         - Set relink behavior
         - Set connection settings
@@ -49,7 +49,6 @@ The tested clouds so far are:
         - Delete task
         - Validate task settings
         - Create S3 task
-     
 ## Methods
 ### `get_pkg_config`
 Retrieve package settings.  
@@ -118,8 +117,8 @@ Retrieve a list of current cloud connections.
   
 #### Parameters
 <div class="padding-left--md">
-**_group_by_** `str, optional `  
-How to group the connection list, by user or cloud type. Defaults to `"group_by_user"`.   
+**_group_by_** `str`  
+How to group the connection list, by user or cloud type. Defaults to `"group_by_user"`.  
 Possible values:
 - `group_by_user`: Group connection by owner user.
 - `group_by_cloud_type`: Group connections by cloud provider.  
@@ -192,7 +191,7 @@ Retrieve settings for a specific connection.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection, obtained from `get_connections()`.  
   
 
@@ -216,7 +215,7 @@ A dictionary containing the connection settings.
         "max_upload_speed": 0,
         "part_size": 0,
         "pull_event_period": 60,
-        "schedule_info": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",  
+        "schedule_info": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
         "storage_class": "",
         "task_name": "Dropbox"
     },
@@ -240,7 +239,7 @@ Retrieve cloud information for a specific connection.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection, obtained from `get_connections()`.  
   
 
@@ -292,7 +291,7 @@ Retrieve authentication information for a specific connection.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection, obtained from `get_connections()`.  
   
 
@@ -363,28 +362,28 @@ Retrieve logs for a specific connection.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection, obtained from `get_connections()`.  
   
-**_keyword_** `str, optional `  
+**_keyword_** `str`  
 A keyword to filter logs. Defaults to `''`.  
   
-**_date_from_** `int, optional `  
+**_date_from_** `int`  
 The starting date in epoch format. Defaults to `0`.  
   
-**_date_to_** `int, optional `  
+**_date_to_** `int`  
 The ending date in epoch format. Defaults to `0`.  
   
 **_log_level_** `int`  
-Log level filter. Defaults to `-1`.   
+Log level filter. Defaults to `-1`.  
 Possible values:
 - `-1`: All
 - `0`: Info
 - `1`: Warning
 - `2`: Error  
   
-**_action_** `int, optional `  
-Action filter. Defaults to `-1`.   
+**_action_** `int`  
+Action filter. Defaults to `-1`.  
 Possible values:
 - `-1`: All
 - `0`: Delete Remote
@@ -395,10 +394,10 @@ Possible values:
 - `8`: Merge
 - `9`: Merge Deletion  
   
-**_offset_** `int, optional `  
+**_offset_** `int`  
 Log offset for pagination. Defaults to `0`.  
   
-**_limit_** `int, optional `  
+**_limit_** `int`  
 Number of logs to retrieve. Defaults to `200`.  
   
 
@@ -459,7 +458,7 @@ Retrieve a list of tasks related to a specific connection.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection, obtained from `get_connections()`.  
   
 
@@ -513,7 +512,7 @@ Retrieve filter information for a specific task.
   
 #### Parameters
 <div class="padding-left--md">
-**_sess_id_** `int `  
+**_sess_id_** `int`  
 The ID of the task, obtained from `get_tasks()`.  
   
 
@@ -570,13 +569,13 @@ Retrieve a list of children directories in the cloud for a specific task.
   
 #### Parameters
 <div class="padding-left--md">
-**_sess_id_** `int `  
+**_sess_id_** `int`  
 The ID of the task, obtained from `get_tasks()`.  
   
-**_remote_folder_id_** `str `  
+**_remote_folder_id_** `str`  
 The ID of the remote folder, obtained from `get_tasks()`.  
   
-**_path_** `str, optional `  
+**_path_** `str`  
 The folder path to retrieve the child directories from. Defaults to root `'/'`.  
   
 
@@ -737,16 +736,16 @@ Set package configuration settings.
   
 #### Parameters
 <div class="padding-left--md">
-**_pkg_volume_** `str `  
+**_pkg_volume_** `str`  
 The volume path where the package data will be stored (e.g., `/volume1`).  
   
-**_log_count_** `int, optional `  
+**_log_count_** `int`  
 Maximum number of logs retained per connection. Defaults to `20000`, max is `100000`.  
   
-**_workers_** `int, optional `  
+**_workers_** `int`  
 Number of concurrent uploads allowed. Defaults to `3`, max is `20`.  
   
-**_admin_mode_** `bool, optional `  
+**_admin_mode_** `bool`  
 Whether all users' tasks are retrieved or not. Defaults to `True`.  
   
 
@@ -787,7 +786,7 @@ Set the relinking behavior for personal user accounts.
   
 #### Parameters
 <div class="padding-left--md">
-**_delete_from_cloud_** `bool `  
+**_delete_from_cloud_** `bool`  
 Set to `False` for "locally deleted files will be re-fetched from the cloud".  
 Set to `True` for "locally deleted files will also be removed from the cloud".  
   
@@ -824,28 +823,28 @@ Set settings for a specific cloud connection.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection, obtained from `get_connections()`.  
   
-**_task_name_** `str `  
+**_task_name_** `str`  
 The name of the cloud sync task.  
   
-**_pull_event_period_** `int, optional `  
+**_pull_event_period_** `int`  
 Frequency (in seconds) to pull event updates. Defaults to `60`.  
   
-**_max_upload_speed_** `int, optional `  
+**_max_upload_speed_** `int`  
 Maximum upload speed in bytes. Defaults to `0` (unlimited).  
   
-**_max_download_speed_** `int, optional `  
+**_max_download_speed_** `int`  
 Maximum download speed in bytes. Defaults to `0` (unlimited).  
   
-**_storage_class_** `str, optional `  
+**_storage_class_** `str`  
 Cloud-specific storage class. Defaults to `''`.  
   
-**_isSSE_** `bool, optional `  
+**_isSSE_** `bool`  
 Enable Security Service Edge (SSE) for compatible cloud storage. Defaults to `False`.  
   
-**_part_size_** `int, optional `  
+**_part_size_** `int`  
 Part size for file uploads, in megabytes. Defaults to `128`.  
   
 
@@ -881,13 +880,13 @@ Set the schedule for a specific connection.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection, obtained from `get_connections()`.  
   
-**_enable_** `bool `  
+**_enable_** `bool`  
 Whether the scheduling is enabled (`True`) or disabled (`False`).  
   
-**_schedule_info_** `list[str], optional `  
+**_schedule_info_** `list[str]`  
 A list of 7 strings where each string represents a day of the week, going from Sunday to Saturday.  
 Each string is composed of 24 characters, where each character is either '1' (enabled) or '0' (disabled) for the respective hour of the day.  
 The default value (if `schedule_info` is not provided) enables all days and hours.  
@@ -939,23 +938,23 @@ Set the task settings for a specific session.
   
 #### Parameters
 <div class="padding-left--md">
-**_sess_id_** `int `  
+**_sess_id_** `int`  
 The ID of the task, obtained from `get_tasks()`.  
   
-**_sync_direction_** `str `  
-The synchronization direction.   
+**_sync_direction_** `str`  
+The synchronization direction.  
 Possible values:
 - `ONLY_UPLOAD`: Upload local changes only.
 - `BIDIRECTION`: Sync both ways (upload and download).
 - `ONLY_DOWNLOAD`: Download remote changes only.  
   
-**_consistency_check_** `bool, optional `  
+**_consistency_check_** `bool`  
 If True, enables advanced consistency check (requires more resources). Defaults to `True`.  
   
-**_no_delete_on_cloud_** `bool, optional `  
+**_no_delete_on_cloud_** `bool`  
 If `True`, prevents deletion of files in the remote folder when removed from the local directory. Defaults to `True`.  
   
-**_convert_gd_** `bool, optional `  
+**_convert_gd_** `bool`  
 If `True`, converts Google Drive Online documents to Microsoft Office format. Defaults to `False`.  
   
 
@@ -991,19 +990,19 @@ Set task filters for selective synchronization in a specific session.
   
 #### Parameters
 <div class="padding-left--md">
-**_sess_id_** `int `  
+**_sess_id_** `int`  
 The ID of the session, obtained from `get_tasks()`.  
   
-**_filtered_paths_** `list[str], optional `  
+**_filtered_paths_** `list[str]`  
 A list of paths (directories / subdirectories) to exclude from the synchronization process, e.g, `['/images', '/videos/movies']`. Defaults to `[]`.  
   
-**_filtered_filenames_** `list[str], optional `  
+**_filtered_filenames_** `list[str]`  
 A list of filenames to exclude from synchronization. Defaults to `[]`.  
   
-**_filtered_extensions_** `list[str], optional `  
+**_filtered_extensions_** `list[str]`  
 A list of file extensions to exclude from synchronization, e.g., `['mp3', 'iso', 'mkv']`. Defaults to `[]`.  
   
-**_max_upload_size_** `int, optional `  
+**_max_upload_size_** `int`  
 The maximum file size for uploads, in bytes. Files larger than this size will be excluded from synchronization. Defaults to `0` (no size limit).  
   
 
@@ -1039,7 +1038,7 @@ Pause one or all connections.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int, optional `  
+**_conn_id_** `int`  
 The ID of the connection to pause. If not specified or set to `-1`, all connections will be paused.  
   
 
@@ -1075,7 +1074,7 @@ Resume one or all connections.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int, optional `  
+**_conn_id_** `int`  
 The ID of the connection to resume. If not specified or set to `-1`, all connections will be resumed.  
   
 
@@ -1111,7 +1110,7 @@ The data will remain in both the local and remote directories.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection to be removed, obtained from `get_connections()`.  
   
 
@@ -1147,10 +1146,10 @@ The data will remain in both the local and remote directories.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection associated with the task, obtained from `get_connections()`.  
   
-**_sess_id_** `int `  
+**_sess_id_** `int`  
 The ID of the task to be removed, obtained from `get_tasks()`.  
   
 
@@ -1186,28 +1185,28 @@ Test the task settings make sure they are valid.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection.  
   
-**_local_path_** `str `  
+**_local_path_** `str`  
 The local path to sync.  
   
-**_cloud_path_** `str `  
+**_cloud_path_** `str`  
 The cloud path to sync.  
   
-**_sync_direction_** `str, optional `  
+**_sync_direction_** `str`  
 The synchronization direction. Defaults to `'BIDIRECTION'`.  
   
-**_storage_class_** `str, optional `  
+**_storage_class_** `str`  
 The storage class. Defaults to `'STANDARD'`.  
   
-**_file_filter_** `list[str], optional `  
+**_file_filter_** `list[str]`  
 List of file extensions to filter. Defaults to `[]`.  
   
-**_filter_max_upload_size_** `int, optional `  
+**_filter_max_upload_size_** `int`  
 Maximum upload size for files. Defaults to `0`.  
   
-**_filter_names_** `list[str], optional `  
+**_filter_names_** `list[str]`  
 List of file names to filter. Defaults to `[]`.  
   
 
@@ -1234,28 +1233,28 @@ Add a new synchronization task.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection.  
   
-**_local_path_** `str `  
+**_local_path_** `str`  
 The local path to sync.  
   
-**_cloud_path_** `str `  
+**_cloud_path_** `str`  
 The cloud path to sync.  
   
-**_sync_direction_** `str, optional `  
+**_sync_direction_** `str`  
 The synchronization direction. Defaults to `'BIDIRECTION'`.  
   
-**_storage_class_** `str, optional `  
+**_storage_class_** `str`  
 The storage class. Defaults to `'STANDARD'`.  
   
-**_file_filter_** `list[str], optional `  
+**_file_filter_** `list[str]`  
 List of file extensions to filter. Defaults to `[]`.  
   
 **_filter_max_upload_size_** `int`  
 Maximum upload size for files. Defaults to `0`.  
   
-**_filter_names_** `list[str], optional `  
+**_filter_names_** `list[str]`  
 List of file names to filter. Defaults to `[]`.  
   
 

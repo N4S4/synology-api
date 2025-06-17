@@ -15,14 +15,14 @@ This API provides the functionality to get information related to the scheduler 
 
 ### Supported methods
 
-- **Getters** : 
+- **Getters** :
     - Get all tasks
     - Get task information
     - Get task results
     - Get output path for task results
 - **Setters** :
     - Set output path for task results
-    - Set task settings 
+    - Set task settings
 - **Actions** :
     - Run task
     - Create task
@@ -44,6 +44,20 @@ Retrieve tasks output configuration.
 A dictionary containing a list of the tasks and information related to them.  
 
 </div>
+#### Example return
+<details>
+<summary>Click to expand</summary>
+```json
+{
+    "data": {
+        "enable_output": true,
+        "output_path": "share/scripts_output",
+        "type": "esynoscheduler",
+    },
+    "success": true
+}
+```
+</details>
 
 
 
@@ -60,7 +74,7 @@ List all present scheduled tasks and event triggered tasks.
   
 #### Parameters
 <div class="padding-left--md">
-**_sort_by_** `str, optional `  
+**_sort_by_** `str`  
 The field to sort tasks by. Defaults to `"next_trigger_time"`.  
 Possible values:
 - "next_trigger_time"
@@ -69,16 +83,16 @@ Possible values:
 - "action"
 - "owner"  
   
-**_sort_direction_** `str, optional `  
+**_sort_direction_** `str`  
 The sort direction. Defaults to `"ASC"`.  
 Possible values:
 - "ASC"
 - "DESC"  
   
-**_offset_** `int, optional `  
+**_offset_** `int`  
 Task offset for pagination. Defaults to `0`.  
   
-**_limit_** `int, optional `  
+**_limit_** `int`  
 Number of tasks to retrieve. Defaults to `50`.  
   
 
@@ -145,13 +159,13 @@ Retrieve the configuration for a specific task or list of all the available serv
   
 #### Parameters
 <div class="padding-left--md">
-**_task_id_** `int `  
+**_task_id_** `int`  
 The ID of the task to retrieve the configuration for. Pass `-1` to get a list of all available services with their IDs.  
   
-**_real_owner_** `str `  
+**_real_owner_** `str`  
 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.  
   
-**_type_** `str, optional `  
+**_type_** `str`  
 The type of task (e.g., 'service'). Pass "service" to get a list of all available services with their IDs. Defaults to `""`.  
   
 
@@ -224,7 +238,7 @@ Retrieve the results list for a specific task.
   
 #### Parameters
 <div class="padding-left--md">
-**_task_id_** `int `  
+**_task_id_** `int`  
 The ID of the task to retrieve the results for.  
   
 
@@ -276,10 +290,10 @@ Configure the output settings for tasks results.
   
 #### Parameters
 <div class="padding-left--md">
-**_enable_output_** `bool `  
+**_enable_output_** `bool`  
 Whether to enable result logging or not.  
   
-**_output_path_** `str, optional `  
+**_output_path_** `str`  
 The path where the result logs will be stored, e.g. `share/scripts_output'`. Defaults to `""`.  
   
 
@@ -315,10 +329,10 @@ Enable or disable a task.
   
 #### Parameters
 <div class="padding-left--md">
-**_task_id_** `int `  
+**_task_id_** `int`  
 The ID of the task to be enabled.  
   
-**_real_owner_** `str `  
+**_real_owner_** `str`  
 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.  
   
 **_enable_** `bool`  
@@ -357,10 +371,10 @@ Run a specific task.
   
 #### Parameters
 <div class="padding-left--md">
-**_task_id_** `int `  
+**_task_id_** `int`  
 The ID of the task to be run.  
   
-**_real_owner_** `str `  
+**_real_owner_** `str`  
 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.  
   
 
@@ -396,10 +410,10 @@ Delete a specific task.
   
 #### Parameters
 <div class="padding-left--md">
-**_task_id_** `int `  
+**_task_id_** `int`  
 The ID of the task to be deleted.  
   
-**_real_owner_** `str `  
+**_real_owner_** `str`  
 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.  
   
 
@@ -426,7 +440,7 @@ A dictionary containing the result of the task deletion.
 
 
 ### `create_script_task`
-Create a new Script task with the provided schedule and notification settings.   
+Create a new Script task with the provided schedule and notification settings.  
 :::tip
  
  If the task needs to run with root privileges, please specify the owner as "root".  
@@ -440,28 +454,28 @@ Create a new Script task with the provided schedule and notification settings.
   
 #### Parameters
 <div class="padding-left--md">
-**_task_name_** `str `  
+**_task_name_** `str`  
 The name of the task.  
   
-**_owner_** `str `  
+**_owner_** `str`  
 The task owner. If the task needs to run with root privileges, please specify the owner as "root".  
   
-**_script_** `str `  
+**_script_** `str`  
 The script to be executed.  
   
-**_enable_** `bool, optional `  
+**_enable_** `bool`  
 Whether the task should be enabled upon creation. Defaults to `True`.  
   
-**_run_frequently_** `bool, optional `  
+**_run_frequently_** `bool`  
 Determines whether the task runs on a recurring schedule (`True`) or only on a specific date (`False`). Defaults to `True`.  
   
-**_run_days_** `str, optional `  
+**_run_days_** `str`  
 Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).  
   
-**_run_date_** `str, optional `  
+**_run_date_** `str`  
 The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.  
   
-**_repeat_** `str, optional `  
+**_repeat_** `str`  
 How often the task should repeat. Defaults to `daily`.  
 Possible values:
 - `daily` -> Only when 'run_frequently=True'
@@ -472,35 +486,35 @@ Possible values:
 - `every_6_months` -> Only when 'run_frequently=False'
 - `yearly` -> Only when 'run_frequently=False'  
   
-**_monthly_week_** `list[str], optional `  
-If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`.   
+**_monthly_week_** `list[str]`  
+If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`.  
 Defaults to `[]`.  
   
-**_start_time_h_** `int, optional `  
+**_start_time_h_** `int`  
 Hour at which the task should start. Defaults to `0`.  
   
-**_start_time_m_** `int, optional `  
+**_start_time_m_** `int`  
 Minute at which the task should start. Defaults to `0`.  
   
-**_same_day_repeat_h_** `int, optional `  
-Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.   
-Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).   
+**_same_day_repeat_h_** `int`  
+Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.  
+Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).  
 Possible values: `0..23`  
 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
   
-**_same_day_repeat_m_** `int, optional `  
-Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.   
-Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).   
+**_same_day_repeat_m_** `int`  
+Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.  
+Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).  
 Posible values: `1`, `5`, `10`, `15`, `20`, `30`  
 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
   
-**_same_day_repeat_until_** `int, optional `  
+**_same_day_repeat_until_** `int`  
 Last hour of the day when the task can repeat. Defaults to `start_time_h`.  
   
-**_notify_email_** `str, optional `  
+**_notify_email_** `str`  
 Email address to send notifications to. Defaults to `""`, thus disabling the notification feature.  
   
-**_notify_only_on_error_** `bool, optional `  
+**_notify_only_on_error_** `bool`  
 If `True`, notifications are only sent when an error occurs. Defaults to `False`.  
   
 
@@ -530,14 +544,13 @@ A dictionary with the id of the created task.
 
 
 ### `modify_script_task`
-Modify settings of a Script task.   
+Modify settings of a Script task.  
 :::warning
  
- This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
+ This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.  
  
 :::
 
- 
 :::tip
  
  If the task needs to run with root privileges, please specify the owner as "root".  
@@ -554,31 +567,31 @@ Modify settings of a Script task.
 **_task_id_** `int`  
 The ID of the task.  
   
-**_task_name_** `str `  
+**_task_name_** `str`  
 The name of the task.  
   
-**_owner_** `str `  
+**_owner_** `str`  
 The task owner. If the task needs to run with root privileges, please specify the owner as "root".  
   
-**_real_owner_** `str `  
+**_real_owner_** `str`  
 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.  
   
-**_script_** `str `  
+**_script_** `str`  
 The script to be executed.  
   
-**_enable_** `bool, optional `  
+**_enable_** `bool`  
 Whether the task should be enabled upon creation. Defaults to `True`.  
   
-**_run_frequently_** `bool, optional `  
+**_run_frequently_** `bool`  
 Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.  
   
-**_run_days_** `str, optional `  
+**_run_days_** `str`  
 Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).  
   
-**_run_date_** `str, optional `  
+**_run_date_** `str`  
 The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.  
   
-**_repeat_** `str, optional `  
+**_repeat_** `str`  
 How often the task should repeat. Defaults to `'daily'`.  
 Possible values:
 - `daily` -> Only when 'run_frequently=True'
@@ -589,34 +602,34 @@ Possible values:
 - `every_6_months` -> Only when 'run_frequently=False'
 - `yearly` -> Only when 'run_frequently=False'  
   
-**_monthly_week_** `list[str], optional `  
+**_monthly_week_** `list[str]`  
 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. Defaults to `[]`.  
   
-**_start_time_h_** `int, optional `  
+**_start_time_h_** `int`  
 Hour at which the task should start. Defaults to `0`.  
   
-**_start_time_m_** `int, optional `  
+**_start_time_m_** `int`  
 Minute at which the task should start. Defaults to `0`.  
   
-**_same_day_repeat_h_** `int, optional `  
-Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
+**_same_day_repeat_h_** `int`  
+Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.
 Set to `0` to disable same-day repeats. Defaults to `0`.  
 Possible values: `0..23`  
 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
   
-**_same_day_repeat_m_** `int, optional `  
-Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
+**_same_day_repeat_m_** `int`  
+Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.
 Set to `0` to disable same-day repeats. Defaults to `0`.  
 Posible values: `1`, `5`, `10`, `15`, `20`, `30`  
 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
   
-**_same_day_repeat_until_** `int, optional `  
+**_same_day_repeat_until_** `int`  
 Last hour of the day when the task can repeat. Defaults to `start_time_h`.  
   
-**_notify_email_** `str, optional `  
+**_notify_email_** `str`  
 Email address to send notifications to. Defaults to `""`, thus disabling the notification feature.  
   
-**_notify_only_on_error_** `bool, optional `  
+**_notify_only_on_error_** `bool`  
 If `True`, notifications are only sent when an error occurs. Defaults to `False`.  
   
 
@@ -655,28 +668,28 @@ Create a new Beep Control task with the provided schedule and beep duration.
   
 #### Parameters
 <div class="padding-left--md">
-**_task_name_** `str `  
+**_task_name_** `str`  
 The name of the task.  
   
-**_owner_** `str `  
+**_owner_** `str`  
 The task owner.  
   
-**_beep_duration_** `int, optional `  
+**_beep_duration_** `int`  
 The amount of seconds the beep will be triggered for, in seconds. Defaults to `60`.  
   
-**_enable_** `bool, optional `  
+**_enable_** `bool`  
 Whether the task should be enabled upon creation. Defaults to `True`.  
   
-**_run_frequently_** `bool, optional `  
+**_run_frequently_** `bool`  
 Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.  
   
-**_run_days_** `str, optional `  
+**_run_days_** `str`  
 Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).  
   
-**_run_date_** `str, optional `  
+**_run_date_** `str`  
 The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.  
   
-**_repeat_** `str, optional `  
+**_repeat_** `str`  
 How often the task should repeat. Defaults to `'daily'`.  
 Possible values:
 - `daily` -> Only when 'run_frequently=True'
@@ -687,29 +700,29 @@ Possible values:
 - `every_6_months` -> Only when 'run_frequently=False'
 - `yearly` -> Only when 'run_frequently=False'  
   
-**_monthly_week_** `list[str], optional `  
-If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
+**_monthly_week_** `list[str]`  
+If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`.
 Defaults to `[]`.  
   
-**_start_time_h_** `int, optional `  
+**_start_time_h_** `int`  
 Hour at which the task should start. Defaults to `0`.  
   
-**_start_time_m_** `int, optional `  
+**_start_time_m_** `int`  
 Minute at which the task should start. Defaults to `0`.  
   
-**_same_day_repeat_h_** `int, optional `  
-Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired. 
+**_same_day_repeat_h_** `int`  
+Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.
 Set to `0` to disable same-day repeats. Defaults to `0`.  
 Possible values: `0..23`  
 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
   
-**_same_day_repeat_m_** `int, optional `  
-Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired. 
-Set to `0` to disable same-day repeats. Defaults to `0`.   
+**_same_day_repeat_m_** `int`  
+Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.
+Set to `0` to disable same-day repeats. Defaults to `0`.  
 Posible values: `1`, `5`, `10`, `15`, `20`, `30`  
 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
   
-**_same_day_repeat_until_** `int, optional `  
+**_same_day_repeat_until_** `int`  
 Last hour of the day when the task can repeat. Defaults to `start_time_h`.  
   
 
@@ -739,7 +752,7 @@ A dictionary with the id of the created task.
 
 
 ### `modify_beep_control_task`
-Modify settings of a Beep Control task.   
+Modify settings of a Beep Control task.  
 :::warning
  
  This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.  
@@ -753,28 +766,28 @@ Modify settings of a Beep Control task.
   
 #### Parameters
 <div class="padding-left--md">
-**_task_name_** `str `  
+**_task_name_** `str`  
 The name of the task.  
   
-**_real_owner_** `str `  
+**_real_owner_** `str`  
 The task owner.  
   
-**_beep_duration_** `int, optional `  
+**_beep_duration_** `int`  
 The amount of seconds the beep will be triggered for, in seconds. Defaults to `60`.  
   
-**_enable_** `bool, optional `  
+**_enable_** `bool`  
 Whether the task should be enabled upon creation. Defaults to `True`.  
   
-**_run_frequently_** `bool, optional `  
+**_run_frequently_** `bool`  
 Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.  
   
-**_run_days_** `str, optional `  
+**_run_days_** `str`  
 Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).  
   
-**_run_date_** `str, optional `  
+**_run_date_** `str`  
 The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.  
   
-**_repeat_** `str, optional `  
+**_repeat_** `str`  
 How often the task should repeat. Defaults to `'daily'`.  
 Possible values:
 - `daily` -> Only when 'run_frequently=True'
@@ -785,17 +798,17 @@ Possible values:
 - `every_6_months` -> Only when 'run_frequently=False'
 - `yearly` -> Only when 'run_frequently=False'  
   
-**_monthly_week_** `list[str], optional `  
+**_monthly_week_** `list[str]`  
 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. Defaults to `[]`.  
   
-**_start_time_h_** `int, optional `  
+**_start_time_h_** `int`  
 Hour at which the task should start. Defaults to `0`.  
   
-**_start_time_m_** `int, optional `  
+**_start_time_m_** `int`  
 Minute at which the task should start. Defaults to `0`.  
   
-**_same_day_repeat_h_** `int, optional `  
-Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.   
+**_same_day_repeat_h_** `int`  
+Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.  
 Set to `0` to disable same-day repeats. Defaults to `0`.  
 Possible values: `0..23`  
 :::info
@@ -805,8 +818,8 @@ Possible values: `0..23`
 :::
 
   
-**_same_day_repeat_m_** `int, optional `  
-Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.   
+**_same_day_repeat_m_** `int`  
+Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.  
 Set to `0` to disable same-day repeats. Defaults to `0`.  
 Posible values: `1`, `5`, `10`, `15`, `20`, `30`  
 :::info
@@ -816,7 +829,7 @@ Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 :::
 
   
-**_same_day_repeat_until_** `int, optional `  
+**_same_day_repeat_until_** `int`  
 Last hour of the day when the task can repeat. Defaults to `start_time_h`.  
   
 
@@ -855,15 +868,15 @@ Create a new Service Control task with the provided schedule and services to sta
   
 #### Parameters
 <div class="padding-left--md">
-**_task_name_** `str `  
+**_task_name_** `str`  
 The name of the task.  
   
-**_owner_** `str `  
+**_owner_** `str`  
 The task owner.  
   
 **_services (list)_** ``  
 A list containing the services and their type to be influenced by the specified action (start / stop).  
-To get a list of all the available services and their corresponding IDs, call `get_task_config(task_id=-1, real_owner=your_username, type='service')`.   
+To get a list of all the available services and their corresponding IDs, call `get_task_config(task_id=-1, real_owner=your_username, type='service')`.  
 E.g.:
 ```python
 [
@@ -873,23 +886,23 @@ E.g.:
 ]
 ```  
   
-**_action_** `str `  
+**_action_** `str`  
 The action to apply to the services. Either `'start'` or `'stop'`.  
   
-**_enable_** `bool, optional `  
+**_enable_** `bool`  
 Whether the task should be enabled upon creation. Defaults to `True`.  
   
-**_run_frequently_** `bool, optional `  
+**_run_frequently_** `bool`  
 Determines whether the task runs on a recurring schedule (`True`) or only on a specific date (`False`). Defaults to `True`.  
   
-**_run_days_** `str, optional `  
+**_run_days_** `str`  
 Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).  
   
-**_run_date_** `str, optional `  
+**_run_date_** `str`  
 The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.  
   
-**_repeat_** `str, optional `  
-How often the task should repeat. Defaults to `'daily'`.   
+**_repeat_** `str`  
+How often the task should repeat. Defaults to `'daily'`.  
 Possible values:
 - `daily` -> Only when 'run_frequently=True'
 - `weekly` -> Only when 'run_frequently=True'
@@ -899,18 +912,18 @@ Possible values:
 - `every_6_months` -> Only when 'run_frequently=False'
 - `yearly` -> Only when 'run_frequently=False'  
   
-**_monthly_week_** `list[str], optional `  
+**_monthly_week_** `list[str]`  
 If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. Defaults to `[]`.  
   
-**_start_time_h_** `int, optional `  
+**_start_time_h_** `int`  
 Hour at which the task should start. Defaults to `0`.  
   
-**_start_time_m_** `int, optional `  
+**_start_time_m_** `int`  
 Minute at which the task should start. Defaults to `0`.  
   
-**_same_day_repeat_h_** `int, optional `  
-Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.   
-Set to `0` to disable same-day repeats. Defaults to `0`.   
+**_same_day_repeat_h_** `int`  
+Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.  
+Set to `0` to disable same-day repeats. Defaults to `0`.  
 Possible values: `0..23`  
 :::info
  
@@ -919,9 +932,9 @@ Possible values: `0..23`
 :::
 
   
-**_same_day_repeat_m_** `int, optional `  
-Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.   
-Set to `0` to disable same-day repeats. Defaults to `0`.   
+**_same_day_repeat_m_** `int`  
+Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.  
+Set to `0` to disable same-day repeats. Defaults to `0`.  
 Posible values: `1`, `5`, `10`, `15`, `20`, `30`  
 :::info
  
@@ -930,7 +943,7 @@ Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 :::
 
   
-**_same_day_repeat_until_** `int, optional `  
+**_same_day_repeat_until_** `int`  
 Last hour of the day when the task can repeat. Defaults to `start_time_h`.  
   
 
@@ -960,7 +973,7 @@ A dictionary with the id of the created task.
 
 
 ### `modify_service_control_task`
-Modify settings of a Service Control task.   
+Modify settings of a Service Control task.  
 :::warning
  
  This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.  
@@ -977,15 +990,15 @@ Modify settings of a Service Control task.
 **_task_id_** `int`  
 The ID of the task.  
   
-**_task_name_** `str `  
+**_task_name_** `str`  
 The name of the task.  
   
-**_real_owner_** `str `  
+**_real_owner_** `str`  
 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.  
   
 **_services (list)_** ``  
 A list containing the services and their type to be influenced by the specified action (start / stop).  
-To get a list of all the available services and their corresponding IDs, call `get_task_config(task_id=-1, real_owner=your_username, type='service')`.   
+To get a list of all the available services and their corresponding IDs, call `get_task_config(task_id=-1, real_owner=your_username, type='service')`.  
 E.g.:
 ```python
 [
@@ -995,25 +1008,25 @@ E.g.:
 ]
 ```  
   
-**_action_** `str `  
+**_action_** `str`  
 The action to apply to the services. Either `'start'` or `'stop'`.  
   
-**_enable_** `bool, optional `  
+**_enable_** `bool`  
 Whether the task should be enabled upon creation. Defaults to `True`.  
   
-**_run_frequently_** `bool, optional `  
+**_run_frequently_** `bool`  
 Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.  
   
-**_run_days_** `str, optional `  
-Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list 
+**_run_days_** `str`  
+Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list
 (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).  
   
-**_run_date_** `str, optional `  
-The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). 
+**_run_date_** `str`  
+The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros).
 Defaults to `""`.  
   
-**_repeat_** `str, optional `  
-How often the task should repeat. Defaults to `'daily'`.   
+**_repeat_** `str`  
+How often the task should repeat. Defaults to `'daily'`.  
 Possible values:
 - `daily` -> Only when 'run_frequently=True'
 - `weekly` -> Only when 'run_frequently=True'
@@ -1023,19 +1036,19 @@ Possible values:
 - `every_6_months` -> Only when 'run_frequently=False'
 - `yearly` -> Only when 'run_frequently=False'  
   
-**_monthly_week_** `list[str], optional `  
-If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`. 
+**_monthly_week_** `list[str]`  
+If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`.
 Defaults to `[]`.  
   
-**_start_time_h_** `int, optional `  
+**_start_time_h_** `int`  
 Hour at which the task should start. Defaults to `0`.  
   
-**_start_time_m_** `int, optional `  
+**_start_time_m_** `int`  
 Minute at which the task should start. Defaults to `0`.  
   
-**_same_day_repeat_h_** `int, optional `  
-Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.   
-Set to `0` to disable same-day repeats. Defaults to `0`.   
+**_same_day_repeat_h_** `int`  
+Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.  
+Set to `0` to disable same-day repeats. Defaults to `0`.  
 Possible values: `0..23`  
 :::info
  
@@ -1044,9 +1057,9 @@ Possible values: `0..23`
 :::
 
   
-**_same_day_repeat_m_** `int, optional `  
-Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.   
-Set to `0` to disable same-day repeats. Defaults to `0`.   
+**_same_day_repeat_m_** `int`  
+Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.  
+Set to `0` to disable same-day repeats. Defaults to `0`.  
 Posible values: `1`, `5`, `10`, `15`, `20`, `30`  
 :::info
  
@@ -1055,7 +1068,7 @@ Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 :::
 
   
-**_same_day_repeat_until_** `int, optional `  
+**_same_day_repeat_until_** `int`  
 Last hour of the day when the task can repeat. Defaults to `start_time_h`.  
   
 
@@ -1094,20 +1107,20 @@ Create a new Recycle Bin Control task with the provided schedule and services to
   
 #### Parameters
 <div class="padding-left--md">
-**_task_name_** `str `  
+**_task_name_** `str`  
 The name of the task.  
   
-**_owner_** `str `  
+**_owner_** `str`  
 The task owner.  
   
-**_clean_all_shares_** `bool `  
+**_clean_all_shares_** `bool`  
 Whether the task should empty the recycle bins of all shares or not, if set to `False`, shares must be specified.  
   
 **_shares_** `list[str]`  
 List of shares of which to clean the recycle bins. Pass only the name of the shares without slashes, e.g. `shares=['photo', 'web']`. Defaults to `[]`.  
   
 **_policy (dict)_** ``  
-Determines what files will be deleted from the recycle bins.   
+Determines what files will be deleted from the recycle bins.  
 Possible values are:
 - `{"policy": "clean_all"}` -> Clean all files
 - `{"policy": "time", "time": int}` -> Clean all files older than X days, days being possed as value for "time" key.
@@ -1116,20 +1129,20 @@ Possible values for "sort_type" are:
 - `0` -> Delete bigger files first
 - `1` -> Delete older files first  
   
-**_enable_** `bool, optional `  
+**_enable_** `bool`  
 Whether the task should be enabled upon creation. Defaults to `True`.  
   
-**_run_frequently_** `bool, optional `  
+**_run_frequently_** `bool`  
 Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.  
   
-**_run_days_** `str, optional `  
+**_run_days_** `str`  
 Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).  
   
-**_run_date_** `str, optional `  
-The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). 
+**_run_date_** `str`  
+The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros).
 Defaults to `""`.  
   
-**_repeat_** `str, optional `  
+**_repeat_** `str`  
 How often the task should repeat. Defaults to `'daily'`.  
 Possible values:
 - `daily` -> Only when 'run_frequently=True'
@@ -1140,19 +1153,19 @@ Possible values:
 - `every_6_months` -> Only when 'run_frequently=False'
 - `yearly` -> Only when 'run_frequently=False'  
   
-**_monthly_week_** `list[str], optional `  
-If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`.   
+**_monthly_week_** `list[str]`  
+If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`.  
 Defaults to `[]`.  
   
-**_start_time_h_** `int, optional `  
+**_start_time_h_** `int`  
 Hour at which the task should start. Defaults to `0`.  
   
-**_start_time_m_** `int, optional `  
+**_start_time_m_** `int`  
 Minute at which the task should start. Defaults to `0`.  
   
-**_same_day_repeat_h_** `int, optional `  
-Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.   
-Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).   
+**_same_day_repeat_h_** `int`  
+Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.  
+Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).  
 Possible values: `0..23`  
 :::info
  
@@ -1161,9 +1174,9 @@ Possible values: `0..23`
 :::
 
   
-**_same_day_repeat_m_** `int, optional `  
-Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.   
-Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).   
+**_same_day_repeat_m_** `int`  
+Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.  
+Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).  
 Posible values: `1`, `5`, `10`, `15`, `20`, `30`  
 :::info
  
@@ -1172,7 +1185,7 @@ Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 :::
 
   
-**_same_day_repeat_until_** `int, optional `  
+**_same_day_repeat_until_** `int`  
 Last hour of the day when the task can repeat. Defaults to `start_time_h`.  
   
 
@@ -1202,7 +1215,7 @@ A dictionary with the id of the created task.
 
 
 ### `modify_recycle_bin_task`
-Modify settings of a Recycle Bin Control task.   
+Modify settings of a Recycle Bin Control task.  
 :::warning
  
  This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.  
@@ -1219,20 +1232,20 @@ Modify settings of a Recycle Bin Control task.
 **_task_id_** `int`  
 The ID of the task.  
   
-**_task_name_** `str `  
+**_task_name_** `str`  
 The name of the task.  
   
-**_real_owner_** `str `  
+**_real_owner_** `str`  
 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.  
   
-**_clean_all_shares_** `bool `  
+**_clean_all_shares_** `bool`  
 Whether the task should empty the recycle bins of all shares or not, if set to `False`, shares must be specified.  
   
 **_shares_** `list[str]`  
 List of shares of which to clean the recycle bins. Pass only the name of the shares without slashes, e.g. `shares=['photo', 'web']`. Defaults to `[]`.  
   
 **_policy (dict)_** ``  
-Determines what files will be deleted from the recycle bins.   
+Determines what files will be deleted from the recycle bins.  
 Possible values are:
 - `{"policy": "clean_all"}` -> Clean all files
 - `{"policy": "time", "time": int}` -> Clean all files older than X days, days being possed as value for "time" key.
@@ -1241,20 +1254,20 @@ Possible values for "sort_type" are:
 - `0` -> Delete bigger files first
 - `1` -> Delete older files first  
   
-**_enable_** `bool, optional `  
+**_enable_** `bool`  
 Whether the task should be enabled upon creation. Defaults to `True`.  
   
-**_run_frequently_** `bool, optional `  
+**_run_frequently_** `bool`  
 Determines whether the task runs on a recurring schedule (True) or only on a specific date (False). Defaults to `True`.  
   
-**_run_days_** `str, optional `  
+**_run_days_** `str`  
 Days of the week when the task should run, used if `run_frequently` is set to `True`, specified as a comma-separated list (e.g., '0,1,2' for Sunday, Monday, Tuesday). Defaults to `'0,1,2,3,4,5,6'` (Daily).  
   
-**_run_date_** `str, optional `  
-The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). 
+**_run_date_** `str`  
+The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros).
 Defaults to `""`.  
   
-**_repeat_** `str, optional `  
+**_repeat_** `str`  
 How often the task should repeat. Defaults to `'daily'`.  
 Possible values:
 - `daily` -> Only when 'run_frequently=True'
@@ -1265,19 +1278,19 @@ Possible values:
 - `every_6_months` -> Only when 'run_frequently=False'
 - `yearly` -> Only when 'run_frequently=False'  
   
-**_monthly_week_** `list[str], optional `  
-If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`.   
+**_monthly_week_** `list[str]`  
+If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`.  
 Defaults to `[]`.  
   
-**_start_time_h_** `int, optional `  
+**_start_time_h_** `int`  
 Hour at which the task should start. Defaults to `0`.  
   
-**_start_time_m_** `int, optional `  
+**_start_time_m_** `int`  
 Minute at which the task should start. Defaults to `0`.  
   
-**_same_day_repeat_h_** `int, optional `  
-Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.   
-Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).   
+**_same_day_repeat_h_** `int`  
+Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.  
+Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).  
 Possible values: `0..23`  
 :::info
  
@@ -1286,9 +1299,9 @@ Possible values: `0..23`
 :::
 
   
-**_same_day_repeat_m_** `int, optional `  
-Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.   
-Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).   
+**_same_day_repeat_m_** `int`  
+Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.  
+Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).  
 Posible values: `1`, `5`, `10`, `15`, `20`, `30`  
 :::info
  
@@ -1297,7 +1310,7 @@ Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 :::
 
   
-**_same_day_repeat_until_** `int, optional `  
+**_same_day_repeat_until_** `int`  
 Last hour of the day when the task can repeat. Defaults to `start_time_h`.  
   
 

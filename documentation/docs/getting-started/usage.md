@@ -5,13 +5,13 @@ sidebar_position: 3
 # Basic Usage
 ### Standard workflow
 - Import desired API class
-  
+
     ```python
     from synology_api.filestation import FileStation
     from synology_api.downloadstation import DownloadStation
     ```
 - Authenticate
-  
+
     ```python
     fs = FileStation(
         'Synology Ip',
@@ -83,7 +83,7 @@ ds_info = ds.get_info()
 :::info
 The response data would be a `JSON` object parsed into a `Dict`:
 :::
-```python 
+```python
 {
     "data": {
         "enable_list_usergrp": False,

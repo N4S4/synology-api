@@ -17,8 +17,8 @@ const Counter: React.FC<CounterProps> = ({ title, count }) => {
     all: "All Time",
   }
   return (
-    <motion.div 
-      className="col center-content-col margin-bottom--lg" 
+    <motion.div
+      className="col center-content-col margin-bottom--lg"
       style={{ gap: '1rem' }}
       variants={slideDown}
       transition={{ delayChildren: 0.3 }}

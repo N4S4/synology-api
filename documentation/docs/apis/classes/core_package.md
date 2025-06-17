@@ -82,7 +82,7 @@ List installed packages
 <div class="padding-left--md">
 **_additional_** `list[str]`  
 Additional fields to retrieve. Defaults to `[]`.
-All fields known are: 
+All fields known are:
     `["description", "description_enu", "dependent_packages", "beta", "distributor", "distributor_url",
     "maintainer", "maintainer_url", "dsm_apps", "dsm_app_page", "dsm_app_launch_name","report_beta_url",
     "support_center", "startable", "installed_info", "support_url", "is_uninstall_pages","install_type",
@@ -237,7 +237,7 @@ Set settings of the package center
 **_enable_email_** `bool`  
 Enable email notification  
   
-**_enable_dsm_** `bool `  
+**_enable_dsm_** `bool`  
 Enable desktop notification  
   
 **_enable_autoupdate_** `bool`  
@@ -675,68 +675,63 @@ List of usefull informations about volumes
 
 ### `upgrade_package`
 Upgrade an existing package  
-Parameters
-            ----------
-            task_id : str
-                Task id of the download or the upload file
-            check_codesign : bool, optional
-                Check signature of the source code of the package (is it a Synology one). Defaults to `False`
-            force : bool, optional
-                Force installation. Defaults to `False`
-            installrunpackage : bool, optional
-                Run package after installation. Defaults to `True`
-            extra_values : dict, optional
-                Extra values due to some package installation. Defaults to `{}`
-                All known extra values are:
-                - Surveillance station
-                ```json
-                    {
-                        "chkSVS_Alias": true,
-                        "strSVS_Alias": "cam",
-                        "chkSVS_HTTP": true,
-                        "strSVS_HTTP": "9900",
-                        "chkSVS_HTTPS": true,
-                        "strSVS_HTTPS": "9901"
-                    }
-                ```
-        
-            Returns
-            -------
-            dict
-                Message and some info about installation
-        
-            Example return
-            ----------
-            ```json
-            {
-                "data": {
-                    "message": "<br><strong><p style='color:blue'><big><b>Installation Successful!</big></p>
-<br><p style='color:blue'>:::note
- 
- If Plex cannot access your media, verify user <strong>PlexMediaServer</strong> is granted permission in <strong>Control Panel</strong>.</p><br>
- 
-:::
-
-Set access to your media share(s) by performing the following steps:<br><br>
-1. Open <strong>Control Panel</strong> and select <strong>Shared Folder</strong><br>
-2. Select the share which contains your media and click <strong>Edit</strong><br>
-3. Click the <strong>Permissions</strong> tab<br>
-4. Change the dropdown from <strong>Local Users</strong> to <strong>System internal user</strong><br>
-5. Check the <strong>Read/Write</strong> checkbox for the <strong>PlexMediaServer</strong> user<br>
-6. Click <strong>Save</strong> to confirm the new permissions<br>
-7. Repeat steps 2-6 for each share you want Plex Media Server to access<br>
-",
-                    "packageName": "Plex Media Server",
-                    "worker_message": []
-                },
-                "success": true,
-            }
-            ```  
+  
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Core.Package.Installation` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_task_id_** `str`  
+Task id of the download or the upload file  
+  
+**_check_codesign_** `bool`  
+Check signature of the source code of the package (is it a Synology one). Defaults to `False`  
+  
+**_force_** `bool`  
+Force installation. Defaults to `False`  
+  
+**_installrunpackage_** `bool`  
+Run package after installation. Defaults to `True`  
+  
+**_extra_values_** `dict`  
+Extra values due to some package installation. Defaults to `{}`
+All known extra values are:
+- Surveillance station
+```json
+    {
+        "chkSVS_Alias": true,
+        "strSVS_Alias": "cam",
+        "chkSVS_HTTP": true,
+        "strSVS_HTTP": "9900",
+        "chkSVS_HTTPS": true,
+        "strSVS_HTTPS": "9901"
+    }
+```  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict`  
+Message and some info about installation  
+
+</div>
+#### Example return
+<details>
+<summary>Click to expand</summary>
+```json
+{
+    "data": {
+        "message": "message",
+        "packageName": "Plex Media Server",
+        "worker_message": []
+    },
+    "success": true,
+}
+```
+</details>
 
 
 
@@ -896,8 +891,12 @@ Possible message to the user
 
 
 ### `easy_install`
-Execute an "easy" installation process of the package  
+Execute an easy installation process of the package  
   
+#### Internal API
+<div class="padding-left--md">
+`hotfix` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
@@ -908,14 +907,14 @@ Package ID to install
 Volume path where you want to install the package  
   
 **_install_dependencies_** `bool`  
-If you want to install dependencies. Defaults to `True`  
+If you want to install dependencies. Defaults to True  
   
 
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict`  
-Information about installation, same as `install_package` function  
+`dict[str, object]`  
+Information about installation, same as install_package function  
 
 </div>
 #### Example return

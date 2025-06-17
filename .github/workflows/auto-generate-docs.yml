@@ -5,6 +5,9 @@ on:
     branches:
       - master
 
+permissions:
+  contents: write
+
 jobs:
   generate:
     runs-on: ubuntu-latest
@@ -29,7 +32,7 @@ jobs:
         run: |
           for file in ${ALL_CHANGED_FILES}; do
             echo "$file was changed"
-          
+
             python3 docs_parser.py -f "$(basename "$file")"
           done
       - name: Commit & Push changes
