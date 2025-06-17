@@ -23,7 +23,7 @@
 - DirectoryServer:
     status: finished
 - Docker:
-    status: not_started
+    status: finished
 - DownloadStation:
     status: not_started
 - EventScheduler:
