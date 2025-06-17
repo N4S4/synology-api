@@ -294,6 +294,7 @@ def gen_method(method: dict, file_content: str) -> str:
         
     description = dedup_newlines(description)
 
+    # TODO: refactor, synology_api.core_package.Package.easy_install don't have internal API, but it has a docstring.
     internal_api = parse_method_api(method['name'], file_content)
 
     parameters = ''
