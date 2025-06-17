@@ -10,6 +10,29 @@ As I say the following are just "guidelines" so do not feel obligated.
 
 Have a look on our Code of conduct!
 
+## How setup your environment
+
+If you want to contribute to this package, you may want to setup your environment.
+
+Install dependencies for your OS:
+```bash
+# macos 
+bash scripts/dependencies_darwin.sh
+
+# linux
+bash scripts/dependencies_linux.sh
+```
+
+Install right version of tools
+```bash
+asdf install 
+```
+
+From now you can use Taskfile to run repetitive commands, for example:
+```bash
+task docs
+```
+
 ## Testing
 
 We would appreciate if you test your code on your Synology NAS (if you own one),

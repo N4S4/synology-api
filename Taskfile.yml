@@ -1,0 +1,44 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task --list
+    silent: true
+
+  dependencies:
+    desc: Install dependencies to work with this repo
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Installing dependencies..."
+      - bash scripts/dependencies_{{OS}}.sh "{{ARCH}}"
+
+  install:
+    desc: Install all tools required to work with this project
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Installing the tools for project..."
+      - bash scripts/install.sh
+
+  docs-parser:
+    desc: Parse the documentation files
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Parsing the documentation files..."
+      - python3 docs_parser.py -a
+
+  docs-build:
+    desc: Build the documentation website
+    dir: '{{.TASKFILE_DIR}}/documentation'
+    cmds:
+      - npm ci
+      - npm run build
+
+  docs:
+    desc: Parse the documentation files and build the documentation website
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - task: docs-parser
+      - task: docs-build

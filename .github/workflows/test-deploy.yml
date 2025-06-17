@@ -17,9 +17,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Get Node.js version from .tool-versions
+        id: node-version
+        run: echo "NODE_VERSION=$(cat .tool-versions | egrep nodejs | awk '{print $2}' | xargs)" >> $GITHUB_ENV
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
           cache-dependency-path: ./documentation/package-lock.json
 
