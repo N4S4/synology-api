@@ -88,13 +88,15 @@ class VPN(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def openvpn_export_configuration(self, as_zip_file=False) -> bytes | ZipFile:
-        """Downloads the openvpn.zip containing the VPNConfig.ovpn file
-        Args:    
+        """Downloads the openvpn\.zip containing the VPNConfig\.ovpn file
+        Args:
             as_zip_file (bool):
                 If the bytes should be converted to a ZipFile
-                
-        Returns:
-            Either openvpn.zip as a ZipFile or the bytes version of the ZipFile
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the OpenVPN configuration file as bytes or a ZipFile object if `as_zip_file` is True.
         """
         api_name = 'SYNO.VPNServer.Settings.Certificate'
         info = self.gen_list[api_name]
