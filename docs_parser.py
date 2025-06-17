@@ -102,6 +102,7 @@ def list_item(text: str, styles: list[str] = []) -> str:
 
 def metadata(class_name: str) -> tuple[str, str]:
     """Generate front matter header"""
+    docs_status=""
     for i, api in enumerate(get_docs_status()):
         key = (list(api.keys())[0])
         if key == class_name:
