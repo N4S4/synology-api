@@ -9,11 +9,11 @@ title: ✅ ActiveBackupMicrosoft
   
 # ActiveBackupMicrosoft
 ## Overview
-Active Backup for Microsoft 365 Implementation. 
+Active Backup for Microsoft 365 Implementation.
 
 ### Supported methods
 
-- **Getters** : 
+- **Getters** :
     - Get all tasks info
     - Get task settings
     - Get task logs
@@ -410,7 +410,7 @@ Retrieve the settings of a task.
   
 #### Parameters
 <div class="padding-left--md">
-**_task_id_** `int `  
+**_task_id_** `int`  
 The ID of the task.  
   
 
@@ -621,10 +621,10 @@ Set the number of workers for the Active Backup for Microsoft 365 package.
   
 #### Parameters
 <div class="padding-left--md">
-**_backup_job_workers_** `int `  
+**_backup_job_workers_** `int`  
 Maximum number of concurrent backup accounts. Defaults to `40`.  
   
-**_event_workers_** `int `  
+**_event_workers_** `int`  
 Maximum number of concurrent backup files. Defaults to `40`.  
   
 
@@ -651,7 +651,7 @@ A dictionary containing the result of the worker count update.
 
 
 ### `set_task_schedule`
-Set the schedule for a given task.   
+Set the schedule for a given task.  
   
 #### Internal API
 <div class="padding-left--md">
@@ -664,20 +664,20 @@ Set the schedule for a given task.
 The ID of the task.  
   
 **_policy_** `int`  
-The schedule policy.   
-Possible values:  
-- 0 = continuous  
-- 1 = manual  
+The schedule policy.  
+Possible values:
+- 0 = continuous
+- 1 = manual
 - 2 = scheduled  
   
 **_schedule_** `dict`  
-A dictionary containing the schedule settings.   
+A dictionary containing the schedule settings.  
 Possible values:
 - `start_hour` (int): The start hour of the schedule.
 - `start_minute` (int): The start minute of the schedule.
 - `last_run_hour` (int): The last run hour of the schedule.
 - `repeat_every_hours` (int): Run the backup every X hours.
-- `run_days` (list[int]): Run the backup at the specified days (Sunday = 0, Morning = 1, and so on...).    
+- `run_days` (list[int]): Run the backup at the specified days (Sunday = 0, Morning = 1, and so on...).  
 :::note
  
  If `repeat_every_hours` is set to 0, the backup will run once a day.  
@@ -706,7 +706,7 @@ A dictionary containing the result of the schedule update.
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json 
+```json
 {
     "success": true
 }
@@ -745,7 +745,7 @@ A dictionary containing the result of the rotation policy update.
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json 
+```json
 {
     "success": true
 }
@@ -817,7 +817,7 @@ A dictionary containing the result of the task cancellation.
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json 
+```json
 {
     "success": true
 }
@@ -867,7 +867,7 @@ A dictionary containing the result of the task deletion.
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json 
+```json
 {
     "success": true
 }
@@ -893,11 +893,11 @@ Relink a task.
 The name of the task.  
   
 **_shared_folder_** `str`  
-The name of the shared folder where the task is stored.   
+The name of the shared folder where the task is stored.  
 Example: `ActiveBackupforBusiness`  
   
 **_task_path_** `str`  
-The relative path from the the shared folder where the task is stored.   
+The relative path from the the shared folder where the task is stored.  
 Example: `/ActiveBackupForMicrosoft365/task_1`  
   
 **_admin_email_** `str`  
@@ -917,7 +917,7 @@ A dictionary containing the result of the task relinking.
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json 
+```json
 {
     "data": {
         "task_id": 3

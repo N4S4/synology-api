@@ -13,7 +13,7 @@ Core Group API implementation.
 
 ### Supported methods
 
-    - **Getters** : 
+    - **Getters** :
         - Get all groups
         - Get group members
         - Get group shares permissions
@@ -25,7 +25,7 @@ Core Group API implementation.
         - Set group share permissions
         - Set group share quotas
         - Set group service speed limit
-    
+
     - **Actions** :
         - Create new group
         - Delete groups
@@ -115,7 +115,7 @@ The group to list users from.
   
 **_in_group_** `bool`  
 Defaults to `True`.  
-If `True`, retrieves users who are members of the specified group.   
+If `True`, retrieves users who are members of the specified group.  
 If `False`, retrieves users who are not members of the group.  
   
 
@@ -172,7 +172,7 @@ Retrieve bandwidth control settings for a given group.
   
 #### Parameters
 <div class="padding-left--md">
-**_group_** `str `  
+**_group_** `str`  
 The group to retrieve settings for.  
   
 
@@ -199,14 +199,14 @@ Retrieve quota settings for a given group.
   
 #### Parameters
 <div class="padding-left--md">
-**_group_** `str `  
+**_group_** `str`  
 The group to retrieve quota settings for.  
   
 
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict[str, object] `  
+`dict[str, object]`  
 A dictionary containing the result of the request.  
 
 </div>
@@ -286,7 +286,7 @@ A dictionary containing the result of the request.
         "total": 1
     },
     "success": true
-}     
+}
 ```
 </details>
 
@@ -318,7 +318,7 @@ The new description of the group. Defaults to current value.
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict[str, object] `  
+`dict[str, object]`  
 A dictionary containing the result of the request.  
 
 </div>
@@ -374,7 +374,7 @@ Example:
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict[str, object] `  
+`dict[str, object]`  
 A dictionary containing the result of the request.  
 
 </div>
@@ -451,7 +451,7 @@ A dictionary containing the result of the request.
 
 
 ### `set_speed_limit`
-Set speed limit for a given share.   
+Set speed limit for a given share.  
 :::info
  
  Doesn't support **scheduled** speed limits, only on/off.  
@@ -475,7 +475,7 @@ The maximum upload speed in KB/s.
 The maximum download speed in KB/s.  
   
 **_protocol_** `str`  
-The protocol to set the speed limit for.   
+The protocol to set the speed limit for.  
 Possible values:
 - FileStation
 - WebDAV
@@ -521,7 +521,7 @@ Add users to a group.
   
 #### Parameters
 <div class="padding-left--md">
-**_group_** `str `  
+**_group_** `str`  
 The group to add users to.  
   
 **_users_** `list[str]`  
@@ -561,7 +561,7 @@ Remove users from a group.
   
 #### Parameters
 <div class="padding-left--md">
-**_group_** `str `  
+**_group_** `str`  
 The group to remove users from.  
   
 **_users_** `list[str]`  
@@ -611,7 +611,7 @@ Description to assign to the group. Defaults to empty string.
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict[str, object] `  
+`dict[str, object]`  
 A dictionary containing the result of the request.  
 
 </div>
@@ -651,7 +651,7 @@ The groups to delete.
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict[str, object] `  
+`dict[str, object]`  
 A dictionary containing the result of the request.  
 
 </div>

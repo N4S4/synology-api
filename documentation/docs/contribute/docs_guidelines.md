@@ -70,7 +70,7 @@ class MyNewClass(base_api.BaseApi):
         - Getters:
             - Get A from B
             - Get X from Y
-        - Setters: 
+        - Setters:
             - Set A
             - Set X
         - Actions:
@@ -78,7 +78,7 @@ class MyNewClass(base_api.BaseApi):
             - Create something
             - Delete something
 
-        See full docs:  
+        See full docs:
         https://N4S4.github.io/synology-api/docs/apis/MyNewClass
     """
     pass
@@ -100,12 +100,12 @@ class MyNewClass(base_api.BaseApi):
             ----------
             my_arg : int
                 A description about this argument.
-            
+
             my_karg : str, optional
                 A description about this argument. Defaults to `""`.
 
                 Multiline information.
-            
+
             new_karg : str, optional
                 A description about this argument. Defaults to `"option1"`
 

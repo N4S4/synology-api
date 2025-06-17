@@ -16,14 +16,14 @@ There is no documentation for these APIs, so the implementation is based on netw
 
 ### Supported methods
 
-    - **Getters** : 
+    - **Getters** :
         - Get all share/LUN snapshots
         - Get all replications
         - Get all LUNs
 
     - **Setters** :
         - Set snapshot attributes
-    
+
     - **Actions** :
         - Create share/LUN snapshot (WORM support only for share snaps ATM)
         - Delete share/LUN snapshot
@@ -153,7 +153,7 @@ List snapshots for a LUN.
 UUID of the source LUN to list snapshots for.  
   
 **_additional_** `list[str]`  
-Additional fields to retrieve. Specify `[]` to get only basic information.   
+Additional fields to retrieve. Specify `[]` to get only basic information.  
 Defaults to `["locked_app_keys", "is_worm_locked"]`  
 
 Possible values:
@@ -248,7 +248,7 @@ List available LUNs
 Type of LUNS to retrieve.  
 
  Defaults to `[ "BLOCK", "FILE", "THIN", "ADV", "SINK", "CINDER", "CINDER_BLUN", "CINDER_BLUN_THICK", "BLUN", "BLUN_THICK", "BLUN_SINK", "BLUN_THICK_SINK" ]`.  
- 
+
  Possible values:
  - `"BLOCK"`
  - `"FILE"`
@@ -901,7 +901,7 @@ API response if successful, error message if not.
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json     
+```json
 {
     "success": true
 }
@@ -956,7 +956,7 @@ API response if successful
 
 
 ### `create_snapshot_lun`
-Create a snapshot for a LUN.   
+Create a snapshot for a LUN.  
 :::note
  
  At the moment, it does not support creating WORM snapshots.  
@@ -1032,7 +1032,7 @@ List of UUIDs of the snapshots to delete.
 #### Returns
 <div class="padding-left--md">
 `dict[str, object]`  
-API response if successful.   
+API response if successful.  
 
 If deletion fails, an error code is returned alonside the snapshot uuid:
 ```json

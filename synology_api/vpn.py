@@ -89,10 +89,10 @@ class VPN(base_api.BaseApi):
 
     def openvpn_export_configuration(self, as_zip_file=False) -> bytes | ZipFile:
         """Downloads the openvpn.zip containing the VPNConfig.ovpn file
-        Args:    
+        Args:
             as_zip_file (bool):
                 If the bytes should be converted to a ZipFile
-                
+
         Returns:
             Either openvpn.zip as a ZipFile or the bytes version of the ZipFile
         """

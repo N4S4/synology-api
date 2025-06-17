@@ -191,7 +191,7 @@ class Certificate(base_api.BaseApi):
             ----------
             cert_id : str
                 The certificate ID to export. This can be found in the list_cert() method.
-            
+
             Returns
             -------
             Optional[BytesIO]

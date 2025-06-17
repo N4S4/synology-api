@@ -11,14 +11,14 @@ class Snapshot(base_api.BaseApi):
         There is no documentation for these APIs, so the implementation is based on network inspection.
 
         Supported methods:
-            - Getters: 
+            - Getters:
                 - Get all share/LUN snapshots
                 - Get all replications
                 - Get all LUNs
 
             - Setters:
                 - Set snapshot attributes
-            
+
             - Actions:
                 - Create share/LUN snapshot (WORM support only for share snaps ATM)
                 - Delete share/LUN snapshot
@@ -33,7 +33,7 @@ class Snapshot(base_api.BaseApi):
 
         resp_share = ss.list_snapshots('share_name')
         resp_lun = ss.list_snapshots_lun('src_lun_uuid')
-        
+
         print(resp_share, resp_lun)
         ```
 
@@ -41,7 +41,7 @@ class Snapshot(base_api.BaseApi):
         ```python
         resp_share = ss.create_snapshot('share_name')
         resp_lun = create_snapshot_lun('lun_id')
-        
+
         print(resp_share, resp_lun)
         ```
 
@@ -49,7 +49,7 @@ class Snapshot(base_api.BaseApi):
         ```python
         resp_share = ss.delete_snapshots('share_name', ['snapshot_name'])
         resp_lun = ss.delete_snapshots_lun(['snapshot_uuid'])
-        
+
         print(resp_share, resp_lun)
         ```
 
@@ -89,7 +89,7 @@ class Snapshot(base_api.BaseApi):
             additional_attribute : list[str], optional
                 List of snapshot attributes whose values are included in the response. Defaults to `[]` (only time is returned).
 
-                
+
                 Note that not all attributes are available via API. The following are confirmed to work:
                     - `"desc"`
                     - `"lock"`
@@ -146,12 +146,12 @@ class Snapshot(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
-    # This could be moved to a different class, but as we are only using 2 methods, 
+
+    # This could be moved to a different class, but as we are only using 2 methods,
     # we can keep it here until we have a more complete implementation for SYNO.Core.ISCSI
     def list_snapshots_lun(
-            self, 
-            src_lun_uuid: str, 
+            self,
+            src_lun_uuid: str,
             additional: list[str] = ["locked_app_keys", "is_worm_locked"]
         ) -> dict[str, object]:
         """List snapshots for a LUN.
@@ -162,14 +162,14 @@ class Snapshot(base_api.BaseApi):
                 UUID of the source LUN to list snapshots for.
 
             additional : list[str], optional
-                Additional fields to retrieve. Specify `[]` to get only basic information. 
-                
+                Additional fields to retrieve. Specify `[]` to get only basic information.
+
                 Defaults to `["locked_app_keys", "is_worm_locked"]`
 
-                
+
                 Possible values:
                 - `"locked_app_keys"` -> If snapshot is preserved by the system, the locking package key will be returned.
-                - `"is_worm_locked"` -> Whether the snapshot is locked by WORM. 
+                - `"is_worm_locked"` -> Whether the snapshot is locked by WORM.
 
             Returns
             -------
@@ -235,7 +235,7 @@ class Snapshot(base_api.BaseApi):
             }
             ```
         """
-        
+
         api_name = 'SYNO.Core.ISCSI.LUN'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -277,16 +277,16 @@ class Snapshot(base_api.BaseApi):
         ]
     ) -> dict[str, object]:
         """List available LUNs
-        
+
             Parameters
             ----------
             types : list[str], optional
                Type of LUNS to retrieve.
 
-               
+
                 Defaults to `[ "BLOCK", "FILE", "THIN", "ADV", "SINK", "CINDER", "CINDER_BLUN", "CINDER_BLUN_THICK", "BLUN", "BLUN_THICK", "BLUN_SINK", "BLUN_THICK_SINK" ]`.
 
-                
+
                 Possible values:
                 - `"BLOCK"`
                 - `"FILE"`
@@ -304,10 +304,10 @@ class Snapshot(base_api.BaseApi):
             additional_info : list[str], optional
                 Additional LUN information to include in the response. Specify `[]` to get only basic information.
 
-                
+
                 Defaults to `[ "is_action_locked", "is_mapped", "extent_size", "allocated_size", "status", "allow_bkpobj", "flashcache_status", "family_config", "snapshot_info" ]`.
 
-                
+
                 Possible values:
                 - `"is_action_locked"`
                 - `"is_mapped"`
@@ -318,12 +318,12 @@ class Snapshot(base_api.BaseApi):
                 - `"flashcache_status"`
                 - `"family_config"`
                 - `"snapshot_info"`
-        
+
             Returns
             -------
             dict[str, object]
                 A dictionary containing a list of LUNs present in the system.
-        
+
             Example return
             ----------
             ```json
@@ -463,7 +463,7 @@ class Snapshot(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': '1', 
+            'version': '1',
             'method': 'list',
             'types': json.dumps(types),
             'additional': json.dumps(additional_info)
@@ -492,11 +492,11 @@ class Snapshot(base_api.BaseApi):
             ----------
             additional_info : list[str], optional
                 List of additional information to include in the response. Specify `[]` to get only basic information.
-                
+
 
                 Defaults to `["sync_policy", "sync_report", "main_site_info", "dr_site_info", "can_do", "op_info", "last_op_info", "topology", "testfailover_info", "retention_lock_report"]`.
 
-                
+
                 Possible values:
                     - `"sync_policy"` -> Information about the sync policy as schedule, retention, lock, etc.
                     - `"sync_report"` -> Information about the previous runs and their results / error count.
@@ -877,13 +877,13 @@ class Snapshot(base_api.BaseApi):
             "desc": description,
             "lock": lock,
         }
-        
+
         if immutable == True:
             snapinfo['worm_lock'] = True
             if immutable_days < 1:
                 return "immutable_days must be greater than 0"
             snapinfo['worm_lock_day'] = immutable_days
-        
+
         req_param = {
             'version': '1',
             'method': 'create',
@@ -976,7 +976,7 @@ class Snapshot(base_api.BaseApi):
 
             Example return
             --------------
-            ```json	
+            ```json
             {
                 "success": true
             }
@@ -1013,9 +1013,9 @@ class Snapshot(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def sync_replication(
-            self, 
+            self,
             plan_id: str,
             lock_snapshot: bool = True,
             description: str = "Snapshot taken by [Synology API]",
@@ -1049,8 +1049,8 @@ class Snapshot(base_api.BaseApi):
 
         plans = self.list_replication_plans(additional_info=['sync_policy']).get('data').get('plans')
         is_send_encrypted = None
-        for plan in plans: 
-            if plan.get('plan_id') == plan_id: 
+        for plan in plans:
+            if plan.get('plan_id') == plan_id:
                 is_send_encrypted = plan.get('additional').get('sync_policy').get('is_send_encrypted')
 
         api_name = 'SYNO.DR.Plan'
@@ -1068,16 +1068,16 @@ class Snapshot(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def create_snapshot_lun(
-            self, 
+            self,
             lun_id: str,
             description: str = "Snapshot taken by [Synology API]",
             lock: bool = True,
             app_aware: bool = True
         ) -> dict[str, object]:
-        """Create a snapshot for a LUN. 
-        
+        """Create a snapshot for a LUN.
+
             Note: At the moment, it does not support creating WORM snapshots.
 
             Parameters
@@ -1126,7 +1126,7 @@ class Snapshot(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def delete_snapshots_lun(self, snapshot_uuids: list[str]) -> dict[str, object]:
         """Delete snapshots for a LUN.
 
@@ -1140,8 +1140,8 @@ class Snapshot(base_api.BaseApi):
             Returns
             -------
             dict[str, object]
-                API response if successful. 
-                
+                API response if successful.
+
 
                 If deletion fails, an error code is returned alonside the snapshot uuid:
                 ```json

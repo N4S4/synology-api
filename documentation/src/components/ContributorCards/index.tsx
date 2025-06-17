@@ -36,7 +36,7 @@ const Card: React.FC<CardProps> = ({ username, avatar_url }) => {
         height: '4.5rem',
       }}
       transition={{
-        width: '0.3s ease', 
+        width: '0.3s ease',
         height: '0.3s ease',
 		    scale: '0.3s cubic-bezier(0.36, -0.04, 0, 1.08)'
       }}
@@ -47,7 +47,7 @@ const Card: React.FC<CardProps> = ({ username, avatar_url }) => {
         alt={`${username} Profile`}
         src={avatar_url}
       />
-      <motion.div 
+      <motion.div
         className="user-info"
         initial="hidden"
         whileHover="visible"
@@ -92,7 +92,7 @@ const ContributorCards = () => {
       {!loading && data?.length > 0 && (
         <div className="col">
           <h2>Built by the community:</h2>
-          <motion.div 
+          <motion.div
             className="row center-content margin-bottom--lg"
             initial="hidden"
             whileInView="visible"
