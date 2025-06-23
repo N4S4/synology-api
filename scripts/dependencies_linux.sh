@@ -17,3 +17,5 @@ echo "Installing asdf plugins..."
 "$(go env GOPATH)/bin/asdf" plugin add nodejs
 "$(go env GOPATH)/bin/asdf" plugin add python
 "$(go env GOPATH)/bin/asdf" plugin add task
+"$(go env GOPATH)/bin/asdf" plugin add shfmt
+"$(go env GOPATH)/bin/asdf" plugin add shellcheck
