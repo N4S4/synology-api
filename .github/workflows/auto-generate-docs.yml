@@ -1,7 +1,7 @@
 name: Auto Generate Docs
 
 on:
-  pull_request:
+  push:
     branches:
       - master
 
