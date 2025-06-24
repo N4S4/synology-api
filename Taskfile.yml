@@ -42,3 +42,25 @@ tasks:
     cmds:
       - task: docs-parser
       - task: docs-build
+
+  format:
+    desc: Format the code in the project
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Formatting the code..."
+      - task: bash-shellcheck
+      - task: bash-lint
+
+  bash-shellcheck:
+    desc: Run shellcheck on all shell scripts in the project
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Running shellcheck..."
+      - shellcheck --shell=bash --external-sources scripts/*
+
+  bash-lint:
+    desc: Run shellcheck and shfmt on all shell scripts in the project
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Running shfmt..."
+      - shfmt --diff --language-dialect bash -w scripts/*

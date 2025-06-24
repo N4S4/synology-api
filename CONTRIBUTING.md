@@ -32,6 +32,13 @@ From now you can use Taskfile to run repetitive commands, for example:
 ```bash
 task docs
 ```
+## Formating code 
+
+In task file is defined a task to format the code, you can run it with:
+```bash
+task format
+```
+Currently task will run `shellcheck` and `shfmt` on shell scripts. In near future it will run formatters on python files.
 
 ## Testing
 

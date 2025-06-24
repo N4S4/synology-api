@@ -13,3 +13,5 @@ echo "Installing asdf plugins..."
 asdf plugin add nodejs
 asdf plugin add python
 asdf plugin add task
+asdf plugin add shfmt
+asdf plugin add shellcheck
