@@ -37,7 +37,7 @@ To see all available tasks, run:
 task --list
 ```
 
-## Formating code 
+## Formating code
 
 In task file is defined a task to format the code, you can run it with:
 ```bash
