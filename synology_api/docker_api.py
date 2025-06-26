@@ -23,6 +23,7 @@ class Docker(base_api.BaseApi):
                 - Search for docker image in all available registries
                 - Get list of projects
                 - Get list of docker networks
+                - Get list of event logs from Container Manager
 
             - Setters:
                 -
@@ -31,6 +32,92 @@ class Docker(base_api.BaseApi):
                 - Export container profile
                 - Export container profile and content
     """
+
+    def list_event_logs(self, limit : int = 1000, offset : int = 0, sort_by : str = "time", sort_dir : str = "DESC", loglevel : str = "", filter_content: str = "", datefrom : int = 0, dateto : int = 0) -> dict[str, object] | str:
+        """Get list of event logs from Container Manager.
+            For example: \"Container started successfully.\", \"Container stopped successfully.\", \"Start project \'tsdproxy\' successfully.\"
+
+            Parameters
+            ----------
+            limit : int, optional
+                Maximum number of event logs to return. Defaults 1000.
+
+            offset : int, optional
+                Offset for pagination. Defaults to 0.
+
+            sort_by : str, optional
+                Field to sort the logs by. Can be one of: 'time', 'level', 'user', 'event'. Defaults to 'time'.
+
+            sort_dir : str, optional
+                Direction to sort the logs. Can be either 'ASC' or 'DESC'. Defaults to 'DESC'.
+
+            loglevel : str, optional
+                Log level to filter by. Can be one of: '', 'information', 'warning', 'error'. Defaults to '' (no filtering).
+
+            filter_content : str, optional
+                Filter content to search in the logs. Defaults to an empty string (no filtering).
+
+            datefrom : int, optional
+                Datatime from which to start fetching logs, in Unix timestamp format. Defaults to 0 (no filtering).
+
+            datato : int, optional
+                Datatime until which to fetch logs, in Unix timestamp format. Defaults to 0 (no filtering).
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the event logs.
+
+            Example return
+            --------------
+            ```json
+                {
+                    "data": {
+                        "error_count": 0,
+                        "info_count": 2,
+                        "limit": 2,
+                        "logs": [
+                            {
+                                "event": "Start project 'glance' successfully.",
+                                "level": "info",
+                                "log_type": "dockerlog",
+                                "time": "2025\/06\/26 15\:29\:14",
+                                "user": "devops"
+                            },
+                            {
+                                "event": "Stop project \'glance\' successfully.",
+                                "level": "info",
+                                "log_type": "dockerlog",
+                                "time": "2025\/06\/26 15\:29\:08",
+                                "user": "devops"
+                            }
+                        ],
+                        "offset": 0,
+                        "total": 2,
+                        "warn_count": 0
+                    },
+                    "success": true
+                }
+            ```
+        """
+        if sort_dir not in ['ASC', 'DESC']:
+            raise ValueError("sort_dir must be either 'ASC' or 'DESC'")
+
+        if sort_by not in ['time', 'level', 'user', 'event']:
+            raise ValueError("sort_by must be one of: 'time', 'level', 'user', 'event'")
+
+        if loglevel not in ['', 'information', 'warning', 'error']:
+            raise ValueError("loglevel must be one of: '', 'information', 'warning', 'error'")
+
+
+        #
+        api_name = 'SYNO.Docker.Log'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'action': 'load', 'limit': limit, 'offset': offset, 'sort_by': sort_by, 'sort_dir': sort_dir, 'filter_content': filter_content, 'datefrom': datefrom, 'dateto': dateto}
+
+        return self.request_data(api_name, api_path, req_param, method='post')
+
     def containers(self) -> dict[str, object] | str:
         """Get list of containers.
 
