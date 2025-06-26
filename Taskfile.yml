@@ -64,3 +64,10 @@ tasks:
     cmds:
       - echo "Running shfmt..."
       - shfmt --diff --language-dialect bash -w scripts/*
+
+  pre-commit:
+    desc: Run all pre-commit hooks
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Running pre-commit hooks..."
+      - pre-commit run --all-files

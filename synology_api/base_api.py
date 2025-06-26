@@ -11,37 +11,37 @@ class BaseApi(object):
 
         Parameters
         ----------
-        ip_address : str  
+        ip_address : str
             The IP/DNS address of the NAS.
 
-        port : str  
+        port : str
             The port of the NAS. Defaults to `5000`.
 
-        username : str  
+        username : str
             The username to use for authentication.
 
-        password : str  
+        password : str
             The password to use for authentication.
 
-        secure : bool  
+        secure : bool
             Whether to use HTTPS or not. Defaults to `False`.
 
-        cert_verify : bool  
+        cert_verify : bool
             Whether to verify the SSL certificate or not. Defaults to `False`.
 
-        dsm_version : int  
+        dsm_version : int
             The DSM version. Defaults to `7`.
 
-        debug : bool  
+        debug : bool
             Whether to print debug messages or not. Defaults to `True`.
 
-        otp_code : str  
+        otp_code : str
             The OTP code to use for authentication. Defaults to `None`
     """
-    
+
     # Class-level attribute to store the shared session
     shared_session: Optional[syn.Authentication] = None
-    
+
     def __init__(self,
             ip_address: str,
             port: str,
@@ -58,7 +58,7 @@ class BaseApi(object):
         ) -> None:
 
         self.application = application
-        
+
         # Reuse shared session if it exists, otherwise create a new one
         if BaseApi.shared_session:
             self.session = BaseApi.shared_session
@@ -87,6 +87,7 @@ class BaseApi(object):
 
     def logout(self) -> None:
         """Close current session."""
+        api_name = 'hotfix' # fix for docs_parser.py issue
         if self.session:
             self.session.logout()
             if BaseApi.shared_session == self.session:

@@ -6,32 +6,32 @@ class Share(base_api.BaseApi):
     """
     Core Share API implementation.
     """
-    
+
     def validate_set(self, name: str, vol_path: str, desc: str = "", enable_share_compress: bool = False, enable_share_cow: bool = False, enc_passwd: str = "", encryption: bool = False) -> dict:
         """Validate set of parameter for a new / modified shared folder
             Parameters
             ----------
             name : str
                 Share name.
-                
+
             vol_path : str
                 Volume path.
-                
+
             desc : str, optional
                 Share description. Defaults to `""`.
-                
+
             enable_share_compress : bool, optional
                 Enable share compress. Defaults to `False`.
-                
+
             enable_share_cow : bool, optional
                 Enable share cow. Defaults to `False`.
-                
+
             enc_passwd : str, optional
                 Encrypted password. Defaults to `""`.
-                
+
             encryption : bool, optional
                 Enable encryption. Defaults to `False`.
-                    
+
             Returns
             -------
             dict
@@ -53,7 +53,7 @@ class Share(base_api.BaseApi):
             "version": info['maxVersion'],
             "name": name,
         }
-        
+
         req_param_encrypted = {
             "shareinfo": json.dumps({
                 "name": name,
@@ -65,24 +65,24 @@ class Share(base_api.BaseApi):
                 "encryption": encryption,
             })
         }
-        
+
         # If using https don't use encryption
         if self.session._secure:
             req_param.update(req_param_encrypted)
         else:
             encrypted_params = self.session.encrypt_params(req_param_encrypted)
             req_param.update(encrypted_params)
-        
-        
+
+
         return self.request_data(api_name, api_path, req_param, method="post")
-    
+
     def list_folders(self, share_type: str = "all", additional: list = []) -> dict:
         """List all folders informations
             Parameters
             ----------
             share_type : str, optional
                 Share type. Defaults to `all`.
-                
+
             additional : list[str], optional
                 Additional fields to retrieve. Defaults to `[]`.
                 All fields known are: `[
@@ -92,7 +92,7 @@ class Share(base_api.BaseApi):
                     "load_worm_attr","include_cold_storage_share","is_cold_storage_share","include_missing_share","is_missing_share",
                     "include_offline_share","is_offline_share","include_worm_share"
                 ]`.
-                    
+
             Returns
             -------
             dict
@@ -127,20 +127,20 @@ class Share(base_api.BaseApi):
             "shareType": share_type,
             "additional": json.dumps(additional)
         }
-        
+
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_folder(self, name: str, additional: list = []) -> dict:
         """Get a folder by name
             Parameters
             ----------
             name : str
                 Share name.
-                
+
             additional : list, optional
                 Additional fields to retrieve. Defaults to `[]`.
                 All fields known are: `["disable_list","disable_modify","disable_download","unite_permission","is_aclmode"]`.
-                    
+
             Returns
             -------
             dict
@@ -174,9 +174,9 @@ class Share(base_api.BaseApi):
             "name": name,
             "additional": json.dumps(additional)
         }
-        
+
         return self.request_data(api_name, api_path, req_param)
-    
+
     def create_folder(self,
                 name: str, vol_path: str, desc: str = "", hidden: bool = False,
                 enable_recycle_bin: bool = True, recycle_bin_admin_only: bool = True,
@@ -188,37 +188,37 @@ class Share(base_api.BaseApi):
             ----------
             name : str
                 Share name.
-                
+
             vol_path : str
                 Volume path.
-                
+
             desc : str, optional
                 Share description. Defaults to `""`.
-                
+
             hidden : bool, optional
                 Hide share. Defaults to `False`.
-                
+
             enable_recycle_bin : bool, optional
                 Enable recycle bin. Defaults to `True`.
-                
+
             recycle_bin_admin_only : bool, optional
                 Recycle bin admin only. Defaults to `True`.
-                
+
             hide_unreadable : bool, optional
                 Hide unreadable. Defaults to `False`.
-                
+
             enable_share_cow : bool, optional
                 Enable share cow. Defaults to `False`.
-                
+
             enable_share_compress : bool, optional
                 Enable share compress. Defaults to `False`.
-                
-            share_quota : int, optional 
+
+            share_quota : int, optional
                 Share quota. Defaults to `0`.
-                
-            name_org : str, optional 
+
+            name_org : str, optional
                 Defaults to `""`.
-                    
+
             Returns
             -------
             dict
@@ -234,7 +234,7 @@ class Share(base_api.BaseApi):
                 "success": true,
             ```
         """
-        
+
         api_name = "SYNO.Core.Share"
         info = self.core_list[api_name]
         api_path = info["path"]
@@ -264,17 +264,17 @@ class Share(base_api.BaseApi):
         else:
             encrypted_params = self.session.encrypt_params(req_param_encrypted)
             req_param.update(encrypted_params)
-        
+
         return self.request_data(api_name, api_path, req_param, method="post")
-    
+
     def delete_folders(self, name: List[str]) -> dict:
         """Delete folder(s) by name(s)
-        
+
             Parameters
             ----------
             name : List[str]
                 Share names.
-                    
+
             Returns
             -------
             dict
@@ -296,9 +296,9 @@ class Share(base_api.BaseApi):
             "version": info['minVersion'],
             "name": name
         }
-        
+
         return self.request_data(api_name, api_path, req_param)
-    
+
     def clone(self,
                 name: str, name_org: str, vol_path: str, desc: str = "", hidden: bool = False,
                 enable_recycle_bin: bool = True, recycle_bin_admin_only: bool = True,
@@ -310,42 +310,42 @@ class Share(base_api.BaseApi):
             ----------
             name : str
                 New shared folder name.
-                
+
             name_org : str
                 Original shared folder name.
-                
+
             vol_path : str
                 Volume path.
-                
+
             desc : str, optional
                 Shared folder description. Defaults to `""`.
-                
+
             hidden : bool, optional
                 Hide shared folder. Defaults to `False`.
-                
+
             enable_recycle_bin : bool, optional
                 Enable recycle bin. Defaults to `True`.
-                
+
             recycle_bin_admin_only : bool, optional
                 Recycle bin admin only. Defaults to `True`.
-                
+
             hide_unreadable : bool, optional
                 Hide unreadable. Defaults to `False`.
-                
+
             enable_share_cow : bool, optional
                 Enable share cow. Defaults to `False`.
-                
+
             enable_share_compress : bool, optional
                 Enable share compress. Defaults to `False`.
-                
+
             share_quota : int, optional
                 Share quota. Defaults to `0`.
-                    
+
             Returns
             -------
             dict
                 Name of the created shared folder
-                
+
             Example return
             --------------
             ```json
@@ -364,7 +364,7 @@ class Share(base_api.BaseApi):
             "version": info['maxVersion'],
             "name": name,
         }
-        
+
         req_param_encrypted = {
             "shareinfo": json.dumps({
                 "desc": desc,
@@ -380,22 +380,22 @@ class Share(base_api.BaseApi):
                 "share_quota": share_quota,
             })
         }
-        
+
         # If using https don't use encryption
         if self.session._secure:
             req_param.update(req_param_encrypted)
         else:
             encrypted_params = self.session.encrypt_params(req_param_encrypted)
             req_param.update(encrypted_params)
-            
+
         return self.request_data(api_name, api_path, req_param, method="post")
-    
+
 class SharePermission(base_api.BaseApi):
     """
     Core Share Permission API implementation.
     """
-    
-    def get_folder_permission_by_name(self, 
+
+    def get_folder_permission_by_name(self,
                 name: str, permission_substr: str, offset: int = 0, limit: int = 50, is_unite_permission: bool = False, with_inherit: bool = False,
                 user_group_type: str = "local_user"
         ) -> dict:
@@ -404,31 +404,31 @@ class SharePermission(base_api.BaseApi):
             ----------
             name : str
                 The folder name to list permissions for.
-                
+
             permission_substr : str
                 The substring to search for in the permissions.
-                
+
             offset : int, optional
                 The offset to start at. Defaults to `0`.
-                
+
             limit : int, optional
                 The maximum number of results to return. Defaults to `50`.
-                
+
             is_unite_permission : bool, optional
                 Whether to return unified permissions. Defaults to `False`.
-                
+
             with_inherit : bool, optional
                 Whether to include inherited permissions. Defaults to `False`.
-                
+
             user_group_type : str, optional
                 The type of user group to list permissions for. Defaults to `"local_user"`.
                 All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
-            
+
             Returns
             -------
-            dict 
+            dict
                 List of permission(s) on the folder
-                
+
             Example return
             --------------
             ```json
@@ -451,7 +451,7 @@ class SharePermission(base_api.BaseApi):
             }
             ```
         """
-        
+
         api_name = "SYNO.Core.Share.Permission"
         info = self.core_list[api_name]
         api_path = info["path"]
@@ -468,8 +468,8 @@ class SharePermission(base_api.BaseApi):
             "user_group_type": user_group_type,
         }
         return self.request_data(api_name, api_path, req_param, method="get")
-    
-    def get_folder_permissions(self, 
+
+    def get_folder_permissions(self,
                 name: str, offset: int = 0, limit: int = 50, is_unite_permission: bool = False, with_inherit: bool = False,
                 user_group_type: str = "local_user"
         ) -> dict:
@@ -478,19 +478,19 @@ class SharePermission(base_api.BaseApi):
             ----------
             name : str
                 The folder name to list permissions for.
-                
+
             offset : int, optional
                 The offset to start at. Defaults to `0`.
-                
+
             limit : int, optional
                 The maximum number of results to return. Defaults to `50`.
-                
+
             is_unite_permission : bool, optional
                 Whether to return unified permissions. Defaults to `False`.
-                
+
             with_inherit : bool, optional
                 Whether to include inherited permissions. Defaults to `False`.
-                
+
             user_group_type : str, optional
                 The type of user group to list permissions for. Defaults to `"local_user"`.
                 All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
@@ -564,18 +564,18 @@ class SharePermission(base_api.BaseApi):
             "user_group_type": user_group_type,
         }
         return self.request_data(api_name, api_path, req_param, method="get")
-    
+
     def set_folder_permissions(self, name: str, user_group_type: str, permissions: List[dict[str, object]]) -> dict:
         """Set folder permissions for a given folder.
             Parameters
             ----------
             name : str
                 The folder name to set permissions for.
-                
+
             user_group_type : str
                 The type of user group to set permissions for.
                 All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
-                
+
             permissions : dict
                 The permissions to set for the folder.
                 Example:
@@ -590,12 +590,12 @@ class SharePermission(base_api.BaseApi):
                     }
                 ]
                 ```
-                    
+
             Returns
             -------
-            dict 
+            dict
                 Success
-                    
+
             Example return
             --------------
             ```json
@@ -615,7 +615,7 @@ class SharePermission(base_api.BaseApi):
             "permissions": json.dumps(permissions),
         }
         return self.request_data(api_name, api_path, req_param, method="get")
-    
+
     def get_local_group_permissions(self, group: str) -> dict:
         """Retrieve share permissions for a given group.
             Parameters
@@ -650,7 +650,7 @@ class SharePermission(base_api.BaseApi):
                     "total": 1
                 },
                 "success": true
-            }     
+            }
             ```
         """
         api_name = "SYNO.Core.Share.Permission"
@@ -667,7 +667,7 @@ class SharePermission(base_api.BaseApi):
             "additional": json.dumps(["hidden", "encryption", "is_aclmode"]),
         }
         return self.request_data(api_name, api_path, req_param)
-    
+
     def set_local_group_permissions(
         self, group: str, permissions: list[dict[str, Any]]
     ) -> dict:
@@ -676,7 +676,7 @@ class SharePermission(base_api.BaseApi):
             ----------
             group : str
                 The group to set the permissions for.
-                
+
             permissions : list[dict[str, Any]]
                 The permissions to set for the group.
                 Example:
@@ -722,18 +722,18 @@ class SharePermission(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
 class KeyManagerStore(base_api.BaseApi):
     """
     Core Share KeyManager Store API implementation.
     """
-    
+
     def init(self) -> dict:
         """Initialize KeyManagerStore API.
         """
-        
+
         raise NotImplementedError("This method is not completly implemented yet. API return error 403")
-        
+
         api_name = "SYNO.Core.Share.KeyManager.Store"
         version = self.core_list[api_name]["maxVersion"]
         api_path = self.core_list[api_name]["path"]
@@ -742,25 +742,25 @@ class KeyManagerStore(base_api.BaseApi):
             "method": "init",
             "share_path": "/usr/syno/etc/.encrypt"
         }
-        
+
         req_param_encrypted = {
             "passphrase": "",
         }
-        
+
         # If using https don't use encryption
         if self.session._secure:
             req_param.update(req_param_encrypted)
         else:
             encrypted_params = self.session.encrypt_params(req_param_encrypted)
             req_param.update(encrypted_params)
-        
-        
+
+
         return self.request_data(api_name, api_path, req_param, method="post")
-    
+
     def verify(self) -> dict:
-        
+
         raise NotImplementedError("This method is not implemented yet.")
-    
+
         api_name = "SYNO.Core.Share.KeyManager.Store"
         version = self.core_list[api_name]["maxVersion"]
         api_path = self.core_list[api_name]["path"]
@@ -768,28 +768,28 @@ class KeyManagerStore(base_api.BaseApi):
             "version": version,
             "method": "verify",
         }
-        
+
         req_param_encrypted = {
             "passphrase": "",
         }
-        
+
         # If using https don't use encryption
         if self.session._secure:
             req_param.update(req_param_encrypted)
         else:
             encrypted_params = self.session.encrypt_params(req_param_encrypted)
             req_param.update(encrypted_params)
-        
-        
+
+
         return self.request_data(api_name, api_path, req_param, method="post")
-    
+
     def explore(self) -> dict:
         """Explore KeyManagerStore API. Get list of existing stores
             Returns
             -------
             dict
                 List of stores existing on the NAS
-                    
+
             Example return
             --------------
             ```json
@@ -808,21 +808,21 @@ class KeyManagerStore(base_api.BaseApi):
             "version": version,
             "method": "explore",
         }
-        
+
         return self.request_data(api_name, api_path, req_param)
-    
+
 class KeyManagerAutoKey(base_api.BaseApi):
     """
     Core Share KeyManager AutoKey API implementation.
     """
-    
+
     def list(self) -> dict:
         """List KeyManagerStore API.
             Returns
             -------
             dict
                 List of keys in the manager
-                    
+
             Example return
             --------------
             ```json
@@ -841,6 +841,6 @@ class KeyManagerAutoKey(base_api.BaseApi):
             "version": version,
             "method": "list",
         }
-        
+
         return self.request_data(api_name, api_path, req_param)
 
