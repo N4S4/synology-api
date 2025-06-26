@@ -4,7 +4,8 @@ from unittest import TestCase
 import unittest
 from synology_api.filestation import FileStation
 from synology_api.surveillancestation import SurveillanceStation
-import os, pathlib
+import os
+import pathlib
 
 
 def parse_config(config_path) -> dict[str, str]:
@@ -25,7 +26,6 @@ class TestSynoApi(TestCase):
                 )
             )
         )
-
 
     def test_syno_filestation_login(self):
         fs = FileStation(ip_address=self.config["synology_ip"], port=self.config["synology_port"],
@@ -59,7 +59,8 @@ class TestSynoApi(TestCase):
         self.assertIsNotNone(ss_info)
         ss_info_data = ss_info['data']
         self.assertIsNotNone(ss_info_data)
-        self.assertEqual(ss_info_data['path'], '/webman/3rdparty/SurveillanceStation/')
+        self.assertEqual(ss_info_data['path'],
+                         '/webman/3rdparty/SurveillanceStation/')
 
 
 if __name__ == '__main__':

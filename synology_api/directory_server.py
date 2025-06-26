@@ -83,11 +83,12 @@ class DirectoryServer(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_directory_objects(self,
-                                basedn: str,
-                                offset: int = 0,
-                                limit: int = 40,
-                                objectCategory: list[str] = [ "person", "group", "organizationalUnit", "computer", "container", "builtinDomain"]
-                            ) -> dict[str, object]:
+                               basedn: str,
+                               offset: int = 0,
+                               limit: int = 40,
+                               objectCategory: list[str] = [
+                                   "person", "group", "organizationalUnit", "computer", "container", "builtinDomain"]
+                               ) -> dict[str, object]:
         """lists directory objects.
 
             Parameters
@@ -518,16 +519,16 @@ class DirectoryServer(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)['data']['isConflict']
 
     def modify_user_info(self,
-        user_dn: str = None,
-        firstName: str = None,
-        lastName: str = None,
-        displayName: str = None,
-        description: str = None,
-        initials: str = None,
-        physicalDeliveryOfficeName: str = None,
-        telephoneNumber: str = None,
-        web: str = None
-    ) -> dict[str, object]:
+                         user_dn: str = None,
+                         firstName: str = None,
+                         lastName: str = None,
+                         displayName: str = None,
+                         description: str = None,
+                         initials: str = None,
+                         physicalDeliveryOfficeName: str = None,
+                         telephoneNumber: str = None,
+                         web: str = None
+                         ) -> dict[str, object]:
         """Performs modification to user information within the Active Directory.
 
             Parameters
@@ -614,7 +615,7 @@ class DirectoryServer(base_api.BaseApi):
             userObject.lastName = lastName
         if displayName is not None:
             userObject.displayName = displayName
-        #if description is not None:
+        # if description is not None:
         #    userObject.description = description
         if initials is not None:
             userObject.initials = initials
@@ -626,7 +627,8 @@ class DirectoryServer(base_api.BaseApi):
             userObject.web = web
 
         theJsonObject = userObject.__dict__
-        val = self.setEntryRequest("SYNO.ActiveDirectory.User", "set", "userList", theJsonObject)
+        val = self.setEntryRequest(
+            "SYNO.ActiveDirectory.User", "set", "userList", theJsonObject)
 
         return val
 
@@ -684,14 +686,16 @@ class DirectoryServer(base_api.BaseApi):
             }
             ```
         """
-        compound = [{"api":modificationAPI,"method":  method,"version":2,nameOfObject:[jsonObject]}]
+        compound = [{"api": modificationAPI, "method":  method,
+                     "version": 2, nameOfObject: [jsonObject]}]
         api_name = "SYNO.Entry.Request"
         info = {'maxVersion': 1, 'minVersion': 1,
                 'path': 'entry.cgi', 'requestFormat': 'JSON'}
         api_path = info['path']
-        req_param = {"api": api_name, 'method': 'request', 'compound': json.dumps(compound), 'mode': '"sequential"', 'stop_when_error': True, 'version': info['maxVersion']}
-        print (json.dumps(req_param))
-        return self.request_data(api_name, api_path, req_param,"post")
+        req_param = {"api": api_name, 'method': 'request', 'compound': json.dumps(
+            compound), 'mode': '"sequential"', 'stop_when_error': True, 'version': info['maxVersion']}
+        print(json.dumps(req_param))
+        return self.request_data(api_name, api_path, req_param, "post")
 
     def update_domain_records(self) -> dict[str, object]:
         """Updates the Synology users and groups database with information from Directory Server.

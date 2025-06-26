@@ -43,19 +43,19 @@ class BaseApi(object):
     shared_session: Optional[syn.Authentication] = None
 
     def __init__(self,
-            ip_address: str,
-            port: str,
-            username: str,
-            password: str,
-            secure: bool = False,
-            cert_verify: bool = False,
-            dsm_version: int = 7,
-            debug: bool = True,
-            otp_code: Optional[str] = None,
-            device_id: Optional[str] = None,
-            device_name: Optional[str] = None,
-            application: str = 'Core',
-        ) -> None:
+                 ip_address: str,
+                 port: str,
+                 username: str,
+                 password: str,
+                 secure: bool = False,
+                 cert_verify: bool = False,
+                 dsm_version: int = 7,
+                 debug: bool = True,
+                 otp_code: Optional[str] = None,
+                 device_id: Optional[str] = None,
+                 device_name: Optional[str] = None,
+                 application: str = 'Core',
+                 ) -> None:
 
         self.application = application
 
@@ -64,7 +64,8 @@ class BaseApi(object):
             self.session = BaseApi.shared_session
         else:
             if not all([ip_address, port, username, password]):
-                raise ValueError("Missing required credentials for initial authentication.")
+                raise ValueError(
+                    "Missing required credentials for initial authentication.")
 
             self.session = syn.Authentication(
                 ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code,
@@ -87,7 +88,7 @@ class BaseApi(object):
 
     def logout(self) -> None:
         """Close current session."""
-        api_name = 'hotfix' # fix for docs_parser.py issue
+        api_name = 'hotfix'  # fix for docs_parser.py issue
         if self.session:
             self.session.logout()
             if BaseApi.shared_session == self.session:

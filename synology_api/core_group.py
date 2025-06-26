@@ -310,7 +310,8 @@ class Group(base_api.BaseApi):
             "name": group,
             "user_group_type": "local_group",
             "share_type": json.dumps(
-                ["dec", "local", "usb", "sata", "cluster", "c2", "cold_storage", "worm"]
+                ["dec", "local", "usb", "sata", "cluster",
+                    "c2", "cold_storage", "worm"]
             ),
             "additional": json.dumps(["hidden", "encryption", "is_aclmode"]),
         }
@@ -550,7 +551,8 @@ class Group(base_api.BaseApi):
         api_name = "SYNO.Core.BandwidthControl"
         info = self.core_list[api_name]
         api_path = info["path"]
-        req_param = {"version": 1, "method": "set", "bandwidths": json.dumps(settings)}
+        req_param = {"version": 1, "method": "set",
+                     "bandwidths": json.dumps(settings)}
 
         return self.request_data(api_name, api_path, req_param)
 

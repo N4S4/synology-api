@@ -73,7 +73,8 @@ class Virtualization(base_api.BaseApi):
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'list'}
 
-        self._network_group_list = self.request_data(api_name, api_path, req_param)
+        self._network_group_list = self.request_data(
+            api_name, api_path, req_param)
 
         return self._network_group_list
 
@@ -93,7 +94,8 @@ class Virtualization(base_api.BaseApi):
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'list'}
 
-        self._host_operation_list = self.request_data(api_name, api_path, req_param)
+        self._host_operation_list = self.request_data(
+            api_name, api_path, req_param)
 
         return self._host_operation_list
 
@@ -101,7 +103,8 @@ class Virtualization(base_api.BaseApi):
         api_name = 'SYNO.Virtualization.API.Guest'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': additional}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'list', 'additional': additional}
 
         info = self.request_data(api_name, api_path, req_param)
 
@@ -303,7 +306,8 @@ class Virtualization(base_api.BaseApi):
         api_name = 'SYNO.Virtualization.API.Guest.Image'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'create', 'auto_clean_task': auto_clean_task}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'create', 'auto_clean_task': auto_clean_task}
 
         if storage_names is None and storage_ids is None:
             return 'Specify at least one of storage_names or storge_ids'

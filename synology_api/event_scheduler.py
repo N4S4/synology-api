@@ -4,6 +4,7 @@ from .core_sys_info import SysInfo
 import json
 from typing import List
 
+
 class EventScheduler(base_api.BaseApi):
     """Event Scheduler API implementation.
 
@@ -26,8 +27,8 @@ class EventScheduler(base_api.BaseApi):
 
     def __get_root_token(self) -> str:
         sys_info = SysInfo(ip_address=self.session._ip_address, port=self.session._port, username=self.session._username, password=self.session._password,
-                            secure=self.session._secure, cert_verify=self.session._verify, dsm_version=self.session._version, debug=self.session._debug,
-                            otp_code=self.session._otp_code, application=self.application)
+                           secure=self.session._secure, cert_verify=self.session._verify, dsm_version=self.session._version, debug=self.session._debug,
+                           otp_code=self.session._otp_code, application=self.application)
         response = sys_info.password_confirm(password=self.session._password)
         if response['success']:
             return response['data']['SynoConfirmPWToken']
@@ -35,9 +36,9 @@ class EventScheduler(base_api.BaseApi):
             return ''
 
     def get_task_results(
-            self,
-            task_name: str
-        ) -> dict[str, object] | str:
+        self,
+        task_name: str
+    ) -> dict[str, object] | str:
         """Retrieve the results list for a specific task.
 
             Parameters
@@ -87,10 +88,10 @@ class EventScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_result_output(
-            self,
-            task_name: str,
-            result_id: int
-        ) -> dict[str, object] | str:
+        self,
+        task_name: str,
+        result_id: int
+    ) -> dict[str, object] | str:
         """Retrieve the output for a given result.
 
             Parameters
@@ -131,10 +132,10 @@ class EventScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def task_set_enable(
-            self,
-            task_name: str,
-            enable: bool
-        ) -> dict[str, object] | str:
+        self,
+        task_name: str,
+        enable: bool
+    ) -> dict[str, object] | str:
         """Enable or disable Event task.
 
             Parameters
@@ -172,9 +173,9 @@ class EventScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def task_run(
-            self,
-            task_name: str
-        ) -> dict[str, object] | str:
+        self,
+        task_name: str
+    ) -> dict[str, object] | str:
         """Run a specific Event task.
 
             Parameters
@@ -208,9 +209,9 @@ class EventScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def task_delete(
-            self,
-            task_name: str
-        ) -> dict[str, object] | str:
+        self,
+        task_name: str
+    ) -> dict[str, object] | str:
         """Delete a specific Event task.
 
             Parameters
@@ -244,17 +245,17 @@ class EventScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def task_create_or_set(
-            self,
-            action: str,
-            task_name: str,
-            owner: dict,
-            trigger_event: str,
-            script: str,
-            depend_on_task: list[str] = [],
-            enable: bool = True,
-            notify_email: str = '',
-            notify_only_on_error: bool = False
-        ) -> dict[str, object] | str:
+        self,
+        action: str,
+        task_name: str,
+        owner: dict,
+        trigger_event: str,
+        script: str,
+        depend_on_task: list[str] = [],
+        enable: bool = True,
+        notify_email: str = '',
+        notify_only_on_error: bool = False
+    ) -> dict[str, object] | str:
         """Create or modify an event-based task.
 
             Parameters
@@ -317,7 +318,7 @@ class EventScheduler(base_api.BaseApi):
             return {'error': f'trigger_event <{trigger_event}> is not valid.'}
 
         pre_tasks = ''
-        for task in depend_on_task: # NAS expects "[Task Name 1][Task Name 2]"
+        for task in depend_on_task:  # NAS expects "[Task Name 1][Task Name 2]"
             pre_tasks += f'[{task}]'
 
         api_name = 'SYNO.Core.EventScheduler'
@@ -332,7 +333,8 @@ class EventScheduler(base_api.BaseApi):
             'depend_on_task': pre_tasks,
             'enable': enable,
             'notify_enable': notify_email != '',
-            'notify_mail': f'"{notify_email}"', # Fails if not formatted with double quotes.
+            # Fails if not formatted with double quotes.
+            'notify_mail': f'"{notify_email}"',
             'notify_if_error':  notify_only_on_error,
             'operation': script,
             'operation_type': 'script'
@@ -407,7 +409,6 @@ class EventScheduler(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-
 
     def load_power_schedule(self) -> dict:
         """Load the power schedule, poweron tasks and poweroff tasks

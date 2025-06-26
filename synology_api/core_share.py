@@ -2,6 +2,7 @@ import json
 from typing import List, Any
 from . import base_api
 
+
 class Share(base_api.BaseApi):
     """
     Core Share API implementation.
@@ -72,7 +73,6 @@ class Share(base_api.BaseApi):
         else:
             encrypted_params = self.session.encrypt_params(req_param_encrypted)
             req_param.update(encrypted_params)
-
 
         return self.request_data(api_name, api_path, req_param, method="post")
 
@@ -178,11 +178,11 @@ class Share(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def create_folder(self,
-                name: str, vol_path: str, desc: str = "", hidden: bool = False,
-                enable_recycle_bin: bool = True, recycle_bin_admin_only: bool = True,
-                hide_unreadable: bool = False, enable_share_cow: bool = False,
-                enable_share_compress: bool = False, share_quota: int = 0, name_org: str = "",
-        ) -> dict:
+                      name: str, vol_path: str, desc: str = "", hidden: bool = False,
+                      enable_recycle_bin: bool = True, recycle_bin_admin_only: bool = True,
+                      hide_unreadable: bool = False, enable_share_cow: bool = False,
+                      enable_share_compress: bool = False, share_quota: int = 0, name_org: str = "",
+                      ) -> dict:
         """Create a new shared folder
             Parameters
             ----------
@@ -300,11 +300,11 @@ class Share(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def clone(self,
-                name: str, name_org: str, vol_path: str, desc: str = "", hidden: bool = False,
-                enable_recycle_bin: bool = True, recycle_bin_admin_only: bool = True,
-                hide_unreadable: bool = False, enable_share_cow: bool = False,
-                enable_share_compress: bool = False, share_quota: int = 0
-        ) -> dict:
+              name: str, name_org: str, vol_path: str, desc: str = "", hidden: bool = False,
+              enable_recycle_bin: bool = True, recycle_bin_admin_only: bool = True,
+              hide_unreadable: bool = False, enable_share_cow: bool = False,
+              enable_share_compress: bool = False, share_quota: int = 0
+              ) -> dict:
         """Clone existing shared folder.
             Parameters
             ----------
@@ -390,15 +390,16 @@ class Share(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param, method="post")
 
+
 class SharePermission(base_api.BaseApi):
     """
     Core Share Permission API implementation.
     """
 
     def get_folder_permission_by_name(self,
-                name: str, permission_substr: str, offset: int = 0, limit: int = 50, is_unite_permission: bool = False, with_inherit: bool = False,
-                user_group_type: str = "local_user"
-        ) -> dict:
+                                      name: str, permission_substr: str, offset: int = 0, limit: int = 50, is_unite_permission: bool = False, with_inherit: bool = False,
+                                      user_group_type: str = "local_user"
+                                      ) -> dict:
         """Retrieve share permissions for a given folder filtered by permission name (sub string)
             Parameters
             ----------
@@ -470,9 +471,9 @@ class SharePermission(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method="get")
 
     def get_folder_permissions(self,
-                name: str, offset: int = 0, limit: int = 50, is_unite_permission: bool = False, with_inherit: bool = False,
-                user_group_type: str = "local_user"
-        ) -> dict:
+                               name: str, offset: int = 0, limit: int = 50, is_unite_permission: bool = False, with_inherit: bool = False,
+                               user_group_type: str = "local_user"
+                               ) -> dict:
         """Retrieve share permissions for a given folder.
             Parameters
             ----------
@@ -662,7 +663,8 @@ class SharePermission(base_api.BaseApi):
             "name": group,
             "user_group_type": "local_group",
             "share_type": json.dumps(
-                ["dec", "local", "usb", "sata", "cluster", "c2", "cold_storage", "worm"]
+                ["dec", "local", "usb", "sata", "cluster",
+                    "c2", "cold_storage", "worm"]
             ),
             "additional": json.dumps(["hidden", "encryption", "is_aclmode"]),
         }
@@ -723,6 +725,7 @@ class SharePermission(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
+
 class KeyManagerStore(base_api.BaseApi):
     """
     Core Share KeyManager Store API implementation.
@@ -732,7 +735,8 @@ class KeyManagerStore(base_api.BaseApi):
         """Initialize KeyManagerStore API.
         """
 
-        raise NotImplementedError("This method is not completly implemented yet. API return error 403")
+        raise NotImplementedError(
+            "This method is not completly implemented yet. API return error 403")
 
         api_name = "SYNO.Core.Share.KeyManager.Store"
         version = self.core_list[api_name]["maxVersion"]
@@ -753,7 +757,6 @@ class KeyManagerStore(base_api.BaseApi):
         else:
             encrypted_params = self.session.encrypt_params(req_param_encrypted)
             req_param.update(encrypted_params)
-
 
         return self.request_data(api_name, api_path, req_param, method="post")
 
@@ -779,7 +782,6 @@ class KeyManagerStore(base_api.BaseApi):
         else:
             encrypted_params = self.session.encrypt_params(req_param_encrypted)
             req_param.update(encrypted_params)
-
 
         return self.request_data(api_name, api_path, req_param, method="post")
 
@@ -810,6 +812,7 @@ class KeyManagerStore(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
+
 
 class KeyManagerAutoKey(base_api.BaseApi):
     """
@@ -843,4 +846,3 @@ class KeyManagerAutoKey(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-

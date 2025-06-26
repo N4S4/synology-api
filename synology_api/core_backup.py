@@ -11,7 +11,8 @@ class Backup(base_api.BaseApi):
         api_name = 'SYNO.Backup.Repository'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['minVersion'], 'method': 'get', 'task_id': task_id}
+        req_param = {'version': info['minVersion'],
+                     'method': 'get', 'task_id': task_id}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -44,7 +45,8 @@ class Backup(base_api.BaseApi):
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['minVersion'], 'method': 'status', 'task_id': task_id}
+        req_param = {'version': info['minVersion'],
+                     'method': 'status', 'task_id': task_id}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -55,7 +57,8 @@ class Backup(base_api.BaseApi):
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['minVersion'], 'method': 'get', 'task_id': task_id}
+        req_param = {'version': info['minVersion'],
+                     'method': 'get', 'task_id': task_id}
 
         return self.request_data(api_name, api_path, req_param)
 

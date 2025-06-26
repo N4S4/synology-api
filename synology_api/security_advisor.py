@@ -25,7 +25,8 @@ class SecurityAdvisor(base_api.BaseApi):
         api_name = 'SYNO.SecurityAdvisor.Conf.Checklist'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'group': 'home'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'list', 'group': 'home'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -33,7 +34,8 @@ class SecurityAdvisor(base_api.BaseApi):
         api_name = 'SYNO.SecurityAdvisor.LoginActivity'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'offser': offset, 'limit': limit}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'list', 'offser': offset, 'limit': limit}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -49,6 +51,7 @@ class SecurityAdvisor(base_api.BaseApi):
         api_name = 'SYNO.Core.SecurityScan.Conf'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'group_enum', 'argGroup': 'custom'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'group_enum', 'argGroup': 'custom'}
 
         return self.request_data(api_name, api_path, req_param)
