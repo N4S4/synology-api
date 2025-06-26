@@ -77,7 +77,7 @@ def header(level: str, text: str, styles: list[str] = []) -> str:
     if level not in header_levels:
         warnings.warn(f'Unknown header level: {level}', UserWarning)
     return header_levels.get(level, '') + ' ' + __stylize(text, styles) + '\n'
-    
+
 def text(text: str, styles: list[str] = [], newline: bool = False) -> str:
     """Generate text element with styles"""
     return __stylize(text, styles) + (NEWLINE if newline else ' ')
@@ -116,7 +116,7 @@ def metadata(class_name: str) -> tuple[str, str]:
     content += f'title: {status_indicator} {class_name}\n'
     content += META_TAG
     content += AUTO_GEN_DISCLAIMER
-    
+
     return (content, docs_status)
 
 def admonition(level: str, text: str) -> str:
@@ -148,7 +148,7 @@ def init_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description='This script parses docstrings from the wrapper source files and generates markdown files for docusaurus.'
     )
-    
+
     parser.add_argument('-a', '--all',
                         action='store_true',
                         help='Parse all non-excluded files')
@@ -156,14 +156,14 @@ def init_parser() -> argparse.ArgumentParser:
                         type=str,
                         action='extend',
                         nargs="+",
-                        help='Parse specified files. This overrides the excluded files.')  
+                        help='Parse specified files. This overrides the excluded files.')
     parser.add_argument('-l', '--api-list',
                         action='store_true',
                         help='Parses APIs used by the class and generates MD for Supported APIs page.')
     parser.add_argument('-e', '--excluded',
                         action='store_true',
                         help='Show a list of the excluded files to parse.')
-    
+
     return parser
 
 def get_files_to_parse() -> list[str]:
@@ -174,7 +174,7 @@ def validate_args(parser: argparse.ArgumentParser) -> tuple[list[str], bool]:
     if len(sys.argv)==1:
         parser.print_help(sys.stderr)
         sys.exit(1)
-    
+
     args = parser.parse_args()
     if args.excluded:
         print('Excluded files:')
@@ -247,7 +247,7 @@ def parse_class_apis(class_name: str, file_content: str, file_path: str) -> str:
 def parse_method_api(method_name: str, file_content: str) -> str:
     match = re.search(METHOD_API_NAME_PATTERN(method_name), file_content)
     section = ''
-    if match: 
+    if match:
         api_name = check_concatenation(match.group(1))
         section = header('h4', 'Internal API')
         section += div(text(api_name, ['code']), 'padding', 'left', 'md')
@@ -283,7 +283,7 @@ def gen_method(method: dict, file_content: str) -> str:
     docstring = method['docstring']
     if docstring is None:
         return content + SEPARATOR
-    
+
     description = text(docstring.short_description or '', newline=True)
     # In some cases, the whole docstring text will be parsed in the long_description.
     # Avoid appending it in that case.
@@ -291,9 +291,9 @@ def gen_method(method: dict, file_content: str) -> str:
         print(docstring.params)
         print('========>', docstring.long_description)
         warnings.warn(f'[{method["name"]}] failed to parse docstrings. Make sure the format is correct. Check guidelines if needed.', UserWarning)
-    else: 
+    else:
         description += text(docstring.long_description or '', newline=True)
-        
+
     description = dedup_newlines(description)
 
     # TODO: refactor, synology_api.core_package.Package.easy_install don't have internal API, but it has a docstring.
@@ -310,7 +310,7 @@ def gen_method(method: dict, file_content: str) -> str:
             parameters_body += text(dedup_newlines(param.description or ''), newline=True)
             parameters_body += NEWLINE
         parameters += div(content=parameters_body, spacing='padding', side='left', size='md')
-    
+
     returns = ''
     if docstring.returns:
         validate_str(method['name'] + ' - returns', [docstring.returns.type_name, docstring.returns.description])
@@ -337,7 +337,7 @@ def gen_method(method: dict, file_content: str) -> str:
 
 def write(path: str, content: str):
     with open(path, 'w', encoding="utf-8") as f:
-        print('Writing into:', path)  
+        print('Writing into:', path)
         f.write(content)
 
 def main():
@@ -351,7 +351,7 @@ def main():
         doc_content = ''
         file_path = join(PARSE_DIR, file_name)
         print('Processing: ' + file_name)
-        with open(file_path, 'r', encoding="utf-8") as f: 
+        with open(file_path, 'r', encoding="utf-8") as f:
             file_content = f.read()
             docstrings = get_docstrings(file_content)
             if docstrings is None:
@@ -363,7 +363,7 @@ def main():
             for i, class_item in enumerate(classes):
                 supported_apis += parse_class_apis(class_item['name'], file_content, file_name)
                 doc_content += gen_header(
-                    class_item['name'], 
+                    class_item['name'],
                     class_item['docstring_text'],
                     classes=classes_names
                 )
@@ -373,12 +373,12 @@ def main():
                     doc_content += gen_method(method, file_content)
 
         # Write to md files if the args were set
-        if parse_docs: 
+        if parse_docs:
             write(DOCS_DIR + file_name.replace('.py', '.md'), doc_content)
         print('='*20)
     # Write to md files if the args were set
     if parse_api_list:
         write(API_LIST_FILE, supported_apis)
-        
+
 if __name__ == "__main__":
     main()

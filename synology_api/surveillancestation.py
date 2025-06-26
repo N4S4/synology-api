@@ -77,7 +77,7 @@ class SurveillanceStation(base_api.BaseApi):
 
     def get_camera_info(self,
                         cameraIds: int = None,
-                        privCamType: int = 1, 
+                        privCamType: int = 1,
                         blIncludeDeletedCam: bool = True,
                         basic: bool = True,
                         streamInfo: bool = True,
@@ -89,16 +89,16 @@ class SurveillanceStation(base_api.BaseApi):
                         camAppInfo: bool = True) -> dict[str, object] | str:
         '''
         This function return information about a camera.
-        
+
         cameraIds : This parameter is named cameraIds in the API documentation but it refer to 1 camera ID
-        
+
         privCamType: int = 1
             SYNO.SS.CamPriv.LIVEVIEW = 1;
             SYNO.SS.CamPriv.PLAYBACK = 2;
             SYNO.SS.CamPriv.LENS = 4;
             SYNO.SS.CamPriv.AUDIO = 8;
             SYNO.SS.CamPriv.DIGIOUT = 16;
-        
+
         All other parameters must be let to default value
         '''
 
@@ -151,14 +151,14 @@ class SurveillanceStation(base_api.BaseApi):
         ## Return only the content of the response where binary data is stored
         return self.request_data(api_name, api_path, req_param, response_json=False).content
 
-    def enable_camera(self, 
+    def enable_camera(self,
                       idList: str = None,
                       blIncludeDeletedCam: bool = False) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'Enable'}
-        
+
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
                 if val is not None:
@@ -166,14 +166,14 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def disable_camera(self, 
+    def disable_camera(self,
                        idList: str = None,
                        blIncludeDeletedCam: bool = False) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'Disable'}
-        
+
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
                 if val is not None:
@@ -1617,7 +1617,7 @@ class SurveillanceStation(base_api.BaseApi):
         req_param = {'version': info['maxVersion'], 'method': 'SetSetting', 'data': data }
 
         """data example:
-        
+
            data=[{"SSLogType":321912835,"enable":1},{"SSLogType":321912836,"enable":0}]"""
 
         return self.request_data(api_name, api_path, req_param)
@@ -1640,7 +1640,7 @@ class SurveillanceStation(base_api.BaseApi):
         req_param = {'version': info['maxVersion'], 'method': 'CheckQuota'}
 
         """camList example:
-        
+
             camList = [{"ip": "10.13.22.141", "model": "DCS-3110", "vendor": "DLink", "port": 80}]"""
 
         for key, val in locals().items():
@@ -3155,8 +3155,8 @@ class SurveillanceStation(base_api.BaseApi):
         req_param = {'version': info['maxVersion'], 'method': 'SaveLogConfig'}
 
         """data example:
-        
-        data={"log_evt":"11111111111111111111111111111111111111", 
+
+        data={"log_evt":"11111111111111111111111111111111111111",
               "id": 97, "log_alarm":"00111111111111111111111111111111111111"}"""
 
         for key, val in locals().items():
@@ -3174,7 +3174,7 @@ class SurveillanceStation(base_api.BaseApi):
         req_param = {'version': info['maxVersion'], 'method': 'Save'}
 
         """arrayJson example:
-        
+
            arrayJson="[{\"enable\":true,\"id\":97,\"name\":\"ctrler1\",\"host\":\"10.13.12.173\",\"port\":80,
                         \"model\":\"A1001\",\"username\":\"root\",\"password\":\"Q__Q-__-\",\"time_server\":
                         \"SurveillanceStation\",\"time_zone\":\"Fiji\",\"door\":[{\"id\":231,\"name\":\"FrontDoor\",

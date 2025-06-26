@@ -161,7 +161,7 @@ class CertificateError(SynoBaseException):
         else:
             super().__init__(error_message="Certificate Error: %i" % error_code, *args)
         return
-    
+
 class CloudSyncError(SynoBaseException):
     """Class for an error during SYNO.CloudSync request. NOTE: Lacking documentation."""
 
@@ -342,7 +342,7 @@ class VPNError(SynoBaseException):
 class CoreError(SynoBaseException):
     """Class for an error during a SYNO.Core.*
     """
-    
+
     def __init__(self, error_code: int, *args: object) -> None:
         self.error_code = error_code
         if error_code in core_error_codes.keys():

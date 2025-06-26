@@ -569,7 +569,7 @@ class SysInfo(base_api.BaseApi):
         req_param = {'version': info['maxVersion'], 'method': 'get'}
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def terminal_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.Core.Terminal'
         info = self.core_list[api_name]

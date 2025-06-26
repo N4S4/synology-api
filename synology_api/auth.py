@@ -90,7 +90,7 @@ class Authentication:
         else:
             encrypted_params = self.encrypt_params(params_enc)
             params.update(encrypted_params)
-        
+
         if self._otp_code:
             params['otp_code'] = self._otp_code
         if self._device_id is not None and self._device_name is not None:
@@ -224,7 +224,7 @@ class Authentication:
         if print_check == 0:
             print('Not Found')
         return
-    
+
     def _random_AES_passphrase(self, length):
         available = ('0123456789'
                      'abcdefghijklmnopqrstuvwxyz'
