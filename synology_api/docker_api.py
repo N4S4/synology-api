@@ -31,6 +31,7 @@ class Docker(base_api.BaseApi):
             - Actions:
                 - Export container profile
                 - Export container profile and content
+                - Remove event logs from Container Manager
     """
 
     def list_event_logs(self, limit : int = 1000, offset : int = 0, sort_by : str = "time", sort_dir : str = "DESC", loglevel : str = "", filter_content: str = "", datefrom : int = 0, dateto : int = 0) -> dict[str, object] | str:
@@ -115,6 +116,31 @@ class Docker(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'list', 'action': 'load', 'limit': limit, 'offset': offset, 'sort_by': sort_by, 'sort_dir': sort_dir, 'filter_content': filter_content, 'datefrom': datefrom, 'dateto': dateto}
+
+        return self.request_data(api_name, api_path, req_param, method='post')
+
+    def clear_event_logs(self) -> dict[str, object] | str:
+        """Remove event logs from Container Manager.
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary indicating the success of the operation.
+
+            Example return
+            --------------
+            ```json
+                {
+                    "data": {},
+                    "success": true
+                }
+            ```
+        """
+
+        api_name = 'SYNO.Docker.Log'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'clear'}
 
         return self.request_data(api_name, api_path, req_param, method='post')
 
