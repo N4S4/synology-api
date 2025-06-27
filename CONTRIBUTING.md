@@ -37,6 +37,23 @@ To see all available tasks, run:
 task --list
 ```
 
+#### Install Python dependencies
+
+To install Python dependencies, you can use the `task` command:
+```bash
+task install-python-deps
+```
+This will install all the required Python packages listed in `requirements.txt` and `requirements-dev.txt` using `pip` on your local machine.
+
+#### Setup virtual environment
+
+You can use `venv` to create a virtual environment for this project.
+We already have task for that, so you can run:
+```bash
+task venv
+```
+
+
 ## Formating code
 
 In task file is defined a task to format the code, you can run it with:

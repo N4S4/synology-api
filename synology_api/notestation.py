@@ -62,7 +62,8 @@ class NoteStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def smart(self) -> dict[str, object] | str:  # TODO need to investigate for additional params
+    # TODO need to investigate for additional params
+    def smart(self) -> dict[str, object] | str:
         api_name = 'SYNO.NoteStation.Smart'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -86,7 +87,8 @@ class NoteStation(base_api.BaseApi):
         if note_id is None:
             return 'note_id must be specify, run note_list() and copy object_id that you need'
 
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'object_id': note_id}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'object_id': note_id}
 
         return self.request_data(api_name, api_path, req_param)
 

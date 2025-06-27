@@ -70,7 +70,8 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation.Info'
         info = self.download_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'setserverconfig'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'setserverconfig'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -111,7 +112,8 @@ class DownloadStation(base_api.BaseApi):
                      'offset': offset}
 
         if additional_param is None:
-            additional_param = ['detail', 'transfer', 'file', 'tracker', 'peer']
+            additional_param = ['detail', 'transfer',
+                                'file', 'tracker', 'peer']
 
         if type(additional_param) is list:
             req_param['additional'] = ",".join(additional_param)
@@ -122,10 +124,12 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'getinfo', 'id': task_id, 'additional': additional_param}
+        req_param = {'version': info['maxVersion'], 'method': 'getinfo',
+                     'id': task_id, 'additional': additional_param}
 
         if additional_param is None:
-            additional_param = ['detail', 'transfer', 'file', 'tracker', 'peer']
+            additional_param = ['detail', 'transfer',
+                                'file', 'tracker', 'peer']
 
         if type(additional_param) is list:
             req_param['additional'] = ",".join(additional_param)
@@ -140,7 +144,8 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation2.Task.Source'
         info = self.download_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'download', 'id': task_id}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'download', 'id': task_id}
 
         return self.request_data(api_name, api_path, req_param, response_json=False).content
 
@@ -169,7 +174,8 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'pause', 'id': task_id}
+        param = {'version': info['maxVersion'],
+                 'method': 'pause', 'id': task_id}
 
         if type(task_id) is list:
             param['id'] = ",".join(task_id)
@@ -180,7 +186,8 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'resume', 'id': task_id}
+        param = {'version': info['maxVersion'],
+                 'method': 'resume', 'id': task_id}
 
         if type(task_id) is list:
             param['id'] = ",".join(task_id)
@@ -191,7 +198,8 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'edit', 'id': task_id, 'destination': destination}
+        param = {'version': info['maxVersion'], 'method': 'edit',
+                 'id': task_id, 'destination': destination}
 
         if type(task_id) is list:
             param['id'] = ",".join(task_id)
@@ -223,7 +231,8 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation.RSS.Site'
         info = self.download_list[api_name]
         api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'refresh', 'id': rss_id}
+        param = {'version': info['maxVersion'],
+                 'method': 'refresh', 'id': rss_id}
 
         if rss_id is None:
             return 'Enter a valid ID check if you have any with get_rss_list()'
@@ -269,7 +278,8 @@ class DownloadStation(base_api.BaseApi):
 
         param['module'] = module
 
-        self._bt_search_id = self.request_data(api_name, api_path, param)['data']['taskid']
+        self._bt_search_id = self.request_data(
+            api_name, api_path, param)['data']['taskid']
 
         self._bt_search_id_list.append(self._bt_search_id)
 
@@ -295,7 +305,8 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'list', 'taskid': taskid}
+        param = {'version': info['maxVersion'],
+                 'method': 'list', 'taskid': taskid}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'param', 'taskid']:
@@ -321,7 +332,8 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'clean', 'taskid': taskid}
+        param = {'version': info['maxVersion'],
+                 'method': 'clean', 'taskid': taskid}
 
         if taskid is None:
             return 'Enter a valid taskid, you can choose one of ' + str(self._bt_search_id_list)

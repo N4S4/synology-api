@@ -41,7 +41,8 @@ class USBCopy(base_api.BaseApi):
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get_global_setting'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get_global_setting'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -147,7 +148,8 @@ class USBCopy(base_api.BaseApi):
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'id': task_id}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'id': task_id}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -187,6 +189,7 @@ class USBCopy(base_api.BaseApi):
         else:
             return 'enable must be True or False'
 
-        req_param = {'version': info['maxVersion'], 'method': enable, 'id': task_id}
+        req_param = {'version': info['maxVersion'],
+                     'method': enable, 'id': task_id}
 
         return self.request_data(api_name, api_path, req_param)

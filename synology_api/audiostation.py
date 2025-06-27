@@ -16,7 +16,8 @@ class AudioStation(base_api.BaseApi):
         api_name = 'SYNO.AudioStation.Playlist'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'method': 'list', 'library': 'all', 'limit': '100000', 'version': info['maxVersion']}
+        req_param = {'method': 'list', 'library': 'all',
+                     'limit': '100000', 'version': info['maxVersion']}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -24,7 +25,8 @@ class AudioStation(base_api.BaseApi):
         api_name = 'SYNO.AudioStation.RemotePlayer'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'method': 'list', 'type': 'all', 'additional': 'subplayer_list', 'version': info['maxVersion']}
+        req_param = {'method': 'list', 'type': 'all',
+                     'additional': 'subplayer_list', 'version': info['maxVersion']}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -40,7 +42,8 @@ class AudioStation(base_api.BaseApi):
         api_name = 'SYNO.AudioStation.RemotePlayer'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'method': 'getplaylist', 'id': device, 'version': info['maxVersion']}
+        req_param = {'method': 'getplaylist',
+                     'id': device, 'version': info['maxVersion']}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -50,7 +53,8 @@ class AudioStation(base_api.BaseApi):
         api_name = 'SYNO.AudioStation.RemotePlayer'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'method': 'control', 'id': device, 'version': info['maxVersion'], 'action': 'play'}
+        req_param = {'method': 'control', 'id': device,
+                     'version': info['maxVersion'], 'action': 'play'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -58,7 +62,8 @@ class AudioStation(base_api.BaseApi):
         api_name = 'SYNO.AudioStation.RemotePlayer'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'method': 'control', 'id': device, 'version': info['maxVersion'], 'action': 'stop'}
+        req_param = {'method': 'control', 'id': device,
+                     'version': info['maxVersion'], 'action': 'stop'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -66,7 +71,8 @@ class AudioStation(base_api.BaseApi):
         api_name = 'SYNO.AudioStation.RemotePlayer'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'method': 'control', 'id': device, 'version': info['maxVersion'], 'action': 'next'}
+        req_param = {'method': 'control', 'id': device,
+                     'version': info['maxVersion'], 'action': 'next'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -74,6 +80,7 @@ class AudioStation(base_api.BaseApi):
         api_name = 'SYNO.AudioStation.RemotePlayer'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'method': 'control', 'id': device, 'version': info['maxVersion'], 'action': 'prev'}
+        req_param = {'method': 'control', 'id': device,
+                     'version': info['maxVersion'], 'action': 'prev'}
 
         return self.request_data(api_name, api_path, req_param)

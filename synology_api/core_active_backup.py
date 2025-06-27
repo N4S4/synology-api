@@ -4,6 +4,7 @@ from . import base_api
 import time
 import json
 
+
 class ActiveBackupBusiness(base_api.BaseApi):
     """Active Backup for Business API Implementation.
 
@@ -34,16 +35,16 @@ class ActiveBackupBusiness(base_api.BaseApi):
     """
 
     def __create_filter(
-            self,
-            log_level: str = "",
-            keyword: str = "",
-            from_date: int = 0,
-            to_date: int = 0,
-            task_status: str = "",
-            result_status: str = "",
-            backup_type: str = "",
-            action_type: str = ""
-        ):
+        self,
+        log_level: str = "",
+        keyword: str = "",
+        from_date: int = 0,
+        to_date: int = 0,
+        task_status: str = "",
+        result_status: str = "",
+        backup_type: str = "",
+        action_type: str = ""
+    ):
         """
         Create a filter dictionary based on the provided parameters.
         """
@@ -69,7 +70,7 @@ class ActiveBackupBusiness(base_api.BaseApi):
         action_type_map = {
             'backup': 1,
             'dedup_data': 1048576,
-            'restore': [128,1024,2048],
+            'restore': [128, 1024, 2048],
             'migrate': 256,
             'delete_target': 65536,
             'delete_version': 131072,
@@ -265,8 +266,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         settings = [
-            { 'name': 'retention_run_hour', 'value': str(hour) },
-            { 'name': 'retention_run_min', 'value': str(minute) }
+            {'name': 'retention_run_hour', 'value': str(hour)},
+            {'name': 'retention_run_min', 'value': str(minute)}
         ]
 
         req_param = {
@@ -278,10 +279,10 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_traffic_throttle(
-            self,
-            traffic_control: dict[str, object] = { "enable": False, "bandwidth": 0 },
-            ip_range: list[str] = ["", ""]
-        ) -> dict[str, object]:
+        self,
+        traffic_control: dict[str, object] = {"enable": False, "bandwidth": 0},
+        ip_range: list[str] = ["", ""]
+    ) -> dict[str, object]:
         """Set the global bandwidth control and IP range bandwidth control.
 
             Note: Applies only to PC, Physical Server and NAS devices.
@@ -328,18 +329,22 @@ class ActiveBackupBusiness(base_api.BaseApi):
         settings = []
 
         def item(key: str, value: str) -> dict[str, str]:
-            return { 'name': key, 'value': value }
+            return {'name': key, 'value': value}
 
         if traffic_control['enable'] and traffic_control['bandwidth'] > -1:
             settings.append(item('enable_global_bandwidth_control', 'true'))
-            settings.append(item('global_backup_bandwidth_number', str(traffic_control['bandwidth'])))
+            settings.append(item('global_backup_bandwidth_number',
+                            str(traffic_control['bandwidth'])))
 
             if ip_range[0] and ip_range[1]:
-                settings.append(item('enable_ip_range_bandwidth_control', 'true'))
-                settings.append(item('bandwidth_control_ip_start', ip_range[0]))
+                settings.append(
+                    item('enable_ip_range_bandwidth_control', 'true'))
+                settings.append(
+                    item('bandwidth_control_ip_start', ip_range[0]))
                 settings.append(item('bandwidth_control_ip_end', ip_range[1]))
             else:
-                settings.append(item('enable_ip_range_bandwidth_control', 'false'))
+                settings.append(
+                    item('enable_ip_range_bandwidth_control', 'false'))
         else:
             settings.append(item('enable_global_bandwidth_control', 'false'))
 
@@ -407,10 +412,10 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_device_transfer_size(
-            self,
-            time_start: int = int(time.time() - 86400),
-            time_end: int = int(time.time())
-        ) -> dict[str, object]:
+        self,
+        time_start: int = int(time.time() - 86400),
+        time_end: int = int(time.time())
+    ) -> dict[str, object]:
         """Get a list of all devices and their respective transfer size for the given time frame.
 
             Parameters
@@ -545,14 +550,14 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_tasks(
-            self,
-            task_id: int = -1,
-            backup_type: str = "",
-            status: str = "",
-            from_date: int = 0,
-            to_date: int = 0,
-            include_versions: bool = False,
-        ) -> dict[str, object]:
+        self,
+        task_id: int = -1,
+        backup_type: str = "",
+        status: str = "",
+        from_date: int = 0,
+        to_date: int = 0,
+        include_versions: bool = False,
+    ) -> dict[str, object]:
         """Get information of one or all tasks.
 
             Parameters
@@ -809,15 +814,15 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_logs(
-            self,
-            task_id: int = -1,
-            log_level: str = "",
-            keyword: str = "",
-            from_date: int = 0,
-            to_date: int = 0,
-            offset: int = 0,
-            limit: int = 200,
-        ) -> dict[str, object]:
+        self,
+        task_id: int = -1,
+        log_level: str = "",
+        keyword: str = "",
+        from_date: int = 0,
+        to_date: int = 0,
+        offset: int = 0,
+        limit: int = 200,
+    ) -> dict[str, object]:
         """Get logs from the package, tasks and devices. From `[Activities -> Log]` screen in ABB.
 
             For specific task logs `[Task List -> Details -> Log]`, specify `task_id` parameter.
@@ -917,17 +922,17 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def task_history(
-            self,
-            task_id: int = -1,
-            status: str = "",
-            keyword: str = "",
-            backup_type: str = "",
-            action_type: str = "",
-            from_date: int = 0,
-            to_date: int = 0,
-            offset: int = 0,
-            limit: int = 200
-        ) -> dict[str, object]:
+        self,
+        task_id: int = -1,
+        status: str = "",
+        keyword: str = "",
+        backup_type: str = "",
+        action_type: str = "",
+        from_date: int = 0,
+        to_date: int = 0,
+        offset: int = 0,
+        limit: int = 200
+    ) -> dict[str, object]:
         """Return the history of task execution.
 
             Parameters
@@ -1082,12 +1087,12 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def result_details(
-            self,
-            result_id: int,
-            limit: int = 500,
-            order_by: str = "log_level",
-            direction: str = "ASC"
-        ) -> dict[str, object]:
+        self,
+        result_id: int,
+        limit: int = 500,
+        order_by: str = "log_level",
+        direction: str = "ASC"
+    ) -> dict[str, object]:
         """Get details of a task result log. `result_id` can be retrieved from `list_logs()` function.
 
             Parameters

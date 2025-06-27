@@ -3,6 +3,7 @@ import json
 
 from . import base_api
 
+
 class ActiveBackupMicrosoft(base_api.BaseApi):
     """Active Backup for Microsoft 365 Implementation.
 
@@ -25,6 +26,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             - Delete task
             - Relink task
     """
+
     def __trim_task_info(self, task_info: dict[str, any]) -> dict[str, any]:
         # Remove unnecessary / readonly fields
         task_info.pop('app_permissions')
@@ -644,8 +646,10 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         # Avoid setting the worker count to a value higher than the maximum allowed by the NAS.
         response = self.get_worker_count()
 
-        backup_job_workers = min(backup_job_workers, response['data']['max_backup_job_worker_count'])
-        event_workers = min(event_workers, response['data']['max_event_worker_count'])
+        backup_job_workers = min(
+            backup_job_workers, response['data']['max_backup_job_worker_count'])
+        event_workers = min(
+            event_workers, response['data']['max_event_worker_count'])
 
         api_name = 'SYNO.ActiveBackupOffice365'
         info = self.gen_list[api_name]
@@ -661,16 +665,16 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_task_schedule(self,
-        task_id: int,
-        policy: int,
-        schedule: dict[
+                          task_id: int,
+                          policy: int,
+                          schedule: dict[
             "start_hour": int,
             "start_minute": int,
             "last_run_hour": int,
             "repeat_every_hours": int,
             "run_days": list[int]
-        ] = {"place_holder": None}
-    ) -> dict[str, object]:
+                              ] = {"place_holder": None}
+                          ) -> dict[str, object]:
         """Set the schedule for a given task.
 
             Parameters
@@ -723,7 +727,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             ```
         """
         if policy == 2 and "place_holder" in schedule:
-            raise Exception("Received schedule policy, but no schedule was provided.")
+            raise Exception(
+                "Received schedule policy, but no schedule was provided.")
 
         if policy == 2 and (
             "start_hour" not in schedule
@@ -741,19 +746,23 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             task_info['backup_policy'] = policy
             task_info['enable_schedule'] = False
         else:
-            task_info['backup_policy'] = 1 # Manual - needed for scheduled setting
+            # Manual - needed for scheduled setting
+            task_info['backup_policy'] = 1
             task_info['enable_schedule'] = True
-            task_info['schedule']['date_type'] = 0 # Recurring backup
-            task_info['schedule']['monthly_week'] = [] # Not implemented
-            task_info['schedule']['repeat_hour_store_config'] = None # Unnecesary
-            task_info['schedule']['repeat_minute_store_config'] = None # Unnecesary
-            task_info['schedule']['repeat_date'] = 0 # Repeat Daily
-            task_info['schedule']['repeat_min'] = 0 # Not implemented
+            task_info['schedule']['date_type'] = 0  # Recurring backup
+            task_info['schedule']['monthly_week'] = []  # Not implemented
+            # Unnecesary
+            task_info['schedule']['repeat_hour_store_config'] = None
+            # Unnecesary
+            task_info['schedule']['repeat_minute_store_config'] = None
+            task_info['schedule']['repeat_date'] = 0  # Repeat Daily
+            task_info['schedule']['repeat_min'] = 0  # Not implemented
             task_info['schedule']['hour'] = schedule['start_hour']
             task_info['schedule']['minute'] = schedule['start_minute']
             task_info['schedule']['last_work_hour'] = schedule['last_run_hour']
             task_info['schedule']['repeat_hour'] = schedule['repeat_every_hours']
-            task_info['schedule']['week_day'] = ",".join(map(str,schedule['run_days']))
+            task_info['schedule']['week_day'] = ",".join(
+                map(str, schedule['run_days']))
 
         api_name = 'SYNO.ActiveBackupOffice365'
         info = self.gen_list[api_name]
@@ -871,7 +880,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         """
         response = self.get_tasks()
         tasks = response['data']['tasks']
-        matching_task = next((task for task in tasks if task.get("task_id") == task_id), None)
+        matching_task = next(
+            (task for task in tasks if task.get("task_id") == task_id), None)
 
         if matching_task is None:
             raise Exception(f"Task with ID {task_id} not found.")
@@ -937,12 +947,12 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def relink_task(self,
-        task_name: str,
-        local_shared: str,
-        local_path: str,
-        admin_email: str,
-        region: str = "Microsoft 365"
-    ) -> dict[str, object]:
+                    task_name: str,
+                    local_shared: str,
+                    local_path: str,
+                    admin_email: str,
+                    region: str = "Microsoft 365"
+                    ) -> dict[str, object]:
         """Relink a task.
 
             Parameters

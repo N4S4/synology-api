@@ -61,13 +61,13 @@ class Snapshot(base_api.BaseApi):
     """
 
     def list_snapshots(
-            self,
-            share_name: str,
-            attribute_filter: list[str] = [],
-            additional_attribute: list[str] = [],
-            offset: int = 0,
-            limit: int = -1
-        ) -> dict[str, object]:
+        self,
+        share_name: str,
+        attribute_filter: list[str] = [],
+        additional_attribute: list[str] = [],
+        offset: int = 0,
+        limit: int = -1
+    ) -> dict[str, object]:
         """List snapshots for a share.
 
             Parameters
@@ -150,10 +150,10 @@ class Snapshot(base_api.BaseApi):
     # This could be moved to a different class, but as we are only using 2 methods,
     # we can keep it here until we have a more complete implementation for SYNO.Core.ISCSI
     def list_snapshots_lun(
-            self,
-            src_lun_uuid: str,
-            additional: list[str] = ["locked_app_keys", "is_worm_locked"]
-        ) -> dict[str, object]:
+        self,
+        src_lun_uuid: str,
+        additional: list[str] = ["locked_app_keys", "is_worm_locked"]
+    ) -> dict[str, object]:
         """List snapshots for a LUN.
 
             Parameters
@@ -472,20 +472,20 @@ class Snapshot(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_replication_plans(
-            self,
-            additional_info: list[str] = [
-                "sync_policy",
-                "sync_report",
-                "main_site_info",
-                "dr_site_info",
-                "can_do",
-                "op_info",
-                "last_op_info",
-                "topology",
-                "testfailover_info",
-                "retention_lock_report"
-            ]
-        ) -> dict[str, object]:
+        self,
+        additional_info: list[str] = [
+            "sync_policy",
+            "sync_report",
+            "main_site_info",
+            "dr_site_info",
+            "can_do",
+            "op_info",
+            "last_op_info",
+            "topology",
+            "testfailover_info",
+            "retention_lock_report"
+        ]
+    ) -> dict[str, object]:
         """List replication plans.
 
             Parameters
@@ -826,13 +826,13 @@ class Snapshot(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def create_snapshot(
-            self,
-            share_name: str,
-            description: str = "",
-            lock: bool = False,
-            immutable: bool = False,
-            immutable_days: int = 7,
-        ) -> dict[str, object]:
+        self,
+        share_name: str,
+        description: str = "",
+        lock: bool = False,
+        immutable: bool = False,
+        immutable_days: int = 7,
+    ) -> dict[str, object]:
         """Create a snapshot for a share.
 
             Parameters
@@ -894,10 +894,10 @@ class Snapshot(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_snapshots(
-            self,
-            share_name: str,
-            snapshots: list[str]
-        ) -> dict[str, object]:
+        self,
+        share_name: str,
+        snapshots: list[str]
+    ) -> dict[str, object]:
         """Delete snapshots for a share.
 
             Warning: This action removes data from the file system. Use with caution.
@@ -938,14 +938,14 @@ class Snapshot(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_snapshot_attr(
-            self,
-            share_name: str,
-            snapshot: str,
-            description: Optional[str] = None,
-            lock: Optional[bool] = None,
-            immutable: Optional[bool] = None,
-            immutable_days: Optional[int] = None
-        ) -> dict[str, object]:
+        self,
+        share_name: str,
+        snapshot: str,
+        description: Optional[str] = None,
+        lock: Optional[bool] = None,
+        immutable: Optional[bool] = None,
+        immutable_days: Optional[int] = None
+    ) -> dict[str, object]:
         """Set attributes for a snapshot.
 
             Parameters
@@ -1015,11 +1015,11 @@ class Snapshot(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def sync_replication(
-            self,
-            plan_id: str,
-            lock_snapshot: bool = True,
-            description: str = "Snapshot taken by [Synology API]",
-        ) -> dict[str, object]:
+        self,
+        plan_id: str,
+        lock_snapshot: bool = True,
+        description: str = "Snapshot taken by [Synology API]",
+    ) -> dict[str, object]:
         """Trigger a sync for a replication plan.
 
             Parameters
@@ -1047,11 +1047,13 @@ class Snapshot(base_api.BaseApi):
             ```
         """
 
-        plans = self.list_replication_plans(additional_info=['sync_policy']).get('data').get('plans')
+        plans = self.list_replication_plans(
+            additional_info=['sync_policy']).get('data').get('plans')
         is_send_encrypted = None
         for plan in plans:
             if plan.get('plan_id') == plan_id:
-                is_send_encrypted = plan.get('additional').get('sync_policy').get('is_send_encrypted')
+                is_send_encrypted = plan.get('additional').get(
+                    'sync_policy').get('is_send_encrypted')
 
         api_name = 'SYNO.DR.Plan'
         info = self.gen_list[api_name]
@@ -1070,12 +1072,12 @@ class Snapshot(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def create_snapshot_lun(
-            self,
-            lun_id: str,
-            description: str = "Snapshot taken by [Synology API]",
-            lock: bool = True,
-            app_aware: bool = True
-        ) -> dict[str, object]:
+        self,
+        lun_id: str,
+        description: str = "Snapshot taken by [Synology API]",
+        lock: bool = True,
+        app_aware: bool = True
+    ) -> dict[str, object]:
         """Create a snapshot for a LUN.
 
             Note: At the moment, it does not support creating WORM snapshots.

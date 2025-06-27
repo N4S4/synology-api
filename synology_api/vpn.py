@@ -67,7 +67,8 @@ class VPN(base_api.BaseApi):
         api_name = 'SYNO.VPNServer.Settings.Config'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'load', 'serv_type': 'pptp'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'load', 'serv_type': 'pptp'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -75,7 +76,8 @@ class VPN(base_api.BaseApi):
         api_name = 'SYNO.VPNServer.Settings.Config'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'load', 'serv_type': 'openvpn'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'load', 'serv_type': 'openvpn'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -83,7 +85,8 @@ class VPN(base_api.BaseApi):
         api_name = 'SYNO.VPNServer.Settings.Config'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'load', 'serv_type': 'l2tp'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'load', 'serv_type': 'l2tp'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -103,8 +106,10 @@ class VPN(base_api.BaseApi):
         api_name = 'SYNO.VPNServer.Settings.Certificate'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'export', 'serv_type': 'openvpn'}
-        zip_as_bytes = self.request_data(api_name, api_path, req_param, response_json=False).content
+        req_param = {'version': info['maxVersion'],
+                     'method': 'export', 'serv_type': 'openvpn'}
+        zip_as_bytes = self.request_data(
+            api_name, api_path, req_param, response_json=False).content
         if as_zip_file:
             return ZipFile(BytesIO(zip_as_bytes))
         return zip_as_bytes

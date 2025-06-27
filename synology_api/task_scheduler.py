@@ -3,20 +3,21 @@ from . import base_api
 from .core_user import User
 import json
 
+
 class _Schedule():
     def __init__(
-            self,
-            run_frequently: bool = True, # date_type
-            run_days: str = '0,1,2,3,4,5,6', # week_days
-            run_date: str = '', # date
-            repeat: str = 'Daily',
-            monthly_week: list[str] = [],
-            start_time_h: int = 0,
-            start_time_m: int = 0,
-            same_day_repeat_h: int = 0,
-            same_day_repeat_m: int = 0,
-            same_day_repeat_until: int = 0,
-        ):
+        self,
+        run_frequently: bool = True,  # date_type
+        run_days: str = '0,1,2,3,4,5,6',  # week_days
+        run_date: str = '',  # date
+        repeat: str = 'Daily',
+        monthly_week: list[str] = [],
+        start_time_h: int = 0,
+        start_time_m: int = 0,
+        same_day_repeat_h: int = 0,
+        same_day_repeat_m: int = 0,
+        same_day_repeat_until: int = 0,
+    ):
         self.run_frequently = run_frequently
         self.run_days = run_days
         self.run_date = run_date
@@ -32,11 +33,16 @@ class _Schedule():
         schedule_dict = {
             'date_type': 0 if self.run_frequently else 1,
             'monthly_week': json.dumps(self.monthly_week),
-            'hour': self.start_time_h,                    # Start time - Hour for the schedule
-            'minute': self.start_time_m,                  # Start time - Minute for the schedule
-            'repeat_hour': self.same_day_repeat_h,        # Continue running on the same day - Repeat each X hours 0..23
-            'repeat_min': self.same_day_repeat_m,         # Continue running on the same day - Repeat every X minute [1, 5, 10, 15, 20, 30] // 0 = disabled
-            'last_work_hour': self.same_day_repeat_until if self.same_day_repeat_until > -1 else self.start_time_h, # Last run time, defaults to start time if not provided
+            # Start time - Hour for the schedule
+            'hour': self.start_time_h,
+            # Start time - Minute for the schedule
+            'minute': self.start_time_m,
+            # Continue running on the same day - Repeat each X hours 0..23
+            'repeat_hour': self.same_day_repeat_h,
+            # Continue running on the same day - Repeat every X minute [1, 5, 10, 15, 20, 30] // 0 = disabled
+            'repeat_min': self.same_day_repeat_m,
+            # Last run time, defaults to start time if not provided
+            'last_work_hour': self.same_day_repeat_until if self.same_day_repeat_until > -1 else self.start_time_h,
         }
         repeat_modality = -1
 
@@ -92,8 +98,8 @@ class TaskScheduler(base_api.BaseApi):
 
     def __get_root_token(self) -> str:
         user_api = User(ip_address=self.session._ip_address, port=self.session._port, username=self.session._username, password=self.session._password,
-                            secure=self.session._secure, cert_verify=self.session._verify, dsm_version=self.session._version, debug=self.session._debug,
-                            otp_code=self.session._otp_code, application=self.application)
+                        secure=self.session._secure, cert_verify=self.session._verify, dsm_version=self.session._version, debug=self.session._debug,
+                        otp_code=self.session._otp_code, application=self.application)
         response = user_api.password_confirm(password=self.session._password)
         if response['success']:
             return response['data']['SynoConfirmPWToken']
@@ -133,12 +139,12 @@ class TaskScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_task_list(
-            self,
-            sort_by: str = 'next_trigger_time',
-            sort_direction: str = 'ASC',
-            offset: int = 0,
-            limit: int = 50
-        ) -> dict[str, object]:
+        self,
+        sort_by: str = 'next_trigger_time',
+        sort_direction: str = 'ASC',
+        offset: int = 0,
+        limit: int = 50
+    ) -> dict[str, object]:
         """List all present scheduled tasks and event triggered tasks.
 
             Parameters
@@ -225,11 +231,11 @@ class TaskScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_task_config(
-            self,
-            task_id: int,
-            real_owner: str,
-            type: str = ''
-        ) -> dict[str, object]:
+        self,
+        task_id: int,
+        real_owner: str,
+        type: str = ''
+    ) -> dict[str, object]:
         """Retrieve the configuration for a specific task or list of all the available services and their corresponding IDs.
 
             Parameters
@@ -309,9 +315,9 @@ class TaskScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_task_results(
-            self,
-            task_id: int
-        ) -> dict[str, object]:
+        self,
+        task_id: int
+    ) -> dict[str, object]:
         """Retrieve the results list for a specific task.
 
             Parameters
@@ -374,21 +380,21 @@ class TaskScheduler(base_api.BaseApi):
     #     """Retrieve the log information for a specific task result.
 
     #     Parameters
-	# 		---------
+        # 		---------
     #         task_id : int
     #             The ID of the task to retrieve the log for.
     #         timestamp : int
     #             The timestamp of the result for which to retrieve the logs.
 
     #     Returns
-	# 		---------
+        # 		---------
     #         dict[str, object]
     #             A dictionary containing the log of the result,.
 
     #         Example return
-	# 		---------
-	# 		```json
-	#		{}
+        # 		---------
+        # 		```json
+        # {}
     #      ```
     #     """
     #     api_name = 'SYNO.Core.TaskScheduler'
@@ -404,10 +410,10 @@ class TaskScheduler(base_api.BaseApi):
     #     return self.request_data(api_name, api_path, req_param)
 
     def set_output_config(
-            self,
-            enable_output: bool,
-            output_path: str = ''
-        ) -> dict[str, object]:
+        self,
+        enable_output: bool,
+        output_path: str = ''
+    ) -> dict[str, object]:
         """Configure the output settings for tasks results.
 
             Parameters
@@ -445,11 +451,11 @@ class TaskScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def task_set_enable(
-            self,
-            task_id: int,
-            real_owner: str,
-            enable: bool
-        ) -> dict[str, object]:
+        self,
+        task_id: int,
+        real_owner: str,
+        enable: bool
+    ) -> dict[str, object]:
         """Enable or disable a task.
 
             Parameters
@@ -494,10 +500,10 @@ class TaskScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def task_run(
-            self,
-            task_id: int,
-            real_owner: str
-        ) -> dict[str, object]:
+        self,
+        task_id: int,
+        real_owner: str
+    ) -> dict[str, object]:
         """Run a specific task.
 
             Parameters
@@ -538,10 +544,10 @@ class TaskScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def task_delete(
-            self,
-            task_id: int,
-            real_owner: str
-        ) -> dict[str, object]:
+        self,
+        task_id: int,
+        real_owner: str
+    ) -> dict[str, object]:
         """Delete a specific task.
 
             Parameters
@@ -582,24 +588,24 @@ class TaskScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def create_script_task(
-            self,
-            task_name: str,
-            owner: str,
-            script: str,
-            enable: bool = True,
-            run_frequently: bool = True,
-            run_days: str = '0,1,2,3,4,5,6',
-            run_date: str = '',
-            repeat: str = 'daily',
-            monthly_week: list[str] = [],
-            start_time_h: int = 0,
-            start_time_m: int = 0,
-            same_day_repeat_h: int = 0,
-            same_day_repeat_m: int = 0,
-            same_day_repeat_until: int = -1,
-            notify_email: str = '',
-            notify_only_on_error: bool = False
-        ) -> dict[str, object]:
+        self,
+        task_name: str,
+        owner: str,
+        script: str,
+        enable: bool = True,
+        run_frequently: bool = True,
+        run_days: str = '0,1,2,3,4,5,6',
+        run_date: str = '',
+        repeat: str = 'daily',
+        monthly_week: list[str] = [],
+        start_time_h: int = 0,
+        start_time_m: int = 0,
+        same_day_repeat_h: int = 0,
+        same_day_repeat_m: int = 0,
+        same_day_repeat_until: int = -1,
+        notify_email: str = '',
+        notify_only_on_error: bool = False
+    ) -> dict[str, object]:
         """Create a new Script task with the provided schedule and notification settings.
 
             Tip: If the task needs to run with root privileges, please specify the owner as "root".
@@ -694,7 +700,7 @@ class TaskScheduler(base_api.BaseApi):
             ```
         """
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
-                            same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
+                             same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
 
         schedule_dict = schedule._generate_dict()
 
@@ -727,26 +733,26 @@ class TaskScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def modify_script_task(
-            self,
-            task_id: int,
-            task_name: str,
-            owner: str,
-            real_owner: str,
-            script: str,
-            enable: bool = True,
-            run_frequently: bool = True,
-            run_days: str = '0,1,2,3,4,5,6',
-            run_date: str = '',
-            repeat: str = 'daily',
-            monthly_week: list[str] = [],
-            start_time_h: int = 0,
-            start_time_m: int = 0,
-            same_day_repeat_h: int = 0,
-            same_day_repeat_m: int = 0,
-            same_day_repeat_until: int = -1,
-            notify_email: str = '',
-            notify_only_on_error: bool = False
-        ) -> dict[str, object]:
+        self,
+        task_id: int,
+        task_name: str,
+        owner: str,
+        real_owner: str,
+        script: str,
+        enable: bool = True,
+        run_frequently: bool = True,
+        run_days: str = '0,1,2,3,4,5,6',
+        run_date: str = '',
+        repeat: str = 'daily',
+        monthly_week: list[str] = [],
+        start_time_h: int = 0,
+        start_time_m: int = 0,
+        same_day_repeat_h: int = 0,
+        same_day_repeat_m: int = 0,
+        same_day_repeat_until: int = -1,
+        notify_email: str = '',
+        notify_only_on_error: bool = False
+    ) -> dict[str, object]:
         """Modify settings of a Script task.
 
             Warning: This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
@@ -846,7 +852,7 @@ class TaskScheduler(base_api.BaseApi):
         """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
-                            same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
+                             same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
 
         schedule_dict = schedule._generate_dict()
 
@@ -879,22 +885,22 @@ class TaskScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def create_beep_control_task(
-            self,
-            task_name: str,
-            owner: str,
-            enable: bool = True,
-            beep_duration: int = 60,
-            run_frequently: bool = True,
-            run_days: str = '0,1,2,3,4,5,6',
-            run_date: str = '',
-            repeat: str = 'daily',
-            monthly_week: list[str] = [],
-            start_time_h: int = 0,
-            start_time_m: int = 0,
-            same_day_repeat_h: int = 0,
-            same_day_repeat_m: int = 0,
-            same_day_repeat_until: int = -1
-        ) -> dict[str, object]:
+        self,
+        task_name: str,
+        owner: str,
+        enable: bool = True,
+        beep_duration: int = 60,
+        run_frequently: bool = True,
+        run_days: str = '0,1,2,3,4,5,6',
+        run_date: str = '',
+        repeat: str = 'daily',
+        monthly_week: list[str] = [],
+        start_time_h: int = 0,
+        start_time_m: int = 0,
+        same_day_repeat_h: int = 0,
+        same_day_repeat_m: int = 0,
+        same_day_repeat_until: int = -1
+    ) -> dict[str, object]:
         """Create a new Beep Control task with the provided schedule and beep duration.
 
             Parameters
@@ -980,7 +986,7 @@ class TaskScheduler(base_api.BaseApi):
         """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
-                            same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
+                             same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
 
         schedule_dict = schedule._generate_dict()
 
@@ -1005,23 +1011,23 @@ class TaskScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def modify_beep_control_task(
-            self,
-            task_id: int,
-            task_name: str,
-            real_owner: str,
-            enable: bool = True,
-            beep_duration: int = 60,
-            run_frequently: bool = True,
-            run_days: str = '0,1,2,3,4,5,6',
-            run_date: str = '',
-            repeat: str = 'daily',
-            monthly_week: list[str] = [],
-            start_time_h: int = 0,
-            start_time_m: int = 0,
-            same_day_repeat_h: int = 0,
-            same_day_repeat_m: int = 0,
-            same_day_repeat_until: int = -1
-        ) -> dict[str, object]:
+        self,
+        task_id: int,
+        task_name: str,
+        real_owner: str,
+        enable: bool = True,
+        beep_duration: int = 60,
+        run_frequently: bool = True,
+        run_days: str = '0,1,2,3,4,5,6',
+        run_date: str = '',
+        repeat: str = 'daily',
+        monthly_week: list[str] = [],
+        start_time_h: int = 0,
+        start_time_m: int = 0,
+        same_day_repeat_h: int = 0,
+        same_day_repeat_m: int = 0,
+        same_day_repeat_until: int = -1
+    ) -> dict[str, object]:
         """Modify settings of a Beep Control task.
 
             Warning: This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
@@ -1109,7 +1115,7 @@ class TaskScheduler(base_api.BaseApi):
         """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
-                            same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
+                             same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
 
         schedule_dict = schedule._generate_dict()
 
@@ -1134,23 +1140,23 @@ class TaskScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def create_service_control_task(
-            self,
-            task_name: str,
-            owner: str,
-            services: list[dict],
-            action: str,
-            enable: bool = True,
-            run_frequently: bool = True,
-            run_days: str = '0,1,2,3,4,5,6',
-            run_date: str = '',
-            repeat: str = 'daily',
-            monthly_week: list[str] = [],
-            start_time_h: int = 0,
-            start_time_m: int = 0,
-            same_day_repeat_h: int = 0,
-            same_day_repeat_m: int = 0,
-            same_day_repeat_until: int = -1
-        ) -> dict[str, object]:
+        self,
+        task_name: str,
+        owner: str,
+        services: list[dict],
+        action: str,
+        enable: bool = True,
+        run_frequently: bool = True,
+        run_days: str = '0,1,2,3,4,5,6',
+        run_date: str = '',
+        repeat: str = 'daily',
+        monthly_week: list[str] = [],
+        start_time_h: int = 0,
+        start_time_m: int = 0,
+        same_day_repeat_h: int = 0,
+        same_day_repeat_m: int = 0,
+        same_day_repeat_until: int = -1
+    ) -> dict[str, object]:
         """Create a new Service Control task with the provided schedule and services to start/stop.
 
             Parameters
@@ -1250,7 +1256,7 @@ class TaskScheduler(base_api.BaseApi):
         """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
-                            same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
+                             same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
 
         schedule_dict = schedule._generate_dict()
 
@@ -1285,24 +1291,24 @@ class TaskScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def modify_service_control_task(
-            self,
-            task_id: int,
-            task_name: str,
-            real_owner: str,
-            services: list[dict],
-            action: str,
-            enable: bool = True,
-            run_frequently: bool = True,
-            run_days: str = '0,1,2,3,4,5,6',
-            run_date: str = '',
-            repeat: str = 'daily',
-            monthly_week: list[str] = [],
-            start_time_h: int = 0,
-            start_time_m: int = 0,
-            same_day_repeat_h: int = 0,
-            same_day_repeat_m: int = 0,
-            same_day_repeat_until: int = -1
-        ) -> dict[str, object]:
+        self,
+        task_id: int,
+        task_name: str,
+        real_owner: str,
+        services: list[dict],
+        action: str,
+        enable: bool = True,
+        run_frequently: bool = True,
+        run_days: str = '0,1,2,3,4,5,6',
+        run_date: str = '',
+        repeat: str = 'daily',
+        monthly_week: list[str] = [],
+        start_time_h: int = 0,
+        start_time_m: int = 0,
+        same_day_repeat_h: int = 0,
+        same_day_repeat_m: int = 0,
+        same_day_repeat_until: int = -1
+    ) -> dict[str, object]:
         """Modify settings of a Service Control task.
 
             Warning: This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
@@ -1410,7 +1416,7 @@ class TaskScheduler(base_api.BaseApi):
         """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
-                            same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
+                             same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
 
         schedule_dict = schedule._generate_dict()
 
@@ -1444,24 +1450,24 @@ class TaskScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def create_recycle_bin_task(
-            self,
-            task_name: str,
-            owner: str,
-            clean_all_shares: bool,
-            policy: dict,
-            shares: list[str] = [],
-            enable: bool = True,
-            run_frequently: bool = True,
-            run_days: str = '0,1,2,3,4,5,6',
-            run_date: str = '',
-            repeat: str = 'daily',
-            monthly_week: list[str] = [],
-            start_time_h: int = 0,
-            start_time_m: int = 0,
-            same_day_repeat_h: int = 0,
-            same_day_repeat_m: int = 0,
-            same_day_repeat_until: int = -1
-        ) -> dict[str, object]:
+        self,
+        task_name: str,
+        owner: str,
+        clean_all_shares: bool,
+        policy: dict,
+        shares: list[str] = [],
+        enable: bool = True,
+        run_frequently: bool = True,
+        run_days: str = '0,1,2,3,4,5,6',
+        run_date: str = '',
+        repeat: str = 'daily',
+        monthly_week: list[str] = [],
+        start_time_h: int = 0,
+        start_time_m: int = 0,
+        same_day_repeat_h: int = 0,
+        same_day_repeat_m: int = 0,
+        same_day_repeat_until: int = -1
+    ) -> dict[str, object]:
         """Create a new Recycle Bin Control task with the provided schedule and services to start/stop.
 
             Parameters
@@ -1565,7 +1571,7 @@ class TaskScheduler(base_api.BaseApi):
         """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
-                            same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
+                             same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
 
         schedule_dict = schedule._generate_dict()
 
@@ -1596,25 +1602,25 @@ class TaskScheduler(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def modify_recycle_bin_task(
-            self,
-            task_id: int,
-            task_name: str,
-            real_owner: str,
-            clean_all_shares: bool,
-            policy: dict,
-            shares: list[str] = [],
-            enable: bool = True,
-            run_frequently: bool = True,
-            run_days: str = '0,1,2,3,4,5,6',
-            run_date: str = '',
-            repeat: str = 'daily',
-            monthly_week: list[str] = [],
-            start_time_h: int = 0,
-            start_time_m: int = 0,
-            same_day_repeat_h: int = 0,
-            same_day_repeat_m: int = 0,
-            same_day_repeat_until: int = -1
-        ) -> dict[str, object]:
+        self,
+        task_id: int,
+        task_name: str,
+        real_owner: str,
+        clean_all_shares: bool,
+        policy: dict,
+        shares: list[str] = [],
+        enable: bool = True,
+        run_frequently: bool = True,
+        run_days: str = '0,1,2,3,4,5,6',
+        run_date: str = '',
+        repeat: str = 'daily',
+        monthly_week: list[str] = [],
+        start_time_h: int = 0,
+        start_time_m: int = 0,
+        same_day_repeat_h: int = 0,
+        same_day_repeat_m: int = 0,
+        same_day_repeat_until: int = -1
+    ) -> dict[str, object]:
         """Modify settings of a Recycle Bin Control task.
 
             Warning: This method overwrites all the settings of the task, so if you only want to change one setting, you can fetch the current task configuration with `get_task_config()` and pass all the settings to this method.
@@ -1723,7 +1729,7 @@ class TaskScheduler(base_api.BaseApi):
         """
 
         schedule = _Schedule(run_frequently, run_days, run_date, repeat, monthly_week, start_time_h, start_time_m,
-                            same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
+                             same_day_repeat_h, same_day_repeat_m, same_day_repeat_until)
 
         schedule_dict = schedule._generate_dict()
 

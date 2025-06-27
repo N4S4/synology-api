@@ -100,7 +100,7 @@ class User(base_api.BaseApi):
         req_param = {
             "method": "list",
             "version": info['minVersion'],
-            "type": "local", # TODO: Test with ldap and parameter "all"
+            "type": "local",  # TODO: Test with ldap and parameter "all"
             "offset": offset,
             "limit": limit,
             "sort_by": sort_by,
@@ -248,7 +248,6 @@ class User(base_api.BaseApi):
             encrypted_param = self.session.encrypt_params(param_enc)
             req_param.update(encrypted_param)
 
-
         return self.request_data(api_name, api_path, req_param, method="post")
 
     def modify_user(
@@ -328,7 +327,8 @@ class User(base_api.BaseApi):
             req_param.update({"password": password})
         # Using http and self encrypted
         else:
-            req_param.update(self.session.encrypt_params({"password": password}))
+            req_param.update(self.session.encrypt_params(
+                {"password": password}))
 
         return self.request_data(api_name, api_path, req_param, method="post")
 
@@ -412,12 +412,12 @@ class User(base_api.BaseApi):
             "method": "join",
             "version": info['minVersion'],
             "join_group": json.dumps(join_groups),
-            "leave_group":json.dumps(leave_groups),
-            "name":name
+            "leave_group": json.dumps(leave_groups),
+            "name": name
         }
         return self.request_data(api_name, api_path, req_param)
 
-    def affect_groups_status(self, task_id:str):
+    def affect_groups_status(self, task_id: str):
         """Get the status of a join task.
 
             Parameters
@@ -574,7 +574,7 @@ class User(base_api.BaseApi):
             "version": info['minVersion'],
             "enable_reset_passwd_by_email": enable_reset_passwd_by_email,
             "password_must_change": password_must_change,
-            "strong_password":{
+            "strong_password": {
                 "exclude_username": exclude_username,
                 "included_numeric_char": included_numeric_char,
                 "included_special_char": included_special_char,
@@ -582,7 +582,7 @@ class User(base_api.BaseApi):
                 "min_length": min_length,
                 "mixed_case": mixed_case,
                 "exclude_common_password": exclude_common_password,
-                "exclude_history":exclude_history
+                "exclude_history": exclude_history
             }
         }
         return self.request_data(api_name, api_path, req_param)
@@ -694,7 +694,6 @@ class User(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
 
-
     def password_confirm(self, password: str) -> dict[str, object]:
         """Issues a passowrd/session comparison to ensure the given password matches the auth of the current session.
 
@@ -730,10 +729,10 @@ class User(base_api.BaseApi):
             req_param.update({"password": password})
         # Using http and self encrypted
         else:
-            req_param.update(self.session.encrypt_params({"password": password}))
+            req_param.update(self.session.encrypt_params(
+                {"password": password}))
 
         return self.request_data(api_name, api_path, req_param, method="post")
-
 
     def get_username_policy(self) -> dict[str, object]:
         """Get the username policy (List of username that are not usable).

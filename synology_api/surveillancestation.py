@@ -53,15 +53,15 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def camera_list(self, idList: str = None,
-                      offset: int = None,
-                      limit: int = None,
-                      blFromCamList: bool = None,
-                      blIncludeDeletedCam: bool = None,
-                      privCamType: str = None,
-                      basic: bool = None,
-                      streamInfo: bool = None,
-                      blPrivilege: bool = None,
-                      camStm: int = None) -> dict[str, object] | str:
+                    offset: int = None,
+                    limit: int = None,
+                    blFromCamList: bool = None,
+                    blIncludeDeletedCam: bool = None,
+                    privCamType: str = None,
+                    basic: bool = None,
+                    streamInfo: bool = None,
+                    blPrivilege: bool = None,
+                    camStm: int = None) -> dict[str, object] | str:
 
         api_name = 'SYNO.SurveillanceStation.Camera'
         info = self.gen_list[api_name]
@@ -131,10 +131,10 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_snapshot(self,
-                          id: Any = None,
-                          name: str = None,
-                          dsld: int = None,
-                          profileType: int = 1) -> str:
+                     id: Any = None,
+                     name: str = None,
+                     dsld: int = None,
+                     profileType: int = 1) -> str:
         ''' By default, the profileType is 1, which is the default profile.
         Binary data is returned, so the response is not a json object.
         '''
@@ -147,8 +147,8 @@ class SurveillanceStation(base_api.BaseApi):
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
                 if val is not None:
                     req_param[str(key)] = val
-        ## Make sure to disable json response, as the response is a binary file
-        ## Return only the content of the response where binary data is stored
+        # Make sure to disable json response, as the response is a binary file
+        # Return only the content of the response where binary data is stored
         return self.request_data(api_name, api_path, req_param, response_json=False).content
 
     def enable_camera(self,
@@ -181,27 +181,33 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_capability_by_cam_id(self, cameraId: Any = None) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def get_capability_by_cam_id(self, cameraId: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetCapabilityByCamId', 'cameraId': cameraId}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'GetCapabilityByCamId', 'cameraId': cameraId}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def count_occupied_size(self, camId: int = None) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def count_occupied_size(self, camId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetOccupiedSize', 'camId': camId}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'GetOccupiedSize', 'camId': camId}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def is_shortcut_valid(self, cameraId: int = None) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def is_shortcut_valid(self, cameraId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CheckCamValid', 'cameraId': cameraId}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CheckCamValid', 'cameraId': cameraId}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -209,7 +215,8 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.Camera'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetLiveViewPath', 'idList': idList}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'GetLiveViewPath', 'idList': idList}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -217,25 +224,28 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.Camera.Event'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'AudioEnum', 'camId': camId}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'AudioEnum', 'camId': camId}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def alarm_event_enum(self, camId: int = None) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def alarm_event_enum(self, camId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera.Event'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'AlarmEnum', 'camId': camId}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'AlarmEnum', 'camId': camId}
 
         return self.request_data(api_name, api_path, req_param)
 
     def md_parameter_save(self, camId: int = None,
-                         source: int = None,
-                         mode: int = None,
-                         sensitivity: int = None,
-                         threshold: int = None,
-                         objectSize: int = None,
-                         percentage: int = None) -> dict[str, object] | str:
+                          source: int = None,
+                          mode: int = None,
+                          sensitivity: int = None,
+                          threshold: int = None,
+                          objectSize: int = None,
+                          percentage: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera.Event'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -252,7 +262,8 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.Camera.Event'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'MotionEnum', 'camId': camId}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'MotionEnum', 'camId': camId}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -296,12 +307,14 @@ class SurveillanceStation(base_api.BaseApi):
     def alarm_sts_polling(self,
                           camId: int = None,
                           timeOut: int = None,
-                          keep: Any = None) -> dict[str, object] | str:  # TODO not working
+                          # TODO not working
+                          keep: Any = None) -> dict[str, object] | str:
 
         api_name = 'SYNO.SurveillanceStation.Camera.Event'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'AlarmStsPolling'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'AlarmStsPolling'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -333,15 +346,18 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.Camera.Group'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'Enum', 'privCamType': privCamType}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'Enum', 'privCamType': privCamType}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def save_specific_group(self, groupList: Any = None) -> dict[str, object] | str:  # TODO to check
+    # TODO to check
+    def save_specific_group(self, groupList: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera.Group'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'Save', 'groupList': groupList}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'Save', 'groupList': groupList}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -349,7 +365,8 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.Camera.Group'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'Delete', 'id': Id}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'Delete', 'id': Id}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -357,7 +374,8 @@ class SurveillanceStation(base_api.BaseApi):
                                     shareName: str = None,
                                     archiveName: str = None,
                                     camlist: Any = None,
-                                    actFromHost: bool = None) -> dict[str, object] | str:  # TODO not working
+                                    # TODO not working
+                                    actFromHost: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera.Import'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -371,9 +389,9 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def enumerate_camera_from_archive(self,
-                                    shareName: str = None,
-                                    archiveName: str = None,
-                                    serverId: int = None) -> dict[str, object] | str:
+                                      shareName: str = None,
+                                      archiveName: str = None,
+                                      serverId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera.Import'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -387,7 +405,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def enumerate_archive_from_folder(self,
-                                          shareName: str = None) -> dict[str, object] | str:  # TODO not working
+                                      # TODO not working
+                                      shareName: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera.Import'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -408,7 +427,8 @@ class SurveillanceStation(base_api.BaseApi):
                                        passw: str = None,
                                        vendor: str = None,
                                        model: str = None,
-                                       ch: str = None) -> dict[str, object] | str:  # TODO not working
+                                       # TODO not working
+                                       ch: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera.Wizard'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -424,7 +444,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def check_licence_quota(self) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def check_licence_quota(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera.Wizard'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -441,7 +462,8 @@ class SurveillanceStation(base_api.BaseApi):
                                 vendor: str = None,
                                 model: str = None,
                                 ch: str = None,
-                                timeout: int = None) -> dict[str, object] | str:  # TODO not working
+                                # TODO not working
+                                timeout: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera.Wizard'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -472,7 +494,8 @@ class SurveillanceStation(base_api.BaseApi):
                                    camAudioType: str = None,
                                    camSourcePath: str = None,
                                    camUserName: str = None,
-                                   camPassWord: str = None) -> dict[str, object] | str:  # TODO to check
+                                   # TODO to check
+                                   camPassWord: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera.Wizard'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -489,7 +512,8 @@ class SurveillanceStation(base_api.BaseApi):
                          cameraId: Any = None,
                          direction: str = None,
                          speed: int = None,
-                         moveType: str = None) -> dict[str, object] | str:  # TODO not working
+                         # TODO not working
+                         moveType: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -505,7 +529,8 @@ class SurveillanceStation(base_api.BaseApi):
     def camera_lens_zoom(self,
                          cameraId: Any = None,
                          control: Any = None,
-                         moveType: str = None) -> dict[str, object] | str:  # TODO not working
+                         # TODO not working
+                         moveType: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -521,7 +546,8 @@ class SurveillanceStation(base_api.BaseApi):
     def list_preset_ptz_camera(self,
                                cameraId: Any = None,
                                offset: int = None,
-                               limit: int = None) -> dict[str, object] | str:  # TODO not working
+                               # TODO not working
+                               limit: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -540,7 +566,8 @@ class SurveillanceStation(base_api.BaseApi):
                                             position: Any = None,
                                             speed: Any = None,
                                             type: Any = None,
-                                            isPatrol: bool = None) -> dict[str, object] | str:  # TODO not working
+                                            # TODO not working
+                                            isPatrol: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -556,7 +583,8 @@ class SurveillanceStation(base_api.BaseApi):
     def list_patrol_cameras(self,
                             cameraId: Any = None,
                             offset: int = None,
-                            limit: int = None) -> dict[str, object] | str:  # TODO not working
+                            # TODO not working
+                            limit: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -571,7 +599,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def force_cam_to_execute_patrol(self,
                                     cameraId: Any = None,
-                                    patrolId: Any = None) -> dict[str, object] | str:  # TODO not working
+                                    # TODO not working
+                                    patrolId: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -587,7 +616,8 @@ class SurveillanceStation(base_api.BaseApi):
     def focus_camera(self,
                      cameraId: Any = None,
                      control: Any = None,
-                     moveType: Any = None) -> dict[str, object] | str:  # TODO not working
+                     # TODO not working
+                     moveType: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -603,7 +633,8 @@ class SurveillanceStation(base_api.BaseApi):
     def control_camera_iris_in_out(self,
                                    cameraId: Any = None,
                                    control: Any = None,
-                                   moveType: Any = None) -> dict[str, object] | str:  # TODO not working
+                                   # TODO not working
+                                   moveType: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -616,7 +647,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def auto_focus(self, cameraId: Any = None) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def auto_focus(self, cameraId: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -631,7 +663,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def move_cam_lens_to_absolute_position(self,
                                            posX: int = None,
-                                           posY: int = None) -> dict[str, object] | str:  # TODO not working
+                                           # TODO not working
+                                           posY: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -645,7 +678,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def move_cam_to_home_position(self,
-                                  cameraId: Any = None) -> dict[str, object] | str:  # TODO not working
+                                  # TODO not working
+                                  cameraId: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -660,7 +694,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def auto_pan_camera(self,
                         cameraId: Any = None,
-                        moveType: str = None) -> dict[str, object] | str:  # TODO not working
+                        # TODO not working
+                        moveType: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -675,7 +710,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def start_stop_object_tracking(self,
                                    cameraId: Any = None,
-                                   moveType: str = None) -> dict[str, object] | str:  # TODO not working
+                                   # TODO not working
+                                   moveType: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -690,7 +726,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def start_stop_external_recording(self,
                                       cameraId: Any = None,
-                                      action: str = None) -> dict[str, object] | str:  # TODO not working
+                                      # TODO not working
+                                      action: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.ExternalRecording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -749,7 +786,8 @@ class SurveillanceStation(base_api.BaseApi):
                                 blIncludeSnapshot: bool = None,
                                 includeAllCam: bool = None,
                                 from_end: int = None,
-                                from_start: int = None) -> dict[str, object] | str:  # TODO not working
+                                # TODO not working
+                                from_start: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -762,7 +800,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete_all_recordings(self) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def delete_all_recordings(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -776,7 +815,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def apply_settings_advance_tab(self,
-                                rotateUnrecogCam: bool = None) -> dict[str, object] | str:  # TODO not working
+                                   # TODO not working
+                                   rotateUnrecogCam: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -800,11 +840,13 @@ class SurveillanceStation(base_api.BaseApi):
                                  evtSrcType: int = None,
                                  evtSrcId: int = None,
                                  blIncludeSnapshot: bool = None,
-                                 includeAllCam: bool = None) -> dict[str, object] | str:  # TODO not working
+                                 # TODO not working
+                                 includeAllCam: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CountByCategory'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CountByCategory'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -813,7 +855,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def keep_event_play_alive(self) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def keep_event_play_alive(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -827,7 +870,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def stop_recording_event(self,
-                                 idList: Any = None) -> dict[str, object] | str:  # TODO not working
+                             # TODO not working
+                             idList: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -840,7 +884,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def load_settings_in_advanced_tab(self) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def load_settings_in_advanced_tab(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -854,13 +899,14 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def lock_selected_event(self,
-                                 reason: str = None,
-                                 cameraIds: str = None,
-                                 fromTime: int = None,
-                                 toTime: int = None,
-                                 locked: int = None,
-                                 evtSrcType: int = None,
-                                 evtSrcId: int = None) -> dict[str, object] | str:  # TODO not working
+                            reason: str = None,
+                            cameraIds: str = None,
+                            fromTime: int = None,
+                            toTime: int = None,
+                            locked: int = None,
+                            evtSrcType: int = None,
+                            # TODO not working
+                            evtSrcId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -874,8 +920,9 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def unlock_selected_event(self,
-                                 idList: str = None,
-                                 dsld: int = None) -> dict[str, object] | str:  # TODO not working
+                              idList: str = None,
+                              # TODO not working
+                              dsld: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -895,7 +942,8 @@ class SurveillanceStation(base_api.BaseApi):
                                      toTime: int = None,
                                      locked: int = None,
                                      evtSrcType: int = None,
-                                     evtSrcId: int = None) -> dict[str, object] | str:  # TODO not working
+                                     # TODO not working
+                                     evtSrcId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -941,14 +989,16 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, response_json=False)
 
     def check_if_recording_playable(self,
-                            eventId: int = None,
-                            chkDetail: bool = None,
-                            mountId: int = None,
-                            dsld: int = None) -> dict[str, object] | str:  # TODO not working
+                                    eventId: int = None,
+                                    chkDetail: bool = None,
+                                    mountId: int = None,
+                                    # TODO not working
+                                    dsld: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CheckEventValid'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CheckEventValid'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -962,7 +1012,8 @@ class SurveillanceStation(base_api.BaseApi):
                                 alertRecording: bool = None,
                                 mountId: int = None,
                                 dsld: int = None,
-                                videoCodec: int = None) -> dict[str, object] | str:  # TODO not working
+                                # TODO not working
+                                videoCodec: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -976,11 +1027,11 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def download_merged_recording_files(self,
-                            camId: int = None,
-                            fromTime: int = None,
-                            toTime: int = None,
-                            fileName: str = None) -> dict[str, object] | str:  # TODO not working
-
+                                        camId: int = None,
+                                        fromTime: int = None,
+                                        toTime: int = None,
+                                        # TODO not working
+                                        fileName: str = None) -> dict[str, object] | str:
         """Download the merged files of UTC time range recordings of target camera.
            If there are different resolution or codec within UTC time range, the recordings will merge as much as possible
            and downlod file will be a zip file.
@@ -1004,11 +1055,13 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_newest_progress_keep_alive(self, dlid: int = None) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def get_newest_progress_keep_alive(self, dlid: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetRangeExportProgress'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'GetRangeExportProgress'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -1019,8 +1072,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def download_recording_from_target(self,
                                        dlid: int = None,
-                                       fileName: str = None) -> dict[str, object] | str:  # TODO not working
-
+                                       # TODO not working
+                                       fileName: str = None) -> dict[str, object] | str:
         """Response
            MP4 or zip file data.
            The response type can be found in fileExt of GetRangeExportProgress method response when progress 100.
@@ -1040,7 +1093,8 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'OnRangeExportDone'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'OnRangeExportDone'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -1081,7 +1135,7 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_camera_information_list(self,
-                                dslld: int = None) -> dict[str, object] | str:
+                                    dslld: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording.Export'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1102,7 +1156,8 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.Recording.Export'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CheckAvailableExport'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CheckAvailableExport'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -1164,8 +1219,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def redirect_webapi_to_target_ds(self,
                                      dsId: int = None,
-                                     webAPI: Any = None) -> dict[str, object] | str:  # TODO not working
-
+                                     # TODO not working
+                                     webAPI: Any = None) -> dict[str, object] | str:
         """webAPI Array of `webAPI_info`
 
            Example:
@@ -1186,7 +1241,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def modify_share_privilege(self,
                                privSet: int = None,
-                               shareName: str = None) -> dict[str, object] | str:  # TODO not working
+                               # TODO not working
+                               shareName: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.CMS'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1206,7 +1262,8 @@ class SurveillanceStation(base_api.BaseApi):
                               central_rec_mask_mode: bool = None,
                               central_rec_sync_time: bool = None,
                               nvr_enable: bool = None,
-                              nvr_lang: str = None) -> dict[str, object] | str:  # TODO not working
+                              # TODO not working
+                              nvr_lang: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.CMS'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1220,7 +1277,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_cms_info(self,
-                     isPolling: bool = None) -> dict[str, object] | str:  # TODO not working
+                     # TODO not working
+                     isPolling: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.CMS'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1236,7 +1294,8 @@ class SurveillanceStation(base_api.BaseApi):
     def get_log_recording_data_from_target_ds(self,
                                               syncType: int = None,
                                               syncTargetId: int = None,
-                                              limit: int = None) -> dict[str, object] | str:  # TODO not working
+                                              # TODO not working
+                                              limit: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.CMS'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1253,15 +1312,18 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.CMS'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CheckSambaEnabled'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CheckSambaEnabled'}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def check_if_samba_on_and_rec_enabled(self) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def check_if_samba_on_and_rec_enabled(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.CMS'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'BatCheckSambaService'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'BatCheckSambaService'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -1280,7 +1342,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_cms_status(self,
-                       camId: int = None) -> dict[str, object] | str:  # TODO not working
+                       # TODO not working
+                       camId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.CMS'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1293,7 +1356,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def enable_smb_service(self) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def enable_smb_service(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.CMS'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1301,7 +1365,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def notify_slave_ds_to_disconnect(self) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def notify_slave_ds_to_disconnect(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.CMS'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1310,7 +1375,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def lock_recording_server_prevent_setting_change(self,
-                                                     locked: bool = None) -> dict[str, object] | str:  # TODO not working
+                                                     # TODO not working
+                                                     locked: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.CMS'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1370,7 +1436,8 @@ class SurveillanceStation(base_api.BaseApi):
                         adminUsername: str = None,
                         key: str = None,
                         mac: str = None,
-                        masterAuthKey: str = None) -> dict[str, object] | str:  # TODO to check
+                        # TODO to check
+                        masterAuthKey: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.CMS.GetDsStatus'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1422,7 +1489,8 @@ class SurveillanceStation(base_api.BaseApi):
                       mac: str = None,
                       cms_locked: bool = None,
                       cms_masked: bool = None,
-                      cms_sync_time: bool = None) -> dict[str, object] | str:  # TODO not working
+                      # TODO not working
+                      cms_sync_time: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.CMS.GetDsStatus'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1436,9 +1504,9 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def login_slave_ds(self,
-                        adminUsername: str = None,
-                        key: str = None,
-                        mac: str = None,
+                       adminUsername: str = None,
+                       key: str = None,
+                       mac: str = None,
                        masterAuthKey: str = None,
                        hostName: str = None,
                        hostPort: int = None,
@@ -1448,8 +1516,8 @@ class SurveillanceStation(base_api.BaseApi):
                        enable_rec: bool = None,
                        cms_locked: bool = None,
                        cms_masked: bool = None,
-                       cms_sync_time: bool = None) -> dict[str, object] | str:  # TODO not working
-
+                       # TODO not working
+                       cms_sync_time: bool = None) -> dict[str, object] | str:
         """2.3.15.9 API Error Code
             Code Description
             400 Execution failed.
@@ -1482,7 +1550,8 @@ class SurveillanceStation(base_api.BaseApi):
                       adminPasswd: str = None,
                       cms_locked: bool = None,
                       cms_masked: bool = None,
-                      cms_sync_time: bool = None) -> dict[str, object] | str:  # TODO not working
+                      # TODO not working
+                      cms_sync_time: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.CMS.GetDsStatus'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1496,11 +1565,11 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def load_slave_ds_list(self,
-                      blNeedStatus: bool = None,
-                      blGetSortInfo: bool = None,
-                      blRuntimeInfo: bool = None,
-                      dslds: str = None,
-                      sortInfo: int = None) -> dict[str, object] | str:
+                           blNeedStatus: bool = None,
+                           blGetSortInfo: bool = None,
+                           blRuntimeInfo: bool = None,
+                           dslds: str = None,
+                           sortInfo: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.CMS.SlavedsList'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1531,7 +1600,8 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.Log'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CountByCategory'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CountByCategory'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -1610,11 +1680,12 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_advanced_setting_logs(self,
-                            data: Any = None) -> dict[str, object] | str:
+                                  data: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Log'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'SetSetting', 'data': data }
+        req_param = {'version': info['maxVersion'],
+                     'method': 'SetSetting', 'data': data}
 
         """data example:
 
@@ -1623,17 +1694,20 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def load_license_data(self,
-                            num_only: int = None) -> dict[str, object] | str:  # TODO not working
+                          # TODO not working
+                          num_only: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.License'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'Load', 'num_only': num_only}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'Load', 'num_only': num_only}
 
         return self.request_data(api_name, api_path, req_param)
 
     def check_license_quota(self,
                             camList: Any = None,
-                            camServerId: int = None) -> dict[str, object] | str:  # TODO not working
+                            # TODO not working
+                            camServerId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.License'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1691,7 +1765,8 @@ class SurveillanceStation(base_api.BaseApi):
                          actRetPos: int = None,
                          extUrl: str = None,
                          userName: str = None,
-                         password: str = None) -> dict[str, object] | str:  # TODO not working
+                         # TODO not working
+                         password: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.ActionRule'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1704,27 +1779,33 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def download_action_rule(self) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def download_action_rule(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.ActionRule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'DownloadHistory'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'DownloadHistory'}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def send_data_2_player(self) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def send_data_2_player(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.ActionRule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'SendData2Player'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'SendData2Player'}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete_all_histories_of_action_rule(self, idList: str = None) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def delete_all_histories_of_action_rule(self, idList: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.ActionRule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'DeleteHistory', 'idList': idList}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'DeleteHistory', 'idList': idList}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -1732,39 +1813,48 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.ActionRule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'List', 'Start': start, 'limit': limit}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'List', 'Start': start, 'limit': limit}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def disable_action_rules(self, idList: str = None) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def disable_action_rules(self, idList: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.ActionRule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'Disable', 'idList': idList}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'Disable', 'idList': idList}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def enable_action_rules(self, idList: str = None) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def enable_action_rules(self, idList: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.ActionRule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'Enable', 'idList': idList}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'Enable', 'idList': idList}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def list_history_action_rules(self, start: int = None, limit: int = None) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def list_history_action_rules(self, start: int = None, limit: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.ActionRule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'ListHistory', 'start': start, 'limit': limit}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'ListHistory', 'start': start, 'limit': limit}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def delete_action_rule(self, idList: str = None) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def delete_action_rule(self, idList: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.ActionRule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'Delete', 'idList': idList}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'Delete', 'idList': idList}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -1787,7 +1877,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def get_specific_emaps_setting(self,
                                    emapIds: int = None,
-                                   includeImage: int = None) -> dict[str, object] | str:  # TODO to check
+                                   # TODO to check
+                                   includeImage: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Emap'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1801,7 +1892,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_emap_image(self,
-                       filename: str = None) -> dict[str, object] | str:  # TODO to check
+                       # TODO to check
+                       filename: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Emap.Image'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1814,22 +1906,26 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_autorized_ds_token(self) -> dict[str, object] | str:  # TODO to check
+    # TODO to check
+    def get_autorized_ds_token(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetRegisterToken'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'GetRegisterToken'}
 
         return self.request_data(api_name, api_path, req_param)
 
     def set_message_event(self,
                           eventTypes: str = None,
                           subject: str = None,
-                          content: str = None) -> dict[str, object] | str:  # TODO not working
+                          # TODO not working
+                          content: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'SetCustomizedMessage'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'SetCustomizedMessage'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -1839,11 +1935,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_message_event(self,
-                          eventTypes: int = None) -> dict[str, object] | str:  # TODO not working
+                          # TODO not working
+                          eventTypes: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'SetCustomizedMessage'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'SetCustomizedMessage'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -1853,7 +1951,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_notification_sender_name(self,
-                                     ss_pkg_name: str = None) -> dict[str, object] | str:  # TODO not working
+                                     # TODO not working
+                                     ss_pkg_name: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1866,7 +1965,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_notification_sender_name(self) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def get_notification_sender_name(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1876,7 +1976,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def set_advanced_notification_setting(self,
                                           blSyncDSMNotify: bool = None,
-                                          blCompactMsg: bool = None) -> dict[str, object] | str:  # TODO to check
+                                          # TODO to check
+                                          blCompactMsg: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1889,7 +1990,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_advanced_notification_setting(self) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def get_advanced_notification_setting(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -1912,11 +2014,13 @@ class SurveillanceStation(base_api.BaseApi):
                                                   setMinMessageInterval: bool = None,
                                                   minMessageInterval: int = None,
                                                   hasSysSms: bool = None,
-                                                  apiId: str = None) -> dict[str, object] | str:  # TODO to check
+                                                  # TODO to check
+                                                  apiId: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification.SMS'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'SendTestMessage'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'SendTestMessage'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -1969,11 +2073,13 @@ class SurveillanceStation(base_api.BaseApi):
                       primaryEmail: str = None,
                       secondaryEmail: str = None,
                       synoMailEnable: bool = None,
-                      mail_recipient: str = None) -> dict[str, object] | str:  # TODO to check
+                      # TODO to check
+                      mail_recipient: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification.SMS'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'SendTestMessage'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'SendTestMessage'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -1990,11 +2096,13 @@ class SurveillanceStation(base_api.BaseApi):
                        primaryEmail: str = None,
                        secondaryEmail: str = None,
                        synoMailEnable: bool = None,
-                       mail_recipient: str = None) -> dict[str, object] | str:  # TODO to check
+                       # TODO to check
+                       mail_recipient: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification.PushService'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'SendVerificationMail'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'SendVerificationMail'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2015,7 +2123,8 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.Notification.PushService'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'ListMobileDevice'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'ListMobileDevice'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2039,11 +2148,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_controller_access_schedule(self,
-                      targetIds: str = None) -> dict[str, object] | str:  # TODO to check
+                                       # TODO to check
+                                       targetIds: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification.Schedule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetAccessControlControllerSchedule'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'GetAccessControlControllerSchedule'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2054,11 +2165,13 @@ class SurveillanceStation(base_api.BaseApi):
 
     def get_camera_alarm_schedule(self,
                                   cameraId: int = None,
-                                  alarmdx: int = None) -> dict[str, object] | str:  # TODO to check
+                                  # TODO to check
+                                  alarmdx: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification.Schedule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetCameraAlarmSchedule'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'GetCameraAlarmSchedule'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2068,11 +2181,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_sys_dependent_schedule(self,
-                                  eventGroupTypes: int = None) -> dict[str, object] | str:  # TODO to check
+                                   # TODO to check
+                                   eventGroupTypes: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification.Schedule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetSystemDependentSchedule'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'GetSystemDependentSchedule'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2086,11 +2201,13 @@ class SurveillanceStation(base_api.BaseApi):
                            schedule: Any = None,
                            cameraIds: str = None,
                            cameraGroupIds: str = None,
-                           filter: int = None) -> dict[str, object] | str:  # TODO to check
+                           # TODO to check
+                           filter: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification.Schedule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'SetBatchSchedule'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'SetBatchSchedule'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2100,11 +2217,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_access_ctrl_door_schedule(self,
-                                      doorId: str = None) -> dict[str, object] | str:  # TODO to check
+                                      # TODO to check
+                                      doorId: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification.Schedule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetAccessControlDoorSchedule'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'GetAccessControlDoorSchedule'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2114,11 +2233,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_camera_schedule(self,
-                            cameraId: str = None) -> dict[str, object] | str:  # TODO to check
+                            # TODO to check
+                            cameraId: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification.Schedule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetCameraSchedule'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'GetCameraSchedule'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2129,11 +2250,13 @@ class SurveillanceStation(base_api.BaseApi):
 
     def set_sys_dependent_schedule(self,
                                    eventType: int = None,
-                                   schedule: Any = None) -> dict[str, object] | str:  # TODO to check
+                                   # TODO to check
+                                   schedule: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification.Schedule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'SetSystemDependentSchedule'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'SetSystemDependentSchedule'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2145,11 +2268,13 @@ class SurveillanceStation(base_api.BaseApi):
     def set_controller_access_schedule(self,
                                        eventType: int = None,
                                        schedule: Any = None,
-                                       doorId: int = None) -> dict[str, object] | str:  # TODO to check
+                                       # TODO to check
+                                       doorId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification.Schedule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'SetAccessControlSchedule'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'SetAccessControlSchedule'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2161,11 +2286,13 @@ class SurveillanceStation(base_api.BaseApi):
     def set_camera_schedule(self,
                             eventType: int = None,
                             schedule: Any = None,
-                            cameraId: Any = None) -> dict[str, object] | str:  # TODO to check
+                            # TODO to check
+                            cameraId: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification.Schedule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'SetCameraSchedule'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'SetCameraSchedule'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2183,7 +2310,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_adv_tab_info_filter(self,
-                                X: int = None) -> dict[str, object] | str:  # TODO to check
+                                # TODO to check
+                                X: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification.Email'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2224,7 +2352,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_sms_service_provider(self,
-                                    providerName: str = None) -> dict[str, object] | str:  # TODO to check
+                                    # TODO to check
+                                    providerName: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Notification.SMS.ServiceProvider'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2247,7 +2376,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def enable_specific_addon(self,
                               service: int = None,
-                              servicename: str = None) -> dict[str, object] | str: # TODO to check
+                              # TODO to check
+                              servicename: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AddOns'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2261,11 +2391,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_specific_addon_update_info(self,
-                       service: int = None) -> dict[str, object] | str: # TODO to check
+                                       # TODO to check
+                                       service: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AddOns'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CheckUpdateInfo'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CheckUpdateInfo'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2275,7 +2407,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_specific_addon_info(self,
-                       service: int = None) -> dict[str, object] | str:  # TODO to check
+                                # TODO to check
+                                service: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AddOns'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2298,7 +2431,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def update_addon_package(self,
                              service: int = None,
-                             filePath: str = None) -> dict[str, object] | str:  # TODO to check
+                             # TODO to check
+                             filePath: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AddOns'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2312,11 +2446,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def check_addon_status(self,
-                             service: int = None) -> dict[str, object] | str:  # TODO to check
+                           # TODO to check
+                           service: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AddOns'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CheckEnableDone'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CheckEnableDone'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2327,7 +2463,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def disable_addon(self,
                       service: int = None,
-                      serviceName: str = None) -> dict[str, object] | str:  # TODO to check
+                      # TODO to check
+                      serviceName: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AddOns'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2341,8 +2478,9 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_addon_autoupdate(self,
-                      service: int = None,
-                      BlEnabled: Any = None) -> dict[str, object] | str:  # TODO to check
+                             service: int = None,
+                             # TODO to check
+                             BlEnabled: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AddOns'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2356,7 +2494,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_specific_camera_recording_server(self,
-                                                camIdList: str = None) -> dict[str, object] | str:  # TODO to check
+                                                # TODO to check
+                                                camIdList: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Alert'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2370,7 +2509,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_camera_event_analytic(self,
-                                  camIdList: str = None) -> dict[str, object] | str:  # TODO to check
+                                  # TODO to check
+                                  camIdList: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Alert'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2385,7 +2525,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def delete_selected_events(self,
                                dsIdList: str = None,
-                               idList: str = None) -> dict[str, object] | str:  # TODO to check
+                               # TODO to check
+                               idList: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Alert'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2399,7 +2540,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_specific_camera_events(self,
-                               camIdList: str = None) -> dict[str, object] | str:  # TODO to check
+                                      # TODO to check
+                                      camIdList: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Alert'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2414,7 +2556,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def get_analytic_history(self,
                              camIdList: str = None,
-                             typeListstring: str = None) -> dict[str, object] | str:  # TODO to check
+                             # TODO to check
+                             typeListstring: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Alert'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2431,7 +2574,8 @@ class SurveillanceStation(base_api.BaseApi):
                                        camIdList: str = None,
                                        dsId: int = None,
                                        lock: int = None,
-                                       typeList: str = None) -> dict[str, object] | str:  # TODO to check
+                                       # TODO to check
+                                       typeList: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Alert'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2446,7 +2590,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def unklock_selected_events(self,
                                 dsId: int = None,
-                                idList: str = None) -> dict[str, object] | str:  # TODO to check
+                                # TODO to check
+                                idList: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Alert'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2460,7 +2605,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_camera_analytic_trigger(self,
-                                       trigCamIdList: str = None) -> dict[str, object] | str:  # TODO to check
+                                    # TODO to check
+                                    trigCamIdList: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Alert'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2474,11 +2620,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def flush_event_header(self,
-                           eventId: str = None) -> dict[str, object] | str:  # TODO to check
+                           # TODO to check
+                           eventId: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Alert'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'EventFlushHeader'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'EventFlushHeader'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2489,7 +2637,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def lock_selected_events(self,
                              dsId: int = None,
-                             idList: str = None) -> dict[str, object] | str:  # TODO to check
+                             # TODO to check
+                             idList: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Alert'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2504,11 +2653,13 @@ class SurveillanceStation(base_api.BaseApi):
 
     def get_analytic_event_from_rec_server(self,
                                            camIdList: str = None,
-                                           idList: int = None) -> dict[str, object] | str:  # TODO to check
+                                           # TODO to check
+                                           idList: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Alert'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'RecServerEventCount'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'RecServerEventCount'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2528,7 +2679,8 @@ class SurveillanceStation(base_api.BaseApi):
                                dwellTime: int = None,
                                direction: int = None,
                                objSize: int = None,
-                               region: str = None) -> dict[str, object] | str:  # TODO to check
+                               # TODO to check
+                               region: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Alert.Setting'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2542,7 +2694,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def check_if_snapshot_exist(self,
-                               id: int = None) -> dict[str, object] | str:  # TODO to check
+                                # TODO to check
+                                id: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2561,7 +2714,8 @@ class SurveillanceStation(base_api.BaseApi):
                                    width: int = None,
                                    height: int = None,
                                    byteSize: int = None,
-                                   imageData: str = None) -> dict[str, object] | str:  # TODO to check
+                                   # TODO to check
+                                   imageData: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2580,11 +2734,13 @@ class SurveillanceStation(base_api.BaseApi):
                                    to: int = None,
                                    timezoneOffset: int = None,
                                    byteSize: int = None,
-                                   imageData: str = None) -> dict[str, object] | str:  # TODO to check
+                                   # TODO to check
+                                   imageData: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CountByCategory'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CountByCategory'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2597,14 +2753,16 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def check_any_locked_snapshot(self,
-                                   id: str = None,
-                                   dsfrom: int = None,
-                                   to: int = None,
-                                   keyword: str = None) -> dict[str, object] | str:  # TODO to check
+                                  id: str = None,
+                                  dsfrom: int = None,
+                                  to: int = None,
+                                  # TODO to check
+                                  keyword: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'ChkContainLocked'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'ChkContainLocked'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2617,9 +2775,10 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def unlock_snapshot_by_filter(self,
-                                   dsfrom: int = None,
-                                   to: int = None,
-                                   keyword: str = None) -> dict[str, object] | str:  # TODO to check
+                                  dsfrom: int = None,
+                                  to: int = None,
+                                  # TODO to check
+                                  keyword: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2645,7 +2804,8 @@ class SurveillanceStation(base_api.BaseApi):
                                   imgSize: int = None,
                                   blIncludeAuInfo: bool = None,
                                   blIncludeRecCnt: bool = None,
-                                  camId: int = None) -> dict[str, object] | str:  # TODO to check
+                                  # TODO to check
+                                  camId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2662,7 +2822,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def unlock_snapshot(self,
-                        objList: Any = None) -> dict[str, object] | str:  # TODO to check
+                        # TODO to check
+                        objList: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2678,7 +2839,8 @@ class SurveillanceStation(base_api.BaseApi):
     def take_snapshot(self,
                       dsId: int = None,
                       camId: int = None,
-                      blSave: bool = None) -> dict[str, object] | str:  # TODO to check
+                      # TODO to check
+                      blSave: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2691,7 +2853,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_snapshot_setting_function(self) -> dict[str, object] | str:  # TODO to check
+    # TODO to check
+    def get_snapshot_setting_function(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2703,7 +2866,8 @@ class SurveillanceStation(base_api.BaseApi):
                                   deleteAllCommand: bool = None,
                                   dsfrom: int = None,
                                   to: int = None,
-                                  keyword: str = None) -> dict[str, object] | str:  # TODO to check
+                                  # TODO to check
+                                  keyword: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2721,7 +2885,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def get_snapshot_image(self,
                            id: int = None,
-                           imgSize: int = None) -> dict[str, object] | str:  # TODO to modify for download?
+                           # TODO to modify for download?
+                           imgSize: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2749,7 +2914,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def downld_single_snapshot(self,
-                               id: int = None) -> dict[str, object] | str:  # TODO not working
+                               # TODO not working
+                               id: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2768,7 +2934,7 @@ class SurveillanceStation(base_api.BaseApi):
                                   limitTotalSize: bool = None,
                                   limitSizeInGb: int = None,
                                   addTimestamp: bool = None,
-                                  timestampPosition: int = None)-> dict[str, object] | str:
+                                  timestampPosition: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2787,7 +2953,8 @@ class SurveillanceStation(base_api.BaseApi):
                       width: int = None,
                       height: int = None,
                       byteSize: int = None,
-                      imageData: str = None)-> dict[str, object] | str:  # TODO to check
+                      # TODO to check
+                      imageData: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2805,7 +2972,8 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.SnapShot'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'ChkSnapshotValid'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'ChkSnapshotValid'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -2815,7 +2983,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def enable_visualstation(self,
-                             vslist: str = None) -> dict[str, object] | str:  # TODO to check
+                             # TODO to check
+                             vslist: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.VisualStation'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2834,7 +3003,8 @@ class SurveillanceStation(base_api.BaseApi):
                                  mask: str = None,
                                  gateway: str = None,
                                  blDhcp: bool = None,
-                                 name: str = None) -> dict[str, object] | str:  # TODO to check
+                                 # TODO to check
+                                 name: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.VisualStation'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2848,7 +3018,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def lock_visualstation_by_id(self,
-                                 vslist: str = None) -> dict[str, object] | str:  # TODO to check
+                                 # TODO to check
+                                 vslist: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.VisualStation'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2861,7 +3032,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def enumerate_vs_owner_info(self) -> dict[str, object] | str:  # TODO to check
+    # TODO to check
+    def enumerate_vs_owner_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.VisualStation'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2870,7 +3042,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def unlock_visualstation_by_id(self,
-                                   vslist: str = None) -> dict[str, object] | str:  # TODO to check
+                                   # TODO to check
+                                   vslist: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.VisualStation'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2884,7 +3057,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def disable_visualstation_by_id(self,
-                                    vslist: str = None) -> dict[str, object] | str:  # TODO to check
+                                    # TODO to check
+                                    vslist: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.VisualStation'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2898,7 +3072,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_specific_visualstation(self,
-                                      vslist: str = None) -> dict[str, object] | str:  # TODO to check
+                                      # TODO to check
+                                      vslist: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.VisualStation'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2912,7 +3087,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def enumerate_layout_visualstation(self,
-                                       vsId: int = None) -> dict[str, object] | str:  # TODO to check
+                                       # TODO to check
+                                       vsId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.VisualStation.Layout'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2934,7 +3110,8 @@ class SurveillanceStation(base_api.BaseApi):
                                 isFixAspectRatio: int = None,
                                 layoutType: int = None,
                                 channelList: Any = None,
-                                customPosList: str = None) -> dict[str, object] | str:  # TODO to check
+                                # TODO to check
+                                customPosList: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.VisualStation.Layout'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2949,7 +3126,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def delete_layout_visualstation(self,
                                     id: int = None,
-                                    vsId: int = None) -> dict[str, object] | str:  # TODO to check
+                                    # TODO to check
+                                    vsId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.VisualStation.Layout'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2962,7 +3140,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def clear_visualstation_search_result(self) -> dict[str, object] | str:  # TODO to check
+    # TODO to check
+    def clear_visualstation_search_result(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.VisualStation.Search'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2971,7 +3150,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_visualstation_ip_info(self,
-                                  ip: int = None) -> dict[str, object] | str:  # TODO to check
+                                  # TODO to check
+                                  ip: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.VisualStation.Search'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2984,7 +3164,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_previous_visualstation_search(self) -> dict[str, object] | str:  # TODO to check
+    # TODO to check
+    def stop_previous_visualstation_search(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.VisualStation.Search'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -2993,7 +3174,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_visualstation_list(self,
-                               offset: int = None) -> dict[str, object] | str:  # TODO to check
+                               # TODO to check
+                               offset: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.VisualStation.Layout'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3018,7 +3200,8 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.AxisAcsCtrler'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CountByCategoryCardHolder'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CountByCategoryCardHolder'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -3037,11 +3220,13 @@ class SurveillanceStation(base_api.BaseApi):
 
     def get_cardholder_photo(self,
                              photo_name: str = None,
-                             isRedirectCgi: bool = None) -> dict[str, object] | str:  # TODO to check
+                             # TODO to check
+                             isRedirectCgi: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AxisAcsCtrler'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetCardholderPhoto'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'GetCardholderPhoto'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -3067,7 +3252,8 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.AxisAcsCtrler'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CountByCategoryLog'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CountByCategoryLog'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -3095,12 +3281,14 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def retrieve_last_access_credential(self,
-                            ctrlerId: int = None,
-                            idPtId: int = None) -> dict[str, object] | str:  # TODO to check
+                                        ctrlerId: int = None,
+                                        # TODO to check
+                                        idPtId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AxisAcsCtrler'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'RetrieveLastCard'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'RetrieveLastCard'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -3148,7 +3336,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def modify_controller_logger_config(self,
-                                        data: Any = None) -> dict[str, object] | str:  # TODO to check
+                                        # TODO to check
+                                        data: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AxisAcsCtrler'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3199,7 +3388,8 @@ class SurveillanceStation(base_api.BaseApi):
                                filterKeyword: str = None,
                                doorIds: str = None,
                                eventTypes: str = None,
-                               update: int = None) -> dict[str, object] | str:  # TODO to modify for download?
+                               # TODO to modify for download?
+                               update: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AxisAcsCtrler'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3217,7 +3407,8 @@ class SurveillanceStation(base_api.BaseApi):
                                       ip: str = None,
                                       port: int = None,
                                       userName: str = None,
-                                      password: int = None) -> dict[str, object] | str:  # TODO to check
+                                      # TODO to check
+                                      password: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AxisAcsCtrler'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3235,7 +3426,8 @@ class SurveillanceStation(base_api.BaseApi):
                                            ip: str = None,
                                            port: int = None,
                                            userName: str = None,
-                                           password: int = None) -> dict[str, object] | str:  # TODO to check
+                                           # TODO to check
+                                           password: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AxisAcsCtrler'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3253,7 +3445,8 @@ class SurveillanceStation(base_api.BaseApi):
                                        limit: int = None,
                                        update: int = None,
                                        blIncludeRecCnt: bool = None,
-                                       blIncludeAuInfo: bool = None) -> dict[str, object] | str:  # TODO to check
+                                       # TODO to check
+                                       blIncludeAuInfo: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AxisAcsCtrler'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3281,7 +3474,7 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def enumerate_door_info(self,
-                           DoorIds: str = None) -> dict[str, object] | str:
+                            DoorIds: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AxisAcsCtrler'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3332,7 +3525,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def manual_lock_operation(self,
                               doorId: int = None,
-                              operation: int = None) -> dict[str, object] | str:  # TODO to check
+                              # TODO to check
+                              operation: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AxisAcsCtrler'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3400,7 +3594,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def retrieve_data_from_controller(self, ctrlerId: str = None) -> dict[str, object] | str:  # TODO to check
+    # TODO to check
+    def retrieve_data_from_controller(self, ctrlerId: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.AxisAcsCtrler'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3417,7 +3612,8 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.AxisAcsCtrler'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'BlockCardHolder'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'BlockCardHolder'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -3430,7 +3626,8 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.AxisAcsCtrler'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CountByCategory'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CountByCategory'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -3458,7 +3655,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def enumerate_digital_output(self,
-                                 camId: int = None) -> dict[str, object] | str:  # TODO to check
+                                 # TODO to check
+                                 camId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.DigitalOutput'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3476,7 +3674,8 @@ class SurveillanceStation(base_api.BaseApi):
                                        idx: int = None,
                                        keep_setting: bool = None,
                                        normal_state: int = None,
-                                       trigger_state: bool = None) -> dict[str, object] | str:  # TODO to check
+                                       # TODO to check
+                                       trigger_state: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.DigitalOutput'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3496,7 +3695,8 @@ class SurveillanceStation(base_api.BaseApi):
                                            setNormalCap: bool = None,
                                            normal: int = None,
                                            trigger: bool = None,
-                                           timeOut: int = None) -> dict[str, object] | str:  # TODO to check
+                                           # TODO to check
+                                           timeOut: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.DigitalOutput'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3511,7 +3711,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def trigger_external_event(self,
                                eventId: int = None,
-                               eventName: str = None) -> dict[str, object] | str:  # TODO to check
+                               # TODO to check
+                               eventName: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.ExternalEvent'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3528,7 +3729,8 @@ class SurveillanceStation(base_api.BaseApi):
                             start: int = None,
                             limit: int = None,
                             blFromList: bool = None,
-                            ownerDsId: int = None) -> dict[str, object] | str:  # TODO to check
+                            # TODO to check
+                            ownerDsId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IOModule'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3548,7 +3750,8 @@ class SurveillanceStation(base_api.BaseApi):
                          User: str = None,
                          Pass: str = None,
                          Vendor: str = None,
-                         Model: str = None) -> dict[str, object] | str:  # TODO to check
+                         # TODO to check
+                         Model: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IOModule'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3561,11 +3764,13 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_supported_list_io_modules(self) -> dict[str, object] | str:  # TODO to check
+    # TODO to check
+    def get_supported_list_io_modules(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IOModule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'EnumVendorModel'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'EnumVendorModel'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -3583,7 +3788,8 @@ class SurveillanceStation(base_api.BaseApi):
                                timeServer: str = None,
                                passWord: str = None,
                                ntpEnable: bool = None,
-                               DIOdata: Any = None) -> dict[str, object] | str:  # TODO to check
+                               # TODO to check
+                               DIOdata: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IOModule'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3597,7 +3803,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def enable_io_modules(self,
-                            iomlist: str = None) -> dict[str, object] | str:  # TODO to check
+                          # TODO to check
+                          iomlist: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IOModule'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3611,7 +3818,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def disable_io_modules(self,
-                          iomlist: str = None) -> dict[str, object] | str:  # TODO to check
+                           # TODO to check
+                           iomlist: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IOModule'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3625,7 +3833,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_io_modules(self,
-                          iomlist: str = None) -> dict[str, object] | str:  # TODO to check
+                          # TODO to check
+                          iomlist: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IOModule'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3644,7 +3853,8 @@ class SurveillanceStation(base_api.BaseApi):
                                      ip: str = None,
                                      userName: str = None,
                                      passWord: str = None,
-                                     model: str = None) -> dict[str, object] | str:  # TODO to check
+                                     # TODO to check
+                                     model: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IOModule'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3659,7 +3869,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def get_capability_io_module(self,
                                  vendor: str = None,
-                                 model: str = None) -> dict[str, object] | str:  # TODO to check
+                                 # TODO to check
+                                 model: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IOModule'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3674,7 +3885,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def configure_io_port_setting(self,
                                   id: int = None,
-                                  DIOdata: Any = None) -> dict[str, object] | str:  # TODO to check
+                                  # TODO to check
+                                  DIOdata: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IOModule'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3690,7 +3902,8 @@ class SurveillanceStation(base_api.BaseApi):
     def poll_trigger_state_io_module(self,
                                      Id: int = None,
                                      list: Any = None,
-                                     timeOut: int = None) -> dict[str, object] | str:  # TODO to check
+                                     # TODO to check
+                                     timeOut: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IOModule'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3708,7 +3921,8 @@ class SurveillanceStation(base_api.BaseApi):
                                idx: int = None,
                                normal: int = None,
                                trigger: bool = None,
-                               timeOut: int = None) -> dict[str, object] | str:  # TODO to check
+                               # TODO to check
+                               timeOut: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IOModule'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3721,7 +3935,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_number_of_devices(self) -> dict[str, object] | str:  # TODO to check
+    # TODO to check
+    def get_number_of_devices(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IOModule'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3738,11 +3953,13 @@ class SurveillanceStation(base_api.BaseApi):
                                      start: int = None,
                                      limit: int = None,
                                      ownerDsId: int = None,
-                                     blFromList: bool = None) -> dict[str, object] | str:  # TODO to check
+                                     # TODO to check
+                                     blFromList: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IOModule'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CountByCategory'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CountByCategory'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -3779,7 +3996,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_current_camera_status(self,
-                                  id_list: str = None) -> dict[str, object] | str:  # TODO not working
+                                  # TODO not working
+                                  id_list: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Camera.Status'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3793,7 +4011,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def enum_preset_camera_list(self,
-                                cameraId: Any = None) -> dict[str, object] | str:  # TODO not working
+                                # TODO not working
+                                cameraId: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ.Preset'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3807,7 +4026,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_preset_camera_capability(self,
-                                     cameraId: int = None) -> dict[str, object] | str:  # TODO not working
+                                     # TODO not working
+                                     cameraId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ.Preset'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3824,7 +4044,8 @@ class SurveillanceStation(base_api.BaseApi):
                                        cameraId: int = None,
                                        position: int = None,
                                        speed: int = None,
-                                       name: str = None) -> dict[str, object] | str:  # TODO not working
+                                       # TODO not working
+                                       name: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ.Preset'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3839,7 +4060,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def delete_list_preset_camera(self,
                                   cameraId: Any = None,
-                                  position: str = None) -> dict[str, object] | str:  # TODO not working
+                                  # TODO not working
+                                  position: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ.Preset'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3856,7 +4078,8 @@ class SurveillanceStation(base_api.BaseApi):
                                           cameraId: Any = None,
                                           position: int = None,
                                           speed: int = None,
-                                          type: int = None) -> dict[str, object] | str:  # TODO not working
+                                          # TODO not working
+                                          type: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ.Preset'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3871,7 +4094,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def set_current_camera_position(self,
                                     cameraId: Any = None,
-                                    bindPosition: int = None) -> dict[str, object] | str:  # TODO not working
+                                    # TODO not working
+                                    bindPosition: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ.Preset'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3913,7 +4137,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def load_patrol_detail(self,
-                           id: int = None) -> dict[str, object] | str:  # TODO not working
+                           # TODO not working
+                           id: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ.Patrol'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3932,7 +4157,8 @@ class SurveillanceStation(base_api.BaseApi):
                              stayTime: int = None,
                              speed: int = None,
                              name: str = None,
-                             presetList: Any = None) -> dict[str, object] | str:  # TODO not working
+                             # TODO not working
+                             presetList: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ.Patrol'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -3947,7 +4173,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def delete_specific_patrol(self,
                                camId: Any = None,
-                               patrolId: str = None) -> dict[str, object] | str:  # TODO not working
+                               # TODO not working
+                               patrolId: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.PTZ.Patrol'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4046,7 +4273,8 @@ class SurveillanceStation(base_api.BaseApi):
                              filterEnable: bool = None,
                              filterStatus: int = None,
                              start: int = None,
-                             limit: int = None) -> dict[str, object] | str:  # TODO not working
+                             # TODO not working
+                             limit: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Transactions.Device'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4069,7 +4297,8 @@ class SurveillanceStation(base_api.BaseApi):
                                  filterTimeRangeIntersect: bool = None,
                                  filterKeyword: str = None,
                                  start: int = None,
-                                 limit: int = None) -> dict[str, object] | str:  # TODO not working
+                                 # TODO not working
+                                 limit: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Transactions.Transaction'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4154,7 +4383,8 @@ class SurveillanceStation(base_api.BaseApi):
     def start_session_with_specified_session_id(self,
                                                 device_name: str = None,
                                                 session_id: str = None,
-                                                timeout: int = None) -> dict[str, object] | str:  # TODO not working
+                                                # TODO not working
+                                                timeout: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Transactions.Transaction'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4169,7 +4399,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def complete_session_with_specified_id(self,
                                            device_name: str = None,
-                                           session_id: str = None) -> dict[str, object] | str:  # TODO not working
+                                           # TODO not working
+                                           session_id: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Transactions.Transaction'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4184,7 +4415,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def cancel_session_with_specified_session_id(self,
                                                  device_name: str = None,
-                                                 session_id: str = None) -> dict[str, object] | str:  # TODO not working
+                                                 # TODO not working
+                                                 session_id: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Transactions.Transaction'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4200,7 +4432,8 @@ class SurveillanceStation(base_api.BaseApi):
     def carry_data_into_session_id(self,
                                    device_name: str = None,
                                    session_id: str = None,
-                                   content: str = None) -> dict[str, object] | str:  # TODO not working
+                                   # TODO not working
+                                   content: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Transactions.Transaction'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4236,7 +4469,8 @@ class SurveillanceStation(base_api.BaseApi):
                                    recStartTm: Any = None,
                                    schedule: str = None,
                                    storagePath: str = None,
-                                   type: int = None) -> dict[str, object] | str:  # TODO to check
+                                   # TODO to check
+                                   type: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Archiving.Pull'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4250,14 +4484,15 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def login_source_server_get_info(self,
-                                   port: str = None,
-                                   hostname: str = None,
-                                   protocol: bool = None,
+                                     port: str = None,
+                                     hostname: str = None,
+                                     protocol: bool = None,
                                      username: str = None,
                                      passwd: str = None,
                                      archId: int = None,
                                      didCode: str = None,
-                                     srcDsId: int = None) -> dict[str, object] | str:  # TODO not working
+                                     # TODO not working
+                                     srcDsId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Archiving.Pull'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4271,8 +4506,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_archive_vault_task(self,
-                                   id: int = None,
-                                   keepRec: bool = None) -> dict[str, object] | str:
+                                  id: int = None,
+                                  keepRec: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Archiving.Pull'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4299,7 +4534,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def enable_archive_vault_task(self,
-                                  id: int = None) -> dict[str, object] | str:  # TODO not working
+                                  # TODO not working
+                                  id: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Archiving.Pull'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4313,7 +4549,7 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def disable_archive_vault_task(self,
-                                  id: int = None) -> dict[str, object] | str:
+                                   id: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Archiving.Pull'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4328,7 +4564,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def disable_archive_vault_batchedit_task(self,
                                              taskIds: str = None,
-                                             attrs: Any = None) -> dict[str, object] | str:  # TODO not working
+                                             # TODO not working
+                                             attrs: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Archiving.Pull'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4342,11 +4579,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_batch_edit_progress(self,
-                                pid: int = None) -> dict[str, object] | str:  # TODO not working
+                                # TODO not working
+                                pid: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Archiving.Pull'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'BatchEditProgress'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'BatchEditProgress'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -4356,11 +4595,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_batchedit_proress_info(self,
-                                   pid: int = None) -> dict[str, object] | str:  # TODO not working
+                                   # TODO not working
+                                   pid: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Archiving.Pull'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetBatchEditProgress'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'GetBatchEditProgress'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -4370,11 +4611,12 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def clean_batchedit_progress_data(self,
-                                   pid: int = None) -> dict[str, object] | str:
+                                      pid: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Archiving.Pull'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'BatchEditProgressDone'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'BatchEditProgressDone'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -4417,7 +4659,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_deep_video_analytic(self) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def get_deep_video_analytic(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4457,7 +4700,8 @@ class SurveillanceStation(base_api.BaseApi):
                              people_stay_max: int = None,
                              people_region: str = None,
                              people_hint_pos: str = None,
-                             blEditMode: bool = None) -> dict[str, object] | str:  # TODO not working
+                             # TODO not working
+                             blEditMode: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4499,7 +4743,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def disable_dva_task(self,
-                         ids: str = None) -> dict[str, object] | str:  # TODO not working
+                         # TODO not working
+                         ids: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4513,11 +4758,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def reset_counter_people_counting_task(self,
-                                           taskId: str = None) -> dict[str, object] | str:  # TODO not working
+                                           # TODO not working
+                                           taskId: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'ResetPplCntCounter'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'ResetPplCntCounter'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -4550,7 +4797,8 @@ class SurveillanceStation(base_api.BaseApi):
                                 intervalUnit: int = None,
                                 timezone: int = None,
                                 timestamp: int = None,
-                                blOccupancy: int = None) -> dict[str, object] | str:  # TODO not working
+                                # TODO not working
+                                blOccupancy: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA.Report'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4564,8 +4812,9 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_people_counting_task(self,
-                                taskList: str = None,
-                                limit: int = None) -> dict[str, object] | str:  # TODO not working
+                                  taskList: str = None,
+                                  # TODO not working
+                                  limit: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4579,8 +4828,9 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_recording_file_of_detection(self,
-                                slaveDsParam: str = None,
-                                deleteMethod: int = None) -> dict[str, object] | str:  # TODO not working
+                                           slaveDsParam: str = None,
+                                           # TODO not working
+                                           deleteMethod: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4596,11 +4846,13 @@ class SurveillanceStation(base_api.BaseApi):
     def get_info_of_task_and_frame(self,
                                    eventId: int = None,
                                    taskId: int = None,
-                                   blAlertEvt: bool = None) -> dict[str, object] | str:  # TODO not working
+                                   # TODO not working
+                                   blAlertEvt: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetAnalyticResult'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'GetAnalyticResult'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -4611,7 +4863,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def lock_recording_file_of_detection(self,
                                          dsId: int = None,
-                                         idList: int = None) -> dict[str, object] | str:  # TODO not working
+                                         # TODO not working
+                                         idList: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4626,7 +4879,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def unlock_recording_file_of_detection(self,
                                            dsId: int = None,
-                                           idList: str = None) -> dict[str, object] | str:  # TODO not working
+                                           # TODO not working
+                                           idList: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA.Recording'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4639,7 +4893,8 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_info_people_counting_task(self) -> dict[str, object] | str:  # TODO not working
+    # TODO not working
+    def get_info_people_counting_task(self) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA.TaskGroup'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4663,7 +4918,8 @@ class SurveillanceStation(base_api.BaseApi):
                                     resert_date: int = None,
                                     resert_weekday: int = None,
                                     resert_tome_hour: int = None,
-                                    resert_tome_minute: int = None) -> dict[str, object] | str:  # TODO not working
+                                    # TODO not working
+                                    resert_tome_minute: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA.TaskGroup'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4687,7 +4943,8 @@ class SurveillanceStation(base_api.BaseApi):
                                                resert_date: int = None,
                                                resert_weekday: int = None,
                                                resert_tome_hour: int = None,
-                                               resert_tome_minute: int = None) -> dict[str, object] | str:  # TODO not working
+                                               # TODO not working
+                                               resert_tome_minute: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA.TaskGroup'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4701,7 +4958,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_task_group(self,
-                          ids: str = None) -> dict[str, object] | str:  # TODO not working
+                          # TODO not working
+                          ids: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA.TaskGroup'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4715,7 +4973,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def start_count_people_task_in_groups(self,
-                                          ids: str = None) -> dict[str, object] | str:  # TODO not working
+                                          # TODO not working
+                                          ids: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA.TaskGroup'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4729,7 +4988,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def stop_count_people_task_in_groups(self,
-                                         ids: str = None) -> dict[str, object] | str:  # TODO not working
+                                         # TODO not working
+                                         ids: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA.TaskGroup'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4743,7 +5003,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_number_counting_task_group(self,
-                                       id: int = None) -> dict[str, object] | str:  # TODO not working
+                                       # TODO not working
+                                       id: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA.TaskGroup'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4757,11 +5018,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def lock_recording_file_result(self,
-                                   id: int = None) -> dict[str, object] | str:  # TODO not working
+                                   # TODO not working
+                                   id: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.IVA.TaskGroup'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'ResetPeopleCount'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'ResetPeopleCount'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -4819,7 +5082,8 @@ class SurveillanceStation(base_api.BaseApi):
                             pre_rec_time: int = None,
                             schedule: str = None,
                             scheduleOn: bool = None,
-                            ignore_bad_quality: bool = None) -> dict[str, object] | str:  # TODO not working
+                            # TODO not working
+                            ignore_bad_quality: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4834,7 +5098,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def delete_face_task(self,
                          ids: str = None,
-                         keepRecording: bool = None) -> dict[str, object] | str:  # TODO not working
+                         # TODO not working
+                         keepRecording: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4848,7 +5113,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def enable_task_to_start_detection_recording(self,
-                                                 ids: str = None) -> dict[str, object] | str:  # TODO not working
+                                                 # TODO not working
+                                                 ids: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4862,7 +5128,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def disable_task_to_stop_detection_recording(self,
-                                                 ids: str = None) -> dict[str, object] | str:  # TODO not working
+                                                 # TODO not working
+                                                 ids: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4876,11 +5143,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_task_with_privilege_to_watch(self,
-                                          ids: int = None) -> dict[str, object] | str:  # TODO not working
+                                          # TODO not working
+                                          ids: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'ListPlayableTsk'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'ListPlayableTsk'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -4892,11 +5161,13 @@ class SurveillanceStation(base_api.BaseApi):
     def create_face_group(self,
                           name: str = None,
                           description: str = None,
-                          update_registered_face: Any = None) -> dict[str, object] | str:  # TODO not working
+                          # TODO not working
+                          update_registered_face: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CreateFaceGroup'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CreateFaceGroup'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -4906,11 +5177,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def disable_face_grooup(self,
-                            ids: Any = None) -> dict[str, object] | str:  # TODO not working
+                            # TODO not working
+                            ids: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'DeleteFaceGroup'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'DeleteFaceGroup'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -4938,7 +5211,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def get_face_group_list(self,
                             id_only: bool = None,
-                            filter: Any = None) -> dict[str, object] | str:  # TODO not working
+                            # TODO not working
+                            filter: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4952,7 +5226,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def count_face_groups(self,
-                          filter: Any = None) -> dict[str, object] | str:  # TODO not working
+                          # TODO not working
+                          filter: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -4967,11 +5242,13 @@ class SurveillanceStation(base_api.BaseApi):
 
     def detect_faces_image(self,
                            image_data: str = None,
-                           image_size: int = None) -> dict[str, object] | str:  # TODO not working
+                           # TODO not working
+                           image_size: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'DetectImageFace'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'DetectImageFace'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -4990,11 +5267,13 @@ class SurveillanceStation(base_api.BaseApi):
                                update_face_group: Any = None,
                                captured_face_id: int = None,
                                update_unrecognized_captured_face: bool = None,
-                               append_image_data: bool = None) -> dict[str, object] | str:  # TODO not working
+                               # TODO not working
+                               append_image_data: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CreateRegisteredFace'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CreateRegisteredFace'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -5004,11 +5283,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_registered_face(self,
-                               ids: Any = None) -> dict[str, object] | str:  # TODO not working
+                               # TODO not working
+                               ids: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'DeleteRegisteredFace'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'DeleteRegisteredFace'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -5033,7 +5314,8 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'EditRegisteredFace'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'EditRegisteredFace'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -5050,7 +5332,8 @@ class SurveillanceStation(base_api.BaseApi):
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'ListRegisteredFace'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'ListRegisteredFace'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -5060,11 +5343,13 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def count_registered_face(self,
-                              filter: Any = None) -> dict[str, object] | str:  # TODO not working
+                              # TODO not working
+                              filter: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'CountRegisteredFace'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CountRegisteredFace'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -5075,11 +5360,13 @@ class SurveillanceStation(base_api.BaseApi):
 
     def search_registered_face(self,
                                keywords: str = None,
-                               append_image_data: bool = None) -> dict[str, object] | str:  # TODO not working
+                               # TODO not working
+                               append_image_data: bool = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'SearchRegisteredFace'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'SearchRegisteredFace'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -5093,7 +5380,8 @@ class SurveillanceStation(base_api.BaseApi):
                              blIncludeSnapshot: bool = None,
                              blIncludeRegisteredFace: bool = None,
                              limit: int = None,
-                             slaveDsParam: int = None) -> dict[str, object] | str:  # TODO not working
+                             # TODO not working
+                             slaveDsParam: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face.Result'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -5108,7 +5396,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def delete_face_result(self,
                            filter: Any = None,
-                           slaveDsParam: Any = None) -> dict[str, object] | str:  # TODO not working
+                           # TODO not working
+                           slaveDsParam: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face.Result'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -5123,7 +5412,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def lock_face_result(self,
                          filter: Any = None,
-                         slaveDsParam: Any = None) -> dict[str, object] | str:  # TODO not working
+                         # TODO not working
+                         slaveDsParam: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face.Result'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -5138,7 +5428,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def unlock_face_result(self,
                            filter: Any = None,
-                           slaveDsParam: Any = None) -> dict[str, object] | str:  # TODO not working
+                           # TODO not working
+                           slaveDsParam: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face.Result'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -5152,7 +5443,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_recording_file_of_face_info(self,
-                                        capturedFaceId: int = None) -> dict[str, object] | str:  # TODO not working
+                                        # TODO not working
+                                        capturedFaceId: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face.Result'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -5170,11 +5462,13 @@ class SurveillanceStation(base_api.BaseApi):
                                          eventId: int = None,
                                          startTime: int = None,
                                          endTime: int = None,
-                                         blIncludeRegisteredFace: int = None) -> dict[str, object] | str:  # TODO not working
+                                         # TODO not working
+                                         blIncludeRegisteredFace: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face.Result'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'GetAnalyticResult'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'GetAnalyticResult'}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:
@@ -5185,7 +5479,8 @@ class SurveillanceStation(base_api.BaseApi):
 
     def correct_face_result(self,
                             id: int = None,
-                            registered_face_id: int = None) -> dict[str, object] | str:  # TODO not working
+                            # TODO not working
+                            registered_face_id: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face.Result'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -5199,7 +5494,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def mark_face_result_as_stranger(self,
-                                     ids: str = None) -> dict[str, object] | str:  # TODO not working
+                                     # TODO not working
+                                     ids: str = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Face.Result'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -5234,7 +5530,8 @@ class SurveillanceStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_bookmark(self,
-                        bookmarkIds: Any = None) -> dict[str, object] | str:  # TODO not working
+                        # TODO not working
+                        bookmarkIds: Any = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording.Bookmark'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -5252,7 +5549,8 @@ class SurveillanceStation(base_api.BaseApi):
                              limit: int = None,
                              cameraIds: str = None,
                              fromTime: int = None,
-                             toTime: int = None) -> dict[str, object] | str:  # TODO not working
+                             # TODO not working
+                             toTime: int = None) -> dict[str, object] | str:
         api_name = 'SYNO.SurveillanceStation.Recording.Bookmark'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -5264,4 +5562,3 @@ class SurveillanceStation(base_api.BaseApi):
                     req_param[str(key)] = val
 
         return self.request_data(api_name, api_path, req_param)
-

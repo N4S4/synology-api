@@ -7,11 +7,12 @@ from . import base_api
 
 class DhcpServer(base_api.BaseApi):
 
-    def general_info(self, ifname:str = 'ovs_eth0') -> dict[str, object] | str:
+    def general_info(self, ifname: str = 'ovs_eth0') -> dict[str, object] | str:
         api_name = 'SYNO.Network.DHCPServer'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'ifname': ifname}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'ifname': ifname}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -55,18 +56,20 @@ class DhcpServer(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def dhcp_clientlist(self, ifname:str = 'bond0') -> dict[str, object] | str:
+    def dhcp_clientlist(self, ifname: str = 'bond0') -> dict[str, object] | str:
         api_name = 'SYNO.Network.DHCPServer.ClientList'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'ifname': ifname}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'list', 'ifname': ifname}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def dhcp_reservations(self, ifname:str = 'bond0') -> dict[str, object] | str:
+    def dhcp_reservations(self, ifname: str = 'bond0') -> dict[str, object] | str:
         api_name = 'SYNO.Network.DHCPServer.Reservation'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'ifname': ifname}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'ifname': ifname}
 
         return self.request_data(api_name, api_path, req_param)

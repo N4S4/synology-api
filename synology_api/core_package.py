@@ -1,8 +1,12 @@
 import json
 from typing import List
 from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
-import os, requests, tqdm, time
+import os
+import requests
+import tqdm
+import time
 from . import base_api
+
 
 class Package(base_api.BaseApi):
     """
@@ -202,10 +206,10 @@ class Package(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_package_center_settings(self,
-                        enable_email: bool, enable_dsm: bool, enable_autoupdate: bool,
-                        autoupdateall: bool, autoupdateimportant: bool,
-                        default_vol: str, update_channel: str
-            ) -> dict:
+                                    enable_email: bool, enable_dsm: bool, enable_autoupdate: bool,
+                                    autoupdateall: bool, autoupdateimportant: bool,
+                                    default_vol: str, update_channel: str
+                                    ) -> dict:
         """Set settings of the package center
             Parameters
             ----------
@@ -573,13 +577,15 @@ class Package(base_api.BaseApi):
                                 unit_divisor=1024
                                 )
 
-                monitor = MultipartEncoderMonitor(encoder, lambda monitor: bar.update(monitor.bytes_read - bar.n))
+                monitor = MultipartEncoderMonitor(
+                    encoder, lambda monitor: bar.update(monitor.bytes_read - bar.n))
 
                 r = session.post(
                     url,
                     data=monitor,
                     verify=verify,
-                    headers={"X-SYNO-TOKEN": self.session._syno_token, 'Content-Type': monitor.content_type}
+                    headers={"X-SYNO-TOKEN": self.session._syno_token,
+                             'Content-Type': monitor.content_type}
                 )
 
             else:
@@ -587,7 +593,8 @@ class Package(base_api.BaseApi):
                     url,
                     data=encoder,
                     verify=verify,
-                    headers={"X-SYNO-TOKEN": self.session._syno_token, 'Content-Type': encoder.content_type}
+                    headers={"X-SYNO-TOKEN": self.session._syno_token,
+                             'Content-Type': encoder.content_type}
                 )
 
         session.close()
@@ -626,9 +633,9 @@ class Package(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def check_installation(self,
-                        package_id: str, install_type: str = "", install_on_cold_storage: bool = False,
-                        blCheckDep: bool = False, replacepkgs: dict = {}
-                        ) -> dict:
+                           package_id: str, install_type: str = "", install_on_cold_storage: bool = False,
+                           blCheckDep: bool = False, replacepkgs: dict = {}
+                           ) -> dict:
         """Check installation of the package on the default volume
 
             Parameters
@@ -750,9 +757,9 @@ class Package(base_api.BaseApi):
         info = self.core_list[api_name]
         api_path = info['path']
         req_param = {
-            "method":"upgrade",
-            "version":info['minVersion'],
-            "type":0,
+            "method": "upgrade",
+            "version": info['minVersion'],
+            "type": 0,
             "check_codesign": check_codesign,
             "force": force,
             "installrunpackage": installrunpackage,
@@ -761,7 +768,7 @@ class Package(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
 
-    def install_package(self, package_id:str, volume_path: str, file_path: str, check_codesign: bool = True, force: bool = True, installrunpackage: bool = True, extra_values: dict = {}) -> dict:
+    def install_package(self, package_id: str, volume_path: str, file_path: str, check_codesign: bool = True, force: bool = True, installrunpackage: bool = True, extra_values: dict = {}) -> dict:
         """Install a package that is already downloaded
 
             Parameters
@@ -865,9 +872,9 @@ class Package(base_api.BaseApi):
             },
             {
                 "api": "SYNO.Core.Package.Installation",
-                "method":"install",
-                "version":self.core_list["SYNO.Core.Package.Installation"]['minVersion'],
-                "type":0,
+                "method": "install",
+                "version": self.core_list["SYNO.Core.Package.Installation"]['minVersion'],
+                "type": 0,
                 "volume_path": volume_path,
                 "path": file_path,
                 "check_codesign": check_codesign,
@@ -905,7 +912,8 @@ class Package(base_api.BaseApi):
         """
 
         if not self._is_package_already_installed(package_id=package_id):
-            raise Exception(f"""Package "{package_id}" is not installed, it cannot be uninstalled""")
+            raise Exception(
+                f"""Package "{package_id}" is not installed, it cannot be uninstalled""")
 
         api_name = 'SYNO.Core.Package.Uninstallation'
         info = self.core_list[api_name]
@@ -923,7 +931,8 @@ class Package(base_api.BaseApi):
         response: dict = self.list_installed()
         data: dict = response.get("data")
         installed_packages = data.get("packages")
-        package_infos: dict = next((package for package in installed_packages if package["id"] == package_id), None)
+        package_infos: dict = next(
+            (package for package in installed_packages if package["id"] == package_id), None)
         return package_infos != None
 
     def easy_install(self, package_id: str, volume_path: str, install_dependencies: bool = True) -> dict:
@@ -997,7 +1006,7 @@ class Package(base_api.BaseApi):
             }
             ```
         """
-        api_name = 'hotfix' # fix for docs_parser.py issue
+        api_name = 'hotfix'  # fix for docs_parser.py issue
 
         # Package already installed
         if self._is_package_already_installed(package_id):
@@ -1006,23 +1015,28 @@ class Package(base_api.BaseApi):
         response: dict = self.list_installable()
         data: dict = response.get("data")
         installable_packages = data.get("packages")
-        package_infos: dict = next((package for package in installable_packages if package["id"] == package_id), None)
+        package_infos: dict = next(
+            (package for package in installable_packages if package["id"] == package_id), None)
         # Package not found
         if package_infos == None:
-            raise Exception(f"""Package "{package_id}" not found in installable list, installation not possible""")
-
+            raise Exception(
+                f"""Package "{package_id}" not found in installable list, installation not possible""")
 
         # Check dependencies
         deppkgs = package_infos.get("deppkgs")
         if deppkgs:
             if not install_dependencies:
-                raise Exception(f"""Package "{package_id}" has dependencies that needs to be installed but "install_dependencies" is set to "False" """)
+                raise Exception(
+                    f"""Package "{package_id}" has dependencies that needs to be installed but "install_dependencies" is set to "False" """)
             deppkg: str
             for deppkg in deppkgs:
                 if not self._is_package_already_installed(deppkg):
-                    print(f"""Installation of dependency "{deppkg}" for "{package_id}" started""")
-                    self.easy_install(package_id=deppkg, volume_path=volume_path)
-                    print(f"""Installation of dependency "{deppkg}" for "{package_id}" done""")
+                    print(
+                        f"""Installation of dependency "{deppkg}" for "{package_id}" started""")
+                    self.easy_install(package_id=deppkg,
+                                      volume_path=volume_path)
+                    print(
+                        f"""Installation of dependency "{deppkg}" for "{package_id}" done""")
 
         # Store information of the package
         url = package_infos.get("link")
@@ -1030,10 +1044,11 @@ class Package(base_api.BaseApi):
         version = package_infos.get("version")
         checksum = package_infos.get("md5")
 
-        ## Start installation sequence
+        # Start installation sequence
 
         # Start download the package installation file
-        response: dict = self.download_package(url=url, package_id=package_id, checksum=checksum, filesize=filesize)
+        response: dict = self.download_package(
+            url=url, package_id=package_id, checksum=checksum, filesize=filesize)
         data: dict = response.get("data")
         task_id = data.get("taskid")
 
@@ -1044,7 +1059,8 @@ class Package(base_api.BaseApi):
         if not data.get("finished"):
             with tqdm.tqdm(total=100) as pbar:
                 while not data.get("finished"):
-                    response: dict = self.get_dowload_package_status(task_id=task_id)
+                    response: dict = self.get_dowload_package_status(
+                        task_id=task_id)
                     data: dict = response.get("data")
                     progress: float = data.get("progress")
                     if progress:

@@ -4,6 +4,7 @@ from . import base_api
 import json
 from .utils import merge_dicts, make_folder_meta_list_from_path
 
+
 class CloudSync(base_api.BaseApi):
     """Cloud Sync API implementation.
 
@@ -333,16 +334,16 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_connection_logs(
-            self,
-            conn_id: int,
-            keyword: str = '',
-            date_from: int = 0,
-            date_to: int = 0,
-            log_level: int = -1,
-            action: int = -1,
-            offset: int = 0,
-            limit: int = 200
-        ) -> dict[str, object]:
+        self,
+        conn_id: int,
+        keyword: str = '',
+        date_from: int = 0,
+        date_to: int = 0,
+        log_level: int = -1,
+        action: int = -1,
+        offset: int = 0,
+        limit: int = 200
+    ) -> dict[str, object]:
         """Retrieve logs for a specific connection.
 
             Parameters
@@ -547,11 +548,11 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_task_cloud_folders(
-            self,
-            sess_id: int,
-            remote_folder_id: str,
-            path: str = '/'
-        ) -> dict[str, object]:
+        self,
+        sess_id: int,
+        remote_folder_id: str,
+        path: str = '/'
+    ) -> dict[str, object]:
         """Retrieve a list of children directories in the cloud for a specific task.
 
             Parameters
@@ -715,12 +716,12 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_pkg_config(
-            self,
-            pkg_volume: str,
-            log_count: int = 20000,
-            workers: int = 3,
-            admin_mode: bool = True
-        ) -> dict[str, object]:
+        self,
+        pkg_volume: str,
+        log_count: int = 20000,
+        workers: int = 3,
+        admin_mode: bool = True
+    ) -> dict[str, object]:
         """Set package configuration settings.
 
             Parameters
@@ -803,16 +804,16 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_connection_settings(
-            self,
-            conn_id: str,
-            task_name: str,
-            pull_event_period: int = 60,
-            max_upload_speed: int = 0,
-            max_download_speed: int = 0,
-            storage_class: str = '',
-            isSSE: bool = False,
-            part_size: int = 128
-        ) -> dict[str, object]:
+        self,
+        conn_id: str,
+        task_name: str,
+        pull_event_period: int = 60,
+        max_upload_speed: int = 0,
+        max_download_speed: int = 0,
+        storage_class: str = '',
+        isSSE: bool = False,
+        part_size: int = 128
+    ) -> dict[str, object]:
         """Set settings for a specific cloud connection.
 
             Parameters
@@ -874,11 +875,11 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_connection_schedule(
-            self,
-            conn_id: int,
-            enable: bool,
-            schedule_info: list[str] = []
-        ) -> dict[str, object]:
+        self,
+        conn_id: int,
+        enable: bool,
+        schedule_info: list[str] = []
+    ) -> dict[str, object]:
         """Set the schedule for a specific connection.
 
             Parameters
@@ -943,13 +944,13 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_task_settings(
-            self,
-            sess_id: int,
-            sync_direction: str,
-            consistency_check: bool = True,
-            no_delete_on_cloud: bool = True,
-            convert_gd: bool = False
-        ) -> dict[str, object]:
+        self,
+        sess_id: int,
+        sync_direction: str,
+        consistency_check: bool = True,
+        no_delete_on_cloud: bool = True,
+        convert_gd: bool = False
+    ) -> dict[str, object]:
         """Set the task settings for a specific session.
 
             Parameters
@@ -1003,13 +1004,13 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_task_filters(
-            self,
-            sess_id: int,
-            filtered_paths: list[str] = [],
-            filtered_filenames: list[str] = [],
-            filtered_extensions: list[str] = [],
-            max_upload_size: int = 0
-        ) -> dict[str, object]:
+        self,
+        sess_id: int,
+        filtered_paths: list[str] = [],
+        filtered_filenames: list[str] = [],
+        filtered_extensions: list[str] = [],
+        max_upload_size: int = 0
+    ) -> dict[str, object]:
         """Set task filters for selective synchronization in a specific session.
 
             Parameters
@@ -1162,10 +1163,10 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def task_remove(
-            self,
-            conn_id: int,
-            sess_id: int
-        ) -> dict[str, object]:
+        self,
+        conn_id: int,
+        sess_id: int
+    ) -> dict[str, object]:
         """Remove a specific task.
 
             The data will remain in both the local and remote directories.
@@ -1203,17 +1204,17 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def __generate_sync_task_s3_params(
-            self,
-            conn_id: int,
-            local_path: str,
-            cloud_path: str,
-            sync_direction='BIDIRECTION',
-            storage_class='STANDARD',
-            file_filter: list[str] = [],
-            filter_max_upload_size: int = 0,
-            filter_names: list[str] = [],
-            server_folder_id: str = '',
-        ) -> dict[str, Any]:
+        self,
+        conn_id: int,
+        local_path: str,
+        cloud_path: str,
+        sync_direction='BIDIRECTION',
+        storage_class='STANDARD',
+        file_filter: list[str] = [],
+        filter_max_upload_size: int = 0,
+        filter_names: list[str] = [],
+        server_folder_id: str = '',
+    ) -> dict[str, Any]:
         """Generate parameters for creating a sync task with S3.
 
             Parameters
@@ -1249,11 +1250,13 @@ class CloudSync(base_api.BaseApi):
         """
         # Validate local path format
         if local_path[0] != '/' or local_path.count('/') < 2:
-            raise ValueError('Invalid local path, must be in format /<share_folder>/<sub_directory>')
+            raise ValueError(
+                'Invalid local path, must be in format /<share_folder>/<sub_directory>')
 
         # Validate cloud path format
         if cloud_path[0] != '/' or cloud_path[-1] == '/':
-            raise ValueError('Invalid cloud path, must be started with / and not ended with /')
+            raise ValueError(
+                'Invalid cloud path, must be started with / and not ended with /')
 
         # Get connection authentication details
         auth = self.get_connection_auth(conn_id)
@@ -1292,16 +1295,16 @@ class CloudSync(base_api.BaseApi):
         return merge_dicts(auth['data'], create_session_request_params)
 
     def test_task_setting(
-            self,
-            conn_id: int,
-            local_path: str,
-            cloud_path: str,
-            sync_direction='BIDIRECTION',
-            storage_class='STANDARD',
-            file_filter: list[str] = [],
-            filter_max_upload_size: int = 0,
-            filter_names: list[str] = [],
-        ) -> tuple[bool, dict[str, object] | str]:
+        self,
+        conn_id: int,
+        local_path: str,
+        cloud_path: str,
+        sync_direction='BIDIRECTION',
+        storage_class='STANDARD',
+        file_filter: list[str] = [],
+        filter_max_upload_size: int = 0,
+        filter_names: list[str] = [],
+    ) -> tuple[bool, dict[str, object] | str]:
         """Test the task settings make sure they are valid.
 
             Parameters
@@ -1370,16 +1373,16 @@ class CloudSync(base_api.BaseApi):
             return (False, 'Invalid task setting')
 
     def create_sync_task_s3(
-            self,
-            conn_id: int,
-            local_path: str,
-            cloud_path: str,
-            sync_direction='BIDIRECTION',
-            storage_class='STANDARD',
-            filter_max_upload_size: int = 0,
-            file_filter: list[str] = [],
-            filter_names: list[str] = [],
-        ) -> tuple[bool, Any]:
+        self,
+        conn_id: int,
+        local_path: str,
+        cloud_path: str,
+        sync_direction='BIDIRECTION',
+        storage_class='STANDARD',
+        filter_max_upload_size: int = 0,
+        file_filter: list[str] = [],
+        filter_names: list[str] = [],
+    ) -> tuple[bool, Any]:
         """Add a new synchronization task.
 
             Parameters
@@ -1461,6 +1464,6 @@ class CloudSync(base_api.BaseApi):
             'connection_id': conn_id
         }
         # Compound data
-        compound_data = [ create_session_request, list_session_request ]
+        compound_data = [create_session_request, list_session_request]
         # Send request and return response
         return (True, self.batch_request(compound_data, method='post'))

@@ -23,8 +23,6 @@ import hashlib
 import urllib
 
 
-
-
 USE_EXCEPTIONS: bool = True
 
 
@@ -63,7 +61,8 @@ class Authentication:
 
         schema = 'https' if secure else 'http'
 
-        self._base_url = '%s://%s:%s/webapi/' % (schema, self._ip_address, self._port)
+        self._base_url = '%s://%s:%s/webapi/' % (
+            schema, self._ip_address, self._port)
 
         self.full_api_list = {}
         self.app_api_list = {}
@@ -73,16 +72,17 @@ class Authentication:
 
     def login(self) -> None:
         login_api = 'auth.cgi'
-        params = {'api': "SYNO.API.Auth", 'version': self._version, 'method': 'login', 'enable_syno_token':'yes', 'client':'browser'}
+        params = {'api': "SYNO.API.Auth", 'version': self._version,
+                  'method': 'login', 'enable_syno_token': 'yes', 'client': 'browser'}
 
         params_enc = {
             'account': self._username,
             'enable_device_token': 'no',
             'logintype': 'local',
-            'otp_code':'',
+            'otp_code': '',
             'rememberme': 0,
             'passwd': self._password,
-            'session': 'webui', # Hardcoded for handle non administrator users API usage
+            'session': 'webui',  # Hardcoded for handle non administrator users API usage
             'format': 'cookie'
         }
         if self._secure:
@@ -108,7 +108,8 @@ class Authentication:
             session_request_json: dict[str, object] = {}
             if USE_EXCEPTIONS:
                 try:
-                    session_request = requests.post(self._base_url + login_api, data=params, verify=self._verify)
+                    session_request = requests.post(
+                        self._base_url + login_api, data=params, verify=self._verify)
                     session_request.raise_for_status()
                     session_request_json = session_request.json()
                 except requests.exceptions.ConnectionError as e:
@@ -119,7 +120,8 @@ class Authentication:
                     raise JSONDecodeError(error_message=str(e.args))
             else:
                 # Will raise its own errors:
-                session_request = requests.post(self._base_url + login_api, data=params, verify=self._verify)
+                session_request = requests.post(
+                    self._base_url + login_api, data=params, verify=self._verify)
                 session_request_json = session_request.json()
 
             # Check dsm response for error:
@@ -133,18 +135,21 @@ class Authentication:
             else:
                 self._sid = None
                 if self._debug is True:
-                    print('Login failed: ' + self._get_error_message(error_code, 'Auth'))
+                    print('Login failed: ' +
+                          self._get_error_message(error_code, 'Auth'))
                 if USE_EXCEPTIONS:
                     raise LoginError(error_code=error_code)
         return
 
     def logout(self) -> None:
         logout_api = 'auth.cgi?api=SYNO.API.Auth'
-        param = {'version': self._version, 'method': 'logout', 'session': 'webui'}
+        param = {'version': self._version,
+                 'method': 'logout', 'session': 'webui'}
 
         if USE_EXCEPTIONS:
             try:
-                response = requests.get(self._base_url + logout_api, param, verify=self._verify)
+                response = requests.get(
+                    self._base_url + logout_api, param, verify=self._verify)
                 response.raise_for_status()
                 response_json = response.json()
                 error_code = self._get_error_code(response_json)
@@ -155,7 +160,8 @@ class Authentication:
             except requests.exceptions.JSONDecodeError as e:
                 raise JSONDecodeError(error_message=str(e.args))
         else:
-            response = requests.get(self._base_url + logout_api, param, verify=self._verify)
+            response = requests.get(
+                self._base_url + logout_api, param, verify=self._verify)
             error_code = self._get_error_code(response.json())
         self._session_expire = True
         self._sid = None
@@ -163,7 +169,8 @@ class Authentication:
             if not error_code:
                 print('Successfully logged out.')
             else:
-                print('Logout failed: ' + self._get_error_message(error_code, 'Auth'))
+                print('Logout failed: ' +
+                      self._get_error_message(error_code, 'Auth'))
         if USE_EXCEPTIONS and error_code:
             raise LogoutError(error_code=error_code)
 
@@ -176,7 +183,8 @@ class Authentication:
         if USE_EXCEPTIONS:
             # Check request for error, and raise our own error.:
             try:
-                response = requests.get(self._base_url + query_path, list_query, verify=self._verify)
+                response = requests.get(
+                    self._base_url + query_path, list_query, verify=self._verify)
                 response.raise_for_status()
                 response_json = response.json()
             except requests.exceptions.ConnectionError as e:
@@ -187,7 +195,8 @@ class Authentication:
                 raise JSONDecodeError(error_message=str(e.args))
         else:
             # Will raise its own errors:
-            response_json = requests.get(self._base_url + query_path, list_query, verify=self._verify).json()
+            response_json = requests.get(
+                self._base_url + query_path, list_query, verify=self._verify).json()
 
         if app is not None:
             for key in response_json['data']:
@@ -291,12 +300,12 @@ class Authentication:
         return {cipher_key: json.dumps(enc_params)}
 
     def request_multi_datas(self,
-                     compound: dict[object] = None,
-                     method: Optional[str] = None,
-                     mode: Optional[str] = "sequential", # "sequential" or "parallel"
-                     response_json: bool = True
-                     ) -> dict[str, object] | str | list | requests.Response:  # 'post' or 'get'
-
+                            compound: dict[object] = None,
+                            method: Optional[str] = None,
+                            # "sequential" or "parallel"
+                            mode: Optional[str] = "sequential",
+                            response_json: bool = True
+                            ) -> dict[str, object] | str | list | requests.Response:  # 'post' or 'get'
         '''
         Compound is a json structure that contains multiples requests, you can execute them sequential or parallel
 
@@ -309,7 +318,7 @@ class Authentication:
             }
         ]
         '''
-        api_name = 'hotfix' # fix for docs_parser.py issue
+        api_name = 'hotfix'  # fix for docs_parser.py issue
         api_path = self.full_api_list['SYNO.Entry.Request']['path']
         api_version = self.full_api_list['SYNO.Entry.Request']['maxVersion']
         url = f"{self._base_url}{api_path}"
@@ -327,14 +336,16 @@ class Authentication:
         if method is None:
             method = 'get'
 
-        ## Request need some headers to work properly
+        # Request need some headers to work properly
         # X-SYNO-TOKEN is the token that we get when we login
         # We get it from the self._syno_token variable and by param 'enable_syno_token':'yes' in the login request
 
         if method == 'get':
-            response = requests.get(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
+            response = requests.get(url, req_param, verify=self._verify, headers={
+                                    "X-SYNO-TOKEN": self._syno_token})
         elif method == 'post':
-            response = requests.post(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
+            response = requests.post(url, req_param, verify=self._verify, headers={
+                                     "X-SYNO-TOKEN": self._syno_token})
 
         if response_json is True:
             return response.json()
@@ -367,9 +378,11 @@ class Authentication:
             # Catch and raise our own errors:
             try:
                 if method == 'get':
-                    response = requests.get(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
+                    response = requests.get(url, req_param, verify=self._verify, headers={
+                                            "X-SYNO-TOKEN": self._syno_token})
                 elif method == 'post':
-                    response = requests.post(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
+                    response = requests.post(url, req_param, verify=self._verify, headers={
+                                             "X-SYNO-TOKEN": self._syno_token})
             except requests.exceptions.ConnectionError as e:
                 raise SynoConnectionError(error_message=e.args[0])
             except requests.exceptions.HTTPError as e:
@@ -377,9 +390,11 @@ class Authentication:
         else:
             # Will raise its own error:
             if method == 'get':
-                response = requests.get(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
+                response = requests.get(url, req_param, verify=self._verify, headers={
+                                        "X-SYNO-TOKEN": self._syno_token})
             elif method == 'post':
-                response = requests.post(url, req_param, verify=self._verify, headers={"X-SYNO-TOKEN":self._syno_token})
+                response = requests.post(url, req_param, verify=self._verify, headers={
+                                         "X-SYNO-TOKEN": self._syno_token})
 
         # Check for error response from dsm:
         error_code = 0
@@ -395,7 +410,8 @@ class Authentication:
 
         if error_code:
             if self._debug is True:
-                print('Data request failed: ' + self._get_error_message(error_code, api_name))
+                print('Data request failed: ' +
+                      self._get_error_message(error_code, api_name))
 
             if USE_EXCEPTIONS:
                 # Download station error:
@@ -480,7 +496,8 @@ class Authentication:
                     raise CoreSysInfoError(error_code=error_code)
                 # Unhandled API:
                 else:
-                    raise UndefinedError(error_code=error_code, api_name=api_name)
+                    raise UndefinedError(
+                        error_code=error_code, api_name=api_name)
 
         if response_json is True:
             return response.json()
@@ -502,11 +519,14 @@ class Authentication:
         elif api_name == 'Auth':
             message = auth_error_codes.get(code, "<Undefined.Auth.Error>")
         elif api_name.find('DownloadStation') > -1:
-            message = download_station_error_codes.get(code, "<Undefined.DownloadStation.Error>")
+            message = download_station_error_codes.get(
+                code, "<Undefined.DownloadStation.Error>")
         elif api_name.find('Virtualization') > -1:
-            message = virtualization_error_codes.get(code, "<Undefined.Virtualization.Error>")
+            message = virtualization_error_codes.get(
+                code, "<Undefined.Virtualization.Error>")
         elif api_name.find('FileStation') > -1:
-            message = file_station_error_codes.get(code, "<Undefined.FileStation.Error>")
+            message = file_station_error_codes.get(
+                code, "<Undefined.FileStation.Error>")
         else:
             message = "<Undefined.%s.Error>" % api_name
         return 'Error {} - {}'.format(code, message)
@@ -522,7 +542,6 @@ class Authentication:
     @property
     def syno_token(self) -> str:
         return self._syno_token
-
 
 
 class AESCipher(object):
