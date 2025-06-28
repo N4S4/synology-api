@@ -15,7 +15,7 @@ This class provides methods to interact with the Active Backup for Business pack
 
 ### Supported methods
 
-    - **Getters** : 
+    - **Getters** :
         - Get package settings
         - Get tasks information
         - Get tasks versions information
@@ -25,7 +25,7 @@ This class provides methods to interact with the Active Backup for Business pack
         - Get package / devices / tasks logs
         - Get task history
         - Get task result details
-        - Get storage information 
+        - Get storage information
     - **Setters** :
         - Set maximum concurrent devices
         - Set retention policy execution time
@@ -223,7 +223,7 @@ A dictionary containing the result of the operation.
 Set the global bandwidth control and IP range bandwidth control.  
 :::note
  
- Applies only to PC, Physical Server and NAS devices.   
+ Applies only to PC, Physical Server and NAS devices.  
  
 :::
 
@@ -241,15 +241,15 @@ Set the global bandwidth control and IP range bandwidth control.
 #### Parameters
 <div class="padding-left--md">
 **_traffic_control_** `dict[str, object]`  
-Traffic control settings.   
+Traffic control settings.  
 Defaults to `{ 'enable': False, 'bandwidth': 0 }` (disable traffic throttling).  
 Bandwidth should be specified in MB/s.  
   
 **_ip_range_** `list[str]`  
-If specified, traffic control will only be applied to this IP range.   
+If specified, traffic control will only be applied to this IP range.  
 Defaults to `["", ""]` (disable IP range bandwidth control).  
 First index should contain the IP range start, second index the IP range end. Only supports IPv4 format.  
-Example: 
+Example:
 ```python
 ["192.168.0.1", "192.168.0.10"]
 ```  
@@ -470,7 +470,7 @@ A dictionary containing a list of devices and their transfer size.
 
 
 ### `list_tasks`
-Get information of one or all tasks.   
+Get information of one or all tasks.  
   
 #### Internal API
 <div class="padding-left--md">
@@ -491,7 +491,7 @@ Possible values:
 - `"file_server"`
 - `"nas"`  
 
-Note that values are different when returned by the API.    
+Note that values are different when returned by the API.  
 Return values mappings:
 - `1` -> `vm`
 - `2` -> `pc`
@@ -725,12 +725,12 @@ Get logs of specific task. Defaults to `-1` (all logs - package/tasks/devices)
   
 **_log_level_** `str`  
 Type of logs to return. Defaults to `""` (all types).  
-Possible values:  
+Possible values:
 - `"error"`
 - `"warning"`
 - `"information"`  
 
-Note that values are different when returned by the API.   
+Note that values are different when returned by the API.  
 Return values mappings:
 - 0 -> `error`
 - 1 -> `warning`
@@ -816,13 +816,13 @@ Get logs of specific task. Defaults to `-1` (all tasks)
   
 **_status_** `str`  
 Return only tasks matching the status provided. Defaults to `""` (all status).  
-Possible values:  
+Possible values:
 - `"success"`
 - `"partial_success"`
 - `"fail"`
 - `"cancel"`  
 
-Note that values are different when returned by the API.   
+Note that values are different when returned by the API.  
 Return values mappings:
 - `2` -> `success`
 - `3` -> `partial_success`
@@ -831,14 +831,14 @@ Return values mappings:
   
 **_backup_type_** `str`  
 Return only tasks matching the device type provided. Defaults to `""` (all device types).  
-Possible values:  
+Possible values:
 - `"vm"`
 - `"pc"`
 - `"physical_server"`
 - `"file_server"`
 - `"nas"`  
 
-Note that values are different when returned by the API.   
+Note that values are different when returned by the API.  
 Return values mappings:
 - `1` -> `vm`
 - `2` -> `pc`
@@ -848,7 +848,7 @@ Return values mappings:
   
 **_action_type_** `str`  
 Return only tasks matching the task type provided. Defaults to `""` (all task types).  
-Possible values:  
+Possible values:
 - `"backup"`
 - `"dedup_data"`
 - `"restore"`
@@ -859,7 +859,7 @@ Possible values:
 - `"relink"`
 - `"create_task"`  
 
-Note that values are different when returned by the API.   
+Note that values are different when returned by the API.  
 Return values mappings:
 - `1` -> `backup`
 - `1048576` -> `dedup_data`
@@ -1093,7 +1093,7 @@ A dictionary containing a list of storage devices.
 
 
 ### `backup_task_run`
-Trigger a backup event for the given tasks.   
+Trigger a backup event for the given tasks.  
   
 #### Internal API
 <div class="padding-left--md">
@@ -1103,7 +1103,7 @@ Trigger a backup event for the given tasks.
 #### Parameters
 <div class="padding-left--md">
 **_task_ids_** `list[int]`  
-List of task IDs to trigger the backup event.   
+List of task IDs to trigger the backup event.  
 Even if only one task is specified, a list has to be passed as argument.  
   
 
@@ -1140,7 +1140,7 @@ Cancel specified ongoing task.
 #### Parameters
 <div class="padding-left--md">
 **_task_ids_** `list[int]`  
-List of task IDs to trigger the cancellation event.   
+List of task IDs to trigger the cancellation event.  
 Even if only one task is specified, a list has to be passed as argument.  
   
 
@@ -1182,7 +1182,7 @@ Remove the given tasks from ABB.
 #### Parameters
 <div class="padding-left--md">
 **_task_ids_** `list[int]`  
-List of task IDs to remove.   
+List of task IDs to remove.  
 Even if only one task is specified, a list has to be passed as argument.  
   
 

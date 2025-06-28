@@ -348,6 +348,10 @@ This API is not documented yet.
 ### `generate_file_tree`
 Generate the file tree based on the folder path you give, you need to create the root node before call this function  
   
+#### Internal API
+<div class="padding-left--md">
+`hotfix` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">

@@ -167,7 +167,7 @@ Since this is a compound request, the data contains an object with it's own requ
 
 
 ### `create_new_user`
-Create a new user.   
+Create a new user.  
 :::note
  
  The user can be created in AD, but not able to log on until the next synchronization occurs.  
@@ -231,9 +231,9 @@ The result of this method is a dictionary object with a 'data' dictionary and a 
 ```json
 {
     'data': {
-        'dn': 'CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM', 
+        'dn': 'CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM',
         'name': 'NETBIOSNAME\ababab'
-    }, 
+    },
     'success': true
 }
 ```
@@ -247,7 +247,7 @@ The result of this method is a dictionary object with a 'data' dictionary and a 
 ### `reset_password`
 Send a password reset email.  
 This will trigger the password reset email from
-Control Panel>Notification>Rules>System>Reset password for your account to be sent to the user.   
+Control Panel>Notification>Rules>System>Reset password for your account to be sent to the user.  
 :::info
  
  In order to use this, Control Panel>User & Group>Advanced>"Allow non-administrator users to reset forgotten passwords via email" must be enabled.  
@@ -279,7 +279,7 @@ The return object can be checked for the "success" to be a true or false.
 {
     "data": {
         "msg": 3
-    }, 
+    },
     "success": true
 }
 ```
@@ -291,7 +291,7 @@ The return object can be checked for the "success" to be a true or false.
 
 
 ### `change_user_password`
-Change the user's password.   
+Change the user's password.  
 :::info
  
  This is a compound dual-level request where the synology API proxies your request to the Directory Server.  
@@ -425,9 +425,9 @@ A success object, and data object containing the new dn and the netbios name of 
 ```json
 {
     'data': {
-        'dn': 'CN=My Group,CN=Groups,DC=MY,DC=DOMAIN,DC=COM', 
+        'dn': 'CN=My Group,CN=Groups,DC=MY,DC=DOMAIN,DC=COM',
         'name': 'NETBIOSNAME\My Group'
-    }, 
+    },
     'success': true
 }
 ```
@@ -496,7 +496,7 @@ Since this is a compound request, the data contains an object with it's own requ
 
 
 ### `does_dn_exist`
-Checks if a container exists. This can be used to verifiy the username or group name is unique.   
+Checks if a container exists. This can be used to verifiy the username or group name is unique.  
 :::info
  
  This will not check the container, only if a similarly named container already exists.  
@@ -711,7 +711,7 @@ The 'success' object will be true if the operation was successful. or false if f
 
 ### `get_task_status`
 Gets the current status of a task running on the Directory Domain object.  
-This is used to ensure the task is completed.  For example, the primary utilization of this is when updating Synology's internal Domain user and group list.    
+This is used to ensure the task is completed.  For example, the primary utilization of this is when updating Synology's internal Domain user and group list.  
 Until this method reports finish, the job is not completed, and it is not safe to operate under the assumption that users have been synchronized.  
 #### Internal API
 <div class="padding-left--md">
@@ -740,7 +740,7 @@ The 'success' object will be true if the operation was successful. or false if f
 {
     'data': {
         'status': 'updating'
-    }, 
+    },
     'success': true
 }
 ```
@@ -882,7 +882,7 @@ Delete for example requires an entry.  If an entry is required, the task will no
 #### Parameters
 <div class="padding-left--md">
 **_task_id_** `str`  
-The ID of the task to be checked. This is provided when making a request.   
+The ID of the task to be checked. This is provided when making a request.  
 An example Task ID may look like this
 `@administrators/Synoads_SYNO.ActiveDirectory.Directory_delete6145EA17C4F03DA9`  
   

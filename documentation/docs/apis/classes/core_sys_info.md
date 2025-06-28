@@ -492,13 +492,6 @@ This API is not documented yet.
 ---
 
 
-### `hardware_power_schedule`
-
-
-
----
-
-
 ### `terminal_info`
 
 
