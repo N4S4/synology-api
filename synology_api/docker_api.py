@@ -226,7 +226,8 @@ class Docker(base_api.BaseApi):
         api_name = 'SYNO.Docker.Container'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'limit': '-1', 'offset': '0', 'type': 'all'}
+        req_param = {'version': info['maxVersion'], 'method': 'list',
+                     'limit': '-1', 'offset': '0', 'type': 'all'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -413,7 +414,7 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     # TODO: rename to list_downloaded_images?
-    def downloaded_images(self, limit : int = -1, offset : int = 0, show_dsm : bool = False) -> dict[str, object] | str:
+    def downloaded_images(self, limit: int = -1, offset: int = 0, show_dsm: bool = False) -> dict[str, object] | str:
         """List of docker images available on Synology NAS.
 
             Parameters
@@ -549,7 +550,7 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     # TODO: rename search_images_in_registries?
-    def search_image(self, query : str = None) -> dict[str, object] | str:
+    def search_image(self, query: str = None) -> dict[str, object] | str:
         """Search for docker image in all available registries.
 
             Parameters
@@ -602,7 +603,8 @@ class Docker(base_api.BaseApi):
         api_path = info['path']
         # version 1 contains methods: search, tags, get, create, set, using, delete
         # version 2 contains methods: tags
-        req_param = {'version': 1, 'method': 'search', 'offset': 0, 'limit': 50, 'page_size': 50, 'q': query}
+        req_param = {'version': 1, 'method': 'search',
+                     'offset': 0, 'limit': 50, 'page_size': 50, 'q': query}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -672,7 +674,7 @@ class Docker(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_project_info(self, project_id : str = None) -> dict[str, object] | str:
+    def get_project_info(self, project_id: str = None) -> dict[str, object] | str:
         """Get information about a specific project.
 
             Parameters
@@ -996,11 +998,12 @@ class Docker(base_api.BaseApi):
         api_name = 'SYNO.Docker.Project'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'id': project_id}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'id': project_id}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def start_container(self, container : str = None) -> dict[str, object] | str:
+    def start_container(self, container: str = None) -> dict[str, object] | str:
         """Start a container by its name.
 
             Parameters
@@ -1033,11 +1036,12 @@ class Docker(base_api.BaseApi):
         api_name = 'SYNO.Docker.Container'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'start', 'name': container}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'start', 'name': container}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def stop_container(self, container : str = None) -> dict[str, object] | str:
+    def stop_container(self, container: str = None) -> dict[str, object] | str:
         """Stop a container by its name.
 
             Parameters
@@ -1069,12 +1073,13 @@ class Docker(base_api.BaseApi):
         api_name = 'SYNO.Docker.Container'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'stop', 'name': container}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'stop', 'name': container}
 
         return self.request_data(api_name, api_path, req_param)
 
     # TODO: rename to export_container_profile?
-    def export_container_settings(self, container : str = None, path : str = None) -> dict[str, object] | str:
+    def export_container_settings(self, container: str = None, path: str = None) -> dict[str, object] | str:
         """Export container profile
 
             file \<container\>.syno.json will be created in the specified path.
@@ -1107,12 +1112,13 @@ class Docker(base_api.BaseApi):
         api_name = 'SYNO.Docker.Container.Profile'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'export', 'name': container, 'path' : path}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'export', 'name': container, 'path': path}
 
         return self.request_data(api_name, api_path, req_param)
 
     # TODO: rename to export_container_profile_and_content?
-    def export_container(self, container : str = None, path : str = None) -> dict[str, object] | str:
+    def export_container(self, container: str = None, path: str = None) -> dict[str, object] | str:
         """Export container profile and content to a specified path on Synology nas.
 
             archive \<container\>.syno.txz will be created in the specified path.
@@ -1144,12 +1150,13 @@ class Docker(base_api.BaseApi):
         api_name = 'SYNO.Docker.Container'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'export', 'name': container, 'path' : path}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'export', 'name': container, 'path': path}
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_logs(self, name : str = None, from_date : str = None, to_date : str = None,
-                 level : str = None, keyword : str = None, sort_dir : str = 'DESC', offset : int = 0,
+    def get_logs(self, name: str = None, from_date: str = None, to_date: str = None,
+                 level: str = None, keyword: str = None, sort_dir: str = 'DESC', offset: int = 0,
                  limit: int = 1000
                  ) -> dict[str, object] | str:
         """Get list of container logs.

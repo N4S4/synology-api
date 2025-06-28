@@ -70,7 +70,8 @@ class DownloadStationError(SynoBaseException):
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
         elif error_code in download_station_error_codes.keys():
-            super().__init__(error_message=download_station_error_codes[error_code], *args)
+            super().__init__(
+                error_message=download_station_error_codes[error_code], *args)
         else:
             super().__init__(error_message="DownloadStation Error: %i" % error_code, *args)
         return
@@ -84,7 +85,8 @@ class FileStationError(SynoBaseException):
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
         elif error_code in file_station_error_codes.keys():
-            super().__init__(error_message=file_station_error_codes[error_code], *args)
+            super().__init__(
+                error_message=file_station_error_codes[error_code], *args)
         else:
             super().__init__(error_message="FileStation Error: %i" % error_code, *args)
         return
@@ -98,7 +100,8 @@ class VirtualizationError(SynoBaseException):
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
         elif error_code in virtualization_error_codes.keys():
-            super().__init__(error_message=virtualization_error_codes[error_code], *args)
+            super().__init__(
+                error_message=virtualization_error_codes[error_code], *args)
         else:
             super().__init__(error_message="Virtualization Error: %i" % error_code, *args)
         return
@@ -128,6 +131,7 @@ class ActiveBackupError(SynoBaseException):
         else:
             super().__init__(error_message='ActiveBackup Error: %i' % error_code, *args)
 
+
 class ActiveBackupMicrosoftError(SynoBaseException):
     """Class for an error during ActiveBackupMicrosoft request. NOTE: I can't find any documentation on error codes or their
     respective messages."""
@@ -138,6 +142,7 @@ class ActiveBackupMicrosoftError(SynoBaseException):
             super().__init__(error_message=error_codes[error_code], *args)
         else:
             super().__init__(error_message='ActiveBackupMicrosoft Error: %i' % error_code, *args)
+
 
 class BackupError(SynoBaseException):
     """Class for an error during backup request. NOTE: Again I can't find error code documentation."""
@@ -161,7 +166,8 @@ class CertificateError(SynoBaseException):
         else:
             super().__init__(error_message="Certificate Error: %i" % error_code, *args)
         return
-    
+
+
 class CloudSyncError(SynoBaseException):
     """Class for an error during SYNO.CloudSync request. NOTE: Lacking documentation."""
 
@@ -328,6 +334,7 @@ class USBCopyError(SynoBaseException):
         else:
             super().__init__(error_message="USBCopy Error: %i" % error_code, *args)
 
+
 class VPNError(SynoBaseException):
     """Class for an error during a VPN request. NOTE: No docs on errors."""
 
@@ -339,10 +346,11 @@ class VPNError(SynoBaseException):
             super().__init__(error_message="VPN Error: %i" % error_code, *args)
         return
 
+
 class CoreError(SynoBaseException):
     """Class for an error during a SYNO.Core.*
     """
-    
+
     def __init__(self, error_code: int, *args: object) -> None:
         self.error_code = error_code
         if error_code in core_error_codes.keys():
@@ -350,6 +358,7 @@ class CoreError(SynoBaseException):
         else:
             super().__init__(error_message="Core Error: %i" % error_code, *args)
         return
+
 
 class CoreSysInfoError(SynoBaseException):
     """Class for an error during a 'SYNO.Backup.Service.NetworkBackup', SYNO.Storage.*,
@@ -371,5 +380,6 @@ class UndefinedError(SynoBaseException):
     def __init__(self, error_code: int, api_name: str, *args: object) -> None:
         self.error_code = error_code
         self.api_name = api_name
-        super().__init__(error_message="Undefined Error: API: %s, Code: %i" % (api_name, error_code), *args)
+        super().__init__(error_message="Undefined Error: API: %s, Code: %i" %
+                         (api_name, error_code), *args)
         return

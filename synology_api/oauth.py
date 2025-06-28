@@ -9,7 +9,8 @@ class OAuth(base_api.BaseApi):
         api_name = 'SYNO.OAUTH.Client'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'offset': offset, 'limit': limit}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'list', 'offset': offset, 'limit': limit}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -17,7 +18,8 @@ class OAuth(base_api.BaseApi):
         api_name = 'SYNO.OAUTH.Token'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'offset': offset, 'limit': limit}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'list', 'offset': offset, 'limit': limit}
 
         return self.request_data(api_name, api_path, req_param)
 

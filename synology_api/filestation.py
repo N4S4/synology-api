@@ -181,7 +181,8 @@ class FileStation(base_api.BaseApi):
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'start', 'folder_path': ''}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'start', 'folder_path': ''}
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param'] and 'time' not in key:
@@ -195,7 +196,8 @@ class FileStation(base_api.BaseApi):
                         req_param[key] = '"' + str(timestamp) + '"'
                     except ValueError:
                         try:
-                            datetime.fromtimestamp(int(val)).strftime('%Y-%m-%d %H:%M:%S')
+                            datetime.fromtimestamp(int(val)).strftime(
+                                '%Y-%m-%d %H:%M:%S')
                             req_param[key] = '"' + val + '"'
                         except ValueError:
                             return 'Enter the correct Date Time format "YYY-MM-DD HH:MM:SS" or Unix timestamp'
@@ -235,7 +237,8 @@ class FileStation(base_api.BaseApi):
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'taskid': ''}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'list', 'taskid': ''}
 
         if task_id is None:
             return 'Enter a correct taskid, choose one of the following: ' + str(self._search_taskid_list)
@@ -264,7 +267,8 @@ class FileStation(base_api.BaseApi):
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'stop', 'taskid': self._search_taskid}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'stop', 'taskid': self._search_taskid}
 
         if taskid is None:
             return 'Enter a valid taskid, choose between ' + str(self._search_taskid_list)
@@ -277,9 +281,11 @@ class FileStation(base_api.BaseApi):
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'stop', 'taskid': ''}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'stop', 'taskid': ''}
 
-        assert len(self._search_taskid_list), 'Task list is empty' + str(self._search_taskid_list)
+        assert len(self._search_taskid_list), 'Task list is empty' + \
+            str(self._search_taskid_list)
 
         for task_id in self._search_taskid_list:
             req_param['taskid'] = task_id
@@ -449,7 +455,8 @@ class FileStation(base_api.BaseApi):
         else:
             return 'Enter a valid path'
 
-        taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
+        taskid = self.request_data(api_name, api_path, req_param)[
+            'data']['taskid']
 
         response_id = '"{}"'.format(taskid)
         self._dir_taskid = response_id
@@ -469,7 +476,8 @@ class FileStation(base_api.BaseApi):
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'stop', 'taskid': taskid}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'stop', 'taskid': taskid}
 
         if taskid is None:
             return 'Enter a valid taskid choose between: ' + str(self._dir_taskid_list)
@@ -485,7 +493,8 @@ class FileStation(base_api.BaseApi):
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'status', 'taskid': taskid}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'status', 'taskid': taskid}
 
         if taskid is None and self._dir_taskid != '':
             return 'Choose a taskid from this list: ' + str(self._dir_taskid)
@@ -503,7 +512,8 @@ class FileStation(base_api.BaseApi):
         else:
             req_param['file_path'] = file_path
 
-        self._md5_calc_taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
+        self._md5_calc_taskid = self.request_data(
+            api_name, api_path, req_param)['data']['taskid']
         self._md5_calc_taskid_list.append(self._md5_calc_taskid)
 
         message = ('You can now check the status of request with '
@@ -522,7 +532,8 @@ class FileStation(base_api.BaseApi):
         req_param = {'version': info['maxVersion'], 'method': 'status'}
 
         if taskid is None and self._md5_calc_taskid != '':
-            req_param['taskid'] = '"{taskid}"'.format(taskid=self._md5_calc_taskid)
+            req_param['taskid'] = '"{taskid}"'.format(
+                taskid=self._md5_calc_taskid)
         elif taskid is not None:
             req_param['taskid'] = '"{taskid}"'.format(taskid=taskid)
         else:
@@ -534,7 +545,8 @@ class FileStation(base_api.BaseApi):
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'stop', 'taskid': taskid}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'stop', 'taskid': taskid}
 
         if taskid is None:
             return 'Enter a valid taskid choose between: ' + str(self._md5_calc_taskid_list)
@@ -605,13 +617,15 @@ class FileStation(base_api.BaseApi):
                                 unit_divisor=1024
                                 )
 
-                monitor = MultipartEncoderMonitor(encoder, lambda monitor: bar.update(monitor.bytes_read - bar.n))
+                monitor = MultipartEncoderMonitor(
+                    encoder, lambda monitor: bar.update(monitor.bytes_read - bar.n))
 
                 r = session.post(
                     url,
                     data=monitor,
                     verify=verify,
-                    headers={"X-SYNO-TOKEN": self.session._syno_token, 'Content-Type': monitor.content_type}
+                    headers={"X-SYNO-TOKEN": self.session._syno_token,
+                             'Content-Type': monitor.content_type}
                 )
 
             else:
@@ -619,7 +633,8 @@ class FileStation(base_api.BaseApi):
                     url,
                     data=encoder,
                     verify=verify,
-                    headers={"X-SYNO-TOKEN": self.session._syno_token, 'Content-Type': encoder.content_type}
+                    headers={"X-SYNO-TOKEN": self.session._syno_token,
+                             'Content-Type': encoder.content_type}
                 )
 
         session.close()
@@ -877,7 +892,8 @@ class FileStation(base_api.BaseApi):
                 if val is not None:
                     req_param[str(key)] = val
 
-        self._copy_move_taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
+        self._copy_move_taskid = self.request_data(
+            api_name, api_path, req_param)['data']['taskid']
         self._dir_taskid_list.append(self._copy_move_taskid)
 
         message = ('You can now check the status of request with '
@@ -945,7 +961,8 @@ class FileStation(base_api.BaseApi):
                 if val is not None:
                     req_param[str(key)] = val
 
-        self._delete_taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
+        self._delete_taskid = self.request_data(
+            api_name, api_path, req_param)['data']['taskid']
         self._delete_taskid_list.append(self._delete_taskid)
 
         message = ('You can now check the status of request with '
@@ -1042,7 +1059,8 @@ class FileStation(base_api.BaseApi):
         if dest_folder_path is None:
             return 'Enter a valid dest_folder_path'
 
-        self._extract_taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
+        self._extract_taskid = self.request_data(
+            api_name, api_path, req_param)['data']['taskid']
         self._extract_taskid_list.append(self._extract_taskid)
 
         message = ('You can now check the status of request with '
@@ -1147,7 +1165,8 @@ class FileStation(base_api.BaseApi):
         if password is not None:
             req_param['_password'] = password
 
-        self._compress_taskid = self.request_data(api_name, api_path, req_param)['data']['taskid']
+        self._compress_taskid = self.request_data(
+            api_name, api_path, req_param)['data']['taskid']
 
         message = ('You can now check the status of request with '
                    'get_compress_status() , your id is: '
@@ -1255,18 +1274,21 @@ class FileStation(base_api.BaseApi):
             with session.get(url, stream=True, verify=verify, headers={"X-SYNO-TOKEN": self.session._syno_token}) as r:
                 r.raise_for_status()
                 return io.BytesIO(r.content)
-            
+
     def generate_file_tree(self, folder_path: str, tree: Tree) -> None:
         """Generate the file tree based on the folder path you give, you need to create the root node before call this function
-        
+
             Parameters
             ----------
             folder_path : str
                 Folder path to generate file tree
             tree : Tree
-                Instance of the Tree of lib "Treelib"
-        
+                Instance of the Tree of lib \"Treelib\"
+
         """
+
+        api_name = 'hotfix'  # fix for docs_parser.py issue
+
         data: dict = self.get_file_list(
             folder_path=folder_path
         ).get("data")
@@ -1277,11 +1299,11 @@ class FileStation(base_api.BaseApi):
             file_name: str = file.get("name")
             file_path: str = file.get("path")
             if file.get("isdir"):
-                
+
                 tree.create_node(file_name, file_path, parent=folder_path)
                 self.generate_file_tree(file_path, tree)
             else:
                 tree.create_node(file_name, file_path, parent=folder_path)
-    
+
 
 # TODO SYNO.FileStation.Thumb to be done

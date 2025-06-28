@@ -4,22 +4,23 @@ from . import base_api
 import json
 from .utils import merge_dicts, make_folder_meta_list_from_path
 
+
 class CloudSync(base_api.BaseApi):
     """Cloud Sync API implementation.
 
-       This API provides the functionality to get information related to the package settings and current connections and tasks. 
+       This API provides the functionality to get information related to the package settings and current connections and tasks.
        It also provides functionalities to set most of the settings for tasks and package configuration, as well as manage the current syncing processes.
 
        Due to the vast amount of public clouds available in the project, the API was not tested for every cloud scenario, so some params request may be missing in specific not tested clouds.
 
        The tested clouds so far are:
-       - Google Drive  
+       - Google Drive
        - OneDrive
        - DropBox
        - Amazon S3 (task creation)
 
        Supported methods:
-            - Getters: 
+            - Getters:
                - Get package settings
                - Get connections
                - Get connections settings
@@ -30,7 +31,7 @@ class CloudSync(base_api.BaseApi):
                - Get task filters
                - Get task synced remote directories
                - Get recently modified & currently syncing files
-            - Setters: 
+            - Setters:
                - Set package settings
                - Set relink behavior
                - Set connection settings
@@ -44,7 +45,7 @@ class CloudSync(base_api.BaseApi):
                - Delete task
                - Validate task settings
                - Create S3 task
-            
+
     """
 
     def get_pkg_config(self) -> dict[str, object]:
@@ -95,20 +96,20 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'get_config'
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_connections(self, group_by: str = 'group_by_user') -> dict[str, object]:
         """Retrieve a list of current cloud connections.
 
             Parameters
             ----------
-            group_by : str, optional 
-                How to group the connection list, by user or cloud type. Defaults to `"group_by_user"`. 
-                
+            group_by : str, optional
+                How to group the connection list, by user or cloud type. Defaults to `"group_by_user"`.
+
                 Possible values:
                 - `group_by_user`: Group connection by owner user.
                 - `group_by_cloud_type`: Group connections by cloud provider.
@@ -165,20 +166,20 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'list_conn',
             'is_tray': False,
             'group_by': group_by
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_connection_settings(self, conn_id: int) -> dict[str, object]:
         """Retrieve settings for a specific connection.
 
             Parameters
             ----------
-            conn_id : int 
+            conn_id : int
                 The ID of the connection, obtained from `get_connections()`.
 
             Returns
@@ -198,7 +199,7 @@ class CloudSync(base_api.BaseApi):
                     "max_upload_speed": 0,
                     "part_size": 0,
                     "pull_event_period": 60,
-                    "schedule_info": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",  
+                    "schedule_info": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
                     "storage_class": "",
                     "task_name": "Dropbox"
                 },
@@ -210,25 +211,25 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'get_connection_setting',
             'connection_id': conn_id
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_connection_information(self, conn_id: int) -> dict[str, object]:
         """Retrieve cloud information for a specific connection.
 
             Parameters
             ----------
-            conn_id : int 
+            conn_id : int
                 The ID of the connection, obtained from `get_connections()`.
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing cloud information. 
+                A dictionary containing cloud information.
 
             Example return
             --------------
@@ -258,26 +259,26 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'get_property',
             'connection_id': conn_id
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_connection_auth(self, conn_id: int) -> dict[str, object]:
         """Retrieve authentication information for a specific connection.
 
             Parameters
             ----------
-            conn_id : int 
+            conn_id : int
                 The ID of the connection, obtained from `get_connections()`.
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing the connection authentication details. 
-            
+                A dictionary containing the connection authentication details.
+
             Example return
             --------------
             ```json
@@ -325,52 +326,52 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'get_conn_auth_info',
             'connection_id': conn_id
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_connection_logs(
-            self, 
-            conn_id: int,
-            keyword: str = '',
-            date_from: int = 0,
-            date_to: int = 0,
-            log_level: int = -1,
-            action: int = -1,
-            offset: int = 0,
-            limit: int = 200
-        ) -> dict[str, object]:
+        self,
+        conn_id: int,
+        keyword: str = '',
+        date_from: int = 0,
+        date_to: int = 0,
+        log_level: int = -1,
+        action: int = -1,
+        offset: int = 0,
+        limit: int = 200
+    ) -> dict[str, object]:
         """Retrieve logs for a specific connection.
 
             Parameters
             ----------
-            conn_id : int 
+            conn_id : int
                 The ID of the connection, obtained from `get_connections()`.
 
-            keyword : str, optional 
+            keyword : str, optional
                 A keyword to filter logs. Defaults to `''`.
 
-            date_from : int, optional 
+            date_from : int, optional
                 The starting date in epoch format. Defaults to `0`.
 
-            date_to : int, optional 
+            date_to : int, optional
                 The ending date in epoch format. Defaults to `0`.
 
             log_level : int, optional
-                Log level filter. Defaults to `-1`. 
-                
+                Log level filter. Defaults to `-1`.
+
                 Possible values:
                 - `-1`: All
                 - `0`: Info
                 - `1`: Warning
                 - `2`: Error
 
-            action : int, optional 
-                Action filter. Defaults to `-1`. 
-                
+            action : int, optional
+                Action filter. Defaults to `-1`.
+
                 Possible values:
                 - `-1`: All
                 - `0`: Delete Remote
@@ -381,16 +382,16 @@ class CloudSync(base_api.BaseApi):
                 - `8`: Merge
                 - `9`: Merge Deletion
 
-            offset : int, optional 
+            offset : int, optional
                 Log offset for pagination. Defaults to `0`.
 
-            limit : int, optional 
+            limit : int, optional
                 Number of logs to retrieve. Defaults to `200`.
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing the connection logs. 
+                A dictionary containing the connection logs.
 
             Example return
             --------------
@@ -429,7 +430,7 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'get_log',
             'connection_id': conn_id,
             'offset': offset,
@@ -448,13 +449,13 @@ class CloudSync(base_api.BaseApi):
 
             Parameters
             ----------
-            conn_id : int 
+            conn_id : int
                 The ID of the connection, obtained from `get_connections()`.
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing the list of tasks. 
+                A dictionary containing the list of tasks.
 
             Example return
             --------------
@@ -486,25 +487,25 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'list_sess',
             'connection_id': conn_id
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_task_filters(self, sess_id: int) -> dict[str, object]:
         """Retrieve filter information for a specific task.
 
             Parameters
             ----------
-            sess_id : int 
+            sess_id : int
                 The ID of the task, obtained from `get_tasks()`.
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing task filter information. 
+                A dictionary containing task filter information.
 
             Example return
             --------------
@@ -539,7 +540,7 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'get_selective_sync_config',
             'session_id': sess_id
         }
@@ -547,28 +548,28 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_task_cloud_folders(
-            self, 
-            sess_id: int,
-            remote_folder_id: str,
-            path: str = '/'
-        ) -> dict[str, object]:
+        self,
+        sess_id: int,
+        remote_folder_id: str,
+        path: str = '/'
+    ) -> dict[str, object]:
         """Retrieve a list of children directories in the cloud for a specific task.
 
             Parameters
             ----------
-            sess_id : int 
+            sess_id : int
                 The ID of the task, obtained from `get_tasks()`.
 
-            remote_folder_id : str 
+            remote_folder_id : str
                 The ID of the remote folder, obtained from `get_tasks()`.
 
-            path : str, optional 
+            path : str, optional
                 The folder path to retrieve the child directories from. Defaults to root `'/'`.
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing the list of children directories. 
+                A dictionary containing the list of children directories.
 
             Example return
             --------------
@@ -610,7 +611,7 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'get_selective_folder_list',
             'session_id': sess_id,
             'path': path,
@@ -619,14 +620,14 @@ class CloudSync(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_recently_modified(self) -> dict[str, object]:
         """Retrieve the 5 latest modified files and the currently syncing items.
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing the recently modified files. 
+                A dictionary containing the recently modified files.
 
             Example return
             --------------
@@ -708,39 +709,39 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'get_recently_change'
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def set_pkg_config(
-            self, 
-            pkg_volume: str,
-            log_count: int = 20000,
-            workers: int = 3,
-            admin_mode: bool = True
-        ) -> dict[str, object]:
+        self,
+        pkg_volume: str,
+        log_count: int = 20000,
+        workers: int = 3,
+        admin_mode: bool = True
+    ) -> dict[str, object]:
         """Set package configuration settings.
 
             Parameters
             ----------
-            pkg_volume : str 
+            pkg_volume : str
                 The volume path where the package data will be stored (e.g., `/volume1`).
 
-            log_count : int, optional 
+            log_count : int, optional
                 Maximum number of logs retained per connection. Defaults to `20000`, max is `100000`.
 
-            workers : int, optional 
+            workers : int, optional
                 Number of concurrent uploads allowed. Defaults to `3`, max is `20`.
 
-            admin_mode : bool, optional 
+            admin_mode : bool, optional
                 Whether all users' tasks are retrieved or not. Defaults to `True`.
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing the result of the configuration update. 
+                A dictionary containing the result of the configuration update.
 
             Example return
             --------------
@@ -756,7 +757,7 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'set_global_config',
             'repo_vol_path': pkg_volume,
             'log_count': log_count,
@@ -764,16 +765,16 @@ class CloudSync(base_api.BaseApi):
             'admin_mode': admin_mode,
         }
 
-        return self.request_data(api_name, api_path, req_param) 
-    
+        return self.request_data(api_name, api_path, req_param)
+
     def set_relink_behavior(self, delete_from_cloud: bool) -> dict[str, object]:
         """Set the relinking behavior for personal user accounts.
 
             Warning: Miss-configuration of this action may lead to data loss.
-        
+
             Parameters
             ----------
-            delete_from_cloud : bool 
+            delete_from_cloud : bool
                 Set to `False` for "locally deleted files will be re-fetched from the cloud".
 
                 Set to `True` for "locally deleted files will also be removed from the cloud".
@@ -781,7 +782,7 @@ class CloudSync(base_api.BaseApi):
             Returns
             -------
             dict[str, object]
-                A dictionary containing the result of the relink behavior update. 
+                A dictionary containing the result of the relink behavior update.
 
             Example return
             --------------
@@ -795,56 +796,56 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'set_personal_config',
             'sync_mode': delete_from_cloud
         }
 
-        return self.request_data(api_name, api_path, req_param) 
-    
+        return self.request_data(api_name, api_path, req_param)
+
     def set_connection_settings(
-            self, 
-            conn_id: str,
-            task_name: str,
-            pull_event_period: int = 60,
-            max_upload_speed: int = 0,
-            max_download_speed: int = 0,
-            storage_class: str = '',
-            isSSE: bool = False,
-            part_size: int = 128
-        ) -> dict[str, object]:
+        self,
+        conn_id: str,
+        task_name: str,
+        pull_event_period: int = 60,
+        max_upload_speed: int = 0,
+        max_download_speed: int = 0,
+        storage_class: str = '',
+        isSSE: bool = False,
+        part_size: int = 128
+    ) -> dict[str, object]:
         """Set settings for a specific cloud connection.
 
             Parameters
             ----------
-            conn_id : int 
+            conn_id : int
                 The ID of the connection, obtained from `get_connections()`.
 
-            task_name : str 
+            task_name : str
                 The name of the cloud sync task.
 
-            pull_event_period : int, optional 
+            pull_event_period : int, optional
                 Frequency (in seconds) to pull event updates. Defaults to `60`.
 
-            max_upload_speed : int, optional 
+            max_upload_speed : int, optional
                 Maximum upload speed in bytes. Defaults to `0` (unlimited).
 
-            max_download_speed : int, optional 
+            max_download_speed : int, optional
                 Maximum download speed in bytes. Defaults to `0` (unlimited).
 
-            storage_class : str, optional 
-                Cloud-specific storage class. Defaults to `''`. 
+            storage_class : str, optional
+                Cloud-specific storage class. Defaults to `''`.
 
-            isSSE : bool, optional 
+            isSSE : bool, optional
                 Enable Security Service Edge (SSE) for compatible cloud storage. Defaults to `False`.
 
-            part_size : int, optional 
+            part_size : int, optional
                 Part size for file uploads, in megabytes. Defaults to `128`.
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing the updated connection settings. 
+                A dictionary containing the updated connection settings.
 
             Example return
             --------------
@@ -856,10 +857,10 @@ class CloudSync(base_api.BaseApi):
         """
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
-        api_path = info['path']   
+        api_path = info['path']
 
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'set_connection_setting',
             'connection_id': conn_id,
             'task_name': task_name,
@@ -871,25 +872,25 @@ class CloudSync(base_api.BaseApi):
             'part_size': part_size,
         }
 
-        return self.request_data(api_name, api_path, req_param) 
-    
+        return self.request_data(api_name, api_path, req_param)
+
     def set_connection_schedule(
-            self, 
-            conn_id: int,
-            enable: bool,
-            schedule_info: list[str] = []
-        ) -> dict[str, object]:
+        self,
+        conn_id: int,
+        enable: bool,
+        schedule_info: list[str] = []
+    ) -> dict[str, object]:
         """Set the schedule for a specific connection.
 
             Parameters
             ----------
-            conn_id : int 
+            conn_id : int
                 The ID of the connection, obtained from `get_connections()`.
 
-            enable : bool 
+            enable : bool
                 Whether the scheduling is enabled (`True`) or disabled (`False`).
 
-            schedule_info : list[str], optional 
+            schedule_info : list[str], optional
                 A list of 7 strings where each string represents a day of the week, going from Sunday to Saturday.
 
                 Each string is composed of 24 characters, where each character is either '1' (enabled) or '0' (disabled) for the respective hour of the day.
@@ -914,7 +915,7 @@ class CloudSync(base_api.BaseApi):
             Returns
             -------
             dict[str, object]
-                A dictionary containing the schedule settings. 
+                A dictionary containing the schedule settings.
 
             Example return
             --------------
@@ -933,7 +934,7 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'set_schedule_setting',
             'connection_id': conn_id,
             'is_enabled_schedule': enable,
@@ -941,43 +942,43 @@ class CloudSync(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def set_task_settings(
-            self,
-            sess_id: int, 
-            sync_direction: str,
-            consistency_check: bool = True,
-            no_delete_on_cloud: bool = True,
-            convert_gd: bool = False
-        ) -> dict[str, object]:
+        self,
+        sess_id: int,
+        sync_direction: str,
+        consistency_check: bool = True,
+        no_delete_on_cloud: bool = True,
+        convert_gd: bool = False
+    ) -> dict[str, object]:
         """Set the task settings for a specific session.
 
             Parameters
             ----------
-            sess_id : int 
+            sess_id : int
                 The ID of the task, obtained from `get_tasks()`.
 
-            sync_direction : str 
-                The synchronization direction. 
-                
+            sync_direction : str
+                The synchronization direction.
+
                 Possible values:
                 - `ONLY_UPLOAD`: Upload local changes only.
                 - `BIDIRECTION`: Sync both ways (upload and download).
                 - `ONLY_DOWNLOAD`: Download remote changes only.
 
-            consistency_check : bool, optional 
+            consistency_check : bool, optional
                 If True, enables advanced consistency check (requires more resources). Defaults to `True`.
-                
-            no_delete_on_cloud : bool, optional 
+
+            no_delete_on_cloud : bool, optional
                 If `True`, prevents deletion of files in the remote folder when removed from the local directory. Defaults to `True`.
 
-            convert_gd : bool, optional 
+            convert_gd : bool, optional
                 If `True`, converts Google Drive Online documents to Microsoft Office format. Defaults to `False`.
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing the result of the task settings configuration. 
+                A dictionary containing the result of the task settings configuration.
 
             Example return
             --------------
@@ -991,7 +992,7 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'set_session_setting',
             'session_id': sess_id,
             'sync_direction': sync_direction,
@@ -1000,38 +1001,38 @@ class CloudSync(base_api.BaseApi):
             'google_drive_convert_online_doc': convert_gd
         }
 
-        return self.request_data(api_name, api_path, req_param) 
-    
+        return self.request_data(api_name, api_path, req_param)
+
     def set_task_filters(
-            self,
-            sess_id: int, 
-            filtered_paths: list[str] = [],
-            filtered_filenames: list[str] = [],
-            filtered_extensions: list[str] = [],
-            max_upload_size: int = 0
-        ) -> dict[str, object]:
+        self,
+        sess_id: int,
+        filtered_paths: list[str] = [],
+        filtered_filenames: list[str] = [],
+        filtered_extensions: list[str] = [],
+        max_upload_size: int = 0
+    ) -> dict[str, object]:
         """Set task filters for selective synchronization in a specific session.
 
             Parameters
             ----------
-            sess_id : int 
+            sess_id : int
                 The ID of the session, obtained from `get_tasks()`.
 
-            filtered_paths : list[str], optional 
+            filtered_paths : list[str], optional
                 A list of paths (directories / subdirectories) to exclude from the synchronization process, e.g, `['/images', '/videos/movies']`. Defaults to `[]`.
 
-            filtered_filenames : list[str], optional 
+            filtered_filenames : list[str], optional
                 A list of filenames to exclude from synchronization. Defaults to `[]`.
 
-            filtered_extensions : list[str], optional 
+            filtered_extensions : list[str], optional
                 A list of file extensions to exclude from synchronization, e.g., `['mp3', 'iso', 'mkv']`. Defaults to `[]`.
-            max_upload_size : int, optional 
+            max_upload_size : int, optional
                 The maximum file size for uploads, in bytes. Files larger than this size will be excluded from synchronization. Defaults to `0` (no size limit).
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing the result of the task filters configuration. 
+                A dictionary containing the result of the task filters configuration.
 
             Example return
             --------------
@@ -1041,12 +1042,12 @@ class CloudSync(base_api.BaseApi):
             }
             ```
         """
-        # Using json.dumps() to convert from list to str to match the '["text"]' format the API is waiting for. Otherwise, error 120 is raised. 
+        # Using json.dumps() to convert from list to str to match the '["text"]' format the API is waiting for. Otherwise, error 120 is raised.
         api_name = 'SYNO.CloudSync'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'set_selective_sync_config',
             'session_id': sess_id,
             'filtered_paths': json.dumps(filtered_paths),
@@ -1057,20 +1058,20 @@ class CloudSync(base_api.BaseApi):
             'filtered_max_upload_size': max_upload_size,
         }
 
-        return self.request_data(api_name, api_path, req_param) 
-    
+        return self.request_data(api_name, api_path, req_param)
+
     def connection_pause(self, conn_id: int = -1) -> dict[str, object]:
         """Pause one or all connections.
 
             Parameters
             ----------
-            conn_id : int, optional 
+            conn_id : int, optional
                 The ID of the connection to pause. If not specified or set to `-1`, all connections will be paused.
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing the result of the pause action. 
+                A dictionary containing the result of the pause action.
 
             Example return
             --------------
@@ -1084,27 +1085,27 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'pause'
         }
-        
+
         if conn_id > -1:
             req_param['connection_id'] = conn_id
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def connection_resume(self, conn_id: int = -1) -> dict[str, object]:
         """Resume one or all connections.
 
             Parameters
             ----------
-            conn_id : int, optional 
+            conn_id : int, optional
                 The ID of the connection to resume. If not specified or set to `-1`, all connections will be resumed.
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing the result of the resume action. 
+                A dictionary containing the result of the resume action.
 
             Example return
             --------------
@@ -1118,15 +1119,15 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'resume'
         }
-        
+
         if conn_id > -1:
             req_param['connection_id'] = conn_id
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def connection_remove(self, conn_id: int) -> dict[str, object]:
         """Remove a specific connection and all associated tasks.
 
@@ -1134,13 +1135,13 @@ class CloudSync(base_api.BaseApi):
 
             Parameters
             ----------
-            conn_id : int 
+            conn_id : int
                 The ID of the connection to be removed, obtained from `get_connections()`.
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing the result of the remove action. 
+                A dictionary containing the result of the remove action.
 
             Example return
             --------------
@@ -1154,33 +1155,33 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'unlink_connection',
             'connection_id': conn_id
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def task_remove(
-            self, 
-            conn_id: int,
-            sess_id: int
-        ) -> dict[str, object]:
+        self,
+        conn_id: int,
+        sess_id: int
+    ) -> dict[str, object]:
         """Remove a specific task.
 
             The data will remain in both the local and remote directories.
 
             Parameters
             ----------
-            conn_id : int 
+            conn_id : int
                 The ID of the connection associated with the task, obtained from `get_connections()`.
-            sess_id : int 
+            sess_id : int
                 The ID of the task to be removed, obtained from `get_tasks()`.
 
             Returns
             -------
             dict[str, object]
-                A dictionary containing the result of the task removal. 
+                A dictionary containing the result of the task removal.
 
             Example return
             --------------
@@ -1194,7 +1195,7 @@ class CloudSync(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['minVersion'], 
+            'version': info['minVersion'],
             'method': 'unlink_session',
             'connection_id': conn_id,
             'session_id': sess_id
@@ -1203,43 +1204,43 @@ class CloudSync(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def __generate_sync_task_s3_params(
-            self,
-            conn_id: int,
-            local_path: str,
-            cloud_path: str,
-            sync_direction='BIDIRECTION',
-            storage_class='STANDARD',
-            file_filter: list[str] = [],
-            filter_max_upload_size: int = 0,
-            filter_names: list[str] = [],
-            server_folder_id: str = '',
-        ) -> dict[str, Any]:
+        self,
+        conn_id: int,
+        local_path: str,
+        cloud_path: str,
+        sync_direction='BIDIRECTION',
+        storage_class='STANDARD',
+        file_filter: list[str] = [],
+        filter_max_upload_size: int = 0,
+        filter_names: list[str] = [],
+        server_folder_id: str = '',
+    ) -> dict[str, Any]:
         """Generate parameters for creating a sync task with S3.
 
             Parameters
             ----------
-            conn_id : int 
+            conn_id : int
                 The ID of the connection.
 
-            local_path : str 
+            local_path : str
                 The local path to sync.
 
-            cloud_path : str 
+            cloud_path : str
                 The cloud path to sync.
 
-            sync_direction : str, optional 
+            sync_direction : str, optional
                 The synchronization direction. Defaults to `'BIDIRECTION'`.
 
-            storage_class : str, optional 
+            storage_class : str, optional
                 The storage class. Defaults to `'STANDARD'`.
 
-            file_filter : list[str], optional 
+            file_filter : list[str], optional
                 List of file extensions to filter. Defaults to `[]`.
 
-            filter_max_upload_size : int, optional 
+            filter_max_upload_size : int, optional
                 Maximum upload size for files. Defaults to `0`.
 
-            filter_names : list[str], optional 
+            filter_names : list[str], optional
                 List of file names to filter. Defaults to `[]`.
 
             Returns
@@ -1249,11 +1250,13 @@ class CloudSync(base_api.BaseApi):
         """
         # Validate local path format
         if local_path[0] != '/' or local_path.count('/') < 2:
-            raise ValueError('Invalid local path, must be in format /<share_folder>/<sub_directory>')
+            raise ValueError(
+                'Invalid local path, must be in format /<share_folder>/<sub_directory>')
 
         # Validate cloud path format
         if cloud_path[0] != '/' or cloud_path[-1] == '/':
-            raise ValueError('Invalid cloud path, must be started with / and not ended with /')
+            raise ValueError(
+                'Invalid cloud path, must be started with / and not ended with /')
 
         # Get connection authentication details
         auth = self.get_connection_auth(conn_id)
@@ -1292,42 +1295,42 @@ class CloudSync(base_api.BaseApi):
         return merge_dicts(auth['data'], create_session_request_params)
 
     def test_task_setting(
-            self,
-            conn_id: int,
-            local_path: str,
-            cloud_path: str,
-            sync_direction='BIDIRECTION',
-            storage_class='STANDARD',
-            file_filter: list[str] = [],
-            filter_max_upload_size: int = 0,
-            filter_names: list[str] = [],
-        ) -> tuple[bool, dict[str, object] | str]:
+        self,
+        conn_id: int,
+        local_path: str,
+        cloud_path: str,
+        sync_direction='BIDIRECTION',
+        storage_class='STANDARD',
+        file_filter: list[str] = [],
+        filter_max_upload_size: int = 0,
+        filter_names: list[str] = [],
+    ) -> tuple[bool, dict[str, object] | str]:
         """Test the task settings make sure they are valid.
 
             Parameters
             ----------
-            conn_id : int 
+            conn_id : int
                 The ID of the connection.
 
-            local_path : str 
+            local_path : str
                 The local path to sync.
 
-            cloud_path : str 
+            cloud_path : str
                 The cloud path to sync.
 
-            sync_direction : str, optional 
+            sync_direction : str, optional
                 The synchronization direction. Defaults to `'BIDIRECTION'`.
 
-            storage_class : str, optional 
+            storage_class : str, optional
                 The storage class. Defaults to `'STANDARD'`.
 
-            file_filter : list[str], optional 
+            file_filter : list[str], optional
                 List of file extensions to filter. Defaults to `[]`.
 
-            filter_max_upload_size : int, optional 
+            filter_max_upload_size : int, optional
                 Maximum upload size for files. Defaults to `0`.
 
-            filter_names : list[str], optional 
+            filter_names : list[str], optional
                 List of file names to filter. Defaults to `[]`.
 
             Returns
@@ -1370,42 +1373,42 @@ class CloudSync(base_api.BaseApi):
             return (False, 'Invalid task setting')
 
     def create_sync_task_s3(
-            self,
-            conn_id: int,
-            local_path: str,
-            cloud_path: str,
-            sync_direction='BIDIRECTION',
-            storage_class='STANDARD',
-            filter_max_upload_size: int = 0,
-            file_filter: list[str] = [],
-            filter_names: list[str] = [],
-        ) -> tuple[bool, Any]:
+        self,
+        conn_id: int,
+        local_path: str,
+        cloud_path: str,
+        sync_direction='BIDIRECTION',
+        storage_class='STANDARD',
+        filter_max_upload_size: int = 0,
+        file_filter: list[str] = [],
+        filter_names: list[str] = [],
+    ) -> tuple[bool, Any]:
         """Add a new synchronization task.
 
             Parameters
             ----------
-            conn_id : int 
+            conn_id : int
                 The ID of the connection.
 
-            local_path : str 
+            local_path : str
                 The local path to sync.
 
-            cloud_path : str 
+            cloud_path : str
                 The cloud path to sync.
 
-            sync_direction : str, optional 
+            sync_direction : str, optional
                 The synchronization direction. Defaults to `'BIDIRECTION'`.
 
-            storage_class : str, optional 
+            storage_class : str, optional
                 The storage class. Defaults to `'STANDARD'`.
 
-            file_filter : list[str], optional 
+            file_filter : list[str], optional
                 List of file extensions to filter. Defaults to `[]`.
 
             filter_max_upload_size : int, optional
                 Maximum upload size for files. Defaults to `0`.
 
-            filter_names : list[str], optional 
+            filter_names : list[str], optional
                 List of file names to filter. Defaults to `[]`.
 
 
@@ -1461,6 +1464,6 @@ class CloudSync(base_api.BaseApi):
             'connection_id': conn_id
         }
         # Compound data
-        compound_data = [ create_session_request, list_session_request ]
+        compound_data = [create_session_request, list_session_request]
         # Send request and return response
         return (True, self.batch_request(compound_data, method='post'))

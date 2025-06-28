@@ -58,7 +58,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.BandwidthControl.Protocol'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'protocol': 'NetworkBackup'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'protocol': 'NetworkBackup'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -162,7 +163,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.SecurityScan.Status'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'items': 'ALL', 'method': 'rule_get'}
+        req_param = {'version': info['maxVersion'],
+                     'items': 'ALL', 'method': 'rule_get'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -179,7 +181,8 @@ class SysInfo(base_api.BaseApi):
         info = self.core_list[api_name]
         api_path = info['path']
         additional = '["email", "description", "expired"]'
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': additional}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'list', 'additional': additional}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -187,7 +190,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.QuickConnect'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get_misc_config'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get_misc_config'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -283,7 +287,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.Network.VPN.OpenVPN'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': '["status"]'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'list', 'additional': '["status"]'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -391,11 +396,13 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def set_fan_speed(self, fan_speed: str = 'quietfan') -> dict[str, object] | str:  # coolfan , fullfan
+    # coolfan , fullfan
+    def set_fan_speed(self, fan_speed: str = 'quietfan') -> dict[str, object] | str:
         api_name = 'SYNO.Core.Hardware.FanSpeed'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'set', "dual_fan_speed": fan_speed}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'set', "dual_fan_speed": fan_speed}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -403,7 +410,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.Hardware.ZRAM'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'set', "enable_zram": str(enable_zram).lower()}
+        req_param = {'version': info['maxVersion'], 'method': 'set', "enable_zram": str(
+            enable_zram).lower()}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -438,7 +446,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.Led.Brightness'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'set', 'led_brightness': led_brightness}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'set', 'led_brightness': led_brightness}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -519,7 +528,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.System'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': (info['maxVersion'] if version is None else version), 'method': 'shutdown'}
+        req_param = {'version': (
+            info['maxVersion'] if version is None else version), 'method': 'shutdown'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -538,11 +548,13 @@ class SysInfo(base_api.BaseApi):
         req_param = {'version': info['maxVersion'], 'method': 'getinfo'}
 
         return self.request_data(api_name, api_path, req_param)
+
     def get_network_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.Core.System'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'info', 'type': 'network'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'info', 'type': 'network'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -550,7 +562,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.System'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'info', 'type': 'storage_v2'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'info', 'type': 'storage_v2'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -569,7 +582,7 @@ class SysInfo(base_api.BaseApi):
         req_param = {'version': info['maxVersion'], 'method': 'get'}
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def terminal_info(self) -> dict[str, object] | str:
         api_name = 'SYNO.Core.Terminal'
         info = self.core_list[api_name]
@@ -615,7 +628,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.ExternalDevice.Storage.eSATA'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': ['dev_type', 'status']}
+        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': [
+            'dev_type', 'status']}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -688,7 +702,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.DDNS.ExtIP'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'retry': 'true'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'list', 'retry': 'true'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -696,7 +711,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.DDNS.Synology'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get_myds_account'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get_myds_account'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -728,7 +744,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.BandwidthControl.Protocol'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'protocol': 'FTP'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'protocol': 'FTP'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -784,7 +801,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.S2S.Server.Pair'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': ['sync_shares']}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'list', 'additional': ['sync_shares']}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -857,7 +875,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.Network.Router.Gateway.List'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'iptype': ip_type, 'type': type}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'iptype': ip_type, 'type': type}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -937,7 +956,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.System.ProcessGroup'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'node': 'xnode-3697', 'interval': interval}
+        req_param = {'version': info['maxVersion'], 'method': 'list',
+                     'node': 'xnode-3697', 'interval': interval}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -962,7 +982,8 @@ class SysInfo(base_api.BaseApi):
                       "url",
                       "available_operation"]
 
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'additional': additional}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'list', 'additional': additional}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -970,7 +991,8 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.DSMNotify'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'notify', 'action': 'load'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'notify', 'action': 'load'}
 
         return self.request_data(api_name, api_path, req_param)
 

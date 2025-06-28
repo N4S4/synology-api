@@ -7,21 +7,21 @@ class User(base_api.BaseApi):
     """Core User API implementation.
 
         Supported actions:
-            - Getters: 
+            - Getters:
                 - Get all users
                 - Password policies
                 - Password expiry
 
             - Setters:
                 - Set user password policy
-            
+
             - Actions:
                 - Create new user
                 - Modify user
                 - Delete user
                 - User join/leave group
     """
-    
+
     def get_users(
         self, offset: int = 0, limit: int = -1, sort_by: str = "name", sort_direction: str = "ASC", additional: list[str] = []
     ) -> dict[str, object]:
@@ -40,10 +40,10 @@ class User(base_api.BaseApi):
 
             sort_direction : str, optional
                 The sort direction. Defaults to `"ASC"` else `"DESC"`.
-                
+
             additional : list[str], optional
                 Additional fields to retrieve. Defaults to `[]`.
-                
+
                 All fields known are: `["description","email","expired","cannot_chg_passwd","passwd_never_expire","password_last_change", "groups", "2fa_status"]`.
 
 
@@ -100,16 +100,16 @@ class User(base_api.BaseApi):
         req_param = {
             "method": "list",
             "version": info['minVersion'],
-            "type": "local", # TODO: Test with ldap and parameter "all"
+            "type": "local",  # TODO: Test with ldap and parameter "all"
             "offset": offset,
             "limit": limit,
             "sort_by": sort_by,
             "sort_direction": sort_direction,
             "additional": json.dumps(additional)
         }
-        
+
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_user(self, name: str, additional: list[str] = []) -> dict[str, object]:
         """Retrieve a user information.
 
@@ -164,9 +164,9 @@ class User(base_api.BaseApi):
             "name": name,
             "additional": json.dumps(additional)
         }
-        
+
         return self.request_data(api_name, api_path, req_param)
-    
+
     def create_user(
         self, name: str, password: str, description: str = "", email: str = "", expire: str = "never", cannot_chg_passwd: bool = False,
         passwd_never_expire: bool = True, notify_by_email: bool = False, send_password: bool = False
@@ -201,7 +201,7 @@ class User(base_api.BaseApi):
 
             send_password : bool, optional
                 Whether to send the password. Defaults to `False`.
-            
+
             Returns
             -------
             dict[str, object]
@@ -210,7 +210,7 @@ class User(base_api.BaseApi):
             Example return
             --------------
             ```json
-            { 
+            {
                 "data":
                 {
                     "name":"toto",
@@ -220,7 +220,7 @@ class User(base_api.BaseApi):
             }
             ```
         """
-        
+
         api_name = "SYNO.Core.User"
         info = self.core_list[api_name]
         api_path = info["path"]
@@ -247,10 +247,9 @@ class User(base_api.BaseApi):
         else:
             encrypted_param = self.session.encrypt_params(param_enc)
             req_param.update(encrypted_param)
-    
-        
+
         return self.request_data(api_name, api_path, req_param, method="post")
-    
+
     def modify_user(
         self, name: str, new_name: str, password: str = "", description: str = "", email: str = "", expire: str = "never", cannot_chg_passwd: bool = False,
         passwd_never_expire: bool = True, notify_by_email: bool = False, send_password: bool = False
@@ -288,7 +287,7 @@ class User(base_api.BaseApi):
 
             send_password : bool, optional
                 Whether to send the password. Defaults to `False`.
-            
+
             Returns
             -------
             dict[str, object]
@@ -328,10 +327,11 @@ class User(base_api.BaseApi):
             req_param.update({"password": password})
         # Using http and self encrypted
         else:
-            req_param.update(self.session.encrypt_params({"password": password}))
-            
+            req_param.update(self.session.encrypt_params(
+                {"password": password}))
+
         return self.request_data(api_name, api_path, req_param, method="post")
-    
+
     def delete_user(self, name: str) -> dict[str, object]:
         """Delete a user.
 
@@ -365,9 +365,9 @@ class User(base_api.BaseApi):
             "version": info['minVersion'],
             "name": name
         }
-        
+
         return self.request_data(api_name, api_path, req_param)
-    
+
     def affect_groups(self, name: str, join_groups: list[str] = [], leave_groups: list[str] = []) -> dict[str, object]:
         """Affect or disaffect groups to a user.
 
@@ -383,12 +383,12 @@ class User(base_api.BaseApi):
 
             leave_groups : list[str]
                 The names of the groups to leave.
-                
-                
+
+
             Returns
             -------
             dict[str, object]
-                A dictionary containing the task id to check the status of the join task. Use `affect_groups_status` func to check the status of the task.   
+                A dictionary containing the task id to check the status of the join task. Use `affect_groups_status` func to check the status of the task.
 
             Example return
             --------------
@@ -404,7 +404,7 @@ class User(base_api.BaseApi):
             }
             ```
         """
-        
+
         api_name = "SYNO.Core.User.Group"
         info = self.core_list[api_name]
         api_path = info["path"]
@@ -412,19 +412,19 @@ class User(base_api.BaseApi):
             "method": "join",
             "version": info['minVersion'],
             "join_group": json.dumps(join_groups),
-            "leave_group":json.dumps(leave_groups),
-            "name":name
+            "leave_group": json.dumps(leave_groups),
+            "name": name
         }
         return self.request_data(api_name, api_path, req_param)
-    
-    def affect_groups_status(self, task_id:str):
+
+    def affect_groups_status(self, task_id: str):
         """Get the status of a join task.
-        
+
             Parameters
             ----------
             task_id : str
                 The task id of the join task.
-                
+
             Returns
             -------
             dict[str, object]
@@ -466,7 +466,7 @@ class User(base_api.BaseApi):
             "task_id": task_id
         }
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_password_policy(self) -> dict[str, object]:
         """Get the password policy.
 
@@ -507,7 +507,7 @@ class User(base_api.BaseApi):
             "version": info['minVersion']
         }
         return self.request_data(api_name, api_path, req_param)
-    
+
     def set_password_policy(
         self, enable_reset_passwd_by_email: bool = False, password_must_change: bool = False,
         exclude_username: bool = True, included_numeric_char: bool = True, included_special_char: bool = False,
@@ -518,41 +518,41 @@ class User(base_api.BaseApi):
 
             Parameters
             ----------
-            enable_reset_passwd_by_email : bool, optional 
+            enable_reset_passwd_by_email : bool, optional
                 Defaults to `False`.
 
-            password_must_change : bool, optional 
+            password_must_change : bool, optional
                 Defaults to `False`.
 
-            exclude_username : bool, optional 
+            exclude_username : bool, optional
                 Defaults to `True`.
 
-            included_numeric_char : bool, optional 
+            included_numeric_char : bool, optional
                 Defaults to `True`.
 
-            included_special_char : bool, optional 
+            included_special_char : bool, optional
                 Defaults to `False`.
 
-            min_length : int, optional 
+            min_length : int, optional
                 Defaults to `8`.
 
-            min_length_enable : bool, optional 
+            min_length_enable : bool, optional
                 Defaults to `True`.
 
-            mixed_case : bool, optional 
+            mixed_case : bool, optional
                 Defaults to `True`.
 
-            exclude_common_password : bool, optional 
+            exclude_common_password : bool, optional
                 Defaults to `False`.
 
-            exclude_history : bool, optional 
+            exclude_history : bool, optional
                 Defaults to `False`.
 
             Returns
             -------
             dict[str, object]
                 A dictionary indicating the success of the operation.
-            
+
             Example return
             --------------
             ```json
@@ -565,7 +565,7 @@ class User(base_api.BaseApi):
                 }
             ```
         """
-                
+
         api_name = "SYNO.Core.User.PasswordPolicy"
         info = self.core_list[api_name]
         api_path = info["path"]
@@ -574,7 +574,7 @@ class User(base_api.BaseApi):
             "version": info['minVersion'],
             "enable_reset_passwd_by_email": enable_reset_passwd_by_email,
             "password_must_change": password_must_change,
-            "strong_password":{
+            "strong_password": {
                 "exclude_username": exclude_username,
                 "included_numeric_char": included_numeric_char,
                 "included_special_char": included_special_char,
@@ -582,11 +582,11 @@ class User(base_api.BaseApi):
                 "min_length": min_length,
                 "mixed_case": mixed_case,
                 "exclude_common_password": exclude_common_password,
-                "exclude_history":exclude_history
+                "exclude_history": exclude_history
             }
         }
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_password_expiry(self) -> dict[str, object]:
         """Get the password expiry.
 
@@ -622,14 +622,14 @@ class User(base_api.BaseApi):
             "version": info['minVersion']
         }
         return self.request_data(api_name, api_path, req_param)
-    
+
     def set_password_expiry(
         self, password_expire_enable: bool = False, max_age: int = 30, min_age_enable: bool = False, min_age: int = 1,
         enable_login_prompt: bool = False, login_prompt_days: int = 1, allow_reset_after_expired: bool = True,
         enable_mail_notification: bool = False, never_expired_list: list[str] = []
     ) -> dict[str, object]:
         """Set the password expiry.
-        
+
             Parameters
             ----------
             password_expire_enable : bool, optional
@@ -658,7 +658,7 @@ class User(base_api.BaseApi):
 
             never_expired_list : list[str], optional
                 List of users that should never expire.
-            
+
             Returns
             -------
             dict[str, object]
@@ -675,7 +675,7 @@ class User(base_api.BaseApi):
             }
             ```
         """
-        
+
         api_name = "SYNO.Core.User.PasswordExpiry"
         info = self.core_list[api_name]
         api_path = info["path"]
@@ -693,8 +693,7 @@ class User(base_api.BaseApi):
             "never_expired_list": json.dumps(never_expired_list)
         }
         return self.request_data(api_name, api_path, req_param)
-    
-        
+
     def password_confirm(self, password: str) -> dict[str, object]:
         """Issues a passowrd/session comparison to ensure the given password matches the auth of the current session.
 
@@ -730,11 +729,11 @@ class User(base_api.BaseApi):
             req_param.update({"password": password})
         # Using http and self encrypted
         else:
-            req_param.update(self.session.encrypt_params({"password": password}))
-            
+            req_param.update(self.session.encrypt_params(
+                {"password": password}))
+
         return self.request_data(api_name, api_path, req_param, method="post")
-    
-    
+
     def get_username_policy(self) -> dict[str, object]:
         """Get the username policy (List of username that are not usable).
 

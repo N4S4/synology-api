@@ -1,13 +1,16 @@
-import json,sys
+import json
+import sys
 # my_package/my_module.py
 __all__ = ['merge_dicts', 'make_folder_meta_list_from_path', 'parse_config']
+
 
 def merge_dicts(x, y):
     z = x.copy()   # start with keys and values of x
     z.update(y)    # modifies z with keys and values of y
     return z
 
-def make_folder_meta_list_from_path( path):
+
+def make_folder_meta_list_from_path(path):
     """
     Create a list of folder metadata dictionaries from a given path.
 

@@ -19,3 +19,4 @@ echo "Installing asdf plugins..."
 "$(go env GOPATH)/bin/asdf" plugin add task
 "$(go env GOPATH)/bin/asdf" plugin add shfmt
 "$(go env GOPATH)/bin/asdf" plugin add shellcheck
+"$(go env GOPATH)/bin/asdf" plugin add pre-commit

@@ -8,7 +8,7 @@ class Group(base_api.BaseApi):
     Core Group API implementation.
 
     Supported methods:
-        - Getters: 
+        - Getters:
             - Get all groups
             - Get group members
             - Get group shares permissions
@@ -20,7 +20,7 @@ class Group(base_api.BaseApi):
             - Set group share permissions
             - Set group share quotas
             - Set group service speed limit
-        
+
         - Actions:
             - Create new group
             - Delete groups
@@ -116,9 +116,9 @@ class Group(base_api.BaseApi):
             in_group : bool, optional
                 Defaults to `True`.
 
-                If `True`, retrieves users who are members of the specified group. 
-                
-                If `False`, retrieves users who are not members of the group. 
+                If `True`, retrieves users who are members of the specified group.
+
+                If `False`, retrieves users who are not members of the group.
 
             Returns
             -------
@@ -171,7 +171,7 @@ class Group(base_api.BaseApi):
 
             Parameters
             ----------
-            group : str 
+            group : str
                 The group to retrieve settings for.
 
             Returns
@@ -218,12 +218,12 @@ class Group(base_api.BaseApi):
 
             Parameters
             ----------
-            group : str 
+            group : str
                 The group to retrieve quota settings for.
 
             Returns
             -------
-            dict[str, object] 
+            dict[str, object]
                 A dictionary containing the result of the request.
 
             Example return
@@ -298,7 +298,7 @@ class Group(base_api.BaseApi):
                     "total": 1
                 },
                 "success": true
-            }     
+            }
             ```
         """
         api_name = "SYNO.Core.Share.Permission"
@@ -310,7 +310,8 @@ class Group(base_api.BaseApi):
             "name": group,
             "user_group_type": "local_group",
             "share_type": json.dumps(
-                ["dec", "local", "usb", "sata", "cluster", "c2", "cold_storage", "worm"]
+                ["dec", "local", "usb", "sata", "cluster",
+                    "c2", "cold_storage", "worm"]
             ),
             "additional": json.dumps(["hidden", "encryption", "is_aclmode"]),
         }
@@ -334,7 +335,7 @@ class Group(base_api.BaseApi):
 
             Returns
             -------
-            dict[str, object] 
+            dict[str, object]
                 A dictionary containing the result of the request.
 
             Example return
@@ -402,7 +403,7 @@ class Group(base_api.BaseApi):
 
             Returns
             -------
-            dict[str, object] 
+            dict[str, object]
                 A dictionary containing the result of the request.
 
             Example return
@@ -438,7 +439,7 @@ class Group(base_api.BaseApi):
 
             permissions : list[dict[str, object]]:
                 The permissions to set for the group.
-                
+
                 Example:
                 ```python
                 [
@@ -490,8 +491,8 @@ class Group(base_api.BaseApi):
         download_limit: int,
         protocol: str,
     ) -> dict[str, object]:
-        """Set speed limit for a given share. 
-        
+        """Set speed limit for a given share.
+
             Info: Doesn't support **scheduled** speed limits, only on/off.
 
             Parameters
@@ -506,8 +507,8 @@ class Group(base_api.BaseApi):
                 The maximum download speed in KB/s.
 
             protocol : str
-                The protocol to set the speed limit for. 
-                
+                The protocol to set the speed limit for.
+
                 Possible values:
                 - FileStation
                 - WebDAV
@@ -550,7 +551,8 @@ class Group(base_api.BaseApi):
         api_name = "SYNO.Core.BandwidthControl"
         info = self.core_list[api_name]
         api_path = info["path"]
-        req_param = {"version": 1, "method": "set", "bandwidths": json.dumps(settings)}
+        req_param = {"version": 1, "method": "set",
+                     "bandwidths": json.dumps(settings)}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -559,7 +561,7 @@ class Group(base_api.BaseApi):
 
             Parameters
             ----------
-            group : str 
+            group : str
                 The group to add users to.
 
             users : list[str]
@@ -597,7 +599,7 @@ class Group(base_api.BaseApi):
 
             Parameters
             ----------
-            group : str 
+            group : str
                 The group to remove users from.
 
             users : list[str]
@@ -643,7 +645,7 @@ class Group(base_api.BaseApi):
 
             Returns
             -------
-            dict[str, object] 
+            dict[str, object]
                 A dictionary containing the result of the request.
 
             Example return
@@ -681,7 +683,7 @@ class Group(base_api.BaseApi):
 
             Returns
             -------
-            dict[str, object] 
+            dict[str, object]
                 A dictionary containing the result of the request.
 
             Example return

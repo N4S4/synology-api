@@ -7,11 +7,11 @@ class USBCopy(base_api.BaseApi):
     """USB Copy Implementation.
 
     Supported methods:
-        - Getters: 
+        - Getters:
             - Get package settings
             - Get package logs
             - Get task settings
-            
+
         - Actions:
             - Enable / Disable task
     """
@@ -41,10 +41,11 @@ class USBCopy(base_api.BaseApi):
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get_global_setting'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get_global_setting'}
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_package_logs(self, offset: int = 0, limit: int = 200) -> dict[str, object]:
         """Retrieve package logs.
 
@@ -81,7 +82,7 @@ class USBCopy(base_api.BaseApi):
                 "success" : True
             }
             ```
-        
+
         """
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
@@ -90,7 +91,7 @@ class USBCopy(base_api.BaseApi):
                      'log_filter': '{"log_desc_id_list":[0,1,2,3,10,11,100,101,102,103,104,105,1000]}'}
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_task_settings(self, task_id: int) -> dict[str, object]:
         """Retrieve task settings
 
@@ -147,7 +148,8 @@ class USBCopy(base_api.BaseApi):
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'id': task_id}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'id': task_id}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -187,6 +189,7 @@ class USBCopy(base_api.BaseApi):
         else:
             return 'enable must be True or False'
 
-        req_param = {'version': info['maxVersion'], 'method': enable, 'id': task_id}
+        req_param = {'version': info['maxVersion'],
+                     'method': enable, 'id': task_id}
 
         return self.request_data(api_name, api_path, req_param)

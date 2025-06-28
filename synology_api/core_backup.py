@@ -6,12 +6,13 @@ class Backup(base_api.BaseApi):
 
     def backup_repository_get(self, task_id: str) -> dict[str, object] | str:
         '''
-        Get repository information for given task.   
+        Get repository information for given task.
         '''
         api_name = 'SYNO.Backup.Repository'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['minVersion'], 'method': 'get', 'task_id': task_id}
+        req_param = {'version': info['minVersion'],
+                     'method': 'get', 'task_id': task_id}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -39,23 +40,25 @@ class Backup(base_api.BaseApi):
 
     def backup_task_status(self, task_id: str) -> dict[str, object] | str:
         '''
-        Get status and state of task.    
+        Get status and state of task.
         '''
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['minVersion'], 'method': 'status', 'task_id': task_id}
+        req_param = {'version': info['minVersion'],
+                     'method': 'status', 'task_id': task_id}
 
         return self.request_data(api_name, api_path, req_param)
 
     def backup_task_get(self, task_id: str) -> dict[str, object] | str:
         '''
-        Get detailed task information.  
+        Get detailed task information.
         '''
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['minVersion'], 'method': 'get', 'task_id': task_id}
+        req_param = {'version': info['minVersion'],
+                     'method': 'get', 'task_id': task_id}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -86,7 +89,7 @@ class Backup(base_api.BaseApi):
             'task_id': task_id
         }
         return self.request_data(api_name, api_path, req_param)
-    
+
     def backup_task_cancel(self, task_id: str) -> dict[str, object] | str:
         '''
         Cancel currently running backup task.
@@ -102,7 +105,7 @@ class Backup(base_api.BaseApi):
             'task_id': task_id
         }
         return self.request_data(api_name, api_path, req_param)
-    
+
     def backup_task_suspend(self, task_id: str) -> dict[str, object] | str:
         '''
         Suspend currently running backup task.
@@ -118,7 +121,7 @@ class Backup(base_api.BaseApi):
             'task_id': task_id
         }
         return self.request_data(api_name, api_path, req_param)
-    
+
     def backup_task_discard(self, task_id: str) -> dict[str, object] | str:
         '''
         Discard currently suspended backup task.
@@ -133,7 +136,7 @@ class Backup(base_api.BaseApi):
             'task_id': task_id
         }
         return self.request_data(api_name, api_path, req_param)
-    
+
     def backup_task_resume(self, task_id: str) -> dict[str, object] | str:
         '''
         Discard currently suspended backup task.
@@ -148,13 +151,13 @@ class Backup(base_api.BaseApi):
             'task_id': task_id
         }
         return self.request_data(api_name, api_path, req_param)
-    
+
     def backup_task_remove(self, task_id_list: str) -> dict[str, object] | str:
         '''
         Remove one or more backup tasks.
         Data in destination will not be removed. It is still possible to relink the task using the original .hbk file.
         The API requires an array of tasks to remove, it should be passed as a string with the following format:
-        `task_id_list = '[29]'` || `task_id_list = '[29,15]'` 
+        `task_id_list = '[29]'` || `task_id_list = '[29,15]'`
         '''
         api_name = 'SYNO.Backup.Task'
         info = self.gen_list[api_name]
@@ -166,7 +169,7 @@ class Backup(base_api.BaseApi):
             'task_id_list': task_id_list
         }
         return self.request_data(api_name, api_path, req_param)
-    
+
     def integrity_check_run(self, task_id: str) -> dict[str, object] | str:
         '''
         Run integrity check for backup task.
@@ -184,7 +187,7 @@ class Backup(base_api.BaseApi):
             'task_id': task_id
         }
         return self.request_data(api_name, api_path, req_param)
-    
+
     def integrity_check_cancel(self, task_id: str) -> dict[str, object] | str:
         '''
         Cancel currently running integrity check for backup task.
@@ -200,8 +203,8 @@ class Backup(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
 
-    def hb_logs_get(self, 
-                    limit: int = 1000, 
+    def hb_logs_get(self,
+                    limit: int = 1000,
                     offset: int = 0,
                     filter_keyword: str = '',
                     # filter_level: str = '', For some reason when passing filter_level, the API returns error 120.
@@ -264,7 +267,7 @@ class Backup(base_api.BaseApi):
             'parallel_backup_limit': parallel_backup_limit
         }
         return self.request_data(api_name, api_path, req_param)
-    
+
     def vault_target_settings_get(self, target_id: int) -> dict[str, object]:
         '''
         Get settings of target.
@@ -278,7 +281,7 @@ class Backup(base_api.BaseApi):
             'target_id': target_id
         }
         return self.request_data(api_name, api_path, req_param)
-    
+
     def vault_task_statistics_get(self, task_id: int) -> dict[str, object]:
         '''
         Get statistics for given task.
@@ -293,10 +296,10 @@ class Backup(base_api.BaseApi):
             'task_id': task_id
         }
         return self.request_data(api_name, api_path, req_param)
-    
-    def vault_target_logs_get(self, 
-                              target_id: int, 
-                              limit: int = 1000, 
+
+    def vault_target_logs_get(self,
+                              target_id: int,
+                              limit: int = 1000,
                               offset: int = 0) -> dict[str, object]:
         '''
         Get logs for given task.

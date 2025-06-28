@@ -22,6 +22,15 @@ tasks:
       - echo "Installing the tools for project..."
       - bash scripts/install.sh
 
+  install-python-deps:
+    desc: Install Python dependencies
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Installing Python dependencies..."
+      - pip install --upgrade pip
+      - pip install -r requirements.txt
+      - pip install -r requirements-dev.txt
+
   docs-parser:
     desc: Parse the documentation files
     dir: '{{.TASKFILE_DIR}}'
@@ -64,3 +73,19 @@ tasks:
     cmds:
       - echo "Running shfmt..."
       - shfmt --diff --language-dialect bash -w scripts/*
+
+  pre-commit:
+    desc: Run all pre-commit hooks
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Running pre-commit hooks..."
+      - pre-commit run --all-files
+
+  venv:
+    desc: Install the virtual environment
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Installing the virtual environment..."
+      - python3 -m venv .venv
+      - source .venv/bin/activate
+      - task: install-python-deps

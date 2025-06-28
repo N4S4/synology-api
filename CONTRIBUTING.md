@@ -14,9 +14,9 @@ Have a look on our Code of conduct!
 
 If you want to contribute to this package, you may want to setup your environment.
 
-Install dependencies for your OS:
+#### Install dependencies for your OS:
 ```bash
-# macos 
+# macos
 bash scripts/dependencies_darwin.sh
 
 # linux
@@ -25,20 +25,62 @@ bash scripts/dependencies_linux.sh
 
 Install right version of tools
 ```bash
-asdf install 
+asdf install
 ```
 
 From now you can use Taskfile to run repetitive commands, for example:
 ```bash
 task docs
 ```
-## Formating code 
+To see all available tasks, run:
+```bash
+task --list
+```
+
+#### Install Python dependencies
+
+To install Python dependencies, you can use the `task` command:
+```bash
+task install-python-deps
+```
+This will install all the required Python packages listed in `requirements.txt` and `requirements-dev.txt` using `pip` on your local machine.
+
+#### Setup virtual environment
+
+You can use `venv` to create a virtual environment for this project.
+We already have task for that, so you can run:
+```bash
+task venv
+```
+
+
+## Formating code
 
 In task file is defined a task to format the code, you can run it with:
 ```bash
 task format
 ```
 Currently task will run `shellcheck` and `shfmt` on shell scripts. In near future it will run formatters on python files.
+
+
+#### pre-commit hooks
+
+To ensure your code is properly formatted and passes all checks, we use pre-commit hooks.
+These hooks are installed automatically with the `task install` command (requires a Taskfile).
+If you prefer, you can install them manually with:
+```bash
+pre-commit install
+```
+
+Hooks will run automatically before each commit, but you can also trigger them manually:
+```bash
+pre-commit run --all-files
+# or
+task pre-commit
+```
+
+These pre-commit hooks help keep the codebase clean and consistent by checking formatting, linting, and running tests.
+They may seem strict at first, but they save time and reduce issues in the long run.
 
 ## Testing
 

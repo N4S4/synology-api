@@ -83,11 +83,12 @@ class DirectoryServer(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_directory_objects(self,
-                                basedn: str,
-                                offset: int = 0,
-                                limit: int = 40,
-                                objectCategory: list[str] = [ "person", "group", "organizationalUnit", "computer", "container", "builtinDomain"]
-                            ) -> dict[str, object]:
+                               basedn: str,
+                               offset: int = 0,
+                               limit: int = 40,
+                               objectCategory: list[str] = [
+                                   "person", "group", "organizationalUnit", "computer", "container", "builtinDomain"]
+                               ) -> dict[str, object]:
         """lists directory objects.
 
             Parameters
@@ -175,11 +176,11 @@ class DirectoryServer(base_api.BaseApi):
             change_password_next_logon: str = 'null',
             password_never_expire: str = 'true'
     ) -> dict[str, object]:
-        """Create a new user. 
-        
+        """Create a new user.
+
             Note: The user can be created in AD, but not able to log on until the next synchronization occurs.
-        
-            Note: Please note that synchronization with Synology is a separate step. 
+
+            Note: Please note that synchronization with Synology is a separate step.
 
             Parameters
             ----------
@@ -216,16 +217,16 @@ class DirectoryServer(base_api.BaseApi):
             Returns
             -------
             dict[str, object]
-                The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. The data dictionary contains an 'error', or it contains a 'dn' and a 'name'. 
+                The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. The data dictionary contains an 'error', or it contains a 'dn' and a 'name'.
 
             Example return
             --------------
             ```json
             {
                 'data': {
-                    'dn': 'CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM', 
+                    'dn': 'CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM',
                     'name': 'NETBIOSNAME\\ababab'
-                }, 
+                },
                 'success': true
             }
             ```
@@ -247,8 +248,8 @@ class DirectoryServer(base_api.BaseApi):
         """Send a password reset email.
 
             This will trigger the password reset email from
-            Control Panel>Notification>Rules>System>Reset password for your account to be sent to the user. 
-        
+            Control Panel>Notification>Rules>System>Reset password for your account to be sent to the user.
+
             Info: In order to use this, Control Panel>User & Group>Advanced>"Allow non-administrator users to reset forgotten passwords via email" must be enabled.
 
             Parameters
@@ -267,7 +268,7 @@ class DirectoryServer(base_api.BaseApi):
             {
                 "data": {
                     "msg": 3
-                }, 
+                },
                 "success": true
             }
             ```
@@ -283,8 +284,8 @@ class DirectoryServer(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def change_user_password(self, user_dn: str, password: str) -> dict[str, object]:
-        """Change the user's password. 
-            
+        """Change the user's password.
+
             Info: This is a compound dual-level request where the synology API proxies your request to the Directory Server.
 
             Parameters
@@ -303,7 +304,7 @@ class DirectoryServer(base_api.BaseApi):
                 The first level is the success to the AD server.  The second Data level is the status of the actual request.
 
                 Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
-            
+
             Example return
             --------------
             ```json
@@ -409,15 +410,15 @@ class DirectoryServer(base_api.BaseApi):
             -------
             dict[str, object]
                 A success object, and data object containing the new dn and the netbios name of the group.
-            
+
             Example return
             --------------
             ```json
             {
                 'data': {
-                    'dn': 'CN=My Group,CN=Groups,DC=MY,DC=DOMAIN,DC=COM', 
+                    'dn': 'CN=My Group,CN=Groups,DC=MY,DC=DOMAIN,DC=COM',
                     'name': 'NETBIOSNAME\\My Group'
-                }, 
+                },
                 'success': true
             }
             ```
@@ -448,8 +449,8 @@ class DirectoryServer(base_api.BaseApi):
 
                 The first level is the success to the AD server.  The second Data level is the status of the actual request.
 
-                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request. 
-                
+                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
+
             Example return
             --------------
             ```json
@@ -490,15 +491,15 @@ class DirectoryServer(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def does_dn_exist(self, groupName: str) -> dict[str, object]:
-        """Checks if a container exists. This can be used to verifiy the username or group name is unique. 
-            
+        """Checks if a container exists. This can be used to verifiy the username or group name is unique.
+
             Info: This will not check the container, only if a similarly named container already exists.
 
             Parameters
             ----------
             groupName : str
                 The user, or group's name. e.g.  `jdoe` or `My Cool Group`
-                
+
                 Fully Qualified Domain Name such as `CN=My Cool Group,CN=Groups,DC=MY,DC=DOMAIN,DC=COM` are not successful.
 
                 Improper case such as `my cool group` instead of `My Cool Group` are successful
@@ -518,16 +519,16 @@ class DirectoryServer(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)['data']['isConflict']
 
     def modify_user_info(self,
-        user_dn: str = None,
-        firstName: str = None,
-        lastName: str = None,
-        displayName: str = None,
-        description: str = None,
-        initials: str = None,
-        physicalDeliveryOfficeName: str = None,
-        telephoneNumber: str = None,
-        web: str = None
-    ) -> dict[str, object]:
+                         user_dn: str = None,
+                         firstName: str = None,
+                         lastName: str = None,
+                         displayName: str = None,
+                         description: str = None,
+                         initials: str = None,
+                         physicalDeliveryOfficeName: str = None,
+                         telephoneNumber: str = None,
+                         web: str = None
+                         ) -> dict[str, object]:
         """Performs modification to user information within the Active Directory.
 
             Parameters
@@ -614,7 +615,7 @@ class DirectoryServer(base_api.BaseApi):
             userObject.lastName = lastName
         if displayName is not None:
             userObject.displayName = displayName
-        #if description is not None:
+        # if description is not None:
         #    userObject.description = description
         if initials is not None:
             userObject.initials = initials
@@ -626,7 +627,8 @@ class DirectoryServer(base_api.BaseApi):
             userObject.web = web
 
         theJsonObject = userObject.__dict__
-        val = self.setEntryRequest("SYNO.ActiveDirectory.User", "set", "userList", theJsonObject)
+        val = self.setEntryRequest(
+            "SYNO.ActiveDirectory.User", "set", "userList", theJsonObject)
 
         return val
 
@@ -654,8 +656,8 @@ class DirectoryServer(base_api.BaseApi):
 
                 The first level is the success to the AD server.  The second Data level is the status of the actual request.
 
-                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.  
-                
+                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
+
             Example return
             --------------
             ```json
@@ -684,14 +686,16 @@ class DirectoryServer(base_api.BaseApi):
             }
             ```
         """
-        compound = [{"api":modificationAPI,"method":  method,"version":2,nameOfObject:[jsonObject]}]
+        compound = [{"api": modificationAPI, "method":  method,
+                     "version": 2, nameOfObject: [jsonObject]}]
         api_name = "SYNO.Entry.Request"
         info = {'maxVersion': 1, 'minVersion': 1,
                 'path': 'entry.cgi', 'requestFormat': 'JSON'}
         api_path = info['path']
-        req_param = {"api": api_name, 'method': 'request', 'compound': json.dumps(compound), 'mode': '"sequential"', 'stop_when_error': True, 'version': info['maxVersion']}
-        print (json.dumps(req_param))
-        return self.request_data(api_name, api_path, req_param,"post")
+        req_param = {"api": api_name, 'method': 'request', 'compound': json.dumps(
+            compound), 'mode': '"sequential"', 'stop_when_error': True, 'version': info['maxVersion']}
+        print(json.dumps(req_param))
+        return self.request_data(api_name, api_path, req_param, "post")
 
     def update_domain_records(self) -> dict[str, object]:
         """Updates the Synology users and groups database with information from Directory Server.
@@ -704,14 +708,14 @@ class DirectoryServer(base_api.BaseApi):
                 The 'data' object contains the 'task_id' used to track with the getTaskStatus() method.
 
                 The 'success' object will be true if the operation was successful. or false if failed.
-            
+
             Example return
             --------------
             ```json
             {
                 "data": {
                     "task_id": "@administrators/DomainUpdate6146195136397F2"
-                }, 
+                },
                 "success": true
             }
             ```
@@ -738,8 +742,8 @@ class DirectoryServer(base_api.BaseApi):
     def get_task_status(self, task_id: str) -> dict[str, object]:
         """Gets the current status of a task running on the Directory Domain object.
 
-            This is used to ensure the task is completed.  For example, the primary utilization of this is when updating Synology's internal Domain user and group list.  
-            
+            This is used to ensure the task is completed.  For example, the primary utilization of this is when updating Synology's internal Domain user and group list.
+
             Until this method reports finish, the job is not completed, and it is not safe to operate under the assumption that users have been synchronized.
 
             Parameters
@@ -753,14 +757,14 @@ class DirectoryServer(base_api.BaseApi):
                 The 'data' object contains the 'status' used to determine the current status. 'status' will be 'updating' or 'finish' if the job was started.
                 T
                 The 'success' object will be true if the operation was successful. or false if failed.
-            
+
             Example return
             --------------
             ```json
             {
                 'data': {
                     'status': 'updating'
-                }, 
+                },
                 'success': true
             }
             ```
@@ -789,7 +793,7 @@ class DirectoryServer(base_api.BaseApi):
 
                 The first level is the success to the AD server.  The second Data level is the status of the actual request.
 
-                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.  
+                Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
 
             Example return
             --------------
@@ -900,8 +904,8 @@ class DirectoryServer(base_api.BaseApi):
             Parameters
             ----------
             task_id: str
-                The ID of the task to be checked. This is provided when making a request. 
-                
+                The ID of the task to be checked. This is provided when making a request.
+
                 An example Task ID may look like this
                 `@administrators/Synoads_SYNO.ActiveDirectory.Directory_delete6145EA17C4F03DA9`
         """

@@ -33,7 +33,8 @@ class LogCenter(base_api.BaseApi):
         api_name = 'SYNO.LogCenter.Log'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get_remotearch_subfolder'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get_remotearch_subfolder'}
 
         return self.request_data(api_name, api_path, req_param)
 

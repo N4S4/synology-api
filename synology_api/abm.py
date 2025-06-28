@@ -3,11 +3,12 @@ import json
 
 from . import base_api
 
+
 class ActiveBackupMicrosoft(base_api.BaseApi):
-    """Active Backup for Microsoft 365 Implementation. 
+    """Active Backup for Microsoft 365 Implementation.
 
         Supported methods:
-        - Getters: 
+        - Getters:
             - Get all tasks info
             - Get task settings
             - Get task logs
@@ -18,13 +19,14 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             - Set worker settings
             - Set task schedule policy
             - Set task retention policy
-        
+
         - Actions:
             - Run backup
             - Cancel backup
             - Delete task
             - Relink task
     """
+
     def __trim_task_info(self, task_info: dict[str, any]) -> dict[str, any]:
         # Remove unnecessary / readonly fields
         task_info.pop('app_permissions')
@@ -32,7 +34,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         task_info.pop('application_id')
         task_info.pop('tenant_id')
 
-        # This can be modified, but only if something is added, 
+        # This can be modified, but only if something is added,
         # e.g. for adding a user to the task, we would have to send the user_list array only with the new user.
         task_info['user_list'] = []
         task_info['group_list'] = []
@@ -42,7 +44,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         task_info['team_list'] = []
 
         return task_info
-    
+
     def get_tasks(self) -> dict[str, object]:
         """Retrieve all tasks.
 
@@ -261,7 +263,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_package_log(self, offset: int = 0, limit: int = 200) -> dict[str, object]:
         """Retrieve general logs.
 
@@ -333,7 +335,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_task_log(self, task_id: int, limit: int = 200, offset: int = 0, key_word: str = '') -> dict[str, object]:
         """Retrieve all logs for a given task.
 
@@ -407,13 +409,13 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-        
+
     def get_task_setting(self, task_id: int) -> dict[str, object]:
         """Retrieve the settings of a task.
 
             Parameters
             ----------
-            task_id : int 
+            task_id : int
                 The ID of the task.
 
             Returns
@@ -580,7 +582,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def get_worker_count(self) -> dict[str, object]:
         """Get the number of workers for the Active Backup for Microsoft 365 package.
 
@@ -619,17 +621,17 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
             Parameters
             ----------
-            backup_job_workers : int 
+            backup_job_workers : int
                 Maximum number of concurrent backup accounts. Defaults to `40`.
 
-            event_workers : int 
+            event_workers : int
                 Maximum number of concurrent backup files. Defaults to `40`.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the result of the worker count update.
-            
+
             Example return
             --------------
             ```json
@@ -640,12 +642,14 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         """
         if backup_job_workers < 5 or event_workers < 5:
             raise Exception("The number of workers must be at least 5.")
-        
+
         # Avoid setting the worker count to a value higher than the maximum allowed by the NAS.
         response = self.get_worker_count()
-        
-        backup_job_workers = min(backup_job_workers, response['data']['max_backup_job_worker_count'])
-        event_workers = min(event_workers, response['data']['max_event_worker_count'])
+
+        backup_job_workers = min(
+            backup_job_workers, response['data']['max_backup_job_worker_count'])
+        event_workers = min(
+            event_workers, response['data']['max_event_worker_count'])
 
         api_name = 'SYNO.ActiveBackupOffice365'
         info = self.gen_list[api_name]
@@ -660,42 +664,42 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def set_task_schedule(self, 
-        task_id: int, 
-        policy: int, 
-        schedule: dict[
+    def set_task_schedule(self,
+                          task_id: int,
+                          policy: int,
+                          schedule: dict[
             "start_hour": int,
             "start_minute": int,
             "last_run_hour": int,
             "repeat_every_hours": int,
             "run_days": list[int]
-        ] = {"place_holder": None}
-    ) -> dict[str, object]:
-        """Set the schedule for a given task. 
+                              ] = {"place_holder": None}
+                          ) -> dict[str, object]:
+        """Set the schedule for a given task.
 
             Parameters
             ----------
             task_id : int
-                The ID of the task.  
+                The ID of the task.
 
             policy : int
-                The schedule policy. 
-                
-                Possible values:  
-                - 0 = continuous  
-                - 1 = manual  
-                - 2 = scheduled  
+                The schedule policy.
+
+                Possible values:
+                - 0 = continuous
+                - 1 = manual
+                - 2 = scheduled
 
             schedule : dict
-                A dictionary containing the schedule settings. 
-                
+                A dictionary containing the schedule settings.
+
                 Possible values:
                 - `start_hour` (int): The start hour of the schedule.
                 - `start_minute` (int): The start minute of the schedule.
                 - `last_run_hour` (int): The last run hour of the schedule.
                 - `repeat_every_hours` (int): Run the backup every X hours.
-                - `run_days` (list[int]): Run the backup at the specified days (Sunday = 0, Morning = 1, and so on...).  
-                
+                - `run_days` (list[int]): Run the backup at the specified days (Sunday = 0, Morning = 1, and so on...).
+
                 Note: If `repeat_every_hours` is set to 0, the backup will run once a day.
 
                 Example, to run the backup every day hourly starting at 08:30 until 23:30.
@@ -713,18 +717,19 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             -------
             dict[str, object]
                 A dictionary containing the result of the schedule update.
-            
+
             Example return
             --------------
-            ```json 
+            ```json
             {
                 "success": true
             }
             ```
         """
         if policy == 2 and "place_holder" in schedule:
-            raise Exception("Received schedule policy, but no schedule was provided.")
-        
+            raise Exception(
+                "Received schedule policy, but no schedule was provided.")
+
         if policy == 2 and (
             "start_hour" not in schedule
             or "start_minute" not in schedule
@@ -733,27 +738,31 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             or "run_days" not in schedule
         ):
             raise Exception("Invalid schedule provided.")
-        
+
         response = self.get_task_setting(task_id)
         task_info = self.__trim_task_info(response['data']['task_info'])
-        
+
         if policy != 2:
             task_info['backup_policy'] = policy
             task_info['enable_schedule'] = False
         else:
-            task_info['backup_policy'] = 1 # Manual - needed for scheduled setting
+            # Manual - needed for scheduled setting
+            task_info['backup_policy'] = 1
             task_info['enable_schedule'] = True
-            task_info['schedule']['date_type'] = 0 # Recurring backup
-            task_info['schedule']['monthly_week'] = [] # Not implemented
-            task_info['schedule']['repeat_hour_store_config'] = None # Unnecesary
-            task_info['schedule']['repeat_minute_store_config'] = None # Unnecesary
-            task_info['schedule']['repeat_date'] = 0 # Repeat Daily
-            task_info['schedule']['repeat_min'] = 0 # Not implemented
+            task_info['schedule']['date_type'] = 0  # Recurring backup
+            task_info['schedule']['monthly_week'] = []  # Not implemented
+            # Unnecesary
+            task_info['schedule']['repeat_hour_store_config'] = None
+            # Unnecesary
+            task_info['schedule']['repeat_minute_store_config'] = None
+            task_info['schedule']['repeat_date'] = 0  # Repeat Daily
+            task_info['schedule']['repeat_min'] = 0  # Not implemented
             task_info['schedule']['hour'] = schedule['start_hour']
             task_info['schedule']['minute'] = schedule['start_minute']
             task_info['schedule']['last_work_hour'] = schedule['last_run_hour']
             task_info['schedule']['repeat_hour'] = schedule['repeat_every_hours']
-            task_info['schedule']['week_day'] = ",".join(map(str,schedule['run_days']))
+            task_info['schedule']['week_day'] = ",".join(
+                map(str, schedule['run_days']))
 
         api_name = 'SYNO.ActiveBackupOffice365'
         info = self.gen_list[api_name]
@@ -767,14 +776,14 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def set_rotation_policy(self, task_id: int, days_to_keep: int) -> dict[str, object]:
         """Set the rotation policy for a given task.
 
             Parameters
             ----------
             task_id : int
-                The ID of the task.  
+                The ID of the task.
 
             days_to_keep : int
                 The amount of days to keep previous versions. Defaults to `0` (keep all versions).
@@ -783,10 +792,10 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             -------
             dict[str, object]
                 A dictionary containing the result of the rotation policy update.
-            
+
             Example return
             --------------
-            ```json 
+            ```json
             {
                 "success": true
             }
@@ -794,13 +803,13 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         """
         response = self.get_task_setting(task_id=task_id)
         task_info = self.__trim_task_info(response['data']['task_info'])
-        
+
         if days_to_keep == 0:
             task_info['rotation_policy'] = 0
-        else: 
+        else:
             task_info['rotation_policy'] = 1
-            task_info['preserve_day_number'] = days_to_keep 
-        
+            task_info['preserve_day_number'] = days_to_keep
+
         api_name = 'SYNO.ActiveBackupOffice365'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -813,7 +822,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def run_backup(self, task_id: int) -> dict[str, object]:
         """Manually run backup for a given task id.
 
@@ -826,7 +835,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             -------
             dict[str, object]
                 A dictionary containing the result of the backup task.
-            
+
             Example return
             --------------
             ```json
@@ -847,7 +856,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def cancel_backup(self, task_id: int) -> dict[str, object]:
         """Cancel a running backup task.
 
@@ -860,10 +869,10 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             -------
             dict[str, object]
                 A dictionary containing the result of the task cancellation.
-            
+
             Example return
             --------------
-            ```json 
+            ```json
             {
                 "success": true
             }
@@ -871,15 +880,16 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         """
         response = self.get_tasks()
         tasks = response['data']['tasks']
-        matching_task = next((task for task in tasks if task.get("task_id") == task_id), None)
-        
+        matching_task = next(
+            (task for task in tasks if task.get("task_id") == task_id), None)
+
         if matching_task is None:
             raise Exception(f"Task with ID {task_id} not found.")
-        
+
         # Return if task is not running
         if matching_task['status'] != 4:
-            return 
-        
+            return
+
         api_name = 'SYNO.ActiveBackupOffice365'
         info = self.gen_list[api_name]
         api_path = info['path']
@@ -893,7 +903,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
+
     def delete_task(self, task_id: int, remove_data: bool = False) -> dict[str, object]:
         """Delete a task.
 
@@ -906,17 +916,17 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
             remove_data : bool
                 Whether to remove the backup data in the NAS. Defaults to `False`.
-                
-                Warning: If this is set to `True`, all task data in the NAS will be lost and the task cannot be relinked in the future. 
+
+                Warning: If this is set to `True`, all task data in the NAS will be lost and the task cannot be relinked in the future.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the result of the task deletion.
-            
+
             Example return
             --------------
-            ```json 
+            ```json
             {
                 "success": true
             }
@@ -935,14 +945,14 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-    
-    def relink_task(self, 
-        task_name: str, 
-        local_shared: str, 
-        local_path: str, 
-        admin_email: str,
-        region: str = "Microsoft 365"
-    ) -> dict[str, object]:
+
+    def relink_task(self,
+                    task_name: str,
+                    local_shared: str,
+                    local_path: str,
+                    admin_email: str,
+                    region: str = "Microsoft 365"
+                    ) -> dict[str, object]:
         """Relink a task.
 
             Parameters
@@ -951,18 +961,18 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
                 The name of the task.
 
             shared_folder : str
-                The name of the shared folder where the task is stored. 
-                
+                The name of the shared folder where the task is stored.
+
                 Example: `ActiveBackupforBusiness`
 
             task_path : str
-                The relative path from the the shared folder where the task is stored. 
-                
+                The relative path from the the shared folder where the task is stored.
+
                 Example: `/ActiveBackupForMicrosoft365/task_1`
 
             admin_email : str
                 The email of the Microsoft 365 administrator.
-                
+
             region : str
                 The region of the Microsoft 365 account. Defaults to `Microsoft 365`
 
@@ -970,10 +980,10 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             -------
             dict[str, object]
                 A dictionary containing the result of the task relinking.
-            
+
             Example return
             --------------
-            ```json 
+            ```json
             {
                 "data": {
                     "task_id": 3

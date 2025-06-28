@@ -2,9 +2,11 @@ from unittest import TestCase
 import unittest
 from synology_api.cloud_sync import CloudSync
 from setup_tests import parse_config
-import os, pathlib
+import os
+import pathlib
 import json
 import time
+
 
 class TestSynologyCloudSync(TestCase):
     config: dict[str, str]
@@ -62,7 +64,8 @@ class TestSynologyCloudSync(TestCase):
             # json.dump(task, open('task.json', 'w'), indent=4)
 
             # Verify that the task was created successfully
-            self.assertTrue(task[1]['data']['result'][0]['success'], "Task creation should be successful")
+            self.assertTrue(task[1]['data']['result'][0]
+                            ['success'], "Task creation should be successful")
 
             # Find the session id
             list_sessions = task[1]['data']['result'][1]['data']['sess']
@@ -71,16 +74,19 @@ class TestSynologyCloudSync(TestCase):
             sess_id = max(sess['sess_id'] for sess in list_sessions)
 
             # Sleep for 5 seconds before removing the session id
-            print(f"Sleeping for 5 seconds before removing session id: {sess_id}")
+            print(
+                f"Sleeping for 5 seconds before removing session id: {sess_id}")
             time.sleep(5)
 
             # Remove the session
             task_remover = cs.task_remove(conn_id=conn_id, sess_id=sess_id)
             # Verify that the task was removed successfully
-            self.assertTrue(task_remover['success'], "Task removal should be successful")
+            self.assertTrue(task_remover['success'],
+                            "Task removal should be successful")
         finally:
             # Ensure logout is called to clean up the session
             cs.logout()
+
 
 if __name__ == '__main__':
     unittest.main()

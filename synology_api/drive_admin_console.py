@@ -132,7 +132,8 @@ class AdminConsole(base_api.BaseApi):
         api_name = 'SYNO.SynologyDrive.Profiles'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'start': start, 'limit': limit, 'user': user}
+        req_param = {'version': info['maxVersion'], 'method': 'list',
+                     'start': start, 'limit': limit, 'user': user}
 
         return self.request_data(api_name, api_path, req_param)
 
