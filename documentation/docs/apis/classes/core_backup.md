@@ -17,7 +17,7 @@ This API is partially documented or under construction.
 
 ## Methods
 ### `backup_repository_get`
-Get repository information for given task.  
+Get repository information for given task.     
   
 #### Internal API
 <div class="padding-left--md">
@@ -59,7 +59,7 @@ Get current restoring information and a list of present tasks in Hyper Backup.
 
 
 ### `backup_task_status`
-Get status and state of task.  
+Get status and state of task.      
   
 #### Internal API
 <div class="padding-left--md">
@@ -73,7 +73,7 @@ Get status and state of task.
 
 
 ### `backup_task_get`
-Get detailed task information.  
+Get detailed task information.    
   
 #### Internal API
 <div class="padding-left--md">

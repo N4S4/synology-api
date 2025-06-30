@@ -12,14 +12,14 @@ title: ✅ User
 Core User API implementation.
 
 Supported actions:
-    - **Getters** :
+    - **Getters** : 
         - Get all users
         - Password policies
         - Password expiry
 
     - **Setters** :
         - Set user password policy
-
+    
     - **Actions** :
         - Create new user
         - Modify user
@@ -216,7 +216,7 @@ A dictionary containing the user information.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
+{ 
     "data":
     {
         "name":"toto",
@@ -503,34 +503,34 @@ Set the password policy.
   
 #### Parameters
 <div class="padding-left--md">
-**_enable_reset_passwd_by_email_** `bool`  
+**_enable_reset_passwd_by_email_** `bool, optional `  
 Defaults to `False`.  
   
-**_password_must_change_** `bool`  
+**_password_must_change_** `bool, optional `  
 Defaults to `False`.  
   
-**_exclude_username_** `bool`  
+**_exclude_username_** `bool, optional `  
 Defaults to `True`.  
   
-**_included_numeric_char_** `bool`  
+**_included_numeric_char_** `bool, optional `  
 Defaults to `True`.  
   
-**_included_special_char_** `bool`  
+**_included_special_char_** `bool, optional `  
 Defaults to `False`.  
   
-**_min_length_** `int`  
+**_min_length_** `int, optional `  
 Defaults to `8`.  
   
-**_min_length_enable_** `bool`  
+**_min_length_enable_** `bool, optional `  
 Defaults to `True`.  
   
-**_mixed_case_** `bool`  
+**_mixed_case_** `bool, optional `  
 Defaults to `True`.  
   
-**_exclude_common_password_** `bool`  
+**_exclude_common_password_** `bool, optional `  
 Defaults to `False`.  
   
-**_exclude_history_** `bool`  
+**_exclude_history_** `bool, optional `  
 Defaults to `False`.  
   
 

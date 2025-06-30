@@ -13,11 +13,11 @@ USB Copy Implementation.
 
 ### Supported methods
 
-    - **Getters** :
+    - **Getters** : 
         - Get package settings
         - Get package logs
         - Get task settings
-
+        
     - **Actions** :
         - Enable / Disable task
 ## Methods

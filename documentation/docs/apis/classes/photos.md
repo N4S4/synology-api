@@ -148,20 +148,20 @@ List all items in all folders in Personal Space
 **_offset_** `int`  
 Specify how many shared folders are skipped before beginning to return listed shared folders.  
   
-**_limit_** `int`  
+**_limit_** `int `  
 Number of shared folders requested. Set to `0` to list all shared folders.  
   
 **_folder_id_** `int`  
 ID of folder  
   
 **_sort_by_** `str`  
-Possible values:
+Possible values: 
 - `filename`
 - `filesize`
 - `takentime`
 - `item_type`  
   
-**_sort_direction_** `str`  
+**_sort_direction_** `str, optional `  
 Possible values: `asc` or `desc`. Defaults to: `desc`  
   
 **_passphrase_** `str`  
@@ -171,10 +171,10 @@ Passphrase for a shared album
 Possible values:
 `["thumbnail","resolution", "orientation", "video_convert", "video_meta", "provider_user_id", "exif", "tag", "description", "gps", "geocoding_id", "address", "person"]`  
   
-**_type_** `str`  
+**_type_** `str `  
 Possible values:
-- `photo`: Photo
-- `video`: Video
+- `photo`: Photo 
+- `video`: Video 
 - `live`: iPhone live photos'  
   
 
