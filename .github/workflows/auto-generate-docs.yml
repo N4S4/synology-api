@@ -7,6 +7,8 @@ on:
 
 jobs:
   generate:
+    # temporary disabled
+    if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
