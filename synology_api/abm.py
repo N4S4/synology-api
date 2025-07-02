@@ -53,8 +53,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the list of tasks.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -280,8 +280,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the list of logs.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -358,8 +358,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the list of logs.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -423,8 +423,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the settings of the task.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -591,8 +591,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the number of workers.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -632,8 +632,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the worker count update.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -702,7 +702,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
                 Note: If `repeat_every_hours` is set to 0, the backup will run once a day.
 
-                Example, to run the backup every day hourly starting at 08:30 until 23:30.
+                Examples, to run the backup every day hourly starting at 08:30 until 23:30.
                 ```json
                 {
                     "start_hour": 8,
@@ -718,8 +718,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the schedule update.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -793,8 +793,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the rotation policy update.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -836,8 +836,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the backup task.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -870,8 +870,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the task cancellation.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -924,8 +924,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the task deletion.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -963,12 +963,12 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             shared_folder : str
                 The name of the shared folder where the task is stored.
 
-                Example: `ActiveBackupforBusiness`
+                Examples: `ActiveBackupforBusiness`
 
             task_path : str
                 The relative path from the the shared folder where the task is stored.
 
-                Example: `/ActiveBackupForMicrosoft365/task_1`
+                Examples: `/ActiveBackupForMicrosoft365/task_1`
 
             admin_email : str
                 The email of the Microsoft 365 administrator.
@@ -981,8 +981,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the task relinking.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {

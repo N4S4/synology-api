@@ -56,8 +56,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of package settings.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -119,8 +119,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the list of cloud connections.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -187,8 +187,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the connection settings.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -231,8 +231,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing cloud information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -279,8 +279,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the connection authentication details.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -393,8 +393,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the connection logs.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -457,8 +457,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the list of tasks.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -507,8 +507,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing task filter information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -571,8 +571,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the list of children directories.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -629,8 +629,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the recently modified files.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -743,8 +743,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the configuration update.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -784,8 +784,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the relink behavior update.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -847,8 +847,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the updated connection settings.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -917,8 +917,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the schedule settings.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -980,8 +980,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the task settings configuration.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -1034,8 +1034,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the task filters configuration.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -1073,8 +1073,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the pause action.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -1107,8 +1107,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the resume action.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -1143,8 +1143,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the remove action.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -1183,8 +1183,8 @@ class CloudSync(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the task removal.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true

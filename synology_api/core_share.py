@@ -38,8 +38,8 @@ class Share(base_api.BaseApi):
             dict
                 Success.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true,
@@ -98,8 +98,8 @@ class Share(base_api.BaseApi):
             dict
                 A dictionary containing the shared folders information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -146,8 +146,8 @@ class Share(base_api.BaseApi):
             dict
                 A dictionary containing the shared folder information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -224,8 +224,8 @@ class Share(base_api.BaseApi):
             dict
                 Name of the created shared folder
 
-            Example return
-            ---------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -280,8 +280,8 @@ class Share(base_api.BaseApi):
             dict
                 Success.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -346,8 +346,8 @@ class Share(base_api.BaseApi):
             dict
                 Name of the created shared folder
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -430,8 +430,8 @@ class SharePermission(base_api.BaseApi):
             dict
                 List of permission(s) on the folder
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -501,8 +501,8 @@ class SharePermission(base_api.BaseApi):
             dict
                 All permissions on the folder
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -597,8 +597,8 @@ class SharePermission(base_api.BaseApi):
             dict
                 Success
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -629,8 +629,8 @@ class SharePermission(base_api.BaseApi):
             dict
                 Permissions of a group on Shared folders
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -704,8 +704,8 @@ class SharePermission(base_api.BaseApi):
             dict
                 Success
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -792,8 +792,8 @@ class KeyManagerStore(base_api.BaseApi):
             dict
                 List of stores existing on the NAS
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -826,8 +826,8 @@ class KeyManagerAutoKey(base_api.BaseApi):
             dict
                 List of keys in the manager
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {

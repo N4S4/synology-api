@@ -49,8 +49,8 @@ class Group(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the groups information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -125,8 +125,8 @@ class Group(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -179,8 +179,8 @@ class Group(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -226,8 +226,8 @@ class Group(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -276,8 +276,8 @@ class Group(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -338,8 +338,8 @@ class Group(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -406,8 +406,8 @@ class Group(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {},
@@ -463,8 +463,8 @@ class Group(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -521,8 +521,8 @@ class Group(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -572,8 +572,8 @@ class Group(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {},
@@ -610,8 +610,8 @@ class Group(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {},
@@ -648,8 +648,8 @@ class Group(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -686,8 +686,8 @@ class Group(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {},

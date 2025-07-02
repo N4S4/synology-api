@@ -114,8 +114,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing a list of the tasks and information related to them.
 
-            Example return
-            -----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -177,8 +177,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing a list of the tasks and information related to them.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -254,8 +254,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the task configuration.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -330,8 +330,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the task results.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": [
@@ -429,8 +429,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the output configuration.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -474,8 +474,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the task enabling.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -519,8 +519,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the task execution.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -563,8 +563,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the task deletion.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -688,8 +688,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary with the id of the created task.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -839,8 +839,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary with the id of the created task.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -973,8 +973,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary with the id of the created task.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -1102,8 +1102,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary with the id of the created task.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -1243,8 +1243,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary with the id of the created task.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -1403,8 +1403,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary with the id of the created task.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -1558,8 +1558,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary with the id of the created task.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -1716,8 +1716,8 @@ class TaskScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary with the id of the created task.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {

@@ -43,8 +43,8 @@ class DirectoryServer(base_api.BaseApi):
             dict[str, object]
                 Information about your domain.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -119,8 +119,8 @@ class DirectoryServer(base_api.BaseApi):
 
                 Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -219,8 +219,8 @@ class DirectoryServer(base_api.BaseApi):
             dict[str, object]
                 The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. The data dictionary contains an 'error', or it contains a 'dn' and a 'name'.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 'data': {
@@ -262,8 +262,8 @@ class DirectoryServer(base_api.BaseApi):
             dict[str, object]
                 The return object can be checked for the "success" to be a true or false.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -305,8 +305,8 @@ class DirectoryServer(base_api.BaseApi):
 
                 Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -411,8 +411,8 @@ class DirectoryServer(base_api.BaseApi):
             dict[str, object]
                 A success object, and data object containing the new dn and the netbios name of the group.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 'data': {
@@ -451,8 +451,8 @@ class DirectoryServer(base_api.BaseApi):
 
                 Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -569,8 +569,8 @@ class DirectoryServer(base_api.BaseApi):
 
                 Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -658,8 +658,8 @@ class DirectoryServer(base_api.BaseApi):
 
                 Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -709,8 +709,8 @@ class DirectoryServer(base_api.BaseApi):
 
                 The 'success' object will be true if the operation was successful. or false if failed.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -758,8 +758,8 @@ class DirectoryServer(base_api.BaseApi):
                 T
                 The 'success' object will be true if the operation was successful. or false if failed.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 'data': {
@@ -795,8 +795,8 @@ class DirectoryServer(base_api.BaseApi):
 
                 Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -863,8 +863,8 @@ class DirectoryServer(base_api.BaseApi):
 
                 Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
