@@ -89,3 +89,10 @@ tasks:
       - python3 -m venv .venv
       - source .venv/bin/activate
       - task: install-python-deps
+
+  numpydoc-validation:
+    desc: Validate the numpydoc format of the documentation
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Validating numpydoc format..."
+      - pre-commit run numpydoc-validation -a

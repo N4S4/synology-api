@@ -52,8 +52,8 @@ class User(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the groups information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -128,8 +128,8 @@ class User(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the user information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "api": "SYNO.Core.User",
@@ -207,8 +207,8 @@ class User(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the user information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data":
@@ -293,8 +293,8 @@ class User(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the user information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data":{
@@ -345,8 +345,8 @@ class User(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the user information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -390,8 +390,8 @@ class User(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the task id to check the status of the join task. Use `affect_groups_status` func to check the status of the task.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "api": "SYNO.Core.User.Group",
@@ -430,8 +430,8 @@ class User(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the status of the join task.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -475,8 +475,8 @@ class User(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the password policy information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "api": "SYNO.Core.User.PasswordPolicy",
@@ -553,8 +553,8 @@ class User(base_api.BaseApi):
             dict[str, object]
                 A dictionary indicating the success of the operation.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
                 {
                     "api": "SYNO.Core.User.PasswordPolicy",
@@ -595,8 +595,8 @@ class User(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the password expiry information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "api": "SYNO.Core.User.PasswordExpiry",
@@ -664,8 +664,8 @@ class User(base_api.BaseApi):
             dict[str, object]
                 A dictionary indicating the success of the operation.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "api": "SYNO.Core.User.PasswordExpiry",
@@ -709,8 +709,8 @@ class User(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing a `SynoConfirmPWToken`, or an error message.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -742,8 +742,8 @@ class User(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the username policy information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "api": "SYNO.Core.User.UsernamePolicy",

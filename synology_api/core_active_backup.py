@@ -111,8 +111,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the current settings.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -214,8 +214,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -254,8 +254,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -315,8 +315,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -369,8 +369,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -431,8 +431,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing a list of devices and their transfer size.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data" : {
@@ -608,8 +608,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing a list of tasks.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -868,8 +868,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing a list of logs.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "count": 1,
@@ -1026,8 +1026,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing a list of results.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -1122,8 +1122,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing a list of result details.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -1186,8 +1186,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing a list of storage devices.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data" : {
@@ -1263,8 +1263,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -1299,8 +1299,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -1336,8 +1336,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -1374,8 +1374,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true

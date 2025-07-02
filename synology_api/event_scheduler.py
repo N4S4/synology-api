@@ -51,8 +51,8 @@ class EventScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the task results.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": [
@@ -107,8 +107,8 @@ class EventScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result output.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -151,8 +151,8 @@ class EventScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the action.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -188,8 +188,8 @@ class EventScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the task execution.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -224,7 +224,8 @@ class EventScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the task deletion.
 
-            Example return
+            Examples
+            --------
             ```json
             ----------
             {
@@ -304,8 +305,8 @@ class EventScheduler(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the task creation or modification, or a strnig in case of an error.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -378,8 +379,8 @@ class EventScheduler(base_api.BaseApi):
             dict
                 List of tasks in power schedule
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -418,8 +419,8 @@ class EventScheduler(base_api.BaseApi):
             dict
                 List of tasks in power schedule
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {

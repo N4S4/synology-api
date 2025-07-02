@@ -107,8 +107,8 @@ class Snapshot(base_api.BaseApi):
             dict[str, object]
                 API response if successful, error message if not.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -176,8 +176,8 @@ class Snapshot(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing the LUN snapshots information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -324,8 +324,8 @@ class Snapshot(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing a list of LUNs present in the system.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -514,8 +514,8 @@ class Snapshot(base_api.BaseApi):
             dict[str, object]
                 API response if successful, error message if not
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -859,8 +859,8 @@ class Snapshot(base_api.BaseApi):
             dict[str, object]
                 API response if successful, error message if not.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": "GMT+09-2023.09.12-00.33.20",
@@ -915,8 +915,8 @@ class Snapshot(base_api.BaseApi):
             dict[str, object]
                 API response if successful, error message if not.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -974,8 +974,8 @@ class Snapshot(base_api.BaseApi):
             dict[str, object]
                 API response if successful, error message if not.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -1038,8 +1038,8 @@ class Snapshot(base_api.BaseApi):
             dict[str, object]
                 API response if successful
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -1101,8 +1101,8 @@ class Snapshot(base_api.BaseApi):
             dict[str, object]
                 API response if successful
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -1157,8 +1157,8 @@ class Snapshot(base_api.BaseApi):
                 }
                 ```
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": [],

@@ -30,8 +30,8 @@ class Package(base_api.BaseApi):
             dict
                 Informations about the package
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -82,8 +82,8 @@ class Package(base_api.BaseApi):
             dict
                 List of packages installed on the NAS
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -122,8 +122,8 @@ class Package(base_api.BaseApi):
             dict
                 List of beta_package, categories and packages available
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -155,8 +155,8 @@ class Package(base_api.BaseApi):
             dict
                 List settings of the Package center
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -240,8 +240,8 @@ class Package(base_api.BaseApi):
             dict
                 Return some settings
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -278,8 +278,8 @@ class Package(base_api.BaseApi):
             dict
                 List of configs
 
-            Return example
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -334,8 +334,8 @@ class Package(base_api.BaseApi):
             dict
                 _description_
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -376,8 +376,8 @@ class Package(base_api.BaseApi):
             dict
                 Retreive first progress of the download and the taskid used to check download status with `get_dowload_package_status` function
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -417,8 +417,8 @@ class Package(base_api.BaseApi):
             dict
                 Retrieve informations about the download, important info is the `progress` field
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -463,8 +463,8 @@ class Package(base_api.BaseApi):
             dict
                 Retrieve information about downloaded package installation file, response field is used for `check_installation` and `install_package` function
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -521,8 +521,8 @@ class Package(base_api.BaseApi):
             dict
                 Informations about the uploaded file for installation
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -611,8 +611,8 @@ class Package(base_api.BaseApi):
             dict
                 Return default volume, if default volume is set to `Always ask me` it return error 4501
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -656,8 +656,8 @@ class Package(base_api.BaseApi):
             dict
                 List of usefull informations about volumes
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -739,8 +739,8 @@ class Package(base_api.BaseApi):
             dict
                 Message and some info about installation
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -804,8 +804,8 @@ class Package(base_api.BaseApi):
             dict
                 Message and some info about installation
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -898,8 +898,8 @@ class Package(base_api.BaseApi):
             dict
                 Possible message to the user
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -952,8 +952,8 @@ class Package(base_api.BaseApi):
             dict[str, object]
                 Information about installation, same as install_package function
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data": {

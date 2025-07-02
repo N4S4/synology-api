@@ -24,8 +24,8 @@ class USBCopy(base_api.BaseApi):
             dict[str, object]
                 Parsed JSON into `dict`
 
-            Example return
-            --------------
+            Examples
+            --------
             ```python
             {
                 "data" : {
@@ -62,8 +62,8 @@ class USBCopy(base_api.BaseApi):
             dict[str, object]
                 Parsed response JSON into `dict`
 
-            Example return
-            --------------
+            Examples
+            --------
             ```python
             {
                 "data" : {
@@ -105,8 +105,8 @@ class USBCopy(base_api.BaseApi):
             dict[str, object]
                 Parsed response JSON into `dict`
 
-            Example return
-            --------------
+            Examples
+            --------
             ```python
             {
                 "data" : {
@@ -169,8 +169,8 @@ class USBCopy(base_api.BaseApi):
             dict[str, object]
                 Parsed response JSON into `dict`
 
-            Example return
-            --------------
+            Examples
+            --------
             ```python
             {
                 "success": True

@@ -82,6 +82,17 @@ task pre-commit
 These pre-commit hooks help keep the codebase clean and consistent by checking formatting, linting, and running tests.
 They may seem strict at first, but they save time and reduce issues in the long run.
 
+## Validation
+
+To ensure your code is valid and follows the project's standards, we use `numpydoc` for validation of docstrings.
+
+To validate your code, you can run:
+```bash
+task numpydoc-validation
+```
+
+Alternatively, before committing, pre-commit hooks will automatically run this validation for the files you commit.
+
 ## Testing
 
 We would appreciate if you test your code on your Synology NAS (if you own one),
