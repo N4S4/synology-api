@@ -39,8 +39,8 @@ ADMONITIONS = [
     {'pattern': r'(Danger:)(.*)', 'level': 'danger'},
 ]
 
-# Match example return block, header in group 1 and content in group 2
-EXAMPLE_RETURN_PATTERN = r'(?s)(Example return\n-.*)(```.*```)'
+# Match Examples block, header in group 1 and content in group 2
+EXAMPLE_RETURN_PATTERN = r'(?s)(Examples\n.*?)(```.*?```)'
 
 # Match API name in string, API name in group 1
 CLASS_API_NAME_PATTERN = r'api_name\s*=\s*f?[\'"](.*)[\'"]'
