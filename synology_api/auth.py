@@ -1,3 +1,6 @@
+"""
+Provides authentication and API request handling for Synology DSM, including session management, encryption utilities, and error handling for various Synology services.
+"""
 from __future__ import annotations
 from random import randint
 from typing import Optional
@@ -27,6 +30,35 @@ USE_EXCEPTIONS: bool = True
 
 
 class Authentication:
+    """
+    Handles authentication and API requests for Synology DSM.
+
+    Parameters
+    ----------
+    ip_address : str
+        The IP address of the Synology device.
+    port : str
+        The port to connect to.
+    username : str
+        The username for authentication.
+    password : str
+        The password for authentication.
+    secure : bool, optional
+        Whether to use HTTPS (default is False).
+    cert_verify : bool, optional
+        Whether to verify SSL certificates (default is False).
+    dsm_version : int, optional
+        DSM API version (default is 7).
+    debug : bool, optional
+        Enable debug output (default is True).
+    otp_code : str, optional
+        One-time password for 2FA.
+    device_id : str, optional
+        Device ID for device binding.
+    device_name : str, optional
+        Device name for device binding.
+    """
+
     def __init__(self,
                  ip_address: str,
                  port: str,
@@ -40,7 +72,39 @@ class Authentication:
                  device_id: Optional[str] = None,
                  device_name: Optional[str] = None
                  ) -> None:
+        """
+        Initialize the Authentication object for Synology DSM.
 
+        Parameters
+        ----------
+        ip_address : str
+            The IP address of the Synology device.
+        port : str
+            The port to connect to.
+        username : str
+            The username for authentication.
+        password : str
+            The password for authentication.
+        secure : bool, optional
+            Whether to use HTTPS (default is False).
+        cert_verify : bool, optional
+            Whether to verify SSL certificates (default is False).
+        dsm_version : int, optional
+            DSM API version (default is 7).
+        debug : bool, optional
+            Enable debug output (default is True).
+        otp_code : str, optional
+            One-time password for 2FA (default is None).
+        device_id : str, optional
+            Device ID for device binding (default is None).
+        device_name : str, optional
+            Device name for device binding (default is None).
+
+        Returns
+        -------
+        None
+            Just setter, no return values.
+        """
         self._ip_address: str = ip_address
         self._port: str = port
         self._username: str = username
@@ -68,9 +132,31 @@ class Authentication:
         self.app_api_list = {}
 
     def verify_cert_enabled(self) -> bool:
+        """
+        Check if SSL certificate verification is enabled.
+
+        Returns
+        -------
+        bool
+            True if certificate verification is enabled, False otherwise.
+        """
         return self._verify
 
     def login(self) -> None:
+        """
+        Log in to the Synology DSM and obtain a session ID and token.
+
+        Raises
+        ------
+        SynoConnectionError
+            If a connection error occurs.
+        HTTPError
+            If an HTTP error occurs.
+        JSONDecodeError
+            If the response cannot be decoded as JSON.
+        LoginError
+            If login fails due to an API error.
+        """
         login_api = 'auth.cgi'
         params = {'api': "SYNO.API.Auth", 'version': self._version,
                   'method': 'login', 'enable_syno_token': 'yes', 'client': 'browser'}
@@ -142,6 +228,20 @@ class Authentication:
         return
 
     def logout(self) -> None:
+        """
+        Log out from the Synology DSM and invalidate the session.
+
+        Raises
+        ------
+        SynoConnectionError
+            If a connection error occurs.
+        HTTPError
+            If an HTTP error occurs.
+        JSONDecodeError
+            If the response cannot be decoded as JSON.
+        LogoutError
+            If logout fails due to an API error.
+        """
         logout_api = 'auth.cgi?api=SYNO.API.Auth'
         param = {'version': self._version,
                  'method': 'logout', 'session': 'webui'}
@@ -177,6 +277,23 @@ class Authentication:
         return
 
     def get_api_list(self, app: Optional[str] = None) -> None:
+        """
+        Retrieve the list of available APIs from the Synology DSM.
+
+        Parameters
+        ----------
+        app : str, optional
+            Filter APIs by application name.
+
+        Raises
+        ------
+        SynoConnectionError
+            If a connection error occurs.
+        HTTPError
+            If an HTTP error occurs.
+        JSONDecodeError
+            If the response cannot be decoded as JSON.
+        """
         query_path = 'query.cgi?api=SYNO.API.Info'
         list_query = {'version': '1', 'method': 'query', 'query': 'all'}
 
@@ -208,6 +325,9 @@ class Authentication:
         return
 
     def show_api_name_list(self) -> None:
+        """
+        Print the list of available API names.
+        """
         prev_key = ''
         for key in self.full_api_list:
             if key != prev_key:
@@ -216,6 +336,9 @@ class Authentication:
         return
 
     def show_json_response_type(self) -> None:
+        """
+        Print API names that return JSON data.
+        """
         for key in self.full_api_list:
             for sub_key in self.full_api_list[key]:
                 if sub_key == 'requestFormat':
@@ -224,6 +347,14 @@ class Authentication:
         return
 
     def search_by_app(self, app: str) -> None:
+        """
+        Search and print API names containing the specified application name.
+
+        Parameters
+        ----------
+        app : str
+            Application name to search for.
+        """
         print_check = 0
         for key in self.full_api_list:
             if app.lower() in key.lower():
@@ -235,6 +366,19 @@ class Authentication:
         return
 
     def _random_AES_passphrase(self, length):
+        """
+        Generate a random passphrase for AES encryption.
+
+        Parameters
+        ----------
+        length : int
+            Length of the passphrase.
+
+        Returns
+        -------
+        bytes
+            Randomly generated passphrase.
+        """
         available = ('0123456789'
                      'abcdefghijklmnopqrstuvwxyz'
                      'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -248,6 +392,14 @@ class Authentication:
         return key
 
     def _get_enc_info(self):
+        """
+        Retrieve encryption information from the Synology API.
+
+        Returns
+        -------
+        dict
+            Encryption information including public key and cipher details.
+        """
         api_name = 'SYNO.API.Encryption'
         req_params = {
             "method": "getinfo",
@@ -258,6 +410,23 @@ class Authentication:
         return response["data"]
 
     def _encrypt_RSA(self, modulus, passphrase, text):
+        """
+        Encrypt text using RSA public key encryption.
+
+        Parameters
+        ----------
+        modulus : int
+            RSA modulus.
+        passphrase : int
+            RSA public exponent.
+        text : str or bytes
+            Text to encrypt.
+
+        Returns
+        -------
+        bytes
+            Encrypted ciphertext.
+        """
         public_numbers = rsa.RSAPublicNumbers(passphrase, modulus)
         public_key = public_numbers.public_key(default_backend())
 
@@ -271,11 +440,39 @@ class Authentication:
         return ciphertext
 
     def _encrypt_AES(self, passphrase, text):
+        """
+        Encrypt text using AES encryption.
+
+        Parameters
+        ----------
+        passphrase : bytes
+            AES passphrase.
+        text : str
+            Text to encrypt.
+
+        Returns
+        -------
+        bytes
+            Encrypted ciphertext.
+        """
         cipher = AESCipher(passphrase)
 
         return cipher.encrypt(text)
 
     def encrypt_params(self, params):
+        """
+        Encrypt login parameters using RSA and AES.
+
+        Parameters
+        ----------
+        params : dict
+            Parameters to encrypt.
+
+        Returns
+        -------
+        dict
+            Encrypted parameters suitable for login.
+        """
         enc_info = self._get_enc_info()
         public_key = enc_info["public_key"]
         cipher_key = enc_info["cipherkey"]
@@ -306,18 +503,41 @@ class Authentication:
                             mode: Optional[str] = "sequential",
                             response_json: bool = True
                             ) -> dict[str, object] | str | list | requests.Response:  # 'post' or 'get'
-        '''
-        Compound is a json structure that contains multiples requests, you can execute them sequential or parallel
+        """
+        Send multiple requests to the Synology API, either sequentially or in parallel.
 
-        Example of compound:
-        compound = [
-            {
-                "api": "SYNO.Core.User",
-                "method": "list",
-                "version": self.core_list["SYNO.Core.User"]
-            }
-        ]
-        '''
+        Parameters
+        ----------
+        compound : dict[object], optional
+            A JSON structure containing multiple requests to be executed.
+            Example:
+            compound = [
+                {
+                    "api": "SYNO.Core.User",
+                    "method": "list",
+                    "version": self.core_list["SYNO.Core.User"]
+                }
+            ].
+        method : str, optional
+            The HTTP method to use ('get' or 'post'). Defaults to 'get' if not specified.
+        mode : str, optional
+            The execution mode for the requests, either "sequential" or "parallel".
+            Defaults to "sequential".
+        response_json : bool, optional
+            Whether to return the response as JSON. If False, returns the raw response object.
+
+        Returns
+        -------
+        dict[str, object] or str or list or requests.Response
+            The response from the API, either as a JSON-decoded object, string, list, or the raw response.
+
+        Raises
+        ------
+        SynoConnectionError
+            If a connection error occurs.
+        HTTPError
+            If an HTTP error occurs.
+        """
         api_name = 'hotfix'  # fix for docs_parser.py issue
         api_path = self.full_api_list['SYNO.Entry.Request']['path']
         api_version = self.full_api_list['SYNO.Entry.Request']['maxVersion']
@@ -359,7 +579,36 @@ class Authentication:
                      method: Optional[str] = None,
                      response_json: bool = True
                      ) -> dict[str, object] | str | list | requests.Response:  # 'post' or 'get'
+        """
+        Send a request to the Synology API and handle errors based on the API name.
 
+        Parameters
+        ----------
+        api_name : str
+            The name of the Synology API to call.
+        api_path : str
+            The path to the API endpoint.
+        req_param : dict[str, object]
+            The parameters to include in the request.
+        method : str, optional
+            The HTTP method to use ('get' or 'post'). Defaults to 'get' if not specified.
+        response_json : bool, optional
+            Whether to return the response as JSON. If False, returns the raw response object.
+
+        Returns
+        -------
+        dict[str, object] or str or list or requests.Response
+            The response from the API, either as a JSON-decoded object, string, list, or the raw response.
+
+        Raises
+        ------
+        SynoConnectionError
+            If a connection error occurs.
+        HTTPError
+            If an HTTP error occurs.
+        DownloadStationError, FileStationError, AudioStationError, ActiveBackupError, ActiveBackupMicrosoftError, VirtualizationError, BackupError, CloudSyncError, CertificateError, DHCPServerError, DirectoryServerError, DockerError, DriveAdminError, LogCenterError, NoteStationError, OAUTHError, PhotosError, SecurityAdvisorError, TaskSchedulerError, EventSchedulerError, UniversalSearchError, USBCopyError, VPNError, CoreError, CoreSysInfoError, UndefinedError
+            If the API returns an error code specific to the API being called.
+        """
         # Convert all boolean in string in lowercase because Synology API is waiting for "true" or "false"
         for k, v in req_param.items():
             if isinstance(v, bool):
@@ -506,6 +755,19 @@ class Authentication:
 
     @staticmethod
     def _get_error_code(response: dict[str, object]) -> int:
+        """
+        Extract the error code from an API response.
+
+        Parameters
+        ----------
+        response : dict
+            The API response.
+
+        Returns
+        -------
+        int
+            Error code, or 0 if successful.
+        """
         if response.get('success'):
             code = CODE_SUCCESS
         else:
@@ -514,6 +776,21 @@ class Authentication:
 
     @staticmethod
     def _get_error_message(code: int, api_name: str) -> str:
+        """
+        Get a human-readable error message for a given error code and API.
+
+        Parameters
+        ----------
+        code : int
+            Error code.
+        api_name : str
+            Name of the API.
+
+        Returns
+        -------
+        str
+            Error message.
+        """
         if code in error_codes.keys():
             message = error_codes[code]
         elif api_name == 'Auth':
@@ -533,23 +810,66 @@ class Authentication:
 
     @property
     def sid(self) -> Optional[str]:
+        """
+        Get the current session ID.
+
+        Returns
+        -------
+        str or None
+            Session ID if logged in, else None.
+        """
         return self._sid
 
     @property
     def base_url(self) -> str:
+        """
+        Get the base URL for API requests.
+
+        Returns
+        -------
+        str
+            Base URL.
+        """
         return self._base_url
 
     @property
     def syno_token(self) -> str:
+        """
+        Get the Synology token for API requests.
+
+        Returns
+        -------
+        str
+            Synology token.
+        """
         return self._syno_token
 
 
 class AESCipher(object):
-    """Encrypt with OpenSSL-compatible way"""
+    """
+    Encrypt with OpenSSL-compatible way.
+
+    Parameters
+    ----------
+    password : bytes
+        The password to derive the key from.
+    key_length : int, optional
+        Length of the key (default is 32).
+    """
 
     SALT_MAGIC = b'Salted__'
 
     def __init__(self, password, key_length=32):
+        """
+        Initialize the AESCipher object.
+
+        Parameters
+        ----------
+        password : bytes
+            The password to derive the key from.
+        key_length : int, optional
+            Length of the key (default is 32).
+        """
         self._bs = 16
         self._salt = urandom(self._bs - len(self.SALT_MAGIC))
 
@@ -559,10 +879,42 @@ class AESCipher(object):
                                                       self._bs)
 
     def _pad(self, s):
+        """
+        Pad the input string to a multiple of the block size.
+
+        Parameters
+        ----------
+        s : str
+            String to pad.
+
+        Returns
+        -------
+        bytes
+            Padded string as bytes.
+        """
         bs = self._bs
         return (s + (bs - len(s) % bs) * chr(bs - len(s) % bs)).encode('utf-8')
 
     def _derive_key_and_iv(self, password, salt, key_length, iv_length):
+        """
+        Derive the key and IV from the password and salt.
+
+        Parameters
+        ----------
+        password : bytes
+            Password.
+        salt : bytes
+            Salt.
+        key_length : int
+            Length of the key.
+        iv_length : int
+            Length of the IV.
+
+        Returns
+        -------
+        tuple
+            (key, iv).
+        """
         d = d_i = b''
         while len(d) < key_length + iv_length:
             md5_str = d_i + password + salt
@@ -571,6 +923,19 @@ class AESCipher(object):
         return d[:key_length], d[key_length:key_length + iv_length]
 
     def encrypt(self, text):
+        """
+        Encrypt the given text using AES CBC mode.
+
+        Parameters
+        ----------
+        text : str
+            Text to encrypt.
+
+        Returns
+        -------
+        bytes
+            Encrypted ciphertext with OpenSSL salt header.
+        """
         cipher = Cipher(
             algorithms.AES(self._key),
             modes.CBC(self._iv),
