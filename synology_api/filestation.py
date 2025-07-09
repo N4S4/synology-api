@@ -122,8 +122,8 @@ class FileStation(base_api.BaseApi):
         if additional is None:
             additional = ['real_path', 'size', 'owner', 'time']
 
-        if type(additional) is list:
-            additional = ','.join(additional)
+        #if type(additional) is list:
+        #    additional = ','.join(additional)
 
         req_param['additional'] = additional
 
