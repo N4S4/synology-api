@@ -1,9 +1,97 @@
+"""
+Synology Download Station API wrapper.
+
+This module provides a Python interface for managing downloads, tasks, RSS feeds, and BT searches
+on Synology NAS devices using the Download Station application.
+"""
+
 from __future__ import annotations
 from typing import Optional, Any
 from . import base_api
 
 
 class DownloadStation(base_api.BaseApi):
+    """
+    Core Download Station API implementation for Synology NAS.
+
+    This class provides methods to manage downloads, tasks, RSS feeds, and BT searches.
+
+    Parameters
+    ----------
+    ip_address : str
+        IP address or hostname of the Synology NAS.
+    port : str
+        Port number to connect to.
+    username : str
+        Username for authentication.
+    password : str
+        Password for authentication.
+    secure : bool, optional
+        Use HTTPS if True, HTTP if False (default is False).
+    cert_verify : bool, optional
+        Verify SSL certificates (default is False).
+    dsm_version : int, optional
+        DSM version (default is 7).
+    debug : bool, optional
+        Enable debug output (default is True).
+    otp_code : Optional[str], optional
+        One-time password for 2FA (default is None).
+    device_id : Optional[str], optional
+        Device ID (default is None).
+    device_name : Optional[str], optional
+        Device name (default is None).
+    interactive_output : bool, optional
+        Enable interactive output (default is True).
+    download_st_version : int, optional
+        Download Station API version (default is None).
+
+    Methods
+    -------
+    get_info()
+        Get Download Station info.
+    get_config()
+        Get Download Station config.
+    set_server_config(...)
+        Set Download Station server config.
+    schedule_info()
+        Get schedule info.
+    schedule_set_config(...)
+        Set schedule config.
+    tasks_list(...)
+        List download tasks.
+    tasks_info(...)
+        Get info for specific tasks.
+    tasks_source(...)
+        Download task source.
+    create_task(...)
+        Create a new download task.
+    delete_task(...)
+        Delete a download task.
+    pause_task(...)
+        Pause a download task.
+    resume_task(...)
+        Resume a download task.
+    edit_task(...)
+        Edit a download task.
+    get_statistic_info()
+        Get Download Station statistics.
+    get_rss_info_list(...)
+        Get RSS site info list.
+    refresh_rss_site(...)
+        Refresh RSS site.
+    rss_feed_list(...)
+        Get RSS feed list.
+    start_bt_search(...)
+        Start a BT search.
+    get_bt_search_results(...)
+        Get BT search results.
+    get_bt_search_category()
+        Get BT search categories.
+    clean_bt_search(...)
+        Clean BT search tasks.
+    get_bt_module()
+        Get BT search modules.
+    """
 
     def __init__(self,
                  ip_address: str,
@@ -20,6 +108,38 @@ class DownloadStation(base_api.BaseApi):
                  interactive_output: bool = True,
                  download_st_version: int = None
                  ) -> None:
+        """
+        Initialize the DownloadStation API wrapper.
+
+        Parameters
+        ----------
+        ip_address : str
+            IP address or hostname of the Synology NAS.
+        port : str
+            Port number to connect to.
+        username : str
+            Username for authentication.
+        password : str
+            Password for authentication.
+        secure : bool, optional
+            Use HTTPS if True, HTTP if False (default is False).
+        cert_verify : bool, optional
+            Verify SSL certificates (default is False).
+        dsm_version : int, optional
+            DSM version (default is 7).
+        debug : bool, optional
+            Enable debug output (default is True).
+        otp_code : Optional[str], optional
+            One-time password for 2FA (default is None).
+        device_id : Optional[str], optional
+            Device ID (default is None).
+        device_name : Optional[str], optional
+            Device name (default is None).
+        interactive_output : bool, optional
+            Enable interactive output (default is True).
+        download_st_version : int, optional
+            Download Station API version (default is None).
+        """
 
         super(DownloadStation, self).__init__(ip_address, port, username, password, secure, cert_verify,
                                               dsm_version, debug, otp_code, device_id, device_name, 'DownloadStation')
@@ -38,6 +158,14 @@ class DownloadStation(base_api.BaseApi):
             self.download_st_version = ''
 
     def get_info(self) -> dict[str, object] | str:
+        """
+        Get Download Station info.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Download Station info.
+        """
         api_name = 'SYNO.DownloadStation.Info'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -46,6 +174,14 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_config(self) -> dict[str, object] | str:
+        """
+        Get Download Station config.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Download Station config.
+        """
         api_name = 'SYNO.DownloadStation.Info'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -66,7 +202,39 @@ class DownloadStation(base_api.BaseApi):
                           default_destination: Optional[str] = None,
                           emule_default_destination: Optional[str] = None
                           ) -> dict[str, object] | str:
+        """
+        Set Download Station server configuration.
 
+        Parameters
+        ----------
+        bt_max_download : Optional[int], optional
+            Maximum BT download speed.
+        bt_max_upload : Optional[int], optional
+            Maximum BT upload speed.
+        emule_max_download : Optional[int], optional
+            Maximum eMule download speed.
+        emule_max_upload : Optional[int], optional
+            Maximum eMule upload speed.
+        nzb_max_download : Optional[int], optional
+            Maximum NZB download speed.
+        http_max_download : Optional[int], optional
+            Maximum HTTP download speed.
+        ftp_max_download : Optional[int], optional
+            Maximum FTP download speed.
+        emule_enabled : Optional[bool], optional
+            Enable eMule.
+        unzip_service_enabled : Optional[bool], optional
+            Enable unzip service.
+        default_destination : Optional[str], optional
+            Default download destination.
+        emule_default_destination : Optional[str], optional
+            Default eMule download destination.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = 'SYNO.DownloadStation.Info'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -81,6 +249,14 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def schedule_info(self) -> dict[str, object] | str:
+        """
+        Get Download Station schedule configuration.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Schedule configuration.
+        """
         api_name = 'SYNO.DownloadStation.Schedule'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -89,6 +265,21 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def schedule_set_config(self, enabled: bool = False, emule_enabled: bool = False) -> dict[str, object] | str:
+        """
+        Set Download Station schedule configuration.
+
+        Parameters
+        ----------
+        enabled : bool, optional
+            Enable schedule (default is False).
+        emule_enabled : bool, optional
+            Enable eMule schedule (default is False).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = 'SYNO.DownloadStation.Schedule'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -105,6 +296,23 @@ class DownloadStation(base_api.BaseApi):
                    offset: int = 0,
                    limit: int = -1
                    ) -> dict[str, object] | str:
+        """
+        List download tasks.
+
+        Parameters
+        ----------
+        additional_param : Optional[str or list[str]], optional
+            Additional fields to retrieve.
+        offset : int, optional
+            Offset for pagination (default is 0).
+        limit : int, optional
+            Maximum number of tasks to retrieve (default is -1).
+
+        Returns
+        -------
+        dict[str, object] or str
+            List of download tasks.
+        """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -121,6 +329,21 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def tasks_info(self, task_id, additional_param: Optional[str | list[str]] = None) -> dict[str, object] | str:
+        """
+        Get information for specific download tasks.
+
+        Parameters
+        ----------
+        task_id : str or list[str]
+            Task ID(s).
+        additional_param : Optional[str or list[str]], optional
+            Additional fields to retrieve.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Task information.
+        """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -140,6 +363,19 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def tasks_source(self, task_id) -> bytes:
+        """
+        Download task source.
+
+        Parameters
+        ----------
+        task_id : str or list[str]
+            Task ID(s).
+
+        Returns
+        -------
+        bytes
+            Task source content.
+        """
         # DownloadStation2 is required here
         api_name = 'SYNO.DownloadStation2.Task.Source'
         info = self.download_list[api_name]
@@ -150,6 +386,21 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, response_json=False).content
 
     def create_task(self, url, destination) -> dict[str, object] | str:
+        """
+        Create a new download task.
+
+        Parameters
+        ----------
+        url : str
+            Download URL.
+        destination : str
+            Download destination.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -159,6 +410,21 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_task(self, task_id: str, force: bool = False) -> dict[str, object] | str:
+        """
+        Delete a download task.
+
+        Parameters
+        ----------
+        task_id : str or list[str]
+            Task ID(s).
+        force : bool, optional
+            Force delete (default is False).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -171,6 +437,19 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, param)
 
     def pause_task(self, task_id: str) -> dict[str, object] | str:
+        """
+        Pause a download task.
+
+        Parameters
+        ----------
+        task_id : str or list[str]
+            Task ID(s).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -183,6 +462,19 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, param)
 
     def resume_task(self, task_id: str) -> dict[str, object] | str:
+        """
+        Resume a download task.
+
+        Parameters
+        ----------
+        task_id : str or list[str]
+            Task ID(s).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -195,6 +487,21 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, param)
 
     def edit_task(self, task_id: str, destination: str = 'sharedfolder') -> dict[str, object] | str:
+        """
+        Edit a download task.
+
+        Parameters
+        ----------
+        task_id : str or list[str]
+            Task ID(s).
+        destination : str, optional
+            New download destination (default is 'sharedfolder').
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -207,6 +514,14 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, param)
 
     def get_statistic_info(self) -> dict[str, object] | str:
+        """
+        Get Download Station statistics.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Statistics information.
+        """
         api_name = 'SYNO.DownloadStation.Statistic'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -215,6 +530,21 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, param)
 
     def get_rss_info_list(self, offset: Optional[int] = None, limit: Optional[int] = None) -> dict[str, object] | str:
+        """
+        Get RSS site info list.
+
+        Parameters
+        ----------
+        offset : Optional[int], optional
+            Offset for pagination.
+        limit : Optional[int], optional
+            Maximum number of RSS sites to retrieve.
+
+        Returns
+        -------
+        dict[str, object] or str
+            RSS site info list.
+        """
         api_name = 'SYNO.DownloadStation.RSS.Site'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -228,6 +558,19 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, param)
 
     def refresh_rss_site(self, rss_id: Optional[str] = None) -> dict[str, object] | str:
+        """
+        Refresh an RSS site.
+
+        Parameters
+        ----------
+        rss_id : Optional[str], optional
+            RSS site ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = 'SYNO.DownloadStation.RSS.Site'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -247,6 +590,23 @@ class DownloadStation(base_api.BaseApi):
                       offset: Optional[int] = None,
                       limit: Optional[int] = None
                       ) -> dict[str, object] | str:
+        """
+        Get RSS feed list.
+
+        Parameters
+        ----------
+        rss_id : Optional[str], optional
+            RSS site ID.
+        offset : Optional[int], optional
+            Offset for pagination.
+        limit : Optional[int], optional
+            Maximum number of RSS feeds to retrieve.
+
+        Returns
+        -------
+        dict[str, object] or str
+            RSS feed list.
+        """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Feed'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -266,6 +626,21 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, param)
 
     def start_bt_search(self, keyword: Optional[str] = None, module: str = 'all') -> dict[str, object] | str:
+        """
+        Start a BT search.
+
+        Parameters
+        ----------
+        keyword : Optional[str], optional
+            Search keyword.
+        module : str, optional
+            BT search module (default is 'all').
+
+        Returns
+        -------
+        dict[str, object] or str
+            BT search task information or message.
+        """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -302,6 +677,31 @@ class DownloadStation(base_api.BaseApi):
                               filter_category: Optional[str] = None,
                               filter_title: Optional[str] = None
                               ) -> dict[str, object] | str:
+        """
+        Get BT search results.
+
+        Parameters
+        ----------
+        taskid : Optional[str], optional
+            BT search task ID.
+        offset : Optional[int], optional
+            Offset for pagination.
+        limit : Optional[int], optional
+            Maximum number of results to retrieve.
+        sort_by : Optional[str], optional
+            Field to sort by.
+        sort_direction : Optional[str], optional
+            Sort direction.
+        filter_category : Optional[str], optional
+            Filter by category.
+        filter_title : Optional[str], optional
+            Filter by title.
+
+        Returns
+        -------
+        dict[str, object] or str
+            BT search results.
+        """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -321,6 +721,14 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, param)
 
     def get_bt_search_category(self) -> dict[str, object] | str:
+        """
+        Get BT search categories.
+
+        Returns
+        -------
+        dict[str, object] or str
+            BT search categories.
+        """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -329,6 +737,19 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, param)
 
     def clean_bt_search(self, taskid: Optional[str | list[str]] = None) -> dict[str, object] | str:
+        """
+        Clean BT search tasks.
+
+        Parameters
+        ----------
+        taskid : Optional[str or list[str]], optional
+            BT search task ID(s).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -347,6 +768,14 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, param)
 
     def get_bt_module(self) -> dict[str, object] | str:
+        """
+        Get BT search modules.
+
+        Returns
+        -------
+        dict[str, object] or str
+            BT search modules.
+        """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.BTSearch'
         info = self.download_list[api_name]
         api_path = info['path']
