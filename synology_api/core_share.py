@@ -1,50 +1,51 @@
+"""
+Synology Core Share API wrapper.
+
+This module provides a Python interface for managing shared folders, permissions, and encryption
+on Synology NAS devices.
+"""
+
 import json
 from typing import List, Any
 from . import base_api
 
 
 class Share(base_api.BaseApi):
-    """
-    Core Share API implementation.
-    """
+    """Core Share API implementation."""
 
     def validate_set(self, name: str, vol_path: str, desc: str = "", enable_share_compress: bool = False, enable_share_cow: bool = False, enc_passwd: str = "", encryption: bool = False) -> dict:
-        """Validate set of parameter for a new / modified shared folder
-            Parameters
-            ----------
-            name : str
-                Share name.
+        """
+        Validate set of parameter for a new / modified shared folder.
 
-            vol_path : str
-                Volume path.
+        Parameters
+        ----------
+        name : str
+            Share name.
+        vol_path : str
+            Volume path.
+        desc : str, optional
+            Share description. Defaults to `""`.
+        enable_share_compress : bool, optional
+            Enable share compress. Defaults to `False`.
+        enable_share_cow : bool, optional
+            Enable share cow. Defaults to `False`.
+        enc_passwd : str, optional
+            Encrypted password. Defaults to `""`.
+        encryption : bool, optional
+            Enable encryption. Defaults to `False`.
 
-            desc : str, optional
-                Share description. Defaults to `""`.
+        Returns
+        -------
+        dict
+            Success.
 
-            enable_share_compress : bool, optional
-                Enable share compress. Defaults to `False`.
-
-            enable_share_cow : bool, optional
-                Enable share cow. Defaults to `False`.
-
-            enc_passwd : str, optional
-                Encrypted password. Defaults to `""`.
-
-            encryption : bool, optional
-                Enable encryption. Defaults to `False`.
-
-            Returns
-            -------
-            dict
-                Success.
-
-            Examples
-            --------
-            ```json
-            {
-                "success": true,
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "success": true,
+        }
+        ```
         """
         api_name = "SYNO.Core.Share"
         info = self.core_list[api_name]
@@ -77,46 +78,47 @@ class Share(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method="post")
 
     def list_folders(self, share_type: str = "all", additional: list = []) -> dict:
-        """List all folders informations
-            Parameters
-            ----------
-            share_type : str, optional
-                Share type. Defaults to `all`.
+        """
+        List all folders informations.
 
-            additional : list[str], optional
-                Additional fields to retrieve. Defaults to `[]`.
-                All fields known are: `[
-                    "hidden","encryption","is_aclmode","unite_permission","is_support_acl","is_sync_share","is_force_readonly","force_readonly_reason",
-                    "recyclebin","is_share_moving","is_cluster_share","is_exfat_share","is_c2_share","is_cold_storage_share","is_missing_share",
-                    "is_offline_share","support_snapshot","share_quota","enable_share_compress","enable_share_cow","enable_share_tiering",
-                    "load_worm_attr","include_cold_storage_share","is_cold_storage_share","include_missing_share","is_missing_share",
-                    "include_offline_share","is_offline_share","include_worm_share"
-                ]`.
+        Parameters
+        ----------
+        share_type : str, optional
+            Share type. Defaults to `all`.
+        additional : list[str], optional
+            Additional fields to retrieve. Defaults to `[]`.
+            All fields known are: `[
+                "hidden","encryption","is_aclmode","unite_permission","is_support_acl","is_sync_share","is_force_readonly","force_readonly_reason",
+                "recyclebin","is_share_moving","is_cluster_share","is_exfat_share","is_c2_share","is_cold_storage_share","is_missing_share",
+                "is_offline_share","support_snapshot","share_quota","enable_share_compress","enable_share_cow","enable_share_tiering",
+                "load_worm_attr","include_cold_storage_share","is_cold_storage_share","include_missing_share","is_missing_share",
+                "include_offline_share","is_offline_share","include_worm_share"
+            ]`.
 
-            Returns
-            -------
-            dict
-                A dictionary containing the shared folders information.
+        Returns
+        -------
+        dict
+            A dictionary containing the shared folders information.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "shares": [
-                    {
-                        "desc": "",
-                        "is_usb_share": false,
-                        "name": "test_shared_folder",
-                        "uuid": "18585c8d-4d74-41a1-b561-21906a7f6f14",
-                        "vol_path": "/volume1"
-                    }
-                    ],
-                    "total": 1
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "shares": [
+                {
+                    "desc": "",
+                    "is_usb_share": false,
+                    "name": "test_shared_folder",
+                    "uuid": "18585c8d-4d74-41a1-b561-21906a7f6f14",
+                    "vol_path": "/volume1"
+                }
+                ],
+                "total": 1
+            },
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Share"
         info = self.core_list[api_name]
@@ -131,39 +133,40 @@ class Share(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_folder(self, name: str, additional: list = []) -> dict:
-        """Get a folder by name
-            Parameters
-            ----------
-            name : str
-                Share name.
+        """
+        Get a folder by name.
 
-            additional : list, optional
-                Additional fields to retrieve. Defaults to `[]`.
-                All fields known are: `["disable_list","disable_modify","disable_download","unite_permission","is_aclmode"]`.
+        Parameters
+        ----------
+        name : str
+            Share name.
+        additional : list, optional
+            Additional fields to retrieve. Defaults to `[]`.
+            All fields known are: `["disable_list","disable_modify","disable_download","unite_permission","is_aclmode"]`.
 
-            Returns
-            -------
-            dict
-                A dictionary containing the shared folder information.
+        Returns
+        -------
+        dict
+            A dictionary containing the shared folder information.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "desc": "",
-                    "disable_download": false,
-                    "disable_list": false,
-                    "disable_modify": false,
-                    "is_aclmode": true,
-                    "is_usb_share": false,
-                    "name": "test_shared_folder",
-                    "unite_permission": false,
-                    "uuid": "18585c8d-4d74-41a1-b561-21906a7f6f14",
-                    "vol_path": "/volume1"
-                },
-                "success": true,
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "desc": "",
+                "disable_download": false,
+                "disable_list": false,
+                "disable_modify": false,
+                "is_aclmode": true,
+                "is_usb_share": false,
+                "name": "test_shared_folder",
+                "unite_permission": false,
+                "uuid": "18585c8d-4d74-41a1-b561-21906a7f6f14",
+                "vol_path": "/volume1"
+            },
+            "success": true,
+        ```
         """
         api_name = "SYNO.Core.Share"
         info = self.core_list[api_name]
@@ -183,56 +186,48 @@ class Share(base_api.BaseApi):
                       hide_unreadable: bool = False, enable_share_cow: bool = False,
                       enable_share_compress: bool = False, share_quota: int = 0, name_org: str = "",
                       ) -> dict:
-        """Create a new shared folder
-            Parameters
-            ----------
-            name : str
-                Share name.
+        """
+        Create a new shared folder.
 
-            vol_path : str
-                Volume path.
+        Parameters
+        ----------
+        name : str
+            Share name.
+        vol_path : str
+            Volume path.
+        desc : str, optional
+            Share description. Defaults to `""`.
+        hidden : bool, optional
+            Hide share. Defaults to `False`.
+        enable_recycle_bin : bool, optional
+            Enable recycle bin. Defaults to `True`.
+        recycle_bin_admin_only : bool, optional
+            Recycle bin admin only. Defaults to `True`.
+        hide_unreadable : bool, optional
+            Hide unreadable. Defaults to `False`.
+        enable_share_cow : bool, optional
+            Enable share cow. Defaults to `False`.
+        enable_share_compress : bool, optional
+            Enable share compress. Defaults to `False`.
+        share_quota : int, optional
+            Share quota. Defaults to `0`.
+        name_org : str, optional
+            Defaults to `""`.
 
-            desc : str, optional
-                Share description. Defaults to `""`.
+        Returns
+        -------
+        dict
+            Name of the created shared folder.
 
-            hidden : bool, optional
-                Hide share. Defaults to `False`.
-
-            enable_recycle_bin : bool, optional
-                Enable recycle bin. Defaults to `True`.
-
-            recycle_bin_admin_only : bool, optional
-                Recycle bin admin only. Defaults to `True`.
-
-            hide_unreadable : bool, optional
-                Hide unreadable. Defaults to `False`.
-
-            enable_share_cow : bool, optional
-                Enable share cow. Defaults to `False`.
-
-            enable_share_compress : bool, optional
-                Enable share compress. Defaults to `False`.
-
-            share_quota : int, optional
-                Share quota. Defaults to `0`.
-
-            name_org : str, optional
-                Defaults to `""`.
-
-            Returns
-            -------
-            dict
-                Name of the created shared folder
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "name": "test_shared_folder"
-                },
-                "success": true,
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "name": "test_shared_folder"
+            },
+            "success": true,
+        ```
         """
 
         api_name = "SYNO.Core.Share"
@@ -268,25 +263,26 @@ class Share(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method="post")
 
     def delete_folders(self, name: List[str]) -> dict:
-        """Delete folder(s) by name(s)
+        """
+        Delete folder(s) by name(s).
 
-            Parameters
-            ----------
-            name : List[str]
-                Share names.
+        Parameters
+        ----------
+        name : List[str]
+            Share names.
 
-            Returns
-            -------
-            dict
-                Success.
+        Returns
+        -------
+        dict
+            Success.
 
-            Examples
-            --------
-            ```json
-            {
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Share"
         info = self.core_list[api_name]
@@ -305,56 +301,48 @@ class Share(base_api.BaseApi):
               hide_unreadable: bool = False, enable_share_cow: bool = False,
               enable_share_compress: bool = False, share_quota: int = 0
               ) -> dict:
-        """Clone existing shared folder.
-            Parameters
-            ----------
-            name : str
-                New shared folder name.
+        """
+        Clone existing shared folder.
 
-            name_org : str
-                Original shared folder name.
+        Parameters
+        ----------
+        name : str
+            New shared folder name.
+        name_org : str
+            Original shared folder name.
+        vol_path : str
+            Volume path.
+        desc : str, optional
+            Shared folder description. Defaults to `""`.
+        hidden : bool, optional
+            Hide shared folder. Defaults to `False`.
+        enable_recycle_bin : bool, optional
+            Enable recycle bin. Defaults to `True`.
+        recycle_bin_admin_only : bool, optional
+            Recycle bin admin only. Defaults to `True`.
+        hide_unreadable : bool, optional
+            Hide unreadable. Defaults to `False`.
+        enable_share_cow : bool, optional
+            Enable share cow. Defaults to `False`.
+        enable_share_compress : bool, optional
+            Enable share compress. Defaults to `False`.
+        share_quota : int, optional
+            Share quota. Defaults to `0`.
 
-            vol_path : str
-                Volume path.
+        Returns
+        -------
+        dict
+            Name of the created shared folder.
 
-            desc : str, optional
-                Shared folder description. Defaults to `""`.
-
-            hidden : bool, optional
-                Hide shared folder. Defaults to `False`.
-
-            enable_recycle_bin : bool, optional
-                Enable recycle bin. Defaults to `True`.
-
-            recycle_bin_admin_only : bool, optional
-                Recycle bin admin only. Defaults to `True`.
-
-            hide_unreadable : bool, optional
-                Hide unreadable. Defaults to `False`.
-
-            enable_share_cow : bool, optional
-                Enable share cow. Defaults to `False`.
-
-            enable_share_compress : bool, optional
-                Enable share compress. Defaults to `False`.
-
-            share_quota : int, optional
-                Share quota. Defaults to `0`.
-
-            Returns
-            -------
-            dict
-                Name of the created shared folder
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "name": "test_shared_folder"
-                },
-                "success": true,
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "name": "test_shared_folder"
+            },
+            "success": true,
+        ```
         """
         api_name = "SYNO.Core.Share"
         info = self.core_list[api_name]
@@ -392,65 +380,59 @@ class Share(base_api.BaseApi):
 
 
 class SharePermission(base_api.BaseApi):
-    """
-    Core Share Permission API implementation.
-    """
+    """Core Share Permission API implementation."""
 
     def get_folder_permission_by_name(self,
                                       name: str, permission_substr: str, offset: int = 0, limit: int = 50, is_unite_permission: bool = False, with_inherit: bool = False,
                                       user_group_type: str = "local_user"
                                       ) -> dict:
-        """Retrieve share permissions for a given folder filtered by permission name (sub string)
-            Parameters
-            ----------
-            name : str
-                The folder name to list permissions for.
+        """
+        Retrieve share permissions for a given folder filtered by permission name (sub string).
 
-            permission_substr : str
-                The substring to search for in the permissions.
+        Parameters
+        ----------
+        name : str
+            The folder name to list permissions for.
+        permission_substr : str
+            The substring to search for in the permissions.
+        offset : int, optional
+            The offset to start at. Defaults to `0`.
+        limit : int, optional
+            The maximum number of results to return. Defaults to `50`.
+        is_unite_permission : bool, optional
+            Whether to return unified permissions. Defaults to `False`.
+        with_inherit : bool, optional
+            Whether to include inherited permissions. Defaults to `False`.
+        user_group_type : str, optional
+            The type of user group to list permissions for. Defaults to `"local_user"`.
+            All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
 
-            offset : int, optional
-                The offset to start at. Defaults to `0`.
+        Returns
+        -------
+        dict
+            List of permission(s) on the folder.
 
-            limit : int, optional
-                The maximum number of results to return. Defaults to `50`.
-
-            is_unite_permission : bool, optional
-                Whether to return unified permissions. Defaults to `False`.
-
-            with_inherit : bool, optional
-                Whether to include inherited permissions. Defaults to `False`.
-
-            user_group_type : str, optional
-                The type of user group to list permissions for. Defaults to `"local_user"`.
-                All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
-
-            Returns
-            -------
-            dict
-                List of permission(s) on the folder
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "items": [
-                        {
-                            "inherit": "-",
-                            "is_admin": false,
-                            "is_custom": false,
-                            "is_deny": false,
-                            "is_readonly": false,
-                            "is_writable": false,
-                            "name": "guest"
-                        }
-                    ],
-                    "total": 1
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "items": [
+                    {
+                        "inherit": "-",
+                        "is_admin": false,
+                        "is_custom": false,
+                        "is_deny": false,
+                        "is_readonly": false,
+                        "is_writable": false,
+                        "name": "guest"
+                    }
+                ],
+                "total": 1
+            },
+            "success": true
+        }
+        ```
         """
 
         api_name = "SYNO.Core.Share.Permission"
@@ -474,81 +456,78 @@ class SharePermission(base_api.BaseApi):
                                name: str, offset: int = 0, limit: int = 50, is_unite_permission: bool = False, with_inherit: bool = False,
                                user_group_type: str = "local_user"
                                ) -> dict:
-        """Retrieve share permissions for a given folder.
-            Parameters
-            ----------
-            name : str
-                The folder name to list permissions for.
+        """
+        Retrieve share permissions for a given folder.
 
-            offset : int, optional
-                The offset to start at. Defaults to `0`.
+        Parameters
+        ----------
+        name : str
+            The folder name to list permissions for.
+        offset : int, optional
+            The offset to start at. Defaults to `0`.
+        limit : int, optional
+            The maximum number of results to return. Defaults to `50`.
+        is_unite_permission : bool, optional
+            Whether to return unified permissions. Defaults to `False`.
+        with_inherit : bool, optional
+            Whether to include inherited permissions. Defaults to `False`.
+        user_group_type : str, optional
+            The type of user group to list permissions for. Defaults to `"local_user"`.
+            All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
 
-            limit : int, optional
-                The maximum number of results to return. Defaults to `50`.
+        Returns
+        -------
+        dict
+            All permissions on the folder.
 
-            is_unite_permission : bool, optional
-                Whether to return unified permissions. Defaults to `False`.
-
-            with_inherit : bool, optional
-                Whether to include inherited permissions. Defaults to `False`.
-
-            user_group_type : str, optional
-                The type of user group to list permissions for. Defaults to `"local_user"`.
-                All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
-
-            Returns
-            -------
-            dict
-                All permissions on the folder
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "items": [
-                        {
-                            "inherit": "rw",
-                            "is_admin": true,
-                            "is_custom": false,
-                            "is_deny": true,
-                            "is_readonly": false,
-                            "is_writable": false,
-                            "name": "admin"
-                        },
-                        {
-                            "inherit": "-",
-                            "is_admin": false,
-                            "is_custom": false,
-                            "is_deny": false,
-                            "is_readonly": false,
-                            "is_writable": false,
-                            "name": "guest"
-                        },
-                        {
-                            "inherit": "rw",
-                            "is_admin": true,
-                            "is_custom": false,
-                            "is_deny": false,
-                            "is_readonly": false,
-                            "is_writable": true,
-                            "name": "test_api"
-                        },
-                        {
-                            "inherit": "-",
-                            "is_admin": false,
-                            "is_custom": false,
-                            "is_deny": false,
-                            "is_readonly": false,
-                            "is_writable": false,
-                            "name": "test_test"
-                        }
-                    ],
-                    "total": 5
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "items": [
+                    {
+                        "inherit": "rw",
+                        "is_admin": true,
+                        "is_custom": false,
+                        "is_deny": true,
+                        "is_readonly": false,
+                        "is_writable": false,
+                        "name": "admin"
+                    },
+                    {
+                        "inherit": "-",
+                        "is_admin": false,
+                        "is_custom": false,
+                        "is_deny": false,
+                        "is_readonly": false,
+                        "is_writable": false,
+                        "name": "guest"
+                    },
+                    {
+                        "inherit": "rw",
+                        "is_admin": true,
+                        "is_custom": false,
+                        "is_deny": false,
+                        "is_readonly": false,
+                        "is_writable": true,
+                        "name": "test_api"
+                    },
+                    {
+                        "inherit": "-",
+                        "is_admin": false,
+                        "is_custom": false,
+                        "is_deny": false,
+                        "is_readonly": false,
+                        "is_writable": false,
+                        "name": "test_test"
+                    }
+                ],
+                "total": 5
+            },
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Share.Permission"
         info = self.core_list[api_name]
@@ -567,43 +546,31 @@ class SharePermission(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method="get")
 
     def set_folder_permissions(self, name: str, user_group_type: str, permissions: List[dict[str, object]]) -> dict:
-        """Set folder permissions for a given folder.
-            Parameters
-            ----------
-            name : str
-                The folder name to set permissions for.
+        """
+        Set folder permissions for a given folder.
 
-            user_group_type : str
-                The type of user group to set permissions for.
-                All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
+        Parameters
+        ----------
+        name : str
+            The folder name to set permissions for.
+        user_group_type : str
+            The type of user group to set permissions for.
+            All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.
+        permissions : dict
+            The permissions to set for the folder.
 
-            permissions : dict
-                The permissions to set for the folder.
-                Example:
-                ```json
-                [
-                    {
-                        "name":"guest",
-                        "is_readonly":false,
-                        "is_writable":true,
-                        "is_deny":false,
-                        "is_custom":false
-                    }
-                ]
-                ```
+        Returns
+        -------
+        dict
+            Success.
 
-            Returns
-            -------
-            dict
-                Success
-
-            Examples
-            --------
-            ```json
-            {
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Share.Permission"
         info = self.core_list[api_name]
@@ -618,41 +585,43 @@ class SharePermission(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method="get")
 
     def get_local_group_permissions(self, group: str) -> dict:
-        """Retrieve share permissions for a given group.
-            Parameters
-            ----------
-            group : str
-                The group to list permissions for.
+        """
+        Retrieve share permissions for a given group.
 
-            Returns
-            -------
-            dict
-                Permissions of a group on Shared folders
+        Parameters
+        ----------
+        group : str
+            The group to list permissions for.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "shares": [
-                        {
-                            "is_aclmode": true,
-                            "is_custom": false,
-                            "is_deny": true,
-                            "is_mask": false,
-                            "is_readonly": false,
-                            "is_sync_share": false,
-                            "is_unite_permission": false,
-                            "is_writable": false,
-                            "name": "ActiveBackupforBusiness",
-                            "share_path": "/volume3/ActiveBackupforBusiness"
-                        }
-                    ],
-                    "total": 1
-                },
-                "success": true
-            }
-            ```
+        Returns
+        -------
+        dict
+            Permissions of a group on Shared folders.
+
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "shares": [
+                    {
+                        "is_aclmode": true,
+                        "is_custom": false,
+                        "is_deny": true,
+                        "is_mask": false,
+                        "is_readonly": false,
+                        "is_sync_share": false,
+                        "is_unite_permission": false,
+                        "is_writable": false,
+                        "name": "ActiveBackupforBusiness",
+                        "share_path": "/volume3/ActiveBackupforBusiness"
+                    }
+                ],
+                "total": 1
+            },
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Share.Permission"
         info = self.core_list[api_name]
@@ -673,44 +642,28 @@ class SharePermission(base_api.BaseApi):
     def set_local_group_permissions(
         self, group: str, permissions: list[dict[str, Any]]
     ) -> dict:
-        """Set group permissions for a given share.
-            Parameters
-            ----------
-            group : str
-                The group to set the permissions for.
+        """
+        Set group permissions for a given share.
 
-            permissions : list[dict[str, Any]]
-                The permissions to set for the group.
-                Example:
-                ```
-                [
-                    {
-                        "name": "web",
-                        "is_readonly": False,
-                        "is_writable": False,
-                        "is_deny": True
-                    },
-                    {
-                        "name": "ActiveBackupforBusiness",
-                        "is_readonly": False,
-                        "is_writable": True,
-                        "is_deny": False
-                    }
-                ]
-                ```
+        Parameters
+        ----------
+        group : str
+            The group to set the permissions for.
+        permissions : list[dict[str, Any]]
+            The permissions to set for the group.
 
-            Returns
-            -------
-            dict
-                Success
+        Returns
+        -------
+        dict
+            Success.
 
-            Examples
-            --------
-            ```json
-            {
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Share.Permission"
         info = self.core_list[api_name]
@@ -727,12 +680,16 @@ class SharePermission(base_api.BaseApi):
 
 
 class KeyManagerStore(base_api.BaseApi):
-    """
-    Core Share KeyManager Store API implementation.
-    """
+    """Core Share KeyManager Store API implementation."""
 
     def init(self) -> dict:
-        """Initialize KeyManagerStore API.
+        """
+        Initialize KeyManagerStore API.
+
+        Returns
+        -------
+        dict
+            Not implemented yet.
         """
 
         raise NotImplementedError(
@@ -761,6 +718,14 @@ class KeyManagerStore(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method="post")
 
     def verify(self) -> dict:
+        """
+        Not implemented yet.
+
+        Returns
+        -------
+        dict
+            Not implemented yet.
+        """
 
         raise NotImplementedError("This method is not implemented yet.")
 
@@ -786,22 +751,24 @@ class KeyManagerStore(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method="post")
 
     def explore(self) -> dict:
-        """Explore KeyManagerStore API. Get list of existing stores
-            Returns
-            -------
-            dict
-                List of stores existing on the NAS
+        """
+        Explore KeyManagerStore API. Get list of existing stores.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "stores": []
-                },
-                "success": true
-            }
-            ```
+        Returns
+        -------
+        dict
+            List of stores existing on the NAS.
+
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "stores": []
+            },
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Share.KeyManager.Store"
         version = self.core_list[api_name]["minVersion"]
@@ -815,27 +782,27 @@ class KeyManagerStore(base_api.BaseApi):
 
 
 class KeyManagerAutoKey(base_api.BaseApi):
-    """
-    Core Share KeyManager AutoKey API implementation.
-    """
+    """Core Share KeyManager AutoKey API implementation."""
 
     def list(self) -> dict:
-        """List KeyManagerStore API.
-            Returns
-            -------
-            dict
-                List of keys in the manager
+        """
+        List KeyManagerStore API.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "keys": []
-                },
-                "success": true
-            }
-            ```
+        Returns
+        -------
+        dict
+            List of keys in the manager.
+
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "keys": []
+            },
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Share.KeyManager.AutoKey"
         version = self.core_list[api_name]["minVersion"]
