@@ -1,3 +1,4 @@
+"""Synology API Python Client."""
 from . import \
     audiostation, \
     auth, \

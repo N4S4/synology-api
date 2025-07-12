@@ -26,3 +26,4 @@ repos:
     stages: [ pre-commit ]
     hooks:
       - id: numpydoc-validation
+        files: ^synology_api/
