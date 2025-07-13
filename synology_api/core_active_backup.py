@@ -338,7 +338,7 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 Example:
                 ```python
                 ["192.168.0.1", "192.168.0.10"]
-                ```.
+                ```
 
             Returns
             -------

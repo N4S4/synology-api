@@ -930,7 +930,7 @@ class CloudSync(base_api.BaseApi):
                     '111111111111111111111111', # saturday  - hours from 0 to 23
                 ]
                 set_connection_schedule(conn_id=3, enable=True, schedule_info=days)
-                ```.
+                ```
 
             Returns
             -------

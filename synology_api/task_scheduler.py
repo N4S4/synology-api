@@ -1255,7 +1255,7 @@ class TaskScheduler(base_api.BaseApi):
                     {'id': 'HyperBackup', 'type': 'package'},
                     {'id': 'Samba', 'type': 'service'}
                 ]
-                ```.
+                ```
 
             action : str
                 The action to apply to the services. Either `'start'` or `'stop'`.
@@ -1413,7 +1413,7 @@ class TaskScheduler(base_api.BaseApi):
                     {'id': 'HyperBackup', 'type': 'package'},
                     {'id': 'Samba', 'type': 'service'}
                 ]
-                ```.
+                ```
 
             action : str
                 The action to apply to the services. Either `'start'` or `'stop'`.

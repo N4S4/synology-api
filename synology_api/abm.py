@@ -733,7 +733,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
                     "repeat_every_hours": 1,
                     "run_days": [0, 1, 2, 3, 4, 5, 6]
                 }
-                ```.
+                ```
 
             Returns
             -------
