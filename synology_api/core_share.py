@@ -752,7 +752,9 @@ class KeyManagerStore(base_api.BaseApi):
 
     def explore(self) -> dict:
         """
-        Explore KeyManagerStore API. Get list of existing stores.
+        Explore KeyManagerStore API.
+
+        Get list of existing stores.
 
         Returns
         -------

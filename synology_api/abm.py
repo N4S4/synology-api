@@ -1,6 +1,4 @@
-"""
-Active Backup for Microsoft 365 Implementation.
-"""
+"""Active Backup for Microsoft 365 Implementation."""
 from __future__ import annotations
 import json
 

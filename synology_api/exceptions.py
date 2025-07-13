@@ -12,7 +12,9 @@ from .error_codes import virtualization_error_codes
 # Base exception:
 class SynoBaseException(Exception):
     """
-    Base class for an exception. Defines error_message.
+    Base class for an exception.
+
+    Defines error_message.
 
     Parameters
     ----------

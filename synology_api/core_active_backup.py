@@ -872,7 +872,9 @@ class ActiveBackupBusiness(base_api.BaseApi):
         limit: int = 200,
     ) -> dict[str, object]:
         """
-        Get logs from the package, tasks and devices. From `[Activities -> Log]` screen in ABB.
+        Get logs from the package, tasks and devices.
+
+        From `[Activities -> Log]` screen in ABB.
 
             For specific task logs `[Task List -> Details -> Log]`, specify `task_id` parameter.
 
@@ -1140,7 +1142,9 @@ class ActiveBackupBusiness(base_api.BaseApi):
         direction: str = "ASC"
     ) -> dict[str, object]:
         """
-        Get details of a task result log. `result_id` can be retrieved from `list_logs()` function.
+        Get details of a task result log.
+
+        `result_id` can be retrieved from `list_logs()` function.
 
             Parameters
             ----------
