@@ -96,3 +96,17 @@ tasks:
     cmds:
       - echo "Validating numpydoc format..."
       - pre-commit run numpydoc-validation -a
+
+  numpydoc-lint:
+    desc: Lint the numpydoc format of the documentation
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Linting numpydoc format..."
+      - pydocstringformatter -w ./synology_api/
+
+  numpydoc:
+    desc: Lint and validate the numpydoc format of the documentation
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - task: numpydoc-lint
+      - task: numpydoc-validation
