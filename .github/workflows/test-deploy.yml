@@ -10,23 +10,20 @@ on:
       - master
 
 jobs:
-  test-deploy:
-    name: Test deployment
+  test-docs-gen:
+    name: Test Docs Generation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Get Node.js version from .tool-versions
-        id: node-version
-        run: echo "NODE_VERSION=$(cat .tool-versions | egrep nodejs | awk '{print $2}' | xargs)" >> $GITHUB_ENV
-      - uses: actions/setup-node@v4
+      - name: Cache asdf
+        uses: actions/cache@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: ./documentation/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-      - name: Test build website
-        run: npm run build
+          path: |
+            ~/.asdf
+          key: ${{ runner.os }}-asdf-${{ hashFiles('.tool-versions') }}
+          restore-keys: |
+            ${{ runner.os }}-asdf-
+      - uses: asdf-vm/actions/install@v4
+      - run: task docs
