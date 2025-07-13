@@ -1560,9 +1560,9 @@ class TaskScheduler(base_api.BaseApi):
             Determines what files will be deleted from the recycle bins.
 
             Possible values are:
-                - {"policy": "clean_all"}: Clean all files.
-                - {"policy": "time", "time": int}: Clean all files older than X days, where X is the value for "time".
-                - {"policy": "size", "size": int, "sort_type": int}: Clean files until recycle bin size reaches given "size" in MB, delete files by "sort_type".
+                - \\{"policy": "clean_all"\\}: Clean all files.
+                - \\{"policy": "time", "time": int\\}: Clean all files older than X days, where X is the value for "time".
+                - \\{"policy": "size", "size": int, "sort_type": int\\}: Clean files until recycle bin size reaches given "size" in MB, delete files by "sort_type".
 
             Possible values for "sort_type":
                 - 0: Delete bigger files first.
@@ -1696,9 +1696,9 @@ class TaskScheduler(base_api.BaseApi):
             Determines what files will be deleted from the recycle bins.
 
             Possible values are:
-                - {"policy": "clean_all"}: Clean all files.
-                - {"policy": "time", "time": int}: Clean all files older than X days, where X is the value for "time".
-                - {"policy": "size", "size": int, "sort_type": int}: Clean files until recycle bin size reaches given "size" in MB, delete files by "sort_type".
+                - \\{"policy": "clean_all"\\}: Clean all files.
+                - \\{"policy": "time", "time": int\\}: Clean all files older than X days, where X is the value for "time".
+                - \\{"policy": "size", "size": int, "sort_type": int\\}: Clean files until recycle bin size reaches given "size" in MB, delete files by "sort_type".
 
             Possible values for "sort_type":
                 - 0: Delete bigger files first.
