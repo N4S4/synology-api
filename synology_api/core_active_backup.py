@@ -874,6 +874,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
         """
         Get logs from the package, tasks and devices.
 
+        Notes
+        -----
         From `[Activities -> Log]` screen in ABB.
 
             For specific task logs `[Task List -> Details -> Log]`, specify `task_id` parameter.
@@ -1144,75 +1146,77 @@ class ActiveBackupBusiness(base_api.BaseApi):
         """
         Get details of a task result log.
 
+        Parameters
+        ----------
+        result_id : int
+            ID of the result to get details from.
+
+        limit : int, optional
+            Amount of results to be returned. Defaults to `500`.
+
+        order_by : str, optional
+            What to order the results by. Defaults to `"log_level"`.
+
+            Possible values:
+            - `"log_level"`
+            - `"log_time"`
+
+        direction : str, optional
+            Direction of the order. Defaults to `"ASC"`.
+
+            Possible values:
+            - `"ASC"`
+            - `"DESC"`
+
+        Returns
+        -------
+        dict[str, object]
+            Dictionary containing a list of result details.
+
+        Notes
+        -----
         `result_id` can be retrieved from `list_logs()` function.
 
-            Parameters
-            ----------
-            result_id : int
-                ID of the result to get details from.
-
-            limit : int, optional
-                Amount of results to be returned. Defaults to `500`.
-
-            order_by : str, optional
-                What to order the results by. Defaults to `"log_level"`.
-
-                Possible values:
-                - `"log_level"`
-                - `"log_time"`
-
-            direction : str, optional
-                Direction of the order. Defaults to `"ASC"`.
-
-                Possible values:
-                - `"ASC"`
-                - `"DESC"`
-
-            Returns
-            -------
-            dict[str, object]
-                Dictionary containing a list of result details.
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "count": 2,
-                    "result_detail_list": [
-                        {
-                            "error_code": 0,
-                            "log_level": 0,
-                            "log_time": 1741897456,
-                            "log_type": 6002,
-                            "other_params": {
-                                "fs_error": -65,
-                                "os_name": "smb",
-                                "path": "/D",
-                                "task_id": 8
-                            },
-                            "result_detail_id": 9526,
-                            "result_id": 592
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "count": 2,
+                "result_detail_list": [
+                    {
+                        "error_code": 0,
+                        "log_level": 0,
+                        "log_time": 1741897456,
+                        "log_type": 6002,
+                        "other_params": {
+                            "fs_error": -65,
+                            "os_name": "smb",
+                            "path": "abc",
+                            "task_id": 8
                         },
-                        {
-                            "error_code": 0,
-                            "log_level": 0,
-                            "log_time": 1741897498,
-                            "log_type": 1104,
-                            "other_params": {
-                                "os_name": "smb",
-                                "path": "",
-                                "task_id": 8,
-                                "task_name": "SMB LAPTOP"
-                            },
-                            "result_detail_id": 9527,
-                            "result_id": 592
-                        }
-                    ]
-                },
-                "success": true
-            }
-            ```
+                        "result_detail_id": 9526,
+                        "result_id": 592
+                    },
+                    {
+                        "error_code": 0,
+                        "log_level": 0,
+                        "log_time": 1741897498,
+                        "log_type": 1104,
+                        "other_params": {
+                            "os_name": "smb",
+                            "path": "",
+                            "task_id": 8,
+                            "task_name": "SMB LAPTOP"
+                        },
+                        "result_detail_id": 9527,
+                        "result_id": 592
+                    }
+                ]
+            },
+            "success": true
+        }
+        ```
         """
         api_name = 'SYNO.ActiveBackup.Log'
         info = self.gen_list[api_name]
