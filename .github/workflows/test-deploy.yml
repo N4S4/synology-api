@@ -26,4 +26,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-asdf-
       - uses: asdf-vm/actions/install@v4
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
       - run: task docs
