@@ -1119,8 +1119,6 @@ class Snapshot(base_api.BaseApi):
         Returns
         -------
         dict[str, object]
-            API response if successful.
-
             If deletion fails, an error code is returned alongside the snapshot uuid:
             ```json
             {
@@ -1131,7 +1129,8 @@ class Snapshot(base_api.BaseApi):
                 ],
                 "success": true
             }
-            ```.
+            ```
+            API response if successful.
 
         Notes
         -----

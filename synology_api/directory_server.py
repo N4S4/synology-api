@@ -468,7 +468,9 @@ class DirectoryServer(base_api.BaseApi):
 
     def does_dn_exist(self, groupName: str) -> dict[str, object]:
         """
-        Check if a container exists. This can be used to verify the username or group name is unique.
+        Check if a container exists.
+
+        This can be used to verify the username or group name is unique.
 
         Parameters
         ----------

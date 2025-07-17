@@ -957,7 +957,7 @@ class SurveillanceStation(base_api.BaseApi):
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'CheckQuota'}
 
-    return self.request_data(api_name, api_path, req_param)
+        return self.request_data(api_name, api_path, req_param)
 
     def format_specific_sd_card(self,
                                 camId: Any = None,
@@ -3460,7 +3460,7 @@ class SurveillanceStation(base_api.BaseApi):
         data : Any, optional
             List of log type settings to apply.
             Example:
-                data=[{"SSLogType":321912835,"enable":1},{"SSLogType":321912836,"enable":0}]
+                data=\\[\\{"SSLogType":321912835,"enable":1\\},\\{"SSLogType":321912836,"enable":0\\}\\]
 
         Returns
         -------
@@ -3515,7 +3515,7 @@ class SurveillanceStation(base_api.BaseApi):
         camList : Any, optional
             List of camera information dictionaries.
             Example:
-                camList = [{"ip": "10.13.22.141", "model": "DCS-3110", "vendor": "DLink", "port": 80}]
+                camList = \\[\\{"ip": "10.13.22.141", "model": "DCS-3110", "vendor": "DLink", "port": 80\\}\\]
         camServerId : int, optional
             Camera server ID.
 
@@ -6842,10 +6842,10 @@ class SurveillanceStation(base_api.BaseApi):
         ----------
         arrayJson : str, optional
             JSON string representing controller settings. Example:
-            [{"enable": true, "id": 97, "name": "ctrler1", "host": "10.13.12.173", "port": 80,
+            \\[\\{"enable": true, "id": 97, "name": "ctrler1", "host": "10.13.12.173", "port": 80,
               "model": "A1001", "username": "root", "password": "Q__Q-__-", "time_server":
-              "SurveillanceStation", "time_zone": "Fiji", "door": [{"id": 231, "name": "FrontDoor",
-              "enable_cam": true, "cam_ds_id": 0, "cam_id": 13}]}]
+              "SurveillanceStation", "time_zone": "Fiji", "door": \\[\\{"id": 231, "name": "FrontDoor",
+              "enable_cam": true, "cam_ds_id": 0, "cam_id": 13\\}\\]\\}\\]
 
         Returns
         -------
@@ -6859,10 +6859,10 @@ class SurveillanceStation(base_api.BaseApi):
 
         """arrayJson example:
 
-           arrayJson="[{\"enable\":true,\"id\":97,\"name\":\"ctrler1\",\"host\":\"10.13.12.173\",\"port\":80,
+           arrayJson="\\[\\{\"enable\":true,\"id\":97,\"name\":\"ctrler1\",\"host\":\"10.13.12.173\",\"port\":80,
                         \"model\":\"A1001\",\"username\":\"root\",\"password\":\"Q__Q-__-\",\"time_server\":
-                        \"SurveillanceStation\",\"time_zone\":\"Fiji\",\"door\":[{\"id\":231,\"name\":\"FrontDoor\",
-                        \"enable_cam\":true,\"cam_ds_id\":0,\"cam_id\":13}]}]\" """
+                        \"SurveillanceStation\",\"time_zone\":\"Fiji\",\"door\":\\[\\{\"id\":231,\"name\":\"FrontDoor\",
+                        \"enable_cam\":true,\"cam_ds_id\":0,\"cam_id\":13\\}\\]\\}\\]\" """
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param']:

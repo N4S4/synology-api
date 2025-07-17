@@ -338,7 +338,7 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 Example:
                 ```python
                 ["192.168.0.1", "192.168.0.10"]
-                ```.
+                ```
 
             Returns
             -------
@@ -872,7 +872,11 @@ class ActiveBackupBusiness(base_api.BaseApi):
         limit: int = 200,
     ) -> dict[str, object]:
         """
-        Get logs from the package, tasks and devices. From `[Activities -> Log]` screen in ABB.
+        Get logs from the package, tasks and devices.
+
+        Notes
+        -----
+        From `[Activities -> Log]` screen in ABB.
 
             For specific task logs `[Task List -> Details -> Log]`, specify `task_id` parameter.
 
@@ -1140,75 +1144,79 @@ class ActiveBackupBusiness(base_api.BaseApi):
         direction: str = "ASC"
     ) -> dict[str, object]:
         """
-        Get details of a task result log. `result_id` can be retrieved from `list_logs()` function.
+        Get details of a task result log.
 
-            Parameters
-            ----------
-            result_id : int
-                ID of the result to get details from.
+        Parameters
+        ----------
+        result_id : int
+            ID of the result to get details from.
 
-            limit : int, optional
-                Amount of results to be returned. Defaults to `500`.
+        limit : int, optional
+            Amount of results to be returned. Defaults to `500`.
 
-            order_by : str, optional
-                What to order the results by. Defaults to `"log_level"`.
+        order_by : str, optional
+            What to order the results by. Defaults to `"log_level"`.
 
-                Possible values:
-                - `"log_level"`
-                - `"log_time"`
+            Possible values:
+            - `"log_level"`
+            - `"log_time"`
 
-            direction : str, optional
-                Direction of the order. Defaults to `"ASC"`.
+        direction : str, optional
+            Direction of the order. Defaults to `"ASC"`.
 
-                Possible values:
-                - `"ASC"`
-                - `"DESC"`
+            Possible values:
+            - `"ASC"`
+            - `"DESC"`
 
-            Returns
-            -------
-            dict[str, object]
-                Dictionary containing a list of result details.
+        Returns
+        -------
+        dict[str, object]
+            Dictionary containing a list of result details.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "count": 2,
-                    "result_detail_list": [
-                        {
-                            "error_code": 0,
-                            "log_level": 0,
-                            "log_time": 1741897456,
-                            "log_type": 6002,
-                            "other_params": {
-                                "fs_error": -65,
-                                "os_name": "smb",
-                                "path": "/D",
-                                "task_id": 8
-                            },
-                            "result_detail_id": 9526,
-                            "result_id": 592
+        Notes
+        -----
+        `result_id` can be retrieved from `list_logs()` function.
+
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "count": 2,
+                "result_detail_list": [
+                    {
+                        "error_code": 0,
+                        "log_level": 0,
+                        "log_time": 1741897456,
+                        "log_type": 6002,
+                        "other_params": {
+                            "fs_error": -65,
+                            "os_name": "smb",
+                            "path": "abc",
+                            "task_id": 8
                         },
-                        {
-                            "error_code": 0,
-                            "log_level": 0,
-                            "log_time": 1741897498,
-                            "log_type": 1104,
-                            "other_params": {
-                                "os_name": "smb",
-                                "path": "",
-                                "task_id": 8,
-                                "task_name": "SMB LAPTOP"
-                            },
-                            "result_detail_id": 9527,
-                            "result_id": 592
-                        }
-                    ]
-                },
-                "success": true
-            }
-            ```
+                        "result_detail_id": 9526,
+                        "result_id": 592
+                    },
+                    {
+                        "error_code": 0,
+                        "log_level": 0,
+                        "log_time": 1741897498,
+                        "log_type": 1104,
+                        "other_params": {
+                            "os_name": "smb",
+                            "path": "",
+                            "task_id": 8,
+                            "task_name": "SMB LAPTOP"
+                        },
+                        "result_detail_id": 9527,
+                        "result_id": 592
+                    }
+                ]
+            },
+            "success": true
+        }
+        ```
         """
         api_name = 'SYNO.ActiveBackup.Log'
         info = self.gen_list[api_name]

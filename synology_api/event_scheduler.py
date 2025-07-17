@@ -370,7 +370,7 @@ class EventScheduler(base_api.BaseApi):
                 "min": 59, # Minutes 0-59
                 "weekdays": "0,1,2,3,4,5,6" # All days of the week (Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday)
             }
-            ```.
+            ```
         poweroff_tasks : List[dict], optional
             List of tasks for power off. Defaults to `[]`.
             Example of a task:
@@ -381,7 +381,7 @@ class EventScheduler(base_api.BaseApi):
                 "min": 59, # Minutes 0-59
                 "weekdays": "0,1,2,3,4,5,6" # All days of the week (Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday)
             }
-            ```.
+            ```
 
         Returns
         -------
