@@ -1,3 +1,4 @@
+"""Active Backup for Microsoft 365 Implementation."""
 from __future__ import annotations
 import json
 
@@ -5,7 +6,8 @@ from . import base_api
 
 
 class ActiveBackupMicrosoft(base_api.BaseApi):
-    """Active Backup for Microsoft 365 Implementation.
+    """
+    Active Backup for Microsoft 365 Implementation.
 
         Supported methods:
         - Getters:
@@ -28,6 +30,19 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
     """
 
     def __trim_task_info(self, task_info: dict[str, any]) -> dict[str, any]:
+        """
+        Helper task to remove few attributes from task info.
+
+            Parameters
+            ----------
+            task_info : dict
+                The task info.
+
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the task info with a few attributes removed.
+        """
         # Remove unnecessary / readonly fields
         task_info.pop('app_permissions')
         task_info.pop('administrator_account_email')
@@ -46,15 +61,16 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         return task_info
 
     def get_tasks(self) -> dict[str, object]:
-        """Retrieve all tasks.
+        """
+        Retrieve all tasks.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the list of tasks.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -265,7 +281,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_package_log(self, offset: int = 0, limit: int = 200) -> dict[str, object]:
-        """Retrieve general logs.
+        """
+        Retrieve general logs.
 
             Parameters
             ----------
@@ -280,8 +297,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the list of logs.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -337,7 +354,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_task_log(self, task_id: int, limit: int = 200, offset: int = 0, key_word: str = '') -> dict[str, object]:
-        """Retrieve all logs for a given task.
+        """
+        Retrieve all logs for a given task.
 
             Parameters
             ----------
@@ -358,8 +376,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the list of logs.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -411,7 +429,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_task_setting(self, task_id: int) -> dict[str, object]:
-        """Retrieve the settings of a task.
+        """
+        Retrieve the settings of a task.
 
             Parameters
             ----------
@@ -423,8 +442,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the settings of the task.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -584,15 +603,16 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_worker_count(self) -> dict[str, object]:
-        """Get the number of workers for the Active Backup for Microsoft 365 package.
+        """
+        Get the number of workers for the Active Backup for Microsoft 365 package.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the number of workers.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -617,7 +637,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_worker_count(self, backup_job_workers: int = 40, event_workers: int = 40) -> dict[str, object]:
-        """Set the number of workers for the Active Backup for Microsoft 365 package.
+        """
+        Set the number of workers for the Active Backup for Microsoft 365 package.
 
             Parameters
             ----------
@@ -632,8 +653,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the worker count update.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -675,7 +696,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             "run_days": list[int]
                               ] = {"place_holder": None}
                           ) -> dict[str, object]:
-        """Set the schedule for a given task.
+        """
+        Set the schedule for a given task.
 
             Parameters
             ----------
@@ -688,7 +710,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
                 Possible values:
                 - 0 = continuous
                 - 1 = manual
-                - 2 = scheduled
+                - 2 = scheduled.
 
             schedule : dict
                 A dictionary containing the schedule settings.
@@ -702,7 +724,7 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
 
                 Note: If `repeat_every_hours` is set to 0, the backup will run once a day.
 
-                Example, to run the backup every day hourly starting at 08:30 until 23:30.
+                Examples, to run the backup every day hourly starting at 08:30 until 23:30.
                 ```json
                 {
                     "start_hour": 8,
@@ -718,8 +740,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the schedule update.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -778,7 +800,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_rotation_policy(self, task_id: int, days_to_keep: int) -> dict[str, object]:
-        """Set the rotation policy for a given task.
+        """
+        Set the rotation policy for a given task.
 
             Parameters
             ----------
@@ -793,8 +816,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the rotation policy update.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -824,7 +847,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def run_backup(self, task_id: int) -> dict[str, object]:
-        """Manually run backup for a given task id.
+        """
+        Manually run backup for a given task id.
 
             Parameters
             ----------
@@ -836,8 +860,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the backup task.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -858,7 +882,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def cancel_backup(self, task_id: int) -> dict[str, object]:
-        """Cancel a running backup task.
+        """
+        Cancel a running backup task.
 
             Parameters
             ----------
@@ -870,8 +895,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the task cancellation.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -905,7 +930,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_task(self, task_id: int, remove_data: bool = False) -> dict[str, object]:
-        """Delete a task.
+        """
+        Delete a task.
 
             Warning: Miss-use of this action may lead to data loss.
 
@@ -924,8 +950,8 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the task deletion.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -953,36 +979,37 @@ class ActiveBackupMicrosoft(base_api.BaseApi):
                     admin_email: str,
                     region: str = "Microsoft 365"
                     ) -> dict[str, object]:
-        """Relink a task.
+        """
+        Relink a task.
 
             Parameters
             ----------
             task_name : str
                 The name of the task.
 
-            shared_folder : str
+            local_shared : str
                 The name of the shared folder where the task is stored.
 
-                Example: `ActiveBackupforBusiness`
+                Examples: `ActiveBackupforBusiness`.
 
-            task_path : str
-                The relative path from the the shared folder where the task is stored.
+            local_path : str
+                The relative path from the shared folder where the task is stored.
 
-                Example: `/ActiveBackupForMicrosoft365/task_1`
+                Examples: `/ActiveBackupForMicrosoft365/task_1`.
 
             admin_email : str
                 The email of the Microsoft 365 administrator.
 
             region : str
-                The region of the Microsoft 365 account. Defaults to `Microsoft 365`
+                The region of the Microsoft 365 account. Defaults to `Microsoft 365`.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the result of the task relinking.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {

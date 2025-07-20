@@ -39,8 +39,8 @@ ADMONITIONS = [
     {'pattern': r'(Danger:)(.*)', 'level': 'danger'},
 ]
 
-# Match example return block, header in group 1 and content in group 2
-EXAMPLE_RETURN_PATTERN = r'(?s)(Example return\n-.*)(```.*```)'
+# Match Examples block, header in group 1 and content in group 2
+EXAMPLE_RETURN_PATTERN = r'(?s)(Examples\n.*?)(```.*?```)'
 
 # Match API name in string, API name in group 1
 CLASS_API_NAME_PATTERN = r'api_name\s*=\s*f?[\'"](.*)[\'"]'
@@ -178,6 +178,9 @@ def init_parser() -> argparse.ArgumentParser:
     parser.add_argument('-e', '--excluded',
                         action='store_true',
                         help='Show a list of the excluded files to parse.')
+    parser.add_argument('--exit-on-warning',
+                        action='store_true',
+                        help='Exit if a warning is encountered.')
 
     return parser
 
@@ -388,12 +391,37 @@ def write(path: str, content: str):
         f.write(content)
 
 
+class WarningCatcher:
+    def __init__(self):
+        self.warnings = []
+
+    def __call__(self, message, category, filename, lineno, file=None, line=None):
+        msg = warnings.formatwarning(message, category, filename, lineno, line)
+        self.warnings.append(msg)
+
+    def has_warnings(self):
+        return bool(self.warnings)
+
+    def print_warnings(self):
+        for w in self.warnings:
+            print(w, end='')
+
+
 def main():
     parser = init_parser()
     files, parse_api_list, parse_docs = validate_args(parser)
 
+    # Setup warning catcher
+    warning_catcher = WarningCatcher()
+    warnings.showwarning = warning_catcher
+
     # Generation for Getting Started/Supported APIs with all the APIs user per class.
     supported_apis = gen_supported_apis()
+
+    # Check if --exit-on-warning flag is set
+    exit_on_warning = any(arg in ('--exit-on-warning',) for arg in sys.argv)
+
+    any_warning = False
 
     for file_name in files:
         doc_content = ''
@@ -427,9 +455,17 @@ def main():
         if parse_docs:
             write(DOCS_DIR + file_name.replace('.py', '.md'), doc_content)
         print('='*20)
+
+        if warning_catcher.has_warnings():
+            any_warning = True
+            # else: continue to process all files
+
     # Write to md files if the args were set
     if parse_api_list:
         write(API_LIST_FILE, supported_apis)
+
+    if any_warning and exit_on_warning:
+        sys.exit(1)
 
 
 if __name__ == "__main__":

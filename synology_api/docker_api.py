@@ -1,3 +1,4 @@
+"""Docker API implementation for Synology NAS."""
 from __future__ import annotations
 from typing import Optional
 import json
@@ -7,7 +8,8 @@ from . import base_api
 
 
 class Docker(base_api.BaseApi):
-    """Docker API implementation.
+    """
+    Docker API implementation.
 
         This class provides methods to interact with Docker containers, images, registries, and projects on a Synology NAS.
 
@@ -26,7 +28,6 @@ class Docker(base_api.BaseApi):
                 - Get list of event logs from Container Manager
 
             - Setters:
-                -
 
             - Actions:
                 - Export container profile
@@ -145,15 +146,16 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method='post')
 
     def containers(self) -> dict[str, object] | str:
-        """Get list of containers.
+        """
+        Get list of containers.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the containers information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -232,16 +234,18 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     # TODO: rename to containers_resources?
+
     def container_resources(self) -> dict[str, object] | str:
-        """Get resources of all containers.
+        """
+        Get resources of all containers.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the resources information of the containers.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
                 {
                     "data": {
@@ -281,15 +285,16 @@ class Docker(base_api.BaseApi):
 
     # TODO: move to code_sys_utilization?
     def system_resources(self) -> dict[str, object] | str:
-        """Get system resources
+        """
+        Get system resources.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the system resources information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                "data" : {
@@ -415,7 +420,8 @@ class Docker(base_api.BaseApi):
 
     # TODO: rename to list_downloaded_images?
     def downloaded_images(self, limit: int = -1, offset: int = 0, show_dsm: bool = False) -> dict[str, object] | str:
-        """List of docker images available on Synology NAS.
+        """
+        List of docker images available on Synology NAS.
 
             Parameters
             ----------
@@ -433,8 +439,8 @@ class Docker(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the list of downloaded images.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                "data" : {
@@ -471,10 +477,16 @@ class Docker(base_api.BaseApi):
 
     # TODO: rename to list_registries?
     def images_registry_resources(self) -> dict[str, object] | str:
-        """Get list of docker registries.
+        """
+        Get list of docker registries.
 
-            Example return
-            --------------
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the list of docker registries.
+
+            Examples
+            --------
             ```json
             {
                "data" : {
@@ -506,10 +518,16 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def network(self) -> dict[str, object] | str:
-        """Get list of docker networks.
+        """
+        Get list of docker networks.
 
-            Example return
-            --------------
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the list of docker networks.
+
+            Examples
+            --------
             ```json
             {
                "data" : {
@@ -551,20 +569,21 @@ class Docker(base_api.BaseApi):
 
     # TODO: rename search_images_in_registries?
     def search_image(self, query: str = None) -> dict[str, object] | str:
-        """Search for docker image in all available registries.
+        """
+        Search for docker image in all available registries.
 
             Parameters
             ----------
             query : str
-                name of the docker image to search for. Defaults to None.
+                Name of the docker image to search for. Defaults to None.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the search results for the docker image.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                "data" : {
@@ -609,10 +628,16 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_projects(self) -> dict[str, object] | str:
-        """Get list of projects.
+        """
+        Get list of projects.
 
-            Example return
-            --------------
+            Returns
+            -------
+            dict[str, object]
+                A dictionary containing the list of projects.
+
+            Examples
+            --------
             ```json
             {
                "data" : {
@@ -675,7 +700,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_project_info(self, project_id: str = None) -> dict[str, object] | str:
-        """Get information about a specific project.
+        """
+        Get information about a specific project.
 
             Parameters
             ----------
@@ -687,8 +713,8 @@ class Docker(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the project information.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                "data" : {
@@ -1004,20 +1030,21 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def start_container(self, container: str = None) -> dict[str, object] | str:
-        """Start a container by its name.
+        """
+        Start a container by its name.
 
             Parameters
             ----------
             container : str
-                The name of the container
+                The name of the container.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the result of the export operation.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                "data" : {
@@ -1042,20 +1069,21 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def stop_container(self, container: str = None) -> dict[str, object] | str:
-        """Stop a container by its name.
+        """
+        Stop a container by its name.
 
             Parameters
             ----------
             container : str
-                The name of the container
+                The name of the container.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the result of the stop operation.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                "data" : {
@@ -1080,27 +1108,28 @@ class Docker(base_api.BaseApi):
 
     # TODO: rename to export_container_profile?
     def export_container_settings(self, container: str = None, path: str = None) -> dict[str, object] | str:
-        """Export container profile
+        """
+        Export container profile.
 
-            file \<container\>.syno.json will be created in the specified path.
+            file \\<container\\>.syno.json will be created in the specified path.
 
             Parameters
             ----------
             container : str
-                The name of the container
+                The name of the container.
 
             path : str, optional
                 The path on filesystem of Synology NAS where the container settings will be exported.
                 If not specified, the file will be offered as a download through the browser.
-                For example: `/docker/nging`
+                For example: `/docker/nging`.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the result of the export operation.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
                 {
                    "data" : {},
@@ -1119,26 +1148,27 @@ class Docker(base_api.BaseApi):
 
     # TODO: rename to export_container_profile_and_content?
     def export_container(self, container: str = None, path: str = None) -> dict[str, object] | str:
-        """Export container profile and content to a specified path on Synology nas.
+        """
+        Export container profile and content to a specified path on Synology nas.
 
-            archive \<container\>.syno.txz will be created in the specified path.
+            archive \\<container\\>.syno.txz will be created in the specified path.
 
             Parameters
             ----------
             container : str
-                The name of the container
+                The name of the container.
 
             path : str
                 The path on filesystem of Synology NAS where the container settings will be exported.
-                For example: `/docker/nging`
+                For example: `/docker/nging`.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the result of the export operation.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
                 {
                    "data" : {},
@@ -1159,12 +1189,13 @@ class Docker(base_api.BaseApi):
                  level: str = None, keyword: str = None, sort_dir: str = 'DESC', offset: int = 0,
                  limit: int = 1000
                  ) -> dict[str, object] | str:
-        """Get list of container logs.
+        """
+        Get list of container logs.
 
             Parameters
             ----------
             name : str
-                The name of the container
+                The name of the container.
 
             from_date : str, optional
                 The start date for the logs. Defaults to None.
@@ -1192,8 +1223,8 @@ class Docker(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the logs from the specified container.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
                 {
                     "data": {
@@ -1224,15 +1255,16 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method="post")
 
     def docker_stats(self) -> dict[str, object] | str:
-        """Get containers resource usage statistics.
+        """
+        Get containers resource usage statistics.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the resource usage statistics of the containers.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
                 {
                    "data" : {

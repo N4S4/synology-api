@@ -1,3 +1,4 @@
+"""Active Backup for Business API Implementation."""
 from __future__ import annotations
 from . import base_api
 
@@ -6,7 +7,8 @@ import json
 
 
 class ActiveBackupBusiness(base_api.BaseApi):
-    """Active Backup for Business API Implementation.
+    """
+    Active Backup for Business API Implementation.
 
         This class provides methods to interact with the Active Backup for Business package.
 
@@ -46,7 +48,31 @@ class ActiveBackupBusiness(base_api.BaseApi):
         action_type: str = ""
     ):
         """
-        Create a filter dictionary based on the provided parameters.
+        Create a filter dictionary for API requests based on provided parameters.
+
+        Parameters
+        ----------
+        log_level : str, optional
+            Log level to filter by. Possible values: 'error', 'warning', 'information'. Defaults to "" (all).
+        keyword : str, optional
+            Keyword to filter logs or tasks. Defaults to "" (no keyword).
+        from_date : int, optional
+            Start of the time window (epoch seconds). Defaults to 0 (no lower bound).
+        to_date : int, optional
+            End of the time window (epoch seconds). Defaults to 0 (no upper bound).
+        task_status : str, optional
+            Task status to filter by. Defaults to "" (all statuses).
+        result_status : str, optional
+            Result status to filter by. Possible values: 'success', 'partial_success', 'fail', 'cancel', 'no_backup'. Defaults to "" (all).
+        backup_type : str, optional
+            Backup type to filter by. Possible values: 'vm', 'pc', 'physical_server', 'file_server', 'nas'. Defaults to "" (all).
+        action_type : str, optional
+            Action type to filter by. Possible values: 'backup', 'dedup_data', 'restore', 'migrate', 'delete_target', 'delete_version', 'delete_host', 'relink', 'create_task'. Defaults to "" (all).
+
+        Returns
+        -------
+        dict
+            Dictionary containing filter parameters for API requests.
         """
         log_level_map = {
             'error': 0,
@@ -104,15 +130,16 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return filter
 
     def get_settings(self) -> dict[str, object]:
-        """Get the package settings including certificate information.
+        """
+        Get the package settings including certificate information.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the current settings.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -198,7 +225,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_concurrent_devices(self, value: int) -> dict[str, object]:
-        """Set the maximum number of concurrent devices that can be backed up at the same time.
+        """
+        Set the maximum number of concurrent devices that can be backed up at the same time.
 
             Note: You can run multiple concurrent backup devices, but only up to the maximum limit you set—provided that your NAS's RAM usage does not exceed its limit.
 
@@ -214,8 +242,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -239,7 +267,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_retention_policy_exec_time(self, hour: int, minute: int) -> dict[str, object]:
-        """Set the time of day when the retention policy will be executed.
+        """
+        Set the time of day when the retention policy will be executed.
 
             Parameters
             ----------
@@ -247,15 +276,15 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 Hour in 24-hour format (0 - 23) when the retention policy will be executed.
 
             minute : int
-                Minute (0 - 59) when the retention policy will be executed
+                Minute (0 - 59) when the retention policy will be executed.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -283,7 +312,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
         traffic_control: dict[str, object] = {"enable": False, "bandwidth": 0},
         ip_range: list[str] = ["", ""]
     ) -> dict[str, object]:
-        """Set the global bandwidth control and IP range bandwidth control.
+        """
+        Set the global bandwidth control and IP range bandwidth control.
 
             Note: Applies only to PC, Physical Server and NAS devices.
 
@@ -315,8 +345,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -329,6 +359,21 @@ class ActiveBackupBusiness(base_api.BaseApi):
         settings = []
 
         def item(key: str, value: str) -> dict[str, str]:
+            """
+            Create a dictionary representing a setting item.
+
+            Parameters
+            ----------
+            key : str
+                The name of the setting.
+            value : str
+                The value of the setting.
+
+            Returns
+            -------
+            dict[str, str]
+                Dictionary with 'name' and 'value' keys.
+            """
             return {'name': key, 'value': value}
 
         if traffic_control['enable'] and traffic_control['bandwidth'] > -1:
@@ -357,7 +402,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_use_pkg_cert(self, use_package_cert: bool) -> dict[str, object]:
-        """Set whether to use the self signed certificate provided by the package.
+        """
+        Set whether to use the self signed certificate provided by the package.
 
             Parameters
             ----------
@@ -369,8 +415,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -391,7 +437,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_vm_hypervisor(self) -> dict[str, object]:
-        """Get a list of all configured hypervisors present in ABB.
+        """
+        Get a list of all configured hypervisors present in ABB.
 
             Returns
             -------
@@ -416,7 +463,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
         time_start: int = int(time.time() - 86400),
         time_end: int = int(time.time())
     ) -> dict[str, object]:
-        """Get a list of all devices and their respective transfer size for the given time frame.
+        """
+        Get a list of all devices and their respective transfer size for the given time frame.
 
             Parameters
             ----------
@@ -431,8 +479,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 A dictionary containing a list of devices and their transfer size.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data" : {
@@ -558,12 +606,13 @@ class ActiveBackupBusiness(base_api.BaseApi):
         to_date: int = 0,
         include_versions: bool = False,
     ) -> dict[str, object]:
-        """Get information of one or all tasks.
+        """
+        Get information of one or all tasks.
 
             Parameters
             ----------
             task_id : int, optional
-                Get information of specific task. Defaults to `-1` (all tasks)
+                Get information of specific task. Defaults to `-1` (all tasks).
 
             backup_type : str, optional
                 Return only tasks matching the device type provided. Defaults to `""` (all device types).
@@ -574,7 +623,6 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 - `"physical_server"`
                 - `"file_server"`
                 - `"nas"`
-
 
                 Note that values are different when returned by the API.
 
@@ -608,8 +656,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing a list of tasks.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -823,14 +871,19 @@ class ActiveBackupBusiness(base_api.BaseApi):
         offset: int = 0,
         limit: int = 200,
     ) -> dict[str, object]:
-        """Get logs from the package, tasks and devices. From `[Activities -> Log]` screen in ABB.
+        """
+        Get logs from the package, tasks and devices.
+
+        Notes
+        -----
+        From `[Activities -> Log]` screen in ABB.
 
             For specific task logs `[Task List -> Details -> Log]`, specify `task_id` parameter.
 
             Parameters
             ----------
             task_id : int, optional
-                Get logs of specific task. Defaults to `-1` (all logs - package/tasks/devices)
+                Get logs of specific task. Defaults to `-1` (all logs - package/tasks/devices).
 
             log_level : str, optional
                 Type of logs to return. Defaults to `""` (all types).
@@ -839,7 +892,6 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 - `"error"`
                 - `"warning"`
                 - `"information"`
-
 
                 Note that values are different when returned by the API.
 
@@ -868,8 +920,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing a list of logs.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "count": 1,
@@ -933,12 +985,13 @@ class ActiveBackupBusiness(base_api.BaseApi):
         offset: int = 0,
         limit: int = 200
     ) -> dict[str, object]:
-        """Return the history of task execution.
+        """
+        Return the history of task execution.
 
             Parameters
             ----------
             task_id : int, optional
-                Get logs of specific task. Defaults to `-1` (all tasks)
+                Get logs of specific task. Defaults to `-1` (all tasks).
 
             status : str, optional
                 Return only tasks matching the status provided. Defaults to `""` (all status).
@@ -949,7 +1002,6 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 - `"fail"`
                 - `"cancel"`
 
-
                 Note that values are different when returned by the API.
 
                 Return values mappings:
@@ -957,6 +1009,9 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 - `3` -> `partial_success`
                 - `4` -> `fail`
                 - `5` -> `cancel`
+
+            keyword : str, optional
+                Keyword used to filter the results. Defaults to `""`.
 
             backup_type : str, optional
                 Return only tasks matching the device type provided. Defaults to `""` (all device types).
@@ -967,7 +1022,6 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 - `"physical_server"`
                 - `"file_server"`
                 - `"nas"`
-
 
                 Note that values are different when returned by the API.
 
@@ -992,7 +1046,6 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 - `"relink"`
                 - `"create_task"`
 
-
                 Note that values are different when returned by the API.
 
                 Return values mappings:
@@ -1005,9 +1058,6 @@ class ActiveBackupBusiness(base_api.BaseApi):
                 - `262144` -> `delete_host`
                 - `2097152` -> `relink`
                 - `268435456` -> `create_task`
-
-            keyword : str, optional
-                Keyword used to filter the results. Defaults to `""`.
 
             from_date : int, optional
                 Date from which the results will start. Format must be epoch date in seconds. Defaults to `0` (no time limit).
@@ -1026,8 +1076,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing a list of results.
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "data": {
@@ -1093,75 +1143,80 @@ class ActiveBackupBusiness(base_api.BaseApi):
         order_by: str = "log_level",
         direction: str = "ASC"
     ) -> dict[str, object]:
-        """Get details of a task result log. `result_id` can be retrieved from `list_logs()` function.
+        """
+        Get details of a task result log.
 
-            Parameters
-            ----------
-            result_id : int
-                ID of the result to get details from.
+        Parameters
+        ----------
+        result_id : int
+            ID of the result to get details from.
 
-            limit : int, optional
-                Amount of results to be returned. Defaults to `500`.
+        limit : int, optional
+            Amount of results to be returned. Defaults to `500`.
 
-            order_by : str, optional
-                What to order the results by. Defaults to `"log_level"`.
+        order_by : str, optional
+            What to order the results by. Defaults to `"log_level"`.
 
-                Possible values:
-                - `"log_level"`
-                - `"log_time"`
+            Possible values:
+            - `"log_level"`
+            - `"log_time"`
 
-            direction : str, optional
-                Direction of the order. Defaults to `"ASC"`.
+        direction : str, optional
+            Direction of the order. Defaults to `"ASC"`.
 
-                Possible values:
-                - `"ASC"`
-                - `"DESC"`
+            Possible values:
+            - `"ASC"`
+            - `"DESC"`
 
-            Returns
-            -------
-            dict[str, object]
-                Dictionary containing a list of result details.
+        Returns
+        -------
+        dict[str, object]
+            Dictionary containing a list of result details.
 
-            Example return
-            ----------
-            ```json
-            {
-                "data": {
-                    "count": 2,
-                    "result_detail_list": [
-                        {
-                            "error_code": 0,
-                            "log_level": 0,
-                            "log_time": 1741897456,
-                            "log_type": 6002,
-                            "other_params": {
-                                "fs_error": -65,
-                                "os_name": "smb",
-                                "path": "/D",
-                                "task_id": 8
-                            },
-                            "result_detail_id": 9526,
-                            "result_id": 592
+        Notes
+        -----
+        `result_id` can be retrieved from `list_logs()` function.
+
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "count": 2,
+                "result_detail_list": [
+                    {
+                        "error_code": 0,
+                        "log_level": 0,
+                        "log_time": 1741897456,
+                        "log_type": 6002,
+                        "other_params": {
+                            "fs_error": -65,
+                            "os_name": "smb",
+                            "path": "abc",
+                            "task_id": 8
                         },
-                        {
-                            "error_code": 0,
-                            "log_level": 0,
-                            "log_time": 1741897498,
-                            "log_type": 1104,
-                            "other_params": {
-                                "os_name": "smb",
-                                "path": "",
-                                "task_id": 8,
-                                "task_name": "SMB LAPTOP"
-                            },
-                            "result_detail_id": 9527,
-                            "result_id": 592
-                        }
-                    ]
-                },
-                "success": true
-            }
-            ```
+                        "result_detail_id": 9526,
+                        "result_id": 592
+                    },
+                    {
+                        "error_code": 0,
+                        "log_level": 0,
+                        "log_time": 1741897498,
+                        "log_type": 1104,
+                        "other_params": {
+                            "os_name": "smb",
+                            "path": "",
+                            "task_id": 8,
+                            "task_name": "SMB LAPTOP"
+                        },
+                        "result_detail_id": 9527,
+                        "result_id": 592
+                    }
+                ]
+            },
+            "success": true
+        }
+        ```
         """
         api_name = 'SYNO.ActiveBackup.Log'
         info = self.gen_list[api_name]
@@ -1179,15 +1234,16 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_storage(self) -> dict[str, object]:
-        """Get a list of all storage devices present in ABB.
+        """
+        Get a list of all storage devices present in ABB.
 
             Returns
             -------
             dict[str, object]
                 A dictionary containing a list of storage devices.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "data" : {
@@ -1249,7 +1305,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def backup_task_run(self, task_ids: list[int]) -> dict[str, object]:
-        """Trigger a backup event for the given tasks.
+        """
+        Trigger a backup event for the given tasks.
 
             Parameters
             ----------
@@ -1263,8 +1320,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -1285,7 +1342,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def backup_task_cancel(self, task_ids: list[int]) -> dict[str, object]:
-        """Cancel specified ongoing task.
+        """
+        Cancel specified ongoing task.
 
             Parameters
             ----------
@@ -1299,8 +1357,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -1320,7 +1378,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def backup_task_remove(self, task_ids: list[int]) -> dict[str, object]:
-        """Remove the given tasks from ABB.
+        """
+        Remove the given tasks from ABB.
 
             Warning: This will remove the task and all its versions from the NAS. The backed up data will not be preserved after this operation.
 
@@ -1336,8 +1395,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -1357,7 +1416,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def backup_task_delete_versions(self, task_id: int, versions_ids: list[int]) -> dict[str, object]:
-        """Delete the specified versions from a task.
+        """
+        Delete the specified versions from a task.
 
             Warning: This will remove the specified versions from the NAS. The corresponding versions data will not be preserved after this operation.
 
@@ -1374,8 +1434,8 @@ class ActiveBackupBusiness(base_api.BaseApi):
             dict[str, object]
                 Dictionary containing the result of the operation.
 
-            Example return
-            ----------
+            Examples
+            --------
             ```json
             {
                 "success": true

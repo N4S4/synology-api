@@ -36,7 +36,7 @@ tasks:
     dir: '{{.TASKFILE_DIR}}'
     cmds:
       - echo "Parsing the documentation files..."
-      - python3 docs_parser.py -a
+      - python3 docs_parser.py -a --exit-on-warning
 
   docs-build:
     desc: Build the documentation website
@@ -89,3 +89,24 @@ tasks:
       - python3 -m venv .venv
       - source .venv/bin/activate
       - task: install-python-deps
+
+  numpydoc-validation:
+    desc: Validate the numpydoc format of the documentation
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Validating numpydoc format..."
+      - pre-commit run numpydoc-validation -a
+
+  numpydoc-lint:
+    desc: Lint the numpydoc format of the documentation
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Linting numpydoc format..."
+      - pydocstringformatter -w ./synology_api/
+
+  numpydoc:
+    desc: Lint and validate the numpydoc format of the documentation
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - task: numpydoc-lint
+      - task: numpydoc-validation
