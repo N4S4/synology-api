@@ -491,7 +491,7 @@ class FileStation(base_api.BaseApi):
         req_param = {'version': info['maxVersion'],
                      'method': 'stop', 'taskid': self._search_taskid}
 
-        if taskid is None:
+        if taskid is None: # NOTE this is unreachable
             return 'Enter a valid taskid, choose between ' + str(self._search_taskid_list)
 
         self._search_taskid_list.remove(taskid)
@@ -2044,7 +2044,7 @@ class FileStation(base_api.BaseApi):
                                         limit: Optional[int] = None,
                                         sort_by: Optional[str] = None,
                                         sort_direction: Optional[str] = None,
-                                        api_filter: Optional[str] = None
+                                        api_filter: Optional[str, list] = None
                                         ) -> dict[str, object] | str:
         """
         Get a list of all background tasks.
@@ -2077,7 +2077,7 @@ class FileStation(base_api.BaseApi):
                 if val is not None:
                     req_param[str(key)] = val
 
-        if type(api_filter) is list:
+        if isinstance(api_filter, list):
             new_path = []
             [new_path.append('"' + x + '"') for x in api_filter]
             api_filter = new_path
