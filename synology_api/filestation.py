@@ -237,7 +237,8 @@ class FileStation(base_api.BaseApi):
         req_param = {'version': info['maxVersion'], 'method': 'list'}
 
         if not isinstance(folder_path, str):
-            raise ValueError('Enter a valid folder_path') # break instead of return
+            # break instead of return
+            raise ValueError('Enter a valid folder_path')
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param', 'additional']:
@@ -491,7 +492,7 @@ class FileStation(base_api.BaseApi):
         req_param = {'version': info['maxVersion'],
                      'method': 'stop', 'taskid': self._search_taskid}
 
-        if taskid is None: # NOTE this is unreachable
+        if taskid is None:  # NOTE this is unreachable
             return 'Enter a valid taskid, choose between ' + str(self._search_taskid_list)
 
         self._search_taskid_list.remove(taskid)
@@ -513,7 +514,7 @@ class FileStation(base_api.BaseApi):
         req_param = {'version': info['maxVersion'],
                      'method': 'stop', 'taskid': ''}
 
-        assert len(self._search_taskid_list), 'Task list is empty' + \
+        assert len(self._search_taskid_list), 'Task list is empty' +\
             str(self._search_taskid_list)
 
         for task_id in self._search_taskid_list:
@@ -2151,9 +2152,13 @@ class FileStation(base_api.BaseApi):
                 r.raise_for_status()
                 return io.BytesIO(r.content)
 
-    def generate_file_tree(self, folder_path: str, tree: Tree, max_depth: Optional[int] = 1, start_depth: Optional[int] = 0) -> None:
+    def generate_file_tree(self,
+                           folder_path: str,
+                           tree: Tree,
+                           max_depth: Optional[int] = 1,
+                           start_depth: Optional[int] = 0) -> None:
         """
-        Recursively generate the file tree based on the folder path you give constrained with
+        Recursively generate the file tree based on the folder path you give constrained with.
 
         You need to create the root node before calling this function.
 
@@ -2164,45 +2169,47 @@ class FileStation(base_api.BaseApi):
         tree : Tree
             Instance of the Tree from the `treelib` library.
         max_depth : int, optional
-            Non-negative number of maximum depth of tree generation if node tree is
-            directory, default to `1` to generate full tree. If `max_depth=0` it
-            will be equivalent to no recursion
+            Non-negative number of maximum depth of tree generation if node tree is directory, default to '1' to generate full tree. If 'max_depth=0' it will be equivalent to no recursion.
         start_depth : int, optional
-            Non negative number to start to control tree generation default to `0`.
-
-        Returns
-        -------
-            None
+            Non negative number to start to control tree generation default to '0'.
         """
         api_name = 'hotfix'  # fix for docs_parser.py issue
 
         if start_depth < 0:
             start_depth = 0
             warnings.warn(
-                f"`start_depth={start_depth}`. It should not be less or than 0, setting `start_depth` to 0!",
+                f"'start_depth={start_depth}'. It should not be less or than 0, setting 'start_depth' to 0!",
                 RuntimeWarning,
                 stacklevel=2
             )
 
-        assert start_depth <= max_depth, ValueError(f"`start_depth` should not be greater than `max_depth`. Got `{start_depth=}, {max_depth=}`!")
-        assert isinstance(tree, Tree), ValueError(f"`tree` has to be a type of `treelib.Tree`! Got {type(tree)=}")
+        assert start_depth <= max_depth, ValueError(
+            f"'start_depth' should not be greater than 'max_depth'. Got '{start_depth=}, {max_depth=}'")
+        assert isinstance(tree, Tree), ValueError(
+            "'tree' has to be a type of 'Tree'")
 
         data: dict[str, object] = self.get_file_list(
             folder_path=folder_path
         ).get("data")
 
         files = data.get("files")
-        _file_info_getter = map(lambda x: (x.get('isdir'), x.get('name'), x.get('path')), files)
+        _file_info_getter = map(lambda x: (
+            x.get('isdir'), x.get('name'), x.get('path')), files)
         for isdir, file_name, file_path in _file_info_getter:
 
             if isdir and (start_depth >= max_depth):
-                tree.create_node(file_name, file_path, parent=folder_path, data={"isdir":isdir, "max_depth":True})
+                tree.create_node(file_name, file_path, parent=folder_path, data={
+                                 "isdir": isdir, "max_depth": True})
 
             elif isdir:
-                tree.create_node(file_name, file_path, parent=folder_path, data={"isdir":isdir, "max_depth":False})
-                self.generate_file_tree(file_path, tree, max_depth, start_depth + 1)
+                tree.create_node(file_name, file_path, parent=folder_path, data={
+                                 "isdir": isdir, "max_depth": False})
+                self.generate_file_tree(
+                    file_path, tree, max_depth, start_depth + 1)
 
             else:
-                tree.create_node(file_name, file_path, parent=folder_path, data={"isdir":isdir, "max_depth":False})
+                tree.create_node(file_name, file_path, parent=folder_path, data={
+                                 "isdir": isdir, "max_depth": False})
+
 
 # TODO SYNO.FileStation.Thumb to be done
