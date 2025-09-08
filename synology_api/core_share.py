@@ -399,7 +399,7 @@ class Share(base_api.BaseApi):
             Returns
             -------
             dict
-                Success
+                Success.
 
             Examples
             --------
@@ -442,7 +442,7 @@ class Share(base_api.BaseApi):
             Returns
             -------
             dict
-                Success
+                Success.
 
             Examples
             --------
