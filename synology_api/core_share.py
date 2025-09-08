@@ -185,6 +185,7 @@ class Share(base_api.BaseApi):
                       enable_recycle_bin: bool = True, recycle_bin_admin_only: bool = True,
                       hide_unreadable: bool = False, enable_share_cow: bool = False,
                       enable_share_compress: bool = False, share_quota: int = 0, name_org: str = "",
+                      encryption: bool = False, enc_passwd: str = ""
                       ) -> dict:
         """
         Create a new shared folder.
@@ -213,6 +214,10 @@ class Share(base_api.BaseApi):
             Share quota. Defaults to `0`.
         name_org : str, optional
             Defaults to `""`.
+        encryption : bool, optional
+            Enable encryption. Defaults to `False`.
+        enc_passwd : str, optional
+            Encrypted password. Defaults to `""`.
 
         Returns
         -------
@@ -251,6 +256,8 @@ class Share(base_api.BaseApi):
                 "hidden": hidden,
                 "hide_unreadable": hide_unreadable,
                 "share_quota": share_quota,
+                "encryption": encryption,
+                "enc_passwd": enc_passwd,
             })
         }
         # If using https don't use encryption
@@ -378,6 +385,78 @@ class Share(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param, method="post")
 
+    def decrypt_folder(self, name: str, password: str) -> dict:
+        """Decrypt a given share.
+            Parameters
+            ----------
+            name : str
+                The share name to decrypt.             
+            password : str
+                The password to use for decrypting the share.
+
+            Returns
+            -------
+            dict
+                Success
+
+            Example return
+            --------------
+            ```json
+            {
+                "success": true
+            }
+            ```
+        """
+        api_name = "SYNO.Core.Share.Crypto"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "decrypt",
+            "version": info['maxVersion'],
+            "name": name,
+        }
+        
+        req_param_encrypted = {
+            "password": password,
+        }
+        # If using https don't use encryption
+        if self.session._secure:
+            req_param.update(req_param_encrypted)
+        else:
+            encrypted_params = self.session.encrypt_params(req_param_encrypted)
+            req_param.update(encrypted_params)
+        
+        return self.request_data(api_name, api_path, req_param, method="post")
+    
+    def encrypt_folder(self, name: str) -> dict:
+        """Encrypt a given share.
+            Parameters
+            ----------
+            name : str
+                The share name to encrypt.
+
+            Returns
+            -------
+            dict
+                Success
+
+            Example return
+            --------------
+            ```json
+            {
+                "success": true
+            }
+            ```
+        """
+        api_name = "SYNO.Core.Share.Crypto"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "encrypt",
+            "version": info['maxVersion'],
+            "name": name,
+        }
+        return self.request_data(api_name, api_path, req_param, method="post")
 
 class SharePermission(base_api.BaseApi):
     """Core Share Permission API implementation."""
@@ -677,7 +756,6 @@ class SharePermission(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
-
 
 class KeyManagerStore(base_api.BaseApi):
     """Core Share KeyManager Store API implementation."""
