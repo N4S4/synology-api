@@ -399,8 +399,8 @@ class Share(base_api.BaseApi):
             dict
                 Success
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
@@ -440,8 +440,8 @@ class Share(base_api.BaseApi):
             dict
                 Success
 
-            Example return
-            --------------
+            Examples
+            --------
             ```json
             {
                 "success": true
