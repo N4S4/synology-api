@@ -386,7 +386,8 @@ class Share(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method="post")
 
     def decrypt_folder(self, name: str, password: str) -> dict:
-        """Decrypt a given share.
+        """
+        Decrypt a given share.
         
             Parameters
             ----------
@@ -430,7 +431,8 @@ class Share(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method="post")
     
     def encrypt_folder(self, name: str) -> dict:
-        """Encrypt a given share.
+        """
+        Encrypt a given share.
         
             Parameters
             ----------
