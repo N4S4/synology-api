@@ -388,11 +388,11 @@ class Share(base_api.BaseApi):
     def decrypt_folder(self, name: str, password: str) -> dict:
         """
         Decrypt a given share.
-        
+
             Parameters
             ----------
             name : str
-                The share name to decrypt.             
+                The share name to decrypt.
             password : str
                 The password to use for decrypting the share.
 
@@ -417,7 +417,7 @@ class Share(base_api.BaseApi):
             "version": info['maxVersion'],
             "name": name,
         }
-        
+
         req_param_encrypted = {
             "password": password,
         }
@@ -427,13 +427,13 @@ class Share(base_api.BaseApi):
         else:
             encrypted_params = self.session.encrypt_params(req_param_encrypted)
             req_param.update(encrypted_params)
-        
+
         return self.request_data(api_name, api_path, req_param, method="post")
-    
+
     def encrypt_folder(self, name: str) -> dict:
         """
         Encrypt a given share.
-        
+
             Parameters
             ----------
             name : str
@@ -461,6 +461,7 @@ class Share(base_api.BaseApi):
             "name": name,
         }
         return self.request_data(api_name, api_path, req_param, method="post")
+
 
 class SharePermission(base_api.BaseApi):
     """Core Share Permission API implementation."""
@@ -760,6 +761,7 @@ class SharePermission(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
+
 
 class KeyManagerStore(base_api.BaseApi):
     """Core Share KeyManager Store API implementation."""
