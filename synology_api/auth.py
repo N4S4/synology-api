@@ -22,7 +22,10 @@ from cryptography.hazmat.primitives.asymmetric import padding, rsa
 import base64
 import hashlib
 import urllib
-
+from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
+import base64
+from noise.connection import NoiseConnection, Keypair
+import time
 
 USE_EXCEPTIONS: bool = True
 
@@ -128,6 +131,51 @@ class Authentication:
 
         self.full_api_list = {}
         self.app_api_list = {}
+        
+    def get_ik_message(self) -> str:
+        """
+        Get the IK message for authentication.
+
+        Returns
+        -------
+        str
+            The IK message.
+        """
+        
+        url = self._base_url + 'entry.cgi/SYNO.API.Auth.UIConfig'
+        data = {
+            "api": "SYNO.API.Auth.UIConfig",
+            "method": "get",
+            "version": "1"
+        }
+        response = requests.post(url, data=data, verify=self._verify)
+
+        # Try to get cookie "_SSID"
+        if response.status_code != 200:
+            raise Exception("Failed to access the URL for IK message. Status code: {}".format(response.status_code))
+        cookies = response.cookies
+        if "_SSID" not in cookies:
+            raise Exception("Cookie '_SSID' not found in the response.")
+        _SSID_encoded = cookies["_SSID"]
+        _SSID = self.decode_ssid_cookie(_SSID_encoded)
+
+        private_bytes = X25519PrivateKey.generate().private_bytes_raw()
+
+        noise = NoiseConnection.from_name(b"Noise_IK_25519_ChaChaPoly_BLAKE2b")
+        noise.set_as_initiator()
+        noise.set_keypair_from_private_bytes(Keypair.STATIC, private_bytes)
+        noise.set_keypair_from_public_bytes(Keypair.REMOTE_STATIC, _SSID)
+
+        noise.start_handshake()
+
+        payload = json.dumps({
+            "time": int(time.time()),
+        }).encode('utf-8')
+
+        message = noise.write_message(payload)
+        ik_message = self.encode_ssid_cookie(message)
+
+        return ik_message
 
     def verify_cert_enabled(self) -> bool:
         """
@@ -157,7 +205,7 @@ class Authentication:
         """
         login_api = 'auth.cgi'
         params = {'api': "SYNO.API.Auth", 'version': self._version,
-                  'method': 'login', 'enable_syno_token': 'yes', 'client': 'browser'}
+                  'method': 'login', 'enable_syno_token': 'yes', 'client': 'browser', 'ik_message': self.get_ik_message()}
 
         params_enc = {
             'account': self._username,
@@ -801,6 +849,27 @@ class Authentication:
         else:
             message = "<Undefined.%s.Error>" % api_name
         return 'Error {} - {}'.format(code, message)
+    
+    @staticmethod
+    def decode_ssid_cookie(ssid: str) -> bytes:
+        # Replace '-' with '+' and '_' with '/'
+        ssid_fixed = ssid.replace('-', '+').replace('_', '/')
+        # Pad with '=' if needed
+        padding = '=' * (-len(ssid_fixed) % 4)
+        ssid_fixed += padding
+        # Decode base64
+        return base64.b64decode(ssid_fixed)
+
+    @staticmethod
+    def encode_ssid_cookie(ssid_bytes: bytes) -> str:
+        # Encode to base64
+        ssid_b64 = base64.b64encode(ssid_bytes).decode('utf-8')
+        # Replace '+' with '-' and '/' with '_'
+        ssid_fixed = ssid_b64.replace('+', '-').replace('/', '_')
+        # Remove padding '='
+        ssid_fixed = ssid_fixed.rstrip('=')
+        return ssid_fixed
+
 
     @property
     def sid(self) -> Optional[str]:
