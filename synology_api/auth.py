@@ -856,13 +856,14 @@ class Authentication:
 
     @staticmethod
     def decode_ssid_cookie(ssid: str) -> bytes:
-        """Decode the SSID cookie.
+        """
+        Decode the SSID cookie.
 
             Parameters
             ----------
             ssid : str
                 The SSID cookie string to decode.
-        
+
             Returns
             -------
             bytes
@@ -878,7 +879,8 @@ class Authentication:
 
     @staticmethod
     def encode_ssid_cookie(ssid_bytes: bytes) -> str:
-        """Encode the SSID cookie.
+        """
+        Encode the SSID cookie.
 
             Parameters
             ----------
