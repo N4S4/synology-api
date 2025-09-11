@@ -131,7 +131,7 @@ class Authentication:
 
         self.full_api_list = {}
         self.app_api_list = {}
-        
+
     def get_ik_message(self) -> str:
         """
         Get the IK message for authentication.
@@ -141,7 +141,7 @@ class Authentication:
         str
             The IK message.
         """
-        
+
         url = self._base_url + 'entry.cgi/SYNO.API.Auth.UIConfig'
         data = {
             "api": "SYNO.API.Auth.UIConfig",
@@ -152,7 +152,8 @@ class Authentication:
 
         # Try to get cookie "_SSID"
         if response.status_code != 200:
-            raise Exception("Failed to access the URL for IK message. Status code: {}".format(response.status_code))
+            raise Exception("Failed to access the URL for IK message. Status code: {}".format(
+                response.status_code))
         cookies = response.cookies
         if "_SSID" not in cookies:
             raise Exception("Cookie '_SSID' not found in the response.")
@@ -205,7 +206,10 @@ class Authentication:
         """
         login_api = 'auth.cgi'
         params = {'api': "SYNO.API.Auth", 'version': self._version,
-                  'method': 'login', 'enable_syno_token': 'yes', 'client': 'browser', 'ik_message': self.get_ik_message()}
+                  'method': 'login', 'enable_syno_token': 'yes', 'client': 'browser'}
+
+        if self._version >= 7:
+            params.update({'ik_message': self.get_ik_message()})
 
         params_enc = {
             'account': self._username,
@@ -849,7 +853,7 @@ class Authentication:
         else:
             message = "<Undefined.%s.Error>" % api_name
         return 'Error {} - {}'.format(code, message)
-    
+
     @staticmethod
     def decode_ssid_cookie(ssid: str) -> bytes:
         # Replace '-' with '+' and '_' with '/'
@@ -869,7 +873,6 @@ class Authentication:
         # Remove padding '='
         ssid_fixed = ssid_fixed.rstrip('=')
         return ssid_fixed
-
 
     @property
     def sid(self) -> Optional[str]:
