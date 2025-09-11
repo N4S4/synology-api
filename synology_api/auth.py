@@ -856,6 +856,18 @@ class Authentication:
 
     @staticmethod
     def decode_ssid_cookie(ssid: str) -> bytes:
+        """Decode the SSID cookie.
+
+            Parameters
+            ----------
+            ssid : str
+                The SSID cookie string to decode.
+        
+            Returns
+            -------
+            bytes
+                The decoded SSID cookie.
+        """
         # Replace '-' with '+' and '_' with '/'
         ssid_fixed = ssid.replace('-', '+').replace('_', '/')
         # Pad with '=' if needed
@@ -866,6 +878,18 @@ class Authentication:
 
     @staticmethod
     def encode_ssid_cookie(ssid_bytes: bytes) -> str:
+        """Encode the SSID cookie.
+
+            Parameters
+            ----------
+            ssid_bytes : bytes
+                The SSID cookie bytes to encode.
+
+            Returns
+            -------
+            str
+                The encoded SSID cookie.
+        """
         # Encode to base64
         ssid_b64 = base64.b64encode(ssid_bytes).decode('utf-8')
         # Replace '+' with '-' and '/' with '_'
