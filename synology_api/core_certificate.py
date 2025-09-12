@@ -1,3 +1,4 @@
+"""Synology DSM Core Certificate API Wrapper."""
 from __future__ import annotations
 from io import BytesIO
 from typing import Optional
@@ -10,6 +11,34 @@ import json
 
 
 class Certificate(base_api.BaseApi):
+    """
+    Synology DSM Core Certificate API Wrapper.
+
+    This class provides methods to interact with the Synology DSM Core Certificate API,
+    allowing management of SSL certificates on a Synology NAS.
+
+    Parameters
+    ----------
+    ip_address : str
+        IP address or hostname of the Synology NAS.
+    port : str
+        Port number to connect to.
+    username : str
+        Username for authentication.
+    password : str
+        Password for authentication.
+    secure : bool, optional
+        Use HTTPS if True, HTTP if False (default is False).
+    cert_verify : bool, optional
+        Verify SSL certificates (default is False).
+    dsm_version : int, optional
+        DSM version (default is 7).
+    debug : bool, optional
+        Enable debug output (default is True).
+    otp_code : Optional[str], optional
+        One-time password for 2FA (default is None).
+    """
+
     def __init__(self,
                  ip_address: str,
                  port: str,
@@ -21,6 +50,30 @@ class Certificate(base_api.BaseApi):
                  debug: bool = True,
                  otp_code: Optional[str] = None
                  ) -> None:
+        """
+        Initialize the Certificate API wrapper.
+
+        Parameters
+        ----------
+        ip_address : str
+            IP address or hostname of the Synology NAS.
+        port : str
+            Port number to connect to.
+        username : str
+            Username for authentication.
+        password : str
+            Password for authentication.
+        secure : bool, optional
+            Use HTTPS if True, HTTP if False (default is False).
+        cert_verify : bool, optional
+            Verify SSL certificates (default is False).
+        dsm_version : int, optional
+            DSM version (default is 7).
+        debug : bool, optional
+            Enable debug output (default is True).
+        otp_code : Optional[str], optional
+            One-time password for 2FA (default is None).
+        """
         super(Certificate, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug,
                                           otp_code)
         self._debug: bool = debug
@@ -30,6 +83,23 @@ class Certificate(base_api.BaseApi):
                                   cert_id: Optional[str] = None,
                                   ids: Optional[str | list[str]] = None
                                   ) -> str | dict[str, object]:
+        """
+        Internal method to perform basic certificate operations.
+
+        Parameters
+        ----------
+        method : str
+            The method to perform ('list', 'set', or 'delete').
+        cert_id : Optional[str], optional
+            Certificate ID for 'set' method (default is None).
+        ids : Optional[str or list[str]], optional
+            Certificate IDs for 'delete' method (default is None).
+
+        Returns
+        -------
+        str or dict[str, object]
+            API response or error message.
+        """
         available_method = ['list', 'set', 'delete']
         if method not in available_method:
             # print error here
@@ -55,12 +125,46 @@ class Certificate(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_cert(self) -> dict[str, object]:
+        """
+        List all certificates.
+
+        Returns
+        -------
+        dict[str, object]
+            List of certificates.
+        """
         return self._base_certificate_methods('list')
 
     def set_default_cert(self, cert_id: str) -> dict[str, object]:
+        """
+        Set a certificate as the default.
+
+        Parameters
+        ----------
+        cert_id : str
+            Certificate ID to set as default.
+
+        Returns
+        -------
+        dict[str, object]
+            API response.
+        """
         return self._base_certificate_methods('set', cert_id)
 
     def delete_certificate(self, ids: str | list[str]) -> dict[str, object]:
+        """
+        Delete one or more certificates.
+
+        Parameters
+        ----------
+        ids : str or list[str]
+            Certificate ID or list of IDs to delete.
+
+        Returns
+        -------
+        dict[str, object]
+            API response.
+        """
         if isinstance(ids, str):
             ids = [ids]
         return self._base_certificate_methods('delete', ids=ids)
@@ -73,6 +177,29 @@ class Certificate(base_api.BaseApi):
                     cert_id: Optional[str] = None,
                     desc: Optional[str] = None
                     ) -> tuple[int, dict[str, object]]:
+        """
+        Upload a certificate to the Synology NAS.
+
+        Parameters
+        ----------
+        serv_key : str, optional
+            Path to the server key file (default is "server.key").
+        ser_cert : str, optional
+            Path to the server certificate file (default is "server.crt").
+        ca_cert : Optional[str], optional
+            Path to the CA certificate file (default is None).
+        set_as_default : bool, optional
+            Set as default certificate after upload (default is True).
+        cert_id : Optional[str], optional
+            Certificate ID to update (default is None).
+        desc : Optional[str], optional
+            Description for the certificate (default is None).
+
+        Returns
+        -------
+        tuple[int, dict[str, object]]
+            HTTP status code and API response.
+        """
         api_name = 'SYNO.Core.Certificate'
         info = self.session.app_api_list[api_name]
         api_path = info['path']
@@ -88,17 +215,21 @@ class Certificate(base_api.BaseApi):
 
         if cert_id:
             print("update exist cert: " + cert_id)
-        data_payload = {'id': cert_id or '', 'desc': desc or '', 'as_default': 'true' if set_as_default else ''}
+        data_payload = {'id': cert_id or '', 'desc': desc or '',
+                        'as_default': 'true' if set_as_default else ''}
 
         with open(serv_key, 'rb') as payload_serv_key, open(ser_cert, 'rb') as payload_ser_cert:
             files = {'key': (serv_key, payload_serv_key, 'application/x-x509-ca-cert'),
                      'cert': (ser_cert, payload_ser_cert, 'application/x-x509-ca-cert')}
             if ca_cert:
                 with open(ca_cert, 'rb') as payload_ca_cert:
-                    files['inter_cert'] = (ca_cert, payload_ca_cert, 'application/x-x509-ca-cert')
-                    r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled(), headers={"X-SYNO-TOKEN":self.session._syno_token})
+                    files['inter_cert'] = (
+                        ca_cert, payload_ca_cert, 'application/x-x509-ca-cert')
+                    r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled(
+                    ), headers={"X-SYNO-TOKEN": self.session._syno_token})
             else:
-                r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled(), headers={"X-SYNO-TOKEN":self.session._syno_token})
+                r = session.post(url, files=files, data=data_payload, verify=self.session.verify_cert_enabled(
+                ), headers={"X-SYNO-TOKEN": self.session._syno_token})
 
         if 200 == r.status_code and r.json()['success']:
             if self._debug is True:
@@ -110,6 +241,21 @@ class Certificate(base_api.BaseApi):
                                     cert_id: str,
                                     service_name: str = "DSM Desktop Service",
                                     ) -> tuple[int, dict[str, object]]:
+        """
+        Set a certificate for a specific DSM service.
+
+        Parameters
+        ----------
+        cert_id : str
+            Certificate ID to assign.
+        service_name : str, optional
+            Name of the service (default is "DSM Desktop Service").
+
+        Returns
+        -------
+        tuple[int, dict[str, object]]
+            HTTP status code and API response.
+        """
         api_name = 'SYNO.Core.Certificate.Service'
         info = self.session.app_api_list[api_name]
         api_path = info['path']
@@ -183,19 +329,19 @@ class Certificate(base_api.BaseApi):
 
         return r.status_code, r.json()
 
-
     def export_cert(self, cert_id: str) -> Optional[BytesIO]:
-        """Export a certificate from the Synology NAS.
+        """
+        Export a certificate from the Synology NAS.
 
-            Parameters
-            ----------
-            cert_id : str
-                The certificate ID to export. This can be found in the list_cert() method.
-            
-            Returns
-            -------
-            Optional[BytesIO]
-                A BytesIO object containing the certificate archive.
+        Parameters
+        ----------
+        cert_id : str
+            The certificate ID to export. This can be found in the list_cert() method.
+
+        Returns
+        -------
+        Optional[BytesIO]
+            A BytesIO object containing the certificate archive, or None if export fails.
         """
 
         api_name = "SYNO.Core.Certificate"
@@ -214,7 +360,8 @@ class Certificate(base_api.BaseApi):
             f"id={cert_id}"
         )
 
-        result = session.get(url, verify=self.session.verify_cert_enabled(), headers={"X-SYNO-TOKEN":self.session._syno_token})
+        result = session.get(url, verify=self.session.verify_cert_enabled(), headers={
+                             "X-SYNO-TOKEN": self.session._syno_token})
 
         if result.status_code == 200:
             return BytesIO(result.content)

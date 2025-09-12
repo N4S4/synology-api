@@ -1,0 +1,112 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task --list
+    silent: true
+
+  dependencies:
+    desc: Install dependencies to work with this repo
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Installing dependencies..."
+      - bash scripts/dependencies_{{OS}}.sh "{{ARCH}}"
+
+  install:
+    desc: Install all tools required to work with this project
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Installing the tools for project..."
+      - bash scripts/install.sh
+
+  install-python-deps:
+    desc: Install Python dependencies
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Installing Python dependencies..."
+      - pip install --upgrade pip
+      - pip install -r requirements.txt
+      - pip install -r requirements-dev.txt
+
+  docs-parser:
+    desc: Parse the documentation files
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Parsing the documentation files..."
+      - python3 docs_parser.py -a --exit-on-warning
+
+  docs-build:
+    desc: Build the documentation website
+    dir: '{{.TASKFILE_DIR}}/documentation'
+    cmds:
+      - npm ci
+      - npm run build
+
+  docs:
+    desc: Parse the documentation files and build the documentation website
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - task: docs-parser
+      - task: docs-build
+
+  format:
+    desc: Format the code in the project
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Formatting the code..."
+      - task: bash-shellcheck
+      - task: bash-lint
+
+  bash-shellcheck:
+    desc: Run shellcheck on all shell scripts in the project
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Running shellcheck..."
+      - shellcheck --shell=bash --external-sources scripts/*
+
+  bash-lint:
+    desc: Run shellcheck and shfmt on all shell scripts in the project
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Running shfmt..."
+      - shfmt --diff --language-dialect bash -w scripts/*
+
+  pre-commit:
+    desc: Run all pre-commit hooks
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Running pre-commit hooks..."
+      - pre-commit run --all-files
+
+  venv:
+    desc: Install the virtual environment
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Installing the virtual environment..."
+      - python3 -m venv .venv
+      - source .venv/bin/activate
+      - task: install-python-deps
+
+  numpydoc-validation:
+    desc: Validate the numpydoc format of the documentation
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Validating numpydoc format..."
+      - pre-commit run numpydoc-validation -a
+
+  numpydoc-lint:
+    desc: Lint the numpydoc format of the documentation
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - echo "Linting numpydoc format..."
+      - pydocstringformatter -w ./synology_api/
+
+  numpydoc:
+    desc: Lint and validate the numpydoc format of the documentation
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - task: numpydoc-lint
+      - task: numpydoc-validation

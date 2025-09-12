@@ -1,3 +1,4 @@
+"""Synology API Python Client."""
 from . import \
     audiostation, \
     auth, \
@@ -28,7 +29,7 @@ from . import \
     universal_search, \
     snapshot, \
     surveillancestation
-    
+
 from .DSM import DSM
 from .DSM.ControlPanel import \
     ControlPanel, \

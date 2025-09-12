@@ -1,3 +1,4 @@
+"""Synology API Error Codes."""
 # source: pages 8 and 16 on PDF:
 # https://global.download.synology.com/download/Document/Software/DeveloperGuide/Os/DSM/All/enu/DSM_Login_Web_API_Guide_enu.pdf
 
