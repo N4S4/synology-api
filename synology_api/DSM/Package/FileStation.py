@@ -15,6 +15,7 @@ import sys
 from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 from urllib import parse
 from treelib import Tree
+import warnings
 from synology_api import base_api
 
 
@@ -2544,29 +2545,61 @@ class FileStation(base_api.BaseApi):
                 r.raise_for_status()
                 return io.BytesIO(r.content)
 
-    def generate_file_tree(self, folder_path: str, tree: Tree) -> None:
+    def generate_file_tree(self,
+                           folder_path: str,
+                           tree: Tree,
+                           max_depth: Optional[int] = 1,
+                           start_depth: Optional[int] = 0) -> None:
         """
-        Generate the file tree based on the folder path you give, you need to create the root node before call this function.
+        Recursively generate the file tree based on the folder path you give constrained with.
+
+        You need to create the root node before calling this function.
 
         Parameters
         ----------
         folder_path : str
-            Folder path to generate file tree
+            Folder path to generate file tree.
         tree : Tree
-            Instance of the Tree of lib "Treelib", this will be modified by the method
+            Instance of the Tree from the `treelib` library.
+        max_depth : int, optional
+            Non-negative number of maximum depth of tree generation if node tree is directory, default to '1' to generate full tree. If 'max_depth=0' it will be equivalent to no recursion.
+        start_depth : int, optional
+            Non negative number to start to control tree generation default to '0'.
         """
-        data: dict = self.get_file_list(
+        api_name = 'hotfix'  # fix for docs_parser.py issue
+
+        if start_depth < 0:
+            start_depth = 0
+            warnings.warn(
+                f"'start_depth={start_depth}'. It should not be less or than 0, setting 'start_depth' to 0!",
+                RuntimeWarning,
+                stacklevel=2
+            )
+
+        assert start_depth <= max_depth, ValueError(
+            f"'start_depth' should not be greater than 'max_depth'. Got '{start_depth=}, {max_depth=}'")
+        assert isinstance(tree, Tree), ValueError(
+            "'tree' has to be a type of 'Tree'")
+
+        data: dict[str, object] = self.get_file_list(
             folder_path=folder_path
         ).get("data")
 
         files = data.get("files")
-        file: dict
-        for file in files:
-            file_name: str = file.get("name")
-            file_path: str = file.get("path")
-            if file.get("isdir"):
+        _file_info_getter = map(lambda x: (
+            x.get('isdir'), x.get('name'), x.get('path')), files)
+        for isdir, file_name, file_path in _file_info_getter:
 
-                tree.create_node(file_name, file_path, parent=folder_path)
-                self.generate_file_tree(file_path, tree)
+            if isdir and (start_depth >= max_depth):
+                tree.create_node(file_name, file_path, parent=folder_path, data={
+                                 "isdir": isdir, "max_depth": True})
+
+            elif isdir:
+                tree.create_node(file_name, file_path, parent=folder_path, data={
+                                 "isdir": isdir, "max_depth": False})
+                self.generate_file_tree(
+                    file_path, tree, max_depth, start_depth + 1)
+
             else:
-                tree.create_node(file_name, file_path, parent=folder_path)
+                tree.create_node(file_name, file_path, parent=folder_path, data={
+                                 "isdir": isdir, "max_depth": False})
