@@ -3,7 +3,6 @@ Notifications API endpoint.
 """
 from synology_api import base_api
 import json
-import requests
 
 
 class Notifications(base_api.BaseApi):
@@ -827,7 +826,7 @@ class Notifications(base_api.BaseApi):
         }
         ```
         """
-        api_name = 'SYNO.Core.Notification.Webhook.Provider'
+        api_name = 'SYNO.Core.Notification.Push.Webhook.Provider'
         info = self.core_list[api_name]
         api_path = info['path']
         req_param = {
