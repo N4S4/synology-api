@@ -1,3 +1,10 @@
+"""
+Synology Core Package API wrapper.
+
+This module provides a Python interface for managing packages on Synology NAS devices,
+including listing, installing, upgrading, uninstalling, and configuring packages.
+"""
+
 import json
 from typing import List
 from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
@@ -10,46 +17,90 @@ from . import base_api
 
 class Package(base_api.BaseApi):
     """
-    Core Package API implementation.
+    Core Package API implementation for Synology NAS.
+
+    This class provides methods to manage packages, including:
+    - Listing installed and installable packages.
+    - Installing, upgrading, and uninstalling packages.
+    - Uploading package files.
+    - Configuring package center settings.
+
+    Methods
+    -------
+    get_package(package_id, additional)
+        Get information about a package.
+    list_installed(additional, ignore_hidden)
+        List installed packages.
+    list_installable()
+        List installable packages.
+    get_package_center_settings()
+        Get package center settings.
+    set_package_center_settings(...)
+        Set package center settings.
+    get_package_center_infos()
+        Get package center information.
+    feasibility_check_install(packages)
+        Check if installation is possible.
+    download_package(url, package_id, checksum, filesize)
+        Start download of a package.
+    get_dowload_package_status(task_id)
+        Get current download status of a package.
+    check_installation_from_download(task_id)
+        Get info about downloaded package file.
+    upload_package_file(file_path, verify, progress_bar, additional)
+        Upload a file for installing a package.
+    get_default_install_volume()
+        Get default install volume for packages.
+    check_installation(...)
+        Check installation of a package.
+    upgrade_package(...)
+        Upgrade an existing package.
+    install_package(...)
+        Install a package that is already downloaded.
+    uninstall_package(package_id)
+        Uninstall a package.
+    easy_install(package_id, volume_path, install_dependencies)
+        Execute an easy installation process of a package.
     """
 
     def get_package(self, package_id: str, additional: List[str] = []) -> dict:
-        """Get infos of a package
+        """
+        Get infos of a package.
 
-            Parameters
-            ----------
-            package_id : str
-                Package ID
-            additional : List[str], optional
-                Additional field to retrieves. Defaults to `[]`
-                All filed known are:
-                `["status","dsm_apps"]`
+        Parameters
+        ----------
+        package_id : str
+            Package ID.
+        additional : List[str], optional
+            Additional field to retrieves. Defaults to `[]`.
+            All filed known are:
+            `["status","dsm_apps"]`.
 
-            Returns
-            -------
-            dict
-                Informations about the package
+        Returns
+        -------
+        dict
+            Informations about the package.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "additional": {
-                        "dsm_apps": " com.plexapp.plexmediaserver",
-                        "status": "running",
-                        "status_code": 0,
-                        "status_description": "retrieve from status script",
-                        "status_origin": "running"
-                    },
-                    "id": "PlexMediaServer",
-                    "name": "Plex Media Server",
-                    "timestamp": 1739228562839,
-                    "version": "1.41.3.9314-72009314"
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "additional": {
+                    "dsm_apps": " com.plexapp.plexmediaserver",
+                    "status": "running",
+                    "status_code": 0,
+                    "status_description": "retrieve from status script",
+                    "status_origin": "running"
                 },
-                "success": true
-            }
-            ```
+                "id": "PlexMediaServer",
+                "name": "Plex Media Server",
+                "timestamp": 1739228562839,
+                "version": "1.41.3.9314-72009314"
+            },
+            "success": true
+        }
+        ```
         """
         api_name = 'SYNO.Core.Package'
         info = self.core_list[api_name]
@@ -63,45 +114,47 @@ class Package(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_installed(self, additional: list = [], ignore_hidden: bool = False) -> dict:
-        """List installed packages
-            Parameters
-            ----------
-            additional : list[str], optional
-                    Additional fields to retrieve. Defaults to `[]`.
-                    All fields known are:
-                        `["description", "description_enu", "dependent_packages", "beta", "distributor", "distributor_url",
-                        "maintainer", "maintainer_url", "dsm_apps", "dsm_app_page", "dsm_app_launch_name","report_beta_url",
-                        "support_center", "startable", "installed_info", "support_url", "is_uninstall_pages","install_type",
-                        "autoupdate", "silent_upgrade", "installing_progress", "ctl_uninstall", "updated_at", "status",
-                        "url","available_operation"]`.
-            ignore_hidden : bool
-                TODO: Write description
+        """
+        List installed packages.
 
-            Returns
-            -------
-            dict
-                List of packages installed on the NAS
+        Parameters
+        ----------
+        additional : list[str], optional
+            Additional fields to retrieve. Defaults to `[]`.
+            All fields known are:
+                `["description", "description_enu", "dependent_packages", "beta", "distributor", "distributor_url",
+                "maintainer", "maintainer_url", "dsm_apps", "dsm_app_page", "dsm_app_launch_name","report_beta_url",
+                "support_center", "startable", "installed_info", "support_url", "is_uninstall_pages","install_type",
+                "autoupdate", "silent_upgrade", "installing_progress", "ctl_uninstall", "updated_at", "status",
+                "url","available_operation"]`.
+        ignore_hidden : bool
+            Whether to ignore hidden packages.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "packages": [
-                        {
-                            "additional": {
-                                "install_type": ""
-                            },
-                            "id": "ActiveBackup-Office365",
-                            "name": "Active Backup for Microsoft 365",
-                            "timestamp": 1738880043640,
-                            "version": "2.5.5-14034"
-                        }
-                    ]
-                },
-                "success": true
+        Returns
+        -------
+        dict
+            List of packages installed on the NAS.
+
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "packages": [
+                    {
+                        "additional": {
+                            "install_type": ""
+                    },
+                    "id": "ActiveBackup-Office365",
+                    "name": "Active Backup for Microsoft 365",
+                    "timestamp": 1738880043640,
+                    "version": "2.5.5-14034"
+                }
             }
-            ```
+            },
+            "success": true
+        }
+        ```
         """
         api_name = 'SYNO.Core.Package'
         info = self.core_list[api_name]
@@ -116,25 +169,27 @@ class Package(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_installable(self) -> dict:
-        """List installable packages
-            Returns
-            -------
-            dict
-                List of beta_package, categories and packages available
+        """
+        List installable packages.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "banners": [],
-                    "beta_packages": [...],
-                    "categories": [...],
-                    "packages": [...]
-                },
-                "success": true
-            }
-            ```
+        Returns
+        -------
+        dict
+            List of beta_package, categories and packages available.
+
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "banners": [],
+                "beta_packages": [...],
+                "categories": [...],
+                "packages": [...]
+            },
+            "success": true
+        }
+        ```
         """
         api_name = 'SYNO.Core.Package.Server'
         info = self.core_list[api_name]
@@ -149,51 +204,53 @@ class Package(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_package_center_settings(self) -> dict:
-        """Get package center settings
-            Returns
-            -------
-            dict
-                List settings of the Package center
+        """
+        Get package center settings.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "autoupdateall": false,
-                    "autoupdateimportant": true,
-                    "default_vol": "/volume1",
-                    "enable_autoupdate": true,
-                    "enable_dsm": true,
-                    "enable_email": false,
-                    "mailset": true,
-                    "trust_level": 0,
-                    "update_channel": true,
-                    "volume_count": 2,
-                    "volume_list": [
-                        {
-                            "desc": "",
-                            "display": "Volume 1 (Available capacity:  184.72 GB )",
-                            "mount_point": "/volume1",
-                            "size_free": "198336327680",
-                            "size_total": "206158430208",
-                            "vol_desc": "Apps",
-                            "volume_features": []
-                        },
-                        {
-                            "desc": "",
-                            "display": "Volume 2 (Available capacity:  2391.14 GB )",
-                            "mount_point": "/volume2",
-                            "size_free": "2567467421696",
-                            "size_total": "3623234412544",
-                            "vol_desc": "Stockage",
-                            "volume_features": []
-                        }
-                    ]
-                },
-                "success": true
-            }
-            ```
+        Returns
+        -------
+        dict
+            List settings of the Package center.
+
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "autoupdateall": false,
+                "autoupdateimportant": true,
+                "default_vol": "/volume1",
+                "enable_autoupdate": true,
+                "enable_dsm": true,
+                "enable_email": false,
+                "mailset": true,
+                "trust_level": 0,
+                "update_channel": true,
+                "volume_count": 2,
+                "volume_list": [
+                    {
+                        "desc": "",
+                        "display": "Volume 1 (Available capacity:  184.72 GB )",
+                        "mount_point": "/volume1",
+                        "size_free": "198336327680",
+                        "size_total": "206158430208",
+                        "vol_desc": "Apps",
+                        "volume_features": []
+                    },
+                    {
+                        "desc": "",
+                        "display": "Volume 2 (Available capacity:  2391.14 GB )",
+                        "mount_point": "/volume2",
+                        "size_free": "2567467421696",
+                        "size_total": "3623234412544",
+                        "vol_desc": "Stockage",
+                        "volume_features": []
+                    }
+                ]
+            },
+            "success": true
+        }
+        ```
         """
         api_name = 'SYNO.Core.Package.Setting'
         info = self.core_list[api_name]
@@ -210,48 +267,44 @@ class Package(base_api.BaseApi):
                                     autoupdateall: bool, autoupdateimportant: bool,
                                     default_vol: str, update_channel: str
                                     ) -> dict:
-        """Set settings of the package center
-            Parameters
-            ----------
-            enable_email : bool
-                Enable email notification
+        """
+        Set settings of the package center.
 
-            enable_dsm : bool
-                Enable desktop notification
+        Parameters
+        ----------
+        enable_email : bool
+            Enable email notification.
+        enable_dsm : bool
+            Enable desktop notification.
+        enable_autoupdate : bool
+            Update packages automatically.
+        autoupdateall : bool
+            Auto update all packages.
+        autoupdateimportant : bool
+            Auto update "important" packages.
+        default_vol : str
+            Default volume for installation, all your volumes or `"no_default_vol" = Always ask me`.
+        update_channel : str
+            "stable" => Disable beta packages.
+            "beta" => Enable beta packages.
 
-            enable_autoupdate: bool
-                Update packages automatically
+        Returns
+        -------
+        dict
+            Return some settings.
 
-            autoupdateall : bool
-                Auto update all packages
-
-            autoupdateimportant : bool
-                Auto update "important" packages
-
-            default_vol : str
-                Default volume for installation, all your volumes or `"no_default_vol" = Always ask me`
-
-            udpate_channel : str
-                "stable" => Disable beta packages
-                "beta" => Enable beta packages
-
-            Returns
-            -------
-            dict
-                Return some settings
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "enable_dsm": true,
-                    "enable_email": false,
-                    "update_channel": "stable"
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "enable_dsm": true,
+                "enable_email": false,
+                "update_channel": "stable"
+            },
+            "success": true
+        }
+        ```
         """
 
         api_name = 'SYNO.Core.Package.Setting'
@@ -272,45 +325,47 @@ class Package(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_package_center_infos(self) -> dict:
-        """Get package center informations
-            Returns
-            -------
-            dict
-                List of configs
+        """
+        Get package center informations.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "config": {
-                        "auth_key": "------------------------------",
-                        "blBetaChannel": false,
-                        "blOtherServer": false,
-                        "def_void": "",
-                        "ds_build": "72806",
-                        "ds_major": "7",
-                        "ds_minor": "2",
-                        "ds_timezone": "Amsterdam",
-                        "ds_unique": "synology_r1000_723+",
-                        "myPayBaseURL": "https://payment.synology.com",
-                        "myds_id": "7886858",
-                        "serial": "2260TPR7X30E6",
-                        "success": true
-                    },
-                    "prerelease": {
-                        "agreed": true,
-                        "success": true
-                    },
-                    "term": {
-                        "agreed_term_version": "0003",
-                        "curr_term_version": "0003",
-                        "success": true
-                    }
+        Returns
+        -------
+        dict
+            List of configs.
+
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "config": {
+                    "auth_key": "------------------------------",
+                    "blBetaChannel": false,
+                    "blOtherServer": false,
+                    "def_void": "",
+                    "ds_build": "72806",
+                    "ds_major": "7",
+                    "ds_minor": "2",
+                    "ds_timezone": "Amsterdam",
+                    "ds_unique": "synology_r1000_723+",
+                    "myPayBaseURL": "https://payment.synology.com",
+                    "myds_id": "7886858",
+                    "serial": "2260TPR7X30E6",
+                    "success": true
                 },
-                "success": true
-            }
-            ```
+                "prerelease": {
+                    "agreed": true,
+                    "success": true
+                },
+                "term": {
+                    "agreed_term_version": "0003",
+                    "curr_term_version": "0003",
+                    "success": true
+                }
+            },
+            "success": true
+        }
+        ```
         """
         api_name = 'SYNO.Core.Package.Info'
         info = self.core_list[api_name]
@@ -322,28 +377,29 @@ class Package(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def feasibility_check_install(self, packages: List[str]) -> dict:
-        """Check if installation is possible
+        """
+        Check if installation is possible.
 
-            Parameters
-            ----------
-            packages : List[str]
-                List of package IDs to check for feasibility
+        Parameters
+        ----------
+        packages : List[str]
+            List of package IDs to check for feasibility.
 
-            Returns
-            -------
-            dict
-                _description_
+        Returns
+        -------
+        dict
+            Feasibility check result.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "template": "data"
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "template": "data"
+            },
+            "success": true
+        }
+        ```
         """
         api_name = 'SYNO.Core.Package.Setting'
         info = self.core_list[api_name]
@@ -358,35 +414,36 @@ class Package(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def download_package(self, url: str, package_id: str, checksum: str, filesize: str) -> dict:
-        """Start download of the package, return a taskId for check status
+        """
+        Start download of the package, return a taskId for check status.
 
-            Parameters
-            ----------
-            url : str
-                Url that can be retrieve from package info using `get_installable` function, in the `link` field
-            package_id : str
-                Package ID that can be retrieve from package info using `get_installable` function, in the `id` field
-            checksum : str
-                Checksum that can be retrieve from package info using `get_installable` function, in the `md5` field
-            filesize : str
-                Filesize that can be retrieve from package info using `get_installable` function, in the `size` field
+        Parameters
+        ----------
+        url : str
+            Url that can be retrieve from package info using `get_installable` function, in the `link` field.
+        package_id : str
+            Package ID that can be retrieve from package info using `get_installable` function, in the `id` field.
+        checksum : str
+            Checksum that can be retrieve from package info using `get_installable` function, in the `md5` field.
+        filesize : str
+            Filesize that can be retrieve from package info using `get_installable` function, in the `size` field.
 
-            Returns
-            -------
-            dict
-                Retreive first progress of the download and the taskid used to check download status with `get_dowload_package_status` function
+        Returns
+        -------
+        dict
+            Retrieve first progress of the download and the taskid used to check download status with `get_dowload_package_status` function.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "progress": 1.0000000000000001e-05,
-                    "taskid": "@SYNOPKG_DOWNLOAD_DhcpServer"
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "progress": 1.0000000000000001e-05,
+                "taskid": "@SYNOPKG_DOWNLOAD_DhcpServer"
+            },
+            "success": true
+        }
+        ```
         """
         api_name = 'SYNO.Core.Package.Installation'
         info = self.core_list[api_name]
@@ -405,40 +462,41 @@ class Package(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_dowload_package_status(self, task_id: str) -> dict:
-        """Get current download status of the package
+        """
+        Get current download status of the package.
 
-            Parameters
-            ----------
-            task_id : str
-                task ID retrieve from response of `download_package` function
+        Parameters
+        ----------
+        task_id : str
+            Task ID retrieved from response of `download_package` function.
 
-            Returns
-            -------
-            dict
-                Retrieve informations about the download, important info is the `progress` field
+        Returns
+        -------
+        dict
+            Retrieve informations about the download, important info is the `progress` field.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "beta": false,
-                    "blqinst": false,
-                    "finished": false,
-                    "id": "DhcpServer",
-                    "installing": false,
-                    "name": "DhcpServer",
-                    "pid": 27844,
-                    "progress": 1.0000000000000001e-05,
-                    "remote_link": "https://global.synologydownload.com/download/Package/spk/DhcpServer/1.0.2-0046/DhcpServer-x86_64-1.0.2-0046.spk",
-                    "size": "1378697",
-                    "success": true,
-                    "taskid": "@SYNOPKG_DOWNLOAD_DhcpServer",
-                    "tmp_folder": "/volume1/@tmp/synopkg/download.esnnkb"
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "beta": false,
+                "blqinst": false,
+                "finished": false,
+                "id": "DhcpServer",
+                "installing": false,
+                "name": "DhcpServer",
+                "pid": 27844,
+                "progress": 1.0000000000000001e-05,
+                "remote_link": "https://global.synologydownload.com/download/Package/spk/DhcpServer/1.0.2-0046/DhcpServer-x86_64-1.0.2-0046.spk",
+                "size": "1378697",
+                "success": true,
+                "taskid": "@SYNOPKG_DOWNLOAD_DhcpServer",
+                "tmp_folder": "/volume1/@tmp/synopkg/download.esnnkb"
+            },
+            "success": true
+        }
+        ```
         """
         api_name = 'SYNO.Core.Package.Installation'
         info = self.core_list[api_name]
@@ -451,43 +509,44 @@ class Package(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def check_installation_from_download(self, task_id: str) -> dict:
-        """Get info about downloaded package file, response field is used for `check_installation` and `install_package` function
+        """
+        Get info about downloaded package file, response field is used for `check_installation` and `install_package` function.
 
-            Parameters
-            ----------
-            task_id : str
-                task ID retrieve from response of `download_package` function
+        Parameters
+        ----------
+        task_id : str
+            Task ID retrieved from response of `download_package` function.
 
-            Returns
-            -------
-            dict
-                Retrieve information about downloaded package installation file, response field is used for `check_installation` and `install_package` function
+        Returns
+        -------
+        dict
+            Retrieve information about downloaded package installation file, response field is used for `check_installation` and `install_package` function.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "description": "DHCP Server turns your DiskStation into a DHCP server within LAN to assign dynamic IP addresses and manage DHCP clients.",
-                    "distributor": "",
-                    "dsm_apps": "SYNO.SDS.DHCP.Instance",
-                    "filename": "/volume1/@tmp/synopkg/download.esnnkb/@SYNOPKG_DOWNLOAD_DhcpServer",
-                    "id": "DhcpServer",
-                    "install_on_cold_storage": false,
-                    "install_reboot": false,
-                    "install_type": "system",
-                    "maintainer": "Synology Inc.",
-                    "name": "DHCP Server",
-                    "startable": true,
-                    "status": "non_installed",
-                    "status_code": 255,
-                    "status_description": "failed to locate given package",
-                    "status_origin": "non_installed",
-                    "version": "1.0.2-0046"
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "description": "DHCP Server turns your DiskStation into a DHCP server within LAN to assign dynamic IP addresses and manage DHCP clients.",
+                "distributor": "",
+                "dsm_apps": "SYNO.SDS.DHCP.Instance",
+                "filename": "/volume1/@tmp/synopkg/download.esnnkb/@SYNOPKG_DOWNLOAD_DhcpServer",
+                "id": "DhcpServer",
+                "install_on_cold_storage": false,
+                "install_reboot": false,
+                "install_type": "system",
+                "maintainer": "Synology Inc.",
+                "name": "DHCP Server",
+                "startable": true,
+                "status": "non_installed",
+                "status_code": 255,
+                "status_description": "failed to locate given package",
+                "status_origin": "non_installed",
+                "version": "1.0.2-0046"
+            },
+            "success": true
+        }
+        ```
         """
         api_name = 'SYNO.Core.Package.Installation.Download'
         info = self.core_list[api_name]
@@ -500,57 +559,58 @@ class Package(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def upload_package_file(self, file_path: str, verify: bool = False, progress_bar: bool = True, additional: list = []) -> dict:
-        """Upload a file for install a package
+        """
+        Upload a file for install a package.
 
-            Parameters
-            ----------
-            file_path : str
-                File path
-            verify : bool, optional
-                Use https. Defaults to `False`
-            progress_bar : bool, optional
-                Enable progress bar in the terminal. Defaults to `True`
-            additional : list, optional
-                Additional field to retrieves. Defaults to `[]`
-                All fields know are:
-                `["description","maintainer","distributor","startable","dsm_apps","status","install_reboot",
-                "install_type","install_on_cold_storage","break_pkgs","replace_pkgs"]`.
+        Parameters
+        ----------
+        file_path : str
+            File path.
+        verify : bool, optional
+            Use https. Defaults to `False`.
+        progress_bar : bool, optional
+            Enable progress bar in the terminal. Defaults to `True`.
+        additional : list, optional
+            Additional field to retrieves. Defaults to `[]`.
+            All fields know are:
+            `["description","maintainer","distributor","startable","dsm_apps","status","install_reboot",
+            "install_type","install_on_cold_storage","break_pkgs","replace_pkgs"]`.
 
-            Returns
-            -------
-            dict
-                Informations about the uploaded file for installation
+        Returns
+        -------
+        dict
+            Informations about the uploaded file for installation.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "additional": {
-                        "break_pkgs": null,
-                        "description": "Plex organizes all of your personal media so you can easily access and enjoy it.",
-                        "distributor": "",
-                        "dsm_apps": " com.plexapp.plexmediaserver",
-                        "install_on_cold_storage": false,
-                        "install_reboot": false,
-                        "install_type": "",
-                        "maintainer": "Plex Inc",
-                        "replace_pkgs": { "Plex Media Server": "" },
-                        "startable": true,
-                        "status": "running",
-                        "status_code": 0,
-                        "status_description": "retrieve from status script",
-                        "status_origin": "running"
-                    },
-                    "codesign_error": 4532,
-                    "id": "PlexMediaServer",
-                    "name": "Plex Media Server",
-                    "task_id": "@SYNOPKG_UPLOAD_17392283048566DD3",
-                    "version": "1.41.3.9314-72009314"
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "additional": {
+                    "break_pkgs": null,
+                    "description": "Plex organizes all of your personal media so you can easily access and enjoy it.",
+                    "distributor": "",
+                    "dsm_apps": " com.plexapp.plexmediaserver",
+                    "install_on_cold_storage": false,
+                    "install_reboot": false,
+                    "install_type": "",
+                    "maintainer": "Plex Inc",
+                    "replace_pkgs": { "Plex Media Server": "" },
+                    "startable": true,
+                    "status": "running",
+                    "status_code": 0,
+                    "status_description": "retrieve from status script",
+                    "status_origin": "running"
                 },
-                "success": true
-            }
-            ```
+                "codesign_error": 4532,
+                "id": "PlexMediaServer",
+                "name": "Plex Media Server",
+                "task_id": "@SYNOPKG_UPLOAD_17392283048566DD3",
+                "version": "1.41.3.9314-72009314"
+            },
+            "success": true
+        }
+        ```
         """
         api_name = 'SYNO.Core.Package.Installation'
         info = self.core_list[api_name]
@@ -604,23 +664,24 @@ class Package(base_api.BaseApi):
         return r.json()
 
     def get_default_install_volume(self) -> dict:
-        """Get default install volume for package
+        """
+        Get default install volume for package.
 
-            Returns
-            -------
-            dict
-                Return default volume, if default volume is set to `Always ask me` it return error 4501
+        Returns
+        -------
+        dict
+            Return default volume, if default volume is set to `Always ask me` it return error 4501.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "default_vol": "/volume1"
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "default_vol": "/volume1"
+            },
+            "success": true
+        }
+        ```
         """
         api_name = 'SYNO.Core.Package.Setting.Volume'
         info = self.core_list[api_name]
@@ -636,58 +697,59 @@ class Package(base_api.BaseApi):
                            package_id: str, install_type: str = "", install_on_cold_storage: bool = False,
                            blCheckDep: bool = False, replacepkgs: dict = {}
                            ) -> dict:
-        """Check installation of the package on the default volume
+        """
+        Check installation of the package on the default volume.
 
-            Parameters
-            ----------
-            package_id : str
-                Id of the package to install
-            install_type : str, optionnal
-                Installation type, Defaults to `""`. TODO: Add description and possible types
-            install_on_cold_storage : bool, optional
-                Defaults to `False`. TODO: Add description
-            blCheckDep : bool, optional
-                Defaults to `False`. TODO: Add description
-            replacepkgs : dict, optional
-                Defaults to `{}`. TODO: Add description
+        Parameters
+        ----------
+        package_id : str
+            Id of the package to install.
+        install_type : str, optionnal
+            Installation type, Defaults to `""`. TODO: Add description and possible types.
+        install_on_cold_storage : bool, optional
+            Defaults to `False`. TODO: Add description.
+        blCheckDep : bool, optional
+            Defaults to `False`. TODO: Add description.
+        replacepkgs : dict, optional
+            Defaults to `{}`. TODO: Add description.
 
-            Returns
-            -------
-            dict
-                List of usefull informations about volumes
+        Returns
+        -------
+        dict
+            List of usefull informations about volumes.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "is_occupied": false,
-                    "volume_count": 2,
-                    "volume_list": [
-                        {
-                            "desc": "",
-                            "display": "Volume 1 (Available capacity:  184.52 GB )",
-                            "mount_point": "/volume1",
-                            "size_free": "198126022656",
-                            "size_total": "206158430208",
-                            "vol_desc": "vol1",
-                            "volume_features": []
-                        },
-                        {
-                            "desc": "",
-                            "display": "Volume 2 (Available capacity:  2391.16 GB )",
-                            "mount_point": "/volume2",
-                            "size_free": "2567484923904",
-                            "size_total": "3623234412544",
-                            "vol_desc": "vol2",
-                            "volume_features": []
-                        }
-                    ],
-                    "volume_path": "/volume1"
-                },
-                "success": true,
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "is_occupied": false,
+                "volume_count": 2,
+                "volume_list": [
+                    {
+                        "desc": "",
+                        "display": "Volume 1 (Available capacity:  184.52 GB )",
+                        "mount_point": "/volume1",
+                        "size_free": "198126022656",
+                        "size_total": "206158430208",
+                        "vol_desc": "vol1",
+                        "volume_features": []
+                    },
+                    {
+                        "desc": "",
+                        "display": "Volume 2 (Available capacity:  2391.16 GB )",
+                        "mount_point": "/volume2",
+                        "size_free": "2567484923904",
+                        "size_total": "3623234412544",
+                        "vol_desc": "vol2",
+                        "volume_features": []
+                    }
+                ],
+                "volume_path": "/volume1"
+            },
+            "success": true,
+        }
+        ```
         """
 
         api_name = 'SYNO.Core.Package.Installation'
@@ -707,50 +769,39 @@ class Package(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def upgrade_package(self, task_id: str, check_codesign: bool = False, force: bool = False, installrunpackage: bool = True, extra_values: dict = {}) -> dict:
-        """Upgrade an existing package
+        """
+        Upgrade an existing package.
 
-            Parameters
-            ----------
-            task_id : str
-                Task id of the download or the upload file
-            check_codesign : bool, optional
-                Check signature of the source code of the package (is it a Synology one). Defaults to `False`
-            force : bool, optional
-                Force installation. Defaults to `False`
-            installrunpackage : bool, optional
-                Run package after installation. Defaults to `True`
-            extra_values : dict, optional
-                Extra values due to some package installation. Defaults to `{}`
-                All known extra values are:
-                - Surveillance station
-                ```json
-                    {
-                        "chkSVS_Alias": true,
-                        "strSVS_Alias": "cam",
-                        "chkSVS_HTTP": true,
-                        "strSVS_HTTP": "9900",
-                        "chkSVS_HTTPS": true,
-                        "strSVS_HTTPS": "9901"
-                    }
-                ```
+        Parameters
+        ----------
+        task_id : str
+            Task id of the download or the upload file.
+        check_codesign : bool, optional
+            Check signature of the source code of the package (is it a Synology one). Defaults to `False`.
+        force : bool, optional
+            Force installation. Defaults to `False`.
+        installrunpackage : bool, optional
+            Run package after installation. Defaults to `True`.
+        extra_values : dict, optional
+            Extra values due to some package installation. Defaults to `{}`.
 
-            Returns
-            -------
-            dict
-                Message and some info about installation
+        Returns
+        -------
+        dict
+            Message and some info about installation.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "message": "message",
-                    "packageName": "Plex Media Server",
-                    "worker_message": []
-                },
-                "success": true,
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "message": "message",
+                "packageName": "Plex Media Server",
+                "worker_message": []
+            },
+            "success": true,
+        }
+        ```
         """
 
         api_name = 'SYNO.Core.Package.Installation'
@@ -769,94 +820,84 @@ class Package(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def install_package(self, package_id: str, volume_path: str, file_path: str, check_codesign: bool = True, force: bool = True, installrunpackage: bool = True, extra_values: dict = {}) -> dict:
-        """Install a package that is already downloaded
+        """
+        Install a package that is already downloaded.
 
-            Parameters
-            ----------
-            package_id : str
-                Id of the package to install
-            volume_path : str
-                Volume path of the installation, can get from `check_installation` function
-            file_path : str
-                File path of the installation, can get from `check_installation_from_download` function
-            check_codesign : bool, optional
-                Check signature of the source code of the package (is it a Synology one). Defaults to `False`
-            force : bool, optional
-                Force installation. Defaults to `False`
-            installrunpackage : bool, optional
-                Run package after installation. Defaults to `True`
-            extra_values : dict, optional
-                Extra values due to some package installation. Defaults to `{}`
-                All known extra values are:
-                - Surveillance station
-                ```json
+        Parameters
+        ----------
+        package_id : str
+            Id of the package to install.
+        volume_path : str
+            Volume path of the installation, can get from `check_installation` function.
+        file_path : str
+            File path of the installation, can get from `check_installation_from_download` function.
+        check_codesign : bool, optional
+            Check signature of the source code of the package (is it a Synology one). Defaults to `False`.
+        force : bool, optional
+            Force installation. Defaults to `False`.
+        installrunpackage : bool, optional
+            Run package after installation. Defaults to `True`.
+        extra_values : dict, optional
+            Extra values due to some package installation. Defaults to `{}`.
+
+        Returns
+        -------
+        dict
+            Message and some info about installation.
+
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "has_fail": false,
+                "result": [
                     {
-                        "chkSVS_Alias": true,
-                        "strSVS_Alias": "cam",
-                        "chkSVS_HTTP": true,
-                        "strSVS_HTTP": "9900",
-                        "chkSVS_HTTPS": true,
-                        "strSVS_HTTPS": "9901"
-                    }
-                ```
-            Returns
-            -------
-            dict
-                Message and some info about installation
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "has_fail": false,
-                    "result": [
-                        {
-                            "api": "SYNO.Core.Package.Installation",
-                            "data": {
-                                "is_occupied": false,
-                                "volume_count": 2,
-                                "volume_list": [
-                                    {
-                                        "desc": "",
-                                        "display": "Volume 1 (Available capacity:  185.09 GB )",
-                                        "mount_point": "/volume1",
-                                        "size_free": "198739943424",
-                                        "size_total": "206158430208",
-                                        "vol_desc": "Apps",
-                                        "volume_features": []
-                                    },
-                                    {
-                                        "desc": "",
-                                        "display": "Volume 2 (Available capacity:  2391.17 GB )",
-                                        "mount_point": "/volume2",
-                                        "size_free": "2567495630848",
-                                        "size_total": "3623234412544",
-                                        "vol_desc": "Stockage",
-                                        "volume_features": []
-                                    }
-                                ],
-                                "volume_path": "/volume1"
-                            },
-                            "method": "check",
-                            "success": true,
-                            "version": 1
+                        "api": "SYNO.Core.Package.Installation",
+                        "data": {
+                            "is_occupied": false,
+                            "volume_count": 2,
+                            "volume_list": [
+                                {
+                                    "desc": "",
+                                    "display": "Volume 1 (Available capacity:  185.09 GB )",
+                                    "mount_point": "/volume1",
+                                    "size_free": "198739943424",
+                                    "size_total": "206158430208",
+                                    "vol_desc": "Apps",
+                                    "volume_features": []
+                                },
+                                {
+                                    "desc": "",
+                                    "display": "Volume 2 (Available capacity:  2391.17 GB )",
+                                    "mount_point": "/volume2",
+                                    "size_free": "2567495630848",
+                                    "size_total": "3623234412544",
+                                    "vol_desc": "Stockage",
+                                    "volume_features": []
+                                }
+                            ],
+                            "volume_path": "/volume1"
                         },
-                        {
-                            "api": "SYNO.Core.Package.Installation",
-                            "data": {
-                                "packageName": "Text Editor",
-                                "worker_message": []
-                            },
-                            "method": "install",
-                            "success": true,
-                            "version": 1
-                        }
-                    ]
-                },
-                "success": true
-            }
-            ```
+                        "method": "check",
+                        "success": true,
+                        "version": 1
+                    },
+                    {
+                        "api": "SYNO.Core.Package.Installation",
+                        "data": {
+                            "packageName": "Text Editor",
+                            "worker_message": []
+                    },
+                    "method": "install",
+                    "success": true,
+                    "version": 1
+                }
+            ]
+        },
+        "success": true
+        }
+        ```
         """
         compound = [
             {
@@ -886,29 +927,30 @@ class Package(base_api.BaseApi):
         return self.batch_request(compound=compound)
 
     def uninstall_package(self, package_id: str) -> dict:
-        """Uninstall a package
+        """
+        Uninstall a package.
 
-            Parameters
-            ----------
-            package_id : str
-                Id of the package to uninstall
+        Parameters
+        ----------
+        package_id : str
+            Id of the package to uninstall.
 
-            Returns
-            -------
-            dict
-                Possible message to the user
+        Returns
+        -------
+        dict
+            Possible message to the user.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "message": "",
-                    "worker_message": []
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "message": "",
+                "worker_message": []
+            },
+            "success": true
+        }
+        ```
         """
 
         if not self._is_package_already_installed(package_id=package_id):
@@ -928,6 +970,19 @@ class Package(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def _is_package_already_installed(self, package_id: str) -> bool:
+        """
+        Check if a package is already installed.
+
+        Parameters
+        ----------
+        package_id : str
+            The ID of the package to check.
+
+        Returns
+        -------
+        bool
+            True if the package is installed, False otherwise.
+        """
         response: dict = self.list_installed()
         data: dict = response.get("data")
         installed_packages = data.get("packages")
@@ -936,75 +991,76 @@ class Package(base_api.BaseApi):
         return package_infos != None
 
     def easy_install(self, package_id: str, volume_path: str, install_dependencies: bool = True) -> dict:
-        """Execute an easy installation process of the package
+        """
+        Execute an easy installation process of the package.
 
-            Parameters
-            ----------
-            package_id : str
-                Package ID to install
-            volume_path : str
-                Volume path where you want to install the package
-            install_dependencies : bool, optional
-                If you want to install dependencies. Defaults to True
+        Parameters
+        ----------
+        package_id : str
+            Package ID to install.
+        volume_path : str
+            Volume path where you want to install the package.
+        install_dependencies : bool, optional
+            If you want to install dependencies. Defaults to True.
 
-            Returns
-            -------
-            dict[str, object]
-                Information about installation, same as install_package function
+        Returns
+        -------
+        dict[str, object]
+            Information about installation, same as install_package function.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "has_fail": false,
-                    "result": [
-                        {
-                            "api": "SYNO.Core.Package.Installation",
-                            "data": {
-                                "is_occupied": false,
-                                "volume_count": 2,
-                                "volume_list": [
-                                    {
-                                        "desc": "",
-                                        "display": "Volume 1 (Available capacity:  185.11 GB )",
-                                        "mount_point": "/volume1",
-                                        "size_free": "198759485440",
-                                        "size_total": "206158430208",
-                                        "vol_desc": "Apps",
-                                        "volume_features": []
-                                    },
-                                    {
-                                        "desc": "",
-                                        "display": "Volume 2 (Available capacity:  2391.17 GB )",
-                                        "mount_point": "/volume2",
-                                        "size_free": "2567495565312",
-                                        "size_total": "3623234412544",
-                                        "vol_desc": "Stockage",
-                                        "volume_features": []
-                                    }
-                                ],
-                                "volume_path": "/volume1"
-                            },
-                            "method": "check",
-                            "success": true,
-                            "version": 1
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "has_fail": false,
+                "result": [
+                    {
+                        "api": "SYNO.Core.Package.Installation",
+                        "data": {
+                            "is_occupied": false,
+                            "volume_count": 2,
+                            "volume_list": [
+                                {
+                                    "desc": "",
+                                    "display": "Volume 1 (Available capacity:  185.11 GB )",
+                                    "mount_point": "/volume1",
+                                    "size_free": "198759485440",
+                                    "size_total": "206158430208",
+                                    "vol_desc": "Apps",
+                                    "volume_features": []
+                                },
+                                {
+                                    "desc": "",
+                                    "display": "Volume 2 (Available capacity:  2391.17 GB )",
+                                    "mount_point": "/volume2",
+                                    "size_free": "2567495565312",
+                                    "size_total": "3623234412544",
+                                    "vol_desc": "Stockage",
+                                    "volume_features": []
+                                }
+                            ],
+                            "volume_path": "/volume1"
                         },
-                        {
-                            "api": "SYNO.Core.Package.Installation",
-                            "data": {
-                                "packageName": "Text Editor",
-                                "worker_message": []
-                            },
-                            "method": "install",
-                            "success": true,
-                            "version": 1
-                        }
-                    ]
-                },
-                "success": true
-            }
-            ```
+                        "method": "check",
+                        "success": true,
+                        "version": 1
+                    },
+                    {
+                        "api": "SYNO.Core.Package.Installation",
+                        "data": {
+                            "packageName": "Text Editor",
+                            "worker_message": []
+                    },
+                    "method": "install",
+                    "success": true,
+                    "version": 1
+                }
+            ]
+        },
+        "success": true
+        }
+        ```
         """
         api_name = 'hotfix'  # fix for docs_parser.py issue
 

@@ -1,12 +1,40 @@
+"""
+Exception classes for Synology API.
+
+This module defines custom exception classes for handling errors and error codes
+returned by various Synology API endpoints.
+"""
+
 from .error_codes import error_codes, auth_error_codes, download_station_error_codes, file_station_error_codes, core_error_codes
 from .error_codes import virtualization_error_codes
 
 
 # Base exception:
 class SynoBaseException(Exception):
-    """Base class for an exception. Defines error_message."""
+    """
+    Base class for an exception.
+
+    Defines error_message.
+
+    Parameters
+    ----------
+    error_message : str
+        The error message describing the exception.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_message: str, *args: object) -> None:
+        """
+        Initialize SynoBaseException.
+
+        Parameters
+        ----------
+        error_message : str
+            The error message describing the exception.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         super().__init__(*args)
         self.error_message = error_message
         return
@@ -14,34 +42,110 @@ class SynoBaseException(Exception):
 
 # Classes to reraise Exceptions from requests.
 class SynoConnectionError(SynoBaseException):
-    """Class to raise when a connection error occurs."""
+    """
+    Exception raised when a connection error occurs.
+
+    Parameters
+    ----------
+    error_message : str
+        The error message describing the connection error.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_message: str, *args: object) -> None:
+        """
+        Initialize SynoConnectionError.
+
+        Parameters
+        ----------
+        error_message : str
+            The error message describing the connection error.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         super().__init__(error_message=error_message, *args)
         return
 
 
 class HTTPError(SynoBaseException):
-    """Class to raise when a http error occurs."""
+    """
+    Exception raised when an HTTP error occurs.
+
+    Parameters
+    ----------
+    error_message : str
+        The error message describing the HTTP error.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_message: str, *args: object) -> None:
+        """
+        Initialize HTTPError.
+
+        Parameters
+        ----------
+        error_message : str
+            The error message describing the HTTP error.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         super().__init__(error_message, *args)
         return
 
 
 class JSONDecodeError(SynoBaseException):
-    """Class to raise when server fails to send JSON."""
+    """
+    Exception raised when the server fails to send valid JSON.
+
+    Parameters
+    ----------
+    error_message : str
+        The error message describing the JSON decode error.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_message: str, *args: object) -> None:
+        """
+        Initialize JSONDecodeError.
+
+        Parameters
+        ----------
+        error_message : str
+            The error message describing the JSON decode error.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         super().__init__(error_message, *args)
         return
 
 
 # Classes for when we receive an error code in the JSON from the server.
 class LoginError(SynoBaseException):
-    """Class for an error during login."""
+    """
+    Exception raised for an error during login.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize LoginError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code: int = error_code
         if error_code not in error_codes.keys():
             super().__init__(error_message=auth_error_codes[error_code], *args)
@@ -51,9 +155,28 @@ class LoginError(SynoBaseException):
 
 
 class LogoutError(SynoBaseException):
-    """Class for an error during logout."""
+    """
+    Exception raised for an error during logout.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize LogoutError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code: int = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -63,9 +186,28 @@ class LogoutError(SynoBaseException):
 
 
 class DownloadStationError(SynoBaseException):
-    """Class for an error during a download station request."""
+    """
+    Exception raised for an error during a Download Station request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize DownloadStationError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code: int = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -78,9 +220,28 @@ class DownloadStationError(SynoBaseException):
 
 
 class FileStationError(SynoBaseException):
-    """Class for an error during a file station request."""
+    """
+    Exception raised for an error during a File Station request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize FileStationError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code: int = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -93,9 +254,28 @@ class FileStationError(SynoBaseException):
 
 
 class VirtualizationError(SynoBaseException):
-    """Class for an error during a virtualization request."""
+    """
+    Exception raised for an error during a virtualization request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize VirtualizationError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -108,10 +288,28 @@ class VirtualizationError(SynoBaseException):
 
 
 class AudioStationError(SynoBaseException):
-    """Class for an error during an audio station request. NOTE: I can't find any documentation on the audio station
-    webAPI errors numbers and their respective messages."""
+    """
+    Exception raised for an error during an Audio Station request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize AudioStationError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -121,10 +319,28 @@ class AudioStationError(SynoBaseException):
 
 
 class ActiveBackupError(SynoBaseException):
-    """Class for an error during ActiveBackup request. NOTE: I can't find any documentation on error codes or their
-    respective messages."""
+    """
+    Exception raised for an error during an Active Backup request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize ActiveBackupError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -133,10 +349,28 @@ class ActiveBackupError(SynoBaseException):
 
 
 class ActiveBackupMicrosoftError(SynoBaseException):
-    """Class for an error during ActiveBackupMicrosoft request. NOTE: I can't find any documentation on error codes or their
-    respective messages."""
+    """
+    Exception raised for an error during an Active Backup Microsoft request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize ActiveBackupMicrosoftError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -145,9 +379,28 @@ class ActiveBackupMicrosoftError(SynoBaseException):
 
 
 class BackupError(SynoBaseException):
-    """Class for an error during backup request. NOTE: Again I can't find error code documentation."""
+    """
+    Exception raised for an error during a backup request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize BackupError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -157,9 +410,28 @@ class BackupError(SynoBaseException):
 
 
 class CertificateError(SynoBaseException):
-    """Class for an error during Core.Certificate request. NOTE: Lacking documentation."""
+    """
+    Exception raised for an error during a Core.Certificate request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize CertificateError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code])
@@ -169,9 +441,28 @@ class CertificateError(SynoBaseException):
 
 
 class CloudSyncError(SynoBaseException):
-    """Class for an error during SYNO.CloudSync request. NOTE: Lacking documentation."""
+    """
+    Exception raised for an error during a SYNO.CloudSync request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize CloudSyncError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code])
@@ -181,9 +472,28 @@ class CloudSyncError(SynoBaseException):
 
 
 class DHCPServerError(SynoBaseException):
-    """Class for an error during a DHCPServer request."""
+    """
+    Exception raised for an error during a DHCPServer request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize DHCPServerError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -193,9 +503,28 @@ class DHCPServerError(SynoBaseException):
 
 
 class DirectoryServerError(SynoBaseException):
-    """Class for an error during a directory server request. NOTE: No docs on errors."""
+    """
+    Exception raised for an error during a Directory Server request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize DirectoryServerError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -205,9 +534,28 @@ class DirectoryServerError(SynoBaseException):
 
 
 class DockerError(SynoBaseException):
-    """Class for an error during a docker request. NOTE: No docs on errors."""
+    """
+    Exception raised for an error during a Docker request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize DockerError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -217,9 +565,28 @@ class DockerError(SynoBaseException):
 
 
 class DriveAdminError(SynoBaseException):
-    """Class for an error during a drive admin request. NOTE: No error docs."""
+    """
+    Exception raised for an error during a Drive Admin request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize DriveAdminError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -229,9 +596,28 @@ class DriveAdminError(SynoBaseException):
 
 
 class LogCenterError(SynoBaseException):
-    """Class for an error during a LogCenter request. NOTE: No docs on errors.... again."""
+    """
+    Exception raised for an error during a LogCenter request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize LogCenterError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -241,9 +627,28 @@ class LogCenterError(SynoBaseException):
 
 
 class NoteStationError(SynoBaseException):
-    """Class for an error during a NoteStation request. NOTE: No error docs."""
+    """
+    Exception raised for an error during a NoteStation request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize NoteStationError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -253,9 +658,28 @@ class NoteStationError(SynoBaseException):
 
 
 class OAUTHError(SynoBaseException):
-    """Class for an error during a OAUTH request. NOTE: No error docs."""
+    """
+    Exception raised for an error during an OAUTH request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize OAUTHError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -265,9 +689,28 @@ class OAUTHError(SynoBaseException):
 
 
 class PhotosError(SynoBaseException):
-    """Class for an error during a Photos request. NOTE: No error docs."""
+    """
+    Exception raised for an error during a Photos request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize PhotosError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -277,9 +720,28 @@ class PhotosError(SynoBaseException):
 
 
 class SecurityAdvisorError(SynoBaseException):
-    """Class for an error during a SecurityAdvisor request. NOTE: What docs?"""
+    """
+    Exception raised for an error during a SecurityAdvisor request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize SecurityAdvisorError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -289,9 +751,28 @@ class SecurityAdvisorError(SynoBaseException):
 
 
 class TaskSchedulerError(SynoBaseException):
-    """Class for an error during TaskScheduler request. NOTE:... no docs on errors...."""
+    """
+    Exception raised for an error during a TaskScheduler request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize TaskSchedulerError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -301,9 +782,28 @@ class TaskSchedulerError(SynoBaseException):
 
 
 class EventSchedulerError(SynoBaseException):
-    """Class for an error during EventScheduler request. NOTE:... no docs on errors...."""
+    """
+    Exception raised for an error during an EventScheduler request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize EventSchedulerError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -313,9 +813,28 @@ class EventSchedulerError(SynoBaseException):
 
 
 class UniversalSearchError(SynoBaseException):
-    """Class for an error during UniversalSearch request. NOTE:... no docs on errors...."""
+    """
+    Exception raised for an error during a UniversalSearch request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize UniversalSearchError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -325,9 +844,28 @@ class UniversalSearchError(SynoBaseException):
 
 
 class USBCopyError(SynoBaseException):
-    """Class for an error during a USBCopy request. NOTE: No docs on errors."""
+    """
+    Exception raised for an error during a USBCopy request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize USBCopyError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -336,9 +874,28 @@ class USBCopyError(SynoBaseException):
 
 
 class VPNError(SynoBaseException):
-    """Class for an error during a VPN request. NOTE: No docs on errors."""
+    """
+    Exception raised for an error during a VPN request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize VPNError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -348,10 +905,28 @@ class VPNError(SynoBaseException):
 
 
 class CoreError(SynoBaseException):
-    """Class for an error during a SYNO.Core.*
+    """
+    Exception raised for an error during a SYNO.Core.* request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
     """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize CoreError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in core_error_codes.keys():
             super().__init__(error_message=core_error_codes[error_code], *args)
@@ -361,11 +936,28 @@ class CoreError(SynoBaseException):
 
 
 class CoreSysInfoError(SynoBaseException):
-    """Class for an error during a 'SYNO.Backup.Service.NetworkBackup', SYNO.Storage.*,
-            'SYNO.Finder.FileIndexing.Status', 'SYNO.S2S.Server.Pair', SYNO.ResourceMonitor.*
+    """
+    Exception raised for an error during a CoreSysInfoError request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
     """
 
     def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize CoreSysInfoError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         if error_code in error_codes.keys():
             super().__init__(error_message=error_codes[error_code], *args)
@@ -375,9 +967,32 @@ class CoreSysInfoError(SynoBaseException):
 
 
 class UndefinedError(SynoBaseException):
-    """Class for undefined errors."""
+    """
+    Exception raised for undefined errors.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    api_name : str
+        The name of the API where the error occurred.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
 
     def __init__(self, error_code: int, api_name: str, *args: object) -> None:
+        """
+        Initialize UndefinedError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        api_name : str
+            The name of the API where the error occurred.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
         self.error_code = error_code
         self.api_name = api_name
         super().__init__(error_message="Undefined Error: API: %s, Code: %i" %

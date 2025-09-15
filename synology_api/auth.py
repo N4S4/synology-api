@@ -1,6 +1,4 @@
-"""
-Provides authentication and API request handling for Synology DSM, including session management, encryption utilities, and error handling for various Synology services.
-"""
+"""Provides authentication and API request handling for Synology DSM, including session management, encryption utilities, and error handling for various Synology services."""
 from __future__ import annotations
 from random import randint
 from typing import Optional
@@ -325,9 +323,7 @@ class Authentication:
         return
 
     def show_api_name_list(self) -> None:
-        """
-        Print the list of available API names.
-        """
+        """Print the list of available API names."""
         prev_key = ''
         for key in self.full_api_list:
             if key != prev_key:
@@ -336,9 +332,7 @@ class Authentication:
         return
 
     def show_json_response_type(self) -> None:
-        """
-        Print API names that return JSON data.
-        """
+        """Print API names that return JSON data."""
         for key in self.full_api_list:
             for sub_key in self.full_api_list[key]:
                 if sub_key == 'requestFormat':

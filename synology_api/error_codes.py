@@ -1,3 +1,4 @@
+"""Synology API Error Codes."""
 # source: pages 8 and 16 on PDF:
 # https://global.download.synology.com/download/Document/Software/DeveloperGuide/Os/DSM/All/enu/DSM_Login_Web_API_Guide_enu.pdf
 
@@ -124,6 +125,37 @@ file_station_error_codes: dict[int, str] = {
     420: 'Illegal file name on FAT file system',
     421: 'Device or resource busy',
     599: 'No such task of the file operation',
+    800: 'A folder path of favorite folder is already added to user\'s favorites',
+    801: 'A name of favorite folder conflicts with an existing folder path in the user\'s favorties',
+    802: 'There are too many favorites to be added',
+    900: 'Failed to delete file(s)/folder(s). More information in <errors> object',
+    1000: 'Failed to copy files/folders. More information in <errors> object.',
+    1001: 'Failed to move files/folders. More information in <errors> object.',
+    1002: 'An error occurred at the destination. More information in <errors> object.',
+    1003: 'Cannot overwrite or skip the existing file because no  overwrite  parameter is given.',
+    1004: 'File cannot overwrite a folder with the same name, or folder cannot overwrite a file with the same name.',
+    1006: 'Cannot copy/move file/folder with special characters to a FAT32 file system.',
+    1007: 'Cannot copy/move a file bigger than 4G to a FAT32 file system.',
+    1100: 'Failed to create a folder. More information in <errors> object.',
+    1101: 'The number of folders to the parent folder would exceed the system limitation.',
+    1200: 'Failed to rename it. more information in <errors> object.',
+    1300: 'Failed to compress files/folders.',
+    1301: ' Cannot create the archive because the given archive name is too long.',
+    1400: 'Failed to extract files.',
+    1401: 'Cannot open the file as archive.',
+    1402: 'Failed to read archive data error',
+    1403: 'Wrong password.',
+    1404: 'Failed to get the file and dir list in an archive.',
+    1405: 'Failed to find the item ID in an archive file.',
+    1800: 'There is no Content-Length information in the HTTP header or the received size doesn\'t match the value of Content-Length information in the HTTP header',
+    1801: 'Wait too long, no date can be received from client (Default maximum wait time is 3600 seconds)',
+    1802: 'No filename information in the last part of file content',
+    1803: 'Upload connection is cancelled',
+    1804: 'Failed to upload oversized file to FAT file system',
+    1805: 'Can\'t overwrite or skip the existing file, if no overwrite  parameter is given',
+    2000: 'Sharing link does not exist.',
+    2001: 'Cannot generate sharing link because too many sharing links exist',
+    2002: 'Failed to access sharing links',
 }
 
 # Source: https://global.synologydownload.com/download/Document/Software/DeveloperGuide/Package/Virtualization/All
