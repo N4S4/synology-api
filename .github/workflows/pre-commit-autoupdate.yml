@@ -1,0 +1,49 @@
+name: pre-commit
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: pre-commit-${{ github.ref }}-autoupdate
+  cancel-in-progress: true
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+
+jobs:
+  autoupdate:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache asdf
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.asdf
+          key: ${{ runner.os }}-asdf-${{ hashFiles('.tool-versions') }}
+          restore-keys: |
+            ${{ runner.os }}-asdf-
+      - uses: asdf-vm/actions/install@v4
+      - name: Run pre-commit autoupdate
+        id: pre_commit_autoupdate
+        run: |
+          pre-commit autoupdate
+          if git diff --quiet ".pre-commit-config.yaml"; then
+            echo "No changes to commit"
+            echo "autoupdate=false" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          echo "autoupdate=true" >> "$GITHUB_ENV"
+      - name: Create Pull Request
+        if: success() && steps.pre_commit_autoupdate.outcome == 'success' && env.autoupdate == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          title: "chore(pre-commit): autoupdate hooks"
+          body: "Automated pre-commit autoupdate."
+          commit-message: "chore(pre-commit): autoupdate hooks"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

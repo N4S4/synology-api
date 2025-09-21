@@ -1,3 +1,11 @@
+"""
+Synology Core Group API wrapper.
+
+This module provides a Python interface for managing groups on Synology NAS devices,
+including group creation, deletion, membership management, quota and permission settings,
+and bandwidth control.
+"""
+
 import json
 from typing import Any
 from . import base_api
@@ -5,83 +13,97 @@ from . import base_api
 
 class Group(base_api.BaseApi):
     """
-    Core Group API implementation.
+    Core Group API implementation for Synology NAS.
 
-    Supported methods:
-        - Getters:
-            - Get all groups
-            - Get group members
-            - Get group shares permissions
-            - Get group shares quota
-            - Get group services speed limits
+    This class provides methods to manage groups, including:
+    - Retrieving group information, members, permissions, quotas, and speed limits.
+    - Modifying group name, description, share permissions, quotas, and speed limits.
+    - Creating and deleting groups.
+    - Adding and removing users from groups.
 
-        - Setters:
-            - Set group name/description
-            - Set group share permissions
-            - Set group share quotas
-            - Set group service speed limit
-
-        - Actions:
-            - Create new group
-            - Delete groups
-            - Add users to a group
-            - Remove users from a group
+    Methods
+    -------
+    get_groups(offset=0, limit=-1, name_only=False)
+        Retrieve groups information.
+    get_users(group, in_group=True)
+        Retrieve users who are members or not members of a group.
+    get_speed_limits(group)
+        Retrieve bandwidth control settings for a group.
+    get_quota(group)
+        Retrieve quota settings for a group.
+    get_permissions(group)
+        Retrieve share permissions for a group.
+    set_group_info(group, new_name="", new_description="")
+        Change group name and/or description.
+    set_share_quota(group, share_quotas)
+        Set group quota for a given share.
+    set_share_permissions(group, permissions)
+        Set group permissions for a given share.
+    set_speed_limit(group, upload_limit, download_limit, protocol)
+        Set speed limit for a given share.
+    add_users(group, users)
+        Add users to a group.
+    remove_users(group, users)
+        Remove users from a group.
+    create(name, description="")
+        Create a new group.
+    delete(groups)
+        Delete specified groups.
     """
 
     def get_groups(
         self, offset: int = 0, limit: int = -1, name_only: bool = False
     ) -> dict[str, object]:
-        """Retrieve groups information.
+        """
+        Retrieve groups information.
 
-            Parameters
-            ----------
-            offset : int, optional
-                The offset of the groups to retrieve. Defaults to `0`.
+        Parameters
+        ----------
+        offset : int, optional
+            The offset of the groups to retrieve. Defaults to 0.
+        limit : int, optional
+            The maximum number of groups to retrieve. Defaults to -1 (all groups).
+        name_only : bool, optional
+            If True, returns only group names. If False, returns full group information. Defaults to False.
 
-            limit : int, optional
-                The maximum number of groups to retrieve. Defaults to `-1` (all groups).
+        Returns
+        -------
+        dict[str, object]
+            A dictionary containing the groups information.
 
-            name_only : bool, optional
-                If `True`, returns only group names. If `False`, returns full group information. Defaults to `False`.
-
-            Returns
-            -------
-            dict[str, object]
-                A dictionary containing the groups information.
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "groups": [
-                        {
-                            "description": "System default admin group",
-                            "gid": 101,
-                            "name": "administrators"
-                        },
-                        {
-                            "description": "System default group for Web services",
-                            "gid": 1023,
-                            "name": "http"
-                        },
-                        {
-                            "description": "A test group",
-                            "gid": 65536,
-                            "name": "Test"
-                        },
-                        {
-                            "description": "System default group",
-                            "gid": 100,
-                            "name": "users"
-                        }
-                    ],
-                    "offset": 0,
-                    "total": 4
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "groups": [
+                    {
+                        "description": "System default admin group",
+                        "gid": 101,
+                        "name": "administrators"
+                    },
+                    {
+                        "description": "System default group for Web services",
+                        "gid": 1023,
+                        "name": "http"
+                    },
+                    {
+                        "description": "A test group",
+                        "gid": 65536,
+                        "name": "Test"
+                    },
+                    {
+                        "description": "System default group",
+                        "gid": 100,
+                        "name": "users"
+                    }
+                ],
+                "offset": 0,
+                "total": 4
+            },
+            "success": true
+        }
+        ```
         """
 
         api_name = "SYNO.Core.Group"
@@ -106,53 +128,50 @@ class Group(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_users(self, group: str, in_group: bool = True) -> dict[str, object]:
-        """Retrieve users members or not of a group.
+        """
+        Retrieve users who are members or not members of a group.
 
-            Parameters
-            ----------
-            group : str
-                The group to list users from.
+        Parameters
+        ----------
+        group : str
+            The group to list users from.
+        in_group : bool, optional
+            If True, retrieves users who are members of the specified group.
+            If False, retrieves users who are not members of the group. Defaults to True.
 
-            in_group : bool, optional
-                Defaults to `True`.
+        Returns
+        -------
+        dict[str, object]
+            A dictionary containing the result of the request.
 
-                If `True`, retrieves users who are members of the specified group.
-
-                If `False`, retrieves users who are not members of the group.
-
-            Returns
-            -------
-            dict[str, object]
-                A dictionary containing the result of the request.
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "offset": 0,
-                    "total": 3,
-                    "users": [
-                        {
-                            "description": "System default user",
-                            "name": "admin",
-                            "uid": 1024
-                        },
-                        {
-                            "description": "",
-                            "name": "customAdmin",
-                            "uid": 1026
-                        },
-                        {
-                            "description": "",
-                            "name": "test",
-                            "uid": 1032
-                        }
-                    ]
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "offset": 0,
+                "total": 3,
+                "users": [
+                    {
+                        "description": "System default user",
+                        "name": "admin",
+                        "uid": 1024
+                    },
+                    {
+                        "description": "",
+                        "name": "customAdmin",
+                        "uid": 1026
+                    },
+                    {
+                        "description": "",
+                        "name": "test",
+                        "uid": 1032
+                    }
+                ]
+            },
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Group.Member"
         info = self.core_list[api_name]
@@ -167,40 +186,42 @@ class Group(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_speed_limits(self, group: str) -> dict[str, object]:
-        """Retrieve bandwidth control settings for a given group.
+        """
+        Retrieve bandwidth control settings for a given group.
 
-            Parameters
-            ----------
-            group : str
-                The group to retrieve settings for.
+        Parameters
+        ----------
+        group : str
+            The group to retrieve settings for.
 
-            Returns
-            -------
-            dict[str, object]
-                A dictionary containing the result of the request.
+        Returns
+        -------
+        dict[str, object]
+            A dictionary containing the result of the request.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "bandwidths": [
-                        {
-                            "download_limit_1": 0,
-                            "download_limit_2": 0,
-                            "name": "group_name",
-                            "owner_type": "local_group",
-                            "policy": "notexist",
-                            "protocol": "FTP",
-                            "protocol_ui": "FTP",
-                            "schedule_plan": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
-                            "upload_limit_1": 0,
-                            "upload_limit_2": 0
-                        },
-                    ]
-                },
-                "success": true
-            }
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "bandwidths": [
+                    {
+                        "download_limit_1": 0,
+                        "download_limit_2": 0,
+                        "name": "group_name",
+                        "owner_type": "local_group",
+                        "policy": "notexist",
+                        "protocol": "FTP",
+                        "protocol_ui": "FTP",
+                        "schedule_plan": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+                        "upload_limit_1": 0,
+                        "upload_limit_2": 0
+                    },
+                ]
+            },
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.BandwidthControl"
         info = self.core_list[api_name]
@@ -214,42 +235,43 @@ class Group(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_quota(self, group: str) -> dict[str, object]:
-        """Retrieve quota settings for a given group.
+        """
+        Retrieve quota settings for a given group.
 
-            Parameters
-            ----------
-            group : str
-                The group to retrieve quota settings for.
+        Parameters
+        ----------
+        group : str
+            The group to retrieve quota settings for.
 
-            Returns
-            -------
-            dict[str, object]
-                A dictionary containing the result of the request.
+        Returns
+        -------
+        dict[str, object]
+            A dictionary containing the result of the request.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "group_quota": [
-                        {
-                            "deduped": false,
-                            "quota_status": "v1",
-                            "shares": [
-                                {
-                                    "description": "",
-                                    "name": "ActiveBackupforBusiness",
-                                    "quota": 1024
-                                }
-                            ],
-                            "support_share_quota": true,
-                            "volume": "/volume3"
-                        }
-                    ]
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "group_quota": [
+                    {
+                        "deduped": false,
+                        "quota_status": "v1",
+                        "shares": [
+                            {
+                                "description": "",
+                                "name": "ActiveBackupforBusiness",
+                                "quota": 1024
+                            }
+                        ],
+                        "support_share_quota": true,
+                        "volume": "/volume3"
+                    }
+                ]
+            },
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Quota"
         info = self.core_list[api_name]
@@ -264,42 +286,43 @@ class Group(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_permissions(self, group: str) -> dict[str, object]:
-        """Retrieve share permissions for a given group.
+        """
+        Retrieve share permissions for a given group.
 
-            Parameters
-            ----------
-            group : str
-                The group to list permissions for.
+        Parameters
+        ----------
+        group : str
+            The group to list permissions for.
 
-            Returns
-            -------
-            dict[str, object]
-                A dictionary containing the result of the request.
+        Returns
+        -------
+        dict[str, object]
+            A dictionary containing the result of the request.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "shares": [
-                        {
-                            "is_aclmode": true,
-                            "is_custom": false,
-                            "is_deny": true,
-                            "is_mask": false,
-                            "is_readonly": false,
-                            "is_sync_share": false,
-                            "is_unite_permission": false,
-                            "is_writable": false,
-                            "name": "ActiveBackupforBusiness",
-                            "share_path": "/volume3/ActiveBackupforBusiness"
-                        }
-                    ],
-                    "total": 1
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "shares": [
+                    {
+                        "is_aclmode": true,
+                        "is_custom": false,
+                        "is_deny": true,
+                        "is_mask": false,
+                        "is_readonly": false,
+                        "is_sync_share": false,
+                        "is_unite_permission": false,
+                        "is_writable": false,
+                        "name": "ActiveBackupforBusiness",
+                        "share_path": "/volume3/ActiveBackupforBusiness"
+                    }
+                ],
+                "total": 1
+            },
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Share.Permission"
         info = self.core_list[api_name]
@@ -320,35 +343,34 @@ class Group(base_api.BaseApi):
     def set_group_info(
         self, group: str, new_name: str = "", new_description: str = ""
     ) -> dict[str, object]:
-        """Change group name and/or description.
+        """
+        Change group name and/or description.
 
-            Parameters
-            ----------
-            group : str
-                The group to set information for.
+        Parameters
+        ----------
+        group : str
+            The group to set information for.
+        new_name : str, optional
+            The new name of the group. Defaults to current value.
+        new_description : str, optional
+            The new description of the group. Defaults to current value.
 
-            new_name : str, optional
-                The new name of the group. Defaults to current value.
+        Returns
+        -------
+        dict[str, object]
+            A dictionary containing the result of the request.
 
-            new_description : str, optional
-                The new description of the group. Defaults to current value.
-
-            Returns
-            -------
-            dict[str, object]
-                A dictionary containing the result of the request.
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "gid": 65536,
-                    "name": "Test_mod"
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "gid": 65536,
+                "name": "Test_mod"
+            },
+            "success": true
+        }
+        ```
         """
         current_groups_info = self.groups_info()
         current_group = filter(
@@ -377,43 +399,29 @@ class Group(base_api.BaseApi):
     def set_share_quota(
         self, group: str, share_quotas: list[dict[str, Any]]
     ) -> dict[str, object]:
-        """Set group quota for a given share.
+        """
+        Set group quota for a given share.
 
-            Parameters
-            ----------
-            group : str
-                The group to set the quota for.
+        Parameters
+        ----------
+        group : str
+            The group to set the quota for.
+        share_quotas : list of dict
+            The quotas to set for the group.
 
-            share_quotas (list[dict[str, Any]]):
-                The quotas to set for the group.
+        Returns
+        -------
+        dict[str, object]
+            A dictionary containing the result of the request.
 
-                Example:
-                ```python
-                [
-                    {
-                        "share": "web",
-                        "quota": 1024, # in MB
-                    },
-                    {
-                        "share": "photo",
-                        "quota": 5120, # in MB
-                    }
-                ]
-                ```
-
-            Returns
-            -------
-            dict[str, object]
-                A dictionary containing the result of the request.
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {},
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {},
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Quota"
         info = self.core_list[api_name]
@@ -430,46 +438,28 @@ class Group(base_api.BaseApi):
     def set_share_permissions(
         self, group: str, permissions: list[dict[str, object]]
     ) -> dict[str, object]:
-        """Set group permissions for a given share.
+        """
+        Set group permissions for a given share.
 
-            Parameters
-            ----------
-            group : str
-                The group to set the permissions for.
+        Parameters
+        ----------
+        group : str
+            The group to set the permissions for.
+        permissions : list of dict
+            The permissions to set for the group.
 
-            permissions : list[dict[str, object]]:
-                The permissions to set for the group.
+        Returns
+        -------
+        dict[str, object]
+            A dictionary containing the result of the request.
 
-                Example:
-                ```python
-                [
-                    {
-                        "name": "web",
-                        "is_readonly": False,
-                        "is_writable": False,
-                        "is_deny": True
-                    },
-                    {
-                        "name": "ActiveBackupforBusiness",
-                        "is_readonly": False,
-                        "is_writable": True,
-                        "is_deny": False
-                    }
-                ]
-                ```
-
-            Returns
-            -------
-            dict[str, object]
-                A dictionary containing the result of the request.
-
-            Examples
-            --------
-            ```json
-            {
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Share.Permission"
         info = self.core_list[api_name]
@@ -491,48 +481,40 @@ class Group(base_api.BaseApi):
         download_limit: int,
         protocol: str,
     ) -> dict[str, object]:
-        """Set speed limit for a given share.
+        """
+        Set speed limit for a given share.
 
-            Info: Doesn't support **scheduled** speed limits, only on/off.
+        Parameters
+        ----------
+        group : str
+            The group to set the speed limit for.
+        upload_limit : int
+            The maximum upload speed in KB/s.
+        download_limit : int
+            The maximum download speed in KB/s.
+        protocol : str
+            The protocol to set the speed limit for. Possible values:
+            FileStation, WebDAV, FTP, NetworkBackup (Rsync), CloudStation (Synology Drive).
 
-            Parameters
-            ----------
-            group : str
-                The group to set the speed limit for.
+        Returns
+        -------
+        dict[str, object]
+            A dictionary containing the result of the request.
 
-            upload_limit : int
-                The maximum upload speed in KB/s.
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "results": [
+                    true
+                ]
+            },
+            "success": true
+        }
+        ```
 
-            download_limit : int
-                The maximum download speed in KB/s.
-
-            protocol : str
-                The protocol to set the speed limit for.
-
-                Possible values:
-                - FileStation
-                - WebDAV
-                - FTP
-                - NetworkBackup (Rsync)
-                - CloudStation (Synology Drive)
-
-            Returns
-            -------
-            dict[str, object]
-                A dictionary containing the result of the request.
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "results": [
-                        true
-                    ]
-                },
-                "success": true
-            }
-            ```
+        Note: Doesn't support scheduled speed limits, only on/off.
         """
         settings = [
             {
@@ -557,29 +539,29 @@ class Group(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def add_users(self, group: str, users: list[str]) -> dict[str, object]:
-        """Add users to a group.
+        """
+        Add users to a group.
 
-            Parameters
-            ----------
-            group : str
-                The group to add users to.
+        Parameters
+        ----------
+        group : str
+            The group to add users to.
+        users : list of str
+            The users to add to the group.
 
-            users : list[str]
-                The users to add to the group.
+        Returns
+        -------
+        dict[str, object]
+            A dictionary containing the result of the request.
 
-            Returns
-            -------
-            dict[str, object]
-                A dictionary containing the result of the request.
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {},
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {},
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Group.Member"
         info = self.core_list[api_name]
@@ -595,29 +577,29 @@ class Group(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def remove_users(self, group: str, users: list[str]) -> dict[str, object]:
-        """Remove users from a group.
+        """
+        Remove users from a group.
 
-            Parameters
-            ----------
-            group : str
-                The group to remove users from.
+        Parameters
+        ----------
+        group : str
+            The group to remove users from.
+        users : list of str
+            The users to remove from the group.
 
-            users : list[str]
-                The users to remove from the group.
+        Returns
+        -------
+        dict[str, object]
+            A dictionary containing the result of the request.
 
-            Returns
-            -------
-            dict[str, object]
-                A dictionary containing the result of the request.
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {},
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {},
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Group.Member"
         info = self.core_list[api_name]
@@ -633,32 +615,32 @@ class Group(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def create(self, name: str, description: str = "") -> dict[str, object]:
-        """Create group.
+        """
+        Create a new group.
 
-            Parameters
-            ----------
-            name : str
-                Name to assign to the group.
+        Parameters
+        ----------
+        name : str
+            Name to assign to the group.
+        description : str, optional
+            Description to assign to the group. Defaults to empty string.
 
-            description : str, optional
-                Description to assign to the group. Defaults to empty string.
+        Returns
+        -------
+        dict[str, object]
+            A dictionary containing the result of the request.
 
-            Returns
-            -------
-            dict[str, object]
-                A dictionary containing the result of the request.
-
-            Examples
-            --------
-            ```json
-            {
-                "data": {
-                    "gid": 65541,
-                    "name": "new_group"
-                },
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {
+                "gid": 65541,
+                "name": "new_group"
+            },
+            "success": true
+        }
+        ```
         """
 
         api_name = "SYNO.Core.Group"
@@ -674,26 +656,27 @@ class Group(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete(self, groups: list[str]) -> dict[str, object]:
-        """Delete specified groups.
+        """
+        Delete specified groups.
 
-            Parameters
-            ----------
-            groups : list[str]
-                The groups to delete.
+        Parameters
+        ----------
+        groups : list of str
+            The groups to delete.
 
-            Returns
-            -------
-            dict[str, object]
-                A dictionary containing the result of the request.
+        Returns
+        -------
+        dict[str, object]
+            A dictionary containing the result of the request.
 
-            Examples
-            --------
-            ```json
-            {
-                "data": {},
-                "success": true
-            }
-            ```
+        Examples
+        --------
+        ```json
+        {
+            "data": {},
+            "success": true
+        }
+        ```
         """
         api_name = "SYNO.Core.Group"
         info = self.core_list[api_name]

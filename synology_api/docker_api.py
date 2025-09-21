@@ -1,6 +1,4 @@
-"""
-Docker API implementation for Synology NAS.
-"""
+"""Docker API implementation for Synology NAS."""
 from __future__ import annotations
 from typing import Optional
 import json
@@ -29,7 +27,6 @@ class Docker(base_api.BaseApi):
                 - Get list of docker networks
 
             - Setters:
-                -
 
             - Actions:
                 - Export container profile
