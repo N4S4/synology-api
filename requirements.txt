@@ -6,7 +6,7 @@ tqdm==4.67.1
 psutil==7.1.0
 docstring-extractor==0.4.0
 treelib==1.8.0
-PyYAML==6.0.2
+PyYAML==6.0.3
 cffi==2.0.0
 cryptography==46.0.1
 noiseprotocol==0.3.1
