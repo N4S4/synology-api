@@ -174,13 +174,13 @@ class LdapServer(base_api.BaseApi):
                 if not disabled:
                     raise ValueError(
                         "If you set the 'expireddate' parameter, you also need to set 'disabled' to true.")
-            if expireddate == "now":
-                return
-            try:
-                datetime.strptime(expireddate, "%Y/%m/%d")
-            except ValueError:
-                ValueError(
-                    "The 'expireddate' parameter must be 'now' or 'YYYY/MM/DD'")
+                if expireddate == "now":
+                    return
+                try:
+                    datetime.strptime(expireddate, "%Y/%m/%d")
+                except ValueError:
+                    ValueError(
+                        "The 'expireddate' parameter must be 'now' or 'YYYY/MM/DD'")
 
         _assert_expireddate_validity()
 
