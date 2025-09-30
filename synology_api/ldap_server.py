@@ -101,7 +101,7 @@ class LdapServer(base_api.BaseApi):
             mobile: str = None,
             postalAddress: str = None,
             apple_birthday: str = None,
-    ) -> dict[str, object]:
+    ) -> dict[str, bool]:
         """
         Create a new user.
 
