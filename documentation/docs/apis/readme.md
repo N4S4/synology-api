@@ -63,24 +63,28 @@ At the moment there are quite a few APIs implemented. They could be totally or p
   
 ###  [Share](./apis/classes/core_share) 
 - `SYNO.Core.Share`  
+- `SYNO.Core.Share.Crypto`  
 - `SYNO.Core.Share.Permission`  
 - `SYNO.Core.Share.KeyManager.Store`  
 - `SYNO.Core.Share.KeyManager.AutoKey`  
   
 ###  [SharePermission](./apis/classes/core_share) 
 - `SYNO.Core.Share`  
+- `SYNO.Core.Share.Crypto`  
 - `SYNO.Core.Share.Permission`  
 - `SYNO.Core.Share.KeyManager.Store`  
 - `SYNO.Core.Share.KeyManager.AutoKey`  
   
 ###  [KeyManagerStore](./apis/classes/core_share) 
 - `SYNO.Core.Share`  
+- `SYNO.Core.Share.Crypto`  
 - `SYNO.Core.Share.Permission`  
 - `SYNO.Core.Share.KeyManager.Store`  
 - `SYNO.Core.Share.KeyManager.AutoKey`  
   
 ###  [KeyManagerAutoKey](./apis/classes/core_share) 
 - `SYNO.Core.Share`  
+- `SYNO.Core.Share.Crypto`  
 - `SYNO.Core.Share.Permission`  
 - `SYNO.Core.Share.KeyManager.Store`  
 - `SYNO.Core.Share.KeyManager.AutoKey`  
@@ -148,7 +152,6 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.Core.ExternalDevice.Storage.eSATA`  
 - `SYNO.Finder.FileIndexing.Status`  
 - `SYNO.Core.CMS.Info`  
-- `SYNO.Core.Service.PortInfo`  
 - `SYNO.Core.PortForwarding.Rules`  
 - `SYNO.Core.PortForwarding.RouterConf`  
 - `SYNO.Core.Polling.Data`  
@@ -215,12 +218,17 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.Docker.Image`  
 - `SYNO.Docker.Registry`  
 - `SYNO.Docker.Network`  
+- `SYNO.Docker.Project`  
+- `SYNO.Docker.Container.Profile`  
+- `SYNO.Docker.Container.Log`  
   
 ###  [DownloadStation](./apis/classes/downloadstation) 
 - `SYNO.DownloadStation.Info`  
 - `SYNO.DownloadStation.Schedule`  
 - `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task`  
 - `SYNO.DownloadStation2.Task.Source`  
+- `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task.List`  
+- `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task.List.Polling`  
 - `SYNO.DownloadStation.Statistic`  
 - `SYNO.DownloadStation.RSS.Site`  
 - `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.RSS.Feed`  
