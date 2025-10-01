@@ -385,6 +385,55 @@ class DownloadStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param, response_json=False).content
 
+    def get_task_list(self, list_id: str) -> dict[str, any]:
+        """Get info from a task list containing the files to be downloaded. This is to be used after creating a task, and before starting the download.
+        
+            Parameters
+            ----------
+            list_id : str
+                List ID returned by create_task.
+        
+            Returns
+            -------
+            dict[str, any]
+                A dictionary containing a task list information.
+        
+            Example
+            ----------
+            ```json
+            {
+                "data" : {
+                    "files" : [
+                        {
+                            "index" : 0,
+                            "name" : "Pulp.Fiction.1994.2160p.4K.BluRay.x265.10bit.AAC5.1-[YTS.MX].mkv",
+                            "size" : 2391069024
+                        },
+                        {
+                            "index" : 1,
+                            "name" : "YTSProxies.com.txt",
+                            "size" : 604
+                        },
+                        {
+                            "index" : 2,
+                            "name" : "www.YTS.MX.jpg",
+                            "size" : 53226
+                        }
+                    ],
+                    "size" : 7835426779,
+                    "title" : "Pulp Fiction (1994) [2160p] [4K] [BluRay] [5.1] [YTS.MX]",
+                    "type" : "bt"
+                },
+            }
+            ```
+        """
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task.List'
+        info = self.download_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get', 'list_id': list_id}
+
+        return self.request_data(api_name, api_path, req_param)
+
     def create_task(self, url, destination) -> dict[str, object] | str:
         """
         Create a new download task.
@@ -510,6 +559,57 @@ class DownloadStation(base_api.BaseApi):
 
         if type(task_id) is list:
             param['id'] = ",".join(task_id)
+
+        return self.request_data(api_name, api_path, param)
+    
+    def download_task_list(
+        self, 
+        list_id: str, 
+        file_indexes: list[int], 
+        destination: str, 
+        create_subfolder: bool = True
+    ) -> dict[str, object] | str:
+        """
+        Download files from a task list.
+
+        Parameters
+        ----------
+        list_id : str
+            Task list ID.
+        file_indexes : list[int]
+            List of file indexes to download.  
+            For example, if `get_task_list()` returns `files: [{index: 0, name: "file1.txt"}, {index: 1, name: "file2.txt"}]`, then `file_indexes = [1]` will download only file2.txt.
+        destination : str
+            Download destination, e.g. 'sharedfolder/subfolder'
+        create_subfolder : bool, optional
+            Create subfolder. Defaults to `True`
+
+        Returns
+        -------
+        dict[str, object] or str
+            A dictionary containing the task_id for the started download task.
+
+        Example
+        ----------
+        ```json
+        {
+            'data': {
+                'task_id': 'username/SYNODLTaskListDownload1759340338C7C39ABA'
+            }
+        }
+        ```
+        """
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task.List.Polling'
+        info = self.download_list[api_name]
+        api_path = info['path']
+        param = {
+            'version': info['maxVersion'],
+            'method': 'download',
+            'list_id': list_id,
+            'file_indexes': ",".join(map(str, file_indexes)),
+            'destination': destination,
+            'create_subfolder': create_subfolder
+        }
 
         return self.request_data(api_name, api_path, param)
 
