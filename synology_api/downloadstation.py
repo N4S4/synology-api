@@ -386,46 +386,49 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, response_json=False).content
 
     def get_task_list(self, list_id: str) -> dict[str, any]:
-        """Get info from a task list containing the files to be downloaded. This is to be used after creating a task, and before starting the download.
-        
-            Parameters
-            ----------
-            list_id : str
-                List ID returned by create_task.
-        
-            Returns
-            -------
-            dict[str, any]
-                A dictionary containing a task list information.
-        
-            Example
-            ----------
-            ```json
-            {
-                "data" : {
-                    "files" : [
-                        {
-                            "index" : 0,
-                            "name" : "Pulp.Fiction.1994.2160p.4K.BluRay.x265.10bit.AAC5.1-[YTS.MX].mkv",
-                            "size" : 2391069024
-                        },
-                        {
-                            "index" : 1,
-                            "name" : "YTSProxies.com.txt",
-                            "size" : 604
-                        },
-                        {
-                            "index" : 2,
-                            "name" : "www.YTS.MX.jpg",
-                            "size" : 53226
-                        }
-                    ],
-                    "size" : 7835426779,
-                    "title" : "Pulp Fiction (1994) [2160p] [4K] [BluRay] [5.1] [YTS.MX]",
-                    "type" : "bt"
-                },
-            }
-            ```
+        """
+        Get info from a task list containing the files to be downloaded.
+
+        This is to be used after creating a task, and before starting the download.
+
+        Parameters
+        ----------
+        list_id : str
+            List ID returned by create_task.
+
+        Returns
+        -------
+        dict[str, any]
+            A dictionary containing a task list information.
+
+        Examples
+        --------
+        ```json
+        {
+            "data" : {
+                "files" : [
+                    {
+                        "index" : 0,
+                        "name" : "Pulp.Fiction.1994.2160p.4K.BluRay.x265.10bit.AAC5.1-[YTS.MX].mkv",
+                        "size" : 2391069024
+                    },
+                    {
+                        "index" : 1,
+                        "name" : "YTSProxies.com.txt",
+                        "size" : 604
+                    },
+                    {
+                        "index" : 2,
+                        "name" : "www.YTS.MX.jpg",
+                        "size" : 53226
+                    }
+                ],
+                "size" : 7835426779,
+                "title" : "Pulp Fiction (1994) [2160p] [4K] [BluRay] [5.1] [YTS.MX]",
+                "type" : "bt"
+            },
+        }
+        ```
         """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task.List'
         info = self.download_list[api_name]
@@ -577,7 +580,7 @@ class DownloadStation(base_api.BaseApi):
         list_id : str
             Task list ID.
         file_indexes : list[int]
-            List of file indexes to download.  
+            List of file indexes to download.
             For example, if `get_task_list()` returns `files: [{index: 0, name: "file1.txt"}, {index: 1, name: "file2.txt"}]`, then `file_indexes = [1]` will download only file2.txt.
         destination : str
             Download destination, e.g. 'sharedfolder/subfolder'
@@ -589,8 +592,8 @@ class DownloadStation(base_api.BaseApi):
         dict[str, object] or str
             A dictionary containing the task_id for the started download task.
 
-        Example
-        ----------
+        Examples
+        --------
         ```json
         {
             'data': {
