@@ -433,7 +433,8 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task.List'
         info = self.download_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'list_id': list_id}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'list_id': list_id}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -564,12 +565,12 @@ class DownloadStation(base_api.BaseApi):
             param['id'] = ",".join(task_id)
 
         return self.request_data(api_name, api_path, param)
-    
+
     def download_task_list(
-        self, 
-        list_id: str, 
-        file_indexes: list[int], 
-        destination: str, 
+        self,
+        list_id: str,
+        file_indexes: list[int],
+        destination: str,
         create_subfolder: bool = True
     ) -> dict[str, object] | str:
         """
@@ -602,7 +603,8 @@ class DownloadStation(base_api.BaseApi):
         }
         ```
         """
-        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task.List.Polling'
+        api_name = 'SYNO.DownloadStation' + \
+            self.download_st_version + '.Task.List.Polling'
         info = self.download_list[api_name]
         api_path = info['path']
         param = {
