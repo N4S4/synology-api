@@ -10,7 +10,7 @@ As I say the following are just "guidelines" so do not feel obligated.
 
 Have a look on our Code of conduct!
 
-## How setup your environment
+## How to set up your environment
 
 If you want to contribute to this package, you may want to setup your environment.
 
