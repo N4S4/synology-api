@@ -6,6 +6,8 @@ on Synology NAS devices using the Download Station application.
 """
 
 from __future__ import annotations
+
+import json
 from typing import Optional, Any
 from . import base_api
 
@@ -323,8 +325,8 @@ class DownloadStation(base_api.BaseApi):
             additional_param = ['detail', 'transfer',
                                 'file', 'tracker', 'peer']
 
-        if type(additional_param) is list:
-            req_param['additional'] = ",".join(additional_param)
+        req_param['additional'] = json.dumps(additional_param if isinstance(
+            additional_param, list) else [additional_param])
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -347,18 +349,17 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'getinfo',
+        req_param = {'version': info['maxVersion'], 'method': 'get',
                      'id': task_id, 'additional': additional_param}
 
         if additional_param is None:
             additional_param = ['detail', 'transfer',
                                 'file', 'tracker', 'peer']
 
-        if type(additional_param) is list:
-            req_param['additional'] = ",".join(additional_param)
-
-        if type(task_id) is list:
-            req_param['id'] = ",".join(task_id)
+        req_param['additional'] = json.dumps(additional_param if isinstance(
+            additional_param, list) else [additional_param])
+        req_param['id'] = json.dumps(
+            task_id if isinstance(task_id, list) else [task_id])
 
         return self.request_data(api_name, api_path, req_param)
 
