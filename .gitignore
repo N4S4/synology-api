@@ -402,4 +402,3 @@ FodyWeavers.xsd
 
 # Test resources
 tests/resources/config-test.json
-/tests/code.py
