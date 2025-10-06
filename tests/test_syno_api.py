@@ -3,6 +3,7 @@ import json
 from unittest import TestCase
 import unittest
 from synology_api.filestation import FileStation
+from synology_api.downloadstation import DownloadStation
 from synology_api.surveillancestation import SurveillanceStation
 import os
 import pathlib
@@ -42,6 +43,21 @@ class TestSynoApi(TestCase):
         shares_list = fs.get_list_share()
         self.assertIsNotNone(shares_list)
         self.assertEqual(shares_list.__len__(), 2)
+
+    def test_syno_downloadstation_login(self):
+        ds = DownloadStation (ip_address=self.config["synology_ip"], port=self.config["synology_port"],
+                              username=self.config["synology_user"],
+                              password=self.config["synology_password"],
+                              secure=bool(self.config["synology_secure"]), cert_verify=False,
+                              dsm_version=int(self.config["dsm_version"]), debug=True,
+                              otp_code=self.config["otp_code"])
+        self.assertIsNotNone(ds)
+        self.assertIsNotNone(ds.session)
+        self.assertIsNotNone(ds.session.sid)
+        self.assertIsNot(ds.session.sid, '')
+        tasks_list = ds.tasks_list()
+        self.assertIsNotNone(tasks_list)
+        self.assertEqual(tasks_list.__len__(), 2)
 
     def test_syno_surveillancestation_login(self):
         ss = SurveillanceStation(ip_address=self.config["synology_ip"], port=self.config["synology_port"],
