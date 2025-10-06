@@ -45,12 +45,12 @@ class TestSynoApi(TestCase):
         self.assertEqual(shares_list.__len__(), 2)
 
     def test_syno_downloadstation_login(self):
-        ds = DownloadStation (ip_address=self.config["synology_ip"], port=self.config["synology_port"],
-                              username=self.config["synology_user"],
-                              password=self.config["synology_password"],
-                              secure=bool(self.config["synology_secure"]), cert_verify=False,
-                              dsm_version=int(self.config["dsm_version"]), debug=True,
-                              otp_code=self.config["otp_code"])
+        ds = DownloadStation(ip_address=self.config["synology_ip"], port=self.config["synology_port"],
+                             username=self.config["synology_user"],
+                             password=self.config["synology_password"],
+                             secure=bool(self.config["synology_secure"]), cert_verify=False,
+                             dsm_version=int(self.config["dsm_version"]), debug=True,
+                             otp_code=self.config["otp_code"])
         self.assertIsNotNone(ds)
         self.assertIsNotNone(ds.session)
         self.assertIsNotNone(ds.session.sid)

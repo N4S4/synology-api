@@ -325,7 +325,8 @@ class DownloadStation(base_api.BaseApi):
             additional_param = ['detail', 'transfer',
                                 'file', 'tracker', 'peer']
 
-        req_param['additional'] = json.dumps(additional_param if isinstance(additional_param, list) else [additional_param])
+        req_param['additional'] = json.dumps(additional_param if isinstance(
+            additional_param, list) else [additional_param])
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -352,10 +353,13 @@ class DownloadStation(base_api.BaseApi):
                      'id': task_id, 'additional': additional_param}
 
         if additional_param is None:
-            additional_param = ['detail', 'transfer', 'file', 'tracker', 'peer']
+            additional_param = ['detail', 'transfer',
+                                'file', 'tracker', 'peer']
 
-        req_param['additional'] = json.dumps(additional_param if isinstance(additional_param, list) else [additional_param])
-        req_param['id'] = json.dumps(task_id if isinstance(task_id, list) else [task_id])
+        req_param['additional'] = json.dumps(additional_param if isinstance(
+            additional_param, list) else [additional_param])
+        req_param['id'] = json.dumps(
+            task_id if isinstance(task_id, list) else [task_id])
 
         return self.request_data(api_name, api_path, req_param)
 
