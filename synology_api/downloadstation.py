@@ -487,7 +487,7 @@ class DownloadStation(base_api.BaseApi):
             ]
             data = get_data_for_request_from_file(file_path, fields)
 
-            return self.request_data(api_name, api_path, method='post', data=data, response_json=True, req_param={})
+            return self.request_data(api_name, api_path, method='post', data=data, req_param={})
 
         req_param = {'version': info['maxVersion'], 'method': 'create', 'type': 'url',
                      'create_list': 'true', 'destination': destination, 'url': f'["{url}"]'}
