@@ -638,7 +638,7 @@ class Authentication:
             The name of the Synology API to call.
         api_path : str
             The path to the API endpoint.
-        data: str, Optional.
+        data : str, optional
          The data to send to upload a file like a torrent file.
         req_param : dict[str, object]
             The parameters to include in the request.

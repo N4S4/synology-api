@@ -77,7 +77,7 @@ def get_data_for_request_from_file(file_path: str, fields: list[tuple]):
     Returns
     -------
     MultiPartEncoder
-        MultiPartEncoder Object to send to the post request
+        MultiPartEncoder Object to send to the post request.
     """
 
     p = Path(file_path).expanduser().resolve()

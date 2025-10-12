@@ -451,7 +451,8 @@ class DownloadStation(base_api.BaseApi):
                     ) -> dict[str, object] | str:
         """
         Create a new download task.
-        You can choose between a url or a file path (.torrent)
+
+        You can choose between a url or a file path (.torrent).
 
         Parameters
         ----------
