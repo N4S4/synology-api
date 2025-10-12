@@ -455,12 +455,12 @@ class DownloadStation(base_api.BaseApi):
 
         Parameters
         ----------
-        url : str, Optional
-            Download URL.
-        file_path: str, Optional
-            Download through file.
-        destination : str
-            Download destination.
+        url: str, optional
+            Download URL. Use either `url` or `file_path`.
+        file_path: str, optional
+            Path to a file (e.g. a .torrent) to download.
+        destination: str, optional
+            Download destination folder (default is "").
 
         Returns
         -------

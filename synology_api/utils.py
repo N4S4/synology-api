@@ -71,12 +71,13 @@ def get_data_for_request_from_file(file_path: str, fields: list[tuple]):
     ----------
     file_path : str
         The file path to be parsed.
-    fields : list of tuple[str, str] containing data
+    fields : list of tuple[str, str]
+        Fields to create the MultiPartEncoder.
 
     Returns
     -------
-    MultiPartEncoder Object to send to the post request
-
+    MultiPartEncoder
+        MultiPartEncoder Object to send to the post request
     """
 
     p = Path(file_path).expanduser().resolve()
@@ -96,6 +97,11 @@ def get_data_for_request_from_file(file_path: str, fields: list[tuple]):
 def generate_gecko_boundary():
     """
     Generate a boundary for MultiPartEncoder.
+
+    Returns
+    -------
+    str:
+     The random boundary ----geckoformboundary{random_hex} for the MultiPartEncoder.
     """
     random_hex = secrets.token_hex(16)  # 16 byte = 32 caratteri esadecimali
     return f"----geckoformboundary{random_hex}"
