@@ -1,8 +1,13 @@
 """Utility functions for Synology API operations."""
 import json
+import secrets
 import sys
 # my_package/my_module.py
 __all__ = ['merge_dicts', 'make_folder_meta_list_from_path', 'parse_config']
+
+from pathlib import Path
+
+from requests_toolbelt import MultipartEncoder
 
 
 def merge_dicts(x, y):
@@ -56,3 +61,47 @@ def make_folder_meta_list_from_path(path):
         })
 
     return folder_list
+
+
+def get_data_for_request_from_file(file_path: str, fields: list[tuple]):
+    """
+    Receive a file path and return a MultiPartEncoder for uploading it inside a request_data.
+
+    Parameters
+    ----------
+    file_path : str
+        The file path to be parsed.
+    fields : list of tuple[str, str]
+        Fields to create the MultiPartEncoder.
+
+    Returns
+    -------
+    MultiPartEncoder
+        MultiPartEncoder Object to send to the post request.
+    """
+
+    p = Path(file_path).expanduser().resolve()
+    if not p.is_file():
+        raise FileNotFoundError(f"File not found: {p}")
+
+    size_value = p.stat().st_size
+    boundary = generate_gecko_boundary()
+    fields.append(("size", str(size_value)))
+    fields.append(
+        ("torrent", (p.name, p.open("rb"), "application/x-bittorrent")))
+
+    enc = MultipartEncoder(fields=fields, boundary=boundary)
+    return enc
+
+
+def generate_gecko_boundary():
+    """
+    Generate a boundary for MultiPartEncoder.
+
+    Returns
+    -------
+    str:
+     The random boundary ----geckoformboundary{random_hex} for the MultiPartEncoder.
+    """
+    random_hex = secrets.token_hex(16)  # 16 byte = 32 caratteri esadecimali
+    return f"----geckoformboundary{random_hex}"

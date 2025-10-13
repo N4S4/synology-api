@@ -8,8 +8,13 @@ on Synology NAS devices using the Download Station application.
 from __future__ import annotations
 
 import json
+import secrets
 from typing import Optional, Any
+
+from requests_toolbelt import MultipartEncoder
+
 from . import base_api
+from .utils import get_data_for_request_from_file
 
 
 class DownloadStation(base_api.BaseApi):
@@ -439,28 +444,54 @@ class DownloadStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def create_task(self, url, destination) -> dict[str, object] | str:
+    def create_task(self,
+                    url: Optional[str] = None,
+                    file_path: Optional[str] = None,
+                    destination: str = "",
+                    ) -> dict[str, object] | str:
         """
         Create a new download task.
 
+        You can choose between a url or a file path (.torrent).
+
         Parameters
         ----------
-        url : str
-            Download URL.
-        destination : str
-            Download destination.
+        url : str, optional
+            Download URL. Use either `url` or `file_path`.
+        file_path : str, optional
+            Path to a file (e.g. a .torrent) to download.
+        destination : str, optional
+            Download destination folder (default is "").
 
         Returns
         -------
         dict[str, object] or str
             API response.
         """
+        # Validazione: esattamente uno tra url e file
+        if bool(url) == bool(file_path):
+            raise ValueError("You can't specify both 'url' and 'file_path'")
+
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
+
+        if file_path:
+            fields = [
+                ("api", api_name),
+                ("method", "create"),
+                ("version", str(info["maxVersion"])),
+                ("type", '"file"'),
+                ("file", '["torrent"]'),
+                ("destination", f'"{destination}"'),
+                ("create_list", "true")
+            ]
+            data = get_data_for_request_from_file(file_path, fields)
+
+            return self.request_data(api_name, api_path, method='post', data=data, req_param={})
+
         req_param = {'version': info['maxVersion'], 'method': 'create', 'type': 'url',
                      'create_list': 'true', 'destination': destination, 'url': f'["{url}"]'}
-
         return self.request_data(api_name, api_path, req_param)
 
     def delete_task(self, task_id: str, force: bool = False) -> dict[str, object] | str:

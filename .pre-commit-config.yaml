@@ -1,11 +1,11 @@
 ci:
-  skip: [ pytest ]
+  skip: [pytest]
 
 default_language_version:
   python: python3.13
 
-default_install_hook_types: [ pre-commit, pre-push, commit-msg ]
-default_stages: [ pre-commit, pre-push, commit-msg ]
+default_install_hook_types: [pre-commit, pre-push, commit-msg]
+default_stages: [pre-commit, pre-push, commit-msg]
 
 repos:
   # general checks (see here: https://pre-commit.com/hooks.html)
@@ -23,7 +23,7 @@ repos:
 
   - repo: https://github.com/numpy/numpydoc
     rev: v1.9.0
-    stages: [ pre-commit ]
     hooks:
       - id: numpydoc-validation
+        stages: [pre-commit, manual]
         files: ^synology_api/

@@ -1,9 +1,12 @@
 """Provides authentication and API request handling for Synology DSM, including session management, encryption utilities, and error handling for various Synology services."""
 from __future__ import annotations
 from random import randint
-from typing import Optional
+from typing import Optional, Any, Union
 import requests
 import json
+
+from requests_toolbelt import MultipartEncoder
+
 from .error_codes import error_codes, CODE_SUCCESS, download_station_error_codes, file_station_error_codes
 from .error_codes import auth_error_codes, virtualization_error_codes
 from urllib3 import disable_warnings
@@ -623,6 +626,7 @@ class Authentication:
                      api_path: str,
                      req_param: dict[str, object],
                      method: Optional[str] = None,
+                     data: Optional[Union[MultipartEncoder, str]] = None,
                      response_json: bool = True
                      ) -> dict[str, object] | str | list | requests.Response:  # 'post' or 'get'
         """
@@ -638,6 +642,8 @@ class Authentication:
             The parameters to include in the request.
         method : str, optional
             The HTTP method to use ('get' or 'post'). Defaults to 'get' if not specified.
+        data : str, optional
+         The data to send to upload a file like a torrent file.
         response_json : bool, optional
             Whether to return the response as JSON. If False, returns the raw response object.
 
@@ -676,8 +682,14 @@ class Authentication:
                     response = requests.get(url, req_param, verify=self._verify, headers={
                                             "X-SYNO-TOKEN": self._syno_token})
                 elif method == 'post':
-                    response = requests.post(url, req_param, verify=self._verify, headers={
-                                             "X-SYNO-TOKEN": self._syno_token})
+                    if data is None:
+                        response = requests.post(url, req_param, verify=self._verify, headers={
+                                                 "X-SYNO-TOKEN": self._syno_token})
+                    else:
+                        url = ('%s%s' % (self._base_url, api_path)) + \
+                            '/' + api_name
+                        response = requests.post(url, data=data, params=req_param, verify=self._verify, headers={
+                                                 "Content-Type": data.content_type, "X-SYNO-TOKEN": self._syno_token})
             except requests.exceptions.ConnectionError as e:
                 raise SynoConnectionError(error_message=e.args[0])
             except requests.exceptions.HTTPError as e:
