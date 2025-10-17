@@ -1,9 +1,11 @@
 """Utility functions for Synology API operations."""
 import json
+import re
 import secrets
 import sys
 # my_package/my_module.py
-__all__ = ['merge_dicts', 'make_folder_meta_list_from_path', 'parse_config']
+__all__ = ['merge_dicts', 'make_folder_meta_list_from_path',
+           'get_data_for_request_from_file', 'generate_gecko_boundary', 'validate_path']
 
 from pathlib import Path
 
@@ -105,3 +107,89 @@ def generate_gecko_boundary():
     """
     random_hex = secrets.token_hex(16)  # 16 byte = 32 caratteri esadecimali
     return f"----geckoformboundary{random_hex}"
+
+
+def validate_path(path: str | list[str]) -> bool:
+    """
+    Validate the format of a Synology FileStation path.
+
+    The function checks whether a given path string (or list of paths) follows
+    the basic formatting rules required by Synology FileStation APIs.
+
+    Parameters
+    ----------
+    path : str or list of str
+        The path or list of paths to validate. Each path can represent
+        either a file or directory.
+
+    Returns
+    -------
+    bool
+        True if the path (or all paths in the list) are valid according to
+        FileStation rules, False otherwise.
+
+    Notes
+    -----
+    - Must start with a forward slash ('/').
+    - Must not contain any of the forbidden characters: * ? " < > |
+    - May contain internal spaces (e.g., '/My Folder/file name.txt').
+    - Must not end with a space, tab, or slash.
+    - If the path contains a file extension, no spaces or characters are allowed
+      after the last period (e.g., '/Media/script.log extra' is invalid).
+    - Optionally allows paths without extensions (e.g., '/Media/script').
+
+    Examples
+    --------
+    >>> validate_path('/Downloads/script.log')
+    True
+    >>> validate_path('/Downloads/script log.txt')
+    True
+    >>> validate_path('/Downloads/script')
+    True
+    >>> validate_path('/Downloads/script.log extra')
+    False
+    >>> validate_path('/Downloads/script.log ')
+    False
+    >>> validate_path('/Downloads/folder/')
+    False
+    >>> validate_path('Downloads/script.log')
+    False
+    """
+
+    def _is_valid(single_path: str) -> bool:
+        """
+        Validate a single Synology FileStation path.
+
+        Parameters
+        ----------
+        single_path : str
+            The path to validate.
+
+        Returns
+        -------
+        bool
+            True if the given path is a valid Synology FileStation path.
+        """
+        path_pattern = re.compile(r'^/[^*?"<>|]+$')
+        if not isinstance(single_path, str):
+            return False
+
+        if not path_pattern.match(single_path):
+            return False
+
+        if path[-1] in (' ', '\t', '/'):
+            return False
+
+        parts = single_path.rsplit('.', 1)
+        if len(parts) == 2 and ' ' in parts[1]:
+            return False
+
+        return True
+
+    if isinstance(path, str):
+        return _is_valid(path)
+
+    if isinstance(path, list):
+        return all(isinstance(p, str) and _is_valid(p) for p in path)
+
+    return False

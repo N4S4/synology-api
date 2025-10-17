@@ -468,7 +468,7 @@ class DownloadStation(base_api.BaseApi):
         dict[str, object] or str
             API response.
         """
-        # Validazione: esattamente uno tra url e file
+        # Validate only a url or a file path.
         if bool(url) == bool(file_path):
             raise ValueError("You can't specify both 'url' and 'file_path'")
 
