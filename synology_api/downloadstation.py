@@ -8,10 +8,7 @@ on Synology NAS devices using the Download Station application.
 from __future__ import annotations
 
 import json
-import secrets
 from typing import Optional, Any
-
-from requests_toolbelt import MultipartEncoder
 
 from . import base_api
 from .utils import get_data_for_request_from_file
@@ -360,9 +357,15 @@ class DownloadStation(base_api.BaseApi):
         if additional_param is None:
             additional_param = ['detail', 'transfer',
                                 'file', 'tracker', 'peer']
+        elif isinstance(additional_param, str):
+            additional_param = [additional_param]
+        elif isinstance(additional_param, list):
+            if not all(isinstance(a, str) for a in additional_param):
+                return "additional_param must be a string or a list of strings."
+        else:
+            return "additional_param must be a string or a list of strings."
 
-        req_param['additional'] = json.dumps(additional_param if isinstance(
-            additional_param, list) else [additional_param])
+        req_param['additional'] = json.dumps(additional_param)
         req_param['id'] = json.dumps(
             task_id if isinstance(task_id, list) else [task_id])
 
@@ -477,16 +480,17 @@ class DownloadStation(base_api.BaseApi):
         api_path = info['path']
 
         if file_path:
-            fields = [
-                ("api", api_name),
-                ("method", "create"),
-                ("version", str(info["maxVersion"])),
-                ("type", '"file"'),
-                ("file", '["torrent"]'),
-                ("destination", f'"{destination}"'),
-                ("create_list", "true")
-            ]
-            data = get_data_for_request_from_file(file_path, fields)
+            fields = {
+                "api": api_name,
+                "method": "create",
+                "version": str(info["maxVersion"]),
+                "type": '"file"',
+                "file": '["torrent"]',
+                "destination": f'"{destination}"',
+                "create_list": "true"
+            }
+            data = get_data_for_request_from_file(
+                file_path='file_path', fields=fields, called_from='DownloadStation')
 
             return self.request_data(api_name, api_path, method='post', data=data, req_param={})
 

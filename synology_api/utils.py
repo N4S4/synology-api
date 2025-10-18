@@ -1,5 +1,6 @@
 """Utility functions for Synology API operations."""
 import json
+import mimetypes
 import re
 import secrets
 import sys
@@ -9,7 +10,8 @@ __all__ = ['merge_dicts', 'make_folder_meta_list_from_path',
 
 from pathlib import Path
 
-from requests_toolbelt import MultipartEncoder
+from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
+from tqdm import tqdm
 
 
 def merge_dicts(x, y):
@@ -65,21 +67,34 @@ def make_folder_meta_list_from_path(path):
     return folder_list
 
 
-def get_data_for_request_from_file(file_path: str, fields: list[tuple]):
+def get_data_for_request_from_file(file_path: str,
+                                   fields: dict[str, str | tuple],
+                                   progress_bar: bool = True,
+                                   called_from: str = 'DownloadStation'):
     """
-    Receive a file path and return a MultiPartEncoder for uploading it inside a request_data.
+    Build and return a ``MultipartEncoder`` or a ``MultipartEncoderMonitor`` to upload a file via ``request_data`` (POST multipart/form-data).
 
     Parameters
     ----------
     file_path : str
         The file path to be parsed.
-    fields : list of tuple[str, str]
-        Fields to create the MultiPartEncoder.
+    fields : dict[str, str | tuple]
+        Dictionary of form fields used to build the multipart payload.
+        Each key represents a form field name.
+        The value can be:
+            - a string (for standard text fields)
+            - a tuple ``(filename, fileobj, mimetype)`` for file fields.
+    progress_bar : bool
+        Whether to show a progress bar when uploading file or not.
+    called_from : str
+        The name of the calling class. (ex 'FileStation')
 
     Returns
     -------
-    MultiPartEncoder
-        MultiPartEncoder Object to send to the post request.
+    MultipartEncoder | MultipartEncoderMonitor
+        The multipart payload object to pass to your HTTP client. When a monitor is returned,
+         access its underlying encoder via ``monitor.encoder`` and supply
+         ``headers = {"Content-Type": monitor.content_type}`` (or ``encoder.content_type``).
     """
 
     p = Path(file_path).expanduser().resolve()
@@ -88,12 +103,25 @@ def get_data_for_request_from_file(file_path: str, fields: list[tuple]):
 
     size_value = p.stat().st_size
     boundary = generate_gecko_boundary()
-    fields.append(("size", str(size_value)))
-    fields.append(
-        ("torrent", (p.name, p.open("rb"), "application/x-bittorrent")))
+    fields["size"] = str(size_value)
+    mime_type, _ = mimetypes.guess_type(p.name)
+    mime_type = mime_type or "application/octet-stream"
 
-    enc = MultipartEncoder(fields=fields, boundary=boundary)
-    return enc
+    if called_from == 'DownloadStation':
+        fields["torrent"] = (p.name, p.open("rb"), mime_type)
+    elif called_from == 'FileStation':
+        fields["files"] = (p.name, p.open("rb"), mime_type)
+
+    encoder = MultipartEncoder(fields=fields, boundary=boundary)
+    print(encoder)
+    if progress_bar:
+        pbar = tqdm(total=encoder.len, unit="B", unit_scale=True,
+                    unit_divisor=1024, desc="Upload Progress")
+        monitor = MultipartEncoderMonitor(
+            encoder, lambda m: pbar.update(m.bytes_read - pbar.n)
+        )
+        return monitor
+    return encoder
 
 
 def generate_gecko_boundary():

@@ -5,7 +5,7 @@ from typing import Optional, Any, Union
 import requests
 import json
 
-from requests_toolbelt import MultipartEncoder
+from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 
 from .error_codes import error_codes, CODE_SUCCESS, download_station_error_codes, file_station_error_codes
 from .error_codes import auth_error_codes, virtualization_error_codes
@@ -626,7 +626,7 @@ class Authentication:
                      api_path: str,
                      req_param: dict[str, object],
                      method: Optional[str] = None,
-                     data: Optional[Union[MultipartEncoder, str]] = None,
+                     data: MultiPartEncoderMonitor | MultipartEncoder | str | None = None,
                      response_json: bool = True
                      ) -> dict[str, object] | str | list | requests.Response:  # 'post' or 'get'
         """
