@@ -13,6 +13,7 @@ import os
 import io
 import time
 from datetime import datetime
+from urllib.parse import urljoin, urlencode
 
 import requests
 import tqdm
@@ -22,7 +23,7 @@ import warnings
 from urllib import parse
 from treelib import Tree
 from . import base_api
-from .utils import validate_path
+from .utils import validate_path, get_data_for_request_from_file
 
 
 class FileStation(base_api.BaseApi):
@@ -269,18 +270,18 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_file_info(self,
-                      path: Optional[str] = None,
-                      additional: Optional[str | list[str]] = None
+                      path: str | list[str],
+                      additional_param: Optional[str | list[str]] = None
                       ) -> dict[str, object] | str:
         """
         Get information about a file or files.
 
         Parameters
         ----------
-        path : str or list of str, optional
+        path : str or list of str
             Path(s) to the file(s).
-        additional : str or list of str, optional
-            Additional attributes to include.
+        additional_param : str or list of str, optional
+            Additional attributes to retrieve.
 
         Returns
         -------
@@ -290,24 +291,22 @@ class FileStation(base_api.BaseApi):
         api_name = 'SYNO.FileStation.List'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'getinfo'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'getinfo',
+                     'path': json.dumps(path)}
 
-        if type(path) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in path]
-            path = new_path
-            path = '[' + ','.join(path) + ']'
-            req_param['path'] = path
-        elif path is not None:
-            req_param['path'] = path
+        if additional_param is None:
+            additional_param = ["real_path", "size",
+                                "owner", "time", "perm", "type"]
+        elif isinstance(additional_param, str):
+            additional_param = [additional_param]
+        elif isinstance(additional_param, list):
+            if not all(isinstance(a, str) for a in additional_param):
+                return "additional_param must be a string or a list of strings."
+        else:
+            return "additional_param must be a string or a list of strings."
 
-        if additional is None:
-            additional = ['real_path', 'size', 'owner', 'time']
-
-        if type(additional) is list:
-            additional = str(additional).replace("'", '"')
-
-        req_param['additional'] = additional
+        req_param['additional'] = json.dumps(additional_param)
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -1063,50 +1062,32 @@ class FileStation(base_api.BaseApi):
         api_name = 'SYNO.FileStation.Upload'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        filename = os.path.basename(file_path)
 
         session = requests.session()
 
-        with open(file_path, 'rb') as payload:
-            url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=upload&_sid=%s' % (
-                api_name, info['minVersion'], self._sid)
+        base = urljoin(self.base_url, api_path)
+        url_params = {
+            "api": api_name,
+            "version": info["minVersion"],
+            "method": "upload",
+            "_sid": self._sid
+        }
 
-            encoder = MultipartEncoder({
-                'path': dest_path,
-                'create_parents': str(create_parents).lower(),
-                'overwrite': str(overwrite).lower(),
-                'files': (filename, payload, 'application/octet-stream')
-            })
-
-            if progress_bar:
-                bar = tqdm.tqdm(desc='Upload Progress',
-                                total=encoder.len,
-                                dynamic_ncols=True,
-                                unit='B',
-                                unit_scale=True,
-                                unit_divisor=1024
-                                )
-
-                monitor = MultipartEncoderMonitor(
-                    encoder, lambda monitor: bar.update(monitor.bytes_read - bar.n))
-
-                r = session.post(
-                    url,
-                    data=monitor,
-                    verify=verify,
-                    headers={"X-SYNO-TOKEN": self.session._syno_token,
-                             'Content-Type': monitor.content_type}
-                )
-
-            else:
-                r = session.post(
-                    url,
-                    data=encoder,
-                    verify=verify,
-                    headers={"X-SYNO-TOKEN": self.session._syno_token,
-                             'Content-Type': encoder.content_type}
-                )
-
+        url = f"{base}?{urlencode(url_params)}"
+        encoder_params = {
+            'path': dest_path,
+            'create_parents': str(create_parents).lower(),
+            'overwrite': str(overwrite).lower(),
+        }
+        data = get_data_for_request_from_file(
+            file_path=file_path, fields=encoder_params, called_from='FileStation', progress_bar=True)
+        r = session.post(
+            url,
+            data=data,
+            verify=verify,
+            headers={"X-SYNO-TOKEN": self.session._syno_token,
+                     'Content-Type': data.content_type}
+        )
         session.close()
         if r.status_code != 200 or not r.json()['success']:
             return r.status_code, r.json()
