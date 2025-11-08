@@ -14,16 +14,29 @@ This API is partially documented or under construction.
  
 :::
 ## Overview
-
+Synology Hyper Backup API.
 ## Methods
 ### `backup_repository_get`
-Get repository information for given task.     
+Get repository information for a given task.  
   
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Backup.Repository` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_task_id_** `str`  
+Task ID.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+Repository information.  
+
+</div>
 
 
 
@@ -38,6 +51,12 @@ Get a list of all present repositories in Hyper Backup.
 `SYNO.Backup.Repository` 
 </div>
   
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+List of repositories.  
+
+</div>
 
 
 
@@ -52,6 +71,12 @@ Get current restoring information and a list of present tasks in Hyper Backup.
 `SYNO.Backup.Task` 
 </div>
   
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+List of tasks and restoring information.  
+
+</div>
 
 
 
@@ -59,13 +84,26 @@ Get current restoring information and a list of present tasks in Hyper Backup.
 
 
 ### `backup_task_status`
-Get status and state of task.      
+Get status and state of a task.  
   
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Backup.Task` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_task_id_** `str`  
+Task ID.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+Status and state information.  
+
+</div>
 
 
 
@@ -73,13 +111,26 @@ Get status and state of task.
 
 
 ### `backup_task_get`
-Get detailed task information.    
+Get detailed task information.  
   
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Backup.Task` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_task_id_** `str`  
+Task ID.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+Task information.  
+
+</div>
 
 
 
@@ -94,6 +145,19 @@ Get last result summary information of a task.
 `SYNO.Backup.Task` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_task_id_** `str`  
+Task ID.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+Last result summary.  
+
+</div>
 
 
 
@@ -108,6 +172,19 @@ If the task is not in backupable state, the API will return an error, usually 44
 `SYNO.Backup.Task` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_task_id_** `str`  
+Task ID.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+API response.  
+
+</div>
 
 
 
@@ -122,6 +199,19 @@ If the task is not running, the API will return an error, usually 44xx.
 `SYNO.Backup.Task` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_task_id_** `str`  
+Task ID.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+API response.  
+
+</div>
 
 
 
@@ -136,6 +226,19 @@ If the task is not running or not yet suspendable, the API will return an error,
 `SYNO.Backup.Task` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_task_id_** `str`  
+Task ID.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+API response.  
+
+</div>
 
 
 
@@ -150,6 +253,19 @@ If the task is not suspended, the request will not fail, and will fail to discar
 `SYNO.Backup.Task` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_task_id_** `str`  
+Task ID.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+API response.  
+
+</div>
 
 
 
@@ -157,13 +273,26 @@ If the task is not suspended, the request will not fail, and will fail to discar
 
 
 ### `backup_task_resume`
-Discard currently suspended backup task.  
+Resume currently suspended backup task.  
 If the task is not suspended, the request will not fail, and will fail to resume the task, leaving the task state as "Failed".  
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Backup.Task` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_task_id_** `str`  
+Task ID.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+API response.  
+
+</div>
 
 
 
@@ -174,12 +303,25 @@ If the task is not suspended, the request will not fail, and will fail to resume
 Remove one or more backup tasks.  
 Data in destination will not be removed. It is still possible to relink the task using the original .hbk file.
 The API requires an array of tasks to remove, it should be passed as a string with the following format:
-`task_id_list = '[29]'` || `task_id_list = '[29,15]'`  
+`task_id_list = '[29]'` or `task_id_list = '[29,15]'`  
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Backup.Task` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_task_id_list_** `str`  
+List of task IDs as a string.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+API response.  
+
+</div>
 
 
 
@@ -188,12 +330,25 @@ The API requires an array of tasks to remove, it should be passed as a string wi
 
 ### `integrity_check_run`
 Run integrity check for backup task.  
-If the task is running, the request will not fail, and will fail to perform the integrity check due to target is busy.  
+If the task is running, the request will not fail, and will fail to perform the integrity check due to target being busy.  
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Backup.Target` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_task_id_** `str`  
+Task ID.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+API response.  
+
+</div>
 
 
 
@@ -208,6 +363,19 @@ If integrity check is not running, the API will return an error, usually 44xx.
 `SYNO.Backup.Target` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_task_id_** `str`  
+Task ID.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+API response.  
+
+</div>
 
 
 
@@ -222,6 +390,31 @@ Get Hyper Backup UI logs.
 `SYNO.SDS.Backup.Client.Common.Log` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_limit_** `int`  
+Maximum number of logs to return (default is 1000).  
+  
+**_offset_** `int`  
+Offset for pagination (default is 0).  
+  
+**_filter_keyword_** `str`  
+Keyword to filter logs (default is '').  
+  
+**_filter_date_from_** `int`  
+Start date in epoch format (default is 0).  
+  
+**_filter_date_to_** `int`  
+End date in epoch format (default is 0).  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+Logs information.  
+
+</div>
 
 
 
@@ -236,6 +429,12 @@ List all available targets in Vault.
 `SYNO.Backup.Service.VersionBackup.Target` 
 </div>
   
+#### Returns
+<div class="padding-left--md">
+`dict[str, object]`  
+List of available targets.  
+
+</div>
 
 
 
@@ -243,13 +442,19 @@ List all available targets in Vault.
 
 
 ### `vault_concurrency_get`
-Get number of concurrent tasks allowed to run in HB Vault. Default value is 2.  
+Get number of concurrent tasks allowed to run in HB Vault.  
   
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Backup.Service.VersionBackup.Config` 
 </div>
   
+#### Returns
+<div class="padding-left--md">
+`dict[str, object]`  
+Number of concurrent tasks (default is 2).  
+
+</div>
 
 
 
@@ -257,13 +462,26 @@ Get number of concurrent tasks allowed to run in HB Vault. Default value is 2.
 
 
 ### `vault_concurrency_set`
-Set number of concurrent tasks allowed to run in HB Vault. Default value is 2.  
+Set number of concurrent tasks allowed to run in HB Vault.  
   
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Backup.Service.VersionBackup.Config` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_parallel_backup_limit_** `int`  
+Number of concurrent tasks (default is 2).  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object]`  
+API response.  
+
+</div>
 
 
 
@@ -271,13 +489,26 @@ Set number of concurrent tasks allowed to run in HB Vault. Default value is 2.
 
 
 ### `vault_target_settings_get`
-Get settings of target.  
+Get settings of a target.  
   
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Backup.Service.VersionBackup.Target` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_target_id_** `int`  
+Target ID.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object]`  
+Target settings.  
+
+</div>
 
 
 
@@ -285,13 +516,26 @@ Get settings of target.
 
 
 ### `vault_task_statistics_get`
-Get statistics for given task.  
+Get statistics for a given task.  
   
 #### Internal API
 <div class="padding-left--md">
 `SYNO.SDS.Backup.Server.Common.Statistic` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_task_id_** `int`  
+Task ID.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object]`  
+Task statistics.  
+
+</div>
 
 
 
@@ -299,13 +543,32 @@ Get statistics for given task.
 
 
 ### `vault_target_logs_get`
-Get logs for given task.  
+Get logs for a given target.  
   
 #### Internal API
 <div class="padding-left--md">
 `SYNO.SDS.Backup.Server.Common.Log` 
 </div>
   
+#### Parameters
+<div class="padding-left--md">
+**_target_id_** `int`  
+Target ID.  
+  
+**_limit_** `int`  
+Maximum number of logs to return (default is 1000).  
+  
+**_offset_** `int`  
+Offset for pagination (default is 0).  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object]`  
+Logs information.  
+
+</div>
 
 
 

@@ -6,11 +6,14 @@ allowing file management, search, upload, download, and background task operatio
 """
 
 from __future__ import annotations
+
+import json
 from typing import Optional, Any
 import os
 import io
 import time
 from datetime import datetime
+from urllib.parse import urljoin, urlencode
 
 import requests
 import tqdm
@@ -20,6 +23,7 @@ import warnings
 from urllib import parse
 from treelib import Tree
 from . import base_api
+from .utils import validate_path, get_data_for_request_from_file
 
 
 class FileStation(base_api.BaseApi):
@@ -55,6 +59,13 @@ class FileStation(base_api.BaseApi):
         Name of the device. Default is None.
     interactive_output : bool, optional
         If True, enables interactive output. Default is False.
+
+    Methods
+    -------
+    get_info()
+        Get FileStation information.
+    get_list_share()
+        List shared folderss.
     """
 
     def __init__(self,
@@ -259,18 +270,18 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_file_info(self,
-                      path: Optional[str] = None,
-                      additional: Optional[str | list[str]] = None
+                      path: str | list[str],
+                      additional_param: Optional[str | list[str]] = None
                       ) -> dict[str, object] | str:
         """
         Get information about a file or files.
 
         Parameters
         ----------
-        path : str or list of str, optional
+        path : str or list of str
             Path(s) to the file(s).
-        additional : str or list of str, optional
-            Additional attributes to include.
+        additional_param : str or list of str, optional
+            Additional attributes to retrieve.
 
         Returns
         -------
@@ -280,24 +291,22 @@ class FileStation(base_api.BaseApi):
         api_name = 'SYNO.FileStation.List'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'getinfo'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'getinfo',
+                     'path': json.dumps(path)}
 
-        if type(path) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in path]
-            path = new_path
-            path = '[' + ','.join(path) + ']'
-            req_param['path'] = path
-        elif path is not None:
-            req_param['path'] = path
+        if additional_param is None:
+            additional_param = ["real_path", "size",
+                                "owner", "time", "perm", "type"]
+        elif isinstance(additional_param, str):
+            additional_param = [additional_param]
+        elif isinstance(additional_param, list):
+            if not all(isinstance(a, str) for a in additional_param):
+                return "additional_param must be a string or a list of strings."
+        else:
+            return "additional_param must be a string or a list of strings."
 
-        if additional is None:
-            additional = ['real_path', 'size', 'owner', 'time']
-
-        if type(additional) is list:
-            additional = str(additional).replace("'", '"')
-
-        req_param['additional'] = additional
+        req_param['additional'] = json.dumps(additional_param)
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -1053,50 +1062,32 @@ class FileStation(base_api.BaseApi):
         api_name = 'SYNO.FileStation.Upload'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        filename = os.path.basename(file_path)
 
         session = requests.session()
 
-        with open(file_path, 'rb') as payload:
-            url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=upload&_sid=%s' % (
-                api_name, info['minVersion'], self._sid)
+        base = urljoin(self.base_url, api_path)
+        url_params = {
+            "api": api_name,
+            "version": info["minVersion"],
+            "method": "upload",
+            "_sid": self._sid
+        }
 
-            encoder = MultipartEncoder({
-                'path': dest_path,
-                'create_parents': str(create_parents).lower(),
-                'overwrite': str(overwrite).lower(),
-                'files': (filename, payload, 'application/octet-stream')
-            })
-
-            if progress_bar:
-                bar = tqdm.tqdm(desc='Upload Progress',
-                                total=encoder.len,
-                                dynamic_ncols=True,
-                                unit='B',
-                                unit_scale=True,
-                                unit_divisor=1024
-                                )
-
-                monitor = MultipartEncoderMonitor(
-                    encoder, lambda monitor: bar.update(monitor.bytes_read - bar.n))
-
-                r = session.post(
-                    url,
-                    data=monitor,
-                    verify=verify,
-                    headers={"X-SYNO-TOKEN": self.session._syno_token,
-                             'Content-Type': monitor.content_type}
-                )
-
-            else:
-                r = session.post(
-                    url,
-                    data=encoder,
-                    verify=verify,
-                    headers={"X-SYNO-TOKEN": self.session._syno_token,
-                             'Content-Type': encoder.content_type}
-                )
-
+        url = f"{base}?{urlencode(url_params)}"
+        encoder_params = {
+            'path': dest_path,
+            'create_parents': str(create_parents).lower(),
+            'overwrite': str(overwrite).lower(),
+        }
+        data = get_data_for_request_from_file(
+            file_path=file_path, fields=encoder_params, called_from='FileStation', progress_bar=True)
+        r = session.post(
+            url,
+            data=data,
+            verify=verify,
+            headers={"X-SYNO-TOKEN": self.session._syno_token,
+                     'Content-Type': data.content_type}
+        )
         session.close()
         if r.status_code != 200 or not r.json()['success']:
             return r.status_code, r.json()
@@ -1387,14 +1378,14 @@ class FileStation(base_api.BaseApi):
                       search_taskid: Optional[str] = None
                       ) -> dict[str, object] | str:
         """
-        Rename a folder.
+        Rename a file or a folder.
 
         Parameters
         ----------
         path : str or list of str
-            Current path or list of paths of the folder(s) to rename.
+            Current path or list of paths of the files or folder(s) to rename.
         name : str or list of str
-            New name or list of new names for the folder(s).
+            New name or list of new names for the file or folder(s).
         additional : str or list of str, optional
             Additional attributes to include.
         search_taskid : str, optional
@@ -1404,33 +1395,32 @@ class FileStation(base_api.BaseApi):
         -------
         dict[str, object] or str
             Response from the API or error message.
+
+        Examples
+        --------
+        >>> rename_folder('/Downloads/script.log', 'script1.log')
+        >>> rename_folder(['/Downloads/script.log','/Downloads/script.log'],['a.log', 'b.log'])
+        >>> rename_folder('/Downloads/script', 'code')
         """
         api_name = 'SYNO.FileStation.Rename'
         info = self.file_station_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'rename'}
 
-        if type(path) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in path]
-            path = new_path
-            path = '[' + ','.join(path) + ']'
-            req_param['path'] = path
-        elif path is not None:
-            req_param['path'] = path
+        if isinstance(path, list) and isinstance(name, list):
+            if len(path) != len(name):
+                raise ValueError("Path and name must have the same length.")
+        elif isinstance(path, str) and isinstance(name, str):
+            pass  # ok, both are strings
         else:
-            return 'Enter a valid folder path (folder path only ex. "/home/Drive/Downloads")'
+            raise TypeError(
+                "Path and name must be both lists or both strings.")
 
-        if type(name) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in name]
-            name = new_path
-            name = '[' + ','.join(name) + ']'
-            req_param['name'] = name
-        elif name is not None:
-            req_param['name'] = name
-        else:
-            return 'Enter a valid new folder name (new folder name only ex. "New Folder")'
+        if validate_path(path) == False:
+            return 'Enter a valid folder path or file path (ex. /Downloads/script.log)'
+
+        req_param['path'] = json.dumps(path)
+        req_param['name'] = json.dumps(name)
 
         if additional is None:
             additional = ['real_path', 'size', 'owner', 'time']
@@ -1443,7 +1433,7 @@ class FileStation(base_api.BaseApi):
         if search_taskid is not None:
             req_param['search_taskid'] = search_taskid
 
-        return self.request_data(api_name, api_path, req_param)
+        return self.request_data(api_name, api_path, req_param, method='post')
 
     def start_copy_move(self,
                         path: str | list[str],
@@ -1475,6 +1465,18 @@ class FileStation(base_api.BaseApi):
         -------
         str or dict[str, object]
             Task ID or error message.
+
+        Examples
+        --------
+        Start a simple move task:
+        You have to specify only the file on the path and not the dest folder.
+
+        >>> fs = FileStation(**params)
+        >>> task_id = fs.start_copy_task(
+        ...     path="/Media/Film/Action/movie1.mkv",
+        ...     dest_folder_path="/Media/Film/Drama",
+        ...     overwrite=True
+        ... )
         """
         api_name = 'SYNO.FileStation.CopyMove'
         info = self.file_station_list[api_name]

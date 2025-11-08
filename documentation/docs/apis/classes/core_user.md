@@ -11,20 +11,38 @@ title: ✅ User
 ## Overview
 Core User API implementation.
 
-Supported actions:
-    - **Getters** : 
-        - Get all users
-        - Password policies
-        - Password expiry
+Methods
+-------
+get_users(offset=0, limit=-1, sort_by="name", sort_direction="ASC", additional=[])
+    Retrieve groups information.
+get_user(name, additional=[])
+    Retrieve user information.
+create_user(...)
+    Create a new user.
+modify_user(...)
+    Modify a user.
+delete_user(name)
+    Delete a user.
+affect_groups(name, join_groups=[], leave_groups=[])
+    Affect or disaffect groups to a user.
+affect_groups_status(task_id)
+    Get the status of a join task.
+get_password_policy()
+    Get the password policy.
+set_password_policy(...)
+    Set the password policy.
+get_password_expiry()
+    Get the password expiry.
+set_password_expiry(...)
+    Set the password expiry.
+password_confirm(password)
+    Confirm password/session.
+get_username_policy()
+    Get the username policy.
 
-    - **Setters** :
-        - Set user password policy
-    
-    - **Actions** :
-        - Create new user
-        - Modify user
-        - Delete user
-        - User join/leave group
+Examples
+--------
+See individual method docstrings for usage examples.
 ## Methods
 ### `get_users`
 Retrieve groups information.  
@@ -40,7 +58,7 @@ Retrieve groups information.
 The offset of the groups to retrieve. Defaults to `0`.  
   
 **_limit_** `int`  
-The maximum number of groups to retrieve. Defaults to `-1` .  
+The maximum number of groups to retrieve. Defaults to `-1`.  
   
 **_sort_by_** `str`  
 Sort by a specific field. Defaults to `"name"`.  
@@ -49,7 +67,7 @@ Sort by a specific field. Defaults to `"name"`.
 The sort direction. Defaults to `"ASC"` else `"DESC"`.  
   
 **_additional_** `list[str]`  
-Additional fields to retrieve. Defaults to `[]`.  
+Additional fields to retrieve. Defaults to `[]`.
 All fields known are: `["description","email","expired","cannot_chg_passwd","passwd_never_expire","password_last_change", "groups", "2fa_status"]`.  
   
 
@@ -110,7 +128,7 @@ A dictionary containing the groups information.
 
 
 ### `get_user`
-Retrieve a user information.  
+Retrieve user information.  
   
 #### Internal API
 <div class="padding-left--md">
@@ -123,7 +141,7 @@ Retrieve a user information.
 The name of the user.  
   
 **_additional_** `list[str]`  
-Additional fields to retrieve. Defaults to `[]`.  
+Additional fields to retrieve. Defaults to `[]`.
 All fields known are: `["description","email","expired","cannot_chg_passwd","passwd_never_expire","password_last_change","is_password_pending"]`.  
   
 
@@ -216,7 +234,7 @@ A dictionary containing the user information.
 <details>
 <summary>Click to expand</summary>
 ```json
-{ 
+{
     "data":
     {
         "name":"toto",
@@ -503,34 +521,34 @@ Set the password policy.
   
 #### Parameters
 <div class="padding-left--md">
-**_enable_reset_passwd_by_email_** `bool, optional `  
+**_enable_reset_passwd_by_email_** `bool`  
 Defaults to `False`.  
   
-**_password_must_change_** `bool, optional `  
+**_password_must_change_** `bool`  
 Defaults to `False`.  
   
-**_exclude_username_** `bool, optional `  
+**_exclude_username_** `bool`  
 Defaults to `True`.  
   
-**_included_numeric_char_** `bool, optional `  
+**_included_numeric_char_** `bool`  
 Defaults to `True`.  
   
-**_included_special_char_** `bool, optional `  
+**_included_special_char_** `bool`  
 Defaults to `False`.  
   
-**_min_length_** `int, optional `  
+**_min_length_** `int`  
 Defaults to `8`.  
   
-**_min_length_enable_** `bool, optional `  
+**_min_length_enable_** `bool`  
 Defaults to `True`.  
   
-**_mixed_case_** `bool, optional `  
+**_mixed_case_** `bool`  
 Defaults to `True`.  
   
-**_exclude_common_password_** `bool, optional `  
+**_exclude_common_password_** `bool`  
 Defaults to `False`.  
   
-**_exclude_history_** `bool, optional `  
+**_exclude_history_** `bool`  
 Defaults to `False`.  
   
 
@@ -664,7 +682,7 @@ A dictionary indicating the success of the operation.
 
 
 ### `password_confirm`
-Issues a passowrd/session comparison to ensure the given password matches the auth of the current session.  
+Confirm password/session to ensure the given password matches the auth of the current session.  
 :::note
  
  This is needed by some APIs as a confirmation method, for example, when creating/modifying a scheduled task with root permissions, seldom needed by end users.  
@@ -708,7 +726,7 @@ A dictionary containing a `SynoConfirmPWToken`, or an error message.
 
 
 ### `get_username_policy`
-Get the username policy (List of username that are not usable).  
+Get the username policy (list of usernames that are not usable).  
   
 #### Internal API
 <div class="padding-left--md">

@@ -6,8 +6,12 @@ on Synology NAS devices using the Download Station application.
 """
 
 from __future__ import annotations
+
+import json
 from typing import Optional, Any
+
 from . import base_api
+from .utils import get_data_for_request_from_file
 
 
 class DownloadStation(base_api.BaseApi):
@@ -323,8 +327,8 @@ class DownloadStation(base_api.BaseApi):
             additional_param = ['detail', 'transfer',
                                 'file', 'tracker', 'peer']
 
-        if type(additional_param) is list:
-            req_param['additional'] = ",".join(additional_param)
+        req_param['additional'] = json.dumps(additional_param if isinstance(
+            additional_param, list) else [additional_param])
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -347,18 +351,23 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'getinfo',
+        req_param = {'version': info['maxVersion'], 'method': 'get',
                      'id': task_id, 'additional': additional_param}
 
         if additional_param is None:
             additional_param = ['detail', 'transfer',
                                 'file', 'tracker', 'peer']
+        elif isinstance(additional_param, str):
+            additional_param = [additional_param]
+        elif isinstance(additional_param, list):
+            if not all(isinstance(a, str) for a in additional_param):
+                return "additional_param must be a string or a list of strings."
+        else:
+            return "additional_param must be a string or a list of strings."
 
-        if type(additional_param) is list:
-            req_param['additional'] = ",".join(additional_param)
-
-        if type(task_id) is list:
-            req_param['id'] = ",".join(task_id)
+        req_param['additional'] = json.dumps(additional_param)
+        req_param['id'] = json.dumps(
+            task_id if isinstance(task_id, list) else [task_id])
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -385,28 +394,108 @@ class DownloadStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param, response_json=False).content
 
-    def create_task(self, url, destination) -> dict[str, object] | str:
+    def get_task_list(self, list_id: str) -> dict[str, any]:
         """
-        Create a new download task.
+        Get info from a task list containing the files to be downloaded.
+
+        This is to be used after creating a task, and before starting the download.
 
         Parameters
         ----------
-        url : str
-            Download URL.
-        destination : str
-            Download destination.
+        list_id : str
+            List ID returned by create_task.
+
+        Returns
+        -------
+        dict[str, any]
+            A dictionary containing a task list information.
+
+        Examples
+        --------
+        ```json
+        {
+            "data" : {
+                "files" : [
+                    {
+                        "index" : 0,
+                        "name" : "Pulp.Fiction.1994.2160p.4K.BluRay.x265.10bit.AAC5.1-[YTS.MX].mkv",
+                        "size" : 2391069024
+                    },
+                    {
+                        "index" : 1,
+                        "name" : "YTSProxies.com.txt",
+                        "size" : 604
+                    },
+                    {
+                        "index" : 2,
+                        "name" : "www.YTS.MX.jpg",
+                        "size" : 53226
+                    }
+                ],
+                "size" : 7835426779,
+                "title" : "Pulp Fiction (1994) [2160p] [4K] [BluRay] [5.1] [YTS.MX]",
+                "type" : "bt"
+            },
+        }
+        ```
+        """
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task.List'
+        info = self.download_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'list_id': list_id}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def create_task(self,
+                    url: Optional[str] = None,
+                    file_path: Optional[str] = None,
+                    destination: str = "",
+                    ) -> dict[str, object] | str:
+        """
+        Create a new download task.
+
+        You can choose between a url or a file path (.torrent).
+
+        Parameters
+        ----------
+        url : str, optional
+            Download URL. Use either `url` or `file_path`.
+        file_path : str, optional
+            Path to a file (e.g. a .torrent) to download.
+        destination : str, optional
+            Download destination folder (default is "").
 
         Returns
         -------
         dict[str, object] or str
             API response.
         """
+        # Validate only a url or a file path.
+        if bool(url) == bool(file_path):
+            raise ValueError("You can't specify both 'url' and 'file_path'")
+
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
+
+        if file_path:
+            fields = {
+                "api": api_name,
+                "method": "create",
+                "version": str(info["maxVersion"]),
+                "type": '"file"',
+                "file": '["torrent"]',
+                "destination": f'"{destination}"',
+                "create_list": "true"
+            }
+            data = get_data_for_request_from_file(
+                file_path='file_path', fields=fields, called_from='DownloadStation')
+
+            return self.request_data(api_name, api_path, method='post', data=data, req_param={})
+
         req_param = {'version': info['maxVersion'], 'method': 'create', 'type': 'url',
                      'create_list': 'true', 'destination': destination, 'url': f'["{url}"]'}
-
         return self.request_data(api_name, api_path, req_param)
 
     def delete_task(self, task_id: str, force: bool = False) -> dict[str, object] | str:
@@ -510,6 +599,58 @@ class DownloadStation(base_api.BaseApi):
 
         if type(task_id) is list:
             param['id'] = ",".join(task_id)
+
+        return self.request_data(api_name, api_path, param)
+
+    def download_task_list(
+        self,
+        list_id: str,
+        file_indexes: list[int],
+        destination: str,
+        create_subfolder: bool = True
+    ) -> dict[str, object] | str:
+        """
+        Download files from a task list.
+
+        Parameters
+        ----------
+        list_id : str
+            Task list ID.
+        file_indexes : list[int]
+            List of file indexes to download.
+            For example, if `get_task_list()` returns `files: [{index: 0, name: "file1.txt"}, {index: 1, name: "file2.txt"}]`, then `file_indexes = [1]` will download only file2.txt.
+        destination : str
+            Download destination, e.g. 'sharedfolder/subfolder'
+        create_subfolder : bool, optional
+            Create subfolder. Defaults to `True`
+
+        Returns
+        -------
+        dict[str, object] or str
+            A dictionary containing the task_id for the started download task.
+
+        Examples
+        --------
+        ```json
+        {
+            'data': {
+                'task_id': 'username/SYNODLTaskListDownload1759340338C7C39ABA'
+            }
+        }
+        ```
+        """
+        api_name = 'SYNO.DownloadStation' + \
+            self.download_st_version + '.Task.List.Polling'
+        info = self.download_list[api_name]
+        api_path = info['path']
+        param = {
+            'version': info['maxVersion'],
+            'method': 'download',
+            'list_id': list_id,
+            'file_indexes': ",".join(map(str, file_indexes)),
+            'destination': destination,
+            'create_subfolder': create_subfolder
+        }
 
         return self.request_data(api_name, api_path, param)
 

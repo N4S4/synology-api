@@ -26,7 +26,7 @@ This API is partially documented or under construction.
 Core Share API implementation.
 ## Methods
 ### `validate_set`
-Validate set of parameter for a new / modified shared folder  
+Validate set of parameter for a new / modified shared folder.  
   
 #### Internal API
 <div class="padding-left--md">
@@ -80,7 +80,7 @@ Success.
 
 
 ### `list_folders`
-List all folders informations  
+List all folders informations.  
   
 #### Internal API
 <div class="padding-left--md">
@@ -138,7 +138,7 @@ A dictionary containing the shared folders information.
 
 
 ### `get_folder`
-Get a folder by name  
+Get a folder by name.  
   
 #### Internal API
 <div class="padding-left--md">
@@ -189,7 +189,7 @@ A dictionary containing the shared folder information.
 
 
 ### `create_folder`
-Create a new shared folder  
+Create a new shared folder.  
   
 #### Internal API
 <div class="padding-left--md">
@@ -225,18 +225,24 @@ Enable share cow. Defaults to `False`.
 **_enable_share_compress_** `bool`  
 Enable share compress. Defaults to `False`.  
   
-**_share_quota_** `int, optional `  
+**_share_quota_** `int`  
 Share quota. Defaults to `0`.  
   
-**_name_org_** `str, optional `  
+**_name_org_** `str`  
 Defaults to `""`.  
+  
+**_encryption_** `bool`  
+Enable encryption. Defaults to `False`.  
+  
+**_enc_passwd_** `str`  
+Encrypted password. Defaults to `""`.  
   
 
 </div>
 #### Returns
 <div class="padding-left--md">
 `dict`  
-Name of the created shared folder  
+Name of the created shared folder.  
 
 </div>
 #### Example return
@@ -257,7 +263,7 @@ Name of the created shared folder
 
 
 ### `delete_folders`
-Delete folder(s) by name(s)  
+Delete folder(s) by name(s).  
   
 #### Internal API
 <div class="padding-left--md">
@@ -340,7 +346,7 @@ Share quota. Defaults to `0`.
 #### Returns
 <div class="padding-left--md">
 `dict`  
-Name of the created shared folder  
+Name of the created shared folder.  
 
 </div>
 #### Example return
@@ -360,12 +366,87 @@ Name of the created shared folder
 ---
 
 
+### `decrypt_folder`
+Decrypt a given share.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Share.Crypto` 
+</div>
+  
+#### Parameters
+<div class="padding-left--md">
+**_name_** `str`  
+The share name to decrypt.  
+  
+**_password_** `str`  
+The password to use for decrypting the share.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict`  
+Success.  
+
+</div>
+#### Example return
+<details>
+<summary>Click to expand</summary>
+```json
+    {
+        "success": true
+    }
+    ```
+</details>
+
+
+
+---
+
+
+### `encrypt_folder`
+Encrypt a given share.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Share.Crypto` 
+</div>
+  
+#### Parameters
+<div class="padding-left--md">
+**_name_** `str`  
+The share name to encrypt.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict`  
+Success.  
+
+</div>
+#### Example return
+<details>
+<summary>Click to expand</summary>
+```json
+    {
+        "success": true
+    }
+    ```
+</details>
+
+
+
+---
+
+
 ## SharePermission
 ## Overview
 Core Share Permission API implementation.
 ## Methods
 ### `get_folder_permission_by_name`
-Retrieve share permissions for a given folder filtered by permission name (sub string)  
+Retrieve share permissions for a given folder filtered by permission name (sub string).  
   
 #### Internal API
 <div class="padding-left--md">
@@ -400,8 +481,8 @@ All known values are: `["system", "local_user", "local_group", "ldap_user", "lda
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict `  
-List of permission(s) on the folder  
+`dict`  
+List of permission(s) on the folder.  
 
 </div>
 #### Example return
@@ -467,7 +548,7 @@ All known values are: `["system", "local_user", "local_group", "ldap_user", "lda
 #### Returns
 <div class="padding-left--md">
 `dict`  
-All permissions on the folder  
+All permissions on the folder.  
 
 </div>
 #### Example return
@@ -544,26 +625,14 @@ The type of user group to set permissions for.
 All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.  
   
 **_permissions_** `dict`  
-The permissions to set for the folder.
-Example:
-```json
-[
-    {
-        "name":"guest",
-        "is_readonly":false,
-        "is_writable":true,
-        "is_deny":false,
-        "is_custom":false
-    }
-]
-```  
+The permissions to set for the folder.  
   
 
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict `  
-Success  
+`dict`  
+Success.  
 
 </div>
 #### Example return
@@ -599,7 +668,7 @@ The group to list permissions for.
 #### Returns
 <div class="padding-left--md">
 `dict`  
-Permissions of a group on Shared folders  
+Permissions of a group on Shared folders.  
 
 </div>
 #### Example return
@@ -625,7 +694,7 @@ Permissions of a group on Shared folders
         "total": 1
     },
     "success": true
-}     
+}
 ```
 </details>
 
@@ -648,31 +717,14 @@ Set group permissions for a given share.
 The group to set the permissions for.  
   
 **_permissions_** `list[dict[str, Any]]`  
-The permissions to set for the group.
-Example:
-```
-[
-    {
-        "name": "web",
-        "is_readonly": False,
-        "is_writable": False,
-        "is_deny": True
-    },
-    {
-        "name": "ActiveBackupforBusiness",
-        "is_readonly": False,
-        "is_writable": True,
-        "is_deny": False
-    }
-]
-```  
+The permissions to set for the group.  
   
 
 </div>
 #### Returns
 <div class="padding-left--md">
 `dict`  
-Success  
+Success.  
 
 </div>
 #### Example return
@@ -702,6 +754,12 @@ Initialize KeyManagerStore API.
 `SYNO.Core.Share.KeyManager.Store` 
 </div>
   
+#### Returns
+<div class="padding-left--md">
+`dict`  
+Not implemented yet.  
+
+</div>
 
 
 
@@ -709,14 +767,7 @@ Initialize KeyManagerStore API.
 
 
 ### `verify`
-
-
-
----
-
-
-### `explore`
-Explore KeyManagerStore API. Get list of existing stores  
+Not implemented yet.  
   
 #### Internal API
 <div class="padding-left--md">
@@ -726,7 +777,27 @@ Explore KeyManagerStore API. Get list of existing stores
 #### Returns
 <div class="padding-left--md">
 `dict`  
-List of stores existing on the NAS  
+Not implemented yet.  
+
+</div>
+
+
+
+---
+
+
+### `explore`
+Explore KeyManagerStore API.  
+Get list of existing stores.  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Core.Share.KeyManager.Store` 
+</div>
+  
+#### Returns
+<div class="padding-left--md">
+`dict`  
+List of stores existing on the NAS.  
 
 </div>
 #### Example return
@@ -762,7 +833,7 @@ List KeyManagerStore API.
 #### Returns
 <div class="padding-left--md">
 `dict`  
-List of keys in the manager  
+List of keys in the manager.  
 
 </div>
 #### Example return
