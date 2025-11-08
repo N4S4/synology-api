@@ -1,11 +1,30 @@
+"""Synology Universal Search API Wrapper."""
 from __future__ import annotations
 from typing import Optional, Any
 from . import base_api
 
 
 class UniversalSearch(base_api.BaseApi):
+    """
+    API wrapper for Synology Universal Search.
+
+    Provides methods to perform keyword-based searches using Synology's Universal Search API.
+    """
 
     def search(self, keyword: str) -> dict[str, object] | str:
+        """
+        Search for files and metadata matching the given keyword.
+
+        Parameters
+        ----------
+        keyword : str
+            The search keyword.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Search results as a dictionary, or a string with error details.
+        """
         api_name = 'SYNO.Finder.FileIndexing.Search'
         info = self.gen_list[api_name]
         api_path = info['path']
