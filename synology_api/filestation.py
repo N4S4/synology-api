@@ -2102,7 +2102,7 @@ class FileStation(base_api.BaseApi):
         Parameters
         ----------
         path : str
-            Path to the file on the server.
+            The file path starting with a shared folder to be downloaded.
         mode : str
             Mode for downloading the file ('open' to open in browser, 'download' to download to disk).
         dest_path : str, optional
