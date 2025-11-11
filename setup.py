@@ -15,7 +15,9 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     install_requires=['requests', 'urllib3', 'setuptools',
-                      'requests_toolbelt', 'tqdm', 'cryptography', 'treelib'],
+                      'requests_toolbelt', 'tqdm', 'cryptography', 'treelib',
+                      'noiseprotocol',
+                      ],
     url='https://github.com/N4S4/synology-api',
     author='Renato Visaggio',
     author_email='synology.python.api@gmail.com'
