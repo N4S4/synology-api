@@ -690,6 +690,7 @@ class Authentication:
                             '/' + api_name
                         response = requests.post(url, data=data, params=req_param, verify=self._verify, headers={
                                                  "Content-Type": data.content_type, "X-SYNO-TOKEN": self._syno_token})
+                response.raise_for_status()
             except requests.exceptions.ConnectionError as e:
                 raise SynoConnectionError(error_message=e.args[0])
             except requests.exceptions.HTTPError as e:
@@ -702,6 +703,7 @@ class Authentication:
             elif method == 'post':
                 response = requests.post(url, req_param, verify=self._verify, headers={
                                          "X-SYNO-TOKEN": self._syno_token})
+            response.raise_for_status()
 
         # Check for error response from dsm:
         error_code = 0
