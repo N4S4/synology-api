@@ -85,6 +85,14 @@ class DownloadStation(base_api.BaseApi):
         Refresh RSS site.
     rss_feed_list(...)
         Get RSS feed list.
+    rss_feed_filter_list(...)
+        Get RSS feed filter list.
+    rss_feed_filter_add(...)
+        Add RSS feed filter.
+    rss_feed_filter_set(...)
+        Set RSS feed filter.
+    rss_feed_filter_delete(...)
+        Delete RSS feed filter.
     start_bt_search(...)
         Start a BT search.
     get_bt_search_results(...)
@@ -771,6 +779,23 @@ class DownloadStation(base_api.BaseApi):
                       offset: Optional[int] = None,
                       limit: Optional[int] = None
                       ) -> dict[str, object] | str:
+        """
+        Get RSS feed filter list.
+
+        Parameters
+        ----------
+        feed_id : int, optional
+            RSS feed ID.
+        offset : int, optional
+            Offset for pagination.
+        limit : int, optional
+            Maximum number of filters to retrieve.
+
+        Returns
+        -------
+        dict[str, object] or str
+            RSS feed filter list.
+        """
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Filter'
         info = self.download_list[api_name]
         api_path = info['path']
@@ -794,6 +819,29 @@ class DownloadStation(base_api.BaseApi):
                       destination: str = None,
                       is_regex: bool = False
                       ) -> dict[str, object] | str:
+        """
+        Add RSS feed filter.
+
+        Parameters
+        ----------
+        feed_id : int
+            RSS feed ID.
+        filter_name : str
+            Filter name.
+        match : str
+            Match pattern.
+        not_match : str
+            Not match pattern.
+        destination : str
+            Download destination.
+        is_regex : bool, optional
+            Use regex for matching (default is False).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
 
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Filter'
         info = self.download_list[api_name]
@@ -819,6 +867,29 @@ class DownloadStation(base_api.BaseApi):
                       destination: str = None,
                       is_regex: bool = False
                       ) -> dict[str, object] | str:
+        """
+        Set RSS feed filter.
+
+        Parameters
+        ----------
+        filter_id : int
+            Filter ID.
+        filter_name : str
+            Filter name.
+        match : str
+            Match pattern.
+        not_match : str
+            Not match pattern.
+        destination : str
+            Download destination.
+        is_regex : bool, optional
+            Use regex for matching (default is False).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
 
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Filter'
         info = self.download_list[api_name]
@@ -839,6 +910,19 @@ class DownloadStation(base_api.BaseApi):
     def rss_feed_filter_delete(self,
                       filter_id: int = None,
                       ) -> dict[str, object] | str:
+        """
+        Delete RSS feed filter.
+
+        Parameters
+        ----------
+        filter_id : int
+            Filter ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
 
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Filter'
         info = self.download_list[api_name]
