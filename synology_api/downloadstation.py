@@ -775,10 +775,10 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, param)
 
     def rss_feed_filter_list(self,
-                      feed_id: Optional [int] = None,
-                      offset: Optional[int] = None,
-                      limit: Optional[int] = None
-                      ) -> dict[str, object] | str:
+                             feed_id: Optional[int] = None,
+                             offset: Optional[int] = None,
+                             limit: Optional[int] = None
+                             ) -> dict[str, object] | str:
         """
         Get RSS feed filter list.
 
@@ -799,7 +799,8 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Filter'
         info = self.download_list[api_name]
         api_path = info['path']
-        param = {'version': info['maxVersion'], 'method': 'list', 'feed_id': feed_id}
+        param = {'version': info['maxVersion'],
+                 'method': 'list', 'feed_id': feed_id}
 
         if feed_id is None:
             return 'Enter a valid ID check if you have any with get_rss_info_list()'
@@ -812,13 +813,13 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, param)
 
     def rss_feed_filter_add(self,
-                      feed_id: int = None,
-                      filter_name: str = None,
-                      match: str = None,
-                      not_match: str = None,
-                      destination: str = None,
-                      is_regex: bool = False
-                      ) -> dict[str, object] | str:
+                            feed_id: int = None,
+                            filter_name: str = None,
+                            match: str = None,
+                            not_match: str = None,
+                            destination: str = None,
+                            is_regex: bool = False
+                            ) -> dict[str, object] | str:
         """
         Add RSS feed filter.
 
@@ -848,8 +849,8 @@ class DownloadStation(base_api.BaseApi):
         api_path = info['path']
 
         param = {'version': info['maxVersion'], 'method': 'add', 'feed_id': feed_id,
-                 'name':f'"{filter_name}"', 'match':f'"{match}"','not_match':f'"{not_match}"',
-                 'destination':f'"{destination}"', 'is_regex':str(is_regex).lower()}
+                 'name': f'"{filter_name}"', 'match': f'"{match}"', 'not_match': f'"{not_match}"',
+                 'destination': f'"{destination}"', 'is_regex': str(is_regex).lower()}
 
         if type(is_regex) is not bool:
             return 'Please set is_regex to True or False'
@@ -860,13 +861,13 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, param)
 
     def rss_feed_filter_set(self,
-                      filter_id: int = None,
-                      filter_name: str = None,
-                      match: str = None,
-                      not_match: str = None,
-                      destination: str = None,
-                      is_regex: bool = False
-                      ) -> dict[str, object] | str:
+                            filter_id: int = None,
+                            filter_name: str = None,
+                            match: str = None,
+                            not_match: str = None,
+                            destination: str = None,
+                            is_regex: bool = False
+                            ) -> dict[str, object] | str:
         """
         Set RSS feed filter.
 
@@ -896,8 +897,8 @@ class DownloadStation(base_api.BaseApi):
         api_path = info['path']
 
         param = {'version': info['maxVersion'], 'method': 'set', 'feed_id': 'null', 'id': filter_id,
-                 'name':f'"{filter_name}"', 'match':f'"{match}"','not_match':f'"{not_match}"',
-                 'destination':f'"{destination}"', 'is_regex':str(is_regex).lower()}
+                 'name': f'"{filter_name}"', 'match': f'"{match}"', 'not_match': f'"{not_match}"',
+                 'destination': f'"{destination}"', 'is_regex': str(is_regex).lower()}
 
         if type(is_regex) is not bool:
             return 'Please set is_regex to True or False'
@@ -908,8 +909,8 @@ class DownloadStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, param)
 
     def rss_feed_filter_delete(self,
-                      filter_id: int = None,
-                      ) -> dict[str, object] | str:
+                               filter_id: int = None,
+                               ) -> dict[str, object] | str:
         """
         Delete RSS feed filter.
 
@@ -928,7 +929,8 @@ class DownloadStation(base_api.BaseApi):
         info = self.download_list[api_name]
         api_path = info['path']
 
-        param = {'version': info['maxVersion'], 'method': 'delete', 'id': filter_id}
+        param = {'version': info['maxVersion'],
+                 'method': 'delete', 'id': filter_id}
 
         if filter_id is None:
             return 'Enter a valid ID check if you have any with rss_feed_filter_list()'
