@@ -85,6 +85,14 @@ class DownloadStation(base_api.BaseApi):
         Refresh RSS site.
     rss_feed_list(...)
         Get RSS feed list.
+    rss_feed_filter_list(...)
+        Get RSS feed filter list.
+    rss_feed_filter_add(...)
+        Add RSS feed filter.
+    rss_feed_filter_set(...)
+        Set RSS feed filter.
+    rss_feed_filter_delete(...)
+        Delete RSS feed filter.
     start_bt_search(...)
         Start a BT search.
     get_bt_search_results(...)
@@ -719,7 +727,7 @@ class DownloadStation(base_api.BaseApi):
                  'method': 'refresh', 'id': rss_id}
 
         if rss_id is None:
-            return 'Enter a valid ID check if you have any with get_rss_list()'
+            return 'Enter a valid ID check if you have any with get_rss_info_list()'
         elif type(rss_id) is list:
             rss_id = ','.join(rss_id)
             param['id'] = rss_id
@@ -754,7 +762,7 @@ class DownloadStation(base_api.BaseApi):
         param = {'version': info['maxVersion'], 'method': 'list', 'id': rss_id}
 
         if rss_id is None:
-            return 'Enter a valid ID check if you have any with get_rss_list()'
+            return 'Enter a valid ID check if you have any with get_rss_info_list()'
         elif type(rss_id) is list:
             rss_id = ','.join(rss_id)
             param['id'] = rss_id
@@ -763,6 +771,169 @@ class DownloadStation(base_api.BaseApi):
             param['offset'] = offset
         if limit is not None:
             param['limit'] = limit
+
+        return self.request_data(api_name, api_path, param)
+
+    def rss_feed_filter_list(self,
+                             feed_id: Optional[int] = None,
+                             offset: Optional[int] = None,
+                             limit: Optional[int] = None
+                             ) -> dict[str, object] | str:
+        """
+        Get RSS feed filter list.
+
+        Parameters
+        ----------
+        feed_id : int, optional
+            RSS feed ID.
+        offset : int, optional
+            Offset for pagination.
+        limit : int, optional
+            Maximum number of filters to retrieve.
+
+        Returns
+        -------
+        dict[str, object] or str
+            RSS feed filter list.
+        """
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Filter'
+        info = self.download_list[api_name]
+        api_path = info['path']
+        param = {'version': info['maxVersion'],
+                 'method': 'list', 'feed_id': feed_id}
+
+        if feed_id is None:
+            return 'Enter a valid ID check if you have any with get_rss_info_list()'
+
+        if offset is not None:
+            param['offset'] = offset
+        if limit is not None:
+            param['limit'] = limit
+
+        return self.request_data(api_name, api_path, param)
+
+    def rss_feed_filter_add(self,
+                            feed_id: int = None,
+                            filter_name: str = None,
+                            match: str = None,
+                            not_match: str = None,
+                            destination: str = None,
+                            is_regex: bool = False
+                            ) -> dict[str, object] | str:
+        """
+        Add RSS feed filter.
+
+        Parameters
+        ----------
+        feed_id : int
+            RSS feed ID.
+        filter_name : str
+            Filter name.
+        match : str
+            Match pattern.
+        not_match : str
+            Not match pattern.
+        destination : str
+            Download destination.
+        is_regex : bool, optional
+            Use regex for matching (default is False).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
+
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Filter'
+        info = self.download_list[api_name]
+        api_path = info['path']
+
+        param = {'version': info['maxVersion'], 'method': 'add', 'feed_id': feed_id,
+                 'name': f'"{filter_name}"', 'match': f'"{match}"', 'not_match': f'"{not_match}"',
+                 'destination': f'"{destination}"', 'is_regex': str(is_regex).lower()}
+
+        if type(is_regex) is not bool:
+            return 'Please set is_regex to True or False'
+
+        if feed_id is None:
+            return 'Enter a valid ID check if you have any with get_rss_info_list()'
+
+        return self.request_data(api_name, api_path, param)
+
+    def rss_feed_filter_set(self,
+                            filter_id: int = None,
+                            filter_name: str = None,
+                            match: str = None,
+                            not_match: str = None,
+                            destination: str = None,
+                            is_regex: bool = False
+                            ) -> dict[str, object] | str:
+        """
+        Set RSS feed filter.
+
+        Parameters
+        ----------
+        filter_id : int
+            Filter ID.
+        filter_name : str
+            Filter name.
+        match : str
+            Match pattern.
+        not_match : str
+            Not match pattern.
+        destination : str
+            Download destination.
+        is_regex : bool, optional
+            Use regex for matching (default is False).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
+
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Filter'
+        info = self.download_list[api_name]
+        api_path = info['path']
+
+        param = {'version': info['maxVersion'], 'method': 'set', 'feed_id': 'null', 'id': filter_id,
+                 'name': f'"{filter_name}"', 'match': f'"{match}"', 'not_match': f'"{not_match}"',
+                 'destination': f'"{destination}"', 'is_regex': str(is_regex).lower()}
+
+        if type(is_regex) is not bool:
+            return 'Please set is_regex to True or False'
+
+        if filter_id is None:
+            return 'Enter a valid ID check if you have any with rss_feed_filter_list()'
+
+        return self.request_data(api_name, api_path, param)
+
+    def rss_feed_filter_delete(self,
+                               filter_id: int = None,
+                               ) -> dict[str, object] | str:
+        """
+        Delete RSS feed filter.
+
+        Parameters
+        ----------
+        filter_id : int
+            Filter ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
+
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Filter'
+        info = self.download_list[api_name]
+        api_path = info['path']
+
+        param = {'version': info['maxVersion'],
+                 'method': 'delete', 'id': filter_id}
+
+        if filter_id is None:
+            return 'Enter a valid ID check if you have any with rss_feed_filter_list()'
 
         return self.request_data(api_name, api_path, param)
 
