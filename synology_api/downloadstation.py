@@ -498,7 +498,7 @@ class DownloadStation(base_api.BaseApi):
                 "create_list": "true"
             }
             data = get_data_for_request_from_file(
-                file_path='file_path', fields=fields, called_from='DownloadStation')
+                file_path=file_path, fields=fields, called_from='DownloadStation')
 
             return self.request_data(api_name, api_path, method='post', data=data, req_param={})
 
