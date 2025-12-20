@@ -9,28 +9,42 @@ title: ✅ Group
   
 # Group
 ## Overview
-Core Group API implementation.
+Core Group API implementation for Synology NAS.
 
-### Supported methods
+This class provides methods to manage groups, including:
+- Retrieving group information, members, permissions, quotas, and speed limits.
+- Modifying group name, description, share permissions, quotas, and speed limits.
+- Creating and deleting groups.
+- Adding and removing users from groups.
 
-    - **Getters** : 
-        - Get all groups
-        - Get group members
-        - Get group shares permissions
-        - Get group shares quota
-        - Get group services speed limits
-
-    - **Setters** :
-        - Set group name/description
-        - Set group share permissions
-        - Set group share quotas
-        - Set group service speed limit
-    
-    - **Actions** :
-        - Create new group
-        - Delete groups
-        - Add users to a group
-        - Remove users from a group
+Methods
+-------
+get_groups(offset=0, limit=-1, name_only=False)
+    Retrieve groups information.
+get_users(group, in_group=True)
+    Retrieve users who are members or not members of a group.
+get_speed_limits(group)
+    Retrieve bandwidth control settings for a group.
+get_quota(group)
+    Retrieve quota settings for a group.
+get_permissions(group)
+    Retrieve share permissions for a group.
+set_group_info(group, new_name="", new_description="")
+    Change group name and/or description.
+set_share_quota(group, share_quotas)
+    Set group quota for a given share.
+set_share_permissions(group, permissions)
+    Set group permissions for a given share.
+set_speed_limit(group, upload_limit, download_limit, protocol)
+    Set speed limit for a given share.
+add_users(group, users)
+    Add users to a group.
+remove_users(group, users)
+    Remove users from a group.
+create(name, description="")
+    Create a new group.
+delete(groups)
+    Delete specified groups.
 ## Methods
 ### `get_groups`
 Retrieve groups information.  
@@ -43,13 +57,13 @@ Retrieve groups information.
 #### Parameters
 <div class="padding-left--md">
 **_offset_** `int`  
-The offset of the groups to retrieve. Defaults to `0`.  
+The offset of the groups to retrieve. Defaults to 0.  
   
 **_limit_** `int`  
-The maximum number of groups to retrieve. Defaults to `-1` (all groups).  
+The maximum number of groups to retrieve. Defaults to -1 (all groups).  
   
 **_name_only_** `bool`  
-If `True`, returns only group names. If `False`, returns full group information. Defaults to `False`.  
+If True, returns only group names. If False, returns full group information. Defaults to False.  
   
 
 </div>
@@ -101,7 +115,7 @@ A dictionary containing the groups information.
 
 
 ### `get_users`
-Retrieve users members or not of a group.  
+Retrieve users who are members or not members of a group.  
   
 #### Internal API
 <div class="padding-left--md">
@@ -114,9 +128,8 @@ Retrieve users members or not of a group.
 The group to list users from.  
   
 **_in_group_** `bool`  
-Defaults to `True`.  
-If `True`, retrieves users who are members of the specified group.   
-If `False`, retrieves users who are not members of the group.  
+If True, retrieves users who are members of the specified group.
+If False, retrieves users who are not members of the group. Defaults to True.  
   
 
 </div>
@@ -172,7 +185,7 @@ Retrieve bandwidth control settings for a given group.
   
 #### Parameters
 <div class="padding-left--md">
-**_group_** `str `  
+**_group_** `str`  
 The group to retrieve settings for.  
   
 
@@ -183,6 +196,31 @@ The group to retrieve settings for.
 A dictionary containing the result of the request.  
 
 </div>
+#### Example return
+<details>
+<summary>Click to expand</summary>
+```json
+{
+    "data": {
+        "bandwidths": [
+            {
+                "download_limit_1": 0,
+                "download_limit_2": 0,
+                "name": "group_name",
+                "owner_type": "local_group",
+                "policy": "notexist",
+                "protocol": "FTP",
+                "protocol_ui": "FTP",
+                "schedule_plan": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+                "upload_limit_1": 0,
+                "upload_limit_2": 0
+            },
+        ]
+    },
+    "success": true
+}
+```
+</details>
 
 
 
@@ -199,14 +237,14 @@ Retrieve quota settings for a given group.
   
 #### Parameters
 <div class="padding-left--md">
-**_group_** `str `  
+**_group_** `str`  
 The group to retrieve quota settings for.  
   
 
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict[str, object] `  
+`dict[str, object]`  
 A dictionary containing the result of the request.  
 
 </div>
@@ -286,7 +324,7 @@ A dictionary containing the result of the request.
         "total": 1
     },
     "success": true
-}     
+}
 ```
 </details>
 
@@ -318,7 +356,7 @@ The new description of the group. Defaults to current value.
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict[str, object] `  
+`dict[str, object]`  
 A dictionary containing the result of the request.  
 
 </div>
@@ -354,27 +392,14 @@ Set group quota for a given share.
 **_group_** `str`  
 The group to set the quota for.  
   
-**_share_quotas (list[dict[str, Any]])_** ``  
+**_share_quotas_** `list of dict`  
 The quotas to set for the group.  
-Example:
-```python
-[
-    {
-        "share": "web",
-        "quota": 1024, # in MB
-    },
-    {
-        "share": "photo",
-        "quota": 5120, # in MB
-    }
-]
-```  
   
 
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict[str, object] `  
+`dict[str, object]`  
 A dictionary containing the result of the request.  
 
 </div>
@@ -407,25 +432,8 @@ Set group permissions for a given share.
 **_group_** `str`  
 The group to set the permissions for.  
   
-**_permissions_** `list[dict[str, object]]:`  
+**_permissions_** `list of dict`  
 The permissions to set for the group.  
-Example:
-```python
-[
-    {
-        "name": "web",
-        "is_readonly": False,
-        "is_writable": False,
-        "is_deny": True
-    },
-    {
-        "name": "ActiveBackupforBusiness",
-        "is_readonly": False,
-        "is_writable": True,
-        "is_deny": False
-    }
-]
-```  
   
 
 </div>
@@ -451,13 +459,8 @@ A dictionary containing the result of the request.
 
 
 ### `set_speed_limit`
-Set speed limit for a given share.   
-:::info
- 
- Doesn't support **scheduled** speed limits, only on/off.  
- 
-:::
-
+Set speed limit for a given share.  
+  
 #### Internal API
 <div class="padding-left--md">
 `SYNO.Core.BandwidthControl` 
@@ -475,13 +478,8 @@ The maximum upload speed in KB/s.
 The maximum download speed in KB/s.  
   
 **_protocol_** `str`  
-The protocol to set the speed limit for.   
-Possible values:
-- FileStation
-- WebDAV
-- FTP
-- NetworkBackup (Rsync)
-- CloudStation (Synology Drive)  
+The protocol to set the speed limit for. Possible values:
+FileStation, WebDAV, FTP, NetworkBackup (Rsync), CloudStation (Synology Drive).  
   
 
 </div>
@@ -521,10 +519,10 @@ Add users to a group.
   
 #### Parameters
 <div class="padding-left--md">
-**_group_** `str `  
+**_group_** `str`  
 The group to add users to.  
   
-**_users_** `list[str]`  
+**_users_** `list of str`  
 The users to add to the group.  
   
 
@@ -561,10 +559,10 @@ Remove users from a group.
   
 #### Parameters
 <div class="padding-left--md">
-**_group_** `str `  
+**_group_** `str`  
 The group to remove users from.  
   
-**_users_** `list[str]`  
+**_users_** `list of str`  
 The users to remove from the group.  
   
 
@@ -592,7 +590,7 @@ A dictionary containing the result of the request.
 
 
 ### `create`
-Create group.  
+Create a new group.  
   
 #### Internal API
 <div class="padding-left--md">
@@ -611,7 +609,7 @@ Description to assign to the group. Defaults to empty string.
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict[str, object] `  
+`dict[str, object]`  
 A dictionary containing the result of the request.  
 
 </div>
@@ -644,14 +642,14 @@ Delete specified groups.
   
 #### Parameters
 <div class="padding-left--md">
-**_groups_** `list[str]`  
+**_groups_** `list of str`  
 The groups to delete.  
   
 
 </div>
 #### Returns
 <div class="padding-left--md">
-`dict[str, object] `  
+`dict[str, object]`  
 A dictionary containing the result of the request.  
 
 </div>

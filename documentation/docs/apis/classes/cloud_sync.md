@@ -11,45 +11,44 @@ title: ✅ CloudSync
 ## Overview
 Cloud Sync API implementation.
 
-This API provides the functionality to get information related to the package settings and current connections and tasks. 
-It also provides functionalities to set most of the settings for tasks and package configuration, as well as manage the current syncing processes.
+   This API provides the functionality to get information related to the package settings and current connections and tasks.
+   It also provides functionalities to set most of the settings for tasks and package configuration, as well as manage the current syncing processes.
 
-Due to the vast amount of public clouds available in the project, the API was not tested for every cloud scenario, so some params request may be missing in specific not tested clouds.
+   Due to the vast amount of public clouds available in the project, the API was not tested for every cloud scenario, so some params request may be missing in specific not tested clouds.
 
-The tested clouds so far are:
-- Google Drive  
-- OneDrive
-- DropBox
-- Amazon S3 (task creation)
+   The tested clouds so far are:
+   - Google Drive
+   - OneDrive
+   - DropBox
+   - Amazon S3 (task creation)
 
-### Supported methods
+   ### Supported methods
 
-     - **Getters** : 
-        - Get package settings
-        - Get connections
-        - Get connections settings
-        - Get connection information
-        - Get connection auth information
-        - Get connection logs
-        - Get connection tasks
-        - Get task filters
-        - Get task synced remote directories
-        - Get recently modified & currently syncing files
-     - **Setters** : 
-        - Set package settings
-        - Set relink behavior
-        - Set connection settings
-        - Set connection schedule settings
-        - Set task settings
-        - Set task filters
-     - **Actions** :
-        - Pause connection
-        - Resume connection
-        - Delete connection
-        - Delete task
-        - Validate task settings
-        - Create S3 task
-     
+        - **Getters** :
+           - Get package settings
+           - Get connections
+           - Get connections settings
+           - Get connection information
+           - Get connection auth information
+           - Get connection logs
+           - Get connection tasks
+           - Get task filters
+           - Get task synced remote directories
+           - Get recently modified & currently syncing files
+        - **Setters** :
+           - Set package settings
+           - Set relink behavior
+           - Set connection settings
+           - Set connection schedule settings
+           - Set task settings
+           - Set task filters
+        - **Actions** :
+           - Pause connection
+           - Resume connection
+           - Delete connection
+           - Delete task
+           - Validate task settings
+           - Create S3 task
 ## Methods
 ### `get_pkg_config`
 Retrieve package settings.  
@@ -69,38 +68,38 @@ A dictionary containing the result of package settings.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "data": {
-        "admin_mode": "enable",
-        "log_count": 20000,
-        "repo_vol_path": "/volume2",
-        "sync_mode": false,
-        "volume_count": 2,
-        "volume_list": [
-            {
-                "desc": "",
-                "display": "Volume 1 (Available capacity:  715.84 GB )",
-                "mount_point": "/volume1",
-                "size_free": "768625090560",
-                "size_total": "955458760704",
-                "value": "1",
-                "vol_desc": ""
-            },
-            {
-                "desc": "",
-                "display": "Volume 2 (Available capacity:  1841.73 GB )",
-                "mount_point": "/volume2",
-                "size_free": "1977547526144",
-                "size_total": "3835577597952",
-                "value": "2",
-                "vol_desc": ""
-            }
-        ],
-        "worker_count": 20
-    },
-    "success": true
-}
-```
+    {
+        "data": {
+            "admin_mode": "enable",
+            "log_count": 20000,
+            "repo_vol_path": "/volume2",
+            "sync_mode": false,
+            "volume_count": 2,
+            "volume_list": [
+                {
+                    "desc": "",
+                    "display": "Volume 1 (Available capacity:  715.84 GB )",
+                    "mount_point": "/volume1",
+                    "size_free": "768625090560",
+                    "size_total": "955458760704",
+                    "value": "1",
+                    "vol_desc": ""
+                },
+                {
+                    "desc": "",
+                    "display": "Volume 2 (Available capacity:  1841.73 GB )",
+                    "mount_point": "/volume2",
+                    "size_free": "1977547526144",
+                    "size_total": "3835577597952",
+                    "value": "2",
+                    "vol_desc": ""
+                }
+            ],
+            "worker_count": 20
+        },
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -118,8 +117,8 @@ Retrieve a list of current cloud connections.
   
 #### Parameters
 <div class="padding-left--md">
-**_group_by_** `str, optional `  
-How to group the connection list, by user or cloud type. Defaults to `"group_by_user"`.   
+**_group_by_** `str`  
+How to group the connection list, by user or cloud type. Defaults to `"group_by_user"`.  
 Possible values:
 - `group_by_user`: Group connection by owner user.
 - `group_by_cloud_type`: Group connections by cloud provider.  
@@ -136,45 +135,45 @@ A dictionary containing the list of cloud connections.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "data": {
-        "conn": [
-            {
-                "id": 3,
-                "link_status": 1,
-                "resource": "",
-                "status": "uptodate",
-                "task_display_name": "Dropbox",
-                "task_name": "Dropbox",
-                "type": "db",
-                "type_id": 2,
-                "unfinished_files": 0,
-                "user_id": "dbid:xxxxxxxxxxxxxxxxxx",
-                "user_name": "username"
-            },
-            {
-                "id": 2,
-                "link_status": 1,
-                "resource": "",
-                "status": "syncing",
-                "task_display_name": "Microsoft OneDrive",
-                "task_name": "Microsoft OneDrive",
-                "type": "od_v1",
-                "type_id": 22,
-                "unfinished_files": 2,
-                "user_id": "xxxxxx",
-                "user_name": "username"
-            }
-        ],
-        "is_admin_mode": true,
-        "is_pause": false,
-        "notification": null,
-        "total": 2,
-        "tray_status": "syncing"
-    },
-    "success": true
-}
-```
+    {
+        "data": {
+            "conn": [
+                {
+                    "id": 3,
+                    "link_status": 1,
+                    "resource": "",
+                    "status": "uptodate",
+                    "task_display_name": "Dropbox",
+                    "task_name": "Dropbox",
+                    "type": "db",
+                    "type_id": 2,
+                    "unfinished_files": 0,
+                    "user_id": "dbid:xxxxxxxxxxxxxxxxxx",
+                    "user_name": "username"
+                },
+                {
+                    "id": 2,
+                    "link_status": 1,
+                    "resource": "",
+                    "status": "syncing",
+                    "task_display_name": "Microsoft OneDrive",
+                    "task_name": "Microsoft OneDrive",
+                    "type": "od_v1",
+                    "type_id": 22,
+                    "unfinished_files": 2,
+                    "user_id": "xxxxxx",
+                    "user_name": "username"
+                }
+            ],
+            "is_admin_mode": true,
+            "is_pause": false,
+            "notification": null,
+            "total": 2,
+            "tray_status": "syncing"
+        },
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -192,7 +191,7 @@ Retrieve settings for a specific connection.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection, obtained from `get_connections()`.  
   
 
@@ -207,22 +206,22 @@ A dictionary containing the connection settings.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "data": {
-        "client_type": "db",
-        "isSSE": false,
-        "is_enabled_schedule": false,
-        "max_download_speed": 0,
-        "max_upload_speed": 0,
-        "part_size": 0,
-        "pull_event_period": 60,
-        "schedule_info": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",  
-        "storage_class": "",
-        "task_name": "Dropbox"
-    },
-    "success": true
-}
-```
+    {
+        "data": {
+            "client_type": "db",
+            "isSSE": false,
+            "is_enabled_schedule": false,
+            "max_download_speed": 0,
+            "max_upload_speed": 0,
+            "part_size": 0,
+            "pull_event_period": 60,
+            "schedule_info": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+            "storage_class": "",
+            "task_name": "Dropbox"
+        },
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -240,7 +239,7 @@ Retrieve cloud information for a specific connection.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection, obtained from `get_connections()`.  
   
 
@@ -255,26 +254,26 @@ A dictionary containing cloud information.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "data": {
-        "auth_version": "",
-        "bucket_name": "",
-        "container_name": "",
-        "project_id": "",
-        "public_url": "",
-        "quota_total": 2147483648,
-        "quota_used": 423330996,
-        "region": "",
-        "server_addr": "",
-        "shared_drive_name": "",
-        "storage_class": "",
-        "type": "db",
-        "type_id": 2,
-        "user_name": "username"
-    },
-    "success": true
-}
-```
+    {
+        "data": {
+            "auth_version": "",
+            "bucket_name": "",
+            "container_name": "",
+            "project_id": "",
+            "public_url": "",
+            "quota_total": 2147483648,
+            "quota_used": 423330996,
+            "region": "",
+            "server_addr": "",
+            "shared_drive_name": "",
+            "storage_class": "",
+            "type": "db",
+            "type_id": 2,
+            "user_name": "username"
+        },
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -292,7 +291,7 @@ Retrieve authentication information for a specific connection.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection, obtained from `get_connections()`.  
   
 
@@ -307,45 +306,45 @@ A dictionary containing the connection authentication details.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "data": {
-        "access_key": "",
-        "access_token": "xxxxxxxx",
-        "auth_pass": "",
-        "auth_scheme": 0,
-        "auth_user": "",
-        "bucket_id": "",
-        "bucket_name": "",
-        "client_id": "xxxxxxxx",
-        "client_type": "db",
-        "conn_id": 3,
-        "container_name": "",
-        "download_url": "",
-        "openstack_api_key": "",
-        "openstack_domain_id": "",
-        "openstack_domain_name": "",
-        "openstack_identity_service_url": "",
-        "openstack_identity_service_version": "",
-        "openstack_password": "",
-        "openstack_proj_id": "",
-        "openstack_region": "",
-        "openstack_tenant_id": "",
-        "openstack_tenant_name": "",
-        "openstack_token": "",
-        "public_url": "",
-        "refresh_token": "xxxxxxxx",
-        "resource": "",
-        "root_folder_id": "",
-        "root_folder_path": "/",
-        "secret_key": "",
-        "server_addr": "",
-        "service_host": "",
-        "unique_id": "dbid:xxxxxxxx",
-        "user_name": "username"
-    },
-    "success": true
-}
-```
+    {
+        "data": {
+            "access_key": "",
+            "access_token": "xxxxxxxx",
+            "auth_pass": "",
+            "auth_scheme": 0,
+            "auth_user": "",
+            "bucket_id": "",
+            "bucket_name": "",
+            "client_id": "xxxxxxxx",
+            "client_type": "db",
+            "conn_id": 3,
+            "container_name": "",
+            "download_url": "",
+            "openstack_api_key": "",
+            "openstack_domain_id": "",
+            "openstack_domain_name": "",
+            "openstack_identity_service_url": "",
+            "openstack_identity_service_version": "",
+            "openstack_password": "",
+            "openstack_proj_id": "",
+            "openstack_region": "",
+            "openstack_tenant_id": "",
+            "openstack_tenant_name": "",
+            "openstack_token": "",
+            "public_url": "",
+            "refresh_token": "xxxxxxxx",
+            "resource": "",
+            "root_folder_id": "",
+            "root_folder_path": "/",
+            "secret_key": "",
+            "server_addr": "",
+            "service_host": "",
+            "unique_id": "dbid:xxxxxxxx",
+            "user_name": "username"
+        },
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -363,28 +362,28 @@ Retrieve logs for a specific connection.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection, obtained from `get_connections()`.  
   
-**_keyword_** `str, optional `  
+**_keyword_** `str`  
 A keyword to filter logs. Defaults to `''`.  
   
-**_date_from_** `int, optional `  
+**_date_from_** `int`  
 The starting date in epoch format. Defaults to `0`.  
   
-**_date_to_** `int, optional `  
+**_date_to_** `int`  
 The ending date in epoch format. Defaults to `0`.  
   
 **_log_level_** `int`  
-Log level filter. Defaults to `-1`.   
+Log level filter. Defaults to `-1`.  
 Possible values:
 - `-1`: All
 - `0`: Info
 - `1`: Warning
 - `2`: Error  
   
-**_action_** `int, optional `  
-Action filter. Defaults to `-1`.   
+**_action_** `int`  
+Action filter. Defaults to `-1`.  
 Possible values:
 - `-1`: All
 - `0`: Delete Remote
@@ -395,10 +394,10 @@ Possible values:
 - `8`: Merge
 - `9`: Merge Deletion  
   
-**_offset_** `int, optional `  
+**_offset_** `int`  
 Log offset for pagination. Defaults to `0`.  
   
-**_limit_** `int, optional `  
+**_limit_** `int`  
 Number of logs to retrieve. Defaults to `200`.  
   
 
@@ -413,35 +412,35 @@ A dictionary containing the connection logs.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "data": {
-        "items": [
-            {
-                "action": 1,
-                "error_code": -36,
-                "file_name": "OCR Japanese extension.paper",
-                "file_type": "file",
-                "log_level": 2,
-                "path": "/test_share/WebDAV test/subfolder/OCR Japanese extension.paper",
-                "session_id": 4,
-                "time": 1724418508
-            },
-            {
-                "action": 1,
-                "error_code": -36,
-                "file_name": "OCR Japanese extension.paper",
-                "file_type": "file",
-                "log_level": 2,
-                "path": "/test_share/WebDAV test/subfolder/OCR Japanese extension.paper",
-                "session_id": 4,
-                "time": 1724418119
-            }
-        ],
-        "total": 2
-    },
-    "success": true
-}
-```
+    {
+        "data": {
+            "items": [
+                {
+                    "action": 1,
+                    "error_code": -36,
+                    "file_name": "OCR Japanese extension.paper",
+                    "file_type": "file",
+                    "log_level": 2,
+                    "path": "/test_share/WebDAV test/subfolder/OCR Japanese extension.paper",
+                    "session_id": 4,
+                    "time": 1724418508
+                },
+                {
+                    "action": 1,
+                    "error_code": -36,
+                    "file_name": "OCR Japanese extension.paper",
+                    "file_type": "file",
+                    "log_level": 2,
+                    "path": "/test_share/WebDAV test/subfolder/OCR Japanese extension.paper",
+                    "session_id": 4,
+                    "time": 1724418119
+                }
+            ],
+            "total": 2
+        },
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -459,7 +458,7 @@ Retrieve a list of tasks related to a specific connection.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection, obtained from `get_connections()`.  
   
 
@@ -474,28 +473,28 @@ A dictionary containing the list of tasks.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "data": {
-        "sess": [
-            {
-                "cloud_type_str": "db",
-                "conn_id": 3,
-                "error": 0,
-                "error_desc": "",
-                "link_status": 1,
-                "local_sync_path": "/test_share/WebDAV test/subfolder",
-                "remote_folder_id": "id:xxxx",
-                "remote_sync_path": "/docs",
-                "sess_id": 4,
-                "sync_direction": "ONLY_DOWNLOAD",
-                "sync_status": "uptodate"
-            }
-        ],
-        "total": 1
-    },
-    "success": true
-}
-```
+    {
+        "data": {
+            "sess": [
+                {
+                    "cloud_type_str": "db",
+                    "conn_id": 3,
+                    "error": 0,
+                    "error_desc": "",
+                    "link_status": 1,
+                    "local_sync_path": "/test_share/WebDAV test/subfolder",
+                    "remote_folder_id": "id:xxxx",
+                    "remote_sync_path": "/docs",
+                    "sess_id": 4,
+                    "sync_direction": "ONLY_DOWNLOAD",
+                    "sync_status": "uptodate"
+                }
+            ],
+            "total": 1
+        },
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -513,7 +512,7 @@ Retrieve filter information for a specific task.
   
 #### Parameters
 <div class="padding-left--md">
-**_sess_id_** `int `  
+**_sess_id_** `int`  
 The ID of the task, obtained from `get_tasks()`.  
   
 
@@ -528,31 +527,31 @@ A dictionary containing task filter information.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "data": {
-        "filtered_extensions": [
-            "wbmp",
-            "webdoc",
-            "x3f",
-            "xbm"
-        ],
-        "filtered_max_upload_size": 1048576,
-        "filtered_names": [
-            "test"
-        ],
-        "filtered_paths": [
-            "/subfolder_1"
-        ],
-        "user_defined_extensions": [
-            "iso"
-        ],
-        "user_defined_names": [
-            "test"
-        ]
-    },
-    "success": true
-}
-```
+    {
+        "data": {
+            "filtered_extensions": [
+                "wbmp",
+                "webdoc",
+                "x3f",
+                "xbm"
+            ],
+            "filtered_max_upload_size": 1048576,
+            "filtered_names": [
+                "test"
+            ],
+            "filtered_paths": [
+                "/subfolder_1"
+            ],
+            "user_defined_extensions": [
+                "iso"
+            ],
+            "user_defined_names": [
+                "test"
+            ]
+        },
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -570,13 +569,13 @@ Retrieve a list of children directories in the cloud for a specific task.
   
 #### Parameters
 <div class="padding-left--md">
-**_sess_id_** `int `  
+**_sess_id_** `int`  
 The ID of the task, obtained from `get_tasks()`.  
   
-**_remote_folder_id_** `str `  
+**_remote_folder_id_** `str`  
 The ID of the remote folder, obtained from `get_tasks()`.  
   
-**_path_** `str, optional `  
+**_path_** `str`  
 The folder path to retrieve the child directories from. Defaults to root `'/'`.  
   
 
@@ -591,38 +590,38 @@ A dictionary containing the list of children directories.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "data": {
-        "children": [
-            {
-                "exists_type": 1,
-                "file_id": "",
-                "path": "/subfolder_1",
-                "text": "subfolder_1"
-            },
-            {
-                "exists_type": 1,
-                "file_id": "",
-                "path": "/new folder",
-                "text": "new folder"
-            },
-            {
-                "exists_type": 3,
-                "file_id": "id:xxxx",
-                "path": "/test1",
-                "text": "test1"
-            },
-            {
-                "exists_type": 3,
-                "file_id": "id:xxxx",
-                "path": "/test2",
-                "text": "test2"
-            }
-        ]
-    },
-    "success": true
-}
-```
+    {
+        "data": {
+            "children": [
+                {
+                    "exists_type": 1,
+                    "file_id": "",
+                    "path": "/subfolder_1",
+                    "text": "subfolder_1"
+                },
+                {
+                    "exists_type": 1,
+                    "file_id": "",
+                    "path": "/new folder",
+                    "text": "new folder"
+                },
+                {
+                    "exists_type": 3,
+                    "file_id": "id:xxxx",
+                    "path": "/test1",
+                    "text": "test1"
+                },
+                {
+                    "exists_type": 3,
+                    "file_id": "id:xxxx",
+                    "path": "/test2",
+                    "text": "test2"
+                }
+            ]
+        },
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -648,78 +647,78 @@ A dictionary containing the recently modified files.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "data": {
-        "history_items": [
-            {
-                "action": 1,
-                "base_name": "test_file.paper",
-                "log_level": 2,
-                "path": "/test_share/WebDAV test/subfolder/test_file.paper",
-                "session_id": 4,
-                "syncfolder_basename": "subfolder"
-            },
-            {
-                "action": 1,
-                "base_name": "perfect plan.paper",
-                "log_level": 2,
-                "path": "/test_share/WebDAV test/subfolder/perfect plan.paper",
-                "session_id": 4,
-                "syncfolder_basename": "subfolder"
-            },
-            {
-                "action": 1,
-                "base_name": "Untitled.paper",
-                "log_level": 2,
-                "path": "/test_share/WebDAV test/subfolder/Untitled.paper",
-                "session_id": 4,
-                "syncfolder_basename": "subfolder"
-            },
-            {
-                "action": 1,
-                "base_name": "translation hw.paper",
-                "log_level": 2,
-                "path": "/test_share/WebDAV test/subfolder/translation hw.paper",
-                "session_id": 4,
-                "syncfolder_basename": "subfolder"
-            },
-            {
-                "action": 1,
-                "base_name": "The Tao of Harp.paper",
-                "log_level": 2,
-                "path": "/test_share/WebDAV test/subfolder/song ideas/The Tao of Harp.paper",
-                "session_id": 4,
-                "syncfolder_basename": "subfolder"
-            }
-        ],
-        "is_admin_mode": true,
-        "processing_items": [
-            {
-                "base_name": "1111111111111111111111125.jpg",
-                "bit_rate": 2114,
-                "current_size": 65535,
-                "path": "/test_share/WebDAV test/subfolder/test1/asd/1111111111111111.jpg",
-                "session_id": 3,
-                "status": "uploading",
-                "total_size": 295493,
-                "user_name": "username"
-            },
-            {
-                "base_name": "ans1.3.png",
-                "bit_rate": 1047,
-                "current_size": 358122,
-                "path": "/test_share/WebDAV test/subfolder/test2/ans1.3.png",
-                "session_id": 3,
-                "status": "uploading",
-                "total_size": 358122,
-                "user_name": "username"
-            }
-        ],
-        "server_merge_items": []
-    },
-    "success": true
-}
-```
+    {
+        "data": {
+            "history_items": [
+                {
+                    "action": 1,
+                    "base_name": "test_file.paper",
+                    "log_level": 2,
+                    "path": "/test_share/WebDAV test/subfolder/test_file.paper",
+                    "session_id": 4,
+                    "syncfolder_basename": "subfolder"
+                },
+                {
+                    "action": 1,
+                    "base_name": "perfect plan.paper",
+                    "log_level": 2,
+                    "path": "/test_share/WebDAV test/subfolder/perfect plan.paper",
+                    "session_id": 4,
+                    "syncfolder_basename": "subfolder"
+                },
+                {
+                    "action": 1,
+                    "base_name": "Untitled.paper",
+                    "log_level": 2,
+                    "path": "/test_share/WebDAV test/subfolder/Untitled.paper",
+                    "session_id": 4,
+                    "syncfolder_basename": "subfolder"
+                },
+                {
+                    "action": 1,
+                    "base_name": "translation hw.paper",
+                    "log_level": 2,
+                    "path": "/test_share/WebDAV test/subfolder/translation hw.paper",
+                    "session_id": 4,
+                    "syncfolder_basename": "subfolder"
+                },
+                {
+                    "action": 1,
+                    "base_name": "The Tao of Harp.paper",
+                    "log_level": 2,
+                    "path": "/test_share/WebDAV test/subfolder/song ideas/The Tao of Harp.paper",
+                    "session_id": 4,
+                    "syncfolder_basename": "subfolder"
+                }
+            ],
+            "is_admin_mode": true,
+            "processing_items": [
+                {
+                    "base_name": "1111111111111111111111125.jpg",
+                    "bit_rate": 2114,
+                    "current_size": 65535,
+                    "path": "/test_share/WebDAV test/subfolder/test1/asd/1111111111111111.jpg",
+                    "session_id": 3,
+                    "status": "uploading",
+                    "total_size": 295493,
+                    "user_name": "username"
+                },
+                {
+                    "base_name": "ans1.3.png",
+                    "bit_rate": 1047,
+                    "current_size": 358122,
+                    "path": "/test_share/WebDAV test/subfolder/test2/ans1.3.png",
+                    "session_id": 3,
+                    "status": "uploading",
+                    "total_size": 358122,
+                    "user_name": "username"
+                }
+            ],
+            "server_merge_items": []
+        },
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -737,16 +736,16 @@ Set package configuration settings.
   
 #### Parameters
 <div class="padding-left--md">
-**_pkg_volume_** `str `  
+**_pkg_volume_** `str`  
 The volume path where the package data will be stored (e.g., `/volume1`).  
   
-**_log_count_** `int, optional `  
+**_log_count_** `int`  
 Maximum number of logs retained per connection. Defaults to `20000`, max is `100000`.  
   
-**_workers_** `int, optional `  
+**_workers_** `int`  
 Number of concurrent uploads allowed. Defaults to `3`, max is `20`.  
   
-**_admin_mode_** `bool, optional `  
+**_admin_mode_** `bool`  
 Whether all users' tasks are retrieved or not. Defaults to `True`.  
   
 
@@ -761,10 +760,10 @@ A dictionary containing the result of the configuration update.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "success": true
-}
-```
+    {
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -787,7 +786,7 @@ Set the relinking behavior for personal user accounts.
   
 #### Parameters
 <div class="padding-left--md">
-**_delete_from_cloud_** `bool `  
+**_delete_from_cloud_** `bool`  
 Set to `False` for "locally deleted files will be re-fetched from the cloud".  
 Set to `True` for "locally deleted files will also be removed from the cloud".  
   
@@ -803,10 +802,10 @@ A dictionary containing the result of the relink behavior update.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "success": true
-}
-```
+    {
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -824,28 +823,28 @@ Set settings for a specific cloud connection.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection, obtained from `get_connections()`.  
   
-**_task_name_** `str `  
+**_task_name_** `str`  
 The name of the cloud sync task.  
   
-**_pull_event_period_** `int, optional `  
+**_pull_event_period_** `int`  
 Frequency (in seconds) to pull event updates. Defaults to `60`.  
   
-**_max_upload_speed_** `int, optional `  
+**_max_upload_speed_** `int`  
 Maximum upload speed in bytes. Defaults to `0` (unlimited).  
   
-**_max_download_speed_** `int, optional `  
+**_max_download_speed_** `int`  
 Maximum download speed in bytes. Defaults to `0` (unlimited).  
   
-**_storage_class_** `str, optional `  
+**_storage_class_** `str`  
 Cloud-specific storage class. Defaults to `''`.  
   
-**_isSSE_** `bool, optional `  
+**_isSSE_** `bool`  
 Enable Security Service Edge (SSE) for compatible cloud storage. Defaults to `False`.  
   
-**_part_size_** `int, optional `  
+**_part_size_** `int`  
 Part size for file uploads, in megabytes. Defaults to `128`.  
   
 
@@ -860,10 +859,10 @@ A dictionary containing the updated connection settings.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "success": true
-}
-```
+    {
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -881,13 +880,13 @@ Set the schedule for a specific connection.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection, obtained from `get_connections()`.  
   
-**_enable_** `bool `  
+**_enable_** `bool`  
 Whether the scheduling is enabled (`True`) or disabled (`False`).  
   
-**_schedule_info_** `list[str], optional `  
+**_schedule_info_** `list[str]`  
 A list of 7 strings where each string represents a day of the week, going from Sunday to Saturday.  
 Each string is composed of 24 characters, where each character is either '1' (enabled) or '0' (disabled) for the respective hour of the day.  
 The default value (if `schedule_info` is not provided) enables all days and hours.  
@@ -918,10 +917,10 @@ A dictionary containing the schedule settings.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "success": true
-}
-```
+    {
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -939,23 +938,23 @@ Set the task settings for a specific session.
   
 #### Parameters
 <div class="padding-left--md">
-**_sess_id_** `int `  
+**_sess_id_** `int`  
 The ID of the task, obtained from `get_tasks()`.  
   
-**_sync_direction_** `str `  
-The synchronization direction.   
+**_sync_direction_** `str`  
+The synchronization direction.  
 Possible values:
 - `ONLY_UPLOAD`: Upload local changes only.
 - `BIDIRECTION`: Sync both ways (upload and download).
 - `ONLY_DOWNLOAD`: Download remote changes only.  
   
-**_consistency_check_** `bool, optional `  
+**_consistency_check_** `bool`  
 If True, enables advanced consistency check (requires more resources). Defaults to `True`.  
   
-**_no_delete_on_cloud_** `bool, optional `  
+**_no_delete_on_cloud_** `bool`  
 If `True`, prevents deletion of files in the remote folder when removed from the local directory. Defaults to `True`.  
   
-**_convert_gd_** `bool, optional `  
+**_convert_gd_** `bool`  
 If `True`, converts Google Drive Online documents to Microsoft Office format. Defaults to `False`.  
   
 
@@ -970,10 +969,10 @@ A dictionary containing the result of the task settings configuration.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "success": true
-}
-```
+    {
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -991,19 +990,19 @@ Set task filters for selective synchronization in a specific session.
   
 #### Parameters
 <div class="padding-left--md">
-**_sess_id_** `int `  
+**_sess_id_** `int`  
 The ID of the session, obtained from `get_tasks()`.  
   
-**_filtered_paths_** `list[str], optional `  
+**_filtered_paths_** `list[str]`  
 A list of paths (directories / subdirectories) to exclude from the synchronization process, e.g, `['/images', '/videos/movies']`. Defaults to `[]`.  
   
-**_filtered_filenames_** `list[str], optional `  
+**_filtered_filenames_** `list[str]`  
 A list of filenames to exclude from synchronization. Defaults to `[]`.  
   
-**_filtered_extensions_** `list[str], optional `  
+**_filtered_extensions_** `list[str]`  
 A list of file extensions to exclude from synchronization, e.g., `['mp3', 'iso', 'mkv']`. Defaults to `[]`.  
   
-**_max_upload_size_** `int, optional `  
+**_max_upload_size_** `int`  
 The maximum file size for uploads, in bytes. Files larger than this size will be excluded from synchronization. Defaults to `0` (no size limit).  
   
 
@@ -1018,10 +1017,10 @@ A dictionary containing the result of the task filters configuration.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "success": true
-}
-```
+    {
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -1039,7 +1038,7 @@ Pause one or all connections.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int, optional `  
+**_conn_id_** `int`  
 The ID of the connection to pause. If not specified or set to `-1`, all connections will be paused.  
   
 
@@ -1054,10 +1053,10 @@ A dictionary containing the result of the pause action.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "success": true
-}
-```
+    {
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -1075,7 +1074,7 @@ Resume one or all connections.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int, optional `  
+**_conn_id_** `int`  
 The ID of the connection to resume. If not specified or set to `-1`, all connections will be resumed.  
   
 
@@ -1090,10 +1089,10 @@ A dictionary containing the result of the resume action.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "success": true
-}
-```
+    {
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -1111,7 +1110,7 @@ The data will remain in both the local and remote directories.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection to be removed, obtained from `get_connections()`.  
   
 
@@ -1126,10 +1125,10 @@ A dictionary containing the result of the remove action.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "success": true
-}
-```
+    {
+        "success": true
+    }
+    ```
 </details>
 
 
@@ -1147,10 +1146,10 @@ The data will remain in both the local and remote directories.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection associated with the task, obtained from `get_connections()`.  
   
-**_sess_id_** `int `  
+**_sess_id_** `int`  
 The ID of the task to be removed, obtained from `get_tasks()`.  
   
 
@@ -1165,59 +1164,11 @@ A dictionary containing the result of the task removal.
 <details>
 <summary>Click to expand</summary>
 ```json
-{
-    "success": true
-}
-```
+    {
+        "success": true
+    }
+    ```
 </details>
-
-
-
----
-
-
-### `test_task_setting`
-Test the task settings make sure they are valid.  
-  
-#### Internal API
-<div class="padding-left--md">
-`SYNO.CloudSync` 
-</div>
-  
-#### Parameters
-<div class="padding-left--md">
-**_conn_id_** `int `  
-The ID of the connection.  
-  
-**_local_path_** `str `  
-The local path to sync.  
-  
-**_cloud_path_** `str `  
-The cloud path to sync.  
-  
-**_sync_direction_** `str, optional `  
-The synchronization direction. Defaults to `'BIDIRECTION'`.  
-  
-**_storage_class_** `str, optional `  
-The storage class. Defaults to `'STANDARD'`.  
-  
-**_file_filter_** `list[str], optional `  
-List of file extensions to filter. Defaults to `[]`.  
-  
-**_filter_max_upload_size_** `int, optional `  
-Maximum upload size for files. Defaults to `0`.  
-  
-**_filter_names_** `list[str], optional `  
-List of file names to filter. Defaults to `[]`.  
-  
-
-</div>
-#### Returns
-<div class="padding-left--md">
-`tuple[bool, dict[str, object] | str]`  
-A tuple containing a boolean indicating success, and a dictionary or string with the result.  
-
-</div>
 
 
 
@@ -1234,28 +1185,28 @@ Add a new synchronization task.
   
 #### Parameters
 <div class="padding-left--md">
-**_conn_id_** `int `  
+**_conn_id_** `int`  
 The ID of the connection.  
   
-**_local_path_** `str `  
+**_local_path_** `str`  
 The local path to sync.  
   
-**_cloud_path_** `str `  
+**_cloud_path_** `str`  
 The cloud path to sync.  
   
-**_sync_direction_** `str, optional `  
+**_sync_direction_** `str`  
 The synchronization direction. Defaults to `'BIDIRECTION'`.  
   
-**_storage_class_** `str, optional `  
+**_storage_class_** `str`  
 The storage class. Defaults to `'STANDARD'`.  
   
-**_file_filter_** `list[str], optional `  
+**_file_filter_** `list[str]`  
 List of file extensions to filter. Defaults to `[]`.  
   
 **_filter_max_upload_size_** `int`  
 Maximum upload size for files. Defaults to `0`.  
   
-**_filter_names_** `list[str], optional `  
+**_filter_names_** `list[str]`  
 List of file names to filter. Defaults to `[]`.  
   
 
@@ -1264,6 +1215,54 @@ List of file names to filter. Defaults to `[]`.
 <div class="padding-left--md">
 `tuple[bool, Any]`  
 A tuple containing the result of the task creation.  
+
+</div>
+
+
+
+---
+
+
+### `test_task_setting`
+Test the task settings make sure they are valid.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.CloudSync` 
+</div>
+  
+#### Parameters
+<div class="padding-left--md">
+**_conn_id_** `int`  
+The ID of the connection.  
+  
+**_local_path_** `str`  
+The local path to sync.  
+  
+**_cloud_path_** `str`  
+The cloud path to sync.  
+  
+**_sync_direction_** `str`  
+The synchronization direction. Defaults to `'BIDIRECTION'`.  
+  
+**_storage_class_** `str`  
+The storage class. Defaults to `'STANDARD'`.  
+  
+**_file_filter_** `list[str]`  
+List of file extensions to filter. Defaults to `[]`.  
+  
+**_filter_max_upload_size_** `int`  
+Maximum upload size for files. Defaults to `0`.  
+  
+**_filter_names_** `list[str]`  
+List of file names to filter. Defaults to `[]`.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`tuple[bool, dict[str, object] | str]`  
+A tuple containing a boolean indicating success, and a dictionary or string with the result.  
 
 </div>
 

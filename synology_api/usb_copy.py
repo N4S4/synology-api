@@ -1,42 +1,45 @@
+"""USB Copy API wrapper for Synology NAS."""
 from __future__ import annotations
 from typing import Optional
 from . import base_api
 
 
 class USBCopy(base_api.BaseApi):
-    """USB Copy Implementation.
+    """
+    USB Copy API wrapper for Synology NAS.
 
-    Supported methods:
-        - Getters:
-            - Get package settings
-            - Get package logs
-            - Get task settings
+    Methods
+    -------
+    Getters:
+        - Get package settings
+        - Get package logs
+        - Get task settings
 
-        - Actions:
-            - Enable / Disable task
+    Actions:
+        - Enable / Disable task
     """
 
     def get_package_settings(self) -> dict[str, object]:
-        """Retrieve package settings.
+        """
+        Retrieve package settings.
 
-            Returns
-            -------
-            dict[str, object]
-                Parsed JSON into `dict`
+        Returns
+        -------
+        dict[str, object]
+            Parsed JSON into a dictionary.
 
-            Examples
-            --------
-            ```python
+        Examples
+        --------
+        ```python
             {
-                "data" : {
-                    "beep_on_task_start_end" : True,
-                    "log_rotate_count" : 100000,
-                    "repo_volume_path" : "/volume2"
+                "data": {
+                    "beep_on_task_start_end": True,
+                    "log_rotate_count": 100000,
+                    "repo_volume_path": "/volume2"
                 },
-                "success" : True
+                "success": True
             }
-            ```
-
+        ```
         """
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
@@ -47,42 +50,41 @@ class USBCopy(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_package_logs(self, offset: int = 0, limit: int = 200) -> dict[str, object]:
-        """Retrieve package logs.
+        """
+        Retrieve package logs.
 
-            Parameters
-            ----------
-            offset : int
-                Defaults to `0`.
+        Parameters
+        ----------
+        offset : int, optional
+            Offset for logs. Defaults to 0.
+        limit : int, optional
+            Maximum number of logs to retrieve. Defaults to 200.
 
-            limit : int
-                Defaults to `200`.
+        Returns
+        -------
+        dict[str, object]
+            Parsed response JSON into a dictionary.
 
-            Returns
-            -------
-            dict[str, object]
-                Parsed response JSON into `dict`
-
-            Examples
-            --------
-            ```python
+        Examples
+        --------
+        ```python
             {
-                "data" : {
-                    "count" : 1,
-                    "log_list" : [
+                "data": {
+                    "count": 1,
+                    "log_list": [
                         {
-                            "description_id" : 101,
-                            "description_parameter" : "[\"asdf\"]",
-                            "error" : 0,
-                            "log_type" : 1,
-                            "task_id" : 2,
-                            "timestamp" : 1738341351
-                        },
+                            "description_id": 101,
+                            "description_parameter": "[\"asdf\"]",
+                            "error": 0,
+                            "log_type": 1,
+                            "task_id": 2,
+                            "timestamp": 1738341351
+                        }
                     ]
                 },
-                "success" : True
+                "success": True
             }
-            ```
-
+        ```
         """
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
@@ -93,57 +95,57 @@ class USBCopy(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_task_settings(self, task_id: int) -> dict[str, object]:
-        """Retrieve task settings
+        """
+        Retrieve task settings.
 
-            Parameters
-            ----------
-            task_id: int
-                Task ID to retrieve info for
+        Parameters
+        ----------
+        task_id : int
+            Task ID to retrieve info for.
 
-            Returns
-            -------
-            dict[str, object]
-                Parsed response JSON into `dict`
+        Returns
+        -------
+        dict[str, object]
+            Parsed response JSON into a dictionary.
 
-            Examples
-            --------
-            ```python
+        Examples
+        --------
+        ```python
             {
-                "data" : {
-                    "task" : {
-                        "conflict_policy" : "rename",
-                        "copy_file_path" : "",
-                        "copy_strategy" : "versioning",
-                        "default_device_port" : "NA",
-                        "destination_path" : "[USB]",
-                        "eject_when_task_done" : True,
-                        "enable_rotation" : False,
-                        "error_code" : 0,
-                        "id" : 2,
-                        "is_default_task" : False,
-                        "is_ds_mounted" : False,
-                        "is_task_runnable" : False,
-                        "is_usb_mounted" : False,
-                        "latest_finish_time" : 1738341351,
-                        "max_version_count" : 256,
-                        "name" : "asdf",
-                        "next_run_time" : "N/A",
-                        "not_keep_dir_structure" : False,
-                        "remove_src_file" : False,
-                        "rename_photo_video" : False,
-                        "rotation_policy" : "oldest_version",
-                        "run_when_plug_in" : False,
-                        "schedule_id" : 13,
-                        "smart_create_date_dir" : False,
-                        "source_path" : "/music",
-                        "status" : "unmounted",
-                        "type" : "export_general"
+                "data": {
+                    "task": {
+                        "conflict_policy": "rename",
+                        "copy_file_path": "",
+                        "copy_strategy": "versioning",
+                        "default_device_port": "NA",
+                        "destination_path": "[USB]",
+                        "eject_when_task_done": True,
+                        "enable_rotation": False,
+                        "error_code": 0,
+                        "id": 2,
+                        "is_default_task": False,
+                        "is_ds_mounted": False,
+                        "is_task_runnable": False,
+                        "is_usb_mounted": False,
+                        "latest_finish_time": 1738341351,
+                        "max_version_count": 256,
+                        "name": "asdf",
+                        "next_run_time": "N/A",
+                        "not_keep_dir_structure": False,
+                        "remove_src_file": False,
+                        "rename_photo_video": False,
+                        "rotation_policy": "oldest_version",
+                        "run_when_plug_in": False,
+                        "schedule_id": 13,
+                        "smart_create_date_dir": False,
+                        "source_path": "/music",
+                        "status": "unmounted",
+                        "type": "export_general"
                     }
                 },
-                "success" : True
+                "success": True
             }
-            ```
-
+        ```
         """
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]
@@ -154,29 +156,28 @@ class USBCopy(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def toggle_task(self, task_id: int, enable: bool = True) -> dict[str, object]:
-        """Enable or disable USB Copy task
+        """
+        Enable or disable a USB Copy task.
 
-            Parameters
-            ----------
-            task_id : int
-                Task ID to apply the setting to.
+        Parameters
+        ----------
+        task_id : int
+            Task ID to apply the setting to.
+        enable : bool, optional
+            Whether to enable (True) or disable (False) the USB Copy task. Defaults to True.
 
-            enable : bool
-                Whether to enable (`True`) or disable (`False`) USB Copy. Defaults to `True`.
+        Returns
+        -------
+        dict[str, object]
+            Parsed response JSON into a dictionary.
 
-            Returns
-            -------
-            dict[str, object]
-                Parsed response JSON into `dict`
-
-            Examples
-            --------
-            ```python
+        Examples
+        --------
+        ```python
             {
                 "success": True
             }
-            ```
-
+        ```
         """
         api_name = 'SYNO.USBCopy'
         info = self.gen_list[api_name]

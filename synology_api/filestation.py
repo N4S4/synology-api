@@ -1,20 +1,72 @@
+"""
+FileStation API module.
+
+This module provides the FileStation class for interacting with Synology NAS FileStation API,
+allowing file management, search, upload, download, and background task operations.
+"""
+
 from __future__ import annotations
+
+import json
 from typing import Optional, Any
 import os
 import io
 import time
 from datetime import datetime
+from urllib.parse import urljoin, urlencode
 
 import requests
 import tqdm
 from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 import sys
+import warnings
 from urllib import parse
 from treelib import Tree
 from . import base_api
+from .utils import validate_path, get_data_for_request_from_file
 
 
 class FileStation(base_api.BaseApi):
+    """
+    FileStation API implementation.
+
+    Provides methods to interact with Synology NAS FileStation API for file and folder operations,
+    search, upload, download, and background task management.
+
+    Parameters
+    ----------
+    ip_address : str
+        IP address of the Synology NAS.
+    port : str
+        Port number for the connection.
+    username : str
+        Username for authentication.
+    password : str
+        Password for authentication.
+    secure : bool, optional
+        Use HTTPS if True, HTTP otherwise. Default is False.
+    cert_verify : bool, optional
+        Verify SSL certificates if True. Default is False.
+    dsm_version : int, optional
+        DSM version of the Synology NAS. Default is 7.
+    debug : bool, optional
+        Enable debug output if True. Default is True.
+    otp_code : str, optional
+        One-time password for 2-step verification. Default is None.
+    device_id : str, optional
+        Device ID for authentication. Default is None.
+    device_name : str, optional
+        Name of the device. Default is None.
+    interactive_output : bool, optional
+        If True, enables interactive output. Default is False.
+
+    Methods
+    -------
+    get_info()
+        Get FileStation information.
+    get_list_share()
+        List shared folderss.
+    """
 
     def __init__(self,
                  ip_address: str,
@@ -30,7 +82,36 @@ class FileStation(base_api.BaseApi):
                  device_name: Optional[str] = None,
                  interactive_output: bool = True
                  ) -> None:
+        """
+        Initialize FileStation API client.
 
+        Parameters
+        ----------
+        ip_address : str
+            IP address or hostname of the Synology NAS.
+        port : str
+            Port number for the API.
+        username : str
+            Username for authentication.
+        password : str
+            Password for authentication.
+        secure : bool, optional
+            Use HTTPS if True, HTTP if False. Default is False.
+        cert_verify : bool, optional
+            Verify SSL certificates if True. Default is False.
+        dsm_version : int, optional
+            DSM version. Default is 7.
+        debug : bool, optional
+            Enable debug output. Default is True.
+        otp_code : str, optional
+            One-time password for 2FA, if required.
+        device_id : str, optional
+            Device ID for authentication.
+        device_name : str, optional
+            Device name for authentication.
+        interactive_output : bool, optional
+            If True, outputs are formatted for interactive use. Default is True.
+        """
         super(FileStation, self).__init__(ip_address, port, username, password, secure, cert_verify,
                                           dsm_version, debug, otp_code, device_id, device_name, 'FileStation')
 
@@ -51,11 +132,19 @@ class FileStation(base_api.BaseApi):
 
         self.session.get_api_list('FileStation')
 
-        self.file_station_list: Any = self.session.app_api_list
+        self.file_station_list: dict = self.session.app_api_list
 
         self.interactive_output: bool = interactive_output
 
     def get_info(self) -> dict[str, object] | str:
+        """
+        Get FileStation information.
+
+        Returns
+        -------
+        dict[str, object] or str
+            FileStation information or error message.
+        """
         api_name = 'SYNO.FileStation.Info'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -71,7 +160,29 @@ class FileStation(base_api.BaseApi):
                        sort_direction: Optional[str] = None,
                        onlywritable: bool = False
                        ) -> dict[str, object] | str:
+        """
+        List shared folders.
 
+        Parameters
+        ----------
+        additional : str or list of str, optional
+            Additional attributes to include.
+        offset : int, optional
+            Offset for pagination.
+        limit : int, optional
+            Limit for pagination.
+        sort_by : str, optional
+            Field to sort by.
+        sort_direction : str, optional
+            Sort direction ('asc' or 'desc').
+        onlywritable : bool, optional
+            If True, only writable shares are listed.
+
+        Returns
+        -------
+        dict[str, object] or str
+            List of shared folders or error message.
+        """
         api_name = 'SYNO.FileStation.List'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -101,20 +212,49 @@ class FileStation(base_api.BaseApi):
                       pattern: Optional[str] = None,
                       filetype: Optional[str] = None,
                       goto_path: Optional[str] = None,
-                      additional: Optional[str | list[str]] = None) -> dict[str, object] | str:
+                      additional: Optional[str | list[str]] = None) -> dict[str, object]:
+        """
+        List files in a folder.
 
+        Parameters
+        ----------
+        folder_path : str, optional
+            Path to the folder.
+        offset : int, optional
+            Offset for pagination.
+        limit : int, optional
+            Limit for pagination.
+        sort_by : str, optional
+            Field to sort by.
+        sort_direction : str, optional
+            Sort direction ('asc' or 'desc').
+        pattern : str, optional
+            Pattern to filter files.
+        filetype : str, optional
+            File type filter.
+        goto_path : str, optional
+            Path to go to.
+        additional : str or list of str, optional
+            Additional attributes to include.
+
+        Returns
+        -------
+        dict[str, object]
+            List of files or error message.
+        """
         api_name = 'SYNO.FileStation.List'
         info = self.file_station_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'list'}
 
+        if not isinstance(folder_path, str):
+            # break instead of return
+            raise ValueError('Enter a valid folder_path')
+
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param', 'additional']:
                 if val is not None:
                     req_param[str(key)] = val
-
-        if folder_path is None:
-            return 'Enter a valid folder_path'
 
         if filetype is not None:
             req_param['filetype'] = str(req_param['filetype']).lower()
@@ -122,38 +262,51 @@ class FileStation(base_api.BaseApi):
         if additional is None:
             additional = ['real_path', 'size', 'owner', 'time']
 
-        if type(additional) is list:
-            additional = ','.join(additional)
+        # if type(additional) is list:
+        #    additional = ','.join(additional)
 
         req_param['additional'] = additional
 
         return self.request_data(api_name, api_path, req_param)
 
     def get_file_info(self,
-                      path: Optional[str] = None,
-                      additional: Optional[str | list[str]] = None
+                      path: str | list[str],
+                      additional_param: Optional[str | list[str]] = None
                       ) -> dict[str, object] | str:
+        """
+        Get information about a file or files.
+
+        Parameters
+        ----------
+        path : str or list of str
+            Path(s) to the file(s).
+        additional_param : str or list of str, optional
+            Additional attributes to retrieve.
+
+        Returns
+        -------
+        dict[str, object] or str
+            File information or error message.
+        """
         api_name = 'SYNO.FileStation.List'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'getinfo'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'getinfo',
+                     'path': json.dumps(path)}
 
-        if type(path) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in path]
-            path = new_path
-            path = '[' + ','.join(path) + ']'
-            req_param['path'] = path
-        elif path is not None:
-            req_param['path'] = path
+        if additional_param is None:
+            additional_param = ["real_path", "size",
+                                "owner", "time", "perm", "type"]
+        elif isinstance(additional_param, str):
+            additional_param = [additional_param]
+        elif isinstance(additional_param, list):
+            if not all(isinstance(a, str) for a in additional_param):
+                return "additional_param must be a string or a list of strings."
+        else:
+            return "additional_param must be a string or a list of strings."
 
-        if additional is None:
-            additional = ['real_path', 'size', 'owner', 'time']
-
-        if type(additional) is list:
-            additional = str(additional).replace("'", '"')
-
-        req_param['additional'] = additional
+        req_param['additional'] = json.dumps(additional_param)
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -177,7 +330,47 @@ class FileStation(base_api.BaseApi):
                      owner: Optional[str] = None,
                      group: Optional[str] = None
                      ) -> dict[str, object] | str:
+        """
+        Start a search task.
 
+        Parameters
+        ----------
+        folder_path : str, optional
+            Path to the folder where the search will start.
+        recursive : bool, optional
+            If True, the search will be recursive.
+        pattern : str, optional
+            Pattern to search for.
+        extension : str, optional
+            File extension to filter by.
+        filetype : str, optional
+            File type filter.
+        size_from : int, optional
+            Minimum file size.
+        size_to : int, optional
+            Maximum file size.
+        mtime_from : str or int, optional
+            Minimum modification time (Unix timestamp or formatted string).
+        mtime_to : str or int, optional
+            Maximum modification time (Unix timestamp or formatted string).
+        crtime_from : str or int, optional
+            Minimum creation time (Unix timestamp or formatted string).
+        crtime_to : str or int, optional
+            Maximum creation time (Unix timestamp or formatted string).
+        atime_from : str or int, optional
+            Minimum access time (Unix timestamp or formatted string).
+        atime_to : str or int, optional
+            Maximum access time (Unix timestamp or formatted string).
+        owner : str, optional
+            Owner filter.
+        group : str, optional
+            Group filter.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Search task ID or error message.
+        """
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -234,6 +427,31 @@ class FileStation(base_api.BaseApi):
                         offset: Optional[int] = None,
                         additional: Optional[str | list[str]] = None
                         ) -> dict[str, object] | str:
+        """
+        Get the results of a search task.
+
+        Parameters
+        ----------
+        task_id : str
+            Task ID of the search task.
+        filetype : str, optional
+            File type filter.
+        limit : int, optional
+            Limit for pagination.
+        sort_by : str, optional
+            Field to sort by.
+        sort_direction : str, optional
+            Sort direction ('asc' or 'desc').
+        offset : int, optional
+            Offset for pagination.
+        additional : str or list of str, optional
+            Additional attributes to include.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Search results or error message.
+        """
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -264,13 +482,26 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def stop_search_task(self, taskid: str) -> dict[str, object] | str:
+        """
+        Stop a search task.
+
+        Parameters
+        ----------
+        taskid : str
+            Task ID of the search task to stop.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+        """
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'],
                      'method': 'stop', 'taskid': self._search_taskid}
 
-        if taskid is None:
+        if taskid is None:  # NOTE this is unreachable
             return 'Enter a valid taskid, choose between ' + str(self._search_taskid_list)
 
         self._search_taskid_list.remove(taskid)
@@ -278,13 +509,21 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def stop_all_search_task(self) -> str:
+        """
+        Stop all running search tasks.
+
+        Returns
+        -------
+        str
+            Confirmation message.
+        """
         api_name = 'SYNO.FileStation.Search'
         info = self.file_station_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'],
                      'method': 'stop', 'taskid': ''}
 
-        assert len(self._search_taskid_list), 'Task list is empty' + \
+        assert len(self._search_taskid_list), 'Task list is empty' +\
             str(self._search_taskid_list)
 
         for task_id in self._search_taskid_list:
@@ -303,7 +542,29 @@ class FileStation(base_api.BaseApi):
                              sort_direction: Optional[str] = None,
                              additional: Optional[str | list[str]] = None
                              ) -> dict[str, object] | str:
+        """
+        List mount points.
 
+        Parameters
+        ----------
+        mount_type : str, optional
+            Type of mount point to filter by.
+        offset : int, optional
+            Offset for pagination.
+        limit : int, optional
+            Limit for pagination.
+        sort_by : str, optional
+            Field to sort by.
+        sort_direction : str, optional
+            Sort direction ('asc' or 'desc').
+        additional : str or list of str, optional
+            Additional attributes to include.
+
+        Returns
+        -------
+        dict[str, object] or str
+            List of mount points or error message.
+        """
         api_name = 'SYNO.FileStation.VirtualFolder'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -334,7 +595,27 @@ class FileStation(base_api.BaseApi):
                           status_filter: Optional[str] = None,
                           additional: Optional[str | list[str]] = None
                           ) -> dict[str, object] | str:
+        """
+        List favorite files and folders.
 
+        Parameters
+        ----------
+        offset : int, optional
+            Offset for pagination.
+        limit : int, optional
+            Limit for pagination.
+        sort_by : str, optional
+            Field to sort by.
+        status_filter : str, optional
+            Status filter.
+        additional : str or list of str, optional
+            Additional attributes to include.
+
+        Returns
+        -------
+        dict[str, object] or str
+            List of favorites or error message.
+        """
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -360,6 +641,23 @@ class FileStation(base_api.BaseApi):
                        name: Optional[str] = None,
                        index: Optional[int] = None
                        ) -> dict[str, object] | str:
+        """
+        Add a file or folder to favorites.
+
+        Parameters
+        ----------
+        path : str
+            Path to the file or folder.
+        name : str, optional
+            Name for the favorite.
+        index : int, optional
+            Index for the favorite.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+        """
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -376,6 +674,19 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_a_favorite(self, path: Optional[str] = None) -> dict[str, object] | str:
+        """
+        Delete a favorite.
+
+        Parameters
+        ----------
+        path : str, optional
+            Path to the favorite to delete.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+        """
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -389,6 +700,14 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def clear_broken_favorite(self) -> dict[str, object] | str:
+        """
+        Clear broken favorites.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+        """
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -397,6 +716,21 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def edit_favorite_name(self, path: str, new_name: str) -> dict[str, object] | str:
+        """
+        Edit the name of a favorite.
+
+        Parameters
+        ----------
+        path : str
+            Path to the favorite.
+        new_name : str
+            New name for the favorite.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+        """
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -415,6 +749,21 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def replace_all_favorite(self, path: str | list[str], name: str | list[str]):
+        """
+        Replace all favorites with new paths and names.
+
+        Parameters
+        ----------
+        path : str or list of str
+            New path or list of new paths for the favorites.
+        name : str or list of str
+            New name or list of new names for the favorites.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+        """
         api_name = 'SYNO.FileStation.Favorite'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -439,6 +788,19 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def start_dir_size_calc(self, path: str) -> dict[str, object] | str:
+        """
+        Start a directory size calculation task.
+
+        Parameters
+        ----------
+        path : str
+            Path to the directory.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Task ID or error message.
+        """
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -473,6 +835,19 @@ class FileStation(base_api.BaseApi):
         return output
 
     def stop_dir_size_calc(self, taskid: str) -> str:
+        """
+        Stop a directory size calculation task.
+
+        Parameters
+        ----------
+        taskid : str
+            Task ID of the size calculation task to stop.
+
+        Returns
+        -------
+        str
+            Confirmation message.
+        """
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -490,6 +865,19 @@ class FileStation(base_api.BaseApi):
         return 'The task has been stopped'
 
     def get_dir_status(self, taskid: Optional[str] = None) -> dict[str, object] | str:
+        """
+        Get the status of a directory size calculation task.
+
+        Parameters
+        ----------
+        taskid : str, optional
+            Task ID of the size calculation task.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Task status or error message.
+        """
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -502,6 +890,19 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def start_md5_calc(self, file_path: str) -> str | dict[str, object]:
+        """
+        Start an MD5 calculation task.
+
+        Parameters
+        ----------
+        file_path : str
+            Path to the file.
+
+        Returns
+        -------
+        str or dict[str, object]
+            Task ID or error message.
+        """
         api_name = 'SYNO.FileStation.MD5'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -526,6 +927,19 @@ class FileStation(base_api.BaseApi):
         return output
 
     def get_md5_status(self, taskid: Optional[str] = None) -> str | dict[str, object]:
+        """
+        Get the status of an MD5 calculation task.
+
+        Parameters
+        ----------
+        taskid : str, optional
+            Task ID of the MD5 calculation task.
+
+        Returns
+        -------
+        str or dict[str, object]
+            Task status or error message.
+        """
         api_name = 'SYNO.FileStation.MD5'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -542,6 +956,19 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def stop_md5_calc(self, taskid: str) -> str:
+        """
+        Stop an MD5 calculation task.
+
+        Parameters
+        ----------
+        taskid : str
+            Task ID of the MD5 calculation task to stop.
+
+        Returns
+        -------
+        str
+            Confirmation message.
+        """
         api_name = 'SYNO.FileStation.DirSize'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -564,6 +991,25 @@ class FileStation(base_api.BaseApi):
                           overwrite: Optional[bool] = None,
                           create_only: Optional[bool] = None
                           ) -> dict[str, object] | str:
+        """
+        Check permissions for a file or folder.
+
+        Parameters
+        ----------
+        path : str
+            Path to the file or folder.
+        filename : str
+            Name of the file.
+        overwrite : bool, optional
+            If True, overwriting is allowed.
+        create_only : bool, optional
+            If True, only creation is allowed.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Permission check result or error message.
+        """
         api_name = 'SYNO.FileStation.CheckPermission'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -590,53 +1036,58 @@ class FileStation(base_api.BaseApi):
                     verify: bool = False,
                     progress_bar: bool = True
                     ) -> str | tuple[int, dict[str, object]]:
+        """
+        Upload a file to the server.
+
+        Parameters
+        ----------
+        dest_path : str
+            Destination path on the server.
+        file_path : str
+            Path to the file to upload.
+        create_parents : bool, optional
+            If True, parent folders will be created.
+        overwrite : bool, optional
+            If True, existing files will be overwritten.
+        verify : bool, optional
+            If True, SSL certificates will be verified.
+        progress_bar : bool, optional
+            If True, shows a progress bar during upload.
+
+        Returns
+        -------
+        str or tuple[int, dict[str, object]]
+            Upload result or error message.
+        """
         api_name = 'SYNO.FileStation.Upload'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        filename = os.path.basename(file_path)
 
         session = requests.session()
 
-        with open(file_path, 'rb') as payload:
-            url = ('%s%s' % (self.base_url, api_path)) + '?api=%s&version=%s&method=upload&_sid=%s' % (
-                api_name, info['minVersion'], self._sid)
+        base = urljoin(self.base_url, api_path)
+        url_params = {
+            "api": api_name,
+            "version": info["minVersion"],
+            "method": "upload",
+            "_sid": self._sid
+        }
 
-            encoder = MultipartEncoder({
-                'path': dest_path,
-                'create_parents': str(create_parents).lower(),
-                'overwrite': str(overwrite).lower(),
-                'files': (filename, payload, 'application/octet-stream')
-            })
-
-            if progress_bar:
-                bar = tqdm.tqdm(desc='Upload Progress',
-                                total=encoder.len,
-                                dynamic_ncols=True,
-                                unit='B',
-                                unit_scale=True,
-                                unit_divisor=1024
-                                )
-
-                monitor = MultipartEncoderMonitor(
-                    encoder, lambda monitor: bar.update(monitor.bytes_read - bar.n))
-
-                r = session.post(
-                    url,
-                    data=monitor,
-                    verify=verify,
-                    headers={"X-SYNO-TOKEN": self.session._syno_token,
-                             'Content-Type': monitor.content_type}
-                )
-
-            else:
-                r = session.post(
-                    url,
-                    data=encoder,
-                    verify=verify,
-                    headers={"X-SYNO-TOKEN": self.session._syno_token,
-                             'Content-Type': encoder.content_type}
-                )
-
+        url = f"{base}?{urlencode(url_params)}"
+        encoder_params = {
+            'path': dest_path,
+            'create_parents': str(create_parents).lower(),
+            'overwrite': str(overwrite).lower(),
+        }
+        data = get_data_for_request_from_file(
+            file_path=file_path, fields=encoder_params, called_from='FileStation', progress_bar=True)
+        r = session.post(
+            url,
+            data=data,
+            verify=verify,
+            headers={"X-SYNO-TOKEN": self.session._syno_token,
+                     'Content-Type': data.content_type}
+        )
         session.close()
         if r.status_code != 200 or not r.json()['success']:
             return r.status_code, r.json()
@@ -644,6 +1095,19 @@ class FileStation(base_api.BaseApi):
         return r.json()
 
     def get_shared_link_info(self, link_id: str) -> dict[str, object] | str:
+        """
+        Get information about a shared link.
+
+        Parameters
+        ----------
+        link_id : str
+            ID of the shared link.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Shared link information or error message.
+        """
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -663,7 +1127,27 @@ class FileStation(base_api.BaseApi):
                              sort_direction: Optional[str] = None,
                              force_clean: Optional[bool] = None
                              ) -> dict[str, object] | str:
+        """
+        List shared links.
 
+        Parameters
+        ----------
+        offset : int, optional
+            Offset for pagination.
+        limit : int, optional
+            Limit for pagination.
+        sort_by : str, optional
+            Field to sort by.
+        sort_direction : str, optional
+            Sort direction ('asc' or 'desc').
+        force_clean : bool, optional
+            If True, forces a clean of the shared link list.
+
+        Returns
+        -------
+        dict[str, object] or str
+            List of shared links or error message.
+        """
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -683,6 +1167,27 @@ class FileStation(base_api.BaseApi):
                             date_available: Optional[str | int] = None,
                             expire_times: int = 0
                             ) -> dict[str, object] | str:
+        """
+        Create a shared link.
+
+        Parameters
+        ----------
+        path : str
+            Path to the file or folder to share.
+        password : str, optional
+            Password for the shared link.
+        date_expired : str or int, optional
+            Expiration date for the shared link (Unix timestamp or formatted string).
+        date_available : str or int, optional
+            Availability date for the shared link (Unix timestamp or formatted string).
+        expire_times : int, optional
+            Number of times the link can be accessed before expiring.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Shared link details or error message.
+        """
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -706,6 +1211,19 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_shared_link(self, link_id: str) -> dict[str, object] | str:
+        """
+        Delete a shared link.
+
+        Parameters
+        ----------
+        link_id : str
+            ID of the shared link to delete.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+        """
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -719,6 +1237,14 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def clear_invalid_shared_link(self) -> dict[str, object] | str:
+        """
+        Clear invalid shared links.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+        """
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -733,6 +1259,27 @@ class FileStation(base_api.BaseApi):
                          date_available: Optional[str | int] = None,
                          expire_times: int = 0
                          ) -> dict[str, object] | str:
+        """
+        Edit a shared link.
+
+        Parameters
+        ----------
+        link_id : str
+            ID of the shared link to edit.
+        password : str, optional
+            New password for the shared link.
+        date_expired : str or int, optional
+            New expiration date for the shared link (Unix timestamp or formatted string).
+        date_available : str or int, optional
+            New availability date for the shared link (Unix timestamp or formatted string).
+        expire_times : int, optional
+            New number of times the link can be accessed before expiring.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+        """
         api_name = 'SYNO.FileStation.Sharing'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -763,6 +1310,25 @@ class FileStation(base_api.BaseApi):
                       force_parent: Optional[bool] = None,
                       additional: Optional[str | list[str]] = None
                       ) -> str | dict[str, object]:
+        """
+        Create a new folder.
+
+        Parameters
+        ----------
+        folder_path : str or list of str
+            Path or list of paths where the folder should be created.
+        name : str or list of str
+            Name or list of names for the new folder.
+        force_parent : bool, optional
+            If True, parent folders will be created if they don't exist.
+        additional : str or list of str, optional
+            Additional attributes to include.
+
+        Returns
+        -------
+        str or dict[str, object]
+            Creation result or error message.
+        """
         api_name = 'SYNO.FileStation.CreateFolder'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -811,32 +1377,50 @@ class FileStation(base_api.BaseApi):
                       additional: Optional[str | list[str]] = None,
                       search_taskid: Optional[str] = None
                       ) -> dict[str, object] | str:
+        """
+        Rename a file or a folder.
+
+        Parameters
+        ----------
+        path : str or list of str
+            Current path or list of paths of the files or folder(s) to rename.
+        name : str or list of str
+            New name or list of new names for the file or folder(s).
+        additional : str or list of str, optional
+            Additional attributes to include.
+        search_taskid : str, optional
+            Task ID of a search task.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+
+        Examples
+        --------
+        >>> rename_folder('/Downloads/script.log', 'script1.log')
+        >>> rename_folder(['/Downloads/script.log','/Downloads/script.log'],['a.log', 'b.log'])
+        >>> rename_folder('/Downloads/script', 'code')
+        """
         api_name = 'SYNO.FileStation.Rename'
         info = self.file_station_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'rename'}
 
-        if type(path) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in path]
-            path = new_path
-            path = '[' + ','.join(path) + ']'
-            req_param['path'] = path
-        elif path is not None:
-            req_param['path'] = path
+        if isinstance(path, list) and isinstance(name, list):
+            if len(path) != len(name):
+                raise ValueError("Path and name must have the same length.")
+        elif isinstance(path, str) and isinstance(name, str):
+            pass  # ok, both are strings
         else:
-            return 'Enter a valid folder path (folder path only ex. "/home/Drive/Downloads")'
+            raise TypeError(
+                "Path and name must be both lists or both strings.")
 
-        if type(name) is list:
-            new_path = []
-            [new_path.append('"' + x + '"') for x in name]
-            name = new_path
-            name = '[' + ','.join(name) + ']'
-            req_param['name'] = name
-        elif name is not None:
-            req_param['name'] = name
-        else:
-            return 'Enter a valid new folder name (new folder name only ex. "New Folder")'
+        if validate_path(path) == False:
+            return 'Enter a valid folder path or file path (ex. /Downloads/script.log)'
+
+        req_param['path'] = json.dumps(path)
+        req_param['name'] = json.dumps(name)
 
         if additional is None:
             additional = ['real_path', 'size', 'owner', 'time']
@@ -849,7 +1433,7 @@ class FileStation(base_api.BaseApi):
         if search_taskid is not None:
             req_param['search_taskid'] = search_taskid
 
-        return self.request_data(api_name, api_path, req_param)
+        return self.request_data(api_name, api_path, req_param, method='post')
 
     def start_copy_move(self,
                         path: str | list[str],
@@ -859,6 +1443,41 @@ class FileStation(base_api.BaseApi):
                         accurate_progress: Optional[bool] = None,
                         search_taskid: Optional[str] = None
                         ) -> str | dict[str, object]:
+        """
+        Start a copy or move task.
+
+        Parameters
+        ----------
+        path : str or list of str
+            Source path or list of source paths to copy or move.
+        dest_folder_path : str or list of str
+            Destination folder path or list of destination folder paths.
+        overwrite : bool, optional
+            If True, existing files will be overwritten.
+        remove_src : bool, optional
+            If True, source files will be removed after copying.
+        accurate_progress : bool, optional
+            If True, shows accurate progress.
+        search_taskid : str, optional
+            Task ID of a search task.
+
+        Returns
+        -------
+        str or dict[str, object]
+            Task ID or error message.
+
+        Examples
+        --------
+        Start a simple move task:
+        You have to specify only the file on the path and not the dest folder.
+
+        >>> fs = FileStation(**params)
+        >>> task_id = fs.start_copy_task(
+        ...     path="/Media/Film/Action/movie1.mkv",
+        ...     dest_folder_path="/Media/Film/Drama",
+        ...     overwrite=True
+        ... )
+        """
         api_name = 'SYNO.FileStation.CopyMove'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -907,6 +1526,19 @@ class FileStation(base_api.BaseApi):
         return output
 
     def get_copy_move_status(self, taskid: str) -> dict[str, object] | str:
+        """
+        Get the status of a copy or move task.
+
+        Parameters
+        ----------
+        taskid : str
+            Task ID of the copy or move task.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Task status or error message.
+        """
         api_name = 'SYNO.FileStation.CopyMove'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -920,6 +1552,19 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def stop_copy_move_task(self, taskid: str) -> dict[str, object] | str:
+        """
+        Stop a copy or move task.
+
+        Parameters
+        ----------
+        taskid : str
+            Task ID of the copy or move task to stop.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+        """
         api_name = 'SYNO.FileStation.CopyMove'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -940,6 +1585,25 @@ class FileStation(base_api.BaseApi):
                           recursive: Optional[bool] = None,
                           search_taskid: Optional[str] = None
                           ) -> dict[str, object] | str:
+        """
+        Start a delete task.
+
+        Parameters
+        ----------
+        path : str or list of str
+            Path or list of paths to the file or folder to delete.
+        accurate_progress : bool, optional
+            If True, shows accurate progress.
+        recursive : bool, optional
+            If True, deletes folders recursively.
+        search_taskid : str, optional
+            Task ID of a search task.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Task ID or error message.
+        """
         api_name = 'SYNO.FileStation.Delete'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -976,6 +1640,19 @@ class FileStation(base_api.BaseApi):
         return output
 
     def get_delete_status(self, taskid: str) -> dict[str, object] | str:
+        """
+        Get the status of a delete task.
+
+        Parameters
+        ----------
+        taskid : str
+            Task ID of the delete task.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Task status or error message.
+        """
         api_name = 'SYNO.FileStation.Delete'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -989,6 +1666,19 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def stop_delete_task(self, taskid: str) -> dict[str, object] | str:
+        """
+        Stop a delete task.
+
+        Parameters
+        ----------
+        taskid : str
+            Task ID of the delete task to stop.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+        """
         api_name = 'SYNO.FileStation.Delete'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1007,6 +1697,25 @@ class FileStation(base_api.BaseApi):
                                  path: str,
                                  recursive: Optional[bool] = None,
                                  search_taskid: Optional[str] = None) -> dict[str, object] | str:
+        """
+        Delete a file or folder (blocking function).
+
+        This function will stop your script until done! Do not interrupt.
+
+        Parameters
+        ----------
+        path : str or list of str
+            Path or list of paths to the file or folder to delete.
+        recursive : bool, optional
+            If True, deletes folders recursively.
+        search_taskid : str, optional
+            Task ID of a search task.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+        """
         api_name = 'SYNO.FileStation.Delete'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1042,6 +1751,33 @@ class FileStation(base_api.BaseApi):
                            password: Optional[str] = None,
                            item_id: Optional[str] = None
                            ) -> dict[str, object] | str:
+        """
+        Start an extract task.
+
+        Parameters
+        ----------
+        file_path : str
+            Path to the archive file.
+        dest_folder_path : str
+            Destination folder path where the files will be extracted.
+        overwrite : bool, optional
+            If True, existing files will be overwritten.
+        keep_dir : bool, optional
+            If True, the original directory structure will be kept.
+        create_subfolder : bool, optional
+            If True, a subfolder will be created for the extracted files.
+        codepage : str, optional
+            Codepage for the extraction.
+        password : str, optional
+            Password for the archive, if required.
+        item_id : str, optional
+            Item ID for the extraction task.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Task ID or error message.
+        """
         api_name = 'SYNO.FileStation.Extract'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1074,6 +1810,19 @@ class FileStation(base_api.BaseApi):
         return output
 
     def get_extract_status(self, taskid: str) -> dict[str, object] | str:
+        """
+        Get the status of an extract task.
+
+        Parameters
+        ----------
+        taskid : str
+            Task ID of the extract task.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Task status or error message.
+        """
         api_name = 'SYNO.FileStation.Extract'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1087,6 +1836,19 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def stop_extract_task(self, taskid: str) -> dict[str, object] | str:
+        """
+        Stop an extract task.
+
+        Parameters
+        ----------
+        taskid : str
+            Task ID of the extract task to stop.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+        """
         api_name = 'SYNO.FileStation.Extract'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1111,6 +1873,33 @@ class FileStation(base_api.BaseApi):
                                  password: Optional[str] = None,
                                  item_id: Optional[str] = None
                                  ) -> dict[str, object] | str:
+        """
+        Get the list of files in an archive.
+
+        Parameters
+        ----------
+        file_path : str
+            Path to the archive file.
+        offset : int, optional
+            Offset for pagination.
+        limit : int, optional
+            Limit for pagination.
+        sort_by : str, optional
+            Field to sort by.
+        sort_direction : str, optional
+            Sort direction ('asc' or 'desc').
+        codepage : str, optional
+            Codepage for the file list.
+        password : str, optional
+            Password for the archive, if required.
+        item_id : str, optional
+            Item ID for the archive.
+
+        Returns
+        -------
+        dict[str, object] or str
+            List of files in the archive or error message.
+        """
         api_name = 'SYNO.FileStation.Extract'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1134,6 +1923,29 @@ class FileStation(base_api.BaseApi):
                                compress_format: Optional[str] = None,
                                password: Optional[str] = None
                                ) -> dict[str, object] | str | tuple[str]:
+        """
+        Start a file compression task.
+
+        Parameters
+        ----------
+        path : str or list of str
+            Path or list of paths to the file or folder to compress.
+        dest_file_path : str
+            Destination file path for the compressed file.
+        level : int, optional
+            Compression level.
+        mode : str, optional
+            Compression mode.
+        compress_format : str, optional
+            Compression format.
+        password : str, optional
+            Password for the compressed file, if required.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Task ID or error message.
+        """
         api_name = 'SYNO.FileStation.Compress'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1179,6 +1991,19 @@ class FileStation(base_api.BaseApi):
         return output
 
     def get_compress_status(self, taskid: str) -> dict[str, object] | str:
+        """
+        Get the status of a file compression task.
+
+        Parameters
+        ----------
+        taskid : str
+            Task ID of the compression task.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Task status or error message.
+        """
         api_name = 'SYNO.FileStation.Compress'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1192,6 +2017,19 @@ class FileStation(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def stop_compress_task(self, taskid: str) -> dict[str, object] | str:
+        """
+        Stop a file compression task.
+
+        Parameters
+        ----------
+        taskid : str
+            Task ID of the compression task to stop.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Response from the API or error message.
+        """
         api_name = 'SYNO.FileStation.Compress'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1209,8 +2047,29 @@ class FileStation(base_api.BaseApi):
                                         limit: Optional[int] = None,
                                         sort_by: Optional[str] = None,
                                         sort_direction: Optional[str] = None,
-                                        api_filter: Optional[str] = None
+                                        api_filter: Optional[str, list] = None
                                         ) -> dict[str, object] | str:
+        """
+        Get a list of all background tasks.
+
+        Parameters
+        ----------
+        offset : int, optional
+            Offset for pagination.
+        limit : int, optional
+            Limit for pagination.
+        sort_by : str, optional
+            Field to sort by.
+        sort_direction : str, optional
+            Sort direction ('asc' or 'desc').
+        api_filter : str, optional
+            API filter.
+
+        Returns
+        -------
+        dict[str, object] or str
+            List of background tasks or error message.
+        """
         api_name = 'SYNO.FileStation.BackgroundTask'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1221,7 +2080,7 @@ class FileStation(base_api.BaseApi):
                 if val is not None:
                     req_param[str(key)] = val
 
-        if type(api_filter) is list:
+        if isinstance(api_filter, list):
             new_path = []
             [new_path.append('"' + x + '"') for x in api_filter]
             api_filter = new_path
@@ -1237,7 +2096,27 @@ class FileStation(base_api.BaseApi):
                  chunk_size: int = 8192,
                  verify: bool = False
                  ) -> Optional[str]:
+        """
+        Download a file from the server.
 
+        Parameters
+        ----------
+        path : str
+            The file path starting with a shared folder to be downloaded.
+        mode : str
+            Mode for downloading the file ('open' to open in browser, 'download' to download to disk).
+        dest_path : str, optional
+            Destination path on the local machine (for 'download' mode).
+        chunk_size : int, optional
+            Chunk size for downloading.
+        verify : bool, optional
+            If True, SSL certificates will be verified.
+
+        Returns
+        -------
+        Optional[str]
+            None if successful, error message otherwise.
+        """
         api_name = 'SYNO.FileStation.Download'
         info = self.file_station_list[api_name]
         api_path = info['path']
@@ -1275,35 +2154,64 @@ class FileStation(base_api.BaseApi):
                 r.raise_for_status()
                 return io.BytesIO(r.content)
 
-    def generate_file_tree(self, folder_path: str, tree: Tree) -> None:
-        """Generate the file tree based on the folder path you give, you need to create the root node before call this function
-
-            Parameters
-            ----------
-            folder_path : str
-                Folder path to generate file tree
-            tree : Tree
-                Instance of the Tree of lib \"Treelib\"
-
+    def generate_file_tree(self,
+                           folder_path: str,
+                           tree: Tree,
+                           max_depth: Optional[int] = 1,
+                           start_depth: Optional[int] = 0) -> None:
         """
+        Recursively generate the file tree based on the folder path you give constrained with.
 
+        You need to create the root node before calling this function.
+
+        Parameters
+        ----------
+        folder_path : str
+            Folder path to generate file tree.
+        tree : Tree
+            Instance of the Tree from the `treelib` library.
+        max_depth : int, optional
+            Non-negative number of maximum depth of tree generation if node tree is directory, default to '1' to generate full tree. If 'max_depth=0' it will be equivalent to no recursion.
+        start_depth : int, optional
+            Non negative number to start to control tree generation default to '0'.
+        """
         api_name = 'hotfix'  # fix for docs_parser.py issue
 
-        data: dict = self.get_file_list(
+        if start_depth < 0:
+            start_depth = 0
+            warnings.warn(
+                f"'start_depth={start_depth}'. It should not be less or than 0, setting 'start_depth' to 0!",
+                RuntimeWarning,
+                stacklevel=2
+            )
+
+        assert start_depth <= max_depth, ValueError(
+            f"'start_depth' should not be greater than 'max_depth'. Got '{start_depth=}, {max_depth=}'")
+        assert isinstance(tree, Tree), ValueError(
+            "'tree' has to be a type of 'Tree'")
+
+        data: dict[str, object] = self.get_file_list(
             folder_path=folder_path
         ).get("data")
 
         files = data.get("files")
-        file: dict
-        for file in files:
-            file_name: str = file.get("name")
-            file_path: str = file.get("path")
-            if file.get("isdir"):
+        _file_info_getter = map(lambda x: (
+            x.get('isdir'), x.get('name'), x.get('path')), files)
+        for isdir, file_name, file_path in _file_info_getter:
 
-                tree.create_node(file_name, file_path, parent=folder_path)
-                self.generate_file_tree(file_path, tree)
+            if isdir and (start_depth >= max_depth):
+                tree.create_node(file_name, file_path, parent=folder_path, data={
+                                 "isdir": isdir, "max_depth": True})
+
+            elif isdir:
+                tree.create_node(file_name, file_path, parent=folder_path, data={
+                                 "isdir": isdir, "max_depth": False})
+                self.generate_file_tree(
+                    file_path, tree, max_depth, start_depth + 1)
+
             else:
-                tree.create_node(file_name, file_path, parent=folder_path)
+                tree.create_node(file_name, file_path, parent=folder_path, data={
+                                 "isdir": isdir, "max_depth": False})
 
 
 # TODO SYNO.FileStation.Thumb to be done

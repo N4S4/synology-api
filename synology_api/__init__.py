@@ -1,3 +1,4 @@
+"""Synology API Python Client."""
 from . import \
     audiostation, \
     auth, \
@@ -28,3 +29,28 @@ from . import \
     universal_search, \
     snapshot, \
     surveillancestation
+
+from .DSM import DSM
+from .DSM.ControlPanel import \
+    ControlPanel, \
+    ApplicationPrivileges, \
+    DomainLDAP, \
+    ExternalAccess, \
+    ExternalDevices, \
+    FileServices, \
+    HardwarePower, \
+    IndexingService, \
+    InfoCenter, \
+    LoginPortal, \
+    Network, \
+    Notifications, \
+    RegionalOptions, \
+    Security, \
+    SharedFolder, \
+    SynologyAccount, \
+    TaskScheduler, \
+    TerminalSNMP, \
+    UpdateRestore, \
+    UserGroup
+from .DSM.Package import \
+    FileStation
