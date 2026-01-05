@@ -286,8 +286,7 @@ def parse_method_api(method_name: str, file_content: str) -> str:
         section = header('h4', 'Internal API')
         section += div(text(api_name, ['code']), 'padding', 'left', 'md')
     else:
-        warnings.warn(
-            f'Method {method_name} seems to not be directly calling any internal API, this is expected for utility methods that use other calls in the class.', UserWarning)
+        print(f'Method {method_name} seems to not be directly calling any internal API, this is expected for utility methods that use other calls in the class. You can ignore this message if this is the case.')
     return section + NEWLINE
 
 def parse_parameters(docstring: Docstring, method: dict | None) -> str:

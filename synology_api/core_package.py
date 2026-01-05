@@ -1048,7 +1048,6 @@ class Package(base_api.BaseApi):
         }
         ```
         """
-        api_name = 'hotfix'  # fix for docs_parser.py issue
 
         # Package already installed
         if self._is_package_already_installed(package_id):

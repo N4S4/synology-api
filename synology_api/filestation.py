@@ -2236,7 +2236,6 @@ class FileStation(base_api.BaseApi):
         start_depth : int, optional
             Non negative number to start to control tree generation default to '0'.
         """
-        api_name = 'hotfix'  # fix for docs_parser.py issue
 
         if start_depth < 0:
             start_depth = 0

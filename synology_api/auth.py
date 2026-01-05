@@ -587,7 +587,6 @@ class Authentication:
         HTTPError
             If an HTTP error occurs.
         """
-        api_name = 'hotfix'  # fix for docs_parser.py issue
         api_path = self.full_api_list['SYNO.Entry.Request']['path']
         api_version = self.full_api_list['SYNO.Entry.Request']['maxVersion']
         url = f"{self._base_url}{api_path}"
