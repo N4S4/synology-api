@@ -10,14 +10,15 @@ title: 🚧 SysInfo
 # SysInfo
 :::warning
  
-This API is not documented yet.
+This API is partially documented or under construction.
  
 :::
 ## Overview
-Core System Information API implementation for Synology NAS.
-
+Core System Information API implementation for Synology NAS.  
+  
 This class provides methods to retrieve and manage system, network, hardware,
-service, and package information from a Synology NAS.
+service, and package information from a Synology NAS.  
+  
 ## Methods
 ### `fileserv_smb`
 Get SMB file service status.  

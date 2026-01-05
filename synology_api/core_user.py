@@ -15,34 +15,23 @@ class User(base_api.BaseApi):
     """
     Core User API implementation.
 
-    Methods
-    -------
-    get_users(offset=0, limit=-1, sort_by="name", sort_direction="ASC", additional=[])
-        Retrieve groups information.
-    get_user(name, additional=[])
-        Retrieve user information.
-    create_user(...)
-        Create a new user.
-    modify_user(...)
-        Modify a user.
-    delete_user(name)
-        Delete a user.
-    affect_groups(name, join_groups=[], leave_groups=[])
-        Affect or disaffect groups to a user.
-    affect_groups_status(task_id)
-        Get the status of a join task.
-    get_password_policy()
-        Get the password policy.
-    set_password_policy(...)
-        Set the password policy.
-    get_password_expiry()
-        Get the password expiry.
-    set_password_expiry(...)
-        Set the password expiry.
-    password_confirm(password)
-        Confirm password/session.
-    get_username_policy()
-        Get the username policy.
+    Supported methods:
+        - Getters:
+            - Retrieve groups information.
+            - Retrieve user information.
+            - Get the status of a join task.
+            - Get the password policy.
+            - Get the password expiry.
+            - Get the username policy.
+        - Setters:
+            - Create a new user.
+            - Modify a user.
+            - Delete a user.
+            - Affect or disaffect groups to a user.
+            - Set the password policy.
+            - Set the password expiry.
+        - Actions:
+            - Confirm password/session.
 
     Examples
     --------

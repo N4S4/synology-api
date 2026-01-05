@@ -10,13 +10,14 @@ title: 🚧 OAuth
 # OAuth
 :::warning
  
-This API is not documented yet.
+This API is partially documented or under construction.
  
 :::
 ## Overview
-Interface for Synology OAuth API.
-
-Provides methods to interact with OAuth clients, tokens, and logs.
+Interface for Synology OAuth API.  
+  
+Provides methods to interact with OAuth clients, tokens, and logs.  
+  
 ## Methods
 ### `clients`
 Retrieve the list of OAuth clients.  

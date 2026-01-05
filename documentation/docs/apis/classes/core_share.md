@@ -23,7 +23,10 @@ This API is partially documented or under construction.
  
 :::
 ## Overview
-Core Share API implementation.
+Core Share API implementation.  
+  
+  
+  
 ## Methods
 ### `validate_set`
 Validate set of parameter for a new / modified shared folder.  
@@ -443,7 +446,10 @@ Success.
 
 ## SharePermission
 ## Overview
-Core Share Permission API implementation.
+Core Share Permission API implementation.  
+  
+  
+  
 ## Methods
 ### `get_folder_permission_by_name`
 Retrieve share permissions for a given folder filtered by permission name (sub string).  
@@ -744,7 +750,10 @@ Success.
 
 ## KeyManagerStore
 ## Overview
-Core Share KeyManager Store API implementation.
+Core Share KeyManager Store API implementation.  
+  
+  
+  
 ## Methods
 ### `init`
 Initialize KeyManagerStore API.  
@@ -820,7 +829,10 @@ List of stores existing on the NAS.
 
 ## KeyManagerAutoKey
 ## Overview
-Core Share KeyManager AutoKey API implementation.
+Core Share KeyManager AutoKey API implementation.  
+  
+  
+  
 ## Methods
 ### `list`
 List KeyManagerStore API.  

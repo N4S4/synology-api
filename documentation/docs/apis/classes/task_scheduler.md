@@ -9,26 +9,27 @@ title: ✅ TaskScheduler
   
 # TaskScheduler
 ## Overview
-Task Scheduler API implementation.
+Task Scheduler API implementation.  
+  
+This API provides the functionality to get information related to the scheduler settings and current tasks.
 
-    This API provides the functionality to get information related to the scheduler settings and current tasks.
+### Supported methods
 
-    ### Supported methods
-
-    - **Getters** :
-        - Get all tasks
-        - Get task information
-        - Get task results
-        - Get output path for task results
-    - **Setters** :
-        - Set output path for task results
-        - Set task settings
-    - **Actions** :
-        - Run task
-        - Create task
-        - Delete task
-        - Enable task
-        - Disable task
+- **Getters** :
+    - Get all tasks
+    - Get task information
+    - Get task results
+    - Get output path for task results
+- **Setters** :
+    - Set output path for task results
+    - Set task settings
+- **Actions** :
+    - Run task
+    - Create task
+    - Delete task
+    - Enable task
+    - Disable task  
+  
 ## Methods
 ### `get_output_config`
 Retrieve tasks output configuration.  

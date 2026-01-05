@@ -133,7 +133,6 @@ class BaseApi(object):
         None
             Action, no return values.
         """
-        api_name = 'hotfix'  # fix for docs_parser.py issue
         if self.session:
             self.session.logout()
             if BaseApi.shared_session == self.session:

@@ -20,6 +20,37 @@ class DownloadStation(base_api.BaseApi):
 
     This class provides methods to manage downloads, tasks, RSS feeds, and BT searches.
 
+    Supported methods:
+        - Getters:
+            - Get Download Station info.
+            - Get Download Station config.
+            - Get Download Station statistics.
+            - Get RSS site info list.
+            - Get schedule info.
+            - Get info for specific tasks.
+            - List download tasks.
+            - Get RSS feed list.
+            - Get RSS feed filter list.
+            - Get BT search results.
+            - Get BT search categories.
+            - Get BT search modules.
+        - Setters:
+            - Set Download Station server config.
+            - Set schedule config.
+            - Create a new download task.
+            - Edit a download task.
+            - Delete a download task.
+            - Add RSS feed filter.
+            - Set RSS feed filter.
+            - Delete RSS feed filter.
+        - Actions:
+            - Download task source.
+            - Pause a download task.
+            - Resume a download task.
+            - Refresh RSS site.
+            - Start a BT search.
+            - Clean BT search tasks.
+
     Parameters
     ----------
     ip_address : str
@@ -48,61 +79,6 @@ class DownloadStation(base_api.BaseApi):
         Enable interactive output (default is True).
     download_st_version : int, optional
         Download Station API version (default is None).
-
-    Methods
-    -------
-    get_info()
-        Get Download Station info.
-    get_config()
-        Get Download Station config.
-    set_server_config(...)
-        Set Download Station server config.
-    schedule_info()
-        Get schedule info.
-    schedule_set_config(...)
-        Set schedule config.
-    tasks_list(...)
-        List download tasks.
-    tasks_info(...)
-        Get info for specific tasks.
-    tasks_source(...)
-        Download task source.
-    create_task(...)
-        Create a new download task.
-    delete_task(...)
-        Delete a download task.
-    pause_task(...)
-        Pause a download task.
-    resume_task(...)
-        Resume a download task.
-    edit_task(...)
-        Edit a download task.
-    get_statistic_info()
-        Get Download Station statistics.
-    get_rss_info_list(...)
-        Get RSS site info list.
-    refresh_rss_site(...)
-        Refresh RSS site.
-    rss_feed_list(...)
-        Get RSS feed list.
-    rss_feed_filter_list(...)
-        Get RSS feed filter list.
-    rss_feed_filter_add(...)
-        Add RSS feed filter.
-    rss_feed_filter_set(...)
-        Set RSS feed filter.
-    rss_feed_filter_delete(...)
-        Delete RSS feed filter.
-    start_bt_search(...)
-        Start a BT search.
-    get_bt_search_results(...)
-        Get BT search results.
-    get_bt_search_category()
-        Get BT search categories.
-    clean_bt_search(...)
-        Clean BT search tasks.
-    get_bt_module()
-        Get BT search modules.
     """
 
     def __init__(self,

@@ -10,14 +10,15 @@ title: 🚧 LogCenter
 # LogCenter
 :::warning
  
-This API is not documented yet.
+This API is partially documented or under construction.
  
 :::
 ## Overview
-Interface for Synology Log Center API.
-
+Interface for Synology Log Center API.  
+  
 Provides methods to interact with log center features such as retrieving logs,
-client status, remote archives, and storage settings.
+client status, remote archives, and storage settings.  
+  
 ## Methods
 ### `logcenter`
 Retrieve the list of log center receive rules.  

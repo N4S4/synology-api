@@ -14,10 +14,11 @@ This API is not documented yet.
  
 :::
 ## Overview
-API wrapper for Synology VPN Server.
-
+API wrapper for Synology VPN Server.  
+  
 Provides methods to retrieve VPN settings, active connections, logs, network interfaces,
-security autoblock settings, permissions, and VPN protocol-specific settings.
+security autoblock settings, permissions, and VPN protocol-specific settings.  
+  
 ## Methods
 ### `settings_list`
 Retrieve VPN server settings.  

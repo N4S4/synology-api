@@ -14,30 +14,42 @@ This API is not documented yet.
  
 :::
 ## Overview
-API wrapper for Synology Virtual Machine Manager.
+API wrapper for Synology Virtual Machine Manager.  
+  
+Provides methods to manage tasks, networks, storage, hosts, VMs, and images.  
+  
+### Parameters
+<div class="padding-left--md">
+**_ip_address_** `str`  
+IP address of the Synology NAS.  
+  
+**_port_** `str`  
+Port number to connect to.  
+  
+**_username_** `str`  
+DSM username.  
+  
+**_password_** `str`  
+DSM password.  
+  
+**_secure_** `bool`  
+Use HTTPS if True. Default is False.  
+  
+**_cert_verify_** `bool`  
+Verify SSL certificate if True. Default is False.  
+  
+**_dsm_version_** `int`  
+DSM version. Default is 7.  
+  
+**_debug_** `bool`  
+Enable debug mode. Default is True.  
+  
+**_otp_code_** `str`  
+One-time password for 2FA, if required.  
+  
 
-Provides methods to manage tasks, networks, storage, hosts, VMs, and images.
-
-Parameters
-----------
-ip_address : str
-    IP address of the Synology NAS.
-port : str
-    Port number to connect to.
-username : str
-    DSM username.
-password : str
-    DSM password.
-secure : bool, optional
-    Use HTTPS if True. Default is False.
-cert_verify : bool, optional
-    Verify SSL certificate if True. Default is False.
-dsm_version : int, optional
-    DSM version. Default is 7.
-debug : bool, optional
-    Enable debug mode. Default is True.
-otp_code : str, optional
-    One-time password for 2FA, if required.
+</div>
+  
 ## Methods
 ### `get_task_list`
 Get the list of virtualization tasks.  

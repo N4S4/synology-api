@@ -10,14 +10,15 @@ title: 🚧 DhcpServer
 # DhcpServer
 :::warning
  
-This API is not documented yet.
+This API is partially documented or under construction.
  
 :::
 ## Overview
-Core DHCP Server API implementation for Synology NAS.
-
+Core DHCP Server API implementation for Synology NAS.  
+  
 This class provides methods to retrieve and manage DHCP server, PXE, TFTP, and network
-interface information.
+interface information.  
+  
 ## Methods
 ### `general_info`
 Get general DHCP server information for a given interface.  

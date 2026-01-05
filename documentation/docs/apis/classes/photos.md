@@ -14,35 +14,49 @@ This API is partially documented or under construction.
  
 :::
 ## Overview
-Interface for Synology Photos API.
-
+Interface for Synology Photos API.  
+  
 Provides methods to interact with Photos features such as retrieving user info,
-folders, albums, sharing, and items.
+folders, albums, sharing, and items.  
+  
+### Parameters
+<div class="padding-left--md">
+**_ip_address_** `str`  
+The IP address or hostname of the Synology NAS.  
+  
+**_port_** `str`  
+The port number to connect to.  
+  
+**_username_** `str`  
+The username for authentication.  
+  
+**_password_** `str`  
+The password for authentication.  
+  
+**_secure_** `bool`  
+Whether to use HTTPS. Default is False.  
+  
+**_cert_verify_** `bool`  
+Whether to verify SSL certificates. Default is False.  
+  
+**_dsm_version_** `int`  
+DSM version. Default is 7.  
+  
+**_debug_** `bool`  
+Enable debug output. Default is True.  
+  
+**_otp_code_** `str`  
+One-time password for 2FA, if required.  
+  
+**_device_id_** `str`  
+Device ID for the session.  
+  
+**_device_name_** `str`  
+Device name for the session.  
+  
 
-Parameters
-----------
-ip_address : str
-    The IP address or hostname of the Synology NAS.
-port : str
-    The port number to connect to.
-username : str
-    The username for authentication.
-password : str
-    The password for authentication.
-secure : bool, optional
-    Whether to use HTTPS. Default is False.
-cert_verify : bool, optional
-    Whether to verify SSL certificates. Default is False.
-dsm_version : int, optional
-    DSM version. Default is 7.
-debug : bool, optional
-    Enable debug output. Default is True.
-otp_code : str, optional
-    One-time password for 2FA, if required.
-device_id : str, optional
-    Device ID for the session.
-device_name : str, optional
-    Device name for the session.
+</div>
+  
 ## Methods
 ### `get_userinfo`
 Retrieve user information for the current session.  

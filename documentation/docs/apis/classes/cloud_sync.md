@@ -9,46 +9,47 @@ title: ✅ CloudSync
   
 # CloudSync
 ## Overview
-Cloud Sync API implementation.
+Cloud Sync API implementation.  
+  
+This API provides the functionality to get information related to the package settings and current connections and tasks.
+It also provides functionalities to set most of the settings for tasks and package configuration, as well as manage the current syncing processes.
 
-   This API provides the functionality to get information related to the package settings and current connections and tasks.
-   It also provides functionalities to set most of the settings for tasks and package configuration, as well as manage the current syncing processes.
+Due to the vast amount of public clouds available in the project, the API was not tested for every cloud scenario, so some params request may be missing in specific not tested clouds.
 
-   Due to the vast amount of public clouds available in the project, the API was not tested for every cloud scenario, so some params request may be missing in specific not tested clouds.
+The tested clouds so far are:
+- Google Drive
+- OneDrive
+- DropBox
+- Amazon S3 (task creation)
 
-   The tested clouds so far are:
-   - Google Drive
-   - OneDrive
-   - DropBox
-   - Amazon S3 (task creation)
+### Supported methods
 
-   ### Supported methods
-
-        - **Getters** :
-           - Get package settings
-           - Get connections
-           - Get connections settings
-           - Get connection information
-           - Get connection auth information
-           - Get connection logs
-           - Get connection tasks
-           - Get task filters
-           - Get task synced remote directories
-           - Get recently modified & currently syncing files
-        - **Setters** :
-           - Set package settings
-           - Set relink behavior
-           - Set connection settings
-           - Set connection schedule settings
-           - Set task settings
-           - Set task filters
-        - **Actions** :
-           - Pause connection
-           - Resume connection
-           - Delete connection
-           - Delete task
-           - Validate task settings
-           - Create S3 task
+     - **Getters** :
+        - Get package settings
+        - Get connections
+        - Get connections settings
+        - Get connection information
+        - Get connection auth information
+        - Get connection logs
+        - Get connection tasks
+        - Get task filters
+        - Get task synced remote directories
+        - Get recently modified & currently syncing files
+     - **Setters** :
+        - Set package settings
+        - Set relink behavior
+        - Set connection settings
+        - Set connection schedule settings
+        - Set task settings
+        - Set task filters
+     - **Actions** :
+        - Pause connection
+        - Resume connection
+        - Delete connection
+        - Delete task
+        - Validate task settings
+        - Create S3 task  
+  
 ## Methods
 ### `get_pkg_config`
 Retrieve package settings.  

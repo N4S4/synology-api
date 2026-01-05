@@ -2,6 +2,7 @@ import argparse
 import re
 import sys
 import warnings
+from docstring_parser import Docstring
 import yaml
 from os import listdir
 from os.path import isfile, join
@@ -285,12 +286,32 @@ def parse_method_api(method_name: str, file_content: str) -> str:
         section = header('h4', 'Internal API')
         section += div(text(api_name, ['code']), 'padding', 'left', 'md')
     else:
-        warnings.warn(
-            f'Method {method_name} seems to not be directly calling any internal API, this is expected for utility methods that use other calls in the class.', UserWarning)
+        print(f'Method {method_name} seems to not be directly calling any internal API, this is expected for utility methods that use other calls in the class. You can ignore this message if this is the case.')
     return section + NEWLINE
 
 
-def gen_header(class_name: str, docstring: str, classes: list[str]) -> str:
+def parse_parameters(docstring: Docstring, method: dict | None) -> str:
+    parameters = ''
+    if docstring.params:
+        parameters = header('h4' if method else 'h3', 'Parameters')
+        parameters_body = ''
+        for param in docstring.params:
+            # no need to validate str if we are parsing class params
+            if method:
+                validate_str(method['name'] + ' - params',
+                             [param.arg_name, param.type_name, param.description])
+            parameters_body += text(param.arg_name or '', ['bold', 'italic'])
+            parameters_body += text(param.type_name or '',
+                                    ['code'], newline=True)
+            parameters_body += text(dedup_newlines(
+                param.description or ''), newline=True)
+            parameters_body += NEWLINE
+        parameters += div(content=parameters_body,
+                          spacing='padding', side='left', size='md')
+    return parameters
+
+
+def gen_header(class_name: str, docstring: Docstring, classes: list[str]) -> str:
     content = ''
     docs_status = ''
 
@@ -304,13 +325,24 @@ def gen_header(class_name: str, docstring: str, classes: list[str]) -> str:
     content += status_disclaimer(docs_status)
     content += header('h2', 'Overview')
 
-    docstring = docstring.replace(
-        'Supported methods:', header('h3', 'Supported methods'))
-    docstring = docstring.replace('Getters', text('Getters', ['bold']))
-    docstring = docstring.replace('Setters', text('Setters', ['bold']))
-    docstring = docstring.replace('Actions', text('Actions', ['bold']))
+    docstring_content = text(docstring.short_description or '', newline=True)
+    docstring_content += NEWLINE
+    docstring_content += text(docstring.long_description or '', newline=True)
 
-    content += docstring + '\n'
+    docstring_content = docstring_content.replace(
+        'Supported methods:', header('h3', 'Supported methods'))
+    docstring_content = docstring_content.replace(
+        'Getters', text('Getters', ['bold']))
+    docstring_content = docstring_content.replace(
+        'Setters', text('Setters', ['bold']))
+    docstring_content = docstring_content.replace(
+        'Actions', text('Actions', ['bold']))
+
+    if docstring.params:
+        docstring_content += NEWLINE + \
+            parse_parameters(docstring=docstring, method=None)
+
+    content += docstring_content + NEWLINE
     content += header('h2', 'Methods')
 
     return content
@@ -338,21 +370,7 @@ def gen_method(method: dict, file_content: str) -> str:
     # TODO: refactor, synology_api.core_package.Package.easy_install don't have internal API, but it has a docstring.
     internal_api = parse_method_api(method['name'], file_content)
 
-    parameters = ''
-    if docstring.params:
-        parameters = header('h4', 'Parameters')
-        parameters_body = ''
-        for param in docstring.params:
-            validate_str(method['name'] + ' - params',
-                         [param.arg_name, param.type_name, param.description])
-            parameters_body += text(param.arg_name or '', ['bold', 'italic'])
-            parameters_body += text(param.type_name or '',
-                                    ['code'], newline=True)
-            parameters_body += text(dedup_newlines(
-                param.description or ''), newline=True)
-            parameters_body += NEWLINE
-        parameters += div(content=parameters_body,
-                          spacing='padding', side='left', size='md')
+    parameters = parse_parameters(docstring, method)
 
     returns = ''
     if docstring.returns:
@@ -442,7 +460,7 @@ def main():
                     class_item['name'], file_content, file_name)
                 doc_content += gen_header(
                     class_item['name'],
-                    class_item['docstring_text'],
+                    class_item['docstring'],
                     classes=classes_names
                 )
 
