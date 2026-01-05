@@ -7,29 +7,29 @@
 - ActiveBackupMicrosoft:
     status: finished
 - AdminConsole:
-    status: not_started
+    status: partial
 - AudioStation:
-    status: not_started
+    status: partial
 - BaseApi:
     status: finished
 - Backup:
     status: partial
 - Certificate:
-    status: not_started
+    status: partial
 - CloudSync:
     status: finished
 - DhcpServer:
-    status: not_started
+    status: partial
 - DirectoryServer:
     status: finished
 - Docker:
     status: finished
 - DownloadStation:
-    status: not_started
+    status: partial
 - EventScheduler:
     status: finished
 - FileStation:
-    status: not_started
+    status: partial
 - Group:
     status: finished
 - KeyManagerStore:
@@ -37,17 +37,17 @@
 - KeyManagerAutoKey:
     status: not_started
 - LogCenter:
-    status: not_started
+    status: partial
 - NoteStation:
-    status: not_started
+    status: partial
 - OAuth:
-    status: not_started
+    status: partial
 - Package:
     status: partial
 - Photos:
     status: partial
 - SecurityAdvisor:
-    status: not_started
+    status: partial
 - Share:
     status: partial
 - SharePermission:
@@ -55,13 +55,13 @@
 - Snapshot:
     status: finished
 - SurveillanceStation:
-    status: not_started
+    status: partial
 - SysInfo:
-    status: not_started
+    status: partial
 - TaskScheduler:
     status: finished
 - UniversalSearch:
-    status: not_started
+    status: partial
 - USBCopy:
     status: finished
 - User:
