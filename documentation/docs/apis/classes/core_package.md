@@ -14,50 +14,38 @@ This API is partially documented or under construction.
  
 :::
 ## Overview
-Core Package API implementation for Synology NAS.
-
+Core Package API implementation for Synology NAS.  
+  
 This class provides methods to manage packages, including:
 - Listing installed and installable packages.
 - Installing, upgrading, and uninstalling packages.
 - Uploading package files.
 - Configuring package center settings.
 
-Methods
--------
-get_package(package_id, additional)
-    Get information about a package.
-list_installed(additional, ignore_hidden)
-    List installed packages.
-list_installable()
-    List installable packages.
-get_package_center_settings()
-    Get package center settings.
-set_package_center_settings(...)
-    Set package center settings.
-get_package_center_infos()
-    Get package center information.
-feasibility_check_install(packages)
-    Check if installation is possible.
-download_package(url, package_id, checksum, filesize)
-    Start download of a package.
-get_dowload_package_status(task_id)
-    Get current download status of a package.
-check_installation_from_download(task_id)
-    Get info about downloaded package file.
-upload_package_file(file_path, verify, progress_bar, additional)
-    Upload a file for installing a package.
-get_default_install_volume()
-    Get default install volume for packages.
-check_installation(...)
-    Check installation of a package.
-upgrade_package(...)
-    Upgrade an existing package.
-install_package(...)
-    Install a package that is already downloaded.
-uninstall_package(package_id)
-    Uninstall a package.
-easy_install(package_id, volume_path, install_dependencies)
-    Execute an easy installation process of a package.
+### Supported methods
+
+    - **Getters** :
+        - Get package info.
+        - Get information about a package.
+        - List installed packages.
+        - List installable packages.
+        - Get package center settings.
+        - Get package center information.
+        - Get current download status of a package.
+        - Get info about downloaded package file.
+        - Get default install volume for packages.
+    - **Setters** :
+        - Set package center settings.
+    - **Actions** :
+        - Check if installation is possible.
+        - Check installation of a package.
+        - Start download of a package.
+        - Upload a file for installing a package.
+        - Upgrade an existing package.
+        - Install a package that is already downloaded.
+        - Uninstall a package.
+        - Execute an easy installation process of a package.  
+  
 ## Methods
 ### `get_package`
 Get infos of a package.  
@@ -947,10 +935,6 @@ Possible message to the user.
 ### `easy_install`
 Execute an easy installation process of the package.  
   
-#### Internal API
-<div class="padding-left--md">
-`hotfix` 
-</div>
   
 #### Parameters
 <div class="padding-left--md">

@@ -9,27 +9,28 @@ title: ✅ ActiveBackupMicrosoft
   
 # ActiveBackupMicrosoft
 ## Overview
-Active Backup for Microsoft 365 Implementation.
+Active Backup for Microsoft 365 Implementation.  
+  
+### Supported methods
 
-    ### Supported methods
+- **Getters** :
+    - Get all tasks info
+    - Get task settings
+    - Get task logs
+    - Get package logs
+    - Get worker settings
 
-    - **Getters** :
-        - Get all tasks info
-        - Get task settings
-        - Get task logs
-        - Get package logs
-        - Get worker settings
+- **Setters** :
+    - Set worker settings
+    - Set task schedule policy
+    - Set task retention policy
 
-    - **Setters** :
-        - Set worker settings
-        - Set task schedule policy
-        - Set task retention policy
-
-    - **Actions** :
-        - Run backup
-        - Cancel backup
-        - Delete task
-        - Relink task
+- **Actions** :
+    - Run backup
+    - Cancel backup
+    - Delete task
+    - Relink task  
+  
 ## Methods
 ### `get_tasks`
 Retrieve all tasks.  

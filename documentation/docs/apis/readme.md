@@ -228,10 +228,10 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task`  
 - `SYNO.DownloadStation2.Task.Source`  
 - `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task.List`  
-- `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task.List.Polling`  
 - `SYNO.DownloadStation.Statistic`  
 - `SYNO.DownloadStation.RSS.Site`  
 - `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.RSS.Feed`  
+- `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.RSS.Filter`  
 - `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.BTSearch`  
   
 ###  [AdminConsole](./apis/classes/drive_admin_console) 

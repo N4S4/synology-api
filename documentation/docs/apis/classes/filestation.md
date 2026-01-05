@@ -10,11 +10,12 @@ title: 🚧 FileStation
 # FileStation
 :::warning
  
-This API is not documented yet.
+This API is partially documented or under construction.
  
 :::
 ## Overview
 FileStation API implementation.  
+  
 Provides methods to interact with Synology NAS FileStation API for file and folder operations,
 search, upload, download, and background task management.
 
@@ -1702,10 +1703,6 @@ None if successful, error message otherwise.
 ### `generate_file_tree`
 Recursively generate the file tree based on the folder path you give constrained with.  
 You need to create the root node before calling this function.  
-#### Internal API
-<div class="padding-left--md">
-`hotfix` 
-</div>
   
 #### Parameters
 <div class="padding-left--md">

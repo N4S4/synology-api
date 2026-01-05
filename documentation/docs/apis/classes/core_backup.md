@@ -14,7 +14,10 @@ This API is partially documented or under construction.
  
 :::
 ## Overview
-Synology Hyper Backup API.
+Synology Hyper Backup API.  
+  
+  
+  
 ## Methods
 ### `backup_repository_get`
 Get repository information for a given task.  

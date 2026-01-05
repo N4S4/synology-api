@@ -10,14 +10,15 @@ title: 🚧 SurveillanceStation
 # SurveillanceStation
 :::warning
  
-This API is not documented yet.
+This API is partially documented or under construction.
  
 :::
 ## Overview
-API wrapper for Synology Surveillance Station.
-
+API wrapper for Synology Surveillance Station.  
+  
 Provides methods to interact with Surveillance Station features such as retrieving
-station information and saving camera configurations.
+station information and saving camera configurations.  
+  
 ## Methods
 ### `surveillance_station_info`
 Retrieve information about the Surveillance Station.  

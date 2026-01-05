@@ -10,14 +10,15 @@ title: 🚧 NoteStation
 # NoteStation
 :::warning
  
-This API is not documented yet.
+This API is partially documented or under construction.
  
 :::
 ## Overview
-Interface for Synology NoteStation API.
-
+Interface for Synology NoteStation API.  
+  
 Provides methods to interact with NoteStation features such as retrieving settings,
-notebooks, tags, shortcuts, todos, smart notes, and individual notes.
+notebooks, tags, shortcuts, todos, smart notes, and individual notes.  
+  
 ## Methods
 ### `settings_info`
 Retrieve NoteStation settings information.  

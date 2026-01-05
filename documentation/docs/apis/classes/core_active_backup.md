@@ -9,33 +9,34 @@ title: ✅ ActiveBackupBusiness
   
 # ActiveBackupBusiness
 ## Overview
-Active Backup for Business API Implementation.
+Active Backup for Business API Implementation.  
+  
+This class provides methods to interact with the Active Backup for Business package.
 
-    This class provides methods to interact with the Active Backup for Business package.
+### Supported methods
 
-    ### Supported methods
-
-        - **Getters** :
-            - Get package settings
-            - Get tasks information
-            - Get tasks versions information
-            - Get devices information
-            - Get devices transfer size
-            - Get hypervisors information
-            - Get package / devices / tasks logs
-            - Get task history
-            - Get task result details
-            - Get storage information
-        - **Setters** :
-            - Set maximum concurrent devices
-            - Set retention policy execution time
-            - Set bandwidth control
-            - Set use package certificate
-        - **Actions** :
-            - Run backup
-            - Cancel backup
-            - Remove task
-            - Remove version
+    - **Getters** :
+        - Get package settings
+        - Get tasks information
+        - Get tasks versions information
+        - Get devices information
+        - Get devices transfer size
+        - Get hypervisors information
+        - Get package / devices / tasks logs
+        - Get task history
+        - Get task result details
+        - Get storage information
+    - **Setters** :
+        - Set maximum concurrent devices
+        - Set retention policy execution time
+        - Set bandwidth control
+        - Set use package certificate
+    - **Actions** :
+        - Run backup
+        - Cancel backup
+        - Remove task
+        - Remove version  
+  
 ## Methods
 ### `get_settings`
 Get the package settings including certificate information.  

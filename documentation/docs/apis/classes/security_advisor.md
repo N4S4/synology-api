@@ -10,14 +10,15 @@ title: 🚧 SecurityAdvisor
 # SecurityAdvisor
 :::warning
  
-This API is not documented yet.
+This API is partially documented or under construction.
  
 :::
 ## Overview
-Interface for Synology Security Advisor API.
-
+Interface for Synology Security Advisor API.  
+  
 Provides methods to retrieve general info, scan results, checklists,
-login activity, and configuration for Security Advisor.
+login activity, and configuration for Security Advisor.  
+  
 ## Methods
 ### `general_info`
 Retrieve general information about Security Advisor location configuration.  

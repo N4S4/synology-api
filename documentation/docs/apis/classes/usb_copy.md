@@ -9,8 +9,8 @@ title: ✅ USBCopy
   
 # USBCopy
 ## Overview
-USB Copy API wrapper for Synology NAS.
-
+USB Copy API wrapper for Synology NAS.  
+  
 Methods
 -------
 **Getters** :
@@ -19,7 +19,8 @@ Methods
     - Get task settings
 
 **Actions** :
-    - Enable / Disable task
+    - Enable / Disable task  
+  
 ## Methods
 ### `get_package_settings`
 Retrieve package settings.  

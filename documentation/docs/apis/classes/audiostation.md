@@ -10,11 +10,14 @@ title: 🚧 AudioStation
 # AudioStation
 :::warning
  
-This API is not documented yet.
+This API is partially documented or under construction.
  
 :::
 ## Overview
-A class to interact with Synology AudioStation API.
+A class to interact with Synology AudioStation API.  
+  
+  
+  
 ## Methods
 ### `get_info`
 Retrieve general information about the AudioStation service.  

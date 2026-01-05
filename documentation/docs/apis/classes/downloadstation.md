@@ -10,89 +10,90 @@ title: 🚧 DownloadStation
 # DownloadStation
 :::warning
  
-This API is not documented yet.
+This API is partially documented or under construction.
  
 :::
 ## Overview
-Core Download Station API implementation for Synology NAS.
-
+Core Download Station API implementation for Synology NAS.  
+  
 This class provides methods to manage downloads, tasks, RSS feeds, and BT searches.
 
-Parameters
-----------
-ip_address : str
-    IP address or hostname of the Synology NAS.
-port : str
-    Port number to connect to.
-username : str
-    Username for authentication.
-password : str
-    Password for authentication.
-secure : bool, optional
-    Use HTTPS if True, HTTP if False (default is False).
-cert_verify : bool, optional
-    Verify SSL certificates (default is False).
-dsm_version : int, optional
-    DSM version (default is 7).
-debug : bool, optional
-    Enable debug output (default is True).
-otp_code : Optional[str], optional
-    One-time password for 2FA (default is None).
-device_id : Optional[str], optional
-    Device ID (default is None).
-device_name : Optional[str], optional
-    Device name (default is None).
-interactive_output : bool, optional
-    Enable interactive output (default is True).
-download_st_version : int, optional
-    Download Station API version (default is None).
+### Supported methods
 
-Methods
--------
-get_info()
-    Get Download Station info.
-get_config()
-    Get Download Station config.
-set_server_config(...)
-    Set Download Station server config.
-schedule_info()
-    Get schedule info.
-schedule_set_config(...)
-    Set schedule config.
-tasks_list(...)
-    List download tasks.
-tasks_info(...)
-    Get info for specific tasks.
-tasks_source(...)
-    Download task source.
-create_task(...)
-    Create a new download task.
-delete_task(...)
-    Delete a download task.
-pause_task(...)
-    Pause a download task.
-resume_task(...)
-    Resume a download task.
-edit_task(...)
-    Edit a download task.
-get_statistic_info()
-    Get Download Station statistics.
-get_rss_info_list(...)
-    Get RSS site info list.
-refresh_rss_site(...)
-    Refresh RSS site.
-rss_feed_list(...)
-    Get RSS feed list.
-start_bt_search(...)
-    Start a BT search.
-get_bt_search_results(...)
-    Get BT search results.
-get_bt_search_category()
-    Get BT search categories.
-clean_bt_search(...)
-    Clean BT search tasks.
-get_bt_module()
-    Get BT search modules.
+    - **Getters** :
+        - Get Download Station info.
+        - Get Download Station config.
+        - Get Download Station statistics.
+        - Get RSS site info list.
+        - Get schedule info.
+        - Get info for specific tasks.
+        - List download tasks.
+        - Get RSS feed list.
+        - Get RSS feed filter list.
+        - Get BT search results.
+        - Get BT search categories.
+        - Get BT search modules.
+    - **Setters** :
+        - Set Download Station server config.
+        - Set schedule config.
+        - Create a new download task.
+        - Edit a download task.
+        - Delete a download task.
+        - Add RSS feed filter.
+        - Set RSS feed filter.
+        - Delete RSS feed filter.
+    - **Actions** :
+        - Download task source.
+        - Pause a download task.
+        - Resume a download task.
+        - Refresh RSS site.
+        - Start a BT search.
+        - Clean BT search tasks.  
+  
+### Parameters
+<div class="padding-left--md">
+**_ip_address_** `str`  
+IP address or hostname of the Synology NAS.  
+  
+**_port_** `str`  
+Port number to connect to.  
+  
+**_username_** `str`  
+Username for authentication.  
+  
+**_password_** `str`  
+Password for authentication.  
+  
+**_secure_** `bool`  
+Use HTTPS if True, HTTP if False (default is False).  
+  
+**_cert_verify_** `bool`  
+Verify SSL certificates (default is False).  
+  
+**_dsm_version_** `int`  
+DSM version (default is 7).  
+  
+**_debug_** `bool`  
+Enable debug output (default is True).  
+  
+**_otp_code_** `Optional[str]`  
+One-time password for 2FA (default is None).  
+  
+**_device_id_** `Optional[str]`  
+Device ID (default is None).  
+  
+**_device_name_** `Optional[str]`  
+Device name (default is None).  
+  
+**_interactive_output_** `bool`  
+Enable interactive output (default is True).  
+  
+**_download_st_version_** `int`  
+Download Station API version (default is None).  
+  
+
+</div>
+  
 ## Methods
 ### `get_info`
 Get Download Station info.  
@@ -332,8 +333,8 @@ Task source content.
 
 
 ### `get_task_list`
-Get info from a task list containing the files to be downloaded. This is to be used after creating a task, and before starting the download.  
-  
+Get info from a task list containing the files to be downloaded.  
+This is to be used after creating a task, and before starting the download.  
 #### Internal API
 <div class="padding-left--md">
 `SYNO.DownloadStation` 
@@ -352,6 +353,36 @@ List ID returned by create_task.
 A dictionary containing a task list information.  
 
 </div>
+#### Example return
+<details>
+<summary>Click to expand</summary>
+```json
+{
+    "data" : {
+        "files" : [
+            {
+                "index" : 0,
+                "name" : "Pulp.Fiction.1994.2160p.4K.BluRay.x265.10bit.AAC5.1-[YTS.MX].mkv",
+                "size" : 2391069024
+            },
+            {
+                "index" : 1,
+                "name" : "YTSProxies.com.txt",
+                "size" : 604
+            },
+            {
+                "index" : 2,
+                "name" : "www.YTS.MX.jpg",
+                "size" : 53226
+            }
+        ],
+        "size" : 7835426779,
+        "title" : "Pulp Fiction (1994) [2160p] [4K] [BluRay] [5.1] [YTS.MX]",
+        "type" : "bt"
+    },
+}
+```
+</details>
 
 
 
@@ -360,7 +391,7 @@ A dictionary containing a task list information.
 
 ### `create_task`
 Create a new download task.  
-  
+You can choose between a url or a file path (.torrent).  
 #### Internal API
 <div class="padding-left--md">
 `SYNO.DownloadStation` 
@@ -369,10 +400,13 @@ Create a new download task.
 #### Parameters
 <div class="padding-left--md">
 **_url_** `str`  
-Download URL.  
+Download URL. Use either `url` or `file_path`.  
+  
+**_file_path_** `str`  
+Path to a file (e.g. a .torrent) to download.  
   
 **_destination_** `str`  
-Download destination.  
+Download destination folder (default is "").  
   
 
 </div>
@@ -516,7 +550,7 @@ Download files from a task list.
 Task list ID.  
   
 **_file_indexes_** `list[int]`  
-List of file indexes to download.  
+List of file indexes to download.
 For example, if `get_task_list()` returns `files: [{index: 0, name: "file1.txt"}, {index: 1, name: "file2.txt"}]`, then `file_indexes = [1]` will download only file2.txt.  
   
 **_destination_** `str`  
@@ -533,6 +567,17 @@ Create subfolder. Defaults to `True`
 A dictionary containing the task_id for the started download task.  
 
 </div>
+#### Example return
+<details>
+<summary>Click to expand</summary>
+```json
+{
+    'data': {
+        'task_id': 'username/SYNODLTaskListDownload1759340338C7C39ABA'
+    }
+}
+```
+</details>
 
 
 
@@ -641,6 +686,150 @@ Maximum number of RSS feeds to retrieve.
 <div class="padding-left--md">
 `dict[str, object] or str`  
 RSS feed list.  
+
+</div>
+
+
+
+---
+
+
+### `rss_feed_filter_list`
+Get RSS feed filter list.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.DownloadStation` 
+</div>
+  
+#### Parameters
+<div class="padding-left--md">
+**_feed_id_** `int`  
+RSS feed ID.  
+  
+**_offset_** `int`  
+Offset for pagination.  
+  
+**_limit_** `int`  
+Maximum number of filters to retrieve.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+RSS feed filter list.  
+
+</div>
+
+
+
+---
+
+
+### `rss_feed_filter_add`
+Add RSS feed filter.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.DownloadStation` 
+</div>
+  
+#### Parameters
+<div class="padding-left--md">
+**_feed_id_** `int`  
+RSS feed ID.  
+  
+**_filter_name_** `str`  
+Filter name.  
+  
+**_match_** `str`  
+Match pattern.  
+  
+**_not_match_** `str`  
+Not match pattern.  
+  
+**_destination_** `str`  
+Download destination.  
+  
+**_is_regex_** `bool`  
+Use regex for matching (default is False).  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+API response.  
+
+</div>
+
+
+
+---
+
+
+### `rss_feed_filter_set`
+Set RSS feed filter.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.DownloadStation` 
+</div>
+  
+#### Parameters
+<div class="padding-left--md">
+**_filter_id_** `int`  
+Filter ID.  
+  
+**_filter_name_** `str`  
+Filter name.  
+  
+**_match_** `str`  
+Match pattern.  
+  
+**_not_match_** `str`  
+Not match pattern.  
+  
+**_destination_** `str`  
+Download destination.  
+  
+**_is_regex_** `bool`  
+Use regex for matching (default is False).  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+API response.  
+
+</div>
+
+
+
+---
+
+
+### `rss_feed_filter_delete`
+Delete RSS feed filter.  
+  
+#### Internal API
+<div class="padding-left--md">
+`SYNO.DownloadStation` 
+</div>
+  
+#### Parameters
+<div class="padding-left--md">
+**_filter_id_** `int`  
+Filter ID.  
+  
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`  
+API response.  
 
 </div>
 

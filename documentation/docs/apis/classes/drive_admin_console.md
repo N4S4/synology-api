@@ -10,14 +10,15 @@ title: 🚧 AdminConsole
 # AdminConsole
 :::warning
  
-This API is not documented yet.
+This API is partially documented or under construction.
  
 :::
 ## Overview
-Synology Drive Admin Console API implementation.
-
+Synology Drive Admin Console API implementation.  
+  
 This class provides methods to retrieve and manage Synology Drive Admin Console status,
-configuration, connections, logs, shares, and settings.
+configuration, connections, logs, shares, and settings.  
+  
 ## Methods
 ### `status_info`
 Get Synology Drive status information.  

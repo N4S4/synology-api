@@ -9,24 +9,25 @@ title: ✅ EventScheduler
   
 # EventScheduler
 ## Overview
-Event Scheduler API implementation.
-
+Event Scheduler API implementation.  
+  
 This API provides functionality solely related to Event Tasks. For scheduled tasks, check `TaskScheduler`.
 
-Methods
--------
-**Getters** :
-    - Get task results
-    - Get result output
-**Setters** :
-    - Set task settings
-    - Set power schedule
-**Actions** :
-    - Enable task
-    - Disable task
-    - Run task
-    - Delete task
-    - Create task
+### Supported methods
+
+    - **Getters** :
+        - Get task results
+        - Get result output
+    - **Setters** :
+        - Set task settings
+        - Set power schedule
+    - **Actions** :
+        - Enable task
+        - Disable task
+        - Run task
+        - Delete task
+        - Create task  
+  
 ## Methods
 ### `get_task_results`
 Retrieve the results list for a specific task.  

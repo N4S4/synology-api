@@ -9,28 +9,29 @@ title: ✅ Docker
   
 # Docker
 ## Overview
-Docker API implementation.
+Docker API implementation.  
+  
+This class provides methods to interact with Docker containers, images, registries, and projects on a Synology NAS.
 
-    This class provides methods to interact with Docker containers, images, registries, and projects on a Synology NAS.
+Supported actions:
+    - **Getters** :
+        - Get list of containers
+        - Get resources of all containers
+        - Get system resources
+        - List of docker images
+        - Get list of docker registries
+        - Get list of container logs
+        - Get containers resource usage statistics
+        - Search for docker image in all available registries
+        - Get list of projects
+        - Get list of docker networks
 
-    Supported actions:
-        - **Getters** :
-            - Get list of containers
-            - Get resources of all containers
-            - Get system resources
-            - List of docker images
-            - Get list of docker registries
-            - Get list of container logs
-            - Get containers resource usage statistics
-            - Search for docker image in all available registries
-            - Get list of projects
-            - Get list of docker networks
+    - **Setters** :
 
-        - **Setters** :
-
-        - **Actions** :
-            - Export container profile
-            - Export container profile and content
+    - **Actions** :
+        - Export container profile
+        - Export container profile and content  
+  
 ## Methods
 ### `containers`
 Get list of containers.  

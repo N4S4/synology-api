@@ -9,8 +9,8 @@ title: ✅ Snapshot
   
 # Snapshot
 ## Overview
-Class for interacting with Snapshot Replication APIs.
-
+Class for interacting with Snapshot Replication APIs.  
+  
 This class implements APIs to manage snapshots.
 There is no documentation for these APIs, so the implementation is based on network inspection.
 
@@ -27,42 +27,8 @@ Methods
 **Actions** :
     - Create share/LUN snapshot (WORM support only for share snaps ATM)
     - Delete share/LUN snapshot
-    - Sync replication
-
-Examples
---------
-List snapshots for a share/LUN:
-```python
-from synology_api import snapshot
-ss = snapshot.Snapshot('IP', 'PORT', 'USER', 'PASSWORD')
-
-resp_share = ss.list_snapshots('share_name')
-resp_lun = ss.list_snapshots_lun('src_lun_uuid')
-
-print(resp_share, resp_lun)
-```
-
-Create a snapshot for a share/LUN:
-```python
-resp_share = ss.create_snapshot('share_name')
-resp_lun = create_snapshot_lun('lun_id')
-
-print(resp_share, resp_lun)
-```
-
-Delete snapshots for a share:
-```python
-resp_share = ss.delete_snapshots('share_name', ['snapshot_name'])
-resp_lun = ss.delete_snapshots_lun(['snapshot_uuid'])
-
-print(resp_share, resp_lun)
-```
-
-Set attributes for a snapshot:
-```python
-resp = ss.set_snapshot_attr('share_name', 'snapshot_name', description='new description', lock=True)
-print(resp)
-```
+    - Sync replication  
+  
 ## Methods
 ### `list_snapshots`
 List snapshots for a share.  

@@ -10,13 +10,14 @@ title: 🚧 UniversalSearch
 # UniversalSearch
 :::warning
  
-This API is not documented yet.
+This API is partially documented or under construction.
  
 :::
 ## Overview
-API wrapper for Synology Universal Search.
-
-Provides methods to perform keyword-based searches using Synology's Universal Search API.
+API wrapper for Synology Universal Search.  
+  
+Provides methods to perform keyword-based searches using Synology's Universal Search API.  
+  
 ## Methods
 ### `search`
 Search for files and metadata matching the given keyword.  

@@ -9,42 +9,32 @@ title: ✅ Group
   
 # Group
 ## Overview
-Core Group API implementation for Synology NAS.
-
+Core Group API implementation for Synology NAS.  
+  
 This class provides methods to manage groups, including:
 - Retrieving group information, members, permissions, quotas, and speed limits.
 - Modifying group name, description, share permissions, quotas, and speed limits.
 - Creating and deleting groups.
 - Adding and removing users from groups.
 
-Methods
--------
-get_groups(offset=0, limit=-1, name_only=False)
-    Retrieve groups information.
-get_users(group, in_group=True)
-    Retrieve users who are members or not members of a group.
-get_speed_limits(group)
-    Retrieve bandwidth control settings for a group.
-get_quota(group)
-    Retrieve quota settings for a group.
-get_permissions(group)
-    Retrieve share permissions for a group.
-set_group_info(group, new_name="", new_description="")
-    Change group name and/or description.
-set_share_quota(group, share_quotas)
-    Set group quota for a given share.
-set_share_permissions(group, permissions)
-    Set group permissions for a given share.
-set_speed_limit(group, upload_limit, download_limit, protocol)
-    Set speed limit for a given share.
-add_users(group, users)
-    Add users to a group.
-remove_users(group, users)
-    Remove users from a group.
-create(name, description="")
-    Create a new group.
-delete(groups)
-    Delete specified groups.
+### Supported methods
+
+    - **Getters** : 
+        - Retrieve groups information.
+        - Retrieve users who are members or not members of a group.
+        - Retrieve bandwidth control settings for a group.
+        - Retrieve quota settings for a group.
+        - Retrieve share permissions for a group.
+    - **Setters** :
+        - Change group name and/or description.
+        - Set group quota for a given share.
+        - Set group permissions for a given share.
+        - Set speed limit for a given share.
+        - Add users to a group.
+        - Remove users from a group.
+        - Create a new group.
+        - Delete specified groups.  
+  
 ## Methods
 ### `get_groups`
 Retrieve groups information.  

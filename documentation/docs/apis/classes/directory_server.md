@@ -9,8 +9,8 @@ title: ✅ DirectoryServer
   
 # DirectoryServer
 ## Overview
-The directory server API.
-
+The directory server API.  
+  
 Not all items within this class use the Active Directory API. Some use the Synology Entry API which proxies
 the request. Some are related to managing users in ways that are useful in the Directory Server context. For
 example, sending a user password reset email, or updating the user information. This api works slightly
@@ -36,7 +36,8 @@ The APIs in this class are tested working against the following scenarios:
     - Send a password reset email to any Synology user
     - Delete a list of items from the Directory Server
     - Delete a single item from the Directory Server
-    - Perform an entry request to complete a Deletion
+    - Perform an entry request to complete a Deletion  
+  
 ## Methods
 ### `get_directory_info`
 Get directory info.  
