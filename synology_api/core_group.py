@@ -22,7 +22,7 @@ class Group(base_api.BaseApi):
     - Adding and removing users from groups.
 
     Supported methods:
-        - Getters: 
+        - Getters:
             - Retrieve groups information.
             - Retrieve users who are members or not members of a group.
             - Retrieve bandwidth control settings for a group.

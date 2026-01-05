@@ -33,57 +33,57 @@ class FileStation(base_api.BaseApi):
     Provides methods to interact with Synology NAS FileStation API for file and folder operations,
     search, upload, download, and background task management.
 
-    Supported methods: 
-        - Getters: 
-            - Get FileStation info 
-            - Get list of shared folders 
-            - Get file list in a folder 
-            - Get file information 
-            - Get search task results 
-            - Get mount point list 
-            - Get favorite list 
-            - Get directory size calculation status 
-            - Get MD5 calculation status 
-            - Check file/folder permissions 
-            - Get shared link information 
-            - Get shared link list 
-            - Get copy or move task status 
-            - Get delete task status 
-            - Get extract task status 
-            - Get file list of archive 
-            - Get compression task status 
-            - Get list of all background tasks 
-        - Setters: 
-            - Edit favorite name 
-            - Replace all favorites 
-            - Edit shared link 
-        - Actions: 
-            - Start search task 
-            - Stop search task 
-            - Stop all search tasks 
-            - Add a favorite 
-            - Delete a favorite 
-            - Clear broken favorites 
-            - Start directory size calculation 
-            - Stop directory size calculation 
-            - Start MD5 calculation 
-            - Stop MD5 calculation 
-            - Upload file 
-            - Create sharing link 
-            - Delete shared link 
-            - Clear invalid shared links 
-            - Create folder 
-            - Rename folder 
-            - Start copy or move task 
-            - Stop copy or move task 
-            - Start delete task 
-            - Stop delete task 
-            - Delete file or folder (blocking) 
-            - Start extract task 
-            - Stop extract task 
-            - Start file compression 
-            - Stop file compression 
-            - Download file 
+    Supported methods:
+        - Getters:
+            - Get FileStation info
+            - Get list of shared folders
+            - Get file list in a folder
+            - Get file information
+            - Get search task results
+            - Get mount point list
+            - Get favorite list
+            - Get directory size calculation status
+            - Get MD5 calculation status
+            - Check file/folder permissions
+            - Get shared link information
+            - Get shared link list
+            - Get copy or move task status
+            - Get delete task status
+            - Get extract task status
+            - Get file list of archive
+            - Get compression task status
+            - Get list of all background tasks
+        - Setters:
+            - Edit favorite name
+            - Replace all favorites
+            - Edit shared link
+        - Actions:
+            - Start search task
+            - Stop search task
+            - Stop all search tasks
+            - Add a favorite
+            - Delete a favorite
+            - Clear broken favorites
+            - Start directory size calculation
+            - Stop directory size calculation
+            - Start MD5 calculation
+            - Stop MD5 calculation
+            - Upload file
+            - Create sharing link
+            - Delete shared link
+            - Clear invalid shared links
+            - Create folder
+            - Rename folder
+            - Start copy or move task
+            - Stop copy or move task
+            - Start delete task
+            - Stop delete task
+            - Delete file or folder (blocking)
+            - Start extract task
+            - Stop extract task
+            - Start file compression
+            - Stop file compression
+            - Download file
             - Generate file tree
 
     Parameters
@@ -586,7 +586,8 @@ class FileStation(base_api.BaseApi):
                              limit: Optional[int] = None,
                              sort_by: Optional[str] = None,
                              sort_direction: Optional[str] = None,
-                             additional: Optional[str | list[str]] = ["real_path","owner","time","perm","mount_point_type"]
+                             additional: Optional[str | list[str]] = [
+                                 "real_path", "owner", "time", "perm", "mount_point_type"]
                              ) -> dict[str, object] | str:
         """
         List mount points.
@@ -632,7 +633,7 @@ class FileStation(base_api.BaseApi):
         info = self.file_station_list[api_name]
         api_path = info['path']
         req_param = {
-            'version': info['maxVersion'], 
+            'version': info['maxVersion'],
             'method': 'list',
             'offset': offset,
             'limit': limit,

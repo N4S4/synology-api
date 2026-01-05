@@ -289,6 +289,7 @@ def parse_method_api(method_name: str, file_content: str) -> str:
         print(f'Method {method_name} seems to not be directly calling any internal API, this is expected for utility methods that use other calls in the class. You can ignore this message if this is the case.')
     return section + NEWLINE
 
+
 def parse_parameters(docstring: Docstring, method: dict | None) -> str:
     parameters = ''
     if docstring.params:
@@ -298,7 +299,7 @@ def parse_parameters(docstring: Docstring, method: dict | None) -> str:
             # no need to validate str if we are parsing class params
             if method:
                 validate_str(method['name'] + ' - params',
-                            [param.arg_name, param.type_name, param.description])
+                             [param.arg_name, param.type_name, param.description])
             parameters_body += text(param.arg_name or '', ['bold', 'italic'])
             parameters_body += text(param.type_name or '',
                                     ['code'], newline=True)
@@ -308,6 +309,7 @@ def parse_parameters(docstring: Docstring, method: dict | None) -> str:
         parameters += div(content=parameters_body,
                           spacing='padding', side='left', size='md')
     return parameters
+
 
 def gen_header(class_name: str, docstring: Docstring, classes: list[str]) -> str:
     content = ''
@@ -327,13 +329,18 @@ def gen_header(class_name: str, docstring: Docstring, classes: list[str]) -> str
     docstring_content += NEWLINE
     docstring_content += text(docstring.long_description or '', newline=True)
 
-    docstring_content = docstring_content.replace('Supported methods:', header('h3', 'Supported methods'))
-    docstring_content = docstring_content.replace('Getters', text('Getters', ['bold']))
-    docstring_content = docstring_content.replace('Setters', text('Setters', ['bold']))
-    docstring_content = docstring_content.replace('Actions', text('Actions', ['bold']))
+    docstring_content = docstring_content.replace(
+        'Supported methods:', header('h3', 'Supported methods'))
+    docstring_content = docstring_content.replace(
+        'Getters', text('Getters', ['bold']))
+    docstring_content = docstring_content.replace(
+        'Setters', text('Setters', ['bold']))
+    docstring_content = docstring_content.replace(
+        'Actions', text('Actions', ['bold']))
 
     if docstring.params:
-        docstring_content += NEWLINE + parse_parameters(docstring=docstring, method=None)
+        docstring_content += NEWLINE + \
+            parse_parameters(docstring=docstring, method=None)
 
     content += docstring_content + NEWLINE
     content += header('h2', 'Methods')
