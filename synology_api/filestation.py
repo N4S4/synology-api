@@ -33,6 +33,59 @@ class FileStation(base_api.BaseApi):
     Provides methods to interact with Synology NAS FileStation API for file and folder operations,
     search, upload, download, and background task management.
 
+    Supported methods: 
+        - Getters: 
+            - Get FileStation info 
+            - Get list of shared folders 
+            - Get file list in a folder 
+            - Get file information 
+            - Get search task results 
+            - Get mount point list 
+            - Get favorite list 
+            - Get directory size calculation status 
+            - Get MD5 calculation status 
+            - Check file/folder permissions 
+            - Get shared link information 
+            - Get shared link list 
+            - Get copy or move task status 
+            - Get delete task status 
+            - Get extract task status 
+            - Get file list of archive 
+            - Get compression task status 
+            - Get list of all background tasks 
+        - Setters: 
+            - Edit favorite name 
+            - Replace all favorites 
+            - Edit shared link 
+        - Actions: 
+            - Start search task 
+            - Stop search task 
+            - Stop all search tasks 
+            - Add a favorite 
+            - Delete a favorite 
+            - Clear broken favorites 
+            - Start directory size calculation 
+            - Stop directory size calculation 
+            - Start MD5 calculation 
+            - Stop MD5 calculation 
+            - Upload file 
+            - Create sharing link 
+            - Delete shared link 
+            - Clear invalid shared links 
+            - Create folder 
+            - Rename folder 
+            - Start copy or move task 
+            - Stop copy or move task 
+            - Start delete task 
+            - Stop delete task 
+            - Delete file or folder (blocking) 
+            - Start extract task 
+            - Stop extract task 
+            - Start file compression 
+            - Stop file compression 
+            - Download file 
+            - Generate file tree
+
     Parameters
     ----------
     ip_address : str
@@ -59,13 +112,6 @@ class FileStation(base_api.BaseApi):
         Name of the device. Default is None.
     interactive_output : bool, optional
         If True, enables interactive output. Default is False.
-
-    Methods
-    -------
-    get_info()
-        Get FileStation information.
-    get_list_share()
-        List shared folderss.
     """
 
     def __init__(self,
@@ -535,30 +581,47 @@ class FileStation(base_api.BaseApi):
         return 'All task are stopped'
 
     def get_mount_point_list(self,
-                             mount_type: Optional[str] = None,
+                             mount_type: str,
                              offset: Optional[int] = None,
                              limit: Optional[int] = None,
                              sort_by: Optional[str] = None,
                              sort_direction: Optional[str] = None,
-                             additional: Optional[str | list[str]] = None
+                             additional: Optional[str | list[str]] = ["real_path","owner","time","perm","mount_point_type"]
                              ) -> dict[str, object] | str:
         """
         List mount points.
 
         Parameters
         ----------
-        mount_type : str, optional
-            Type of mount point to filter by.
+        mount_type : str
+            Type of mount point to return.
+
+            Posible values:
+            - `"ftp"` = FTP and FTPS connections
+            - `"davs"` = WebDAV connections
+            - `"sharing"` = Public cloud connections
         offset : int, optional
             Offset for pagination.
         limit : int, optional
             Limit for pagination.
         sort_by : str, optional
             Field to sort by.
+
+            Posible values:
+            - `"name"`
+            - `"path"`
         sort_direction : str, optional
             Sort direction ('asc' or 'desc').
         additional : str or list of str, optional
-            Additional attributes to include.
+            Additional attributes to include. Defaults to `["real_path","owner","time","perm","mount_point_type"]`.
+
+            Possible values (not exhaustive):
+            - `"real_path"`
+            - `"size"`
+            - `"owner"`
+            - `"time"`
+            - `"mount_point_type"`
+            - `"perm"`
 
         Returns
         -------
@@ -568,23 +631,21 @@ class FileStation(base_api.BaseApi):
         api_name = 'SYNO.FileStation.VirtualFolder'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
-
-        if mount_type is not None:
-            req_param['type'] = mount_type
+        req_param = {
+            'version': info['maxVersion'], 
+            'method': 'list',
+            'offset': offset,
+            'limit': limit,
+            'sort_by': sort_by,
+            'sort_direction': sort_direction,
+            'additional': additional,
+            'type': mount_type
+        }
 
         for key, val in locals().items():
             if key not in ['self', 'api_name', 'info', 'api_path', 'req_param', 'additional', 'mount_type']:
                 if val is not None:
                     req_param[str(key)] = val
-
-        if additional is None:
-            additional = ['real_path', 'size', 'owner', 'time']
-
-        if type(additional) is list:
-            additional = ','.join(additional)
-
-        req_param['additional'] = additional
 
         return self.request_data(api_name, api_path, req_param)
 

@@ -14,37 +14,105 @@ This API is not documented yet.
  
 :::
 ## Overview
-FileStation API implementation.
-
+FileStation API implementation.  
 Provides methods to interact with Synology NAS FileStation API for file and folder operations,
 search, upload, download, and background task management.
 
-Parameters
-----------
-ip_address : str
-    IP address of the Synology NAS.
-port : str
-    Port number for the connection.
-username : str
-    Username for authentication.
-password : str
-    Password for authentication.
-secure : bool, optional
-    Use HTTPS if True, HTTP otherwise. Default is False.
-cert_verify : bool, optional
-    Verify SSL certificates if True. Default is False.
-dsm_version : int, optional
-    DSM version of the Synology NAS. Default is 7.
-debug : bool, optional
-    Enable debug output if True. Default is True.
-otp_code : str, optional
-    One-time password for 2-step verification. Default is None.
-device_id : str, optional
-    Device ID for authentication. Default is None.
-device_name : str, optional
-    Name of the device. Default is None.
-interactive_output : bool, optional
-    If True, enables interactive output. Default is False.
+### Supported methods
+ 
+    - **Getters** : 
+        - Get FileStation info 
+        - Get list of shared folders 
+        - Get file list in a folder 
+        - Get file information 
+        - Get search task results 
+        - Get mount point list 
+        - Get favorite list 
+        - Get directory size calculation status 
+        - Get MD5 calculation status 
+        - Check file/folder permissions 
+        - Get shared link information 
+        - Get shared link list 
+        - Get copy or move task status 
+        - Get delete task status 
+        - Get extract task status 
+        - Get file list of archive 
+        - Get compression task status 
+        - Get list of all background tasks 
+    - **Setters** : 
+        - Edit favorite name 
+        - Replace all favorites 
+        - Edit shared link 
+    - **Actions** : 
+        - Start search task 
+        - Stop search task 
+        - Stop all search tasks 
+        - Add a favorite 
+        - Delete a favorite 
+        - Clear broken favorites 
+        - Start directory size calculation 
+        - Stop directory size calculation 
+        - Start MD5 calculation 
+        - Stop MD5 calculation 
+        - Upload file 
+        - Create sharing link 
+        - Delete shared link 
+        - Clear invalid shared links 
+        - Create folder 
+        - Rename folder 
+        - Start copy or move task 
+        - Stop copy or move task 
+        - Start delete task 
+        - Stop delete task 
+        - Delete file or folder (blocking) 
+        - Start extract task 
+        - Stop extract task 
+        - Start file compression 
+        - Stop file compression 
+        - Download file 
+        - Generate file tree  
+  
+### Parameters
+<div class="padding-left--md">
+**_ip_address_** `str`  
+IP address of the Synology NAS.  
+  
+**_port_** `str`  
+Port number for the connection.  
+  
+**_username_** `str`  
+Username for authentication.  
+  
+**_password_** `str`  
+Password for authentication.  
+  
+**_secure_** `bool`  
+Use HTTPS if True, HTTP otherwise. Default is False.  
+  
+**_cert_verify_** `bool`  
+Verify SSL certificates if True. Default is False.  
+  
+**_dsm_version_** `int`  
+DSM version of the Synology NAS. Default is 7.  
+  
+**_debug_** `bool`  
+Enable debug output if True. Default is True.  
+  
+**_otp_code_** `str`  
+One-time password for 2-step verification. Default is None.  
+  
+**_device_id_** `str`  
+Device ID for authentication. Default is None.  
+  
+**_device_name_** `str`  
+Name of the device. Default is None.  
+  
+**_interactive_output_** `bool`  
+If True, enables interactive output. Default is False.  
+  
+
+</div>
+  
 ## Methods
 ### `get_info`
 Get FileStation information.  
@@ -172,8 +240,8 @@ Get information about a file or files.
 **_path_** `str or list of str`  
 Path(s) to the file(s).  
   
-**_additional_** `str or list of str`  
-Additional attributes to include.  
+**_additional_param_** `str or list of str`  
+Additional attributes to retrieve.  
   
 
 </div>
@@ -361,7 +429,11 @@ List mount points.
 #### Parameters
 <div class="padding-left--md">
 **_mount_type_** `str`  
-Type of mount point to filter by.  
+Type of mount point to return.  
+Posible values:
+- `"ftp"` = FTP and FTPS connections
+- `"davs"` = WebDAV connections
+- `"sharing"` = Public cloud connections  
   
 **_offset_** `int`  
 Offset for pagination.  
@@ -371,12 +443,22 @@ Limit for pagination.
   
 **_sort_by_** `str`  
 Field to sort by.  
+Posible values:
+- `"name"`
+- `"path"`  
   
 **_sort_direction_** `str`  
 Sort direction ('asc' or 'desc').  
   
 **_additional_** `str or list of str`  
-Additional attributes to include.  
+Additional attributes to include. Defaults to `["real_path","owner","time","perm","mount_point_type"]`.  
+Possible values (not exhaustive):
+- `"real_path"`
+- `"size"`
+- `"owner"`
+- `"time"`
+- `"mount_point_type"`
+- `"perm"`  
   
 
 </div>
@@ -1039,7 +1121,7 @@ Creation result or error message.
 
 
 ### `rename_folder`
-Rename a folder.  
+Rename a file or a folder.  
   
 #### Internal API
 <div class="padding-left--md">
@@ -1049,10 +1131,10 @@ Rename a folder.
 #### Parameters
 <div class="padding-left--md">
 **_path_** `str or list of str`  
-Current path or list of paths of the folder(s) to rename.  
+Current path or list of paths of the files or folder(s) to rename.  
   
 **_name_** `str or list of str`  
-New name or list of new names for the folder(s).  
+New name or list of new names for the file or folder(s).  
   
 **_additional_** `str or list of str`  
 Additional attributes to include.  
@@ -1589,7 +1671,7 @@ Download a file from the server.
 #### Parameters
 <div class="padding-left--md">
 **_path_** `str`  
-Path to the file on the server.  
+The file path starting with a shared folder to be downloaded.  
   
 **_mode_** `str`  
 Mode for downloading the file ('open' to open in browser, 'download' to download to disk).  
