@@ -1,4 +1,4 @@
-setuptools==80.10.1
+setuptools==80.10.2
 requests==2.32.5
 urllib3==2.6.3
 requests-toolbelt==1.0.0
