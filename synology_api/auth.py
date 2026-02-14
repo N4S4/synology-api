@@ -9,6 +9,7 @@ from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 
 from .error_codes import error_codes, CODE_SUCCESS, download_station_error_codes, file_station_error_codes
 from .error_codes import auth_error_codes, virtualization_error_codes
+from .error_codes import iscsi_lun_error_codes, iscsi_target_error_codes
 from urllib3 import disable_warnings
 from urllib3.exceptions import InsecureRequestWarning
 from .exceptions import CoreError
@@ -17,6 +18,7 @@ from .exceptions import FileStationError, AudioStationError, ActiveBackupError, 
 from .exceptions import CertificateError, CloudSyncError, DHCPServerError, DirectoryServerError, DockerError, DriveAdminError
 from .exceptions import LogCenterError, NoteStationError, OAUTHError, PhotosError, SecurityAdvisorError, TaskSchedulerError, EventSchedulerError
 from .exceptions import UniversalSearchError, USBCopyError, VPNError, CoreSysInfoError, UndefinedError
+from .exceptions import LunError, TargetError
 import hashlib
 from os import urandom
 from cryptography.hazmat.backends import default_backend
@@ -782,6 +784,12 @@ class Authentication:
                 # Event Scheduler error:
                 elif api_name.find('SYNO.Core.EventScheduler') > -1:
                     raise EventSchedulerError(error_code=error_code)
+                # ISCSI LUN error:
+                elif api_name.find('SYNO.Core.ISCSI.LUN') > -1:
+                    raise LunError(error_code=error_code)
+                # ISCSI Target error:
+                elif api_name.find('SYNO.Core.ISCSI.Target') > -1:
+                    raise TargetError(error_code=error_code)
                 # Universal search error:
                 elif api_name.find('SYNO.Finder') > -1:
                     raise UniversalSearchError(error_code=error_code)
@@ -863,6 +871,12 @@ class Authentication:
         elif api_name.find('FileStation') > -1:
             message = file_station_error_codes.get(
                 code, "<Undefined.FileStation.Error>")
+        elif api_name.find('SYNO.Core.ISCSI.LUN') > -1:
+            message = iscsi_lun_error_codes.get(
+                code, "<Undefined.ISCSI.LUN.Error>")
+        elif api_name.find('SYNO.Core.ISCSI.Target') > -1:
+            message = iscsi_target_error_codes.get(
+                code, "<Undefined.ISCSI.Target.Error>")
         else:
             message = "<Undefined.%s.Error>" % api_name
         return 'Error {} - {}'.format(code, message)

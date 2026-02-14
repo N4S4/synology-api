@@ -10,11 +10,12 @@ from . import \
     core_active_backup, \
     core_backup, \
     core_certificate, \
-    core_sys_info, \
     core_group, \
-    core_user, \
-    core_share, \
+    core_iscsi, \
     core_package, \
+    core_share, \
+    core_sys_info, \
+    core_user, \
     downloadstation, \
     log_center, \
     vpn, \
