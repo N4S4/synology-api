@@ -38,6 +38,8 @@
     status: not_started
 - LogCenter:
     status: partial
+- LUN:
+    status: finished
 - NoteStation:
     status: partial
 - OAuth:
@@ -58,6 +60,8 @@
     status: partial
 - SysInfo:
     status: partial
+- Target:
+    status: finished
 - TaskScheduler:
     status: finished
 - UniversalSearch:
