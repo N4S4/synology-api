@@ -11,7 +11,7 @@ best-effort wrapper built from:
 - The output of Synology's official CLI helper `synoiscsiwebapi` (method inventory and
   argument hints).
 - Observed parameter conventions from other open-source integrations (CSI drivers).
-- Empirical exploration.
+- Reverse-engineering of DSM Diskstation requests.
 
 Available APIs:
 - `SYNO.Core.ISCSI.LUN`
@@ -1077,16 +1077,17 @@ class LUN(base_api.BaseApi):
 
     # TODO
 
+
 # -----------------------------
 # Target API
 # -----------------------------
-
 
 class Target(base_api.BaseApi):
     """
     API wrapper for Synology iSCSI Target management. This class targets the `SYNO.Core.ISCSI.Target` WebAPI.
 
-    Supported methods (inventory from `synoiscsiwebapi`):
+    Methods
+    -------
     - Getters:
         - List targets
         - Get target details
@@ -1096,8 +1097,89 @@ class Target(base_api.BaseApi):
         - Create / delete
         - Enable / disable
         - Map / unmap LUNs
-        - ACL mask add/remove
-        - Add/remove network portals
+
+    Examples
+    --------
+    List targets
+    ```python
+    from synology_api.core_iscsi import Target
+
+    target_api = LUN('IP', 'PORT', 'USER', 'PASSWORD')
+    target_list = target_api.list()
+
+    print(target_list['data']['targets'])
+    ```
+
+    Create a new target
+    ```
+    my_target = target_api.create(
+        'my-target-1234',
+        'iqn.2000-01.com.synology:xyz'
+    )
+
+    print(my_target)
+    # -> {'data': {'target_id': 4}, 'success': True}
+    ```
+
+    Get information for a given target (e.g. the one just created)
+    ```python
+    tid = my_target['data']['target_id']
+    target_info = target_api.get(tid)
+
+    print(target_info['data']['target'])
+    # -> {'auth_type': 0,
+    # 'connected_sessions': [],
+    # 'has_data_checksum': False,
+    # 'has_header_checksum': False,
+    # 'iqn': 'iqn.2000-01.com.synology:xyz',
+    # 'is_default_target': False,
+    # 'is_enabled': True,
+    # 'mapped_luns': [],
+    # 'mapping_index': 0,
+    # 'max_recv_seg_bytes': 262144,
+    # 'max_send_seg_bytes': 262144,
+    # 'max_sessions': 1,
+    # 'mutual_password': '',
+    # 'mutual_user': '',
+    # 'name': 'my-target-1234',
+    # 'network_portals': [{'interface_name': 'all', 'ip': '', 'port': 3260}],
+    # 'password': '',
+    # 'status': 'online',
+    # 'target_id': 4,
+    # 'user': ''}
+    ```
+
+    Set new characteristics for a given target
+    ```python
+    target_api.set(tid, new_name='my-target-4321', new_iqn='iqn.2000-01.com.synology:zyx')
+    target_api.set(tid, max_sessions=0) # Allow for multiple sessions (no limit)
+    ```
+
+    Enable/disable target
+    ```python
+    target_api.disable(tid)
+    print(target_api.get(tid)['data']['target']['status'])
+    # -> "offline"
+
+    target_api.enable(tid)
+    print(target_api.get(tid)['data']['target']['status'])
+    # -> "online"
+    ```
+
+    Map/unmap LUNs to target
+    ```python
+    target_api.map_lun(tid, uuid) # Map a single LUN
+    target_api.map_lun(tid, [uuid1, uuid2, ...]) # Map multiple LUNs at once
+
+    target_api.unmap_lun(tid, uuid) # Unmap a single LUN
+    target_api.unmap_lun(tid, [uuid1, uuid2, ...]) # Unmap multiple LUNs at once
+    ```
+
+    Delete target
+    ```python
+    print(target_api.delete(tid))
+    # -> {'success': True}
+    ```
     """
 
     _API_NAME = "SYNO.Core.ISCSI.Target"
@@ -1404,8 +1486,8 @@ class Target(base_api.BaseApi):
     def set(
         self,
         target_id: Union[int, str],
-        name: Optional[str] = None,
-        iqn: Optional[str] = None,
+        new_name: Optional[str] = None,
+        new_iqn: Optional[str] = None,
         max_sessions: Optional[int] = None,
         auth_type: Optional[Literal[0, 1, 2]] = None,
         user: Optional[str] = None,
@@ -1424,9 +1506,9 @@ class Target(base_api.BaseApi):
         ----------
         target_id : int | str
             Integer id of iSCSI target.
-        name : str, optional
+        new_name : str, optional
             New target name.
-        iqn : str, optional
+        new_iqn : str, optional
             New target iqn.
         max_sessions : int, optional
             Maximum sessions (use `0` for unlimited on some systems).
@@ -1468,8 +1550,8 @@ class Target(base_api.BaseApi):
         params = {
             "target_id": _json(str(target_id)),
             **{k: v for k, v in {
-                "name": name,
-                "iqn": iqn,
+                "name": new_name,
+                "iqn": new_iqn,
                 "max_sessions": max_sessions,
                 "has_data_checksum": has_data_checksum,
                 "auth_type": auth_type,
