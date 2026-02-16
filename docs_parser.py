@@ -635,6 +635,7 @@ def main():
     supported_apis = {}
 
     for file_name in files:
+        print('Processing: ' + file_name)
         file_info = extract_file_info(PARSE_DIR / file_name, verbose=False)
 
         supported_apis.update({
@@ -671,6 +672,7 @@ def main():
         files_info[file_name] = file_info
 
     if parse_api_list:
+        print('Processing Supported APIs')
         content = gen_supported_apis(supported_apis)
         write(API_LIST_FILE, content)
 
