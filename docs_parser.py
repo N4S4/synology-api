@@ -1,26 +1,36 @@
 import argparse
+import ast
 import re
 import sys
 import warnings
-from docstring_parser import Docstring
 import yaml
-from os import listdir
-from os.path import isfile, join
-from docstring_extractor import get_docstrings
+
+from pathlib import Path
+from typing import Any, Optional, Sequence
+
+from docstring_parser import Docstring, numpydoc, parse
+
+# parse_docstring = parse
+parse_docstring = numpydoc.parse  # Ensure numpydoc parser
 
 ####################
 # Config Constants #
 ####################
-DOCS_TRACKER = './docs_status.yaml'
-PARSE_DIR = './synology_api'
-API_LIST_FILE = './documentation/docs/apis/readme.md'
-DOCS_DIR = './documentation/docs/apis/classes/'
+
+_BASE_DIR = Path(__file__).resolve().parent
+
+DOCS_TRACKER = _BASE_DIR / "docs_status.yaml"
+PARSE_DIR = _BASE_DIR / "synology_api"
+API_LIST_FILE = _BASE_DIR / "documentation" / "docs" / "apis" / "readme.md"
+DOCS_DIR = _BASE_DIR / "documentation" / "docs" / "apis" / "classes"
+
 EXCLUDED_FILES = {'__init__.py', 'auth.py', 'base_api.py',
                   'error_codes.py', 'exceptions.py', 'utils.py'}
 
 ####################
 # String Constants #
 ####################
+
 META_TAG = '---\n'
 SEPARATOR = '\n\n\n---\n\n\n'
 NEWLINE = '  \n'
@@ -31,6 +41,7 @@ AUTO_GEN_DISCLAIMER = AUTO_GEN_TAG + AUTO_GEN_MESSAGE + AUTO_GEN_TAG + NEWLINE
 ##################
 # RegEx Patterns #
 ##################
+
 # Match admonitions, level in group 1 and message in group 2
 ADMONITIONS = [
     {'pattern': r'(Note:)(.*)', 'level': 'note'},
@@ -40,31 +51,39 @@ ADMONITIONS = [
     {'pattern': r'(Danger:)(.*)', 'level': 'danger'},
 ]
 
-# Match Examples block, header in group 1 and content in group 2
-EXAMPLE_RETURN_PATTERN = r'(?s)(Examples\n.*?)(```.*?```)'
+EXAMPLE_RETURN_PATTERN = r'(?s)```.+```'
 
-# Match API name in string, API name in group 1
-CLASS_API_NAME_PATTERN = r'api_name\s*=\s*f?[\'"](.*)[\'"]'
+#############
+#   Utils   #
+#############
 
-# Match first API name after provided method name, API name in group 1
+def write(path: Path, content: str):
+    with open(path, 'w', encoding="utf-8") as f:
+        print('Writing into:', path)
+        f.write(content)
 
+def get_docs_status():
+    with open(DOCS_TRACKER, 'r') as stream:
+        return yaml.safe_load(stream)
 
-def METHOD_API_NAME_PATTERN(method_name: str) -> str:
-    return rf"(?s)def {method_name}\(.*?api_name\s*=\s*f?['\"]([^'\"]+)"
+class WarningCatcher:
+    def __init__(self):
+        self.warnings = []
 
+    def __call__(self, message, category, filename, lineno, file=None, line=None):
+        msg = warnings.formatwarning(message, category, filename, lineno, line)
+        self.warnings.append(msg)
 
-# Match concatenated string in API name, prefix in group 1, concatenation in group 2, suffix in group 3
-# Applies for 'prefix' + 'concatenation' + 'suffix'
-API_NAME_CONCAT_PATTERN = r'(.*)([\'"]\s*\+.*\+\s*[\'"])(.*)'
+    def has_warnings(self):
+        return bool(self.warnings)
 
-# Match concatenated f-string in API name, prefix in group 1, concatenation in group 2, suffix in group 3
-# Applies for f'prefix{concatenation}suffix'
-API_NAME_CONCAT_PATTERN_FSTR = r'(.*)(\{.*\})(.*)'
+    def print_warnings(self):
+        for w in self.warnings:
+            print(w, end='')
 
 ####################
-# Style Generators #
-###################
-
+# Formatting utils #
+####################
 
 def __stylize(text: str, styles: list[str]) -> str:
     style_map = {'code': '`', 'bold': '**', 'italic': '_', 'underline': '___'}
@@ -78,7 +97,6 @@ def __stylize(text: str, styles: list[str]) -> str:
         content += style_map.get(style_str, '')
     return content
 
-
 def header(level: str, text: str, styles: list[str] = []) -> str:
     """Generate header element with styles"""
     header_levels = {'h1': '#', 'h2': '##', 'h3': '###', 'h4': '####'}
@@ -86,35 +104,415 @@ def header(level: str, text: str, styles: list[str] = []) -> str:
         warnings.warn(f'Unknown header level: {level}', UserWarning)
     return header_levels.get(level, '') + ' ' + __stylize(text, styles) + '\n'
 
-
 def text(text: str, styles: list[str] = [], newline: bool = False) -> str:
     """Generate text element with styles"""
     return __stylize(text, styles) + (NEWLINE if newline else ' ')
-
 
 def link(text: str, url: str, fullstop: bool = False, newline: bool = False) -> str:
     """Generate link element"""
     return f' [{text}]({url})' + ('.' if fullstop else ' ') + (NEWLINE if newline else '')
 
-
 def div(content: str, spacing: str = '', side: str = '', size: str = '') -> str:
     """Generate div element"""
-    return f'<div class="{spacing}-{side}--{size}">\n{content}\n</div>\n'
+    return f'<div class="{spacing}-{side}--{size}">\n\n{content}</div>\n'
 
-
-def details(summary: str, content: str) -> str:
+def details(summary: str, content: str, newline: bool = False) -> str:
     """Generate details element"""
-    details = f'<details>\n<summary>{summary}</summary>'
-    details += f'\n{content}\n</details>\n'
-    return details
-
+    details = f'<details>\n<summary>{summary}</summary>\n'
+    details += f'\n{content}\n</details>'
+    return details + (NEWLINE if newline else '')
 
 def list_item(text: str, styles: list[str] = []) -> str:
     """Generate list element"""
     return f'- {__stylize(text, styles)}{NEWLINE}'
 
+def admonition(level: str, text: str) -> str:
+    """Generate admonition"""
+    return f':::{level}\n \n{text}\n \n:::\n'
 
-def metadata(class_name: str) -> tuple[str, str]:
+def insert_admonitions(content: str) -> str:
+    for adm in ADMONITIONS:
+        content = re.sub(adm['pattern'], lambda match: admonition(
+            adm['level'], match.group(2)), content)
+    return content
+
+def dedup_newlines(text: str) -> str:
+    return re.sub(r'\n{2}', '  \n', text)
+
+def validate_str(context: str, strs: list[str | Any]):
+    for current in strs:
+        if not isinstance(current, str):
+            warnings.warn(
+                f'[{context}] Invalid string: {current}', UserWarning)
+
+def multi_class_disclaimer(main_class: str, additional_classes: Sequence[str]) -> str:
+    """Return tip informing about all classes documented on the page"""
+    content = f'This page contains documentation for the `{main_class}` class and its subclasses:  \n'
+    for class_name in additional_classes:
+        content += list_item(link(class_name, f'#{class_name.lower()}'))
+    return admonition('tip', content)
+
+def status_disclaimer(status: str) -> str:
+    """Return admonition disclaimer based on API status"""
+    if status == 'partial':
+        return admonition('warning', 'This API is partially documented or under construction.')
+    elif status == 'not_started':
+        return admonition('warning', 'This API is not documented yet.')
+    return ''
+
+def format_method_api(method_name: str, api_name: Optional[str]) -> str:
+    section = ''
+    if api_name:
+        section = header('h4', 'Internal API')
+        section += div(text(api_name, ['code'], newline=True), 'padding', 'left', 'md')
+    else:
+        print(f'Method {method_name} seems to not be directly calling any internal API, this is expected for utility methods that use other calls in the class. You can ignore this message if this is the case.')
+    return section + NEWLINE
+
+def format_parameters(docstring: Docstring, method: Optional[str] = None) -> str:
+    parameters = ''
+    if docstring.params:
+        parameters = header('h4' if method else 'h3', 'Parameters')
+        parameters_body = ''
+        for param in docstring.params:
+            # no need to validate str if we are parsing class params
+            if method:
+                validate_str(method + ' - params',
+                             [param.arg_name, param.type_name, param.description])
+            parameters_body += text(param.arg_name or '', ['bold', 'italic'])
+            parameters_body += text(param.type_name or '',
+                                    ['code'], newline=True)
+            # parameters_body += text(dedup_newlines(
+            #     param.description or ''), newline=True)
+            parameters_body += text(param.description or '', newline=True)
+            parameters_body += NEWLINE
+        parameters += div(content=parameters_body,
+                          spacing='padding', side='left', size='md')
+    return parameters + NEWLINE
+
+#################
+#    Parsing    #
+#################
+
+def parse_and_validate_args() -> tuple[list[str], bool, bool, bool]:
+    """
+    Create the CLI parser, parse argv, validate combinations, and resolve the list of files to parse.
+
+    Returns:
+        (files, parse_api_list, parse_docs)
+
+        files: list[str]
+            Filenames (not full paths) to parse.
+        parse_api_list: bool
+            Whether to generate the Supported APIs page.
+        parse_docs: bool
+            Whether to generate per-class markdown docs.
+        exit_on_warning: bool
+            Whether to sys.exit(1) on warnings.
+    """
+
+    parser = argparse.ArgumentParser(
+        description=("This script parses docstrings from the wrapper source files and generates markdown files for docusaurus.")
+    )
+
+    parser.add_argument(
+        "-a", "--all",
+        action="store_true",
+        help="Parse all non-excluded files",
+    )
+    parser.add_argument(
+        "-f", "--file",
+        type=str,
+        action="extend",
+        nargs="+",
+        help="Parse specified files. This overrides the excluded files.",
+    )
+    parser.add_argument(
+        "-l", "--api-list",
+        action="store_true",
+        help="Parses APIs used by the class and generates MD for Supported APIs page.",
+    )
+    parser.add_argument(
+        "-e", "--excluded",
+        action="store_true",
+        help="Show a list of the excluded files to parse.",
+    )
+    parser.add_argument(
+        "--exit-on-warning",
+        action="store_true",
+        help="Exit if a warning is encountered.",
+    )
+
+    # Called with no arguments
+    if len(sys.argv) == 1:
+        parser.print_help(sys.stderr)
+        sys.exit(1)
+
+    args = parser.parse_args()
+
+    # Called with --excluded/-e
+    if args.excluded:
+        print("Excluded files:")
+        for name in sorted(EXCLUDED_FILES):
+            print(name)
+        sys.exit(1)
+
+    if args.all or args.api_list:
+        # Called with -a or -l  ->  list all non-excluded files
+        files = [p.name for p in PARSE_DIR.iterdir() if p.is_file() and p.name not in EXCLUDED_FILES]
+    elif args.file:
+        # Called with -f [FILE1, ...]
+        files = args.file
+    else:
+        parser.error("At least one of --all/-a, --api-list/-l or --file/-f FILE1 [FILE2 ...] must be provided.")
+
+    return files, bool(args.api_list), bool(args.all or args.file), args.exit_on_warning
+
+def extract_file_info(file_path: Path, verbose: bool = False) -> dict[str, dict[str, Any]]:
+    """
+    AST-parse a Python file and extract class/method docstrings + inferred API names.
+
+    Docstrings are returned as `docstring_parser.Docstring` objects (or None if absent/unparseable).
+
+    Returns:
+    {
+        'docstring': < file-level Docstring >
+        'classes': {
+            'Class1': {
+                'index': < integer index (position in file) >
+                'docstring': < class-level Docstring >,
+                'methods': {
+                    'method1': {
+                        'docstring':< method-level Docstring >,,
+                        'api_name': str|None,  # method api_name if found, else class-level _API_NAME, else None
+                    },
+                    ...
+                },
+                'api_names': < set of all above methods' `api_name`s >
+            },
+            ...
+        },
+      ...
+    }
+    """
+
+    def vprint(*args, **kwargs):
+        if verbose:
+            print(*args, **kwargs)
+
+    def _is_private(name: str) -> bool:
+        return name.startswith("_")
+
+    def _parse_docstring(text: Optional[str]) -> Optional[Docstring]:
+        if not text:
+            return None
+        try:
+            return parse_docstring(text)
+        except Exception:
+            return None
+
+    def _get_docstring(node: ast.Module | ast.FunctionDef | ast.ClassDef) -> Optional[Docstring]:
+        raw = ast.get_docstring(node, clean=True)
+        return _parse_docstring(raw)
+
+    def _token_from_name_or_attr(expr: ast.AST) -> Optional[str]:
+        # self.foo -> {FOO}
+        if isinstance(expr, ast.Attribute) and isinstance(expr.value, ast.Name) and expr.value.id == "self":
+            return "{" + expr.attr.upper() + "}"
+        # foo -> {FOO}
+        if isinstance(expr, ast.Name):
+            return "{" + expr.id.upper() + "}"
+        return None
+
+    def _resolve_string_expr(expr: ast.AST) -> Optional[str]:
+        """
+        String resolution:
+          - "literal" -> "literal"
+          - f"pre{self.x}post" -> "pre{X}post"
+          - "pre" + self.x + "post" -> "pre{X}post"
+        Returns None if not resolvable.
+        """
+        if isinstance(expr, ast.Constant) and isinstance(expr.value, str):
+            return expr.value
+
+        if isinstance(expr, ast.JoinedStr):
+            parts: list[str] = []
+            for v in expr.values:
+                if isinstance(v, ast.Constant) and isinstance(v.value, str):
+                    parts.append(v.value)
+                elif isinstance(v, ast.FormattedValue):
+                    tok = _token_from_name_or_attr(v.value)
+                    if tok is None:
+                        return None
+                    parts.append(tok)
+                else:
+                    return None
+            return "".join(parts)
+
+        if isinstance(expr, ast.BinOp) and isinstance(expr.op, ast.Add):
+            left = _resolve_string_expr(expr.left)
+            right = _resolve_string_expr(expr.right)
+            if left is not None and right is not None:
+                return left + right
+
+            # best-effort tokenization if one side is resolvable and the other is name/attr-like
+            if left is not None:
+                tok = _token_from_name_or_attr(expr.right)
+                return (left + tok) if tok is not None else None
+            if right is not None:
+                tok = _token_from_name_or_attr(expr.left)
+                return (tok + right) if tok is not None else None
+
+        return None
+
+    def _extract_class_api_name(class_node: ast.ClassDef) -> Optional[str]:
+        """
+        Detect `_API_NAME = "..."` or `_api_name = "..."` in the class body.
+        Only accepts literal string values.
+        """
+        for stmt in class_node.body:
+            if not isinstance(stmt, ast.Assign) or len(stmt.targets) != 1:
+                continue
+            tgt = stmt.targets[0]
+            if not isinstance(tgt, ast.Name):
+                continue
+            if tgt.id not in ("_API_NAME", "_api_name"):
+                continue
+
+            if isinstance(stmt.value, ast.Constant) and isinstance(stmt.value.value, str):
+                return stmt.value.value
+
+        return None
+
+    def _extract_method_api_name(fn_node: ast.AST, parent_api_name: Optional[str] = None) -> Optional[str]:
+        """
+        Find assignments to local variable `api_name = <string expr>` inside the method.
+        Returns the last resolvable assignment found.
+        """
+        last: Optional[str] = None
+
+        for node in ast.walk(fn_node):
+            if isinstance(node, ast.Assign):
+                for tgt in node.targets:
+                    if isinstance(tgt, ast.Name) and tgt.id == "api_name":
+                        resolved = _resolve_string_expr(node.value)
+                        if resolved is not None:
+                            last = resolved
+
+            elif isinstance(node, ast.AnnAssign):
+                if (
+                    isinstance(node.target, ast.Name)
+                    and node.target.id == "api_name"
+                    and node.value is not None
+                ):
+                    resolved = _resolve_string_expr(node.value)
+                    if resolved is not None:
+                        last = resolved
+
+        return last or parent_api_name
+
+    # ---- parse file ----
+
+    vprint(f"Parsing file `{file_path.name}` ...")
+
+    with open(file_path, "r", encoding="utf-8") as f:
+        source = f.read()
+
+        try:
+            tree = ast.parse(source, filename=file_path)
+        except SyntaxError as e:
+            raise SyntaxError(f"Failed to parse {file_path}") from e
+
+    file_info: dict[str, Any] = {'classes': {}}
+
+    # File's dosctring
+    file_info['docstring'] = _get_docstring(tree)
+
+    # Iterate over classes
+    cls_position_index = 0
+    for cls_node in tree.body:
+        if not isinstance(cls_node, ast.ClassDef) or _is_private(cls_node.name):
+            continue
+
+        vprint(f"    Parsing class `{cls_node.name}` ...")
+
+        cls_name = cls_node.name
+        cls_doc = _get_docstring(cls_node) # Class-level docstring
+        cls_api = _extract_class_api_name(cls_node) # Class-level attribute `_API_NAME = ...` or `_api_name = ...`
+
+        vprint(f"        _API_NAME: `{cls_api}`")
+
+        methods: dict[str, dict[str, Any]] = {}
+
+        # Iterate over methods
+        for mth_node in cls_node.body:
+            if not isinstance(mth_node, ast.FunctionDef) or _is_private(mth_node.name):
+                continue
+
+            mth_name = mth_node.name
+            vprint(f"        Parsing method `{mth_name}` ...")
+
+            # Method-level info
+            methods[mth_node.name] = {
+                "docstring": _get_docstring(mth_node),
+                "internal_api": _extract_method_api_name(mth_node, parent_api_name=cls_api),
+            }
+
+            vprint(f"            internal_api: `{methods[mth_node.name]["internal_api"]}`")
+
+        # Class-level info
+        file_info['classes'][cls_name] = {
+            "index": cls_position_index,
+            "docstring": cls_doc,
+            "api_names": {mth_info["internal_api"] for mth_info in methods.values() if mth_info["internal_api"]},
+            "methods": methods,
+        }
+
+        cls_position_index += 1
+
+    return file_info
+
+def get_docstring_example_return(docstring: Docstring) -> str | None:
+    example = [meta.description for meta in docstring.meta if meta.args == ['examples']]
+    if len(example) != 1:
+        return None
+    code_block_match = re.match(EXAMPLE_RETURN_PATTERN, example[0])
+    if code_block_match:
+        return code_block_match.group(0)
+    return None
+
+###################
+# Docs generation #
+###################
+
+def gen_supported_apis(supported_apis: dict[str, dict]) -> str:
+    content = META_TAG
+    content += 'sidebar_position: 1\n'
+    content +=f'title: Supported APIs\n'
+    content += META_TAG
+    content += AUTO_GEN_DISCLAIMER
+    content += header('h1', 'Supported APIs')
+    content += text("At the moment there are quite a few APIs implemented. They could be "
+                    "totally or partically implemented, for specific documentation about "
+                    "an API in particular, please see ")
+    content += link('APIs', './category/api-classes', fullstop=True, newline=True)
+
+    for class_name in sorted(supported_apis.keys()):
+        file_name, api_set = supported_apis[class_name]
+
+        if not api_set:
+            continue
+
+        content += header("h3", link(class_name, f'./apis/classes/{file_name.replace(".py", "")}'))
+
+        for api_name in sorted(api_set):
+            content += list_item(api_name, ["code"])
+
+        content += NEWLINE
+
+    return content
+
+def gen_doc_metadata(class_name: str) -> tuple[str, str]:
     """Generate front matter header"""
     docs_status = ""
     display_order = ""
@@ -133,195 +531,18 @@ def metadata(class_name: str) -> tuple[str, str]:
 
     return (content, docs_status)
 
-
-def admonition(level: str, text: str) -> str:
-    """Generate admonition"""
-    return f':::{level}\n \n{text}\n \n:::\n'
-
-
-def status_disclaimer(status: str) -> str:
-    """Return admonition disclaimer based on API status"""
-    if status == 'partial':
-        return admonition('warning', 'This API is partially documented or under construction.')
-    elif status == 'not_started':
-        return admonition('warning', 'This API is not documented yet.')
-    return ''
-
-
-def multi_class_disclaimer(classes: list[str]) -> str:
-    """Return tip informing about all classes documented on the page"""
-    content = f'This page contains documentation for the `{classes[0]}` class and its subclasses:  \n'
-    for i, class_name in enumerate(classes[1:], start=1):
-        content += list_item(link(class_name, f'#{class_name.lower()}'))
-    return admonition('tip', content)
-
-
-def dedup_newlines(text: str) -> str:
-    return re.sub(r'\n{2}', '  \n', text)
-
-
-def init_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description='This script parses docstrings from the wrapper source files and generates markdown files for docusaurus.'
-    )
-
-    parser.add_argument('-a', '--all',
-                        action='store_true',
-                        help='Parse all non-excluded files')
-    parser.add_argument('-f', '--file',
-                        type=str,
-                        action='extend',
-                        nargs="+",
-                        help='Parse specified files. This overrides the excluded files.')
-    parser.add_argument('-l', '--api-list',
-                        action='store_true',
-                        help='Parses APIs used by the class and generates MD for Supported APIs page.')
-    parser.add_argument('-e', '--excluded',
-                        action='store_true',
-                        help='Show a list of the excluded files to parse.')
-    parser.add_argument('--exit-on-warning',
-                        action='store_true',
-                        help='Exit if a warning is encountered.')
-
-    return parser
-
-
-def get_files_to_parse() -> list[str]:
-    files = listdir(PARSE_DIR)
-    return [file for file in files if isfile(join(PARSE_DIR, file)) and file not in EXCLUDED_FILES]
-
-
-def validate_args(parser: argparse.ArgumentParser) -> tuple[list[str], bool]:
-    if len(sys.argv) == 1:
-        parser.print_help(sys.stderr)
-        sys.exit(1)
-
-    args = parser.parse_args()
-    if args.excluded:
-        print('Excluded files:')
-        for file in EXCLUDED_FILES:
-            print(file)
-        sys.exit(1)
-
-    if args.all or args.api_list:
-        files = get_files_to_parse()
-    elif args.file:
-        files = args.file
-
-    return (files, args.api_list, args.all or args.file)
-
-
-def validate_str(context: str, strs: list[str]):
-    for current in strs:
-        if not isinstance(current, str):
-            warnings.warn(
-                f'[{context}] Invalid string: {current}', UserWarning)
-
-
-def get_docs_status():
-    with open(DOCS_TRACKER, 'r') as stream:
-        return yaml.safe_load(stream)
-
-
-def is_private(signature: str) -> bool:
-    return signature.startswith('_')
-
-
-def insert_admonitions(content: str) -> str:
-    for adm in ADMONITIONS:
-        content = re.sub(adm['pattern'], lambda match: admonition(
-            adm['level'], match.group(2)), content)
-    return content
-
-
-def gen_supported_apis() -> str:
-    content = META_TAG
-    content += f'sidebar_position: 1\n'
-    content += f'title: Supported APIs\n'
-    content += META_TAG
-    content += AUTO_GEN_DISCLAIMER
-    content += header('h1', 'Supported APIs')
-    content += text('At the moment there are quite a few APIs implemented. They could be totally or partically implemented, for specific documentation about an API in particular, please see')
-    content += link('APIs', './category/api-classes',
-                    fullstop=True, newline=True)
-
-    return content
-
-
-def check_concatenation(api_name: str) -> str:
-    match_p1 = re.search(API_NAME_CONCAT_PATTERN, api_name)
-    match_p2 = re.search(API_NAME_CONCAT_PATTERN_FSTR, api_name)
-    match_concat = match_p1 or match_p2
-
-    if match_concat:
-        concatenation = match_concat.group(2).replace('self.', '')
-        concatenation = concatenation.replace('\'', '')
-        concatenation = concatenation.replace('"', '')
-        concatenation = concatenation.replace('+', '')
-        concatenation = concatenation.strip()
-        concatenation = concatenation.upper()
-        api_name = match_concat.group(
-            1) + '{' + concatenation + '}' + match_concat.group(3)
-
-    return api_name
-
-
-def parse_class_apis(class_name: str, file_content: str, file_path: str) -> str:
-    matches = re.findall(CLASS_API_NAME_PATTERN, file_content)
-    section = header('h3', link(
-        class_name, f'./apis/classes/{file_path.replace(".py", "")}'))
-    for api_name in matches:
-        api_name = check_concatenation(api_name)
-
-        if section.find(api_name) == -1:  # Don't add duplicates
-            section += list_item(api_name, ['code'])
-    return section + NEWLINE
-
-
-def parse_method_api(method_name: str, file_content: str) -> str:
-    match = re.search(METHOD_API_NAME_PATTERN(method_name), file_content)
-    section = ''
-    if match:
-        api_name = check_concatenation(match.group(1))
-        section = header('h4', 'Internal API')
-        section += div(text(api_name, ['code']), 'padding', 'left', 'md')
-    else:
-        print(f'Method {method_name} seems to not be directly calling any internal API, this is expected for utility methods that use other calls in the class. You can ignore this message if this is the case.')
-    return section + NEWLINE
-
-
-def parse_parameters(docstring: Docstring, method: dict | None) -> str:
-    parameters = ''
-    if docstring.params:
-        parameters = header('h4' if method else 'h3', 'Parameters')
-        parameters_body = ''
-        for param in docstring.params:
-            # no need to validate str if we are parsing class params
-            if method:
-                validate_str(method['name'] + ' - params',
-                             [param.arg_name, param.type_name, param.description])
-            parameters_body += text(param.arg_name or '', ['bold', 'italic'])
-            parameters_body += text(param.type_name or '',
-                                    ['code'], newline=True)
-            parameters_body += text(dedup_newlines(
-                param.description or ''), newline=True)
-            parameters_body += NEWLINE
-        parameters += div(content=parameters_body,
-                          spacing='padding', side='left', size='md')
-    return parameters
-
-
-def gen_header(class_name: str, docstring: Docstring, classes: list[str]) -> str:
+def gen_doc_header(class_name: str, docstring: Docstring, class_index: int, additional_classes: Sequence[str]) -> str:
     content = ''
     docs_status = ''
 
-    if class_name == classes[0]:
-        content, docs_status = metadata(class_name)
-        if len(classes) > 1:
-            content += multi_class_disclaimer(classes)
+    if class_index == 0:
+        content, docs_status = gen_doc_metadata(class_name)
 
-    content += header('h1',
-                      class_name) if class_name == classes[0] else header('h2', class_name)
+        # File contains more than one class: disclaimer when parsing the first one
+        if additional_classes:
+            content += multi_class_disclaimer(class_name, additional_classes)
+
+    content += header('h1' if class_index == 0 else 'h2', class_name)
     content += status_disclaimer(docs_status)
     content += header('h2', 'Overview')
 
@@ -340,18 +561,16 @@ def gen_header(class_name: str, docstring: Docstring, classes: list[str]) -> str
 
     if docstring.params:
         docstring_content += NEWLINE + \
-            parse_parameters(docstring=docstring, method=None)
+            format_parameters(docstring=docstring, method=None)
 
     content += docstring_content + NEWLINE
-    content += header('h2', 'Methods')
 
     return content
 
+def gen_doc_method(name: str, docstring: Docstring, api_name: Optional[str]) -> str:
+    content = header('h3', name, ['code'])
 
-def gen_method(method: dict, file_content: str) -> str:
-    content = header('h3', method['name'], ['code'])
-    docstring = method['docstring']
-    if docstring is None:
+    if not docstring:
         return content + SEPARATOR
 
     description = text(docstring.short_description or '', newline=True)
@@ -361,36 +580,35 @@ def gen_method(method: dict, file_content: str) -> str:
         print(docstring.params)
         print('========>', docstring.long_description)
         warnings.warn(
-            f'[{method["name"]}] failed to parse docstrings. Make sure the format is correct. Check guidelines if needed.', UserWarning)
+            f'[{name}] failed to parse docstrings. Make sure the format is correct. Check guidelines if needed.', UserWarning)
     else:
         description += text(docstring.long_description or '', newline=True)
 
     description = dedup_newlines(description)
 
-    # TODO: refactor, synology_api.core_package.Package.easy_install don't have internal API, but it has a docstring.
-    internal_api = parse_method_api(method['name'], file_content)
+    internal_api = format_method_api(name, api_name)
 
-    parameters = parse_parameters(docstring, method)
+    parameters = format_parameters(docstring, method=name)
 
-    returns = ''
+    returns = '\n'
     if docstring.returns:
-        validate_str(method['name'] + ' - returns',
+        validate_str(name + ' - returns',
                      [docstring.returns.type_name, docstring.returns.description])
         returns = header('h4', 'Returns')
         returns_body = text(docstring.returns.type_name or '', [
                             'code'], newline=True)
-        returns_body += text(dedup_newlines(
-            docstring.returns.description or ''), newline=True)
+        # returns_body += text(dedup_newlines(
+        #     docstring.returns.description or ''), newline=True)
+        returns_body += text(docstring.returns.description or '', newline=True)
         returns += div(content=returns_body, spacing='padding',
                        side='left', size='md')
+        returns += NEWLINE
 
     example_return = ''
-    example_match = re.search(EXAMPLE_RETURN_PATTERN,
-                              method.get('docstring_text', ''))
+    example_match = get_docstring_example_return(docstring)
     if example_match:
-        example_return = header('h4', 'Example return')
-        example_return += details(summary='Click to expand',
-                                  content=example_match.group(2))
+        example_return += header('h4', 'Example return')
+        example_return += details(summary='Click to expand', content=example_match, newline=False)
 
     content += description
     content += internal_api
@@ -402,89 +620,62 @@ def gen_method(method: dict, file_content: str) -> str:
 
     return content
 
-
-def write(path: str, content: str):
-    with open(path, 'w', encoding="utf-8") as f:
-        print('Writing into:', path)
-        f.write(content)
-
-
-class WarningCatcher:
-    def __init__(self):
-        self.warnings = []
-
-    def __call__(self, message, category, filename, lineno, file=None, line=None):
-        msg = warnings.formatwarning(message, category, filename, lineno, line)
-        self.warnings.append(msg)
-
-    def has_warnings(self):
-        return bool(self.warnings)
-
-    def print_warnings(self):
-        for w in self.warnings:
-            print(w, end='')
-
+################
+# Main routine #
+################
 
 def main():
-    parser = init_parser()
-    files, parse_api_list, parse_docs = validate_args(parser)
+    files, parse_api_list, parse_docs, exit_on_warning = parse_and_validate_args()
 
     # Setup warning catcher
     warning_catcher = WarningCatcher()
     warnings.showwarning = warning_catcher
 
-    # Generation for Getting Started/Supported APIs with all the APIs user per class.
-    supported_apis = gen_supported_apis()
-
-    # Check if --exit-on-warning flag is set
-    exit_on_warning = any(arg in ('--exit-on-warning',) for arg in sys.argv)
-
-    any_warning = False
+    files_info = {}
+    supported_apis = {}
 
     for file_name in files:
-        doc_content = ''
-        file_path = join(PARSE_DIR, file_name)
-        print('Processing: ' + file_name)
-        with open(file_path, 'r', encoding="utf-8") as f:
-            file_content = f.read()
-            docstrings = get_docstrings(file_content)
-            if docstrings is None:
-                warnings.warn(f'Failed to parse {file_name}', UserWarning)
-                continue
+        file_info = extract_file_info(PARSE_DIR / file_name, verbose=False)
 
-            classes = [c for c in docstrings["content"]
-                       if not is_private(c['name'])]
-            classes_names = [c['name'] for c in classes]
-            for i, class_item in enumerate(classes):
-                supported_apis += parse_class_apis(
-                    class_item['name'], file_content, file_name)
-                doc_content += gen_header(
-                    class_item['name'],
-                    class_item['docstring'],
-                    classes=classes_names
+        supported_apis.update({
+            class_name: (file_name, class_info['api_names']) for class_name, class_info in file_info['classes'].items()
+        })
+
+        if parse_docs:
+            doc_content = ''
+
+            # Sort classes by class index (= position in the file)
+            # [python < 3.7 safety, where dict does not preserve insertion order]
+            sorted_class_items = sorted(file_info['classes'].items(), key=lambda keyval: keyval[1]['index'])
+            for class_name, class_info in sorted_class_items:
+                doc_content += gen_doc_header(
+                    class_name,
+                    class_info['docstring'],
+                    class_info['index'],
+                    tuple(c_name for c_name, _ in sorted_class_items[1:])
                 )
 
-                methods = [m for m in class_item['content']
-                           if not is_private(m['name'])]
-                for method in methods:
-                    doc_content += gen_method(method, file_content)
+                if class_info['methods']:
+                    doc_content += header('h2', 'Methods')
 
-        # Write to md files if the args were set
-        if parse_docs:
-            write(DOCS_DIR + file_name.replace('.py', '.md'), doc_content)
-        print('='*20)
+                    for method_name, method_info in class_info['methods'].items():
+                        doc_content += gen_doc_method(
+                            method_name,
+                            method_info['docstring'],
+                            method_info['internal_api']
+                        )
 
-        if warning_catcher.has_warnings():
-            any_warning = True
-            # else: continue to process all files
+            write(DOCS_DIR / file_name.replace('.py', '.md'), doc_content)
+            print('='*20)
 
-    # Write to md files if the args were set
+        files_info[file_name] = file_info
+
     if parse_api_list:
-        write(API_LIST_FILE, supported_apis)
+        content = gen_supported_apis(supported_apis)
+        write(API_LIST_FILE, content)
 
-    if any_warning and exit_on_warning:
+    if exit_on_warning and warning_catcher.has_warnings():
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()
