@@ -493,7 +493,7 @@ def gen_supported_apis(supported_apis: dict[str, dict]) -> str:
     content += AUTO_GEN_DISCLAIMER
     content += header('h1', 'Supported APIs')
     content += text("At the moment there are quite a few APIs implemented. They could be "
-                    "totally or partically implemented, for specific documentation about "
+                    "totally or partially implemented, for specific documentation about "
                     "an API in particular, please see ")
     content += link('APIs', './category/api-classes', fullstop=True, newline=True)
 
