@@ -719,6 +719,8 @@ def main():
         write(API_LIST_FILE, content)
 
     if exit_on_warning and warning_catcher.has_warnings():
+        print('\n\n', r"/!\ Docs generation has failed because of the following warnings /!\ ", '\n')
+        warning_catcher.print_warnings()
         sys.exit(1)
 
 if __name__ == "__main__":
