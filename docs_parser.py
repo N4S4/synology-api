@@ -37,6 +37,12 @@ AUTO_GEN_TAG = '\n<!-- ' + '-'*44 + ' -->\n'
 AUTO_GEN_MESSAGE = '<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->'
 AUTO_GEN_DISCLAIMER = AUTO_GEN_TAG + AUTO_GEN_MESSAGE + AUTO_GEN_TAG + NEWLINE
 
+DOCS_STATUS_INDICATOR = {
+    'finished': '✅',
+    'partial': '🚧',
+    'not_started': '🚧'
+}
+
 ##################
 # RegEx Patterns #
 ##################
@@ -61,9 +67,37 @@ def write(path: Path, content: str):
         print('Writing into:', path)
         f.write(content)
 
-def get_docs_status():
-    with open(DOCS_TRACKER, 'r') as stream:
-        return yaml.safe_load(stream)
+def get_docs_status(docs_status_tracker: Path) -> dict[str, dict[str, int|str]]:
+    """
+    Extract documentation status and infer sidebar display order of implemented classes.
+
+    Parameters
+    ----------
+    docs_status_tracker : Path
+        Path to project's docs_status.yaml file.
+
+    Returns
+    -------
+    dict[str, dict[str, int|str]]
+        Dictionary of the form {
+            '<API_class_name>' : {'display_order': <int>, 'status': <"partial", "finished", ...>},
+            ...
+        }
+
+    """
+    with open(docs_status_tracker, 'r') as stream:
+        api_status_dict = yaml.safe_load(stream)
+
+    # Generate sorted list of API names
+    #  -> 'BaseApi' comes first, then alphabetical ordering
+    api_names = ['BaseApi'] + sorted(api_status_dict.keys() - {'BaseApi'})
+
+    return {
+        api_name: {
+            'display_order': pos,
+            'status': api_status_dict[api_name]['status']
+        } for pos, api_name in enumerate(api_names, start=1)
+    }
 
 class WarningCatcher:
     def __init__(self):
@@ -509,16 +543,25 @@ def gen_supported_apis(supported_apis: dict[str, dict]) -> str:
 
     return content
 
-def gen_doc_metadata(class_name: str) -> tuple[str, str]:
+def gen_doc_metadata(class_name: str, *, docs_status_info: dict) -> tuple[str, str]:
     """Generate front matter header"""
-    docs_status = ""
-    display_order = ""
-    for i, api in enumerate(get_docs_status()):
-        key = (list(api.keys())[0])
-        if key == class_name:
-            display_order = 1 if class_name == 'BaseApi' else i + 2
-            docs_status = api[key]['status']
-    status_indicator = '✅' if docs_status == 'finished' else '🚧'
+    docs_status, display_order, status_indicator = '', '', ''
+
+    if class_name in docs_status_info:
+        docs_status, display_order = (docs_status_info[class_name][key] for key in ('status', 'display_order'))
+        try:
+            status_indicator = DOCS_STATUS_INDICATOR[docs_status]
+        except KeyError:
+            warnings.warn(
+                f"Unknown documentation status '{docs_status}' for class '{class_name}'. "
+                f"Possible values: '{'\', \''.join(DOCS_STATUS_INDICATOR.keys())}'. "
+                f"Please update `{DOCS_TRACKER.name}` accordingly."
+            , UserWarning)
+    else:
+        warnings.warn(
+            f"Class '{class_name}' is missing from `{DOCS_TRACKER.name}`. "
+            f"Please update `{DOCS_TRACKER.name}` accordingly."
+        , UserWarning)
 
     content = META_TAG
     content += f'sidebar_position: {display_order}\n'
@@ -528,12 +571,12 @@ def gen_doc_metadata(class_name: str) -> tuple[str, str]:
 
     return (content, docs_status)
 
-def gen_doc_header(class_name: str, docstring: Docstring, class_index: int, additional_classes: Sequence[str]) -> str:
+def gen_doc_header(class_name: str, docstring: Docstring, class_index: int, additional_classes: Sequence[str], *, docs_status_info: dict) -> str:
     content = ''
     docs_status = ''
 
     if class_index == 0:
-        content, docs_status = gen_doc_metadata(class_name)
+        content, docs_status = gen_doc_metadata(class_name, docs_status_info=docs_status_info)
 
         # File contains more than one class: disclaimer when parsing the first one
         if additional_classes:
@@ -626,6 +669,9 @@ def main():
     warning_catcher = WarningCatcher()
     warnings.showwarning = warning_catcher
 
+    # Parse API documentation status
+    docs_status_info = get_docs_status(DOCS_TRACKER)
+
     files_info = {}
     supported_apis = {}
 
@@ -648,7 +694,8 @@ def main():
                     class_name,
                     class_info['docstring'],
                     class_info['index'],
-                    tuple(c_name for c_name, _ in sorted_class_items[1:])
+                    tuple(c_name for c_name, _ in sorted_class_items[1:]),
+                    docs_status_info=docs_status_info
                 )
 
                 if class_info['methods']:
