@@ -8,9 +8,8 @@ import yaml
 from pathlib import Path
 from typing import Any, Optional, Sequence
 
-from docstring_parser import Docstring, numpydoc, parse
+from docstring_parser import Docstring, numpydoc
 
-# parse_docstring = parse
 parse_docstring = numpydoc.parse  # Ensure numpydoc parser
 
 ####################
@@ -182,8 +181,6 @@ def format_parameters(docstring: Docstring, method: Optional[str] = None) -> str
             parameters_body += text(param.arg_name or '', ['bold', 'italic'])
             parameters_body += text(param.type_name or '',
                                     ['code'], newline=True)
-            # parameters_body += text(dedup_newlines(
-            #     param.description or ''), newline=True)
             parameters_body += text(param.description or '', newline=True)
             parameters_body += NEWLINE
         parameters += div(content=parameters_body,
@@ -458,7 +455,7 @@ def extract_file_info(file_path: Path, verbose: bool = False) -> dict[str, dict[
                 "internal_api": _extract_method_api_name(mth_node, parent_api_name=cls_api),
             }
 
-            vprint(f"            internal_api: `{methods[mth_node.name]["internal_api"]}`")
+            vprint(f"            internal_api: `{methods[mth_node.name]['internal_api']}`")
 
         # Class-level info
         file_info['classes'][cls_name] = {
@@ -488,7 +485,7 @@ def get_docstring_example_return(docstring: Docstring) -> str | None:
 def gen_supported_apis(supported_apis: dict[str, dict]) -> str:
     content = META_TAG
     content += 'sidebar_position: 1\n'
-    content +=f'title: Supported APIs\n'
+    content += 'title: Supported APIs\n'
     content += META_TAG
     content += AUTO_GEN_DISCLAIMER
     content += header('h1', 'Supported APIs')
@@ -597,8 +594,6 @@ def gen_doc_method(name: str, docstring: Docstring, api_name: Optional[str]) -> 
         returns = header('h4', 'Returns')
         returns_body = text(docstring.returns.type_name or '', [
                             'code'], newline=True)
-        # returns_body += text(dedup_newlines(
-        #     docstring.returns.description or ''), newline=True)
         returns_body += text(docstring.returns.description or '', newline=True)
         returns += div(content=returns_body, spacing='padding',
                        side='left', size='md')
