@@ -98,7 +98,6 @@ files, parse_api_list, parse_docs, exit_on_warning = parse_and_validate_args()
 # Parse API documentation status
 docs_status_info = get_docs_status(DOCS_TRACKER)
 
-files_info = {}
 supported_apis = {}
 
 for file_name in files:
@@ -136,8 +135,6 @@ for file_name in files:
         # Write file's documentation
         write(DOCS_DIR / file_name.replace('.py', '.md'), doc_content)
         print('='*20)
-
-    files_info[file_name] = file_info
 
 # Write API list summary
 if parse_api_list:
