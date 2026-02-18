@@ -146,10 +146,10 @@ def format_parameters(docstring: Docstring, method: Optional[str] = None) -> str
     return parameters + NEWLINE
 
 def get_docstring_example_return(docstring: Docstring) -> str | None:
-    example = [meta.description for meta in docstring.meta if meta.args == ['examples']]
-    if len(example) != 1:
+    example = docstring.examples
+    if len(example) != 1 or not example[0].description:
         return None
-    code_block_match = re.match(EXAMPLE_RETURN_PATTERN, example[0])
+    code_block_match = re.match(EXAMPLE_RETURN_PATTERN, example[0].description)
     if code_block_match:
         return code_block_match.group(0)
     return None
