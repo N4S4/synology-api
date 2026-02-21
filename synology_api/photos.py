@@ -163,7 +163,8 @@ class Photos(base_api.BaseApi):
         dict[str, object] or str
             The list of folders or an error message.
         """
-        return self._list_folders(folder_id, limit, offset, additional, 'SYNO.Foto.Browse.Folder')
+        api_name = 'SYNO.Foto.Browse.Folder'
+        return self._list_folders(folder_id, limit, offset, additional, api_name)
 
     def list_teams_folders(self,
                            folder_id: int = 0,
@@ -190,7 +191,8 @@ class Photos(base_api.BaseApi):
         dict[str, object] or str
             The list of team folders or an error message.
         """
-        return self._list_folders(folder_id, limit, offset, additional, 'SYNO.FotoTeam.Browse.Folder')
+        api_name = 'SYNO.FotoTeam.Browse.Folder'
+        return self._list_folders(folder_id, limit, offset, additional, api_name)
 
     def _list_folders(self, folder_id: int, limit: int, offset: int, additional: Optional[str | list[str]],
                       api_name: str) -> Any:
@@ -238,7 +240,8 @@ class Photos(base_api.BaseApi):
         dict[str, object] or str
             The count of folders or an error message.
         """
-        return self._count_folders(folder_id, 'SYNO.Foto.Browse.Folder')
+        api_name = 'SYNO.Foto.Browse.Folder'
+        return self._count_folders(folder_id, api_name)
 
     def count_team_folders(self, folder_id: int = 0) -> dict[str, object] | str:
         """
@@ -254,7 +257,8 @@ class Photos(base_api.BaseApi):
         dict[str, object] or str
             The count of team folders or an error message.
         """
-        return self._count_folders(folder_id, 'SYNO.FotoTeam.Browse.Folder')
+        api_name = 'SYNO.FotoTeam.Browse.Folder'
+        return self._count_folders(folder_id, api_name)
 
     def _count_folders(self, folder_id: int, api_name: str) -> Any:
         """
@@ -536,7 +540,8 @@ class Photos(base_api.BaseApi):
         Any
             The API response for sharing the album.
         """
-        self._share('SYNO.Foto.Sharing.Passphrase', policy='album', permission=permission, album_id=album_id,
+        api_name = 'SYNO.Foto.Sharing.Passphrase'
+        self._share(api_name, policy='album', permission=permission, album_id=album_id,
                     enabled=enabled, expiration=expiration)
 
     def share_team_folder(self,
@@ -564,7 +569,8 @@ class Photos(base_api.BaseApi):
         Any
             The API response for sharing the team folder.
         """
-        self._share('SYNO.FotoTeam.Sharing.Passphrase', policy='folder', permission=permission, folder_id=folder_id,
+        api_name = 'SYNO.FotoTeam.Sharing.Passphrase'
+        self._share(api_name, policy='folder', permission=permission, folder_id=folder_id,
                     enabled=enabled, expiration=expiration)
 
     def _share(self,
