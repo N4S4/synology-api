@@ -228,6 +228,36 @@ surveillance_station_error_codes: dict[int, str] = {
     567: 'The face database is under synchronization.',
 }
 
+# Source: //
+iscsi_lun_error_codes: dict[int, str] = {
+    18990004: "Bad parameter",
+
+    18990318: "Failed to create Btrfs subvolume",
+    18990327: "Failed to get space info",
+
+    18990500: "Bad LUN type",
+    18990501: "Bad LUN location",
+    18990502: "Bad LUN size",
+    18990503: "Bad LUN name",
+    18990505: "Bad LUN UUID",
+
+    18990531: "No such LUN",
+    18990538: "Duplicated LUN name",
+
+    18990619: "Bad LUN types",
+    18990622: "Bad dev_attribs",
+}
+
+iscsi_target_error_codes: dict[int, str] = {
+    18990700: "Bad target name",
+    18990702: "Bad target auth_type",
+    18990710: "Bad target ID",
+    18990722: "Failed to load target (invalid target id ?)",
+    18990724: "Failed to load target config",
+    18990744: "Duplicated target name",
+    18990745: "Duplicated target iqn"
+}
+
 # # Source: sds.bundle.js from DSM
 core_error_codes: dict[int, str] = error_codes
 core_error_codes.update({
