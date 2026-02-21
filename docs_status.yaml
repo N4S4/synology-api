@@ -33,6 +33,8 @@ FileStation:
     status: partial
 Group:
     status: finished
+ISCSI:
+    status: finished
 KeyManagerStore:
     status: not_started
 KeyManagerAutoKey:
