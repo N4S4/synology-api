@@ -42,6 +42,7 @@ EXAMPLE_RETURN_PATTERN = r'(?s)```.+```'
 # Formatting utils #
 ####################
 
+
 def __stylize(text: str, styles: list[str]) -> str:
     style_map = {'code': '`', 'bold': '**', 'italic': '_', 'underline': '___'}
     content = ''
@@ -54,6 +55,7 @@ def __stylize(text: str, styles: list[str]) -> str:
         content += style_map.get(style_str, '')
     return content
 
+
 def header(level: str, text: str, styles: list[str] = []) -> str:
     """Generate header element with styles"""
     header_levels = {'h1': '#', 'h2': '##', 'h3': '###', 'h4': '####'}
@@ -61,17 +63,21 @@ def header(level: str, text: str, styles: list[str] = []) -> str:
         warnings.warn(f'Unknown header level: {level}', UserWarning)
     return header_levels.get(level, '') + ' ' + __stylize(text, styles) + '\n'
 
+
 def text(text: str, styles: list[str] = [], newline: bool = False) -> str:
     """Generate text element with styles"""
     return __stylize(text, styles) + (NEWLINE if newline else ' ')
+
 
 def link(text: str, url: str, fullstop: bool = False, newline: bool = False) -> str:
     """Generate link element"""
     return f' [{text}]({url})' + ('.' if fullstop else ' ') + (NEWLINE if newline else '')
 
+
 def div(content: str, spacing: str = '', side: str = '', size: str = '') -> str:
     """Generate div element"""
     return f'<div class="{spacing}-{side}--{size}">\n\n{content}</div>\n'
+
 
 def details(summary: str, content: str, newline: bool = False) -> str:
     """Generate details element"""
@@ -79,13 +85,16 @@ def details(summary: str, content: str, newline: bool = False) -> str:
     details += f'\n{content}\n</details>'
     return details + (NEWLINE if newline else '')
 
+
 def list_item(text: str, styles: list[str] = []) -> str:
     """Generate list element"""
     return f'- {__stylize(text, styles)}{NEWLINE}'
 
+
 def admonition(level: str, text: str) -> str:
     """Generate admonition"""
     return f':::{level}\n \n{text}\n \n:::\n'
+
 
 def insert_admonitions(content: str) -> str:
     for adm in ADMONITIONS:
@@ -93,8 +102,10 @@ def insert_admonitions(content: str) -> str:
             adm['level'], match.group(2)), content)
     return content
 
+
 def dedup_newlines(text: str) -> str:
     return re.sub(r'\n{2}', '  \n', text)
+
 
 def validate_str(context: str, strs: list[str | Any]):
     for current in strs:
@@ -102,12 +113,14 @@ def validate_str(context: str, strs: list[str | Any]):
             warnings.warn(
                 f'[{context}] Invalid string: {current}', UserWarning)
 
+
 def multi_class_disclaimer(main_class: str, additional_classes: Sequence[str]) -> str:
     """Return tip informing about all classes documented on the page"""
     content = f'This page contains documentation for the `{main_class}` class and its subclasses:  \n'
     for class_name in additional_classes:
         content += list_item(link(class_name, f'#{class_name.lower()}'))
     return admonition('tip', content)
+
 
 def status_disclaimer(status: str) -> str:
     """Return admonition disclaimer based on API status"""
@@ -117,14 +130,17 @@ def status_disclaimer(status: str) -> str:
         return admonition('warning', 'This API is not documented yet.')
     return ''
 
+
 def format_method_api(method_name: str, api_name: Optional[str]) -> str:
     section = ''
     if api_name:
         section = header('h4', 'Internal API')
-        section += div(text(api_name, ['code'], newline=True), 'padding', 'left', 'md')
+        section += div(text(api_name, ['code'],
+                       newline=True), 'padding', 'left', 'md')
     else:
         print(f'Method {method_name} seems to not be directly calling any internal API, this is expected for utility methods that use other calls in the class. You can ignore this message if this is the case.')
     return section + NEWLINE
+
 
 def format_parameters(docstring: Docstring, method: Optional[str] = None) -> str:
     parameters = ''
@@ -145,6 +161,7 @@ def format_parameters(docstring: Docstring, method: Optional[str] = None) -> str
                           spacing='padding', side='left', size='md')
     return parameters + NEWLINE
 
+
 def get_docstring_example_return(docstring: Docstring) -> str | None:
     example = docstring.examples
     if len(example) != 1 or not example[0].description:
@@ -158,6 +175,7 @@ def get_docstring_example_return(docstring: Docstring) -> str | None:
 # Docs generation #
 ###################
 
+
 def gen_supported_apis(supported_apis: dict[str, dict]) -> str:
     content = META_TAG
     content += 'sidebar_position: 1\n'
@@ -168,7 +186,8 @@ def gen_supported_apis(supported_apis: dict[str, dict]) -> str:
     content += text("At the moment there are quite a few APIs implemented. They could be "
                     "totally or partially implemented, for specific documentation about "
                     "an API in particular, please see ")
-    content += link('APIs', './category/api-classes', fullstop=True, newline=True)
+    content += link('APIs', './category/api-classes',
+                    fullstop=True, newline=True)
 
     for class_name in sorted(supported_apis.keys()):
         file_name, api_set = supported_apis[class_name]
@@ -176,7 +195,8 @@ def gen_supported_apis(supported_apis: dict[str, dict]) -> str:
         if not api_set:
             continue
 
-        content += header("h3", link(class_name, f'./apis/classes/{file_name.replace(".py", "")}'))
+        content += header("h3", link(class_name,
+                          f'./apis/classes/{file_name.replace(".py", "")}'))
 
         for api_name in sorted(api_set):
             content += list_item(api_name, ["code"])
@@ -185,25 +205,25 @@ def gen_supported_apis(supported_apis: dict[str, dict]) -> str:
 
     return content
 
+
 def gen_doc_metadata(class_name: str, docs_status_info: dict) -> tuple[str, str]:
     """Generate front matter header"""
     docs_status, display_order, status_indicator = '', '', ''
 
     if class_name in docs_status_info:
-        docs_status, display_order = (docs_status_info[class_name][key] for key in ('status', 'display_order'))
+        docs_status, display_order = (
+            docs_status_info[class_name][key] for key in ('status', 'display_order'))
         try:
             status_indicator = DOCS_STATUS_INDICATOR[docs_status]
         except KeyError:
             warnings.warn(
                 f"Unknown documentation status '{docs_status}' for class '{class_name}'. "
                 f"Possible values: '{'\', \''.join(DOCS_STATUS_INDICATOR.keys())}'. "
-                f"Please update `{DOCS_TRACKER.name}` accordingly."
-            , UserWarning)
+                f"Please update `{DOCS_TRACKER.name}` accordingly.", UserWarning)
     else:
         warnings.warn(
             f"Class '{class_name}' is missing from `{DOCS_TRACKER.name}`. "
-            f"Please update `{DOCS_TRACKER.name}` accordingly."
-        , UserWarning)
+            f"Please update `{DOCS_TRACKER.name}` accordingly.", UserWarning)
 
     content = META_TAG
     content += f'sidebar_position: {display_order}\n'
@@ -212,6 +232,7 @@ def gen_doc_metadata(class_name: str, docs_status_info: dict) -> tuple[str, str]
     content += AUTO_GEN_DISCLAIMER
 
     return (content, docs_status)
+
 
 def gen_doc_header(class_name: str, docstring: Docstring, class_index: int, additional_classes: Sequence[str], docs_status_info: dict) -> str:
     content = ''
@@ -248,6 +269,7 @@ def gen_doc_header(class_name: str, docstring: Docstring, class_index: int, addi
     content += docstring_content + NEWLINE
 
     return content
+
 
 def gen_doc_method(name: str, docstring: Docstring, api_name: Optional[str]) -> str:
     content = header('h3', name, ['code'])
@@ -286,7 +308,8 @@ def gen_doc_method(name: str, docstring: Docstring, api_name: Optional[str]) -> 
     example_match = get_docstring_example_return(docstring)
     if example_match:
         example_return += header('h4', 'Example return')
-        example_return += details(summary='Click to expand', content=example_match, newline=False)
+        example_return += details(summary='Click to expand',
+                                  content=example_match, newline=False)
 
     content += description
     content += internal_api

@@ -5,13 +5,16 @@ from pathlib import Path
 #   Utils   #
 #############
 
+
 def _is_private(name: str) -> bool:
     return name.startswith("_")
+
 
 def write(path: Path, content: str):
     with open(path, 'w', encoding="utf-8") as f:
         print('Writing into:', path)
         f.write(content)
+
 
 class WarningCatcher:
     warnings = []

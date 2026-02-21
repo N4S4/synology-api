@@ -15,6 +15,7 @@ warnings.showwarning = warning_catcher
 #   Parsing   #
 ###############
 
+
 def parse_and_validate_args() -> tuple[list[str], bool, bool, bool]:
     """
     Create the CLI parser, parse argv, validate combinations, and resolve the list of files to parse.
@@ -33,7 +34,8 @@ def parse_and_validate_args() -> tuple[list[str], bool, bool, bool]:
     """
 
     parser = argparse.ArgumentParser(
-        description=("This script parses docstrings from the wrapper source files and generates markdown files for docusaurus.")
+        description=(
+            "This script parses docstrings from the wrapper source files and generates markdown files for docusaurus.")
     )
 
     parser.add_argument(
@@ -80,18 +82,21 @@ def parse_and_validate_args() -> tuple[list[str], bool, bool, bool]:
 
     if args.all or args.api_list:
         # Called with -a or -l  ->  list all non-excluded files
-        files = [p.name for p in PARSE_DIR.iterdir() if p.is_file() and p.name not in EXCLUDED_FILES]
+        files = [p.name for p in PARSE_DIR.iterdir() if p.is_file()
+                 and p.name not in EXCLUDED_FILES]
     elif args.file:
         # Called with -f [FILE1, ...]
         files = args.file
     else:
-        parser.error("At least one of --all/-a, --api-list/-l or --file/-f FILE1 [FILE2 ...] must be provided.")
+        parser.error(
+            "At least one of --all/-a, --api-list/-l or --file/-f FILE1 [FILE2 ...] must be provided.")
 
     return files, bool(args.api_list), bool(args.all or args.file), args.exit_on_warning
 
 ################
 # Main routine #
 ################
+
 
 files, parse_api_list, parse_docs, exit_on_warning = parse_and_validate_args()
 
@@ -112,7 +117,8 @@ for file_name in files:
         doc_content = ''
 
         # Sort classes by class index (= position in the file) [python < 3.7's dict() safety]
-        sorted_class_items = sorted(file_info['classes'].items(), key=lambda keyval: keyval[1]['index'])
+        sorted_class_items = sorted(
+            file_info['classes'].items(), key=lambda keyval: keyval[1]['index'])
         for class_name, class_info in sorted_class_items:
             doc_content += gen_doc_header(
                 class_name,

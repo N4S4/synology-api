@@ -19,6 +19,7 @@ parse_docstring = numpydoc.parse
 # api_name extraction utils #
 #############################
 
+
 def _token_from_name_or_attr(expr: ast.AST) -> Optional[str]:
     # self.foo -> {FOO}
     if isinstance(expr, ast.Attribute) and isinstance(expr.value, ast.Name) and expr.value.id == "self":
@@ -27,6 +28,7 @@ def _token_from_name_or_attr(expr: ast.AST) -> Optional[str]:
     if isinstance(expr, ast.Name):
         return "{" + expr.id.upper() + "}"
     return None
+
 
 def _resolve_string_expr(expr: ast.AST) -> Optional[str]:
     """
@@ -73,9 +75,11 @@ def _resolve_string_expr(expr: ast.AST) -> Optional[str]:
 # ast-tree extraction helpers #
 ###############################
 
+
 def _extract_docstring(node: ast.Module | ast.FunctionDef | ast.ClassDef) -> Optional[Docstring]:
     docstring_str = ast.get_docstring(node, clean=True)
     return parse_docstring(docstring_str) if docstring_str else None
+
 
 def _extract_class_api_name(class_node: ast.ClassDef) -> Optional[str]:
     """
@@ -95,6 +99,7 @@ def _extract_class_api_name(class_node: ast.ClassDef) -> Optional[str]:
             return stmt.value.value
 
     return None
+
 
 def _extract_method_api_name(fn_node: ast.AST, parent_api_name: Optional[str] = None) -> Optional[str]:
     """
@@ -128,6 +133,7 @@ def _extract_method_api_name(fn_node: ast.AST, parent_api_name: Optional[str] = 
 ####################
 
 # -> ast file parser
+
 
 def extract_file_info(file_path: Path, verbose: bool = False) -> dict[str, dict[str, Any]]:
     """
@@ -188,7 +194,7 @@ def extract_file_info(file_path: Path, verbose: bool = False) -> dict[str, dict[
     # File's main data structure
     file_info: dict[str, Any] = {
         'classes': {},
-        'docstring': _extract_docstring(tree) # File-level dosctring
+        'docstring': _extract_docstring(tree)  # File-level dosctring
     }
 
     # Iterate over classes
@@ -200,11 +206,11 @@ def extract_file_info(file_path: Path, verbose: bool = False) -> dict[str, dict[
         vprint(f"    Parsing class `{cls_node.name}` ...")
 
         cls_name = cls_node.name
-        cls_doc = _extract_docstring(cls_node) # Class-level docstring
-        cls_api = _extract_class_api_name(cls_node) # Class-level attribute `_API_NAME = ...` or `_api_name = ...`
+        cls_doc = _extract_docstring(cls_node)  # Class-level docstring
+        # Class-level attribute `_API_NAME = ...` or `_api_name = ...`
+        cls_api = _extract_class_api_name(cls_node)
 
         vprint(f"        _API_NAME: `{cls_api}`")
-
 
         # Iterate over methods
         methods: dict[str, dict[str, Any]] = {}
@@ -222,13 +228,14 @@ def extract_file_info(file_path: Path, verbose: bool = False) -> dict[str, dict[
                 "internal_api": _extract_method_api_name(mth_node, parent_api_name=cls_api),
             }
 
-            vprint(f"            internal_api: `{methods[mth_node.name]['internal_api']}`")
+            vprint(
+                f"            internal_api: `{methods[mth_node.name]['internal_api']}`")
 
         # Class-level info
         file_info['classes'][cls_name] = {
             "index": cls_position_index,
             "docstring": cls_doc,
-            "api_names": { # Gather all class's methods API names
+            "api_names": {  # Gather all class's methods API names
                 mth_info["internal_api"] for mth_info in methods.values() if mth_info["internal_api"]
             },
             "methods": methods,
@@ -239,7 +246,9 @@ def extract_file_info(file_path: Path, verbose: bool = False) -> dict[str, dict[
     return file_info
 
 # -> Doc status getter
-def get_docs_status(docs_status_tracker: Path) -> dict[str, dict[str, int|str]]:
+
+
+def get_docs_status(docs_status_tracker: Path) -> dict[str, dict[str, int | str]]:
     """
     Extract documentation status and infer sidebar display order of implemented classes.
 
