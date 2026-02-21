@@ -36,7 +36,7 @@ tasks:
     dir: '{{.TASKFILE_DIR}}'
     cmds:
       - echo "Parsing the documentation files..."
-      - python3 docs_parser.py -a --exit-on-warning
+      - python3 -m scripts.docs_parser -a -l --exit-on-warning
 
   docs-build:
     desc: Build the documentation website

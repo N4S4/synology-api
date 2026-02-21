@@ -885,11 +885,13 @@ class Package(base_api.BaseApi):
         }
         ```
         """
+        api_name = "SYNO.Core.Package.Installation"
+
         compound = [
             {
-                "api": "SYNO.Core.Package.Installation",
+                "api": api_name,
                 "method": "check",
-                "version": self.core_list['SYNO.Core.Package.Installation']['minVersion'],
+                "version": self.core_list[api_name]['minVersion'],
                 "id": package_id,
                 "install_type": "",
                 "install_on_cold_storage": False,
@@ -898,9 +900,9 @@ class Package(base_api.BaseApi):
                 "replacepkgs": None
             },
             {
-                "api": "SYNO.Core.Package.Installation",
+                "api": api_name,
                 "method": "install",
-                "version": self.core_list["SYNO.Core.Package.Installation"]['minVersion'],
+                "version": self.core_list[api_name]['minVersion'],
                 "type": 0,
                 "volume_path": volume_path,
                 "path": file_path,

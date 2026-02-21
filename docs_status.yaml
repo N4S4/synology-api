@@ -2,75 +2,76 @@
 # This file is used to track the documentation status of the different API classes.
 # It should be manually updated by the maintainers.
 
-- ActiveBackupBusiness:
+BaseApi:
     status: finished
-- ActiveBackupMicrosoft:
+
+ActiveBackupBusiness:
     status: finished
-- AdminConsole:
+ActiveBackupMicrosoft:
+    status: finished
+AdminConsole:
     status: partial
-- AudioStation:
+AudioStation:
     status: partial
-- BaseApi:
-    status: finished
-- Backup:
+Backup:
     status: partial
-- Certificate:
+Certificate:
     status: partial
-- CloudSync:
+CloudSync:
     status: finished
-- DhcpServer:
+DhcpServer:
     status: partial
-- DirectoryServer:
+DirectoryServer:
     status: finished
-- Docker:
+Docker:
     status: finished
-- DownloadStation:
+DownloadStation:
     status: partial
-- EventScheduler:
+EventScheduler:
     status: finished
-- FileStation:
+FileStation:
     status: partial
-- Group:
+Group:
     status: finished
-- KeyManagerStore:
+KeyManagerStore:
     status: not_started
-- KeyManagerAutoKey:
+KeyManagerAutoKey:
     status: not_started
-- LogCenter:
+LogCenter:
     status: partial
-- LUN:
+LUN:
     status: finished
-- NoteStation:
+NoteStation:
     status: partial
-- OAuth:
+OAuth:
     status: partial
-- Package:
+Package:
     status: partial
-- Photos:
+Photos:
     status: partial
-- SecurityAdvisor:
+SecurityAdvisor:
     status: partial
-- Share:
+Share:
     status: partial
-- SharePermission:
+SharePermission:
     status: partial
-- Snapshot:
+Snapshot:
     status: finished
-- SurveillanceStation:
+SurveillanceStation:
     status: partial
-- SysInfo:
+SysInfo:
     status: partial
-- Target:
+Target:
     status: finished
-- TaskScheduler:
+TaskScheduler:
     status: finished
-- UniversalSearch:
+UniversalSearch:
     status: partial
-- USBCopy:
+USBCopy:
     status: finished
-- User:
+User:
     status: finished
-- VPN:
+VPN:
     status: not_started
-- Virtualization:
+Virtualization:
     status: not_started
