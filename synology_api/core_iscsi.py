@@ -32,6 +32,7 @@ from . import base_api
 # Utilities
 # -----------------------------
 
+
 def _ensure_list(value: Optional[Union[str | int, Sequence[str | int]]]) -> list[str | int]:
     """
     Normalize a single string/int or a sequence of strings/ints into a list.
@@ -64,6 +65,7 @@ class ISCSI(base_api.BaseApi):
 # -----------------------------
 # LUN API
 # -----------------------------
+
 
 class LUN(base_api.BaseApi):
     """
@@ -1087,6 +1089,7 @@ class LUN(base_api.BaseApi):
 # -----------------------------
 # Target API
 # -----------------------------
+
 
 class Target(base_api.BaseApi):
     """
