@@ -59,7 +59,7 @@ def _ensure_list(value: Optional[Union[str | int, Sequence[str | int]]]) -> list
 # -----------------------------
 
 class ISCSI(base_api.BaseApi):
-    """Abstract wrapper class for SYNO.Core.ISCSI.<xxx> requests."""
+    """Abstract wrapper class for `SYNO.Core.ISCSI.*` requests."""
     pass
 
 # -----------------------------
