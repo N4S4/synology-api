@@ -138,4 +138,3 @@ When contributing code to synology-api:
 Thank you for helping keep the synology-api project secure! We appreciate the security research community's responsible disclosure practices.
 
 For questions or concerns about this policy, please open a discussion in the repository or contact the maintainers.
-"@ | Out-File -Encoding UTF8 SECURITY.md
