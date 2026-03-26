@@ -139,5 +139,3 @@ Thank you for helping keep the synology-api project secure! We appreciate the se
 disclosure practices.
 
 For questions or concerns about this policy, please open a discussion in the repository or contact the maintainers.
-
-
