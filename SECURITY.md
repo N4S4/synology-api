@@ -45,7 +45,7 @@ Please email your findings to the project maintainers with the following informa
    from synology_api.filestation import FileStation
 
    fs = FileStation(
-       ip=os.getenv("SYNOLOGY_IP"),
+       ip_address=os.getenv("SYNOLOGY_IP"),
        port=os.getenv("SYNOLOGY_PORT"),
        username=os.getenv("SYNOLOGY_USER"),
        password=os.getenv("SYNOLOGY_PASS"),
