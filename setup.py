@@ -8,14 +8,16 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='synology-api',
-    version='0.8.1',
+    version='0.8.2',
     packages=find_packages(exclude=['tests*']),
     license='MIT',
     description='Python Synology API Wrapper',
     long_description=long_description,
     long_description_content_type='text/markdown',
     install_requires=['requests', 'urllib3', 'setuptools',
-                      'requests_toolbelt', 'tqdm', 'cryptography', 'treelib'],
+                      'requests_toolbelt', 'tqdm', 'cryptography', 'treelib',
+                      'noiseprotocol',
+                      ],
     url='https://github.com/N4S4/synology-api',
     author='Renato Visaggio',
     author_email='synology.python.api@gmail.com'

@@ -2,71 +2,78 @@
 # This file is used to track the documentation status of the different API classes.
 # It should be manually updated by the maintainers.
 
-- ActiveBackupBusiness:
+BaseApi:
     status: finished
-- ActiveBackupMicrosoft:
+
+ActiveBackupBusiness:
     status: finished
-- AdminConsole:
-    status: not_started
-- AudioStation:
-    status: not_started
-- BaseApi:
+ActiveBackupMicrosoft:
     status: finished
-- Backup:
+AdminConsole:
     status: partial
-- Certificate:
-    status: not_started
-- CloudSync:
-    status: finished
-- DhcpServer:
-    status: not_started
-- DirectoryServer:
-    status: finished
-- Docker:
-    status: finished
-- DownloadStation:
-    status: not_started
-- EventScheduler:
-    status: finished
-- FileStation:
-    status: not_started
-- Group:
-    status: finished
-- KeyManagerStore:
-    status: not_started
-- KeyManagerAutoKey:
-    status: not_started
-- LogCenter:
-    status: not_started
-- NoteStation:
-    status: not_started
-- OAuth:
-    status: not_started
-- Package:
+AudioStation:
     status: partial
-- Photos:
+Backup:
     status: partial
-- SecurityAdvisor:
-    status: not_started
-- Share:
+Certificate:
     status: partial
-- SharePermission:
+CloudSync:
+    status: finished
+DhcpServer:
     status: partial
-- Snapshot:
+DirectoryServer:
     status: finished
-- SurveillanceStation:
-    status: not_started
-- SysInfo:
-    status: not_started
-- TaskScheduler:
+Docker:
     status: finished
-- UniversalSearch:
-    status: not_started
-- USBCopy:
+DownloadStation:
+    status: partial
+EventScheduler:
     status: finished
-- User:
+FileStation:
+    status: partial
+Group:
     status: finished
-- VPN:
+ISCSI:
+    status: finished
+KeyManagerStore:
     status: not_started
-- Virtualization:
+KeyManagerAutoKey:
+    status: not_started
+LogCenter:
+    status: partial
+LUN:
+    status: finished
+NoteStation:
+    status: partial
+OAuth:
+    status: partial
+Package:
+    status: partial
+Photos:
+    status: partial
+SecurityAdvisor:
+    status: partial
+Share:
+    status: partial
+SharePermission:
+    status: partial
+Snapshot:
+    status: finished
+SurveillanceStation:
+    status: partial
+SysInfo:
+    status: partial
+Target:
+    status: finished
+TaskScheduler:
+    status: finished
+UniversalSearch:
+    status: partial
+USBCopy:
+    status: finished
+User:
+    status: finished
+VPN:
+    status: not_started
+Virtualization:
     status: not_started

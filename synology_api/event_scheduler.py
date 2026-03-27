@@ -17,20 +17,19 @@ class EventScheduler(base_api.BaseApi):
 
     This API provides functionality solely related to Event Tasks. For scheduled tasks, check `TaskScheduler`.
 
-    Methods
-    -------
-    Getters:
-        - Get task results
-        - Get result output
-    Setters:
-        - Set task settings
-        - Set power schedule
-    Actions:
-        - Enable task
-        - Disable task
-        - Run task
-        - Delete task
-        - Create task
+    Supported methods:
+        - Getters:
+            - Get task results
+            - Get result output
+        - Setters:
+            - Set task settings
+            - Set power schedule
+        - Actions:
+            - Enable task
+            - Disable task
+            - Run task
+            - Delete task
+            - Create task
     """
 
     def __get_root_token(self) -> str:

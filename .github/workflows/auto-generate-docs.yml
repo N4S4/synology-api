@@ -32,7 +32,7 @@ jobs:
           for file in ${ALL_CHANGED_FILES}; do
             echo "$file was changed"
 
-            python3 docs_parser.py -f "$(basename "$file")"
+            python3 -m scripts.docs_parser -f "$(basename "$file")"
           done
       - name: Commit & Push changes
         uses: actions-js/push@master

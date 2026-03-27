@@ -152,12 +152,12 @@ class DirectoryServer(base_api.BaseApi):
         """
         action = '"enum"'
         scope = '"one"'
-        api = 'SYNO.ActiveDirectory.Directory'
+        api_name = 'SYNO.ActiveDirectory.Directory'
         method = '"list"'
         info = {'maxVersion': 3, 'minVersion': 1,
                 'path': 'entry.cgi', 'requestFormat': 'JSON'}
         api_path = info['path']
-        req_param = {'api': api, 'action': action, 'basedn': '"'+basedn+'"', 'limit': limit, "method": method,
+        req_param = {'api': api_name, 'action': action, 'basedn': '"'+basedn+'"', 'limit': limit, "method": method,
                      'objectCategory': json.dumps(objectCategory), 'offset': offset, 'scope': scope,  'version': info['maxVersion']}
         print(req_param)
         return self.request_data("", api_path, req_param, 'post')
@@ -567,6 +567,8 @@ class DirectoryServer(base_api.BaseApi):
         }
         ```
         """
+        api_name = "SYNO.ActiveDirectory.User"
+
         class Person:
             """Represents a user object for Active Directory modifications."""
             firstName
@@ -598,8 +600,7 @@ class DirectoryServer(base_api.BaseApi):
             userObject.web = web
 
         theJsonObject = userObject.__dict__
-        val = self.setEntryRequest(
-            "SYNO.ActiveDirectory.User", "set", "userList", theJsonObject)
+        val = self.setEntryRequest(api_name, "set", "userList", theJsonObject)
 
         return val
 

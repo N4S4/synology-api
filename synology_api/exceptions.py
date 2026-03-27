@@ -7,6 +7,7 @@ returned by various Synology API endpoints.
 
 from .error_codes import error_codes, auth_error_codes, download_station_error_codes, file_station_error_codes, core_error_codes
 from .error_codes import virtualization_error_codes
+from .error_codes import iscsi_lun_error_codes, iscsi_target_error_codes
 
 
 # Base exception:
@@ -35,7 +36,7 @@ class SynoBaseException(Exception):
         *args : object
             Additional arguments to pass to the base Exception.
         """
-        super().__init__(*args)
+        super().__init__(error_message, *args)
         self.error_message = error_message
         return
 
@@ -284,6 +285,74 @@ class VirtualizationError(SynoBaseException):
                 error_message=virtualization_error_codes[error_code], *args)
         else:
             super().__init__(error_message="Virtualization Error: %i" % error_code, *args)
+        return
+
+
+class LunError(SynoBaseException):
+    """
+    Exception raised for an error during a SYNO.Core.ISCSI.LUN request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
+
+    def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize LunError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
+        self.error_code: int = error_code
+        if error_code in error_codes.keys():
+            super().__init__(error_message=error_codes[error_code], *args)
+        elif error_code in iscsi_lun_error_codes.keys():
+            super().__init__(
+                error_message=iscsi_lun_error_codes[error_code], *args)
+        else:
+            super().__init__(error_message="ISCSI.Lun Error: %i" % error_code, *args)
+        return
+
+
+class TargetError(SynoBaseException):
+    """
+    Exception raised for an error during a SYNO.Core.ISCSI.Target request.
+
+    Parameters
+    ----------
+    error_code : int
+        The error code returned by the API.
+    *args : object
+        Additional arguments to pass to the base Exception.
+    """
+
+    def __init__(self, error_code: int, *args: object) -> None:
+        """
+        Initialize TargetError.
+
+        Parameters
+        ----------
+        error_code : int
+            The error code returned by the API.
+        *args : object
+            Additional arguments to pass to the base Exception.
+        """
+        self.error_code: int = error_code
+        if error_code in error_codes.keys():
+            super().__init__(error_message=error_codes[error_code], *args)
+        elif error_code in iscsi_target_error_codes.keys():
+            super().__init__(
+                error_message=iscsi_target_error_codes[error_code], *args)
+        else:
+            super().__init__(error_message="ISCSI.Target Error: %i" % error_code, *args)
         return
 
 

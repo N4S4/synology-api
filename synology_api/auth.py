@@ -1,11 +1,15 @@
 """Provides authentication and API request handling for Synology DSM, including session management, encryption utilities, and error handling for various Synology services."""
 from __future__ import annotations
 from random import randint
-from typing import Optional
+from typing import Optional, Any, Union
 import requests
 import json
+
+from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
+
 from .error_codes import error_codes, CODE_SUCCESS, download_station_error_codes, file_station_error_codes
 from .error_codes import auth_error_codes, virtualization_error_codes
+from .error_codes import iscsi_lun_error_codes, iscsi_target_error_codes
 from urllib3 import disable_warnings
 from urllib3.exceptions import InsecureRequestWarning
 from .exceptions import CoreError
@@ -14,6 +18,7 @@ from .exceptions import FileStationError, AudioStationError, ActiveBackupError, 
 from .exceptions import CertificateError, CloudSyncError, DHCPServerError, DirectoryServerError, DockerError, DriveAdminError
 from .exceptions import LogCenterError, NoteStationError, OAUTHError, PhotosError, SecurityAdvisorError, TaskSchedulerError, EventSchedulerError
 from .exceptions import UniversalSearchError, USBCopyError, VPNError, CoreSysInfoError, UndefinedError
+from .exceptions import LunError, TargetError
 import hashlib
 from os import urandom
 from cryptography.hazmat.backends import default_backend
@@ -22,7 +27,10 @@ from cryptography.hazmat.primitives.asymmetric import padding, rsa
 import base64
 import hashlib
 import urllib
-
+from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
+import base64
+from noise.connection import NoiseConnection, Keypair
+import time
 
 USE_EXCEPTIONS: bool = True
 
@@ -129,6 +137,52 @@ class Authentication:
         self.full_api_list = {}
         self.app_api_list = {}
 
+    def get_ik_message(self) -> str:
+        """
+        Get the IK message for authentication.
+
+        Returns
+        -------
+        str
+            The IK message.
+        """
+
+        url = self._base_url + 'entry.cgi/SYNO.API.Auth.UIConfig'
+        data = {
+            "api": "SYNO.API.Auth.UIConfig",
+            "method": "get",
+            "version": "1"
+        }
+        response = requests.post(url, data=data, verify=self._verify)
+
+        # Try to get cookie "_SSID"
+        if response.status_code != 200:
+            raise Exception("Failed to access the URL for IK message. Status code: {}".format(
+                response.status_code))
+        cookies = response.cookies
+        if "_SSID" not in cookies:
+            raise Exception("Cookie '_SSID' not found in the response.")
+        _SSID_encoded = cookies["_SSID"]
+        _SSID = self.decode_ssid_cookie(_SSID_encoded)
+
+        private_bytes = X25519PrivateKey.generate().private_bytes_raw()
+
+        noise = NoiseConnection.from_name(b"Noise_IK_25519_ChaChaPoly_BLAKE2b")
+        noise.set_as_initiator()
+        noise.set_keypair_from_private_bytes(Keypair.STATIC, private_bytes)
+        noise.set_keypair_from_public_bytes(Keypair.REMOTE_STATIC, _SSID)
+
+        noise.start_handshake()
+
+        payload = json.dumps({
+            "time": int(time.time()),
+        }).encode('utf-8')
+
+        message = noise.write_message(payload)
+        ik_message = self.encode_ssid_cookie(message)
+
+        return ik_message
+
     def verify_cert_enabled(self) -> bool:
         """
         Check if SSL certificate verification is enabled.
@@ -158,6 +212,9 @@ class Authentication:
         login_api = 'auth.cgi'
         params = {'api': "SYNO.API.Auth", 'version': self._version,
                   'method': 'login', 'enable_syno_token': 'yes', 'client': 'browser'}
+
+        if self._version >= 7:
+            params.update({'ik_message': self.get_ik_message()})
 
         params_enc = {
             'account': self._username,
@@ -532,7 +589,6 @@ class Authentication:
         HTTPError
             If an HTTP error occurs.
         """
-        api_name = 'hotfix'  # fix for docs_parser.py issue
         api_path = self.full_api_list['SYNO.Entry.Request']['path']
         api_version = self.full_api_list['SYNO.Entry.Request']['maxVersion']
         url = f"{self._base_url}{api_path}"
@@ -571,6 +627,7 @@ class Authentication:
                      api_path: str,
                      req_param: dict[str, object],
                      method: Optional[str] = None,
+                     data: MultiPartEncoderMonitor | MultipartEncoder | str | None = None,
                      response_json: bool = True
                      ) -> dict[str, object] | str | list | requests.Response:  # 'post' or 'get'
         """
@@ -586,6 +643,8 @@ class Authentication:
             The parameters to include in the request.
         method : str, optional
             The HTTP method to use ('get' or 'post'). Defaults to 'get' if not specified.
+        data : str, optional
+         The data to send to upload a file like a torrent file.
         response_json : bool, optional
             Whether to return the response as JSON. If False, returns the raw response object.
 
@@ -624,8 +683,15 @@ class Authentication:
                     response = requests.get(url, req_param, verify=self._verify, headers={
                                             "X-SYNO-TOKEN": self._syno_token})
                 elif method == 'post':
-                    response = requests.post(url, req_param, verify=self._verify, headers={
-                                             "X-SYNO-TOKEN": self._syno_token})
+                    if data is None:
+                        response = requests.post(url, req_param, verify=self._verify, headers={
+                                                 "X-SYNO-TOKEN": self._syno_token})
+                    else:
+                        url = ('%s%s' % (self._base_url, api_path)) + \
+                            '/' + api_name
+                        response = requests.post(url, data=data, params=req_param, verify=self._verify, headers={
+                                                 "Content-Type": data.content_type, "X-SYNO-TOKEN": self._syno_token})
+                response.raise_for_status()
             except requests.exceptions.ConnectionError as e:
                 raise SynoConnectionError(error_message=e.args[0])
             except requests.exceptions.HTTPError as e:
@@ -638,6 +704,7 @@ class Authentication:
             elif method == 'post':
                 response = requests.post(url, req_param, verify=self._verify, headers={
                                          "X-SYNO-TOKEN": self._syno_token})
+            response.raise_for_status()
 
         # Check for error response from dsm:
         error_code = 0
@@ -717,6 +784,12 @@ class Authentication:
                 # Event Scheduler error:
                 elif api_name.find('SYNO.Core.EventScheduler') > -1:
                     raise EventSchedulerError(error_code=error_code)
+                # ISCSI LUN error:
+                elif api_name.find('SYNO.Core.ISCSI.LUN') > -1:
+                    raise LunError(error_code=error_code)
+                # ISCSI Target error:
+                elif api_name.find('SYNO.Core.ISCSI.Target') > -1:
+                    raise TargetError(error_code=error_code)
                 # Universal search error:
                 elif api_name.find('SYNO.Finder') > -1:
                     raise UniversalSearchError(error_code=error_code)
@@ -798,9 +871,61 @@ class Authentication:
         elif api_name.find('FileStation') > -1:
             message = file_station_error_codes.get(
                 code, "<Undefined.FileStation.Error>")
+        elif api_name.find('SYNO.Core.ISCSI.LUN') > -1:
+            message = iscsi_lun_error_codes.get(
+                code, "<Undefined.ISCSI.LUN.Error>")
+        elif api_name.find('SYNO.Core.ISCSI.Target') > -1:
+            message = iscsi_target_error_codes.get(
+                code, "<Undefined.ISCSI.Target.Error>")
         else:
             message = "<Undefined.%s.Error>" % api_name
         return 'Error {} - {}'.format(code, message)
+
+    @staticmethod
+    def decode_ssid_cookie(ssid: str) -> bytes:
+        """
+        Decode the SSID cookie.
+
+            Parameters
+            ----------
+            ssid : str
+                The SSID cookie string to decode.
+
+            Returns
+            -------
+            bytes
+                The decoded SSID cookie.
+        """
+        # Replace '-' with '+' and '_' with '/'
+        ssid_fixed = ssid.replace('-', '+').replace('_', '/')
+        # Pad with '=' if needed
+        padding = '=' * (-len(ssid_fixed) % 4)
+        ssid_fixed += padding
+        # Decode base64
+        return base64.b64decode(ssid_fixed)
+
+    @staticmethod
+    def encode_ssid_cookie(ssid_bytes: bytes) -> str:
+        """
+        Encode the SSID cookie.
+
+            Parameters
+            ----------
+            ssid_bytes : bytes
+                The SSID cookie bytes to encode.
+
+            Returns
+            -------
+            str
+                The encoded SSID cookie.
+        """
+        # Encode to base64
+        ssid_b64 = base64.b64encode(ssid_bytes).decode('utf-8')
+        # Replace '+' with '-' and '/' with '_'
+        ssid_fixed = ssid_b64.replace('+', '-').replace('/', '_')
+        # Remove padding '='
+        ssid_fixed = ssid_fixed.rstrip('=')
+        return ssid_fixed
 
     @property
     def sid(self) -> Optional[str]:

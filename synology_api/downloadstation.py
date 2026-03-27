@@ -6,8 +6,12 @@ on Synology NAS devices using the Download Station application.
 """
 
 from __future__ import annotations
+
+import json
 from typing import Optional, Any
+
 from . import base_api
+from .utils import get_data_for_request_from_file
 
 
 class DownloadStation(base_api.BaseApi):
@@ -15,6 +19,37 @@ class DownloadStation(base_api.BaseApi):
     Core Download Station API implementation for Synology NAS.
 
     This class provides methods to manage downloads, tasks, RSS feeds, and BT searches.
+
+    Supported methods:
+        - Getters:
+            - Get Download Station info.
+            - Get Download Station config.
+            - Get Download Station statistics.
+            - Get RSS site info list.
+            - Get schedule info.
+            - Get info for specific tasks.
+            - List download tasks.
+            - Get RSS feed list.
+            - Get RSS feed filter list.
+            - Get BT search results.
+            - Get BT search categories.
+            - Get BT search modules.
+        - Setters:
+            - Set Download Station server config.
+            - Set schedule config.
+            - Create a new download task.
+            - Edit a download task.
+            - Delete a download task.
+            - Add RSS feed filter.
+            - Set RSS feed filter.
+            - Delete RSS feed filter.
+        - Actions:
+            - Download task source.
+            - Pause a download task.
+            - Resume a download task.
+            - Refresh RSS site.
+            - Start a BT search.
+            - Clean BT search tasks.
 
     Parameters
     ----------
@@ -44,53 +79,6 @@ class DownloadStation(base_api.BaseApi):
         Enable interactive output (default is True).
     download_st_version : int, optional
         Download Station API version (default is None).
-
-    Methods
-    -------
-    get_info()
-        Get Download Station info.
-    get_config()
-        Get Download Station config.
-    set_server_config(...)
-        Set Download Station server config.
-    schedule_info()
-        Get schedule info.
-    schedule_set_config(...)
-        Set schedule config.
-    tasks_list(...)
-        List download tasks.
-    tasks_info(...)
-        Get info for specific tasks.
-    tasks_source(...)
-        Download task source.
-    create_task(...)
-        Create a new download task.
-    delete_task(...)
-        Delete a download task.
-    pause_task(...)
-        Pause a download task.
-    resume_task(...)
-        Resume a download task.
-    edit_task(...)
-        Edit a download task.
-    get_statistic_info()
-        Get Download Station statistics.
-    get_rss_info_list(...)
-        Get RSS site info list.
-    refresh_rss_site(...)
-        Refresh RSS site.
-    rss_feed_list(...)
-        Get RSS feed list.
-    start_bt_search(...)
-        Start a BT search.
-    get_bt_search_results(...)
-        Get BT search results.
-    get_bt_search_category()
-        Get BT search categories.
-    clean_bt_search(...)
-        Clean BT search tasks.
-    get_bt_module()
-        Get BT search modules.
     """
 
     def __init__(self,
@@ -323,8 +311,8 @@ class DownloadStation(base_api.BaseApi):
             additional_param = ['detail', 'transfer',
                                 'file', 'tracker', 'peer']
 
-        if type(additional_param) is list:
-            req_param['additional'] = ",".join(additional_param)
+        req_param['additional'] = json.dumps(additional_param if isinstance(
+            additional_param, list) else [additional_param])
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -347,18 +335,23 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'getinfo',
+        req_param = {'version': info['maxVersion'], 'method': 'get',
                      'id': task_id, 'additional': additional_param}
 
         if additional_param is None:
             additional_param = ['detail', 'transfer',
                                 'file', 'tracker', 'peer']
+        elif isinstance(additional_param, str):
+            additional_param = [additional_param]
+        elif isinstance(additional_param, list):
+            if not all(isinstance(a, str) for a in additional_param):
+                return "additional_param must be a string or a list of strings."
+        else:
+            return "additional_param must be a string or a list of strings."
 
-        if type(additional_param) is list:
-            req_param['additional'] = ",".join(additional_param)
-
-        if type(task_id) is list:
-            req_param['id'] = ",".join(task_id)
+        req_param['additional'] = json.dumps(additional_param)
+        req_param['id'] = json.dumps(
+            task_id if isinstance(task_id, list) else [task_id])
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -385,28 +378,108 @@ class DownloadStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param, response_json=False).content
 
-    def create_task(self, url, destination) -> dict[str, object] | str:
+    def get_task_list(self, list_id: str) -> dict[str, any]:
         """
-        Create a new download task.
+        Get info from a task list containing the files to be downloaded.
+
+        This is to be used after creating a task, and before starting the download.
 
         Parameters
         ----------
-        url : str
-            Download URL.
-        destination : str
-            Download destination.
+        list_id : str
+            List ID returned by create_task.
+
+        Returns
+        -------
+        dict[str, any]
+            A dictionary containing a task list information.
+
+        Examples
+        --------
+        ```json
+        {
+            "data" : {
+                "files" : [
+                    {
+                        "index" : 0,
+                        "name" : "Pulp.Fiction.1994.2160p.4K.BluRay.x265.10bit.AAC5.1-[YTS.MX].mkv",
+                        "size" : 2391069024
+                    },
+                    {
+                        "index" : 1,
+                        "name" : "YTSProxies.com.txt",
+                        "size" : 604
+                    },
+                    {
+                        "index" : 2,
+                        "name" : "www.YTS.MX.jpg",
+                        "size" : 53226
+                    }
+                ],
+                "size" : 7835426779,
+                "title" : "Pulp Fiction (1994) [2160p] [4K] [BluRay] [5.1] [YTS.MX]",
+                "type" : "bt"
+            },
+        }
+        ```
+        """
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task.List'
+        info = self.download_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'list_id': list_id}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def create_task(self,
+                    url: Optional[str] = None,
+                    file_path: Optional[str] = None,
+                    destination: str = "",
+                    ) -> dict[str, object] | str:
+        """
+        Create a new download task.
+
+        You can choose between a url or a file path (.torrent).
+
+        Parameters
+        ----------
+        url : str, optional
+            Download URL. Use either `url` or `file_path`.
+        file_path : str, optional
+            Path to a file (e.g. a .torrent) to download.
+        destination : str, optional
+            Download destination folder (default is "").
 
         Returns
         -------
         dict[str, object] or str
             API response.
         """
+        # Validate only a url or a file path.
+        if bool(url) == bool(file_path):
+            raise ValueError("You can't specify both 'url' and 'file_path'")
+
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
+
+        if file_path:
+            fields = {
+                "api": api_name,
+                "method": "create",
+                "version": str(info["maxVersion"]),
+                "type": '"file"',
+                "file": '["torrent"]',
+                "destination": f'"{destination}"',
+                "create_list": "true"
+            }
+            data = get_data_for_request_from_file(
+                file_path=file_path, fields=fields, called_from='DownloadStation')
+
+            return self.request_data(api_name, api_path, method='post', data=data, req_param={})
+
         req_param = {'version': info['maxVersion'], 'method': 'create', 'type': 'url',
                      'create_list': 'true', 'destination': destination, 'url': f'["{url}"]'}
-
         return self.request_data(api_name, api_path, req_param)
 
     def delete_task(self, task_id: str, force: bool = False) -> dict[str, object] | str:
@@ -513,6 +586,58 @@ class DownloadStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, param)
 
+    def download_task_list(
+        self,
+        list_id: str,
+        file_indexes: list[int],
+        destination: str,
+        create_subfolder: bool = True
+    ) -> dict[str, object] | str:
+        """
+        Download files from a task list.
+
+        Parameters
+        ----------
+        list_id : str
+            Task list ID.
+        file_indexes : list[int]
+            List of file indexes to download.
+            For example, if `get_task_list()` returns `files: [{index: 0, name: "file1.txt"}, {index: 1, name: "file2.txt"}]`, then `file_indexes = [1]` will download only file2.txt.
+        destination : str
+            Download destination, e.g. 'sharedfolder/subfolder'
+        create_subfolder : bool, optional
+            Create subfolder. Defaults to `True`
+
+        Returns
+        -------
+        dict[str, object] or str
+            A dictionary containing the task_id for the started download task.
+
+        Examples
+        --------
+        ```json
+        {
+            'data': {
+                'task_id': 'username/SYNODLTaskListDownload1759340338C7C39ABA'
+            }
+        }
+        ```
+        """
+        api_name = 'SYNO.DownloadStation' + \
+            self.download_st_version + '.Task.List.Polling'
+        info = self.download_list[api_name]
+        api_path = info['path']
+        param = {
+            'version': info['maxVersion'],
+            'method': 'download',
+            'list_id': list_id,
+            'file_indexes': ",".join(map(str, file_indexes)),
+            'destination': destination,
+            'create_subfolder': create_subfolder
+        }
+
+        return self.request_data(api_name, api_path, param)
+
     def get_statistic_info(self) -> dict[str, object] | str:
         """
         Get Download Station statistics.
@@ -578,7 +703,7 @@ class DownloadStation(base_api.BaseApi):
                  'method': 'refresh', 'id': rss_id}
 
         if rss_id is None:
-            return 'Enter a valid ID check if you have any with get_rss_list()'
+            return 'Enter a valid ID check if you have any with get_rss_info_list()'
         elif type(rss_id) is list:
             rss_id = ','.join(rss_id)
             param['id'] = rss_id
@@ -613,7 +738,7 @@ class DownloadStation(base_api.BaseApi):
         param = {'version': info['maxVersion'], 'method': 'list', 'id': rss_id}
 
         if rss_id is None:
-            return 'Enter a valid ID check if you have any with get_rss_list()'
+            return 'Enter a valid ID check if you have any with get_rss_info_list()'
         elif type(rss_id) is list:
             rss_id = ','.join(rss_id)
             param['id'] = rss_id
@@ -622,6 +747,169 @@ class DownloadStation(base_api.BaseApi):
             param['offset'] = offset
         if limit is not None:
             param['limit'] = limit
+
+        return self.request_data(api_name, api_path, param)
+
+    def rss_feed_filter_list(self,
+                             feed_id: Optional[int] = None,
+                             offset: Optional[int] = None,
+                             limit: Optional[int] = None
+                             ) -> dict[str, object] | str:
+        """
+        Get RSS feed filter list.
+
+        Parameters
+        ----------
+        feed_id : int, optional
+            RSS feed ID.
+        offset : int, optional
+            Offset for pagination.
+        limit : int, optional
+            Maximum number of filters to retrieve.
+
+        Returns
+        -------
+        dict[str, object] or str
+            RSS feed filter list.
+        """
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Filter'
+        info = self.download_list[api_name]
+        api_path = info['path']
+        param = {'version': info['maxVersion'],
+                 'method': 'list', 'feed_id': feed_id}
+
+        if feed_id is None:
+            return 'Enter a valid ID check if you have any with get_rss_info_list()'
+
+        if offset is not None:
+            param['offset'] = offset
+        if limit is not None:
+            param['limit'] = limit
+
+        return self.request_data(api_name, api_path, param)
+
+    def rss_feed_filter_add(self,
+                            feed_id: int = None,
+                            filter_name: str = None,
+                            match: str = None,
+                            not_match: str = None,
+                            destination: str = None,
+                            is_regex: bool = False
+                            ) -> dict[str, object] | str:
+        """
+        Add RSS feed filter.
+
+        Parameters
+        ----------
+        feed_id : int
+            RSS feed ID.
+        filter_name : str
+            Filter name.
+        match : str
+            Match pattern.
+        not_match : str
+            Not match pattern.
+        destination : str
+            Download destination.
+        is_regex : bool, optional
+            Use regex for matching (default is False).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
+
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Filter'
+        info = self.download_list[api_name]
+        api_path = info['path']
+
+        param = {'version': info['maxVersion'], 'method': 'add', 'feed_id': feed_id,
+                 'name': f'"{filter_name}"', 'match': f'"{match}"', 'not_match': f'"{not_match}"',
+                 'destination': f'"{destination}"', 'is_regex': str(is_regex).lower()}
+
+        if type(is_regex) is not bool:
+            return 'Please set is_regex to True or False'
+
+        if feed_id is None:
+            return 'Enter a valid ID check if you have any with get_rss_info_list()'
+
+        return self.request_data(api_name, api_path, param)
+
+    def rss_feed_filter_set(self,
+                            filter_id: int = None,
+                            filter_name: str = None,
+                            match: str = None,
+                            not_match: str = None,
+                            destination: str = None,
+                            is_regex: bool = False
+                            ) -> dict[str, object] | str:
+        """
+        Set RSS feed filter.
+
+        Parameters
+        ----------
+        filter_id : int
+            Filter ID.
+        filter_name : str
+            Filter name.
+        match : str
+            Match pattern.
+        not_match : str
+            Not match pattern.
+        destination : str
+            Download destination.
+        is_regex : bool, optional
+            Use regex for matching (default is False).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
+
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Filter'
+        info = self.download_list[api_name]
+        api_path = info['path']
+
+        param = {'version': info['maxVersion'], 'method': 'set', 'feed_id': 'null', 'id': filter_id,
+                 'name': f'"{filter_name}"', 'match': f'"{match}"', 'not_match': f'"{not_match}"',
+                 'destination': f'"{destination}"', 'is_regex': str(is_regex).lower()}
+
+        if type(is_regex) is not bool:
+            return 'Please set is_regex to True or False'
+
+        if filter_id is None:
+            return 'Enter a valid ID check if you have any with rss_feed_filter_list()'
+
+        return self.request_data(api_name, api_path, param)
+
+    def rss_feed_filter_delete(self,
+                               filter_id: int = None,
+                               ) -> dict[str, object] | str:
+        """
+        Delete RSS feed filter.
+
+        Parameters
+        ----------
+        filter_id : int
+            Filter ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
+
+        api_name = 'SYNO.DownloadStation' + self.download_st_version + '.RSS.Filter'
+        info = self.download_list[api_name]
+        api_path = info['path']
+
+        param = {'version': info['maxVersion'],
+                 'method': 'delete', 'id': filter_id}
+
+        if filter_id is None:
+            return 'Enter a valid ID check if you have any with rss_feed_filter_list()'
 
         return self.request_data(api_name, api_path, param)
 

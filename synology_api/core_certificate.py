@@ -39,6 +39,8 @@ class Certificate(base_api.BaseApi):
         One-time password for 2FA (default is None).
     """
 
+    _API_NAME = 'SYNO.Core.Certificate.CRT'
+
     def __init__(self,
                  ip_address: str,
                  port: str,
@@ -105,7 +107,7 @@ class Certificate(base_api.BaseApi):
             # print error here
             return f"Method {method} no supported."
 
-        api_name = 'SYNO.Core.Certificate.CRT'
+        api_name = Certificate._API_NAME
         info = self.gen_list[api_name]
         api_path = info['path']
 
