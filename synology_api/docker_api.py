@@ -1286,7 +1286,8 @@ class Docker(base_api.BaseApi):
         api_name = 'SYNO.Docker.Container'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'name': name}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'name': name}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -1405,7 +1406,8 @@ class Docker(base_api.BaseApi):
         api_name = 'SYNO.Docker.Container.PkgProfile'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'name': name}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'name': name}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -1444,7 +1446,8 @@ class Docker(base_api.BaseApi):
         api_name = 'SYNO.Docker.Container.Profile'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'name': name}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'name': name}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -1916,7 +1919,8 @@ class Docker(base_api.BaseApi):
             'id': project_id, 'content': content,
         }
         if enable_service_portal is not None:
-            req_param['enable_service_portal'] = json.dumps(enable_service_portal)
+            req_param['enable_service_portal'] = json.dumps(
+                enable_service_portal)
         if service_portal_name is not None:
             req_param['service_portal_name'] = service_portal_name
         if service_portal_port is not None:
