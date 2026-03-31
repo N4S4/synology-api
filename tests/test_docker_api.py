@@ -267,7 +267,8 @@ class TestDockerNetworkApi(unittest.TestCase):
         self.assertEqual(args[0][2]['method'], 'list')
 
     def test_create_network(self):
-        self.docker.create_network('mynet', subnet='172.28.0.0/16', gateway='172.28.0.1')
+        self.docker.create_network(
+            'mynet', subnet='172.28.0.0/16', gateway='172.28.0.1')
         args = self.docker.request_data.call_args
         self.assertEqual(args[0][2]['method'], 'create')
         self.assertEqual(args[0][2]['name'], 'mynet')
@@ -304,7 +305,8 @@ class TestDockerProjectApi(unittest.TestCase):
 
     def test_create_project(self):
         yaml_content = 'version: "3"\nservices:\n  web:\n    image: nginx\n'
-        self.docker.create_project('myproject', '/docker/myproject', yaml_content)
+        self.docker.create_project(
+            'myproject', '/docker/myproject', yaml_content)
         args = self.docker.request_data.call_args
         self.assertEqual(args[0][2]['method'], 'create')
         self.assertEqual(args[0][2]['content'], yaml_content)
@@ -355,7 +357,8 @@ class TestDockerRegistryApi(unittest.TestCase):
         self.assertEqual(args[0][2]['q'], 'nginx')
 
     def test_create_registry(self):
-        self.docker.create_registry('GHCR', 'https://ghcr.io', username='user', password='pass')
+        self.docker.create_registry(
+            'GHCR', 'https://ghcr.io', username='user', password='pass')
         args = self.docker.request_data.call_args
         self.assertEqual(args[0][2]['method'], 'create')
         self.assertEqual(args[0][2]['url'], 'https://ghcr.io')

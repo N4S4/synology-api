@@ -1,4 +1,5 @@
-"""Docker API implementation for Synology NAS.
+"""
+Docker API implementation for Synology NAS.
 
 Provides full coverage of all 12 SYNO.Docker.* API endpoints:
     - SYNO.Docker.Container       — Container lifecycle (list, get, start, stop, restart, delete, create, signal, export, stats)
@@ -1271,7 +1272,8 @@ class Docker(base_api.BaseApi):
     # ──────────────────────────────────────────────────────────────────────
 
     def get_container(self, name: str) -> dict[str, object] | str:
-        """Get detailed information about a single container.
+        """
+        Get detailed information about a single container.
 
         Parameters
         ----------
@@ -1292,7 +1294,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def restart_container(self, container: str) -> dict[str, object] | str:
-        """Restart a container by name.
+        """
+        Restart a container by name.
 
         Parameters
         ----------
@@ -1313,7 +1316,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_container(self, name: str, force: bool = False) -> dict[str, object] | str:
-        """Delete a container.
+        """
+        Delete a container.
 
         Parameters
         ----------
@@ -1337,7 +1341,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def create_container(self, profile: dict) -> dict[str, object] | str:
-        """Create a new container from a profile definition.
+        """
+        Create a new container from a profile definition.
 
         Parameters
         ----------
@@ -1361,7 +1366,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method='post')
 
     def signal_container(self, name: str, signal: int = 15) -> dict[str, object] | str:
-        """Send a signal to a running container.
+        """
+        Send a signal to a running container.
 
         Parameters
         ----------
@@ -1388,7 +1394,8 @@ class Docker(base_api.BaseApi):
     # ──────────────────────────────────────────────────────────────────────
 
     def get_pkg_profile(self, name: str) -> dict[str, object] | str:
-        """Get the profile of a package-managed container.
+        """
+        Get the profile of a package-managed container.
 
         Package-managed containers are created by Synology packages
         (e.g. Surveillance Station, MailPlus) rather than by users directly.
@@ -1412,7 +1419,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def list_pkg_profiles(self) -> dict[str, object] | str:
-        """List all package-managed container profiles.
+        """
+        List all package-managed container profiles.
 
         Returns
         -------
@@ -1431,7 +1439,8 @@ class Docker(base_api.BaseApi):
     # ──────────────────────────────────────────────────────────────────────
 
     def get_container_profile(self, name: str) -> dict[str, object] | str:
-        """Get the full profile/configuration of a container.
+        """
+        Get the full profile/configuration of a container.
 
         Parameters
         ----------
@@ -1452,7 +1461,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def import_container_profile(self, name: str, profile: dict) -> dict[str, object] | str:
-        """Import / apply a profile to a container.
+        """
+        Import / apply a profile to a container.
 
         Parameters
         ----------
@@ -1480,7 +1490,8 @@ class Docker(base_api.BaseApi):
     # ──────────────────────────────────────────────────────────────────────
 
     def pull_image(self, repository: str, tag: str = 'latest') -> dict[str, object] | str:
-        """Pull a Docker image from the active registry.
+        """
+        Pull a Docker image from the active registry.
 
         Parameters
         ----------
@@ -1503,7 +1514,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_image(self, name: str, tag: str = 'latest') -> dict[str, object] | str:
-        """Delete a local Docker image.
+        """
+        Delete a local Docker image.
 
         Parameters
         ----------
@@ -1527,7 +1539,8 @@ class Docker(base_api.BaseApi):
 
     def export_image(self, name: str, tag: str = 'latest',
                      path: str = '/docker') -> dict[str, object] | str:
-        """Export a Docker image to a tar archive on the NAS.
+        """
+        Export a Docker image to a tar archive on the NAS.
 
         Parameters
         ----------
@@ -1552,7 +1565,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def import_image(self, path: str) -> dict[str, object] | str:
-        """Import a Docker image from a tar archive on the NAS.
+        """
+        Import a Docker image from a tar archive on the NAS.
 
         Parameters
         ----------
@@ -1574,7 +1588,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method='post')
 
     def get_image(self, name: str, tag: str = 'latest') -> dict[str, object] | str:
-        """Get detailed information about a local Docker image.
+        """
+        Get detailed information about a local Docker image.
 
         Parameters
         ----------
@@ -1604,7 +1619,8 @@ class Docker(base_api.BaseApi):
                         username: Optional[str] = None,
                         password: Optional[str] = None,
                         enable_trust_ssc: bool = True) -> dict[str, object] | str:
-        """Add a new Docker registry.
+        """
+        Add a new Docker registry.
 
         Parameters
         ----------
@@ -1641,7 +1657,8 @@ class Docker(base_api.BaseApi):
                      username: Optional[str] = None,
                      password: Optional[str] = None,
                      enable_trust_ssc: bool = True) -> dict[str, object] | str:
-        """Update an existing Docker registry configuration.
+        """
+        Update an existing Docker registry configuration.
 
         Parameters
         ----------
@@ -1675,7 +1692,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_registry(self, name: str) -> dict[str, object] | str:
-        """Remove a Docker registry.
+        """
+        Remove a Docker registry.
 
         Parameters
         ----------
@@ -1695,7 +1713,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def set_using_registry(self, name: str) -> dict[str, object] | str:
-        """Set the active (default) Docker registry.
+        """
+        Set the active (default) Docker registry.
 
         Parameters
         ----------
@@ -1716,7 +1735,8 @@ class Docker(base_api.BaseApi):
 
     def get_image_tags(self, repository: str, offset: int = 0,
                        limit: int = 50) -> dict[str, object] | str:
-        """List available tags for an image in the registry.
+        """
+        List available tags for an image in the registry.
 
         Uses v2 of the Registry API for paginated tag listing.
 
@@ -1751,7 +1771,8 @@ class Docker(base_api.BaseApi):
                        gateway: Optional[str] = None,
                        ip_range: Optional[str] = None,
                        enable_ipv6: bool = False) -> dict[str, object] | str:
-        """Create a new Docker network.
+        """
+        Create a new Docker network.
 
         Parameters
         ----------
@@ -1791,7 +1812,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def delete_network(self, name: str) -> dict[str, object] | str:
-        """Delete a Docker network.
+        """
+        Delete a Docker network.
 
         Parameters
         ----------
@@ -1812,7 +1834,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_network(self, name: str) -> dict[str, object] | str:
-        """Get detailed information about a Docker network.
+        """
+        Get detailed information about a Docker network.
 
         Parameters
         ----------
@@ -1842,7 +1865,8 @@ class Docker(base_api.BaseApi):
                        service_portal_name: Optional[str] = None,
                        service_portal_port: Optional[int] = None,
                        service_portal_protocol: str = 'http') -> dict[str, object] | str:
-        """Create a new Docker Compose project.
+        """
+        Create a new Docker Compose project.
 
         Parameters
         ----------
@@ -1889,7 +1913,8 @@ class Docker(base_api.BaseApi):
                        service_portal_name: Optional[str] = None,
                        service_portal_port: Optional[int] = None,
                        service_portal_protocol: Optional[str] = None) -> dict[str, object] | str:
-        """Update an existing Docker Compose project.
+        """
+        Update an existing Docker Compose project.
 
         Parameters
         ----------
@@ -1931,7 +1956,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param, method='post')
 
     def delete_project(self, project_id: str, preserve_content: bool = False) -> dict[str, object] | str:
-        """Delete a Docker Compose project.
+        """
+        Delete a Docker Compose project.
 
         Parameters
         ----------
@@ -1955,7 +1981,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def start_project(self, project_id: str) -> dict[str, object] | str:
-        """Start (``docker compose up``) a project.
+        """
+        Start (``docker compose up``) a project.
 
         Parameters
         ----------
@@ -1976,7 +2003,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def stop_project(self, project_id: str) -> dict[str, object] | str:
-        """Stop (``docker compose down``) a project.
+        """
+        Stop (``docker compose down``) a project.
 
         Parameters
         ----------
@@ -1997,7 +2025,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def build_project(self, project_id: str) -> dict[str, object] | str:
-        """Build (``docker compose build``) images for a project.
+        """
+        Build (``docker compose build``) images for a project.
 
         Parameters
         ----------
@@ -2025,7 +2054,8 @@ class Docker(base_api.BaseApi):
                         sort_dir: str = 'DESC',
                         keyword: Optional[str] = None,
                         level: Optional[str] = None) -> dict[str, object] | str:
-        """Get Docker daemon-level / global logs.
+        """
+        Get Docker daemon-level / global logs.
 
         These are logs from the Docker engine itself, not from individual
         containers. Use ``get_logs()`` for per-container logs.
@@ -2067,7 +2097,8 @@ class Docker(base_api.BaseApi):
     # ──────────────────────────────────────────────────────────────────────
 
     def get_migrate_status(self) -> dict[str, object] | str:
-        """Get the migration status of Docker containers / configuration.
+        """
+        Get the migration status of Docker containers / configuration.
 
         Checks whether containers require migration (e.g. after a DSM or
         Docker package upgrade).
@@ -2085,7 +2116,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def start_migration(self) -> dict[str, object] | str:
-        """Start the Docker migration process.
+        """
+        Start the Docker migration process.
 
         Triggers migration of containers that require updating after a
         DSM or Docker package upgrade.
@@ -2107,7 +2139,8 @@ class Docker(base_api.BaseApi):
     # ──────────────────────────────────────────────────────────────────────
 
     def get_docker_utils_info(self) -> dict[str, object] | str:
-        """Get Docker utility information.
+        """
+        Get Docker utility information.
 
         Returns general Docker engine information such as version, storage
         driver, volumes path, and capability flags.
@@ -2125,7 +2158,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def docker_prune(self) -> dict[str, object] | str:
-        """Prune unused Docker resources.
+        """
+        Prune unused Docker resources.
 
         Removes unused containers, networks, images, and build cache
         (equivalent to ``docker system prune``).
@@ -2143,7 +2177,8 @@ class Docker(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def get_docker_version(self) -> dict[str, object] | str:
-        """Get Docker engine version information.
+        """
+        Get Docker engine version information.
 
         Returns
         -------
