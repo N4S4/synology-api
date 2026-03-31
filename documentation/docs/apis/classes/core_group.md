@@ -1,5 +1,5 @@
 ---
-sidebar_position: 16
+sidebar_position: 15
 title: ✅ Group
 ---
 
@@ -19,7 +19,7 @@ This class provides methods to manage groups, including:
 
 ### Supported methods
 
-    - **Getters** : 
+    - **Getters** :
         - Retrieve groups information.
         - Retrieve users who are members or not members of a group.
         - Retrieve bandwidth control settings for a group.
@@ -41,11 +41,13 @@ Retrieve groups information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Group` 
+
+`SYNO.Core.Group`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_offset_** `int`  
 The offset of the groups to retrieve. Defaults to 0.  
   
@@ -55,17 +57,19 @@ The maximum number of groups to retrieve. Defaults to -1 (all groups).
 **_name_only_** `bool`  
 If True, returns only group names. If False, returns full group information. Defaults to False.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the groups information.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -100,7 +104,6 @@ A dictionary containing the groups information.
 </details>
 
 
-
 ---
 
 
@@ -109,11 +112,13 @@ Retrieve users who are members or not members of a group.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Group.Member` 
+
+`SYNO.Core.Group.Member`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_group_** `str`  
 The group to list users from.  
   
@@ -121,17 +126,19 @@ The group to list users from.
 If True, retrieves users who are members of the specified group.
 If False, retrieves users who are not members of the group. Defaults to True.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the request.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -161,7 +168,6 @@ A dictionary containing the result of the request.
 </details>
 
 
-
 ---
 
 
@@ -170,25 +176,29 @@ Retrieve bandwidth control settings for a given group.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.BandwidthControl` 
+
+`SYNO.Core.BandwidthControl`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_group_** `str`  
 The group to retrieve settings for.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the request.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -213,7 +223,6 @@ A dictionary containing the result of the request.
 </details>
 
 
-
 ---
 
 
@@ -222,25 +231,29 @@ Retrieve quota settings for a given group.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Quota` 
+
+`SYNO.Core.Quota`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_group_** `str`  
 The group to retrieve quota settings for.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the request.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -266,7 +279,6 @@ A dictionary containing the result of the request.
 </details>
 
 
-
 ---
 
 
@@ -275,25 +287,29 @@ Retrieve share permissions for a given group.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.Permission` 
+
+`SYNO.Core.Share.Permission`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_group_** `str`  
 The group to list permissions for.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the request.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -319,7 +335,6 @@ A dictionary containing the result of the request.
 </details>
 
 
-
 ---
 
 
@@ -328,11 +343,13 @@ Change group name and/or description.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Group` 
+
+`SYNO.Core.Group`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_group_** `str`  
 The group to set information for.  
   
@@ -342,17 +359,19 @@ The new name of the group. Defaults to current value.
 **_new_description_** `str`  
 The new description of the group. Defaults to current value.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the request.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -365,7 +384,6 @@ A dictionary containing the result of the request.
 </details>
 
 
-
 ---
 
 
@@ -374,28 +392,32 @@ Set group quota for a given share.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Quota` 
+
+`SYNO.Core.Quota`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_group_** `str`  
 The group to set the quota for.  
   
 **_share_quotas_** `list of dict`  
 The quotas to set for the group.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the request.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {},
@@ -403,7 +425,6 @@ A dictionary containing the result of the request.
 }
 ```
 </details>
-
 
 
 ---
@@ -414,35 +435,38 @@ Set group permissions for a given share.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.Permission` 
+
+`SYNO.Core.Share.Permission`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_group_** `str`  
 The group to set the permissions for.  
   
 **_permissions_** `list of dict`  
 The permissions to set for the group.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the request.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "success": true
 }
 ```
 </details>
-
 
 
 ---
@@ -453,11 +477,13 @@ Set speed limit for a given share.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.BandwidthControl` 
+
+`SYNO.Core.BandwidthControl`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_group_** `str`  
 The group to set the speed limit for.  
   
@@ -471,17 +497,19 @@ The maximum download speed in KB/s.
 The protocol to set the speed limit for. Possible values:
 FileStation, WebDAV, FTP, NetworkBackup (Rsync), CloudStation (Synology Drive).  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the request.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -495,7 +523,6 @@ A dictionary containing the result of the request.
 </details>
 
 
-
 ---
 
 
@@ -504,28 +531,32 @@ Add users to a group.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Group.Member` 
+
+`SYNO.Core.Group.Member`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_group_** `str`  
 The group to add users to.  
   
 **_users_** `list of str`  
 The users to add to the group.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the request.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {},
@@ -533,7 +564,6 @@ A dictionary containing the result of the request.
 }
 ```
 </details>
-
 
 
 ---
@@ -544,28 +574,32 @@ Remove users from a group.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Group.Member` 
+
+`SYNO.Core.Group.Member`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_group_** `str`  
 The group to remove users from.  
   
 **_users_** `list of str`  
 The users to remove from the group.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the request.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {},
@@ -573,7 +607,6 @@ A dictionary containing the result of the request.
 }
 ```
 </details>
-
 
 
 ---
@@ -584,28 +617,32 @@ Create a new group.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Group` 
+
+`SYNO.Core.Group`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 Name to assign to the group.  
   
 **_description_** `str`  
 Description to assign to the group. Defaults to empty string.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the request.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -618,7 +655,6 @@ A dictionary containing the result of the request.
 </details>
 
 
-
 ---
 
 
@@ -627,25 +663,29 @@ Delete specified groups.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Group` 
+
+`SYNO.Core.Group`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_groups_** `list of str`  
 The groups to delete.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the request.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {},
@@ -653,7 +693,6 @@ A dictionary containing the result of the request.
 }
 ```
 </details>
-
 
 
 ---

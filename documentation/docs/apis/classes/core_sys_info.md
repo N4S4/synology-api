@@ -1,5 +1,5 @@
 ---
-sidebar_position: 29
+sidebar_position: 30
 title: 🚧 SysInfo
 ---
 
@@ -25,15 +25,18 @@ Get SMB file service status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.FileServ.SMB` 
+
+`SYNO.Core.FileServ.SMB`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 SMB file service status.  
-
 </div>
+  
 
 
 
@@ -45,15 +48,18 @@ Get AFP file service status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.FileServ.AFP` 
+
+`SYNO.Core.FileServ.AFP`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 AFP file service status.  
-
 </div>
+  
 
 
 
@@ -65,15 +71,18 @@ Get NFS file service status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.FileServ.NFS` 
+
+`SYNO.Core.FileServ.NFS`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 NFS file service status.  
-
 </div>
+  
 
 
 
@@ -85,15 +94,18 @@ Get FTP file service status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.FileServ.FTP` 
+
+`SYNO.Core.FileServ.FTP`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 FTP file service status.  
-
 </div>
+  
 
 
 
@@ -105,15 +117,18 @@ Get SFTP file service status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.FileServ.FTP.SFTP` 
+
+`SYNO.Core.FileServ.FTP.SFTP`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 SFTP file service status.  
-
 </div>
+  
 
 
 
@@ -125,15 +140,18 @@ Get network backup service information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Backup.Service.NetworkBackup` 
+
+`SYNO.Backup.Service.NetworkBackup`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Network backup service information.  
-
 </div>
+  
 
 
 
@@ -145,15 +163,18 @@ Get bandwidth control protocol information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.BandwidthControl.Protocol` 
+
+`SYNO.Core.BandwidthControl.Protocol`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Bandwidth control protocol information.  
-
 </div>
+  
 
 
 
@@ -165,15 +186,18 @@ Get shared folders information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share` 
+
+`SYNO.Core.Share`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Shared folders information.  
-
 </div>
+  
 
 
 
@@ -185,15 +209,18 @@ Get status of core services.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Service` 
+
+`SYNO.Core.Service`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Status of core services.  
-
 </div>
+  
 
 
 
@@ -205,15 +232,18 @@ Get service discovery information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.FileServ.ServiceDiscovery` 
+
+`SYNO.Core.FileServ.ServiceDiscovery`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Service discovery information.  
-
 </div>
+  
 
 
 
@@ -225,15 +255,18 @@ Get file transfer status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.SyslogClient.FileTransfer` 
+
+`SYNO.Core.SyslogClient.FileTransfer`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 File transfer status.  
-
 </div>
+  
 
 
 
@@ -245,15 +278,18 @@ Get network status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network` 
+
+`SYNO.Core.Network`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Network status.  
-
 </div>
+  
 
 
 
@@ -265,15 +301,18 @@ Get DSM web status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Web.DSM` 
+
+`SYNO.Core.Web.DSM`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 DSM web status.  
-
 </div>
+  
 
 
 
@@ -285,15 +324,18 @@ Get current connection information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.CurrentConnection` 
+
+`SYNO.Core.CurrentConnection`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Current connection information.  
-
 </div>
+  
 
 
 
@@ -305,15 +347,18 @@ Get bandwidth control status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.BandwidthControl.Status` 
+
+`SYNO.Core.BandwidthControl.Status`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Bandwidth control status.  
-
 </div>
+  
 
 
 
@@ -325,15 +370,18 @@ Get system status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System.Status` 
+
+`SYNO.Core.System.Status`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 System status.  
-
 </div>
+  
 
 
 
@@ -345,15 +393,18 @@ Get latest system logs.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.SyslogClient.Status` 
+
+`SYNO.Core.SyslogClient.Status`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Latest system logs.  
-
 </div>
+  
 
 
 
@@ -365,15 +416,18 @@ Get client notification settings status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.SyslogClient.Setting.Notify` 
+
+`SYNO.Core.SyslogClient.Setting.Notify`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Client notification settings status.  
-
 </div>
+  
 
 
 
@@ -385,15 +439,18 @@ Get security scan configuration.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.SecurityScan.Conf` 
+
+`SYNO.Core.SecurityScan.Conf`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Security scan configuration.  
-
 </div>
+  
 
 
 
@@ -405,15 +462,18 @@ Get security scan rules.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.SecurityScan.Status` 
+
+`SYNO.Core.SecurityScan.Status`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Security scan rules.  
-
 </div>
+  
 
 
 
@@ -425,15 +485,18 @@ Get security scan status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.SecurityScan.Status` 
+
+`SYNO.Core.SecurityScan.Status`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Security scan status.  
-
 </div>
+  
 
 
 
@@ -445,15 +508,18 @@ Get user list.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User` 
+
+`SYNO.Core.User`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 User list.  
-
 </div>
+  
 
 
 
@@ -465,15 +531,18 @@ Get QuickConnect configuration.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.QuickConnect` 
+
+`SYNO.Core.QuickConnect`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 QuickConnect configuration.  
-
 </div>
+  
 
 
 
@@ -485,15 +554,18 @@ Get QuickConnect permissions.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.QuickConnect.Permission` 
+
+`SYNO.Core.QuickConnect.Permission`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 QuickConnect permissions.  
-
 </div>
+  
 
 
 
@@ -505,15 +577,18 @@ Get network topology.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.Router.Topology` 
+
+`SYNO.Core.Network.Router.Topology`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Network topology.  
-
 </div>
+  
 
 
 
@@ -525,15 +600,18 @@ Get WiFi client information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.Wifi.Client` 
+
+`SYNO.Core.Network.Wifi.Client`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 WiFi client information.  
-
 </div>
+  
 
 
 
@@ -545,15 +623,18 @@ Get network bond information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.Bond` 
+
+`SYNO.Core.Network.Bond`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Network bond information.  
-
 </div>
+  
 
 
 
@@ -565,15 +646,18 @@ Get network bridge information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.Bridge` 
+
+`SYNO.Core.Network.Bridge`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Network bridge information.  
-
 </div>
+  
 
 
 
@@ -585,15 +669,18 @@ Get network ethernet information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.Ethernet` 
+
+`SYNO.Core.Network.Ethernet`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Network ethernet information.  
-
 </div>
+  
 
 
 
@@ -605,15 +692,18 @@ Get local network bridge information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.LocalBridge` 
+
+`SYNO.Core.Network.LocalBridge`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Local network bridge information.  
-
 </div>
+  
 
 
 
@@ -625,15 +715,18 @@ Get USB modem information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.USBModem` 
+
+`SYNO.Core.Network.USBModem`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 USB modem information.  
-
 </div>
+  
 
 
 
@@ -645,15 +738,18 @@ Get PPPoE information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.PPPoE` 
+
+`SYNO.Core.Network.PPPoE`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 PPPoE information.  
-
 </div>
+  
 
 
 
@@ -665,15 +761,18 @@ Get IPv6 tunnel information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.IPv6Tunnel` 
+
+`SYNO.Core.Network.IPv6Tunnel`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 IPv6 tunnel information.  
-
 </div>
+  
 
 
 
@@ -685,15 +784,18 @@ Get VPN PPTP information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.VPN.PPTP` 
+
+`SYNO.Core.Network.VPN.PPTP`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 VPN PPTP information.  
-
 </div>
+  
 
 
 
@@ -705,15 +807,18 @@ Get OpenVPN information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.VPN.OpenVPN` 
+
+`SYNO.Core.Network.VPN.OpenVPN`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 OpenVPN information.  
-
 </div>
+  
 
 
 
@@ -725,15 +830,18 @@ Get VPN L2TP information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.VPN.L2TP` 
+
+`SYNO.Core.Network.VPN.L2TP`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 VPN L2TP information.  
-
 </div>
+  
 
 
 
@@ -745,15 +853,18 @@ Get domain schedule.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Directory.Domain.Schedule` 
+
+`SYNO.Core.Directory.Domain.Schedule`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Domain schedule.  
-
 </div>
+  
 
 
 
@@ -765,15 +876,18 @@ Get LDAP client information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Directory.LDAP` 
+
+`SYNO.Core.Directory.LDAP`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 LDAP client information.  
-
 </div>
+  
 
 
 
@@ -785,15 +899,18 @@ Get SSO client information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Directory.SSO` 
+
+`SYNO.Core.Directory.SSO`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 SSO client information.  
-
 </div>
+  
 
 
 
@@ -805,15 +922,18 @@ Check for system upgrades.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Upgrade.Server` 
+
+`SYNO.Core.Upgrade.Server`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 System upgrade check result.  
-
 </div>
+  
 
 
 
@@ -825,15 +945,18 @@ Get system upgrade download progress.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Upgrade.Server.Download` 
+
+`SYNO.Core.Upgrade.Server.Download`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 System upgrade download progress.  
-
 </div>
+  
 
 
 
@@ -845,15 +968,18 @@ Get system upgrade settings.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Upgrade.Setting` 
+
+`SYNO.Core.Upgrade.Setting`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 System upgrade settings.  
-
 </div>
+  
 
 
 
@@ -865,15 +991,18 @@ Get SMS notification configuration.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Notification.SMS.Conf` 
+
+`SYNO.Core.Notification.SMS.Conf`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 SMS notification configuration.  
-
 </div>
+  
 
 
 
@@ -885,15 +1014,18 @@ Get mail notification configuration.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Notification.Mail.Conf` 
+
+`SYNO.Core.Notification.Mail.Conf`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Mail notification configuration.  
-
 </div>
+  
 
 
 
@@ -905,15 +1037,18 @@ Get push mail notification configuration.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Notification.Push.Mail` 
+
+`SYNO.Core.Notification.Push.Mail`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Push mail notification configuration.  
-
 </div>
+  
 
 
 
@@ -925,15 +1060,18 @@ Get push notification configuration.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Notification.Push.Conf` 
+
+`SYNO.Core.Notification.Push.Conf`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Push notification configuration.  
-
 </div>
+  
 
 
 
@@ -945,15 +1083,18 @@ Get hardware beep control status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Hardware.BeepControl` 
+
+`SYNO.Core.Hardware.BeepControl`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Hardware beep control status.  
-
 </div>
+  
 
 
 
@@ -965,15 +1106,18 @@ Get hardware fan speed.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Hardware.FanSpeed` 
+
+`SYNO.Core.Hardware.FanSpeed`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Hardware fan speed.  
-
 </div>
+  
 
 
 
@@ -985,22 +1129,25 @@ Set hardware fan speed.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Hardware.FanSpeed` 
+
+`SYNO.Core.Hardware.FanSpeed`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_fan_speed_** `str`  
 Fan speed mode (e.g., 'quietfan', 'coolfan', 'fullfan'). Defaults to 'quietfan'.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -1012,22 +1159,25 @@ Enable or disable ZRAM.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Hardware.ZRAM` 
+
+`SYNO.Core.Hardware.ZRAM`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_enable_zram_** `bool`  
 Enable ZRAM if True, disable if False. Defaults to True.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -1039,25 +1189,28 @@ Enable power recovery options.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Hardware.PowerRecovery` 
+
+`SYNO.Core.Hardware.PowerRecovery`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_restart_auto_after_issue_** `bool`  
 Restart automatically after issue. Defaults to True.  
   
 **_wake_on_lan_** `bool`  
 Enable Wake-on-LAN. Defaults to False.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -1069,11 +1222,13 @@ Enable or disable beep control options.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Hardware.BeepControl` 
+
+`SYNO.Core.Hardware.BeepControl`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_fan_fail_** `bool`  
 Enable beep on fan failure.  
   
@@ -1086,14 +1241,15 @@ Enable beep on power on.
 **_poweroff_beep_** `bool`  
 Enable beep on power off.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -1105,22 +1261,25 @@ Set LED brightness.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Led.Brightness` 
+
+`SYNO.Core.Led.Brightness`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_led_brightness_** `int`  
 LED brightness level. Defaults to 2.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -1132,25 +1291,28 @@ Set hibernation times.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Hardware.Hibernation` 
+
+`SYNO.Core.Hardware.Hibernation`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_internal_hd_idletime_** `int`  
 Idle time for internal hard drives. Defaults to 0.  
   
 **_usb_idletime_** `int`  
 Idle time for USB devices. Defaults to 0.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -1162,11 +1324,13 @@ Enable or configure external UPS.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.ExternalDevice.UPS` 
+
+`SYNO.Core.ExternalDevice.UPS`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_enable_** `bool`  
 Enable external UPS. Defaults to False.  
   
@@ -1182,14 +1346,15 @@ SNMP auth key dirty flag. Defaults to False.
 **_snmp_privacy_key_dirty_** `bool`  
 SNMP privacy key dirty flag. Defaults to False.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -1201,15 +1366,18 @@ Get system information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System` 
+
+`SYNO.Core.System`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 System information.  
-
 </div>
+  
 
 
 
@@ -1221,15 +1389,18 @@ Get CPU temperature.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System` 
+
+`SYNO.Core.System`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `str`  
 CPU temperature.  
-
 </div>
+  
 
 
 
@@ -1241,15 +1412,18 @@ Get all system utilization statistics.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System.Utilization` 
+
+`SYNO.Core.System.Utilization`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `str`  
 System utilization statistics.  
-
 </div>
+  
 
 
 
@@ -1261,15 +1435,18 @@ Get CPU utilization statistics.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System.Utilization` 
+
+`SYNO.Core.System.Utilization`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `str`  
 CPU utilization statistics.  
-
 </div>
+  
 
 
 
@@ -1281,15 +1458,18 @@ Get disk utilization statistics.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System.Utilization` 
+
+`SYNO.Core.System.Utilization`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `str`  
 Disk utilization statistics.  
-
 </div>
+  
 
 
 
@@ -1301,15 +1481,18 @@ Get memory utilization statistics.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System.Utilization` 
+
+`SYNO.Core.System.Utilization`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `str`  
 Memory utilization statistics.  
-
 </div>
+  
 
 
 
@@ -1321,22 +1504,25 @@ Shutdown the system.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System` 
+
+`SYNO.Core.System`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_version_** `str`  
 API version to use. Defaults to None.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -1348,15 +1534,18 @@ Reboot the system.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System` 
+
+`SYNO.Core.System`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -1368,15 +1557,18 @@ Get DSM information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DSM.Info` 
+
+`SYNO.DSM.Info`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 DSM information.  
-
 </div>
+  
 
 
 
@@ -1388,15 +1580,18 @@ Get network information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System` 
+
+`SYNO.Core.System`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Network information.  
-
 </div>
+  
 
 
 
@@ -1408,15 +1603,18 @@ Get volume information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System` 
+
+`SYNO.Core.System`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Volume information.  
-
 </div>
+  
 
 
 
@@ -1428,15 +1626,18 @@ Get hardware hibernation status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Hardware.Hibernation` 
+
+`SYNO.Core.Hardware.Hibernation`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Hardware hibernation status.  
-
 </div>
+  
 
 
 
@@ -1448,15 +1649,18 @@ Get hardware UPS status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.ExternalDevice.UPS` 
+
+`SYNO.Core.ExternalDevice.UPS`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Hardware UPS status.  
-
 </div>
+  
 
 
 
@@ -1468,15 +1672,18 @@ Get terminal information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Terminal` 
+
+`SYNO.Core.Terminal`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Terminal information.  
-
 </div>
+  
 
 
 
@@ -1488,15 +1695,18 @@ Get SNMP information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.SNMP` 
+
+`SYNO.Core.SNMP`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 SNMP information.  
-
 </div>
+  
 
 
 
@@ -1508,15 +1718,18 @@ Get system process information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System.Process` 
+
+`SYNO.Core.System.Process`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 System process information.  
-
 </div>
+  
 
 
 
@@ -1528,15 +1741,18 @@ Get storage information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Storage.CGI.Storage` 
+
+`SYNO.Storage.CGI.Storage`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Storage information.  
-
 </div>
+  
 
 
 
@@ -1548,15 +1764,18 @@ Get USB storage device information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.ExternalDevice.Storage.USB` 
+
+`SYNO.Core.ExternalDevice.Storage.USB`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 USB storage device information.  
-
 </div>
+  
 
 
 
@@ -1568,15 +1787,18 @@ Get eSATA storage device information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.ExternalDevice.Storage.eSATA` 
+
+`SYNO.Core.ExternalDevice.Storage.eSATA`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 eSATA storage device information.  
-
 </div>
+  
 
 
 
@@ -1588,15 +1810,18 @@ Get file indexing status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Finder.FileIndexing.Status` 
+
+`SYNO.Finder.FileIndexing.Status`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 File indexing status.  
-
 </div>
+  
 
 
 
@@ -1608,15 +1833,18 @@ Get CMS information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.CMS.Info` 
+
+`SYNO.Core.CMS.Info`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 CMS information.  
-
 </div>
+  
 
 
 
@@ -1628,15 +1856,18 @@ Get port forwarding rules.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.PortForwarding.Rules` 
+
+`SYNO.Core.PortForwarding.Rules`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Port forwarding rules.  
-
 </div>
+  
 
 
 
@@ -1648,15 +1879,18 @@ Get port forwarding router configuration.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.PortForwarding.RouterConf` 
+
+`SYNO.Core.PortForwarding.RouterConf`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Port forwarding router configuration.  
-
 </div>
+  
 
 
 
@@ -1668,15 +1902,18 @@ Get disk list.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Polling.Data` 
+
+`SYNO.Core.Polling.Data`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Disk list.  
-
 </div>
+  
 
 
 
@@ -1688,15 +1925,18 @@ Get DDNS provider information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.DDNS.Provider` 
+
+`SYNO.Core.DDNS.Provider`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 DDNS provider information.  
-
 </div>
+  
 
 
 
@@ -1708,15 +1948,18 @@ Get DDNS record information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.DDNS.Record` 
+
+`SYNO.Core.DDNS.Record`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 DDNS record information.  
-
 </div>
+  
 
 
 
@@ -1728,15 +1971,18 @@ Get DDNS external IP.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.DDNS.ExtIP` 
+
+`SYNO.Core.DDNS.ExtIP`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 DDNS external IP.  
-
 </div>
+  
 
 
 
@@ -1748,15 +1994,18 @@ Get Synology DDNS information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.DDNS.Synology` 
+
+`SYNO.Core.DDNS.Synology`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Synology DDNS information.  
-
 </div>
+  
 
 
 
@@ -1768,15 +2017,18 @@ Get iSCSI LUN information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.ISCSI.LUN` 
+
+`SYNO.Core.ISCSI.LUN`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 iSCSI LUN information.  
-
 </div>
+  
 
 
 
@@ -1788,15 +2040,18 @@ Get HDD manager information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Storage.CGI.HddMan` 
+
+`SYNO.Storage.CGI.HddMan`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 HDD manager information.  
-
 </div>
+  
 
 
 
@@ -1808,15 +2063,18 @@ Get FTP security information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.FileServ.FTP.Security` 
+
+`SYNO.Core.FileServ.FTP.Security`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 FTP security information.  
-
 </div>
+  
 
 
 
@@ -1828,15 +2086,18 @@ Get bandwidth control information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.BandwidthControl.Protocol` 
+
+`SYNO.Core.BandwidthControl.Protocol`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Bandwidth control information.  
-
 </div>
+  
 
 
 
@@ -1848,15 +2109,18 @@ Get directory domain information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Directory.Domain` 
+
+`SYNO.Core.Directory.Domain`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Directory domain information.  
-
 </div>
+  
 
 
 
@@ -1868,15 +2132,18 @@ Get WS transfer information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.FileServ.ServiceDiscovery.WSTransfer` 
+
+`SYNO.Core.FileServ.ServiceDiscovery.WSTransfer`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 WS transfer information.  
-
 </div>
+  
 
 
 
@@ -1888,15 +2155,18 @@ Get reflink copy information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.FileServ.ReflinkCopy` 
+
+`SYNO.Core.FileServ.ReflinkCopy`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Reflink copy information.  
-
 </div>
+  
 
 
 
@@ -1908,15 +2178,18 @@ Get Bonjour service information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.ExternalDevice.Printer.BonjourSharing` 
+
+`SYNO.Core.ExternalDevice.Printer.BonjourSharing`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Bonjour service information.  
-
 </div>
+  
 
 
 
@@ -1928,15 +2201,18 @@ Get personal photo enable status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User.Home` 
+
+`SYNO.Core.User.Home`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Personal photo enable status.  
-
 </div>
+  
 
 
 
@@ -1948,15 +2224,18 @@ Get FTP chroot user information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.FileServ.FTP.ChrootUser` 
+
+`SYNO.Core.FileServ.FTP.ChrootUser`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 FTP chroot user information.  
-
 </div>
+  
 
 
 
@@ -1968,15 +2247,18 @@ Get server pair information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.S2S.Server.Pair` 
+
+`SYNO.S2S.Server.Pair`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Server pair information.  
-
 </div>
+  
 
 
 
@@ -1988,11 +2270,13 @@ Get groups information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Group` 
+
+`SYNO.Core.Group`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_offset_** `int`  
 Offset for pagination. Defaults to 0.  
   
@@ -2002,14 +2286,15 @@ Maximum number of groups to retrieve. Defaults to -1.
 **_name_only_** `bool`  
 If True, returns only group names. Defaults to False.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Groups information.  
-
 </div>
+  
 
 
 
@@ -2021,15 +2306,18 @@ Get LDAP information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Directory.LDAP` 
+
+`SYNO.Core.Directory.LDAP`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 LDAP information.  
-
 </div>
+  
 
 
 
@@ -2041,15 +2329,18 @@ Get SSO IWA information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Directory.SSO.IWA` 
+
+`SYNO.Core.Directory.SSO.IWA`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 SSO IWA information.  
-
 </div>
+  
 
 
 
@@ -2061,15 +2352,18 @@ Get SSO information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Directory.SSO` 
+
+`SYNO.Core.Directory.SSO`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 SSO information.  
-
 </div>
+  
 
 
 
@@ -2081,15 +2375,18 @@ Get network interface information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.Interface` 
+
+`SYNO.Core.Network.Interface`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Network interface information.  
-
 </div>
+  
 
 
 
@@ -2101,15 +2398,18 @@ Get proxy information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.Proxy` 
+
+`SYNO.Core.Network.Proxy`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Proxy information.  
-
 </div>
+  
 
 
 
@@ -2121,25 +2421,28 @@ Get gateway list.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Network.Router.Gateway.List` 
+
+`SYNO.Core.Network.Router.Gateway.List`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_ip_type_** `str`  
 IP type (e.g., 'ipv4', 'ipv6'). Defaults to 'ipv4'.  
   
 **_type_** `str`  
 Gateway type (e.g., 'wan'). Defaults to 'wan'.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Gateway list.  
-
 </div>
+  
 
 
 
@@ -2151,15 +2454,18 @@ Get firewall information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Security.Firewall.Profile` 
+
+`SYNO.Core.Security.Firewall.Profile`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Firewall information.  
-
 </div>
+  
 
 
 
@@ -2171,15 +2477,18 @@ Get auto upgrade status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Upgrade.AutoUpgrade` 
+
+`SYNO.Core.Upgrade.AutoUpgrade`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Auto upgrade status.  
-
 </div>
+  
 
 
 
@@ -2191,15 +2500,18 @@ Check upgrade server.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Upgrade.Server` 
+
+`SYNO.Core.Upgrade.Server`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Upgrade server check result.  
-
 </div>
+  
 
 
 
@@ -2211,15 +2523,18 @@ Get alarm rules logs.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.ResourceMonitor.Log` 
+
+`SYNO.ResourceMonitor.Log`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Alarm rules logs.  
-
 </div>
+  
 
 
 
@@ -2231,15 +2546,18 @@ Get alarm rules list.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.ResourceMonitor.EventRule` 
+
+`SYNO.ResourceMonitor.EventRule`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Alarm rules list.  
-
 </div>
+  
 
 
 
@@ -2251,15 +2569,18 @@ Get resource monitor settings.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.ResourceMonitor.Setting` 
+
+`SYNO.ResourceMonitor.Setting`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Resource monitor settings.  
-
 </div>
+  
 
 
 
@@ -2271,11 +2592,13 @@ Get file handling access information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.FileHandle` 
+
+`SYNO.Core.FileHandle`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_sort_direction_** `str`  
 Sort direction ('ASC' or 'DESC'). Defaults to 'ASC'.  
   
@@ -2288,14 +2611,15 @@ Maximum number of results. Defaults to 50.
 **_offset_** `int`  
 Offset for pagination. Defaults to 0.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 File handling access information.  
-
 </div>
+  
 
 
 
@@ -2307,22 +2631,25 @@ Get service group list.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System.ProcessGroup` 
+
+`SYNO.Core.System.ProcessGroup`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_interval_** `int`  
 Interval for statistics. Defaults to 0.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Service group list.  
-
 </div>
+  
 
 
 
@@ -2334,15 +2661,18 @@ Get process group list.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System.Process` 
+
+`SYNO.Core.System.Process`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Process group list.  
-
 </div>
+  
 
 
 
@@ -2354,15 +2684,18 @@ Get installed package list.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package` 
+
+`SYNO.Core.Package`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Installed package list.  
-
 </div>
+  
 
 
 
@@ -2374,15 +2707,18 @@ Get active notifications.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.DSMNotify` 
+
+`SYNO.Core.DSMNotify`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Active notifications.  
-
 </div>
+  
 
 
 
@@ -2394,15 +2730,18 @@ Get system health information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.System.SystemHealth` 
+
+`SYNO.Core.System.SystemHealth`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 System health information.  
-
 </div>
+  
 
 
 
@@ -2414,15 +2753,18 @@ Get upgrade status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Upgrade` 
+
+`SYNO.Core.Upgrade`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Upgrade status.  
-
 </div>
+  
 
 
 

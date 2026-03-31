@@ -1,5 +1,5 @@
 ---
-sidebar_position: 30
+sidebar_position: 32
 title: ✅ TaskScheduler
 ---
 
@@ -36,18 +36,22 @@ Retrieve tasks output configuration.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.EventScheduler` 
+
+`SYNO.Core.EventScheduler`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing a list of the tasks and information related to them.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -61,7 +65,6 @@ A dictionary containing a list of the tasks and information related to them.
 </details>
 
 
-
 ---
 
 
@@ -70,13 +73,16 @@ List all present scheduled tasks and event triggered tasks.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.TaskScheduler` 
+
+`SYNO.Core.TaskScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_sort_by_** `str`  
-The field to sort tasks by. Defaults to `"next_trigger_time"`.  
+The field to sort tasks by. Defaults to `"next_trigger_time"`.
+
 Possible values:
 - "next_trigger_time"
 - "name"
@@ -85,7 +91,8 @@ Possible values:
 - "owner"  
   
 **_sort_direction_** `str`  
-The sort direction. Defaults to `"ASC"`.  
+The sort direction. Defaults to `"ASC"`.
+
 Possible values:
 - "ASC"
 - "DESC"  
@@ -96,17 +103,19 @@ Task offset for pagination. Defaults to `0`.
 **_limit_** `int`  
 Number of tasks to retrieve. Defaults to `50`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing a list of the tasks and information related to them.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -146,7 +155,6 @@ A dictionary containing a list of the tasks and information related to them.
 </details>
 
 
-
 ---
 
 
@@ -155,11 +163,13 @@ Retrieve the configuration for a specific task or list all available services an
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.TaskScheduler` 
+
+`SYNO.Core.TaskScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `int`  
 The ID of the task to retrieve the configuration for. Pass `-1` to get a list of all available services with their IDs.  
   
@@ -169,17 +179,19 @@ The real owner of the task, usually `root`. You can double check from the result
 **_type_** `str`  
 The type of task (e.g., 'service'). Pass `"service"` to get a list of all available services with their IDs. Defaults to `""`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the task configuration.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -225,7 +237,6 @@ A dictionary containing the task configuration.
 </details>
 
 
-
 ---
 
 
@@ -234,25 +245,29 @@ Retrieve the results list for a specific task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.TaskScheduler` 
+
+`SYNO.Core.TaskScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `int`  
 The ID of the task to retrieve the results for.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the task results.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": [
@@ -277,7 +292,6 @@ A dictionary containing the task results.
 </details>
 
 
-
 ---
 
 
@@ -286,35 +300,38 @@ Configure the output settings for tasks results.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.EventScheduler` 
+
+`SYNO.Core.EventScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_enable_output_** `bool`  
 Whether to enable result logging or not.  
   
 **_output_path_** `str`  
 The path where the result logs will be stored, e.g. `share/scripts_output`. Defaults to `""`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the output configuration.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json
-    {
-        "success": true
-    }
-    ```
-</details>
 
+```json
+{
+    "success": true
+}
+```
+</details>
 
 
 ---
@@ -325,11 +342,13 @@ Enable or disable a task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.TaskScheduler` 
+
+`SYNO.Core.TaskScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `int`  
 The ID of the task to be enabled.  
   
@@ -339,24 +358,25 @@ The task real owner, usually it is `root`, you can double check from the result 
 **_enable_** `bool`  
 Wheter to enable (`True`) or disable (`False`) the task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the task enabling.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json
-    {
-        "success": true
-    }
-    ```
-</details>
 
+```json
+{
+    "success": true
+}
+```
+</details>
 
 
 ---
@@ -367,35 +387,38 @@ Run a specific task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.TaskScheduler` 
+
+`SYNO.Core.TaskScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `int`  
 The ID of the task to be run.  
   
 **_real_owner_** `str`  
 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the task execution.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json
-    {
-        "success": true
-    }
-    ```
-</details>
 
+```json
+{
+    "success": true
+}
+```
+</details>
 
 
 ---
@@ -406,35 +429,38 @@ Delete a specific task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.TaskScheduler` 
+
+`SYNO.Core.TaskScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `int`  
 The ID of the task to be deleted.  
   
 **_real_owner_** `str`  
 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the task deletion.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json
-    {
-        "success": true
-    }
-    ```
-</details>
 
+```json
+{
+    "success": true
+}
+```
+</details>
 
 
 ---
@@ -450,11 +476,13 @@ Create a new Script task with the provided schedule and notification settings.
 
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.TaskScheduler` 
+
+`SYNO.Core.TaskScheduler.Root`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_name_** `str`  
 The name of the task.  
   
@@ -477,7 +505,8 @@ Days of the week when the task should run, used if `run_frequently` is set to `T
 The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.  
   
 **_repeat_** `str`  
-How often the task should repeat. Defaults to `daily`.  
+How often the task should repeat. Defaults to `daily`.
+
 Possible values:
 - `daily` -> Only when 'run_frequently=True'
 - `weekly` -> Only when 'run_frequently=True'
@@ -488,7 +517,8 @@ Possible values:
 - `yearly` -> Only when 'run_frequently=False'  
   
 **_monthly_week_** `list[str]`  
-If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`.  
+If `run_frequently=True` and `repeat='monthly'`, specifies the weeks the task should run, e.g., `['first', 'third']`.
+
 Defaults to `[]`.  
   
 **_start_time_h_** `int`  
@@ -498,15 +528,21 @@ Hour at which the task should start. Defaults to `0`.
 Minute at which the task should start. Defaults to `0`.  
   
 **_same_day_repeat_h_** `int`  
-Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.  
-Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).  
-Possible values: `0..23`  
+Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.
+
+Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).
+
+Possible values: `0..23`
+
 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
   
 **_same_day_repeat_m_** `int`  
-Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.  
-Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).  
-Posible values: `1`, `5`, `10`, `15`, `20`, `30`  
+Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.
+
+Set to `0` to disable same-day repeats. Defaults to `0` (disable same day repeat).
+
+Posible values: `1`, `5`, `10`, `15`, `20`, `30`
+
 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
   
 **_same_day_repeat_until_** `int`  
@@ -518,27 +554,28 @@ Email address to send notifications to. Defaults to `""`, thus disabling the not
 **_notify_only_on_error_** `bool`  
 If `True`, notifications are only sent when an error occurs. Defaults to `False`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary with the id of the created task.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json
-    {
-        "data": {
-            "id": 20
-        },
-        "success": true
-    }
-    ```
-</details>
 
+```json
+{
+    "data": {
+        "id": 20
+    },
+    "success": true
+}
+```
+</details>
 
 
 ---
@@ -560,11 +597,13 @@ Modify settings of a Script task.
 
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.TaskScheduler` 
+
+`SYNO.Core.TaskScheduler.Root`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `int`  
 The ID of the task.  
   
@@ -593,7 +632,8 @@ Days of the week when the task should run, used if `run_frequently` is set to `T
 The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.  
   
 **_repeat_** `str`  
-How often the task should repeat. Defaults to `'daily'`.  
+How often the task should repeat. Defaults to `'daily'`.
+
 Possible values:
 - `daily` -> Only when 'run_frequently=True'
 - `weekly` -> Only when 'run_frequently=True'
@@ -614,14 +654,18 @@ Minute at which the task should start. Defaults to `0`.
   
 **_same_day_repeat_h_** `int`  
 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.
-Set to `0` to disable same-day repeats. Defaults to `0`.  
-Possible values: `0..23`  
+Set to `0` to disable same-day repeats. Defaults to `0`.
+
+Possible values: `0..23`
+
 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
   
 **_same_day_repeat_m_** `int`  
 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.
-Set to `0` to disable same-day repeats. Defaults to `0`.  
-Posible values: `1`, `5`, `10`, `15`, `20`, `30`  
+Set to `0` to disable same-day repeats. Defaults to `0`.
+
+Posible values: `1`, `5`, `10`, `15`, `20`, `30`
+
 The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
   
 **_same_day_repeat_until_** `int`  
@@ -633,27 +677,28 @@ Email address to send notifications to. Defaults to `""`, thus disabling the not
 **_notify_only_on_error_** `bool`  
 If `True`, notifications are only sent when an error occurs. Defaults to `False`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary with the id of the created task.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json
-    {
-        "data": {
-            "id": 20
-        },
-        "success": true
-    }
-    ```
-</details>
 
+```json
+{
+    "data": {
+        "id": 20
+    },
+    "success": true
+}
+```
+</details>
 
 
 ---
@@ -664,11 +709,13 @@ Create a new Beep Control task with the provided schedule and beep duration.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.TaskScheduler` 
+
+`SYNO.Core.TaskScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_name_** `str`  
 The name of the task.  
   
@@ -691,7 +738,8 @@ Days of the week when the task should run, used if `run_frequently` is set to Tr
 The specific date the task should run, used if `run_frequently` is set to False. Format: yyyy/m/d (no prefix zeros). Defaults to "".  
   
 **_repeat_** `str`  
-How often the task should repeat. Defaults to 'daily'.  
+How often the task should repeat. Defaults to 'daily'.
+
 Possible values:
     - 'daily' -> Only when run_frequently=True
     - 'weekly' -> Only when run_frequently=True
@@ -712,30 +760,36 @@ Minute at which the task should start. Defaults to 0.
   
 **_same_day_repeat_h_** `int`  
 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.
-Set to 0 to disable same-day repeats. Defaults to 0.  
-Possible values: 0..23  
+Set to 0 to disable same-day repeats. Defaults to 0.
+
+Possible values: 0..23
+
 The args same_day_repeat_h and same_day_repeat_m cannot be used at the same time, if both are passed, same_day_repeat_h will be prioritized.  
   
 **_same_day_repeat_m_** `int`  
 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.
-Set to 0 to disable same-day repeats. Defaults to 0.  
-Possible values: 1, 5, 10, 15, 20, 30  
+Set to 0 to disable same-day repeats. Defaults to 0.
+
+Possible values: 1, 5, 10, 15, 20, 30
+
 The args same_day_repeat_h and same_day_repeat_m cannot be used at the same time, if both are passed, same_day_repeat_h will be prioritized.  
   
 **_same_day_repeat_until_** `int`  
 Last hour of the day when the task can repeat. Defaults to start_time_h.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary with the id of the created task.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -747,7 +801,6 @@ A dictionary with the id of the created task.
 </details>
 
 
-
 ---
 
 
@@ -756,11 +809,13 @@ Modify settings of a Beep Control task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.TaskScheduler` 
+
+`SYNO.Core.TaskScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `int`  
 The ID of the task to modify.  
   
@@ -786,7 +841,8 @@ Days of the week when the task should run, used if `run_frequently` is set to `T
 The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.  
   
 **_repeat_** `str`  
-How often the task should repeat. Defaults to `'daily'`.  
+How often the task should repeat. Defaults to `'daily'`.
+
 Possible values:
     - `daily` -> Only when `run_frequently=True`
     - `weekly` -> Only when `run_frequently=True`
@@ -807,8 +863,10 @@ Minute at which the task should start. Defaults to `0`.
   
 **_same_day_repeat_h_** `int`  
 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.
-Set to `0` to disable same-day repeats. Defaults to `0`.  
-Possible values: `0..23`  
+Set to `0` to disable same-day repeats. Defaults to `0`.
+
+Possible values: `0..23`
+
 :::info
  
  The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
@@ -818,8 +876,10 @@ Possible values: `0..23`
   
 **_same_day_repeat_m_** `int`  
 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.
-Set to `0` to disable same-day repeats. Defaults to `0`.  
-Possible values: `1`, `5`, `10`, `15`, `20`, `30`  
+Set to `0` to disable same-day repeats. Defaults to `0`.
+
+Possible values: `1`, `5`, `10`, `15`, `20`, `30`
+
 :::info
  
  The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
@@ -830,17 +890,19 @@ Possible values: `1`, `5`, `10`, `15`, `20`, `30`
 **_same_day_repeat_until_** `int`  
 Last hour of the day when the task can repeat. Defaults to `start_time_h`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary with the id of the modified task.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -852,7 +914,6 @@ A dictionary with the id of the modified task.
 </details>
 
 
-
 ---
 
 
@@ -861,11 +922,13 @@ Create a new Service Control task with the provided schedule and services to sta
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.TaskScheduler` 
+
+`SYNO.Core.TaskScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_name_** `str`  
 The name of the task.  
   
@@ -873,8 +936,10 @@ The name of the task.
 The task owner.  
   
 **_services_** `list[dict]`  
-A list containing the services and their type to be influenced by the specified action (start / stop).  
-To get a list of all the available services and their corresponding IDs, call `get_task_config(task_id=-1, real_owner=your_username, type='service')`.  
+A list containing the services and their type to be influenced by the specified action (start / stop).
+
+To get a list of all the available services and their corresponding IDs, call `get_task_config(task_id=-1, real_owner=your_username, type='service')`.
+
 E.g.:
 ```python
 [
@@ -900,7 +965,8 @@ Days of the week when the task should run, used if `run_frequently` is set to `T
 The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.  
   
 **_repeat_** `str`  
-How often the task should repeat. Defaults to `'daily'`.  
+How often the task should repeat. Defaults to `'daily'`.
+
 Possible values:
 - `daily` -> Only when 'run_frequently=True'
 - `weekly` -> Only when 'run_frequently=True'
@@ -920,9 +986,12 @@ Hour at which the task should start. Defaults to `0`.
 Minute at which the task should start. Defaults to `0`.  
   
 **_same_day_repeat_h_** `int`  
-Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.  
-Set to `0` to disable same-day repeats. Defaults to `0`.  
-Possible values: `0..23`  
+Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.
+
+Set to `0` to disable same-day repeats. Defaults to `0`.
+
+Possible values: `0..23`
+
 :::info
  
  The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
@@ -931,9 +1000,12 @@ Possible values: `0..23`
 
   
 **_same_day_repeat_m_** `int`  
-Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.  
-Set to `0` to disable same-day repeats. Defaults to `0`.  
-Posible values: `1`, `5`, `10`, `15`, `20`, `30`  
+Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.
+
+Set to `0` to disable same-day repeats. Defaults to `0`.
+
+Posible values: `1`, `5`, `10`, `15`, `20`, `30`
+
 :::info
  
  The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
@@ -944,27 +1016,28 @@ Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 **_same_day_repeat_until_** `int`  
 Last hour of the day when the task can repeat. Defaults to `start_time_h`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary with the id of the created task.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json
-    {
-        "data": {
-            "id": 20
-        },
-        "success": true
-    }
-    ```
-</details>
 
+```json
+{
+    "data": {
+        "id": 20
+    },
+    "success": true
+}
+```
+</details>
 
 
 ---
@@ -980,11 +1053,13 @@ Modify settings of a Service Control task.
 
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.TaskScheduler` 
+
+`SYNO.Core.TaskScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `int`  
 The ID of the task.  
   
@@ -995,8 +1070,10 @@ The name of the task.
 The task real owner, usually it is `root`, you can double check from the result of `get_task_config()`.  
   
 **_services_** `list[dict]`  
-A list containing the services and their type to be influenced by the specified action (start / stop).  
-To get a list of all the available services and their corresponding IDs, call `get_task_config(task_id=-1, real_owner=your_username, type='service')`.  
+A list containing the services and their type to be influenced by the specified action (start / stop).
+
+To get a list of all the available services and their corresponding IDs, call `get_task_config(task_id=-1, real_owner=your_username, type='service')`.
+
 E.g.:
 ```python
 [
@@ -1024,7 +1101,8 @@ The specific date the task should run, used if `run_frequently` is set to `False
 Defaults to `""`.  
   
 **_repeat_** `str`  
-How often the task should repeat. Defaults to `'daily'`.  
+How often the task should repeat. Defaults to `'daily'`.
+
 Possible values:
 - `daily` -> Only when 'run_frequently=True'
 - `weekly` -> Only when 'run_frequently=True'
@@ -1045,9 +1123,12 @@ Hour at which the task should start. Defaults to `0`.
 Minute at which the task should start. Defaults to `0`.  
   
 **_same_day_repeat_h_** `int`  
-Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.  
-Set to `0` to disable same-day repeats. Defaults to `0`.  
-Possible values: `0..23`  
+Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.
+
+Set to `0` to disable same-day repeats. Defaults to `0`.
+
+Possible values: `0..23`
+
 :::info
  
  The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
@@ -1056,9 +1137,12 @@ Possible values: `0..23`
 
   
 **_same_day_repeat_m_** `int`  
-Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.  
-Set to `0` to disable same-day repeats. Defaults to `0`.  
-Posible values: `1`, `5`, `10`, `15`, `20`, `30`  
+Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.
+
+Set to `0` to disable same-day repeats. Defaults to `0`.
+
+Posible values: `1`, `5`, `10`, `15`, `20`, `30`
+
 :::info
  
  The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
@@ -1069,27 +1153,28 @@ Posible values: `1`, `5`, `10`, `15`, `20`, `30`
 **_same_day_repeat_until_** `int`  
 Last hour of the day when the task can repeat. Defaults to `start_time_h`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary with the id of the created task.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json
-    {
-        "data": {
-            "id": 20
-        },
-        "success": true
-    }
-    ```
-</details>
 
+```json
+{
+    "data": {
+        "id": 20
+    },
+    "success": true
+}
+```
+</details>
 
 
 ---
@@ -1100,11 +1185,13 @@ Create a new Recycle Bin Control task with the provided schedule and policy.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.TaskScheduler` 
+
+`SYNO.Core.TaskScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_name_** `str`  
 The name of the task.  
   
@@ -1115,11 +1202,13 @@ The task owner.
 Whether the task should empty the recycle bins of all shares. If set to False, `shares` must be specified.  
   
 **_policy_** `dict`  
-Determines what files will be deleted from the recycle bins.  
+Determines what files will be deleted from the recycle bins.
+
 Possible values are:
     - \{"policy": "clean_all"\}: Clean all files.
     - \{"policy": "time", "time": int\}: Clean all files older than X days, where X is the value for "time".
-    - \{"policy": "size", "size": int, "sort_type": int\}: Clean files until recycle bin size reaches given "size" in MB, delete files by "sort_type".  
+    - \{"policy": "size", "size": int, "sort_type": int\}: Clean files until recycle bin size reaches given "size" in MB, delete files by "sort_type".
+
 Possible values for "sort_type":
     - 0: Delete bigger files first.
     - 1: Delete older files first.  
@@ -1140,7 +1229,8 @@ Days of the week when the task should run, used if `run_frequently` is True, spe
 The specific date the task should run, used if `run_frequently` is False. Format: yyyy/m/d (no prefix zeros). Defaults to "".  
   
 **_repeat_** `str`  
-How often the task should repeat. Defaults to 'daily'.  
+How often the task should repeat. Defaults to 'daily'.
+
 Possible values:
     - 'daily' (only when run_frequently=True)
     - 'weekly' (only when run_frequently=True)
@@ -1161,8 +1251,10 @@ Minute at which the task should start. Defaults to 0.
   
 **_same_day_repeat_h_** `int`  
 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.
-Set to 0 to disable same-day repeats. Defaults to 0.  
-Possible values: 0..23  
+Set to 0 to disable same-day repeats. Defaults to 0.
+
+Possible values: 0..23
+
 :::note
  
  The args same_day_repeat_h and same_day_repeat_m cannot be used at the same time; if both are passed, same_day_repeat_h will be prioritized.  
@@ -1172,8 +1264,10 @@ Possible values: 0..23
   
 **_same_day_repeat_m_** `int`  
 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.
-Set to 0 to disable same-day repeats. Defaults to 0.  
-Possible values: 1, 5, 10, 15, 20, 30  
+Set to 0 to disable same-day repeats. Defaults to 0.
+
+Possible values: 1, 5, 10, 15, 20, 30
+
 :::note
  
  The args same_day_repeat_h and same_day_repeat_m cannot be used at the same time; if both are passed, same_day_repeat_h will be prioritized.  
@@ -1184,12 +1278,14 @@ Possible values: 1, 5, 10, 15, 20, 30
 **_same_day_repeat_until_** `int`  
 Last hour of the day when the task can repeat. Defaults to start_time_h.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
-A dictionary with the id of the created task.  
+A dictionary with the id of the created task.
+
 Examples
 --------
 ```json
@@ -1200,20 +1296,8 @@ Examples
     "success": true
 }
 ```  
-
 </div>
-#### Example return
-<details>
-<summary>Click to expand</summary>
-```json
-    {
-        "data": {
-            "id": 20
-        },
-        "success": true
-    }
-    ```
-</details>
+  
 
 
 
@@ -1225,11 +1309,13 @@ Modify settings of a Recycle Bin Control task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.TaskScheduler` 
+
+`SYNO.Core.TaskScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `int`  
 The ID of the task.  
   
@@ -1243,11 +1329,13 @@ The task real owner, usually it is `root`. You can double check from the result 
 Whether the task should empty the recycle bins of all shares. If set to `False`, `shares` must be specified.  
   
 **_policy_** `dict`  
-Determines what files will be deleted from the recycle bins.  
+Determines what files will be deleted from the recycle bins.
+
 Possible values are:
     - \{"policy": "clean_all"\}: Clean all files.
     - \{"policy": "time", "time": int\}: Clean all files older than X days, where X is the value for "time".
-    - \{"policy": "size", "size": int, "sort_type": int\}: Clean files until recycle bin size reaches given "size" in MB, delete files by "sort_type".  
+    - \{"policy": "size", "size": int, "sort_type": int\}: Clean files until recycle bin size reaches given "size" in MB, delete files by "sort_type".
+
 Possible values for "sort_type":
     - 0: Delete bigger files first.
     - 1: Delete older files first.  
@@ -1268,7 +1356,8 @@ Days of the week when the task should run, used if `run_frequently` is set to `T
 The specific date the task should run, used if `run_frequently` is set to `False`. Format: `yyyy/m/d` (no prefix zeros). Defaults to `""`.  
   
 **_repeat_** `str`  
-How often the task should repeat. Defaults to `'daily'`.  
+How often the task should repeat. Defaults to `'daily'`.
+
 Possible values:
     - `daily` (only when run_frequently=True)
     - `weekly` (only when run_frequently=True)
@@ -1289,8 +1378,10 @@ Minute at which the task should start. Defaults to `0`.
   
 **_same_day_repeat_h_** `int`  
 Number of hours between repeated executions on the same day (run every x hours), if "Continue running within the same day" is desired.
-Set to `0` to disable same-day repeats. Defaults to `0`.  
-Possible values: `0..23`  
+Set to `0` to disable same-day repeats. Defaults to `0`.
+
+Possible values: `0..23`
+
 :::info
  
  The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
@@ -1300,8 +1391,10 @@ Possible values: `0..23`
   
 **_same_day_repeat_m_** `int`  
 Number of minutes between repeated executions on the same day (run every x minutes), if "Continue running within the same day" is desired.
-Set to `0` to disable same-day repeats. Defaults to `0`.  
-Possible values: `1`, `5`, `10`, `15`, `20`, `30`  
+Set to `0` to disable same-day repeats. Defaults to `0`.
+
+Possible values: `1`, `5`, `10`, `15`, `20`, `30`
+
 :::info
  
  The args `same_day_repeat_h` and `same_day_repeat_m` cannot be used at the same time, if both are passed, `same_day_repeat_h` will be prioritized.  
@@ -1312,17 +1405,19 @@ Possible values: `1`, `5`, `10`, `15`, `20`, `30`
 **_same_day_repeat_until_** `int`  
 Last hour of the day when the task can repeat. Defaults to `start_time_h`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary with the id of the modified task.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -1332,7 +1427,6 @@ A dictionary with the id of the modified task.
 }
 ```
 </details>
-
 
 
 ---

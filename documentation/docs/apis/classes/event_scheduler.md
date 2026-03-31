@@ -1,5 +1,5 @@
 ---
-sidebar_position: 14
+sidebar_position: 13
 title: ✅ EventScheduler
 ---
 
@@ -34,25 +34,29 @@ Retrieve the results list for a specific task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.EventScheduler` 
+
+`SYNO.Core.EventScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_name_** `str`  
 Name of the Event task to enable/disable.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the task results.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": [
@@ -78,7 +82,6 @@ A dictionary containing the task results.
 </details>
 
 
-
 ---
 
 
@@ -87,28 +90,32 @@ Retrieve the output for a given result.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.EventScheduler` 
+
+`SYNO.Core.EventScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_name_** `str`  
 Name of the Event task to enable/disable.  
   
 **_result_id_** `int`  
 ID of the result to retrieve. From get_task_results().  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result output.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -121,7 +128,6 @@ A dictionary containing the result output.
 </details>
 
 
-
 ---
 
 
@@ -130,35 +136,38 @@ Enable or disable Event task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.EventScheduler` 
+
+`SYNO.Core.EventScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_name_** `str`  
 Name of the Event task to enable/disable.  
   
 **_enable_** `bool`  
 Whether to enable (`True`) or disable (`False`) the task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the action.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "success": true
 }
 ```
 </details>
-
 
 
 ---
@@ -169,32 +178,35 @@ Run a specific Event task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.EventScheduler` 
+
+`SYNO.Core.EventScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_name_** `str`  
 Name of the Event task to run.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the task execution.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "success": true
 }
 ```
 </details>
-
 
 
 ---
@@ -205,32 +217,35 @@ Delete a specific Event task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.EventScheduler` 
+
+`SYNO.Core.EventScheduler`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_name_** `str`  
 Name of the Event task to run.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the task deletion.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "success": true
 }
 ```
 </details>
-
 
 
 ---
@@ -241,13 +256,16 @@ Create or modify an event-based task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.EventScheduler` 
+
+`SYNO.Core.EventScheduler.Root`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_action_** `str`  
-Action to perform on the task.  
+Action to perform on the task.
+
 Possible values:
 - `create` -> Create a new task.
 - `set` -> Modify an existing task.  
@@ -281,24 +299,25 @@ Email address to send notifications to. Defaults to `""`, thus disabling the not
 **_notify_only_on_error_** `bool`  
 If `True`, notifications are only sent when an error occurs. Defaults to `False`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the result of the task creation or modification, or a string in case of an error.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "success": true
 }
 ```
 </details>
-
 
 
 ---
@@ -309,11 +328,13 @@ Set the power schedule, poweron tasks and poweroff tasks.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Hardware.PowerSchedule` 
+
+`SYNO.Core.Hardware.PowerSchedule`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_poweron_tasks_** `List[dict]`  
 List of tasks for power on. Defaults to `[]`.
 Example of a task:
@@ -338,17 +359,19 @@ Example of a task:
 }
 ```  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 List of tasks in power schedule.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -366,7 +389,6 @@ List of tasks in power schedule.
 }
 ```
 </details>
-
 
 
 ---
@@ -377,18 +399,22 @@ Load the power schedule, poweron tasks and poweroff tasks.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Hardware.PowerSchedule` 
+
+`SYNO.Core.Hardware.PowerSchedule`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 List of tasks in power schedule.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -406,7 +432,6 @@ List of tasks in power schedule.
 }
 ```
 </details>
-
 
 
 ---

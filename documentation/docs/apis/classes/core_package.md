@@ -1,5 +1,5 @@
 ---
-sidebar_position: 22
+sidebar_position: 23
 title: 🚧 Package
 ---
 
@@ -52,11 +52,13 @@ Get infos of a package.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package` 
+
+`SYNO.Core.Package`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_package_id_** `str`  
 Package ID.  
   
@@ -65,17 +67,19 @@ Additional field to retrieves. Defaults to `[]`.
 All filed known are:
 `["status","dsm_apps"]`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Informations about the package.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -97,7 +101,6 @@ Informations about the package.
 </details>
 
 
-
 ---
 
 
@@ -106,11 +109,13 @@ List installed packages.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package` 
+
+`SYNO.Core.Package`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_additional_** `list[str]`  
 Additional fields to retrieve. Defaults to `[]`.
 All fields known are:
@@ -123,17 +128,19 @@ All fields known are:
 **_ignore_hidden_** `bool`  
 Whether to ignore hidden packages.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 List of packages installed on the NAS.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -155,7 +162,6 @@ List of packages installed on the NAS.
 </details>
 
 
-
 ---
 
 
@@ -164,18 +170,22 @@ List installable packages.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package.Server` 
+
+`SYNO.Core.Package.Server`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 List of beta_package, categories and packages available.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -190,7 +200,6 @@ List of beta_package, categories and packages available.
 </details>
 
 
-
 ---
 
 
@@ -199,18 +208,22 @@ Get package center settings.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package.Setting` 
+
+`SYNO.Core.Package.Setting`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 List settings of the Package center.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -251,7 +264,6 @@ List settings of the Package center.
 </details>
 
 
-
 ---
 
 
@@ -260,11 +272,13 @@ Set settings of the package center.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package.Setting` 
+
+`SYNO.Core.Package.Setting`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_enable_email_** `bool`  
 Enable email notification.  
   
@@ -287,17 +301,19 @@ Default volume for installation, all your volumes or `"no_default_vol" = Always 
 "stable" => Disable beta packages.
 "beta" => Enable beta packages.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Return some settings.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -311,7 +327,6 @@ Return some settings.
 </details>
 
 
-
 ---
 
 
@@ -320,18 +335,22 @@ Get package center informations.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package.Info` 
+
+`SYNO.Core.Package.Info`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 List of configs.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -366,7 +385,6 @@ List of configs.
 </details>
 
 
-
 ---
 
 
@@ -375,25 +393,29 @@ Check if installation is possible.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package.Setting` 
+
+`SYNO.Core.Package.Setting`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_packages_** `List[str]`  
 List of package IDs to check for feasibility.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Feasibility check result.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -405,7 +427,6 @@ Feasibility check result.
 </details>
 
 
-
 ---
 
 
@@ -414,11 +435,13 @@ Start download of the package, return a taskId for check status.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package.Installation` 
+
+`SYNO.Core.Package.Installation`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_url_** `str`  
 Url that can be retrieve from package info using `get_installable` function, in the `link` field.  
   
@@ -431,17 +454,19 @@ Checksum that can be retrieve from package info using `get_installable` function
 **_filesize_** `str`  
 Filesize that can be retrieve from package info using `get_installable` function, in the `size` field.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Retrieve first progress of the download and the taskid used to check download status with `get_dowload_package_status` function.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -454,7 +479,6 @@ Retrieve first progress of the download and the taskid used to check download st
 </details>
 
 
-
 ---
 
 
@@ -463,25 +487,29 @@ Get current download status of the package.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package.Installation` 
+
+`SYNO.Core.Package.Installation`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `str`  
 Task ID retrieved from response of `download_package` function.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Retrieve informations about the download, important info is the `progress` field.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -505,7 +533,6 @@ Retrieve informations about the download, important info is the `progress` field
 </details>
 
 
-
 ---
 
 
@@ -514,25 +541,29 @@ Get info about downloaded package file, response field is used for `check_instal
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package.Installation.Download` 
+
+`SYNO.Core.Package.Installation.Download`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `str`  
 Task ID retrieved from response of `download_package` function.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Retrieve information about downloaded package installation file, response field is used for `check_installation` and `install_package` function.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -559,7 +590,6 @@ Retrieve information about downloaded package installation file, response field 
 </details>
 
 
-
 ---
 
 
@@ -568,11 +598,13 @@ Upload a file for install a package.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package.Installation` 
+
+`SYNO.Core.Package.Installation`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_file_path_** `str`  
 File path.  
   
@@ -588,17 +620,19 @@ All fields know are:
 `["description","maintainer","distributor","startable","dsm_apps","status","install_reboot",
 "install_type","install_on_cold_storage","break_pkgs","replace_pkgs"]`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Informations about the uploaded file for installation.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -630,7 +664,6 @@ Informations about the uploaded file for installation.
 </details>
 
 
-
 ---
 
 
@@ -639,18 +672,22 @@ Get default install volume for package.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package.Setting.Volume` 
+
+`SYNO.Core.Package.Setting.Volume`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Return default volume, if default volume is set to `Always ask me` it return error 4501.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -662,7 +699,6 @@ Return default volume, if default volume is set to `Always ask me` it return err
 </details>
 
 
-
 ---
 
 
@@ -671,11 +707,13 @@ Check installation of the package on the default volume.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package.Installation` 
+
+`SYNO.Core.Package.Installation`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_package_id_** `str`  
 Id of the package to install.  
   
@@ -691,17 +729,19 @@ Defaults to `False`. TODO: Add description.
 **_replacepkgs_** `dict`  
 Defaults to `{}`. TODO: Add description.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 List of usefull informations about volumes.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -735,7 +775,6 @@ List of usefull informations about volumes.
 </details>
 
 
-
 ---
 
 
@@ -744,11 +783,13 @@ Upgrade an existing package.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package.Installation` 
+
+`SYNO.Core.Package.Installation`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `str`  
 Task id of the download or the upload file.  
   
@@ -764,17 +805,19 @@ Run package after installation. Defaults to `True`.
 **_extra_values_** `dict`  
 Extra values due to some package installation. Defaults to `{}`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Message and some info about installation.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -788,7 +831,6 @@ Message and some info about installation.
 </details>
 
 
-
 ---
 
 
@@ -797,11 +839,13 @@ Install a package that is already downloaded.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package.Uninstallation` 
+
+`SYNO.Core.Package.Installation`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_package_id_** `str`  
 Id of the package to install.  
   
@@ -823,17 +867,19 @@ Run package after installation. Defaults to `True`.
 **_extra_values_** `dict`  
 Extra values due to some package installation. Defaults to `{}`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Message and some info about installation.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -888,7 +934,6 @@ Message and some info about installation.
 </details>
 
 
-
 ---
 
 
@@ -897,25 +942,29 @@ Uninstall a package.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Package.Uninstallation` 
+
+`SYNO.Core.Package.Uninstallation`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_package_id_** `str`  
 Id of the package to uninstall.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Possible message to the user.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -928,7 +977,6 @@ Possible message to the user.
 </details>
 
 
-
 ---
 
 
@@ -938,6 +986,7 @@ Execute an easy installation process of the package.
   
 #### Parameters
 <div class="padding-left--md">
+
 **_package_id_** `str`  
 Package ID to install.  
   
@@ -947,17 +996,19 @@ Volume path where you want to install the package.
 **_install_dependencies_** `bool`  
 If you want to install dependencies. Defaults to True.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 Information about installation, same as install_package function.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -1010,7 +1061,6 @@ Information about installation, same as install_package function.
 }
 ```
 </details>
-
 
 
 ---

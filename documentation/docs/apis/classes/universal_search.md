@@ -1,5 +1,5 @@
 ---
-sidebar_position: 31
+sidebar_position: 34
 title: 🚧 UniversalSearch
 ---
 
@@ -24,22 +24,25 @@ Search for files and metadata matching the given keyword.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Finder.FileIndexing.Search` 
+
+`SYNO.Finder.FileIndexing.Search`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_keyword_** `str`  
 The search keyword.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Search results as a dictionary, or a string with error details.  
-
 </div>
+  
 
 
 

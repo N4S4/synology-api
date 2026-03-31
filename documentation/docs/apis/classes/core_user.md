@@ -1,5 +1,5 @@
 ---
-sidebar_position: 33
+sidebar_position: 35
 title: ✅ User
 ---
 
@@ -36,11 +36,13 @@ Retrieve groups information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User` 
+
+`SYNO.Core.User`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_offset_** `int`  
 The offset of the groups to retrieve. Defaults to `0`.  
   
@@ -57,17 +59,19 @@ The sort direction. Defaults to `"ASC"` else `"DESC"`.
 Additional fields to retrieve. Defaults to `[]`.
 All fields known are: `["description","email","expired","cannot_chg_passwd","passwd_never_expire","password_last_change", "groups", "2fa_status"]`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the groups information.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -110,7 +114,6 @@ A dictionary containing the groups information.
 </details>
 
 
-
 ---
 
 
@@ -119,11 +122,13 @@ Retrieve user information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User` 
+
+`SYNO.Core.User`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 The name of the user.  
   
@@ -131,17 +136,19 @@ The name of the user.
 Additional fields to retrieve. Defaults to `[]`.
 All fields known are: `["description","email","expired","cannot_chg_passwd","passwd_never_expire","password_last_change","is_password_pending"]`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the user information.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "api": "SYNO.Core.User",
@@ -168,7 +175,6 @@ A dictionary containing the user information.
 </details>
 
 
-
 ---
 
 
@@ -177,11 +183,13 @@ Create a new user.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User` 
+
+`SYNO.Core.User`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 The name of the user.  
   
@@ -209,17 +217,19 @@ Whether to notify by email. Defaults to `False`.
 **_send_password_** `bool`  
 Whether to send the password. Defaults to `False`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the user information.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data":
@@ -233,7 +243,6 @@ A dictionary containing the user information.
 </details>
 
 
-
 ---
 
 
@@ -242,11 +251,13 @@ Modify a user.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User` 
+
+`SYNO.Core.User`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 The name of the actual user.  
   
@@ -277,17 +288,19 @@ Whether to notify by email. Defaults to `False`.
 **_send_password_** `bool`  
 Whether to send the password. Defaults to `False`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the user information.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data":{
@@ -301,7 +314,6 @@ A dictionary containing the user information.
 </details>
 
 
-
 ---
 
 
@@ -310,25 +322,29 @@ Delete a user.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User` 
+
+`SYNO.Core.User`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 The name of the user to delete.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the user information.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -339,7 +355,6 @@ A dictionary containing the user information.
 }
 ```
 </details>
-
 
 
 ---
@@ -355,11 +370,13 @@ Affect or disaffect groups to a user.
 
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User.Group` 
+
+`SYNO.Core.User.Group`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 The name of the user.  
   
@@ -369,17 +386,19 @@ The names of the groups to join.
 **_leave_groups_** `list[str]`  
 The names of the groups to leave.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the task id to check the status of the join task. Use `affect_groups_status` func to check the status of the task.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "api": "SYNO.Core.User.Group",
@@ -394,7 +413,6 @@ A dictionary containing the task id to check the status of the join task. Use `a
 </details>
 
 
-
 ---
 
 
@@ -403,25 +421,29 @@ Get the status of a join task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User.Group` 
+
+`SYNO.Core.User.Group`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `str`  
 The task id of the join task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the status of the join task.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -449,7 +471,6 @@ A dictionary containing the status of the join task.
 </details>
 
 
-
 ---
 
 
@@ -458,18 +479,22 @@ Get the password policy.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User.PasswordPolicy` 
+
+`SYNO.Core.User.PasswordPolicy`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the password policy information.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "api": "SYNO.Core.User.PasswordPolicy",
@@ -494,7 +519,6 @@ A dictionary containing the password policy information.
 </details>
 
 
-
 ---
 
 
@@ -503,11 +527,13 @@ Set the password policy.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User.PasswordPolicy` 
+
+`SYNO.Core.User.PasswordPolicy`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_enable_reset_passwd_by_email_** `bool`  
 Defaults to `False`.  
   
@@ -538,17 +564,19 @@ Defaults to `False`.
 **_exclude_history_** `bool`  
 Defaults to `False`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary indicating the success of the operation.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
     {
         "api": "SYNO.Core.User.PasswordPolicy",
@@ -561,7 +589,6 @@ A dictionary indicating the success of the operation.
 </details>
 
 
-
 ---
 
 
@@ -570,18 +597,22 @@ Get the password expiry.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User.PasswordExpiry` 
+
+`SYNO.Core.User.PasswordExpiry`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the password expiry information.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "api": "SYNO.Core.User.PasswordExpiry",
@@ -601,7 +632,6 @@ A dictionary containing the password expiry information.
 </details>
 
 
-
 ---
 
 
@@ -610,11 +640,13 @@ Set the password expiry.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User.PasswordExpiry` 
+
+`SYNO.Core.User.PasswordExpiry`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_password_expire_enable_** `bool`  
 Enable password expiry. Defaults to `False`.  
   
@@ -642,17 +674,19 @@ Enable mail notification. Defaults to `False`.
 **_never_expired_list_** `list[str]`  
 List of users that should never expire.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary indicating the success of the operation.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "api": "SYNO.Core.User.PasswordExpiry",
@@ -662,7 +696,6 @@ A dictionary indicating the success of the operation.
 }
 ```
 </details>
-
 
 
 ---
@@ -678,25 +711,29 @@ Confirm password/session to ensure the given password matches the auth of the cu
 
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User.PasswordConfirm` 
+
+`SYNO.Core.User.PasswordConfirm`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_password_** `str`  
 The password with which the session was initiated.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing a `SynoConfirmPWToken`, or an error message.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -708,7 +745,6 @@ A dictionary containing a `SynoConfirmPWToken`, or an error message.
 </details>
 
 
-
 ---
 
 
@@ -717,18 +753,22 @@ Get the username policy (list of usernames that are not usable).
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.User.UsernamePolicy` 
+
+`SYNO.Core.User.UsernamePolicy`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing the username policy information.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "api": "SYNO.Core.User.UsernamePolicy",
@@ -739,7 +779,6 @@ A dictionary containing the username policy information.
 }
 ```
 </details>
-
 
 
 ---

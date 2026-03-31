@@ -1,5 +1,5 @@
 ---
-sidebar_position: 27
+sidebar_position: 28
 title: ✅ Snapshot
 ---
 
@@ -35,11 +35,13 @@ List snapshots for a share.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.Snapshot` 
+
+`SYNO.Core.Share.Snapshot`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_share_name_** `str`  
 Name of the share to list snapshots for.  
   
@@ -64,17 +66,19 @@ Offset to start listing from. Defaults to `0`.
 **_limit_** `int`  
 Number of snapshots to return. Defaults to `-1` (all).  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 API response if successful, error message if not.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -98,7 +102,6 @@ API response if successful, error message if not.
 </details>
 
 
-
 ---
 
 
@@ -107,11 +110,13 @@ List snapshots for a LUN.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.ISCSI.LUN` 
+
+`SYNO.Core.ISCSI.LUN`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_src_lun_uuid_** `str`  
 UUID of the source LUN to list snapshots for.  
   
@@ -122,17 +127,19 @@ Possible values:
 - `"locked_app_keys"` -> If snapshot is preserved by the system, the locking package key will be returned.
 - `"is_worm_locked"` -> Whether the snapshot is locked by WORM.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 Dictionary containing the LUN snapshots information.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -192,7 +199,6 @@ Dictionary containing the LUN snapshots information.
 </details>
 
 
-
 ---
 
 
@@ -201,11 +207,13 @@ List available LUNs.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.ISCSI.LUN` 
+
+`SYNO.Core.ISCSI.LUN`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_types_** `list[str]`  
 Type of LUNS to retrieve.
 Defaults to `[ "BLOCK", "FILE", "THIN", "ADV", "SINK", "CINDER", "CINDER_BLUN", "CINDER_BLUN_THICK", "BLUN", "BLUN_THICK", "BLUN_SINK", "BLUN_THICK_SINK" ]`.
@@ -237,17 +245,19 @@ Possible values:
 - `"family_config"`
 - `"snapshot_info"`  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 A dictionary containing a list of LUNs present in the system.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -381,7 +391,6 @@ A dictionary containing a list of LUNs present in the system.
 </details>
 
 
-
 ---
 
 
@@ -390,11 +399,13 @@ List replication plans.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DR.Plan` 
+
+`SYNO.DR.Plan`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_additional_info_** `list[str]`  
 List of additional information to include in the response. Specify `[]` to get only basic information.
 Defaults to `["sync_policy", "sync_report", "main_site_info", "dr_site_info", "can_do", "op_info", "last_op_info", "topology", "testfailover_info", "retention_lock_report"]`.
@@ -410,17 +421,19 @@ Possible values:
     - `"testfailover_info"` -> Information about the previous test failover operation.
     - `"retention_lock_report"` -> Information about the first / last snapshot.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 API response if successful, error message if not.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -719,7 +732,6 @@ API response if successful, error message if not.
 </details>
 
 
-
 ---
 
 
@@ -728,11 +740,13 @@ Create a snapshot for a share.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.Snapshot` 
+
+`SYNO.Core.Share.Snapshot`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_share_name_** `str`  
 Name of the share to create a snapshot for.  
   
@@ -749,17 +763,19 @@ Whether to make the snapshot immutable. Defaults to `False`.
 Number of days to make the snapshot immutable for. Defaults to `7`.
 Must be greater than `0`. Mandatory if immutable is `True`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 API response if successful, error message if not.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": "GMT+09-2023.09.12-00.33.20",
@@ -767,7 +783,6 @@ API response if successful, error message if not.
 }
 ```
 </details>
-
 
 
 ---
@@ -778,35 +793,38 @@ Delete snapshots for a share.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.Snapshot` 
+
+`SYNO.Core.Share.Snapshot`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_share_name_** `str`  
 Name of the share to delete snapshots for.  
   
 **_snapshots_** `list[str]`  
 List of snapshots to delete.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 API response if successful, error message if not.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "success": true
 }
 ```
 </details>
-
 
 
 ---
@@ -817,11 +835,13 @@ Set attributes for a snapshot.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.Snapshot` 
+
+`SYNO.Core.Share.Snapshot`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_share_name_** `str`  
 Name of the share to set attributes for.  
   
@@ -841,24 +861,25 @@ Whether to make the snapshot immutable. Defaults to `None` (no change).
 Number of days to make the snapshot immutable for. Defaults to `None` (no change).
 Must be greater than `0`. Mandatory if immutable is `True`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 API response if successful, error message if not.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "success": true
 }
 ```
 </details>
-
 
 
 ---
@@ -869,11 +890,13 @@ Trigger a sync for a replication plan.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DR.Plan` 
+
+`SYNO.DR.Plan`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_plan_id_** `str`  
 ID of the replication plan to sync.  
   
@@ -883,24 +906,25 @@ Whether to lock the snapshot to prevent rotation. Defaults to `True`.
 **_description_** `str`  
 Description of the snapshot. Defaults to `Snapshot taken by [Synology API]`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 API response if successful.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "success": true
 }
 ```
 </details>
-
 
 
 ---
@@ -911,11 +935,13 @@ Create a snapshot for a LUN.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.ISCSI.LUN` 
+
+`SYNO.Core.ISCSI.LUN`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_lun_id_** `str`  
 ID of the LUN to create a snapshot for.  
   
@@ -928,17 +954,19 @@ Whether to lock the snapshot. Defaults to `True`.
 **_app_aware_** `bool`  
 Whether to make the snapshot application aware. Defaults to `True`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 API response if successful.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -951,7 +979,6 @@ API response if successful.
 </details>
 
 
-
 ---
 
 
@@ -960,18 +987,21 @@ Delete snapshots for a LUN.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.ISCSI.LUN` 
+
+`SYNO.Core.ISCSI.LUN`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_snapshot_uuids_** `list[str]`  
 List of UUIDs of the snapshots to delete.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 If deletion fails, an error code is returned alongside the snapshot uuid:
 ```json
@@ -985,11 +1015,12 @@ If deletion fails, an error code is returned alongside the snapshot uuid:
 }
 ```
 API response if successful.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": [],
@@ -997,7 +1028,6 @@ API response if successful.
 }
 ```
 </details>
-
 
 
 ---
