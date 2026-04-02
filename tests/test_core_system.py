@@ -216,30 +216,30 @@ class TestCoreSystemCoverage(unittest.TestCase):
         """Every API namespace must be referenced in at least one method."""
         source = inspect.getsource(CoreSystem)
         required = {
-        'SYNO.Core.Desktop.Defs',
-        'SYNO.Core.Desktop.Initdata',
-        'SYNO.Core.Desktop.JSUIString',
-        'SYNO.Core.Desktop.PersonalUpdater',
-        'SYNO.Core.Desktop.SessionData',
-        'SYNO.Core.Desktop.Timeout',
-        'SYNO.Core.Desktop.UIString',
-        'SYNO.Core.Desktop.Upgrade',
-        'SYNO.Core.GroupSettings',
-        'SYNO.Core.Help',
-        'SYNO.Core.PersonalSettings',
-        'SYNO.Core.Region.Language',
-        'SYNO.Core.Region.NTP',
-        'SYNO.Core.Region.NTP.DateTimeFormat',
-        'SYNO.Core.Region.NTP.Server',
-        'SYNO.Core.System.ResetButton',
-        'SYNO.Core.Theme.AppPortalLogin',
-        'SYNO.Core.Theme.Desktop',
-        'SYNO.Core.Theme.FileSharingLogin',
-        'SYNO.Core.Theme.Image',
-        'SYNO.Core.Theme.Login',
-        'SYNO.Core.UISearch',
-        'SYNO.Core.UserSettings'
-    }
+            'SYNO.Core.Desktop.Defs',
+            'SYNO.Core.Desktop.Initdata',
+            'SYNO.Core.Desktop.JSUIString',
+            'SYNO.Core.Desktop.PersonalUpdater',
+            'SYNO.Core.Desktop.SessionData',
+            'SYNO.Core.Desktop.Timeout',
+            'SYNO.Core.Desktop.UIString',
+            'SYNO.Core.Desktop.Upgrade',
+            'SYNO.Core.GroupSettings',
+            'SYNO.Core.Help',
+            'SYNO.Core.PersonalSettings',
+            'SYNO.Core.Region.Language',
+            'SYNO.Core.Region.NTP',
+            'SYNO.Core.Region.NTP.DateTimeFormat',
+            'SYNO.Core.Region.NTP.Server',
+            'SYNO.Core.System.ResetButton',
+            'SYNO.Core.Theme.AppPortalLogin',
+            'SYNO.Core.Theme.Desktop',
+            'SYNO.Core.Theme.FileSharingLogin',
+            'SYNO.Core.Theme.Image',
+            'SYNO.Core.Theme.Login',
+            'SYNO.Core.UISearch',
+            'SYNO.Core.UserSettings'
+        }
         for ns in required:
             with self.subTest(namespace=ns):
                 self.assertIn(f"'{ns}'", source)

@@ -65,13 +65,16 @@ def nas_connection_kwargs(nas_config):
 
 def pytest_configure(config):
     """Register custom markers."""
-    config.addinivalue_line("markers", "safe: read-only test, safe for production NAS")
-    config.addinivalue_line("markers", "destructive: write/delete test, may modify NAS state")
+    config.addinivalue_line(
+        "markers", "safe: read-only test, safe for production NAS")
+    config.addinivalue_line(
+        "markers", "destructive: write/delete test, may modify NAS state")
 
 
 def pytest_collection_modifyitems(config, items):
     """Auto-skip destructive tests unless SYNOLOGY_ALLOW_DESTRUCTIVE=1."""
-    allow_destructive = os.environ.get("SYNOLOGY_ALLOW_DESTRUCTIVE", "0") == "1"
+    allow_destructive = os.environ.get(
+        "SYNOLOGY_ALLOW_DESTRUCTIVE", "0") == "1"
     if allow_destructive:
         return
 
