@@ -1,5 +1,5 @@
 ---
-sidebar_position: 10
+sidebar_position: 11
 title: ✅ DirectoryServer
 ---
 
@@ -44,22 +44,18 @@ Get directory info.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.ActiveDirectory.Info`  
+`SYNO.ActiveDirectory.Info` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object]`  
 Information about your domain.  
+
 </div>
-  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-
 ```json
 {
     "data": {
@@ -91,6 +87,7 @@ Information about your domain.
 </details>
 
 
+
 ---
 
 
@@ -99,13 +96,11 @@ List directory objects.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.ActiveDirectory.Directory`  
+`SYNO.ActiveDirectory.User` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_basedn_** `str`  
 The Base DN for the search. E.g. `CN=Users,CN=MY,CN=DOMAIN,CN=COM` or `CN=MY,CN=DOMAIN,CN=COM`.  
   
@@ -121,20 +116,18 @@ The categories of items to search. E.g. `["organizationalUnit","container","buil
 base server containers, and `["person","group","organizationalUnit","computer"]` for a list of contained objects.
 Defaults to `["person","group","organizationalUnit","computer","container","builtinDomain"]`.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object]`  
 The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary. The first level is the success to the AD server.  The second Data level is the status of the actual request.
 Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.  
+
 </div>
-  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-
 ```json
 {
     "data": {
@@ -168,6 +161,7 @@ Since this is a compound request, the data contains an object with it's own requ
 </details>
 
 
+
 ---
 
 
@@ -176,13 +170,11 @@ Create a new user.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.ActiveDirectory.User`  
+`SYNO.ActiveDirectory.User` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_logon_name_** `str`  
 The desired username. E.g. `jdoe`.  
   
@@ -210,19 +202,17 @@ Set to 'true' if the user must change password on next logon. Defaults to `False
 **_password_never_expire_** `str`  
 Set to 'true' if the password never expires.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object]`  
 The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.  
+
 </div>
-  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-
 ```json
 {
     'data': {
@@ -235,6 +225,7 @@ The result of this method is a dictionary object with a 'data' dictionary and a 
 </details>
 
 
+
 ---
 
 
@@ -244,29 +235,25 @@ This will trigger the password reset email from
 Control Panel>Notification>Rules>System>Reset password for your account to be sent to the user.  
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Auth.ForgotPwd`  
+`SYNO.Auth.ForgotPwd` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_username_** `str`  
 The username to reset. E.g. `My Group`.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object]`  
 The return object can be checked for the "success" to be a true or false.  
+
 </div>
-  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-
 ```json
 {
     "data": {
@@ -278,6 +265,7 @@ The return object can be checked for the "success" to be a true or false.
 </details>
 
 
+
 ---
 
 
@@ -286,32 +274,28 @@ Change the user's password.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Entry.Request`  
+`SYNO.Entry.Request` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_user_dn_** `str`  
 The user DN to be modified. E.g. `CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM`.  
   
 **_password_** `str`  
 The new password to be set. E.g. `Password123`.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object]`  
 The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.  
+
 </div>
-  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-
 ```json
 {
     "data": {
@@ -337,6 +321,7 @@ The result of this method is a dictionary object with a 'data' dictionary and a 
 </details>
 
 
+
 ---
 
 
@@ -345,13 +330,11 @@ Create a new AD group.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.ActiveDirectory.Group`  
+`SYNO.ActiveDirectory.Group` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_name_** `str`  
 The name of the group. E.g. `My Group`.  
   
@@ -365,8 +348,7 @@ The email address used to reference this group. Defaults to `""`.
 A description of the AD Group. Defaults to `""`.  
   
 **_type_** `str`  
-Example Options: `security`, `distribution`. Defaults to `"security"`.
-
+Example Options: `security`, `distribution`. Defaults to `"security"`.  
 (definitions from https://docs.microsoft.com/en-us/microsoft-365/admin/create-groups/compare-groups?view=o365-worldwide )
     - `distribution` (Distribution groups) are used for sending email
         notifications to a group of people.
@@ -397,19 +379,17 @@ Example Options: `local`, `global`, `universal`. Defaults to `"global"`.
         is stored in the Global Catalog and replicated forest-wide. Don’t use
         universal groups if you have only one domain.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object]`  
 A success object, and data object containing the new dn and the netbios name of the group.  
+
 </div>
-  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-
 ```json
 {
     'data': {
@@ -422,6 +402,7 @@ A success object, and data object containing the new dn and the netbios name of 
 </details>
 
 
+
 ---
 
 
@@ -430,34 +411,30 @@ Add a user as a member of a group.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Entry.Request`  
+`SYNO.Entry.Request` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_userDn_** `str`  
 The fully qualified dn to add. E.g. `CN=jdoe,CN=Users,CN=MY,CN=DOMAIN,CN=COM`.  
   
 **_groupDn_** `str`  
 The fully qualified dn of the group to which the user is to be added. E.g. `CN=My Group,CN=Groups,CN=MY,CN=DOMAIN,CN=COM`.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object]`  
 The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
 The first level is the success to the AD server.  The second Data level is the status of the actual request.
 Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.  
+
 </div>
-  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-
 ```json
 {
     "data": {
@@ -482,6 +459,7 @@ Since this is a compound request, the data contains an object with it's own requ
 </details>
 
 
+
 ---
 
 
@@ -490,27 +468,24 @@ Check if a container exists.
 This can be used to verify the username or group name is unique.  
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.ActiveDirectory.Group`  
+`SYNO.ActiveDirectory.Group` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_groupName_** `str`  
 The user, or group's name. E.g. `jdoe` or `My Cool Group`.
 Fully Qualified Domain Name such as `CN=My Cool Group,CN=Groups,DC=MY,DC=DOMAIN,DC=COM` are not successful.
 Improper case such as `my cool group` instead of `My Cool Group` are successful.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object]`  
 `True` if the group exists. `False` if the group does not exist.  
+
 </div>
-  
 
 
 
@@ -522,13 +497,11 @@ Modify user information within the Active Directory.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.ActiveDirectory.User`  
+`SYNO.Entry.Request` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_user_dn_** `str`  
 The user DN to be modified. E.g. `CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM`.  
   
@@ -556,21 +529,19 @@ The user's telephone number.
 **_web_** `str`  
 The user's website or location on the web where information can be obtained.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object]`  
 The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
 The first level is the success to the AD server. The second Data level is the status of the actual request.
 Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.  
+
 </div>
-  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-
 ```json
 {
     "data": {
@@ -599,6 +570,7 @@ Since this is a compound request, the data contains an object with it's own requ
 </details>
 
 
+
 ---
 
 
@@ -607,13 +579,11 @@ Modify an object within the Active Directory.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Entry.Request`  
+`SYNO.Entry.Request` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_modificationAPI_** `str`  
 API to be used.  
   
@@ -626,21 +596,19 @@ The user DN to be modified. E.g. `"CN=jdoe,CN=Users,DC=MY,DC=DOMAIN,DC=COM"`.
 **_jsonObject_** `str`  
 The json Object to be added, e.g., a user object.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object]`  
 The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
 The first level is the success to the AD server.  The second Data level is the status of the actual request.
 Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.  
+
 </div>
-  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-
 ```json
 {
     "data": {
@@ -669,6 +637,7 @@ Since this is a compound request, the data contains an object with it's own requ
 </details>
 
 
+
 ---
 
 
@@ -677,22 +646,18 @@ Update the Synology users and groups database with information from Directory Se
 This is a long-running and asynchronous task. You are given back a task_id, and you can use that task_id to check the status with the get_task_status(task_id) method.  
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Core.Directory.Domain`  
+`SYNO.Core.Directory.Domain` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object]`  
 The 'data' object contains the 'task_id' used to track with the getTaskStatus() method.  
+
 </div>
-  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-
 ```json
 {
     "data": {
@@ -704,6 +669,7 @@ The 'data' object contains the 'task_id' used to track with the getTaskStatus() 
 </details>
 
 
+
 ---
 
 
@@ -713,30 +679,26 @@ This is used to ensure the task is completed. For example, the primary utilizati
 Until this method reports finish, the job is not completed, and it is not safe to operate under the assumption that users have been synchronized.  
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Core.Directory.Domain`  
+`SYNO.Core.Directory.Domain` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_task_id_** `str`  
 The task ID to be tracked for status.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object]`  
 The 'data' object contains the 'status' used to determine the current status. 'status' will be 'updating' or 'finish' if the job was started.
 The 'success' object will be true if the operation was successful, or false if failed.  
+
 </div>
-  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-
 ```json
 {
     'data': {
@@ -748,6 +710,7 @@ The 'success' object will be true if the operation was successful, or false if f
 </details>
 
 
+
 ---
 
 
@@ -756,31 +719,27 @@ Delete an array of DNs from AD.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.ActiveDirectory.Directory`  
+`SYNO.ActiveDirectory.Directory` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_dnList_** `list[str]`  
 The fully qualified DN to be removed from the directory server. E.g. `["CN=jdoe,CN=Users,CN=MY,CN=DOMAIN,CN=COM","CN=My Group,CN=Groups,CN=MY,CN=DOMAIN,CN=COM"]`.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object]`  
 The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
 The first level is the success to the AD server.  The second Data level is the status of the actual request.
 Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.  
+
 </div>
-  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-
 ```json
 {
     "data": {
@@ -808,6 +767,7 @@ Since this is a compound request, the data contains an object with it's own requ
 }
 ```
 </details>
+
 
 
 ---
@@ -816,28 +776,29 @@ Since this is a compound request, the data contains an object with it's own requ
 ### `delete_item`
 Delete a DN from AD.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Entry.Request` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_dn_** `str`  
 The fully qualified DN to be removed from the directory server. E.g. `CN=jdoe,CN=Users,CN=MY,CN=DOMAIN,CN=COM` or `CN=My Group,CN=Groups,CN=MY,CN=DOMAIN,CN=COM`.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object]`  
 The result of this method is a dictionary object with a 'data' dictionary and a 'success' dictionary.
 The first level is the success to the AD server.  The second Data level is the status of the actual request.
 Since this is a compound request, the data contains an object with it's own request and results contained within. The object will explain any issues with the request.  
+
 </div>
-  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-
 ```json
 {
     "data": {
@@ -865,6 +826,7 @@ Since this is a compound request, the data contains an object with it's own requ
 }
 ```
 </details>
+
 
 
 ---
@@ -875,27 +837,24 @@ Perform an entry request for a task.
 Some requests require an entry. Delete, for example, requires an entry. If an entry is required, the task will not complete without an Entry Request.  
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Entry.Request`  
+`SYNO.Entry.Request` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_task_id_** `str`  
 The ID of the task to be checked. This is provided when making a request.
 An example Task ID may look like this
     `@administrators/Synoads_SYNO.ActiveDirectory.Directory_delete6145EA17C4F03DA9`.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `Any`  
 The result of the entry request.  
+
 </div>
-  
 
 
 

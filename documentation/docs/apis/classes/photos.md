@@ -1,5 +1,5 @@
 ---
-sidebar_position: 24
+sidebar_position: 23
 title: 🚧 Photos
 ---
 
@@ -21,7 +21,6 @@ folders, albums, sharing, and items.
   
 ### Parameters
 <div class="padding-left--md">
-
 **_ip_address_** `str`  
 The IP address or hostname of the Synology NAS.  
   
@@ -55,8 +54,8 @@ Device ID for the session.
 **_device_name_** `str`  
 Device name for the session.  
   
+
 </div>
-  
   
 ## Methods
 ### `get_userinfo`
@@ -64,18 +63,15 @@ Retrieve user information for the current session.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.UserInfo`  
+`SYNO.Foto.UserInfo` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `Any`  
 The user information data.  
+
 </div>
-  
 
 
 
@@ -87,25 +83,22 @@ Retrieve information about a specific folder.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.Browse.Folder`  
+`SYNO.Foto.Browse.Folder` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_folder_id_** `int`  
 The ID of the folder. Default is 0.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The folder information or an error message.  
+
 </div>
-  
 
 
 
@@ -117,13 +110,11 @@ List folders in Personal Space.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.Browse.Folder`  
+`SYNO.Foto.Browse.Album` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_folder_id_** `int`  
 The parent folder ID. Default is 0.  
   
@@ -136,15 +127,14 @@ Number of folders to skip. Default is 0.
 **_additional_** `str or list of str`  
 Additional fields to include.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The list of folders or an error message.  
+
 </div>
-  
 
 
 
@@ -156,13 +146,11 @@ List folders in Team Space.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.FotoTeam.Browse.Folder`  
+`SYNO.Foto.Browse.Album` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_folder_id_** `int`  
 The parent folder ID. Default is 0.  
   
@@ -175,15 +163,14 @@ Number of folders to skip. Default is 0.
 **_additional_** `str or list of str`  
 Additional fields to include.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The list of team folders or an error message.  
+
 </div>
-  
 
 
 
@@ -195,25 +182,22 @@ Count folders in Personal Space.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.Browse.Folder`  
+`SYNO.Foto.Browse.Album` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_folder_id_** `int`  
 The parent folder ID. Default is 0.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The count of folders or an error message.  
+
 </div>
-  
 
 
 
@@ -225,25 +209,22 @@ Count folders in Team Space.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.FotoTeam.Browse.Folder`  
+`SYNO.Foto.Browse.Album` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_folder_id_** `int`  
 The parent folder ID. Default is 0.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The count of team folders or an error message.  
+
 </div>
-  
 
 
 
@@ -253,22 +234,24 @@ The count of team folders or an error message.
 ### `lookup_folder`
 Lookup a folder by path in Personal Space.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Foto.Browse.Album` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_path_** `str`  
 The folder path.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The folder information or None if not found.  
+
 </div>
-  
 
 
 
@@ -278,22 +261,24 @@ The folder information or None if not found.
 ### `lookup_team_folder`
 Lookup a folder by path in Team Space.  
   
+#### Internal API
+<div class="padding-left--md">
+`SYNO.Foto.Browse.Album` 
+</div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_path_** `str`  
 The folder path.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The folder information or None if not found.  
+
 </div>
-  
 
 
 
@@ -305,28 +290,25 @@ Retrieve information about a specific album.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.Browse.Album`  
+`SYNO.Foto.Browse.Album` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_album_id_** `str`  
 The album ID.  
   
 **_additional_** `str or list of str`  
 Additional fields to include.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The album information or an error message.  
+
 </div>
-  
 
 
 
@@ -338,28 +320,25 @@ List albums.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.Browse.Album`  
+`SYNO.Foto.Browse.Album` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_offset_** `int`  
 Number of albums to skip. Default is 0.  
   
 **_limit_** `int`  
 Maximum number of albums to return. Default is 100.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The list of albums or an error message.  
+
 </div>
-  
 
 
 
@@ -371,13 +350,11 @@ Suggest album conditions based on a keyword.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.Browse.ConditionAlbum`  
+`SYNO.Foto.Browse.ConditionAlbum` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_keyword_** `str`  
 The keyword to suggest conditions for.  
   
@@ -387,15 +364,14 @@ List of conditions to use. Default is ['general_tag'].
 **_user_id_** `str`  
 User ID to use. If None, uses the current user.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The suggested conditions or an error message.  
+
 </div>
-  
 
 
 
@@ -407,28 +383,25 @@ Create a new album with the specified condition.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.Browse.ConditionAlbum`  
+`SYNO.Foto.Browse.ConditionAlbum` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_name_** `str`  
 The name of the album.  
   
 **_condition_** `list of str`  
 The condition for the album.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The API response for album creation.  
+
 </div>
-  
 
 
 
@@ -440,25 +413,22 @@ Delete an album by ID.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.Browse.Album`  
+`SYNO.Foto.Browse.Album` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_album_id_** `str`  
 The album ID.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The API response for album deletion.  
+
 </div>
-  
 
 
 
@@ -470,28 +440,25 @@ Set the condition for an album.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.Browse.ConditionAlbum`  
+`SYNO.Foto.Browse.ConditionAlbum` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_folder_id_** `int`  
 The folder ID.  
   
 **_condition_** `list of str`  
 The condition to set.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The API response for setting the condition.  
+
 </div>
-  
 
 
 
@@ -503,13 +470,11 @@ Share an album with specified permissions.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.Sharing.Passphrase`  
+`SYNO.Foto.Sharing.Misc` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_album_id_** `str`  
 The album ID.  
   
@@ -522,15 +487,14 @@ Whether sharing is enabled. Default is True.
 **_expiration_** `int or str`  
 Expiration time for the share. Default is 0.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `Any`  
 The API response for sharing the album.  
+
 </div>
-  
 
 
 
@@ -542,13 +506,11 @@ Share a team folder with specified permissions.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.FotoTeam.Sharing.Passphrase`  
+`SYNO.Foto.Sharing.Misc` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_folder_id_** `int`  
 The folder ID.  
   
@@ -561,15 +523,14 @@ Whether sharing is enabled. Default is True.
 **_expiration_** `int or str`  
 Expiration time for the share. Default is 0.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `Any`  
 The API response for sharing the team folder.  
+
 </div>
-  
 
 
 
@@ -581,25 +542,22 @@ List users and groups that can be shared with.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.Sharing.Misc`  
+`SYNO.Foto.Sharing.Misc` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_team_space_sharable_list_** `bool`  
 Whether to include team space sharable list. Default is False.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The list of users and groups or an error message.  
+
 </div>
-  
 
 
 
@@ -611,13 +569,11 @@ List all items in all folders in Personal Space.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.Browse.Item`  
+`SYNO.Foto.Browse.Item` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_offset_** `int`  
 Specify how many shared folders are skipped before beginning to return listed shared folders.  
   
@@ -644,15 +600,14 @@ Additional fields to include.
 Possible values:
     `["thumbnail","resolution", "orientation", "video_convert", "video_meta", "provider_user_id", "exif", "tag", "description", "gps", "geocoding_id", "address", "person"]`.  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The list of items or an error message.  
+
 </div>
-  
 
 
 
@@ -664,18 +619,15 @@ List available search filters.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.Search.Filter`  
+`SYNO.Foto.Search.Filter` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The list of search filters or an error message.  
+
 </div>
-  
 
 
 
@@ -687,18 +639,15 @@ Retrieve guest settings for Photos.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Foto.Setting.Guest`  
+`SYNO.Foto.Setting.Guest` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The guest settings or an error message.  
+
 </div>
-  
 
 
 

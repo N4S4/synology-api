@@ -25,18 +25,15 @@ Get Synology Drive status information.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.SynologyDrive`  
+`SYNO.SynologyDrive` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 Status information.  
+
 </div>
-  
 
 
 
@@ -48,18 +45,15 @@ Get Synology Drive configuration information.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.SynologyDrive.Config`  
+`SYNO.SynologyDrive.Config` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 Configuration information.  
+
 </div>
-  
 
 
 
@@ -71,18 +65,15 @@ Get summary of Synology Drive connections.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.SynologyDrive.Connection`  
+`SYNO.SynologyDrive.Connection` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 Connections summary.  
+
 </div>
-  
 
 
 
@@ -94,18 +85,15 @@ Check user status in Synology Drive.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.SynologyDrive`  
+`SYNO.SynologyDrive` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 User check result.  
+
 </div>
-  
 
 
 
@@ -117,18 +105,15 @@ Get list of active Synology Drive connections.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.SynologyDrive.Connection`  
+`SYNO.SynologyDrive.Connection` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 List of active connections.  
+
 </div>
-  
 
 
 
@@ -140,18 +125,15 @@ Get list of active Synology Drive ShareSync connections.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.SynologyDriveShareSync.Connection`  
+`SYNO.SynologyDriveShareSync.Connection` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 List of active ShareSync connections.  
+
 </div>
-  
 
 
 
@@ -163,18 +145,15 @@ Get list of active shares in Synology Drive.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.SynologyDrive.Share`  
+`SYNO.SynologyDrive.Share` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 List of active shares.  
+
 </div>
-  
 
 
 
@@ -186,13 +165,11 @@ Get Synology Drive logs.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.SynologyDrive.Log`  
+`SYNO.SynologyDrive.Log` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_share_type_** `str`  
 Type of share to filter logs (default is 'all').  
   
@@ -217,15 +194,14 @@ Username to filter logs (default is '').
 **_target_** `str`  
 Target type to filter logs (default is 'user').  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 Log information.  
+
 </div>
-  
 
 
 
@@ -237,18 +213,15 @@ Get list of C2FS shares.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.C2FS.Share`  
+`SYNO.C2FS.Share` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 List of C2FS shares.  
+
 </div>
-  
 
 
 
@@ -260,18 +233,15 @@ Get Synology Drive settings.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.SynologyDrive.Settings`  
+`SYNO.SynologyDrive.Settings` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 Settings information.  
+
 </div>
-  
 
 
 
@@ -283,18 +253,15 @@ Get Synology Drive database usage.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.SynologyDrive.DBUsage`  
+`SYNO.SynologyDrive.DBUsage` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 Database usage information.  
+
 </div>
-  
 
 
 
@@ -306,18 +273,15 @@ Get status of deleted nodes in Synology Drive.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.SynologyDrive.Node.Delete`  
+`SYNO.SynologyDrive.Node.Delete` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 Delete status information.  
+
 </div>
-  
 
 
 
@@ -329,18 +293,15 @@ Get file property transfer status for User Home migration.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.SynologyDrive.Migration.UserHome`  
+`SYNO.SynologyDrive.Migration.UserHome` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 File property transfer status.  
+
 </div>
-  
 
 
 
@@ -352,13 +313,11 @@ Get user sync profile(s).
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.SynologyDrive.Profiles`  
+`SYNO.SynologyDrive.Profiles` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_user_** `str`  
 Username to filter profiles (default is '').  
   
@@ -368,15 +327,14 @@ Start index for pagination (default is 0).
 **_limit_** `str or int`  
 Maximum number of profiles to return (default is 'null').  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 User sync profile information.  
+
 </div>
-  
 
 
 
@@ -388,25 +346,22 @@ Pause native client index for a specified duration.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.SynologyDrive.Index`  
+`SYNO.SynologyDrive.Index` 
 </div>
   
 #### Parameters
 <div class="padding-left--md">
-
 **_time_pause_** `int`  
 Pause duration in seconds (default is 60).  
   
+
 </div>
-  
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 API response.  
+
 </div>
-  
 
 
 

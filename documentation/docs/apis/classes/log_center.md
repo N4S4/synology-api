@@ -1,5 +1,5 @@
 ---
-sidebar_position: 20
+sidebar_position: 19
 title: 🚧 LogCenter
 ---
 
@@ -25,18 +25,15 @@ Retrieve the list of log center receive rules.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.LogCenter.RecvRule`  
+`SYNO.LogCenter.RecvRule` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The API response containing the receive rules or an error message.  
+
 </div>
-  
 
 
 
@@ -48,18 +45,15 @@ Retrieve the count status from the syslog client.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Core.SyslogClient.Status`  
+`SYNO.Core.SyslogClient.Status` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The API response containing the count status or an error message.  
+
 </div>
-  
 
 
 
@@ -71,18 +65,15 @@ Retrieve the EPS (events per second) status from the syslog client.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Core.SyslogClient.Status`  
+`SYNO.Core.SyslogClient.Status` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The API response containing the EPS status or an error message.  
+
 </div>
-  
 
 
 
@@ -94,18 +85,15 @@ Retrieve the list of remote log archive subfolders.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.LogCenter.Log`  
+`SYNO.LogCenter.Log` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The API response containing remote archive subfolders or an error message.  
+
 </div>
-  
 
 
 
@@ -117,18 +105,15 @@ Retrieve the list of logs from the syslog client.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.Core.SyslogClient.Log`  
+`SYNO.Core.SyslogClient.Log` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The API response containing the logs or an error message.  
+
 </div>
-  
 
 
 
@@ -140,18 +125,15 @@ Retrieve the log center storage settings.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.LogCenter.Setting.Storage`  
+`SYNO.LogCenter.Setting.Storage` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The API response containing storage settings or an error message.  
+
 </div>
-  
 
 
 
@@ -163,18 +145,15 @@ Retrieve the list of log center client registry send settings.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.LogCenter.Client`  
+`SYNO.LogCenter.Client` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The API response containing registry send settings or an error message.  
+
 </div>
-  
 
 
 
@@ -186,18 +165,15 @@ Retrieve the log center history.
   
 #### Internal API
 <div class="padding-left--md">
-
-`SYNO.LogCenter.History`  
+`SYNO.LogCenter.History` 
 </div>
-  
   
 #### Returns
 <div class="padding-left--md">
-
 `dict[str, object] or str`  
 The API response containing the log center history or an error message.  
+
 </div>
-  
 
 
 
