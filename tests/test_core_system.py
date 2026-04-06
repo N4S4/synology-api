@@ -38,7 +38,8 @@ def _make_instance():
         'SYNO.Core.UserSettings': {'path': 'entry.cgi', 'maxVersion': 1},
     }
     instance.core_list = api_list
-    instance.request_data = MagicMock(return_value={'success': True, 'data': {}})
+    instance.request_data = MagicMock(
+        return_value={'success': True, 'data': {}})
     return instance
 
 
@@ -109,7 +110,8 @@ class TestCoreSystem(unittest.TestCase):
         self.instance.request_data.assert_called_once()
 
     def test_ntp_datetime_format_set(self):
-        self.instance.ntp_datetime_format_set(date_format='test', time_format='test')
+        self.instance.ntp_datetime_format_set(
+            date_format='test', time_format='test')
         self.instance.request_data.assert_called_once()
 
     def test_ntp_server_get(self):
