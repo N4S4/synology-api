@@ -1,4 +1,20 @@
-"""Docker API implementation for Synology NAS."""
+"""
+Docker API implementation for Synology NAS.
+
+Provides full coverage of all 12 SYNO.Docker.* API endpoints:
+    - SYNO.Docker.Container       — Container lifecycle (list, get, start, stop, restart, delete, create, signal, export, stats)
+    - SYNO.Docker.Container.Log   — Per-container log retrieval
+    - SYNO.Docker.Container.PkgProfile — Package-managed container profiles
+    - SYNO.Docker.Container.Profile    — Container profile export/import
+    - SYNO.Docker.Container.Resource   — Container resource usage
+    - SYNO.Docker.Image           — Image management (list, pull, delete, export, import)
+    - SYNO.Docker.Log             — Docker daemon / global logs
+    - SYNO.Docker.Migrate         — Migration utilities
+    - SYNO.Docker.Network         — Network management (list, create, delete)
+    - SYNO.Docker.Project         — Compose project management (list, get, create, update, start, stop, delete, build)
+    - SYNO.Docker.Registry        — Registry management (get, set, create, delete, search, tags, using)
+    - SYNO.Docker.Utils           — Docker utility operations
+"""
 from __future__ import annotations
 from typing import Optional
 import json
@@ -11,26 +27,10 @@ class Docker(base_api.BaseApi):
     """
     Docker API implementation.
 
-        This class provides methods to interact with Docker containers, images, registries, and projects on a Synology NAS.
+    Provides methods to interact with Docker containers, images, registries,
+    networks, projects, logs, migration, and utilities on a Synology NAS.
 
-        Supported actions:
-            - Getters:
-                - Get list of containers
-                - Get resources of all containers
-                - Get system resources
-                - List of docker images
-                - Get list of docker registries
-                - Get list of container logs
-                - Get containers resource usage statistics
-                - Search for docker image in all available registries
-                - Get list of projects
-                - Get list of docker networks
-
-            - Setters:
-
-            - Actions:
-                - Export container profile
-                - Export container profile and content
+    Covers all 12 ``SYNO.Docker.*`` API namespaces exposed by DSM.
     """
 
     def containers(self) -> dict[str, object] | str:
@@ -1264,5 +1264,930 @@ class Docker(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'stats'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # ──────────────────────────────────────────────────────────────────────
+    #  SYNO.Docker.Container — additional methods
+    # ──────────────────────────────────────────────────────────────────────
+
+    def get_container(self, name: str) -> dict[str, object] | str:
+        """
+        Get detailed information about a single container.
+
+        Parameters
+        ----------
+        name : str
+            The name of the container.
+
+        Returns
+        -------
+        dict[str, object]
+            Detailed container inspect data (Config, HostConfig, State, etc.).
+        """
+        api_name = 'SYNO.Docker.Container'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'name': name}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def restart_container(self, container: str) -> dict[str, object] | str:
+        """
+        Restart a container by name.
+
+        Parameters
+        ----------
+        container : str
+            The name of the container to restart.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the restart operation.
+        """
+        api_name = 'SYNO.Docker.Container'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'restart', 'name': container}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def delete_container(self, name: str, force: bool = False) -> dict[str, object] | str:
+        """
+        Delete a container.
+
+        Parameters
+        ----------
+        name : str
+            The name of the container to delete.
+        force : bool, optional
+            Force-remove a running container. Defaults to False.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the delete operation.
+        """
+        api_name = 'SYNO.Docker.Container'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'delete', 'name': name,
+                     'force': json.dumps(force)}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def create_container(self, profile: dict) -> dict[str, object] | str:
+        """
+        Create a new container from a profile definition.
+
+        Parameters
+        ----------
+        profile : dict
+            A container profile dictionary containing image, name, port
+            bindings, volume mounts, environment variables, etc.
+            Matches the JSON format produced by ``export_container_settings``.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the creation, including the new container name.
+        """
+        api_name = 'SYNO.Docker.Container'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'create',
+                     'profile': json.dumps(profile)}
+
+        return self.request_data(api_name, api_path, req_param, method='post')
+
+    def signal_container(self, name: str, signal: int = 15) -> dict[str, object] | str:
+        """
+        Send a signal to a running container.
+
+        Parameters
+        ----------
+        name : str
+            The name of the container.
+        signal : int, optional
+            Unix signal number to send. Defaults to 15 (SIGTERM).
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the signal operation.
+        """
+        api_name = 'SYNO.Docker.Container'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'signal', 'name': name, 'signal': signal}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # ──────────────────────────────────────────────────────────────────────
+    #  SYNO.Docker.Container.PkgProfile  (NEW — package-managed profiles)
+    # ──────────────────────────────────────────────────────────────────────
+
+    def get_pkg_profile(self, name: str) -> dict[str, object] | str:
+        """
+        Get the profile of a package-managed container.
+
+        Package-managed containers are created by Synology packages
+        (e.g. Surveillance Station, MailPlus) rather than by users directly.
+
+        Parameters
+        ----------
+        name : str
+            The name of the package-managed container.
+
+        Returns
+        -------
+        dict[str, object]
+            The package profile definition for the container.
+        """
+        api_name = 'SYNO.Docker.Container.PkgProfile'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'name': name}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def list_pkg_profiles(self) -> dict[str, object] | str:
+        """
+        List all package-managed container profiles.
+
+        Returns
+        -------
+        dict[str, object]
+            A list of all package-managed container profiles.
+        """
+        api_name = 'SYNO.Docker.Container.PkgProfile'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # ──────────────────────────────────────────────────────────────────────
+    #  SYNO.Docker.Container.Profile — additional methods
+    # ──────────────────────────────────────────────────────────────────────
+
+    def get_container_profile(self, name: str) -> dict[str, object] | str:
+        """
+        Get the full profile/configuration of a container.
+
+        Parameters
+        ----------
+        name : str
+            The name of the container.
+
+        Returns
+        -------
+        dict[str, object]
+            The full container profile (image, ports, volumes, env, etc.).
+        """
+        api_name = 'SYNO.Docker.Container.Profile'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'name': name}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def import_container_profile(self, name: str, profile: dict) -> dict[str, object] | str:
+        """
+        Import / apply a profile to a container.
+
+        Parameters
+        ----------
+        name : str
+            The name of the container to update.
+        profile : dict
+            The profile dictionary to apply.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the import operation.
+        """
+        api_name = 'SYNO.Docker.Container.Profile'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'import', 'name': name,
+                     'profile': json.dumps(profile)}
+
+        return self.request_data(api_name, api_path, req_param, method='post')
+
+    # ──────────────────────────────────────────────────────────────────────
+    #  SYNO.Docker.Image — additional methods
+    # ──────────────────────────────────────────────────────────────────────
+
+    def pull_image(self, repository: str, tag: str = 'latest') -> dict[str, object] | str:
+        """
+        Pull a Docker image from the active registry.
+
+        Parameters
+        ----------
+        repository : str
+            The repository name (e.g. ``"nginx"``, ``"grafana/grafana"``).
+        tag : str, optional
+            The image tag to pull. Defaults to ``"latest"``.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the pull operation.
+        """
+        api_name = 'SYNO.Docker.Image'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'pull', 'repository': repository, 'tag': tag}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def delete_image(self, name: str, tag: str = 'latest') -> dict[str, object] | str:
+        """
+        Delete a local Docker image.
+
+        Parameters
+        ----------
+        name : str
+            The repository name (e.g. ``"nginx"``).
+        tag : str, optional
+            The image tag to delete. Defaults to ``"latest"``.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the delete operation.
+        """
+        api_name = 'SYNO.Docker.Image'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'delete', 'name': name, 'tag': tag}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def export_image(self, name: str, tag: str = 'latest',
+                     path: str = '/docker') -> dict[str, object] | str:
+        """
+        Export a Docker image to a tar archive on the NAS.
+
+        Parameters
+        ----------
+        name : str
+            The repository name.
+        tag : str, optional
+            The image tag. Defaults to ``"latest"``.
+        path : str, optional
+            Destination path on the NAS. Defaults to ``"/docker"``.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the export operation.
+        """
+        api_name = 'SYNO.Docker.Image'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'export', 'name': name, 'tag': tag, 'path': path}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def import_image(self, path: str) -> dict[str, object] | str:
+        """
+        Import a Docker image from a tar archive on the NAS.
+
+        Parameters
+        ----------
+        path : str
+            Path to the image archive on the NAS filesystem
+            (e.g. ``"/docker/nginx_latest.tar"``).
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the import operation.
+        """
+        api_name = 'SYNO.Docker.Image'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'import', 'path': path}
+
+        return self.request_data(api_name, api_path, req_param, method='post')
+
+    def get_image(self, name: str, tag: str = 'latest') -> dict[str, object] | str:
+        """
+        Get detailed information about a local Docker image.
+
+        Parameters
+        ----------
+        name : str
+            The repository name.
+        tag : str, optional
+            The image tag. Defaults to ``"latest"``.
+
+        Returns
+        -------
+        dict[str, object]
+            Detailed image metadata.
+        """
+        api_name = 'SYNO.Docker.Image'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'name': name, 'tag': tag}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # ──────────────────────────────────────────────────────────────────────
+    #  SYNO.Docker.Registry — additional methods
+    # ──────────────────────────────────────────────────────────────────────
+
+    def create_registry(self, name: str, url: str,
+                        username: Optional[str] = None,
+                        password: Optional[str] = None,
+                        enable_trust_ssc: bool = True) -> dict[str, object] | str:
+        """
+        Add a new Docker registry.
+
+        Parameters
+        ----------
+        name : str
+            Display name for the registry.
+        url : str
+            Registry URL (e.g. ``"https://ghcr.io"``).
+        username : str, optional
+            Authentication username.
+        password : str, optional
+            Authentication password.
+        enable_trust_ssc : bool, optional
+            Trust self-signed certificates. Defaults to True.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the create operation.
+        """
+        api_name = 'SYNO.Docker.Registry'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': 1, 'method': 'create',
+                     'name': name, 'url': url,
+                     'enable_trust_SSC': json.dumps(enable_trust_ssc)}
+        if username is not None:
+            req_param['username'] = username
+        if password is not None:
+            req_param['password'] = password
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def set_registry(self, name: str, url: str,
+                     username: Optional[str] = None,
+                     password: Optional[str] = None,
+                     enable_trust_ssc: bool = True) -> dict[str, object] | str:
+        """
+        Update an existing Docker registry configuration.
+
+        Parameters
+        ----------
+        name : str
+            Display name of the registry to update.
+        url : str
+            Registry URL.
+        username : str, optional
+            Authentication username.
+        password : str, optional
+            Authentication password.
+        enable_trust_ssc : bool, optional
+            Trust self-signed certificates. Defaults to True.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the update operation.
+        """
+        api_name = 'SYNO.Docker.Registry'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': 1, 'method': 'set',
+                     'name': name, 'url': url,
+                     'enable_trust_SSC': json.dumps(enable_trust_ssc)}
+        if username is not None:
+            req_param['username'] = username
+        if password is not None:
+            req_param['password'] = password
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def delete_registry(self, name: str) -> dict[str, object] | str:
+        """
+        Remove a Docker registry.
+
+        Parameters
+        ----------
+        name : str
+            The display name of the registry to remove.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the delete operation.
+        """
+        api_name = 'SYNO.Docker.Registry'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': 1, 'method': 'delete', 'name': name}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def set_using_registry(self, name: str) -> dict[str, object] | str:
+        """
+        Set the active (default) Docker registry.
+
+        Parameters
+        ----------
+        name : str
+            The display name of the registry to make active.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the operation.
+        """
+        api_name = 'SYNO.Docker.Registry'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': 1, 'method': 'using', 'name': name}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_image_tags(self, repository: str, offset: int = 0,
+                       limit: int = 50) -> dict[str, object] | str:
+        """
+        List available tags for an image in the registry.
+
+        Uses v2 of the Registry API for paginated tag listing.
+
+        Parameters
+        ----------
+        repository : str
+            The image repository name (e.g. ``"nginx"``).
+        offset : int, optional
+            Pagination offset. Defaults to 0.
+        limit : int, optional
+            Maximum tags to return. Defaults to 50.
+
+        Returns
+        -------
+        dict[str, object]
+            A dictionary containing the list of available tags.
+        """
+        api_name = 'SYNO.Docker.Registry'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': 2, 'method': 'tags',
+                     'name': repository, 'offset': offset, 'limit': limit}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # ──────────────────────────────────────────────────────────────────────
+    #  SYNO.Docker.Network — additional methods
+    # ──────────────────────────────────────────────────────────────────────
+
+    def create_network(self, name: str, driver: str = 'bridge',
+                       subnet: Optional[str] = None,
+                       gateway: Optional[str] = None,
+                       ip_range: Optional[str] = None,
+                       enable_ipv6: bool = False) -> dict[str, object] | str:
+        """
+        Create a new Docker network.
+
+        Parameters
+        ----------
+        name : str
+            Name of the network.
+        driver : str, optional
+            Network driver. Defaults to ``"bridge"``.
+        subnet : str, optional
+            Subnet in CIDR notation (e.g. ``"172.28.0.0/16"``).
+        gateway : str, optional
+            Gateway IP address.
+        ip_range : str, optional
+            Allocatable IP range in CIDR notation.
+        enable_ipv6 : bool, optional
+            Enable IPv6 on the network. Defaults to False.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the creation, including the new network ID.
+        """
+        api_name = 'SYNO.Docker.Network'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param: dict[str, object] = {
+            'version': info['maxVersion'], 'method': 'create',
+            'name': name, 'driver': driver,
+            'enable_ipv6': json.dumps(enable_ipv6),
+        }
+        if subnet is not None:
+            req_param['subnet'] = subnet
+        if gateway is not None:
+            req_param['gateway'] = gateway
+        if ip_range is not None:
+            req_param['iprange'] = ip_range
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def delete_network(self, name: str) -> dict[str, object] | str:
+        """
+        Delete a Docker network.
+
+        Parameters
+        ----------
+        name : str
+            The name of the network to delete.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the delete operation.
+        """
+        api_name = 'SYNO.Docker.Network'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'delete', 'name': name}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_network(self, name: str) -> dict[str, object] | str:
+        """
+        Get detailed information about a Docker network.
+
+        Parameters
+        ----------
+        name : str
+            The name of the network.
+
+        Returns
+        -------
+        dict[str, object]
+            Network details including driver, subnet, containers, etc.
+        """
+        api_name = 'SYNO.Docker.Network'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'name': name}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # ──────────────────────────────────────────────────────────────────────
+    #  SYNO.Docker.Project — additional methods
+    # ──────────────────────────────────────────────────────────────────────
+
+    def create_project(self, name: str, share_path: str,
+                       content: str,
+                       enable_service_portal: bool = False,
+                       service_portal_name: Optional[str] = None,
+                       service_portal_port: Optional[int] = None,
+                       service_portal_protocol: str = 'http') -> dict[str, object] | str:
+        """
+        Create a new Docker Compose project.
+
+        Parameters
+        ----------
+        name : str
+            Project name.
+        share_path : str
+            Shared-folder path where the compose file lives
+            (e.g. ``"/docker/myproject"``).
+        content : str
+            The docker-compose YAML content as a string.
+        enable_service_portal : bool, optional
+            Enable the DSM reverse-proxy portal. Defaults to False.
+        service_portal_name : str, optional
+            Portal display name.
+        service_portal_port : int, optional
+            Portal target port.
+        service_portal_protocol : str, optional
+            Portal protocol. Defaults to ``"http"``.
+
+        Returns
+        -------
+        dict[str, object]
+            Result including the new project ID.
+        """
+        api_name = 'SYNO.Docker.Project'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param: dict[str, object] = {
+            'version': info['maxVersion'], 'method': 'create',
+            'name': name, 'share_path': share_path,
+            'content': content,
+            'enable_service_portal': json.dumps(enable_service_portal),
+            'service_portal_protocol': service_portal_protocol,
+        }
+        if service_portal_name is not None:
+            req_param['service_portal_name'] = service_portal_name
+        if service_portal_port is not None:
+            req_param['service_portal_port'] = service_portal_port
+
+        return self.request_data(api_name, api_path, req_param, method='post')
+
+    def update_project(self, project_id: str, content: str,
+                       enable_service_portal: Optional[bool] = None,
+                       service_portal_name: Optional[str] = None,
+                       service_portal_port: Optional[int] = None,
+                       service_portal_protocol: Optional[str] = None) -> dict[str, object] | str:
+        """
+        Update an existing Docker Compose project.
+
+        Parameters
+        ----------
+        project_id : str
+            The UUID of the project.
+        content : str
+            Updated docker-compose YAML content.
+        enable_service_portal : bool, optional
+            Update the portal setting.
+        service_portal_name : str, optional
+            Update portal name.
+        service_portal_port : int, optional
+            Update portal port.
+        service_portal_protocol : str, optional
+            Update portal protocol.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the update operation.
+        """
+        api_name = 'SYNO.Docker.Project'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param: dict[str, object] = {
+            'version': info['maxVersion'], 'method': 'update',
+            'id': project_id, 'content': content,
+        }
+        if enable_service_portal is not None:
+            req_param['enable_service_portal'] = json.dumps(
+                enable_service_portal)
+        if service_portal_name is not None:
+            req_param['service_portal_name'] = service_portal_name
+        if service_portal_port is not None:
+            req_param['service_portal_port'] = service_portal_port
+        if service_portal_protocol is not None:
+            req_param['service_portal_protocol'] = service_portal_protocol
+
+        return self.request_data(api_name, api_path, req_param, method='post')
+
+    def delete_project(self, project_id: str, preserve_content: bool = False) -> dict[str, object] | str:
+        """
+        Delete a Docker Compose project.
+
+        Parameters
+        ----------
+        project_id : str
+            The UUID of the project.
+        preserve_content : bool, optional
+            Keep the compose file on disk. Defaults to False.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the delete operation.
+        """
+        api_name = 'SYNO.Docker.Project'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'delete',
+                     'id': project_id,
+                     'preserve_content': json.dumps(preserve_content)}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def start_project(self, project_id: str) -> dict[str, object] | str:
+        """
+        Start (``docker compose up``) a project.
+
+        Parameters
+        ----------
+        project_id : str
+            The UUID of the project.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the start operation.
+        """
+        api_name = 'SYNO.Docker.Project'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'start', 'id': project_id}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def stop_project(self, project_id: str) -> dict[str, object] | str:
+        """
+        Stop (``docker compose down``) a project.
+
+        Parameters
+        ----------
+        project_id : str
+            The UUID of the project.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the stop operation.
+        """
+        api_name = 'SYNO.Docker.Project'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'stop', 'id': project_id}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def build_project(self, project_id: str) -> dict[str, object] | str:
+        """
+        Build (``docker compose build``) images for a project.
+
+        Parameters
+        ----------
+        project_id : str
+            The UUID of the project.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the build operation.
+        """
+        api_name = 'SYNO.Docker.Project'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'build', 'id': project_id}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # ──────────────────────────────────────────────────────────────────────
+    #  SYNO.Docker.Log  (NEW — Docker daemon / global logs)
+    # ──────────────────────────────────────────────────────────────────────
+
+    def get_docker_logs(self, offset: int = 0, limit: int = 50,
+                        sort_dir: str = 'DESC',
+                        keyword: Optional[str] = None,
+                        level: Optional[str] = None) -> dict[str, object] | str:
+        """
+        Get Docker daemon-level / global logs.
+
+        These are logs from the Docker engine itself, not from individual
+        containers. Use ``get_logs()`` for per-container logs.
+
+        Parameters
+        ----------
+        offset : int, optional
+            Pagination offset. Defaults to 0.
+        limit : int, optional
+            Maximum number of log entries to return. Defaults to 50.
+        sort_dir : str, optional
+            Sort direction (``"ASC"`` or ``"DESC"``). Defaults to ``"DESC"``.
+        keyword : str, optional
+            Keyword filter.
+        level : str, optional
+            Log level filter (e.g. ``"error"``, ``"warn"``).
+
+        Returns
+        -------
+        dict[str, object]
+            Docker daemon log entries.
+        """
+        api_name = 'SYNO.Docker.Log'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param: dict[str, object] = {
+            'version': info['maxVersion'], 'method': 'get',
+            'offset': offset, 'limit': limit, 'sort_dir': sort_dir,
+        }
+        if keyword is not None:
+            req_param['keyword'] = keyword
+        if level is not None:
+            req_param['level'] = level
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # ──────────────────────────────────────────────────────────────────────
+    #  SYNO.Docker.Migrate  (NEW — migration utilities)
+    # ──────────────────────────────────────────────────────────────────────
+
+    def get_migrate_status(self) -> dict[str, object] | str:
+        """
+        Get the migration status of Docker containers / configuration.
+
+        Checks whether containers require migration (e.g. after a DSM or
+        Docker package upgrade).
+
+        Returns
+        -------
+        dict[str, object]
+            Current migration status.
+        """
+        api_name = 'SYNO.Docker.Migrate'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def start_migration(self) -> dict[str, object] | str:
+        """
+        Start the Docker migration process.
+
+        Triggers migration of containers that require updating after a
+        DSM or Docker package upgrade.
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the migration start.
+        """
+        api_name = 'SYNO.Docker.Migrate'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'start'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # ──────────────────────────────────────────────────────────────────────
+    #  SYNO.Docker.Utils  (NEW — utility operations)
+    # ──────────────────────────────────────────────────────────────────────
+
+    def get_docker_utils_info(self) -> dict[str, object] | str:
+        """
+        Get Docker utility information.
+
+        Returns general Docker engine information such as version, storage
+        driver, volumes path, and capability flags.
+
+        Returns
+        -------
+        dict[str, object]
+            Docker engine utility information.
+        """
+        api_name = 'SYNO.Docker.Utils'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def docker_prune(self) -> dict[str, object] | str:
+        """
+        Prune unused Docker resources.
+
+        Removes unused containers, networks, images, and build cache
+        (equivalent to ``docker system prune``).
+
+        Returns
+        -------
+        dict[str, object]
+            Result of the prune operation, including space reclaimed.
+        """
+        api_name = 'SYNO.Docker.Utils'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'prune'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_docker_version(self) -> dict[str, object] | str:
+        """
+        Get Docker engine version information.
+
+        Returns
+        -------
+        dict[str, object]
+            Docker version details (version, API version, go version, etc.).
+        """
+        api_name = 'SYNO.Docker.Utils'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'version'}
 
         return self.request_data(api_name, api_path, req_param)
