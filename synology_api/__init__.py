@@ -15,6 +15,7 @@ from . import \
     core_package, \
     core_share, \
     core_sys_info, \
+    core_system, \
     core_user, \
     downloadstation, \
     log_center, \
