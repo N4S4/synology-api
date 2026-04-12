@@ -12,6 +12,7 @@ from . import \
     core_certificate, \
     core_group, \
     core_iscsi, \
+    core_notification, \
     core_package, \
     core_share, \
     core_sys_info, \
