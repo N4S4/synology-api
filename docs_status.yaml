@@ -31,6 +31,8 @@ CoreNetwork:
     status: partial
 CoreSecurity:
     status: partial
+CoreServiceApps:
+    status: partial
 CoreServiceHW:
     status: partial
 CoreStorage:
