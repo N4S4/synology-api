@@ -14,6 +14,7 @@ from . import \
     core_directory_service_check, \
     core_group, \
     core_iscsi, \
+    core_network, \
     core_package, \
     core_share, \
     core_storage, \
