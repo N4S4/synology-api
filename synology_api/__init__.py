@@ -20,6 +20,7 @@ from . import \
     core_package, \
     core_security, \
     core_service_hw, \
+    core_service_user, \
     core_share, \
     core_storage, \
     core_sys_info, \
