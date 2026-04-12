@@ -28,7 +28,8 @@ def _make_instance():
         'SYNO.Core.Upgrade.RemoteAction': {'path': 'entry.cgi', 'maxVersion': 1},
     }
     instance.core_list = api_list
-    instance.request_data = MagicMock(return_value={'success': True, 'data': {}})
+    instance.request_data = MagicMock(
+        return_value={'success': True, 'data': {}})
     return instance
 
 
@@ -150,20 +151,20 @@ class TestCoreUpgradeCoverage(unittest.TestCase):
         """Every API namespace must be referenced in at least one method."""
         source = inspect.getsource(CoreUpgrade)
         required = {
-        'SYNO.Core.Upgrade.AutoUpgrade.Security',
-        'SYNO.Core.Upgrade.Cluster.Patch',
-        'SYNO.Core.Upgrade.Cluster.Server',
-        'SYNO.Core.Upgrade.Cluster.Server.Download',
-        'SYNO.Core.Upgrade.Group',
-        'SYNO.Core.Upgrade.Group.Download',
-        'SYNO.Core.Upgrade.Group.Setting',
-        'SYNO.Core.Upgrade.GroupInstall',
-        'SYNO.Core.Upgrade.GroupInstall.Network',
-        'SYNO.Core.Upgrade.JuniorModeData',
-        'SYNO.Core.Upgrade.Patch',
-        'SYNO.Core.Upgrade.PreCheck',
-        'SYNO.Core.Upgrade.RemoteAction'
-    }
+            'SYNO.Core.Upgrade.AutoUpgrade.Security',
+            'SYNO.Core.Upgrade.Cluster.Patch',
+            'SYNO.Core.Upgrade.Cluster.Server',
+            'SYNO.Core.Upgrade.Cluster.Server.Download',
+            'SYNO.Core.Upgrade.Group',
+            'SYNO.Core.Upgrade.Group.Download',
+            'SYNO.Core.Upgrade.Group.Setting',
+            'SYNO.Core.Upgrade.GroupInstall',
+            'SYNO.Core.Upgrade.GroupInstall.Network',
+            'SYNO.Core.Upgrade.JuniorModeData',
+            'SYNO.Core.Upgrade.Patch',
+            'SYNO.Core.Upgrade.PreCheck',
+            'SYNO.Core.Upgrade.RemoteAction'
+        }
         for ns in required:
             with self.subTest(namespace=ns):
                 self.assertIn(f"'{ns}'", source)
