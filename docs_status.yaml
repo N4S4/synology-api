@@ -19,6 +19,8 @@ Certificate:
     status: partial
 CloudSync:
     status: finished
+CoreDirectory:
+    status: partial
 CoreSystem:
     status: partial
 DhcpServer:
