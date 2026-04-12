@@ -23,7 +23,8 @@ def _make_instance():
         'SYNO.Core.DirectoryServiceCheck.Progress': {'path': 'entry.cgi', 'maxVersion': 1},
     }
     instance.gen_list = api_list
-    instance.request_data = MagicMock(return_value={'success': True, 'data': {}})
+    instance.request_data = MagicMock(
+        return_value={'success': True, 'data': {}})
     return instance
 
 
@@ -33,46 +34,37 @@ class TestCoreDirectoryServiceCheck(unittest.TestCase):
     def setUp(self):
         self.instance = _make_instance()
 
-
     def test_directory_service_check_common_get(self):
         self.instance.directory_service_check_common_get()
         self.instance.request_data.assert_called_once()
-
 
     def test_directory_service_check_debug_get(self):
         self.instance.directory_service_check_debug_get()
         self.instance.request_data.assert_called_once()
 
-
     def test_directory_service_check_domain_get(self):
         self.instance.directory_service_check_domain_get()
         self.instance.request_data.assert_called_once()
-
 
     def test_directory_service_check_domain_join_get(self):
         self.instance.directory_service_check_domain_join_get()
         self.instance.request_data.assert_called_once()
 
-
     def test_directory_service_check_domain_service_get(self):
         self.instance.directory_service_check_domain_service_get()
         self.instance.request_data.assert_called_once()
-
 
     def test_directory_service_check_domain_validation_get(self):
         self.instance.directory_service_check_domain_validation_get()
         self.instance.request_data.assert_called_once()
 
-
     def test_directory_service_check_ldap_get(self):
         self.instance.directory_service_check_ldap_get()
         self.instance.request_data.assert_called_once()
 
-
     def test_directory_service_check_progress_get(self):
         self.instance.directory_service_check_progress_get()
         self.instance.request_data.assert_called_once()
-
 
 
 if __name__ == '__main__':

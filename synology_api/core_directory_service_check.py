@@ -390,4 +390,3 @@ class CoreDirectoryServiceCheck(base_api.BaseApi):
             req_param['action'] = action
 
         return self.request_data(api_name, api_path, req_param)
-
