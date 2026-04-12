@@ -11,6 +11,7 @@ from . import \
     core_backup, \
     core_certificate, \
     core_directory, \
+    core_directory_service_check, \
     core_group, \
     core_iscsi, \
     core_package, \

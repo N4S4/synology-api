@@ -20,6 +20,7 @@ Certificate:
 CloudSync:
     status: finished
 CoreDirectory:
+CoreDirectoryServiceCheck:
     status: partial
 CoreSystem:
     status: partial
