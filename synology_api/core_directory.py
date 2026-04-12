@@ -14,10 +14,10 @@ import json
 
 class CoreDirectory(base_api.BaseApi):
     """
-    Core Directory and DirectoryServiceCheck API implementation for Synology NAS.
+    Core Directory API implementation for Synology NAS.
 
-    Covers SYNO.Core.Directory.* and SYNO.Core.DirectoryServiceCheck.* endpoints
-    not already present in core_sys_info.py.
+    Covers SYNO.Core.Directory.* endpoints including Azure SSO, domain
+    configuration, LDAP, OIDC, and SAML-based SSO settings.
     """
 
     # ================================================================== #
