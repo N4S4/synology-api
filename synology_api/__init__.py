@@ -12,6 +12,7 @@ from . import \
     core_certificate, \
     core_directory, \
     core_directory_service_check, \
+    core_external_device, \
     core_group, \
     core_iscsi, \
     core_package, \
