@@ -10,6 +10,7 @@ from . import \
     core_active_backup, \
     core_backup, \
     core_certificate, \
+    core_directory, \
     core_group, \
     core_iscsi, \
     core_package, \
