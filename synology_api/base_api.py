@@ -36,9 +36,14 @@ class BaseApi(object):
     otp_code : str, optional
         The OTP code to use for authentication. Defaults to `None`.
     device_id : str, optional
-        Device ID for device binding. Defaults to `None`.
+        Device ID for device binding (trusted device, skips OTP). Defaults to
+        `None`.
     device_name : str, optional
         Device name for device binding. Defaults to `None`.
+    enable_device_token : bool, optional
+        When True, request a device token from DSM after a successful OTP
+        login.  Read the token back via the ``did`` attribute and persist it
+        for use as ``device_id`` in future sessions. Defaults to `False`.
     application : str, optional
         The application context for API list retrieval. Defaults to `'Core'`.
     """
@@ -58,6 +63,7 @@ class BaseApi(object):
                  otp_code: Optional[str] = None,
                  device_id: Optional[str] = None,
                  device_name: Optional[str] = None,
+                 enable_device_token: bool = False,
                  application: str = 'Core',
                  ) -> None:
         """
@@ -84,9 +90,14 @@ class BaseApi(object):
         otp_code : str, optional
             The OTP code to use for authentication. Defaults to `None`.
         device_id : str, optional
-            Device ID for device binding. Defaults to `None`.
+            Device ID for a previously trusted device; when supplied DSM skips
+            OTP verification. Defaults to `None`.
         device_name : str, optional
             Device name for device binding. Defaults to `None`.
+        enable_device_token : bool, optional
+            When True, ask DSM to issue a device token after a successful OTP
+            login.  Retrieve it via ``self.did`` and store it for use as
+            ``device_id`` in future sessions. Defaults to `False`.
         application : str, optional
             The application context for API list retrieval. Defaults to `'Core'`.
 
@@ -107,7 +118,7 @@ class BaseApi(object):
 
             self.session = syn.Authentication(
                 ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code,
-                device_id, device_name
+                device_id, device_name, enable_device_token
             )
             self.session.login()
             self.session.get_api_list(self.application)
@@ -123,6 +134,7 @@ class BaseApi(object):
         self.gen_list: Any = self.session.full_api_list
         self._sid: str = self.session.sid
         self.base_url: str = self.session.base_url
+        self.did: Optional[str] = self.session.did
 
     def logout(self) -> None:
         """

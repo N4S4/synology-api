@@ -60,9 +60,12 @@ class Authentication:
     otp_code : str, optional
         One-time password for 2FA.
     device_id : str, optional
-        Device ID for device binding.
+        Device ID for device binding (trusted device, skips OTP).
     device_name : str, optional
         Device name for device binding.
+    enable_device_token : bool, optional
+        Request a device token after OTP login so future sessions can skip
+        OTP.  Read the returned token via the ``did`` property after login.
     """
 
     def __init__(self,
@@ -76,7 +79,8 @@ class Authentication:
                  debug: bool = True,
                  otp_code: Optional[str] = None,
                  device_id: Optional[str] = None,
-                 device_name: Optional[str] = None
+                 device_name: Optional[str] = None,
+                 enable_device_token: bool = False,
                  ) -> None:
         """
         Initialize the Authentication object for Synology DSM.
@@ -102,9 +106,15 @@ class Authentication:
         otp_code : str, optional
             One-time password for 2FA (default is None).
         device_id : str, optional
-            Device ID for device binding (default is None).
+            Device ID for device binding; when supplied DSM skips OTP
+            (default is None).
         device_name : str, optional
             Device name for device binding (default is None).
+        enable_device_token : bool, optional
+            When True, ask DSM to issue a device token after a successful OTP
+            login.  The token is available via the ``did`` property and can be
+            passed as ``device_id`` in future sessions to bypass OTP
+            (default is False).
 
         Returns
         -------
@@ -125,6 +135,8 @@ class Authentication:
         self._otp_code: Optional[str] = otp_code
         self._device_id: Optional[str] = device_id
         self._device_name: Optional[str] = device_name
+        self._enable_device_token: bool = enable_device_token
+        self._did: Optional[str] = None
 
         if self._verify is False:
             disable_warnings(InsecureRequestWarning)
@@ -218,9 +230,9 @@ class Authentication:
 
         params_enc = {
             'account': self._username,
-            'enable_device_token': 'no',
+            'enable_device_token': 'yes' if self._enable_device_token else 'no',
             'logintype': 'local',
-            'otp_code': '',
+            'otp_code': self._otp_code or '',
             'rememberme': 0,
             'passwd': self._password,
             'session': 'webui',  # Hardcoded for handle non administrator users API usage
@@ -232,8 +244,6 @@ class Authentication:
             encrypted_params = self.encrypt_params(params_enc)
             params.update(encrypted_params)
 
-        if self._otp_code:
-            params['otp_code'] = self._otp_code
         if self._device_id is not None and self._device_name is not None:
             params['device_id'] = self._device_id
             params['device_name'] = self._device_name
@@ -270,6 +280,7 @@ class Authentication:
             if not error_code:
                 self._sid = session_request_json['data']['sid']
                 self._syno_token = session_request_json['data']['synotoken']
+                self._did = session_request_json['data'].get('did')
                 self._session_expire = False
                 if self._debug is True:
                     print('User logged in, new session started!')
@@ -962,6 +973,22 @@ class Authentication:
             Synology token.
         """
         return self._syno_token
+
+    @property
+    def did(self) -> Optional[str]:
+        """
+        Get the device ID token issued by DSM after a trusted-device login.
+
+        This is populated only when ``enable_device_token=True`` was passed and
+        login succeeded with a valid OTP.  Persist this value and supply it as
+        ``device_id`` in future sessions to bypass OTP verification.
+
+        Returns
+        -------
+        str or None
+            Device ID token, or None if not yet issued.
+        """
+        return self._did
 
 
 class AESCipher(object):
