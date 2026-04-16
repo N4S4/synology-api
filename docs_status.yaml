@@ -21,6 +21,8 @@ CloudSync:
     status: finished
 CoreDirectory:
     status: partial
+CoreDirectoryServiceCheck:
+    status: partial
 CoreSystem:
     status: partial
 DhcpServer:
