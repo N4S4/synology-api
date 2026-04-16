@@ -25,6 +25,8 @@ CoreDirectoryServiceCheck:
     status: partial
 CoreSystem:
     status: partial
+CoreUpgrade:
+    status: partial
 DhcpServer:
     status: partial
 DirectoryServer:
