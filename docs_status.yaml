@@ -23,6 +23,8 @@ CoreDirectory:
     status: partial
 CoreDirectoryServiceCheck:
     status: partial
+CoreStorage:
+    status: partial
 CoreSystem:
     status: partial
 CoreUpgrade:
