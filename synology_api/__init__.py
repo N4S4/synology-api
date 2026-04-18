@@ -16,6 +16,7 @@ from . import \
     core_iscsi, \
     core_network, \
     core_package, \
+    core_security, \
     core_share, \
     core_storage, \
     core_sys_info, \
