@@ -25,6 +25,8 @@ CoreDirectoryServiceCheck:
     status: partial
 CoreExternalDevice:
     status: partial
+CoreSecurity:
+    status: partial
 CoreStorage:
     status: partial
 CoreSystem:
@@ -86,6 +88,6 @@ USBCopy:
 User:
     status: finished
 VPN:
-    status: not_started
+    status: partial
 Virtualization:
     status: not_started
