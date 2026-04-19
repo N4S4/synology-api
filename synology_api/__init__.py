@@ -10,12 +10,18 @@ from . import \
     core_active_backup, \
     core_backup, \
     core_certificate, \
+    core_directory, \
+    core_directory_service_check, \
     core_group, \
     core_iscsi, \
     core_notification, \
     core_package, \
+    core_security, \
     core_share, \
+    core_storage, \
     core_sys_info, \
+    core_system, \
+    core_upgrade, \
     core_user, \
     downloadstation, \
     log_center, \

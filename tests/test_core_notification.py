@@ -1,4 +1,4 @@
-"""Unit tests for core_notification — verifies all API namespaces are covered."""
+"""Unit tests for CoreNotification request construction."""
 
 import inspect
 import unittest
@@ -7,203 +7,207 @@ from unittest.mock import MagicMock, patch
 from synology_api.core_notification import CoreNotification
 
 
+API_LIST = {
+    'SYNO.Core.Notification.Advance.CustomizedData': {'path': 'entry.cgi', 'maxVersion': 1},
+    'SYNO.Core.Notification.Advance.FilterSettings': {'path': 'entry.cgi', 'maxVersion': 2},
+    'SYNO.Core.Notification.Advance.FilterSettings.Profile': {'path': 'entry.cgi', 'maxVersion': 3},
+    'SYNO.Core.Notification.Advance.FilterSettings.Template': {'path': 'entry.cgi', 'maxVersion': 4},
+    'SYNO.Core.Notification.Advance.Variables': {'path': 'entry.cgi', 'maxVersion': 5},
+    'SYNO.Core.Notification.Advance.WarningPercentage': {'path': 'entry.cgi', 'maxVersion': 6},
+    'SYNO.Core.Notification.CMS': {'path': 'entry.cgi', 'maxVersion': 7},
+    'SYNO.Core.Notification.CMS.Conf': {'path': 'entry.cgi', 'maxVersion': 8},
+    'SYNO.Core.Notification.Line': {'path': 'entry.cgi', 'maxVersion': 9},
+    'SYNO.Core.Notification.Mail': {'path': 'entry.cgi', 'maxVersion': 10},
+    'SYNO.Core.Notification.Mail.Auth': {'path': 'entry.cgi', 'maxVersion': 11},
+    'SYNO.Core.Notification.Mail.Oauth': {'path': 'entry.cgi', 'maxVersion': 12},
+    'SYNO.Core.Notification.Mail.Profile.Conf': {'path': 'entry.cgi', 'maxVersion': 13},
+    'SYNO.Core.Notification.Push': {'path': 'entry.cgi', 'maxVersion': 14},
+    'SYNO.Core.Notification.Push.AuthToken': {'path': 'entry.cgi', 'maxVersion': 15},
+    'SYNO.Core.Notification.Push.Mobile': {'path': 'entry.cgi', 'maxVersion': 16},
+    'SYNO.Core.Notification.Push.Webhook.Provider': {'path': 'entry.cgi', 'maxVersion': 17},
+    'SYNO.Core.Notification.SMS': {'path': 'entry.cgi', 'maxVersion': 18},
+    'SYNO.Core.Notification.SMS.Provider': {'path': 'entry.cgi', 'maxVersion': 19},
+    'SYNO.Core.Notification.Sysnotify': {'path': 'entry.cgi', 'maxVersion': 20},
+}
+
+
 def _make_instance():
     """Create a CoreNotification instance with mocked auth/session."""
     with patch('synology_api.core_notification.base_api.BaseApi.__init__', return_value=None):
         instance = CoreNotification.__new__(CoreNotification)
 
-    api_list = {
-        'SYNO.Core.Notification.Advance.CustomizedData': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Advance.FilterSettings': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Advance.FilterSettings.Profile': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Advance.FilterSettings.Template': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Advance.Variables': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Advance.WarningPercentage': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.CMS': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.CMS.Conf': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Line': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Mail': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Mail.Auth': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Mail.Oauth': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Mail.Profile.Conf': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Push': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Push.AuthToken': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Push.Mobile': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Push.Webhook.Provider': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.SMS': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.SMS.Provider': {'path': 'entry.cgi', 'maxVersion': 1},
-        'SYNO.Core.Notification.Sysnotify': {'path': 'entry.cgi', 'maxVersion': 1},
-    }
-    instance.gen_list = api_list
-    instance.request_data = MagicMock(return_value={'success': True, 'data': {}})
+    instance.gen_list = API_LIST
+    instance.request_data = MagicMock(
+        return_value={'success': True, 'data': {}})
     return instance
 
 
 class TestCoreNotification(unittest.TestCase):
-    """Tests for CoreNotification methods."""
+    """Tests for CoreNotification request contracts."""
 
     def setUp(self):
         self.instance = _make_instance()
 
-    def test_notification_advance_customized_data_get(self):
+    def assert_request(self, api_name, params):
+        self.instance.request_data.assert_called_once_with(
+            api_name,
+            API_LIST[api_name]['path'],
+            {'version': API_LIST[api_name]['maxVersion'], **params},
+        )
+
+    def test_customized_data_get_request_contract(self):
         self.instance.notification_advance_customized_data_get()
-        self.instance.request_data.assert_called_once()
+        self.assert_request(
+            'SYNO.Core.Notification.Advance.CustomizedData',
+            {'method': 'get'},
+        )
 
-    def test_notification_advance_customized_data_set(self):
-        self.instance.notification_advance_customized_data_set(data='test')
-        self.instance.request_data.assert_called_once()
+    def test_filter_settings_set_omits_none_values(self):
+        self.instance.notification_advance_filter_settings_set()
+        self.assert_request(
+            'SYNO.Core.Notification.Advance.FilterSettings',
+            {'method': 'set'},
+        )
 
-    def test_notification_advance_filter_profile_get(self):
-        self.instance.notification_advance_filter_profile_get()
-        self.instance.request_data.assert_called_once()
+    def test_filter_profile_set_includes_profile(self):
+        self.instance.notification_advance_filter_profile_set(
+            profile='profile-json')
+        self.assert_request(
+            'SYNO.Core.Notification.Advance.FilterSettings.Profile',
+            {'method': 'set', 'profile': 'profile-json'},
+        )
 
-    def test_notification_advance_filter_profile_set(self):
-        self.instance.notification_advance_filter_profile_set(profile={"test": True})
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_advance_filter_settings_get(self):
-        self.instance.notification_advance_filter_settings_get()
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_advance_filter_settings_set(self):
-        self.instance.notification_advance_filter_settings_set(settings='test')
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_advance_filter_template_get(self):
+    def test_filter_template_get_request_contract(self):
         self.instance.notification_advance_filter_template_get()
-        self.instance.request_data.assert_called_once()
+        self.assert_request(
+            'SYNO.Core.Notification.Advance.FilterSettings.Template',
+            {'method': 'get'},
+        )
 
-    def test_notification_advance_filter_template_set(self):
-        self.instance.notification_advance_filter_template_set(template='test')
-        self.instance.request_data.assert_called_once()
+    def test_variables_set_includes_payload(self):
+        self.instance.notification_advance_variables_set(variables='vars-json')
+        self.assert_request(
+            'SYNO.Core.Notification.Advance.Variables',
+            {'method': 'set', 'variables': 'vars-json'},
+        )
 
-    def test_notification_advance_variables_get(self):
-        self.instance.notification_advance_variables_get()
-        self.instance.request_data.assert_called_once()
+    def test_warning_percentage_set_preserves_integer(self):
+        self.instance.notification_advance_warning_percentage_set(
+            percentage=85)
+        self.assert_request(
+            'SYNO.Core.Notification.Advance.WarningPercentage',
+            {'method': 'set', 'percentage': 85},
+        )
 
-    def test_notification_advance_variables_set(self):
-        self.instance.notification_advance_variables_set(variables='test')
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_advance_warning_percentage_get(self):
-        self.instance.notification_advance_warning_percentage_get()
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_advance_warning_percentage_set(self):
-        self.instance.notification_advance_warning_percentage_set(percentage='test')
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_cms_conf_get(self):
-        self.instance.notification_cms_conf_get()
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_cms_conf_set(self):
-        self.instance.notification_cms_conf_set(conf='test')
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_cms_get(self):
+    def test_cms_get_request_contract(self):
         self.instance.notification_cms_get()
-        self.instance.request_data.assert_called_once()
+        self.assert_request(
+            'SYNO.Core.Notification.CMS',
+            {'method': 'get'},
+        )
 
-    def test_notification_cms_set(self):
-        self.instance.notification_cms_set(settings='test')
-        self.instance.request_data.assert_called_once()
+    def test_cms_conf_set_includes_conf(self):
+        self.instance.notification_cms_conf_set(conf='conf-json')
+        self.assert_request(
+            'SYNO.Core.Notification.CMS.Conf',
+            {'method': 'set', 'conf': 'conf-json'},
+        )
 
-    def test_notification_line_get(self):
-        self.instance.notification_line_get()
-        self.instance.request_data.assert_called_once()
+    def test_line_set_converts_boolean_and_includes_token(self):
+        self.instance.notification_line_set(token='line-token', enable=False)
+        self.assert_request(
+            'SYNO.Core.Notification.Line',
+            {'method': 'set', 'token': 'line-token', 'enable': 'false'},
+        )
 
-    def test_notification_line_set(self):
-        self.instance.notification_line_set(token='test', enable='test')
-        self.instance.request_data.assert_called_once()
+    def test_mail_set_includes_settings(self):
+        self.instance.notification_mail_set(settings='mail-json')
+        self.assert_request(
+            'SYNO.Core.Notification.Mail',
+            {'method': 'set', 'settings': 'mail-json'},
+        )
 
-    def test_notification_mail_auth_get(self):
-        self.instance.notification_mail_auth_get()
-        self.instance.request_data.assert_called_once()
+    def test_mail_auth_set_omits_missing_password(self):
+        self.instance.notification_mail_auth_set(
+            auth_type='login', username='notify')
+        self.assert_request(
+            'SYNO.Core.Notification.Mail.Auth',
+            {'method': 'set', 'auth_type': 'login', 'username': 'notify'},
+        )
 
-    def test_notification_mail_auth_set(self):
-        self.instance.notification_mail_auth_set(auth_type='test', username='test', password='test')
-        self.instance.request_data.assert_called_once()
+    def test_mail_oauth_set_includes_credentials(self):
+        self.instance.notification_mail_oauth_set(
+            client_id='cid', client_secret='secret', refresh_token='refresh')
+        self.assert_request(
+            'SYNO.Core.Notification.Mail.Oauth',
+            {
+                'method': 'set',
+                'client_id': 'cid',
+                'client_secret': 'secret',
+                'refresh_token': 'refresh',
+            },
+        )
 
-    def test_notification_mail_get(self):
-        self.instance.notification_mail_get()
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_mail_oauth_get(self):
-        self.instance.notification_mail_oauth_get()
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_mail_oauth_set(self):
-        self.instance.notification_mail_oauth_set(client_id='test', client_secret='test', refresh_token='test')
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_mail_profile_conf_get(self):
+    def test_mail_profile_conf_get_request_contract(self):
         self.instance.notification_mail_profile_conf_get()
-        self.instance.request_data.assert_called_once()
+        self.assert_request(
+            'SYNO.Core.Notification.Mail.Profile.Conf',
+            {'method': 'get'},
+        )
 
-    def test_notification_mail_profile_conf_set(self):
-        self.instance.notification_mail_profile_conf_set(profile={"test": True})
-        self.instance.request_data.assert_called_once()
+    def test_push_set_converts_boolean(self):
+        self.instance.notification_push_set(enable=True)
+        self.assert_request(
+            'SYNO.Core.Notification.Push',
+            {'method': 'set', 'enable': 'true'},
+        )
 
-    def test_notification_mail_set(self):
-        self.instance.notification_mail_set(settings='test')
-        self.instance.request_data.assert_called_once()
+    def test_push_auth_token_set_includes_token(self):
+        self.instance.notification_push_auth_token_set(token='push-token')
+        self.assert_request(
+            'SYNO.Core.Notification.Push.AuthToken',
+            {'method': 'set', 'token': 'push-token'},
+        )
 
-    def test_notification_push_auth_token_get(self):
-        self.instance.notification_push_auth_token_get()
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_push_auth_token_set(self):
-        self.instance.notification_push_auth_token_set(token='test')
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_push_get(self):
-        self.instance.notification_push_get()
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_push_mobile_get(self):
+    def test_push_mobile_get_request_contract(self):
         self.instance.notification_push_mobile_get()
-        self.instance.request_data.assert_called_once()
+        self.assert_request(
+            'SYNO.Core.Notification.Push.Mobile',
+            {'method': 'get'},
+        )
 
-    def test_notification_push_mobile_set(self):
-        self.instance.notification_push_mobile_set(settings='test')
-        self.instance.request_data.assert_called_once()
+    def test_webhook_provider_set_omits_missing_token(self):
+        self.instance.notification_push_webhook_provider_set(
+            provider='slack', url='https://example.invalid/hook')
+        self.assert_request(
+            'SYNO.Core.Notification.Push.Webhook.Provider',
+            {
+                'method': 'set',
+                'provider': 'slack',
+                'url': 'https://example.invalid/hook',
+            },
+        )
 
-    def test_notification_push_set(self):
-        self.instance.notification_push_set(enable='test')
-        self.instance.request_data.assert_called_once()
+    def test_sms_set_includes_settings(self):
+        self.instance.notification_sms_set(settings='sms-json')
+        self.assert_request(
+            'SYNO.Core.Notification.SMS',
+            {'method': 'set', 'settings': 'sms-json'},
+        )
 
-    def test_notification_push_webhook_provider_get(self):
-        self.instance.notification_push_webhook_provider_get()
-        self.instance.request_data.assert_called_once()
+    def test_sms_provider_set_omits_missing_api_key(self):
+        self.instance.notification_sms_provider_set(provider='twilio')
+        self.assert_request(
+            'SYNO.Core.Notification.SMS.Provider',
+            {'method': 'set', 'provider': 'twilio'},
+        )
 
-    def test_notification_push_webhook_provider_set(self):
-        self.instance.notification_push_webhook_provider_set(provider='test', url='test', token='test')
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_sms_get(self):
-        self.instance.notification_sms_get()
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_sms_provider_get(self):
-        self.instance.notification_sms_provider_get()
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_sms_provider_set(self):
-        self.instance.notification_sms_provider_set(provider='test', api_key='test')
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_sms_set(self):
-        self.instance.notification_sms_set(settings='test')
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_sysnotify_get(self):
+    def test_sysnotify_get_request_contract(self):
         self.instance.notification_sysnotify_get()
-        self.instance.request_data.assert_called_once()
-
-    def test_notification_sysnotify_set(self):
-        self.instance.notification_sysnotify_set(settings='test')
-        self.instance.request_data.assert_called_once()
+        self.assert_request(
+            'SYNO.Core.Notification.Sysnotify',
+            {'method': 'get'},
+        )
 
 
 class TestCoreNotificationCoverage(unittest.TestCase):
@@ -212,31 +216,9 @@ class TestCoreNotificationCoverage(unittest.TestCase):
     def test_all_namespaces_covered(self):
         """Every API namespace must be referenced in at least one method."""
         source = inspect.getsource(CoreNotification)
-        required = {
-        'SYNO.Core.Notification.Advance.CustomizedData',
-        'SYNO.Core.Notification.Advance.FilterSettings',
-        'SYNO.Core.Notification.Advance.FilterSettings.Profile',
-        'SYNO.Core.Notification.Advance.FilterSettings.Template',
-        'SYNO.Core.Notification.Advance.Variables',
-        'SYNO.Core.Notification.Advance.WarningPercentage',
-        'SYNO.Core.Notification.CMS',
-        'SYNO.Core.Notification.CMS.Conf',
-        'SYNO.Core.Notification.Line',
-        'SYNO.Core.Notification.Mail',
-        'SYNO.Core.Notification.Mail.Auth',
-        'SYNO.Core.Notification.Mail.Oauth',
-        'SYNO.Core.Notification.Mail.Profile.Conf',
-        'SYNO.Core.Notification.Push',
-        'SYNO.Core.Notification.Push.AuthToken',
-        'SYNO.Core.Notification.Push.Mobile',
-        'SYNO.Core.Notification.Push.Webhook.Provider',
-        'SYNO.Core.Notification.SMS',
-        'SYNO.Core.Notification.SMS.Provider',
-        'SYNO.Core.Notification.Sysnotify'
-    }
-        for ns in required:
-            with self.subTest(namespace=ns):
-                self.assertIn(f"'{ns}'", source)
+        for namespace in API_LIST:
+            with self.subTest(namespace=namespace):
+                self.assertIn(f"'{namespace}'", source)
 
     def test_method_count(self):
         """Verify expected number of public methods."""

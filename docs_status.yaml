@@ -21,6 +21,18 @@ CloudSync:
     status: finished
 CoreNotification:
     status: partial
+CoreDirectory:
+    status: partial
+CoreDirectoryServiceCheck:
+    status: partial
+CoreSecurity:
+    status: partial
+CoreStorage:
+    status: partial
+CoreSystem:
+    status: partial
+CoreUpgrade:
+    status: partial
 DhcpServer:
     status: partial
 DirectoryServer:
@@ -76,6 +88,6 @@ USBCopy:
 User:
     status: finished
 VPN:
-    status: not_started
+    status: partial
 Virtualization:
     status: not_started

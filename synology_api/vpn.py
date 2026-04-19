@@ -220,3 +220,201 @@ class VPN(base_api.BaseApi):
         if as_zip_file:
             return ZipFile(BytesIO(zip_as_bytes))
         return zip_as_bytes
+
+    # ------------------------------------------------------------------
+    # SYNO.Core.Network.VPN — DSM network VPN client settings
+    # ------------------------------------------------------------------
+
+    def core_network_vpn_get(self) -> dict[str, object] | str:
+        """
+        Get DSM network VPN settings.
+
+        Returns
+        -------
+        dict[str, object] or str
+            General DSM network VPN configuration.
+        """
+        api_name = 'SYNO.Core.Network.VPN'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def core_network_vpn_set(
+        self,
+        reconnect: bool = True,
+        interval: int = 30
+    ) -> dict[str, object] | str:
+        """
+        Set DSM network VPN settings.
+
+        Parameters
+        ----------
+        reconnect : bool, optional
+            Enable automatic reconnection. Defaults to True.
+        interval : int, optional
+            Reconnection interval in seconds. Defaults to 30.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
+        api_name = 'SYNO.Core.Network.VPN'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'set',
+            'reconnect': str(reconnect).lower(),
+            'interval': interval,
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def core_network_openvpn_ca_get(self) -> dict[str, object] | str:
+        """
+        Get DSM network OpenVPN certificate authority information.
+
+        Returns
+        -------
+        dict[str, object] or str
+            OpenVPN CA certificate details.
+        """
+        api_name = 'SYNO.Core.Network.VPN.OpenVPN.CA'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def core_network_openvpn_ca_set(
+        self,
+        ca_path: Optional[str] = None
+    ) -> dict[str, object] | str:
+        """
+        Set DSM network OpenVPN CA certificate information.
+
+        Parameters
+        ----------
+        ca_path : str, optional
+            Path to the CA certificate file on the NAS.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
+        api_name = 'SYNO.Core.Network.VPN.OpenVPN.CA'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'set'}
+        if ca_path is not None:
+            req_param['ca_path'] = ca_path
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def core_network_openvpn_with_conf_get(self) -> dict[str, object] | str:
+        """
+        Get DSM network OpenVPN profile configured through an ovpn file.
+
+        Returns
+        -------
+        dict[str, object] or str
+            OpenVPN config-file-based profile details.
+        """
+        api_name = 'SYNO.Core.Network.VPN.OpenVPNWithConf'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def core_network_openvpn_with_conf_set(
+        self,
+        conf_path: Optional[str] = None,
+        username: Optional[str] = None,
+        password: Optional[str] = None
+    ) -> dict[str, object] | str:
+        """
+        Set DSM network OpenVPN profile configured through an ovpn file.
+
+        Parameters
+        ----------
+        conf_path : str, optional
+            Path to the ovpn config file on the NAS.
+        username : str, optional
+            Username for VPN authentication.
+        password : str, optional
+            Password for VPN authentication.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
+        api_name = 'SYNO.Core.Network.VPN.OpenVPNWithConf'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'set'}
+        if conf_path is not None:
+            req_param['conf_path'] = conf_path
+        if username is not None:
+            req_param['username'] = username
+        if password is not None:
+            req_param['password'] = password
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def core_network_openvpn_with_conf_certs_get(self) -> dict[str, object] | str:
+        """
+        Get certificates for DSM network OpenVPN config-file-based profiles.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Certificate details for the OpenVPN config profile.
+        """
+        api_name = 'SYNO.Core.Network.VPN.OpenVPNWithConf.Certs'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def core_network_openvpn_with_conf_certs_set(
+        self,
+        cert_path: Optional[str] = None,
+        key_path: Optional[str] = None,
+        ca_path: Optional[str] = None
+    ) -> dict[str, object] | str:
+        """
+        Set certificates for DSM network OpenVPN config-file-based profiles.
+
+        Parameters
+        ----------
+        cert_path : str, optional
+            Path to the client certificate file on the NAS.
+        key_path : str, optional
+            Path to the private key file on the NAS.
+        ca_path : str, optional
+            Path to the CA certificate file on the NAS.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
+        api_name = 'SYNO.Core.Network.VPN.OpenVPNWithConf.Certs'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'set'}
+        if cert_path is not None:
+            req_param['cert_path'] = cert_path
+        if key_path is not None:
+            req_param['key_path'] = key_path
+        if ca_path is not None:
+            req_param['ca_path'] = ca_path
+
+        return self.request_data(api_name, api_path, req_param)
