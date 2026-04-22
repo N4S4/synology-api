@@ -12,9 +12,11 @@ from . import \
     core_certificate, \
     core_directory, \
     core_directory_service_check, \
+    core_external_device, \
     core_group, \
     core_iscsi, \
     core_network, \
+    core_notification, \
     core_package, \
     core_security, \
     core_share, \
