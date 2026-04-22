@@ -27,6 +27,8 @@ CoreDirectoryServiceCheck:
     status: partial
 CoreExternalDevice:
     status: partial
+CoreNetwork:
+    status: partial
 CoreSecurity:
     status: partial
 CoreStorage:
