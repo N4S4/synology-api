@@ -19,6 +19,8 @@ Certificate:
     status: partial
 CloudSync:
     status: finished
+CoreNotification:
+    status: partial
 CoreDirectory:
     status: partial
 CoreDirectoryServiceCheck:

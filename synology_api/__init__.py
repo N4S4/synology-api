@@ -15,6 +15,7 @@ from . import \
     core_external_device, \
     core_group, \
     core_iscsi, \
+    core_notification, \
     core_package, \
     core_security, \
     core_share, \
