@@ -37,6 +37,8 @@ CoreServiceApps:
     status: partial
 CoreServiceHW:
     status: partial
+CoreServiceUser:
+    status: partial
 CoreStorage:
     status: partial
 CoreSystem:
