@@ -36,18 +36,21 @@ class Virtualization(base_api.BaseApi):
         Enable debug mode. Default is True.
     otp_code : str, optional
         One-time password for 2FA, if required.
+    quickconnect_id : str, optional
+        QuickConnect ID for relay-based access. Defaults to None.
     """
 
     def __init__(self,
-                 ip_address: str,
-                 port: str,
-                 username: str,
-                 password: str,
+                 ip_address: Optional[str] = None,
+                 port: Optional[str] = None,
+                 username: Optional[str] = None,
+                 password: Optional[str] = None,
                  secure: bool = False,
                  cert_verify: bool = False,
                  dsm_version: int = 7,
                  debug: bool = True,
-                 otp_code: Optional[str] = None
+                 otp_code: Optional[str] = None,
+                 quickconnect_id: Optional[str] = None
                  ) -> None:
         """
         Initialize the Virtualization API wrapper.
@@ -72,10 +75,14 @@ class Virtualization(base_api.BaseApi):
             Enable debug mode. Default is True.
         otp_code : str, optional
             One-time password for 2FA, if required.
+        quickconnect_id : str, optional
+            QuickConnect ID for relay-based access. When provided, `ip_address`
+            and `port` are not required.
         """
 
         super(Virtualization, self).__init__(ip_address, port, username, password, secure, cert_verify,
-                                             dsm_version, debug, otp_code)
+                                             dsm_version, debug, otp_code, application='Core',
+                                             quickconnect_id=quickconnect_id)
 
         self._taskid_list: Any = []
         self._network_group_list: Any = []

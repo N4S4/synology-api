@@ -37,20 +37,23 @@ class Certificate(base_api.BaseApi):
         Enable debug output (default is True).
     otp_code : Optional[str], optional
         One-time password for 2FA (default is None).
+    quickconnect_id : str, optional
+        QuickConnect ID for relay-based access. Defaults to None.
     """
 
     _API_NAME = 'SYNO.Core.Certificate.CRT'
 
     def __init__(self,
-                 ip_address: str,
-                 port: str,
-                 username: str,
-                 password: str,
+                 ip_address: Optional[str] = None,
+                 port: Optional[str] = None,
+                 username: Optional[str] = None,
+                 password: Optional[str] = None,
                  secure: bool = False,
                  cert_verify: bool = False,
                  dsm_version: int = 7,
                  debug: bool = True,
-                 otp_code: Optional[str] = None
+                 otp_code: Optional[str] = None,
+                 quickconnect_id: Optional[str] = None
                  ) -> None:
         """
         Initialize the Certificate API wrapper.
@@ -75,9 +78,12 @@ class Certificate(base_api.BaseApi):
             Enable debug output (default is True).
         otp_code : Optional[str], optional
             One-time password for 2FA (default is None).
+        quickconnect_id : str, optional
+            QuickConnect ID for relay-based access. When provided, `ip_address`
+            and `port` are not required.
         """
         super(Certificate, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug,
-                                          otp_code)
+                                          otp_code, application='Core', quickconnect_id=quickconnect_id)
         self._debug: bool = debug
 
     def _base_certificate_methods(self,

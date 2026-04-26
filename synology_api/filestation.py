@@ -112,13 +112,15 @@ class FileStation(base_api.BaseApi):
         Name of the device. Default is None.
     interactive_output : bool, optional
         If True, enables interactive output. Default is False.
+    quickconnect_id : str, optional
+        QuickConnect ID for relay-based access. Defaults to None.
     """
 
     def __init__(self,
-                 ip_address: str,
-                 port: str,
-                 username: str,
-                 password: str,
+                 ip_address: Optional[str] = None,
+                 port: Optional[str] = None,
+                 username: Optional[str] = None,
+                 password: Optional[str] = None,
                  secure: bool = False,
                  cert_verify: bool = False,
                  dsm_version: int = 7,
@@ -126,7 +128,8 @@ class FileStation(base_api.BaseApi):
                  otp_code: Optional[str] = None,
                  device_id: Optional[str] = None,
                  device_name: Optional[str] = None,
-                 interactive_output: bool = True
+                 interactive_output: bool = True,
+                 quickconnect_id: Optional[str] = None
                  ) -> None:
         """
         Initialize FileStation API client.
@@ -157,9 +160,13 @@ class FileStation(base_api.BaseApi):
             Device name for authentication.
         interactive_output : bool, optional
             If True, outputs are formatted for interactive use. Default is True.
+        quickconnect_id : str, optional
+            QuickConnect ID for relay-based access. When provided, `ip_address`
+            and `port` are not required.
         """
         super(FileStation, self).__init__(ip_address, port, username, password, secure, cert_verify,
-                                          dsm_version, debug, otp_code, device_id, device_name, 'FileStation')
+                                          dsm_version, debug, otp_code, device_id, device_name, 'FileStation',
+                                          quickconnect_id=quickconnect_id)
 
         self._dir_taskid: str = ''
         self._dir_taskid_list: list[str] = []
