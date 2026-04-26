@@ -19,6 +19,7 @@ from . import \
     core_notification, \
     core_package, \
     core_security, \
+    core_security_auth, \
     core_service_apps, \
     core_service_hw, \
     core_share, \
