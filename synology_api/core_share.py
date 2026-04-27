@@ -13,6 +13,23 @@ from . import base_api
 class Share(base_api.BaseApi):
     """Core Share API implementation."""
 
+    @staticmethod
+    def _uses_json_request_format(info: dict) -> bool:
+        """
+        Check whether the DSM API declares JSON-formatted request values.
+
+        Parameters
+        ----------
+        info : dict
+            API metadata from `SYNO.API.Info`.
+
+        Returns
+        -------
+        bool
+            True when the API request format is `JSON`.
+        """
+        return info.get("requestFormat") == "JSON"
+
     def validate_set(self, name: str, vol_path: str, desc: str = "", enable_share_compress: bool = False, enable_share_cow: bool = False, enc_passwd: str = "", encryption: bool = False) -> dict:
         """
         Validate set of parameter for a new / modified shared folder.
@@ -238,29 +255,51 @@ class Share(base_api.BaseApi):
         api_name = "SYNO.Core.Share"
         info = self.core_list[api_name]
         api_path = info["path"]
+        shareinfo = {
+            "name": name,
+            "vol_path": vol_path,
+            "desc": desc,
+            "name_org": name_org,
+            "enable_recycle_bin": enable_recycle_bin,
+            "recycle_bin_admin_only": recycle_bin_admin_only,
+        }
+        if hidden:
+            shareinfo["hidden"] = hidden
+        if hide_unreadable:
+            shareinfo["hide_unreadable"] = hide_unreadable
+        if enable_share_cow:
+            shareinfo["enable_share_cow"] = enable_share_cow
+        if enable_share_compress:
+            shareinfo["enable_share_compress"] = enable_share_compress
+        if share_quota:
+            shareinfo["share_quota"] = share_quota
+        if encryption:
+            shareinfo["encryption"] = encryption
+            shareinfo["enc_passwd"] = enc_passwd
+
         req_param = {
             "method": "create",
             "version": info['maxVersion'],
             "name": name,
         }
+
+        if self._uses_json_request_format(info):
+            if self.session._secure:
+                req_param["shareinfo"] = shareinfo
+            else:
+                encrypted_params = self.session.encrypt_params({
+                    "shareinfo": json.dumps(shareinfo, separators=(",", ":"))
+                })
+                req_param.update({
+                    key: json.loads(value) if isinstance(value, str) else value
+                    for key, value in encrypted_params.items()
+                })
+            return self.session.request_webapi_data(
+                api_name, api_path, req_param, method="post")
+
         req_param_encrypted = {
-            "shareinfo": json.dumps({
-                "desc": desc,
-                "enable_recycle_bin": enable_recycle_bin,
-                "enable_share_compress": enable_share_compress,
-                "enable_share_cow": enable_share_cow,
-                "name": name,
-                "name_org": name_org,
-                "vol_path": vol_path,
-                "recycle_bin_admin_only": recycle_bin_admin_only,
-                "hidden": hidden,
-                "hide_unreadable": hide_unreadable,
-                "share_quota": share_quota,
-                "encryption": encryption,
-                "enc_passwd": enc_passwd,
-            })
+            "shareinfo": json.dumps(shareinfo, separators=(",", ":"))
         }
-        # If using https don't use encryption
         if self.session._secure:
             req_param.update(req_param_encrypted)
         else:
