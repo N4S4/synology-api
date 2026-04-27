@@ -565,7 +565,7 @@ The list of users and groups or an error message.
 
 
 ### `list_item_in_folders`
-List all items in all folders in Personal Space.  
+List items in a Personal Space folder.
   
 #### Internal API
 <div class="padding-left--md">
@@ -574,14 +574,14 @@ List all items in all folders in Personal Space.
   
 #### Parameters
 <div class="padding-left--md">
-**_offset_** `int`  
-Specify how many shared folders are skipped before beginning to return listed shared folders.  
-  
-**_limit_** `int`  
-Number of shared folders requested. Set to `0` to list all shared folders.  
-  
-**_folder_id_** `int`  
-ID of folder.  
+**_offset_** `int`
+Specify how many items are skipped before beginning to return listed items.
+
+**_limit_** `int`
+Number of items requested. Default is 1000.
+
+**_folder_id_** `int`
+ID of the folder returned by `list_folders`. Required by Synology Photos item listing.
   
 **_sort_by_** `str`  
 Possible values: 'filename', 'filesize', 'takentime', 'item_type'.  
@@ -614,8 +614,58 @@ The list of items or an error message.
 ---
 
 
+### `list_item_in_team_folders`
+List items in a Team Space folder.
+
+#### Internal API
+<div class="padding-left--md">
+`SYNO.FotoTeam.Browse.Item`
+</div>
+
+#### Parameters
+<div class="padding-left--md">
+**_offset_** `int`
+Specify how many items are skipped before beginning to return listed items.
+
+**_limit_** `int`
+Number of items requested. Default is 1000.
+
+**_folder_id_** `int`
+ID of the folder returned by `list_teams_folders`. Required by Synology Photos item listing.
+
+**_sort_by_** `str`
+Possible values: 'filename', 'filesize', 'takentime', 'item_type'.
+
+**_sort_direction_** `str`
+Possible values: 'asc' or 'desc'. Defaults to: 'desc'.
+
+**_type_** `str`
+Possible values: 'photo', 'video', 'live'.
+
+**_passphrase_** `str`
+Passphrase for a shared album.
+
+**_additional_** `list`
+Additional fields to include.
+Possible values:
+    `["thumbnail","resolution", "orientation", "video_convert", "video_meta", "provider_user_id", "exif", "tag", "description", "gps", "geocoding_id", "address", "person"]`.
+
+
+</div>
+#### Returns
+<div class="padding-left--md">
+`dict[str, object] or str`
+The list of team items or an error message.
+
+</div>
+
+
+
+---
+
+
 ### `list_search_filters`
-List available search filters.  
+List available search filters.
   
 #### Internal API
 <div class="padding-left--md">
