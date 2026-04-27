@@ -8,7 +8,7 @@ core_storage, core_upgrade, core_system, or core_external_device modules.
 
 from __future__ import annotations
 import json
-from typing import Optional
+from typing import Optional, Sequence
 from . import base_api
 
 
@@ -182,6 +182,20 @@ class CoreServiceApps(base_api.BaseApi):
         return self.request_data(api_name, info['path'],
                                  {'version': info['maxVersion'], 'method': 'get'})
 
+    def app_portal_access_control_list(self) -> dict[str, object] | str:
+        """
+        List application portal access control entries.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Result of the app portal access control list operation.
+        """
+        api_name = 'SYNO.Core.AppPortal.AccessControl'
+        info = self.gen_list[api_name]
+        return self.request_data(api_name, info['path'],
+                                 {'version': info['maxVersion'], 'method': 'list'})
+
     def app_portal_access_control_set(self, **kwargs) -> dict[str, object] | str:
         """
         Set application portal access control settings.
@@ -202,6 +216,49 @@ class CoreServiceApps(base_api.BaseApi):
         req_param.update(kwargs)
         return self.request_data(api_name, info['path'], req_param)
 
+    def app_portal_access_control_update(self, entry: dict[str, object] | str) -> dict[str, object] | str:
+        """
+        Update an application portal access control entry.
+
+        Parameters
+        ----------
+        entry : dict[str, object] or str
+            Access control entry to update. Dict values are JSON encoded before
+            they are sent to DSM.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Result of the app portal access control update operation.
+        """
+        api_name = 'SYNO.Core.AppPortal.AccessControl'
+        info = self.gen_list[api_name]
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'update',
+            'entry': self._format_app_portal_entry(entry),
+        }
+        return self.request_data(api_name, info['path'], req_param)
+
+    @staticmethod
+    def _format_app_portal_entry(entry: dict[str, object] | str) -> str:
+        """
+        Format an AppPortal entry payload for DSM.
+
+        Parameters
+        ----------
+        entry : dict[str, object] or str
+            Entry payload as a Python dictionary or pre-encoded JSON string.
+
+        Returns
+        -------
+        str
+            JSON string to send to DSM.
+        """
+        if isinstance(entry, str):
+            return entry
+        return json.dumps(entry, separators=(',', ':'))
+
     def app_portal_config_get(self) -> dict[str, object] | str:
         """
         Get application portal configuration.
@@ -218,35 +275,121 @@ class CoreServiceApps(base_api.BaseApi):
 
     def app_portal_reverse_proxy_get(self) -> dict[str, object] | str:
         """
-        Get reverse proxy rules for app portal.
+        List reverse proxy rules for app portal.
 
         Returns
         -------
         dict[str, object] or str
-            Result of the app portal reverse proxy get operation.
+            Result of the app portal reverse proxy list operation.
+        """
+        return self.app_portal_reverse_proxy_list()
+
+    def app_portal_reverse_proxy_list(self) -> dict[str, object] | str:
+        """
+        List reverse proxy rules for app portal.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Result of the app portal reverse proxy list operation.
         """
         api_name = 'SYNO.Core.AppPortal.ReverseProxy'
         info = self.gen_list[api_name]
         return self.request_data(api_name, info['path'],
-                                 {'version': info['maxVersion'], 'method': 'get'})
+                                 {'version': info['maxVersion'], 'method': 'list'})
 
-    def app_portal_reverse_proxy_set(self, **kwargs) -> dict[str, object] | str:
+    def app_portal_reverse_proxy_create(self, entry: dict[str, object] | str) -> dict[str, object] | str:
         """
-        Set reverse proxy rules for app portal.
+        Create an app portal reverse proxy rule.
 
         Parameters
         ----------
-        **kwargs : object
-            Additional DSM API parameters for the set operation.
+        entry : dict[str, object] or str
+            Reverse proxy entry to create. Dict values are JSON encoded before
+            they are sent to DSM.
 
         Returns
         -------
         dict[str, object] or str
-            Result of the app portal reverse proxy set operation.
+            Result of the app portal reverse proxy create operation.
         """
         api_name = 'SYNO.Core.AppPortal.ReverseProxy'
         info = self.gen_list[api_name]
-        req_param = {'version': info['maxVersion'], 'method': 'set'}
+        return self.request_data(api_name, info['path'], {
+            'version': info['maxVersion'],
+            'method': 'create',
+            'entry': self._format_app_portal_entry(entry),
+        })
+
+    def app_portal_reverse_proxy_update(self, entry: dict[str, object] | str) -> dict[str, object] | str:
+        """
+        Update an app portal reverse proxy rule.
+
+        Parameters
+        ----------
+        entry : dict[str, object] or str
+            Reverse proxy entry to update. Dict values are JSON encoded before
+            they are sent to DSM.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Result of the app portal reverse proxy update operation.
+        """
+        api_name = 'SYNO.Core.AppPortal.ReverseProxy'
+        info = self.gen_list[api_name]
+        return self.request_data(api_name, info['path'], {
+            'version': info['maxVersion'],
+            'method': 'update',
+            'entry': self._format_app_portal_entry(entry),
+        })
+
+    def app_portal_reverse_proxy_delete(self, uuids: str | Sequence[str]) -> dict[str, object] | str:
+        """
+        Delete app portal reverse proxy rules.
+
+        Parameters
+        ----------
+        uuids : str or Sequence[str]
+            Reverse proxy UUID or UUIDs to delete.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Result of the app portal reverse proxy delete operation.
+        """
+        api_name = 'SYNO.Core.AppPortal.ReverseProxy'
+        info = self.gen_list[api_name]
+        if isinstance(uuids, str):
+            if uuids.lstrip().startswith('['):
+                uuids_payload = uuids
+            else:
+                uuids_payload = json.dumps([uuids], separators=(',', ':'))
+        else:
+            uuids_payload = json.dumps(list(uuids), separators=(',', ':'))
+        return self.request_data(api_name, info['path'], {
+            'version': info['maxVersion'],
+            'method': 'delete',
+            'uuids': uuids_payload,
+        })
+
+    def app_portal_reverse_proxy_set(self, **kwargs) -> dict[str, object] | str:
+        """
+        Update reverse proxy rules for app portal.
+
+        Parameters
+        ----------
+        **kwargs : object
+            Additional DSM API parameters for the update operation.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Result of the app portal reverse proxy update operation.
+        """
+        api_name = 'SYNO.Core.AppPortal.ReverseProxy'
+        info = self.gen_list[api_name]
+        req_param = {'version': info['maxVersion'], 'method': 'update'}
         req_param.update(kwargs)
         return self.request_data(api_name, info['path'], req_param)
 
