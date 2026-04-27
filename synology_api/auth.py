@@ -33,6 +33,7 @@ from noise.connection import NoiseConnection, Keypair
 import time
 
 USE_EXCEPTIONS: bool = True
+QUICKCONNECT_GLOBAL_URL = "https://global.quickconnect.to/Serv.php"
 
 
 class Authentication:
@@ -63,20 +64,23 @@ class Authentication:
         Device ID for device binding.
     device_name : str, optional
         Device name for device binding.
+    quickconnect_id : str, optional
+        QuickConnect ID for relay-based access.
     """
 
     def __init__(self,
-                 ip_address: str,
-                 port: str,
-                 username: str,
-                 password: str,
+                 ip_address: Optional[str] = None,
+                 port: Optional[str] = None,
+                 username: Optional[str] = None,
+                 password: Optional[str] = None,
                  secure: bool = False,
                  cert_verify: bool = False,
                  dsm_version: int = 7,
                  debug: bool = True,
                  otp_code: Optional[str] = None,
                  device_id: Optional[str] = None,
-                 device_name: Optional[str] = None
+                 device_name: Optional[str] = None,
+                 quickconnect_id: Optional[str] = None
                  ) -> None:
         """
         Initialize the Authentication object for Synology DSM.
@@ -105,17 +109,30 @@ class Authentication:
             Device ID for device binding (default is None).
         device_name : str, optional
             Device name for device binding (default is None).
+        quickconnect_id : str, optional
+            QuickConnect ID for relay-based access. When provided, HTTPS is
+            always used and `ip_address`/`port` are not required.
 
         Returns
         -------
         None
             Just setter, no return values.
         """
-        self._ip_address: str = ip_address
-        self._port: str = port
+        if quickconnect_id:
+            missing_credentials = not all([username, password])
+        else:
+            missing_credentials = not all(
+                [ip_address, port, username, password])
+        if missing_credentials:
+            raise ValueError(
+                "Missing required credentials for initial authentication.")
+
+        self._quickconnect_id: Optional[str] = quickconnect_id
+        self._ip_address: Optional[str] = ip_address
+        self._port: Optional[str] = port
         self._username: str = username
         self._password: str = password
-        self._secure: bool = secure
+        self._secure: bool = True if self._quickconnect_id else secure
         self._sid: Optional[str] = None
         self._syno_token: Optional[str] = None
         self._session_expire: bool = True
@@ -129,13 +146,202 @@ class Authentication:
         if self._verify is False:
             disable_warnings(InsecureRequestWarning)
 
-        schema = 'https' if secure else 'http'
-
-        self._base_url = '%s://%s:%s/webapi/' % (
-            schema, self._ip_address, self._port)
+        self._requests_session: Optional[requests.Session] = None
+        self._quickconnect_headers: dict[str, str] = {}
+        if self._quickconnect_id:
+            self._base_url = self._build_quickconnect_base_url()
+        else:
+            schema = 'https' if secure else 'http'
+            self._base_url = '%s://%s:%s/webapi/' % (
+                schema, self._ip_address, self._port)
 
         self.full_api_list = {}
         self.app_api_list = {}
+
+    def _quickconnect_payload(self, command: str) -> list[dict[str, object]]:
+        """
+        Build a QuickConnect relay discovery request.
+
+        Parameters
+        ----------
+        command : str
+            QuickConnect command to send to Synology's relay service.
+
+        Returns
+        -------
+        list[dict[str, object]]
+            Request payload accepted by the QuickConnect service.
+        """
+        return [{
+            "version": 1,
+            "command": command,
+            "id": "mainapp_https",
+            "serverID": self._quickconnect_id,
+            "stop_when_error": False,
+            "stop_when_success": command == "request_tunnel",
+            "is_gofile": False,
+            "path": ""
+        }]
+
+    @staticmethod
+    def _quickconnect_response_data(response_json: list[dict[str, object]],
+                                    command: str) -> dict[str, object]:
+        """
+        Validate and unwrap a QuickConnect response.
+
+        Parameters
+        ----------
+        response_json : list[dict[str, object]]
+            JSON returned by Synology's QuickConnect service.
+        command : str
+            Command used for the request, included in error messages.
+
+        Returns
+        -------
+        dict[str, object]
+            First successful response item.
+        """
+        if not response_json or response_json[0].get("errno") != 0:
+            error = response_json[0] if response_json else {}
+            errno = error.get("errno", "unknown")
+            errinfo = error.get("errinfo", "")
+            raise SynoConnectionError(
+                error_message=f"QuickConnect {command} failed: {errno} {errinfo}".strip())
+        return response_json[0]
+
+    def _build_quickconnect_base_url(self) -> str:
+        """
+        Resolve a QuickConnect ID to a relay URL and prime relay cookies.
+
+        Returns
+        -------
+        str
+            Base DSM webapi URL through the QuickConnect relay.
+        """
+        try:
+            server_info_response = requests.post(
+                QUICKCONNECT_GLOBAL_URL,
+                json=self._quickconnect_payload("get_server_info"),
+                verify=self._verify
+            )
+            server_info_response.raise_for_status()
+            server_info = self._quickconnect_response_data(
+                server_info_response.json(), "get_server_info")
+            control_host = server_info.get("env", {}).get("control_host")
+            if not control_host:
+                raise SynoConnectionError(
+                    error_message="QuickConnect get_server_info did not return a control_host")
+
+            tunnel_response = requests.post(
+                f"https://{control_host}/Serv.php",
+                json=self._quickconnect_payload("request_tunnel"),
+                verify=self._verify
+            )
+            tunnel_response.raise_for_status()
+            tunnel_info = self._quickconnect_response_data(
+                tunnel_response.json(), "request_tunnel")
+        except requests.exceptions.ConnectionError as e:
+            raise SynoConnectionError(error_message=e.args[0])
+        except requests.exceptions.HTTPError as e:
+            raise HTTPError(error_message=str(e.args))
+        except requests.exceptions.JSONDecodeError as e:
+            raise JSONDecodeError(error_message=str(e.args))
+
+        relay_region = tunnel_info.get("env", {}).get("relay_region")
+        pingpong_path = tunnel_info.get("server", {}).get("pingpong_path")
+        if not relay_region or not pingpong_path:
+            raise SynoConnectionError(
+                error_message="QuickConnect request_tunnel did not return relay_region and pingpong_path")
+
+        quickconnect_origin = f"https://{self._quickconnect_id}.{relay_region}.quickconnect.to"
+        self._ip_address = f"{self._quickconnect_id}.{relay_region}.quickconnect.to"
+        self._port = "443"
+        self._quickconnect_headers = {
+            "Origin": quickconnect_origin,
+            "Referer": quickconnect_origin
+        }
+        self._requests_session = requests.Session()
+        try:
+            ping_response = self._get(
+                f"{quickconnect_origin}{pingpong_path}", verify=self._verify)
+            ping_response.raise_for_status()
+        except requests.exceptions.ConnectionError as e:
+            raise SynoConnectionError(error_message=e.args[0])
+        except requests.exceptions.HTTPError as e:
+            raise HTTPError(error_message=str(e.args))
+
+        return f"{quickconnect_origin}/webapi/"
+
+    def _merge_headers(self, headers: Optional[dict[str, str]] = None) -> dict[str, str] | None:
+        """
+        Merge QuickConnect relay headers into request headers.
+
+        Parameters
+        ----------
+        headers : dict[str, str], optional
+            Request-specific headers.
+
+        Returns
+        -------
+        dict[str, str] or None
+            Merged headers, or None when no headers are needed.
+        """
+        if not self._quickconnect_headers:
+            return headers
+        merged_headers = self._quickconnect_headers.copy()
+        if headers:
+            merged_headers.update(headers)
+        return merged_headers
+
+    def _get(self, url: str, params: Optional[dict[str, object]] = None, **kwargs) -> requests.Response:
+        """
+        Send a GET request through the active transport.
+
+        Parameters
+        ----------
+        url : str
+            Request URL.
+        params : dict[str, object], optional
+            Query parameters.
+        **kwargs : object
+            Additional request keyword arguments.
+
+        Returns
+        -------
+        requests.Response
+            Response from requests.
+        """
+        kwargs["headers"] = self._merge_headers(kwargs.get("headers"))
+        if kwargs["headers"] is None:
+            kwargs.pop("headers")
+        if self._requests_session:
+            return self._requests_session.get(url, params=params, **kwargs)
+        return requests.get(url, params=params, **kwargs)
+
+    def _post(self, url: str, data: Any = None, **kwargs) -> requests.Response:
+        """
+        Send a POST request through the active transport.
+
+        Parameters
+        ----------
+        url : str
+            Request URL.
+        data : Any, optional
+            Request body.
+        **kwargs : object
+            Additional request keyword arguments.
+
+        Returns
+        -------
+        requests.Response
+            Response from requests.
+        """
+        kwargs["headers"] = self._merge_headers(kwargs.get("headers"))
+        if kwargs["headers"] is None:
+            kwargs.pop("headers")
+        if self._requests_session:
+            return self._requests_session.post(url, data=data, **kwargs)
+        return requests.post(url, data=data, **kwargs)
 
     def get_ik_message(self) -> str:
         """
@@ -153,7 +359,7 @@ class Authentication:
             "method": "get",
             "version": "1"
         }
-        response = requests.post(url, data=data, verify=self._verify)
+        response = self._post(url, data=data, verify=self._verify)
 
         # Try to get cookie "_SSID"
         if response.status_code != 200:
@@ -209,7 +415,7 @@ class Authentication:
         LoginError
             If login fails due to an API error.
         """
-        login_api = 'auth.cgi'
+        login_api = 'entry.cgi' if self._quickconnect_id else 'auth.cgi'
         params = {'api': "SYNO.API.Auth", 'version': self._version,
                   'method': 'login', 'enable_syno_token': 'yes', 'client': 'browser'}
 
@@ -249,7 +455,7 @@ class Authentication:
             session_request_json: dict[str, object] = {}
             if USE_EXCEPTIONS:
                 try:
-                    session_request = requests.post(
+                    session_request = self._post(
                         self._base_url + login_api, data=params, verify=self._verify)
                     session_request.raise_for_status()
                     session_request_json = session_request.json()
@@ -261,7 +467,7 @@ class Authentication:
                     raise JSONDecodeError(error_message=str(e.args))
             else:
                 # Will raise its own errors:
-                session_request = requests.post(
+                session_request = self._post(
                     self._base_url + login_api, data=params, verify=self._verify)
                 session_request_json = session_request.json()
 
@@ -297,13 +503,13 @@ class Authentication:
         LogoutError
             If logout fails due to an API error.
         """
-        logout_api = 'auth.cgi?api=SYNO.API.Auth'
+        logout_api = 'entry.cgi?api=SYNO.API.Auth' if self._quickconnect_id else 'auth.cgi?api=SYNO.API.Auth'
         param = {'version': self._version,
                  'method': 'logout', 'session': 'webui'}
 
         if USE_EXCEPTIONS:
             try:
-                response = requests.get(
+                response = self._get(
                     self._base_url + logout_api, param, verify=self._verify)
                 response.raise_for_status()
                 response_json = response.json()
@@ -315,7 +521,7 @@ class Authentication:
             except requests.exceptions.JSONDecodeError as e:
                 raise JSONDecodeError(error_message=str(e.args))
         else:
-            response = requests.get(
+            response = self._get(
                 self._base_url + logout_api, param, verify=self._verify)
             error_code = self._get_error_code(response.json())
         self._session_expire = True
@@ -355,7 +561,7 @@ class Authentication:
         if USE_EXCEPTIONS:
             # Check request for error, and raise our own error.:
             try:
-                response = requests.get(
+                response = self._get(
                     self._base_url + query_path, list_query, verify=self._verify)
                 response.raise_for_status()
                 response_json = response.json()
@@ -367,7 +573,7 @@ class Authentication:
                 raise JSONDecodeError(error_message=str(e.args))
         else:
             # Will raise its own errors:
-            response_json = requests.get(
+            response_json = self._get(
                 self._base_url + query_path, list_query, verify=self._verify).json()
 
         if app is not None:
@@ -611,11 +817,11 @@ class Authentication:
         # We get it from the self._syno_token variable and by param 'enable_syno_token':'yes' in the login request
 
         if method == 'get':
-            response = requests.get(url, req_param, verify=self._verify, headers={
-                                    "X-SYNO-TOKEN": self._syno_token})
+            response = self._get(url, req_param, verify=self._verify, headers={
+                                 "X-SYNO-TOKEN": self._syno_token})
         elif method == 'post':
-            response = requests.post(url, req_param, verify=self._verify, headers={
-                                     "X-SYNO-TOKEN": self._syno_token})
+            response = self._post(url, req_param, verify=self._verify, headers={
+                                  "X-SYNO-TOKEN": self._syno_token})
 
         if response_json is True:
             return response.json()
@@ -680,17 +886,17 @@ class Authentication:
             # Catch and raise our own errors:
             try:
                 if method == 'get':
-                    response = requests.get(url, req_param, verify=self._verify, headers={
-                                            "X-SYNO-TOKEN": self._syno_token})
+                    response = self._get(url, req_param, verify=self._verify, headers={
+                                         "X-SYNO-TOKEN": self._syno_token})
                 elif method == 'post':
                     if data is None:
-                        response = requests.post(url, req_param, verify=self._verify, headers={
-                                                 "X-SYNO-TOKEN": self._syno_token})
+                        response = self._post(url, req_param, verify=self._verify, headers={
+                                              "X-SYNO-TOKEN": self._syno_token})
                     else:
                         url = ('%s%s' % (self._base_url, api_path)) + \
                             '/' + api_name
-                        response = requests.post(url, data=data, params=req_param, verify=self._verify, headers={
-                                                 "Content-Type": data.content_type, "X-SYNO-TOKEN": self._syno_token})
+                        response = self._post(url, data=data, params=req_param, verify=self._verify, headers={
+                                              "Content-Type": data.content_type, "X-SYNO-TOKEN": self._syno_token})
                 response.raise_for_status()
             except requests.exceptions.ConnectionError as e:
                 raise SynoConnectionError(error_message=e.args[0])
@@ -699,11 +905,11 @@ class Authentication:
         else:
             # Will raise its own error:
             if method == 'get':
-                response = requests.get(url, req_param, verify=self._verify, headers={
-                                        "X-SYNO-TOKEN": self._syno_token})
+                response = self._get(url, req_param, verify=self._verify, headers={
+                                     "X-SYNO-TOKEN": self._syno_token})
             elif method == 'post':
-                response = requests.post(url, req_param, verify=self._verify, headers={
-                                         "X-SYNO-TOKEN": self._syno_token})
+                response = self._post(url, req_param, verify=self._verify, headers={
+                                      "X-SYNO-TOKEN": self._syno_token})
             response.raise_for_status()
 
         # Check for error response from dsm:

@@ -79,13 +79,15 @@ class DownloadStation(base_api.BaseApi):
         Enable interactive output (default is True).
     download_st_version : int, optional
         Download Station API version (default is None).
+    quickconnect_id : str, optional
+        QuickConnect ID for relay-based access. Defaults to None.
     """
 
     def __init__(self,
-                 ip_address: str,
-                 port: str,
-                 username: str,
-                 password: str,
+                 ip_address: Optional[str] = None,
+                 port: Optional[str] = None,
+                 username: Optional[str] = None,
+                 password: Optional[str] = None,
                  secure: bool = False,
                  cert_verify: bool = False,
                  dsm_version: int = 7,
@@ -94,7 +96,8 @@ class DownloadStation(base_api.BaseApi):
                  device_id: Optional[str] = None,
                  device_name: Optional[str] = None,
                  interactive_output: bool = True,
-                 download_st_version: int = None
+                 download_st_version: int = None,
+                 quickconnect_id: Optional[str] = None
                  ) -> None:
         """
         Initialize the DownloadStation API wrapper.
@@ -127,10 +130,14 @@ class DownloadStation(base_api.BaseApi):
             Enable interactive output (default is True).
         download_st_version : int, optional
             Download Station API version (default is None).
+        quickconnect_id : str, optional
+            QuickConnect ID for relay-based access. When provided, `ip_address`
+            and `port` are not required.
         """
 
         super(DownloadStation, self).__init__(ip_address, port, username, password, secure, cert_verify,
-                                              dsm_version, debug, otp_code, device_id, device_name, 'DownloadStation')
+                                              dsm_version, debug, otp_code, device_id, device_name, 'DownloadStation',
+                                              quickconnect_id=quickconnect_id)
 
         self._bt_search_id: str = ''
         self._bt_search_id_list: list[str] = []
