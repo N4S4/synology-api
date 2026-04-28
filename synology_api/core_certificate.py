@@ -265,12 +265,16 @@ class Certificate(base_api.BaseApi):
         # retrieve existing certificates
         certs = self.list_cert()['data']['certificates']
         old_certid = ""
+        target_service = None
         for cert in certs:
             for service in cert['services']:
                 # look for the previous cert
                 if service['display_name'] == service_name:
                     old_certid = cert['id']
+                    target_service = service
                     break
+            if target_service is not None:
+                break
 
         # we need to abort, if the certificate is already set, otherwise DSM6 just removes the whole default service...
         if old_certid == cert_id:
@@ -297,11 +301,21 @@ class Certificate(base_api.BaseApi):
             }
         }
 
+        service_payload = servicedatadict.get(service_name)
+        if service_payload is None:
+            service_payload = target_service
+        if service_payload is None:
+            raise ValueError(
+                f"Service {service_name} not found in certificate service list.")
+        service_payload = {
+            **service_payload,
+            **(servicedatadictdsm7.get(service_name, {}) if (self.session._version == 7) else {})
+        }
+
         # construct the payload
         payloaddict = {
             "settings": json.dumps([{
-                "service": {**servicedatadict[service_name],
-                            **(servicedatadictdsm7[service_name] if (self.session._version == 7) else {})},
+                "service": service_payload,
                 "old_id": f"{old_certid}",
                 "id": f"{cert_id}"
             }], separators=(',', ':')),
