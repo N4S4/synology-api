@@ -118,6 +118,8 @@ class Authentication:
         self._secure: bool = secure
         self._sid: Optional[str] = None
         self._syno_token: Optional[str] = None
+        self._noise_connection: Optional[NoiseConnection] = None
+        self._noise_handshake_hash: Optional[str] = None
         self._session_expire: bool = True
         self._verify: bool = cert_verify
         self._version: int = dsm_version
@@ -179,6 +181,7 @@ class Authentication:
         }).encode('utf-8')
 
         message = noise.write_message(payload)
+        self._noise_connection = noise
         ik_message = self.encode_ssid_cookie(message)
 
         return ik_message
@@ -270,6 +273,7 @@ class Authentication:
             if not error_code:
                 self._sid = session_request_json['data']['sid']
                 self._syno_token = session_request_json['data']['synotoken']
+                self._finish_noise_handshake(session_request_json['data'])
                 self._session_expire = False
                 if self._debug is True:
                     print('User logged in, new session started!')
@@ -281,6 +285,30 @@ class Authentication:
                 if USE_EXCEPTIONS:
                     raise LoginError(error_code=error_code)
         return
+
+    def _finish_noise_handshake(self, login_data: dict[str, object]) -> None:
+        """
+        Complete the DSM 7 Noise handshake when the login response provides it.
+
+        Parameters
+        ----------
+        login_data : dict
+            The `data` object returned by `SYNO.API.Auth.login`.
+
+        Returns
+        -------
+        None
+            Updates the stored Noise state used for request hashes.
+        """
+        ik_message = login_data.get("ik_message")
+        if not self._noise_connection or not isinstance(ik_message, str):
+            return
+
+        self._noise_connection.read_message(
+            self.decode_ssid_cookie(ik_message))
+        self._noise_handshake_hash = self.encode_ssid_cookie(
+            self._noise_connection.get_handshake_hash()
+        )
 
     def logout(self) -> None:
         """
@@ -320,6 +348,8 @@ class Authentication:
             error_code = self._get_error_code(response.json())
         self._session_expire = True
         self._sid = None
+        self._noise_connection = None
+        self._noise_handshake_hash = None
         if self._debug is True:
             if not error_code:
                 print('Successfully logged out.')
@@ -547,6 +577,56 @@ class Authentication:
 
         return {cipher_key: json.dumps(enc_params)}
 
+    def _get_request_hash(self) -> Optional[str]:
+        """
+        Build the DSM web UI request hash from the active Noise session.
+
+        Returns
+        -------
+        str or None
+            Header value for `X-SYNO-HASH`, or `None` if the session does not
+            expose a finished Noise handshake.
+        """
+        if not self._noise_connection or not self._noise_handshake_hash:
+            return None
+        if not self._noise_connection.handshake_finished:
+            return None
+
+        cipher_state = self._noise_connection.noise_protocol.cipher_state_encrypt
+        nonce = cipher_state.n
+        encrypted_empty = cipher_state.encrypt_with_ad(b'', b'')
+
+        return "{}{}.{}".format(
+            self._noise_handshake_hash[:8],
+            self.encode_ssid_cookie(encrypted_empty),
+            self.encode_ssid_cookie(str(nonce).encode('utf-8')),
+        )
+
+    def _get_request_headers(self, headers: Optional[dict[str, object]] = None) -> dict[str, object]:
+        """
+        Return request headers shared by DSM API calls.
+
+        Parameters
+        ----------
+        headers : dict, optional
+            Extra headers to merge into the request.
+
+        Returns
+        -------
+        dict
+            Headers containing the Synology token and, when available, the
+            DSM Noise request hash.
+        """
+        request_headers = {"X-SYNO-TOKEN": self._syno_token}
+        if headers:
+            request_headers.update(headers)
+
+        request_hash = self._get_request_hash()
+        if request_hash:
+            request_headers["X-SYNO-HASH"] = request_hash
+
+        return request_headers
+
     def request_multi_datas(self,
                             compound: dict[object] = None,
                             method: Optional[str] = None,
@@ -611,11 +691,96 @@ class Authentication:
         # We get it from the self._syno_token variable and by param 'enable_syno_token':'yes' in the login request
 
         if method == 'get':
-            response = requests.get(url, req_param, verify=self._verify, headers={
-                                    "X-SYNO-TOKEN": self._syno_token})
+            response = requests.get(
+                url, req_param, verify=self._verify, headers=self._get_request_headers())
         elif method == 'post':
-            response = requests.post(url, req_param, verify=self._verify, headers={
-                                     "X-SYNO-TOKEN": self._syno_token})
+            response = requests.post(
+                url, req_param, verify=self._verify, headers=self._get_request_headers())
+
+        if response_json is True:
+            return response.json()
+        else:
+            return response
+
+    def request_webapi_data(self,
+                            api_name: str,
+                            api_path: str,
+                            req_param: dict[str, object],
+                            method: Optional[str] = None,
+                            response_json: bool = True
+                            ) -> dict[str, object] | str | list | requests.Response:
+        """
+        Send a DSM webapi request using the browser-style JSON API contract.
+
+        DSM APIs marked with `requestFormat: JSON` are submitted by the DSM UI
+        to `/webapi/<path>/<api>` with API/method/version left raw and request
+        parameters JSON-stringified. The UI also authenticates these requests
+        with the session cookie instead of an `_sid` form parameter.
+
+        Parameters
+        ----------
+        api_name : str
+            DSM API name.
+        api_path : str
+            API endpoint path from `SYNO.API.Info`.
+        req_param : dict
+            Request parameters containing at least `method` and `version`.
+        method : str, optional
+            HTTP method to use. Defaults to `post`.
+        response_json : bool, optional
+            If true, return decoded JSON; otherwise return the response object.
+
+        Returns
+        -------
+        dict, str, list or requests.Response
+            Decoded API response, or the raw response object when
+            `response_json` is false.
+        """
+        if method is None:
+            method = 'post'
+
+        encoded_param = {
+            "api": api_name,
+            "method": req_param["method"],
+            "version": req_param["version"],
+        }
+        for key, value in req_param.items():
+            if key in ("api", "method", "version"):
+                continue
+            encoded_param[key] = json.dumps(value)
+
+        url = ('%s%s' % (self._base_url, api_path)) + '/' + api_name
+        headers = self._get_request_headers({"Cookie": "id=%s" % self._sid})
+
+        try:
+            if method == 'get':
+                response = requests.get(
+                    url, encoded_param, verify=self._verify, headers=headers)
+            elif method == 'post':
+                response = requests.post(
+                    url, encoded_param, verify=self._verify, headers=headers)
+            else:
+                raise ValueError("Unsupported request method: %s" % method)
+            response.raise_for_status()
+        except requests.exceptions.ConnectionError as e:
+            raise SynoConnectionError(error_message=e.args[0])
+        except requests.exceptions.HTTPError as e:
+            raise HTTPError(error_message=str(e.args))
+
+        error_code = 0
+        try:
+            error_code = self._get_error_code(response.json())
+        except requests.exceptions.JSONDecodeError:
+            pass
+
+        if error_code:
+            if self._debug is True:
+                print('Data request failed: ' +
+                      self._get_error_message(error_code, api_name))
+            if USE_EXCEPTIONS:
+                if api_name.find('SYNO.Core') > -1:
+                    raise CoreError(error_code=error_code)
+                raise UndefinedError(error_code=error_code, api_name=api_name)
 
         if response_json is True:
             return response.json()
@@ -680,17 +845,24 @@ class Authentication:
             # Catch and raise our own errors:
             try:
                 if method == 'get':
-                    response = requests.get(url, req_param, verify=self._verify, headers={
-                                            "X-SYNO-TOKEN": self._syno_token})
+                    response = requests.get(
+                        url, req_param, verify=self._verify, headers=self._get_request_headers())
                 elif method == 'post':
                     if data is None:
-                        response = requests.post(url, req_param, verify=self._verify, headers={
-                                                 "X-SYNO-TOKEN": self._syno_token})
+                        response = requests.post(
+                            url, req_param, verify=self._verify, headers=self._get_request_headers())
                     else:
                         url = ('%s%s' % (self._base_url, api_path)) + \
                             '/' + api_name
-                        response = requests.post(url, data=data, params=req_param, verify=self._verify, headers={
-                                                 "Content-Type": data.content_type, "X-SYNO-TOKEN": self._syno_token})
+                        response = requests.post(
+                            url,
+                            data=data,
+                            params=req_param,
+                            verify=self._verify,
+                            headers=self._get_request_headers(
+                                {"Content-Type": data.content_type}
+                            ),
+                        )
                 response.raise_for_status()
             except requests.exceptions.ConnectionError as e:
                 raise SynoConnectionError(error_message=e.args[0])
@@ -699,11 +871,11 @@ class Authentication:
         else:
             # Will raise its own error:
             if method == 'get':
-                response = requests.get(url, req_param, verify=self._verify, headers={
-                                        "X-SYNO-TOKEN": self._syno_token})
+                response = requests.get(
+                    url, req_param, verify=self._verify, headers=self._get_request_headers())
             elif method == 'post':
-                response = requests.post(url, req_param, verify=self._verify, headers={
-                                         "X-SYNO-TOKEN": self._syno_token})
+                response = requests.post(
+                    url, req_param, verify=self._verify, headers=self._get_request_headers())
             response.raise_for_status()
 
         # Check for error response from dsm:
