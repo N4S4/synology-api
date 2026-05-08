@@ -7,7 +7,7 @@ import json
 
 from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 
-from .error_codes import error_codes, CODE_SUCCESS, download_station_error_codes, file_station_error_codes
+from .error_codes import error_codes, CODE_SUCCESS, CODE_UNKNOWN, download_station_error_codes, file_station_error_codes
 from .error_codes import auth_error_codes, virtualization_error_codes
 from .error_codes import iscsi_lun_error_codes, iscsi_target_error_codes
 from urllib3 import disable_warnings
@@ -836,10 +836,11 @@ class Authentication:
             Error code, or 0 if successful.
         """
         if response.get('success'):
-            code = CODE_SUCCESS
-        else:
-            code = response.get('error').get('code')
-        return code
+            return CODE_SUCCESS
+        error = response.get('error')
+        if isinstance(error, dict) and isinstance(error.get('code'), int):
+            return error['code']
+        return CODE_UNKNOWN
 
     @staticmethod
     def _get_error_message(code: int, api_name: str) -> str:
