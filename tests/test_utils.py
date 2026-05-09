@@ -39,7 +39,8 @@ class ValidatePathTests(unittest.TestCase):
     # --- list input: positive cases ---
 
     def test_list_all_valid(self):
-        self.assertTrue(validate_path(['/Downloads/a.log', '/Downloads/b.log']))
+        self.assertTrue(validate_path(
+            ['/Downloads/a.log', '/Downloads/b.log']))
 
     # --- list input: negative cases (these caught the closure bug) ---
 
@@ -55,7 +56,8 @@ class ValidatePathTests(unittest.TestCase):
     def test_list_first_element_invalid(self):
         # Regression: the trailing-char check looked at path[-1] (last list
         # element), so an invalid first element could still pass the check.
-        self.assertFalse(validate_path(['/Downloads/folder/', '/Downloads/ok.log']))
+        self.assertFalse(validate_path(
+            ['/Downloads/folder/', '/Downloads/ok.log']))
 
     def test_list_middle_element_invalid(self):
         self.assertFalse(validate_path(['/a.log', '/bad/folder/', '/b.log']))
