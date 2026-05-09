@@ -205,7 +205,7 @@ def validate_path(path: str | list[str]) -> bool:
         if not path_pattern.match(single_path):
             return False
 
-        if path[-1] in (' ', '\t', '/'):
+        if single_path[-1] in (' ', '\t', '/'):
             return False
 
         parts = single_path.rsplit('.', 1)
