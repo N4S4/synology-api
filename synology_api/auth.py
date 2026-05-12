@@ -1,6 +1,6 @@
 """Provides authentication and API request handling for Synology DSM, including session management, encryption utilities, and error handling for various Synology services."""
 from __future__ import annotations
-from random import randint
+import secrets
 from typing import Optional, Any, Union
 import requests
 import json
@@ -437,7 +437,7 @@ class Authentication:
         key = b''
 
         while length > 0:
-            key += available[randint(0, len(available) - 1)].encode('utf-8')
+            key += secrets.choice(available).encode('utf-8')
             length -= 1
 
         return key
