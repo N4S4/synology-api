@@ -1,5 +1,5 @@
 setuptools==82.0.1
-requests==2.34.0
+requests==2.34.1
 urllib3==2.7.0
 requests-toolbelt==1.0.0
 tqdm==4.67.3
