@@ -18,12 +18,14 @@ class GetErrorCodeTests(unittest.TestCase):
         self.assertEqual(self._call({'success': True}), CODE_SUCCESS)
 
     def test_success_true_with_extra_data(self):
-        self.assertEqual(self._call({'success': True, 'data': {'sid': 'x'}}), CODE_SUCCESS)
+        response = {'success': True, 'data': {'sid': 'x'}}
+        self.assertEqual(self._call(response), CODE_SUCCESS)
 
     # --- normal error ---
 
     def test_normal_error_returns_code(self):
-        self.assertEqual(self._call({'success': False, 'error': {'code': 100}}), 100)
+        response = {'success': False, 'error': {'code': 100}}
+        self.assertEqual(self._call(response), 100)
 
     def test_normal_error_returns_code_with_extras(self):
         response = {'success': False, 'error': {'code': 401, 'errors': []}}
@@ -37,18 +39,23 @@ class GetErrorCodeTests(unittest.TestCase):
         self.assertEqual(self._call({'success': False}), CODE_UNKNOWN)
 
     def test_error_is_none_returns_unknown(self):
-        self.assertEqual(self._call({'success': False, 'error': None}), CODE_UNKNOWN)
+        response = {'success': False, 'error': None}
+        self.assertEqual(self._call(response), CODE_UNKNOWN)
 
     def test_error_is_empty_dict_returns_unknown(self):
-        self.assertEqual(self._call({'success': False, 'error': {}}), CODE_UNKNOWN)
+        response = {'success': False, 'error': {}}
+        self.assertEqual(self._call(response), CODE_UNKNOWN)
 
     def test_error_is_non_dict_returns_unknown(self):
         # Server returning a string/list where a dict is expected.
-        self.assertEqual(self._call({'success': False, 'error': 'oops'}), CODE_UNKNOWN)
-        self.assertEqual(self._call({'success': False, 'error': [1, 2, 3]}), CODE_UNKNOWN)
+        self.assertEqual(
+            self._call({'success': False, 'error': 'oops'}), CODE_UNKNOWN)
+        self.assertEqual(
+            self._call({'success': False, 'error': [1, 2, 3]}), CODE_UNKNOWN)
 
     def test_error_code_is_non_int_returns_unknown(self):
-        self.assertEqual(self._call({'success': False, 'error': {'code': 'NaN'}}), CODE_UNKNOWN)
+        response = {'success': False, 'error': {'code': 'NaN'}}
+        self.assertEqual(self._call(response), CODE_UNKNOWN)
 
     def test_completely_empty_response_returns_unknown(self):
         self.assertEqual(self._call({}), CODE_UNKNOWN)
@@ -71,7 +78,8 @@ class GetErrorDetailsTests(unittest.TestCase):
                 'errors': [{'code': 408, 'path': '/test/:'}],
             },
         }
-        self.assertEqual(self._call(response), [{'code': 408, 'path': '/test/:'}])
+        expected = [{'code': 408, 'path': '/test/:'}]
+        self.assertEqual(self._call(response), expected)
 
     def test_active_directory_shape(self):
         # Per docstrings in directory_server.py.
@@ -109,7 +117,8 @@ class GetErrorDetailsTests(unittest.TestCase):
         self.assertEqual(self._call({'success': True, 'data': {}}), [])
 
     def test_error_without_errors_key_returns_empty(self):
-        self.assertEqual(self._call({'success': False, 'error': {'code': 100}}), [])
+        response = {'success': False, 'error': {'code': 100}}
+        self.assertEqual(self._call(response), [])
 
     def test_empty_errors_list_returns_empty(self):
         response = {'success': False, 'error': {'code': 1100, 'errors': []}}
@@ -125,12 +134,15 @@ class GetErrorDetailsTests(unittest.TestCase):
 
     def test_error_is_non_dict_returns_empty(self):
         self.assertEqual(self._call({'success': False, 'error': 'oops'}), [])
-        self.assertEqual(self._call({'success': False, 'error': [1, 2, 3]}), [])
+        self.assertEqual(
+            self._call({'success': False, 'error': [1, 2, 3]}), [])
 
     def test_errors_is_non_list_returns_empty(self):
         # Server returning a dict/string where a list is expected.
-        self.assertEqual(self._call({'success': False, 'error': {'code': 1, 'errors': {'code': 2}}}), [])
-        self.assertEqual(self._call({'success': False, 'error': {'code': 1, 'errors': 'oops'}}), [])
+        error = {'code': 1, 'errors': {'code': 2}}
+        self.assertEqual(self._call({'success': False, 'error': error}), [])
+        error = {'code': 1, 'errors': 'oops'}
+        self.assertEqual(self._call({'success': False, 'error': error}), [])
 
     def test_non_dict_entries_are_filtered_out(self):
         response = {
