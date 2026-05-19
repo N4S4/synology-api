@@ -843,6 +843,35 @@ class Authentication:
         return CODE_UNKNOWN
 
     @staticmethod
+    def _get_error_details(response: dict[str, object]) -> list[dict[str, object]]:
+        """
+        Extract per-item error details from an API response, if present.
+
+        Some Synology APIs (e.g. File Station, Active Directory) wrap a list
+        of more specific errors inside ``response['error']['errors']``, each
+        describing a single failed item — typically by ``path`` (file/folder
+        APIs) or ``msg`` (directory/LDAP APIs), alongside its own ``code``.
+        See https://kb.synology.com/en-global/DG/DSM_Login_Web_API_Guide/2.
+
+        Parameters
+        ----------
+        response : dict
+            The API response.
+
+        Returns
+        -------
+        list[dict]
+            The per-item error entries, or an empty list if none / malformed.
+        """
+        error = response.get('error')
+        if not isinstance(error, dict):
+            return []
+        details = error.get('errors')
+        if not isinstance(details, list):
+            return []
+        return [entry for entry in details if isinstance(entry, dict)]
+
+    @staticmethod
     def _get_error_message(code: int, api_name: str) -> str:
         """
         Get a human-readable error message for a given error code and API.
