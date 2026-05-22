@@ -18,6 +18,10 @@ The **session** is created on instantiation.
 If accessing the NAS through a **remote connection**, it is advised to use _HTTPS_ to connect to it. Please make sure the certificate is valid.
 :::
 
+:::tip
+For QuickConnect access, pass `quickconnect_id` with `username` and `password`. The client resolves the relay URL and uses HTTPS automatically, so `ip_address` and `port` are not required.
+:::
+
 #### Parameters
 <div class="padding-left--md">
 
@@ -45,8 +49,11 @@ _**dsm_version**_ `int`
 _**debug**_ `bool`
     Whether to print debug messages or not. Defaults to `True`.
 
-_**otp_code**_ `str`  
+_**otp_code**_ `str`
     The OTP code to use for authentication. Defaults to `None`.
+
+_**quickconnect_id**_ `str`
+    QuickConnect ID for relay-based access. Defaults to `None`.
 </div>
 
 ## Methods

@@ -41,16 +41,18 @@ class BaseApi(object):
         Device name for device binding. Defaults to `None`.
     application : str, optional
         The application context for API list retrieval. Defaults to `'Core'`.
+    quickconnect_id : str, optional
+        QuickConnect ID for relay-based access. Defaults to `None`.
     """
 
     # Class-level attribute to store the shared session
     shared_session: Optional[syn.Authentication] = None
 
     def __init__(self,
-                 ip_address: str,
-                 port: str,
-                 username: str,
-                 password: str,
+                 ip_address: Optional[str] = None,
+                 port: Optional[str] = None,
+                 username: Optional[str] = None,
+                 password: Optional[str] = None,
                  secure: bool = False,
                  cert_verify: bool = False,
                  dsm_version: int = 7,
@@ -59,6 +61,7 @@ class BaseApi(object):
                  device_id: Optional[str] = None,
                  device_name: Optional[str] = None,
                  application: str = 'Core',
+                 quickconnect_id: Optional[str] = None,
                  ) -> None:
         """
         Initialize the BaseApi object and create or reuse a session.
@@ -89,6 +92,9 @@ class BaseApi(object):
             Device name for device binding. Defaults to `None`.
         application : str, optional
             The application context for API list retrieval. Defaults to `'Core'`.
+        quickconnect_id : str, optional
+            QuickConnect ID for relay-based access. When provided, `ip_address`
+            and `port` are not required.
 
         Returns
         -------
@@ -101,13 +107,18 @@ class BaseApi(object):
         if BaseApi.shared_session:
             self.session = BaseApi.shared_session
         else:
-            if not all([ip_address, port, username, password]):
+            if quickconnect_id:
+                missing_credentials = not all([username, password])
+            else:
+                missing_credentials = not all(
+                    [ip_address, port, username, password])
+            if missing_credentials:
                 raise ValueError(
                     "Missing required credentials for initial authentication.")
 
             self.session = syn.Authentication(
                 ip_address, port, username, password, secure, cert_verify, dsm_version, debug, otp_code,
-                device_id, device_name
+                device_id, device_name, quickconnect_id
             )
             self.session.login()
             self.session.get_api_list(self.application)

@@ -41,20 +41,23 @@ class Photos(base_api.BaseApi):
         Device ID for the session.
     device_name : str, optional
         Device name for the session.
+    quickconnect_id : str, optional
+        QuickConnect ID for relay-based access. Defaults to None.
     """
 
     def __init__(self,
-                 ip_address: str,
-                 port: str,
-                 username: str,
-                 password: str,
+                 ip_address: Optional[str] = None,
+                 port: Optional[str] = None,
+                 username: Optional[str] = None,
+                 password: Optional[str] = None,
                  secure: bool = False,
                  cert_verify: bool = False,
                  dsm_version: int = 7,
                  debug: bool = True,
                  otp_code: Optional[str] = None,
                  device_id: Optional[str] = None,
-                 device_name: Optional[str] = None
+                 device_name: Optional[str] = None,
+                 quickconnect_id: Optional[str] = None
                  ) -> None:
         """
         Initialize the Photos API interface.
@@ -83,10 +86,14 @@ class Photos(base_api.BaseApi):
             Device ID for the session.
         device_name : str, optional
             Device name for the session.
+        quickconnect_id : str, optional
+            QuickConnect ID for relay-based access. When provided, `ip_address`
+            and `port` are not required.
         """
 
         super(Photos, self).__init__(ip_address, port, username, password, secure, cert_verify,
-                                     dsm_version, debug, otp_code, device_id, device_name, 'FotoStation')
+                                     dsm_version, debug, otp_code, device_id, device_name, 'FotoStation',
+                                     quickconnect_id=quickconnect_id)
 
         self.session.get_api_list('Foto')
 
