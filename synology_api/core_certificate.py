@@ -37,20 +37,23 @@ class Certificate(base_api.BaseApi):
         Enable debug output (default is True).
     otp_code : Optional[str], optional
         One-time password for 2FA (default is None).
+    quickconnect_id : str, optional
+        QuickConnect ID for relay-based access. Defaults to None.
     """
 
     _API_NAME = 'SYNO.Core.Certificate.CRT'
 
     def __init__(self,
-                 ip_address: str,
-                 port: str,
-                 username: str,
-                 password: str,
+                 ip_address: Optional[str] = None,
+                 port: Optional[str] = None,
+                 username: Optional[str] = None,
+                 password: Optional[str] = None,
                  secure: bool = False,
                  cert_verify: bool = False,
                  dsm_version: int = 7,
                  debug: bool = True,
-                 otp_code: Optional[str] = None
+                 otp_code: Optional[str] = None,
+                 quickconnect_id: Optional[str] = None
                  ) -> None:
         """
         Initialize the Certificate API wrapper.
@@ -75,9 +78,12 @@ class Certificate(base_api.BaseApi):
             Enable debug output (default is True).
         otp_code : Optional[str], optional
             One-time password for 2FA (default is None).
+        quickconnect_id : str, optional
+            QuickConnect ID for relay-based access. When provided, `ip_address`
+            and `port` are not required.
         """
         super(Certificate, self).__init__(ip_address, port, username, password, secure, cert_verify, dsm_version, debug,
-                                          otp_code)
+                                          otp_code, application='Core', quickconnect_id=quickconnect_id)
         self._debug: bool = debug
 
     def _base_certificate_methods(self,
@@ -265,12 +271,16 @@ class Certificate(base_api.BaseApi):
         # retrieve existing certificates
         certs = self.list_cert()['data']['certificates']
         old_certid = ""
+        target_service = None
         for cert in certs:
             for service in cert['services']:
                 # look for the previous cert
                 if service['display_name'] == service_name:
                     old_certid = cert['id']
+                    target_service = service
                     break
+            if target_service is not None:
+                break
 
         # we need to abort, if the certificate is already set, otherwise DSM6 just removes the whole default service...
         if old_certid == cert_id:
@@ -297,11 +307,21 @@ class Certificate(base_api.BaseApi):
             }
         }
 
+        service_payload = servicedatadict.get(service_name)
+        if service_payload is None:
+            service_payload = target_service
+        if service_payload is None:
+            raise ValueError(
+                f"Service {service_name} not found in certificate service list.")
+        service_payload = {
+            **service_payload,
+            **(servicedatadictdsm7.get(service_name, {}) if (self.session._version == 7) else {})
+        }
+
         # construct the payload
         payloaddict = {
             "settings": json.dumps([{
-                "service": {**servicedatadict[service_name],
-                            **(servicedatadictdsm7[service_name] if (self.session._version == 7) else {})},
+                "service": service_payload,
                 "old_id": f"{old_certid}",
                 "id": f"{cert_id}"
             }], separators=(',', ':')),

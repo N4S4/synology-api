@@ -73,6 +73,21 @@ ds_info = ds.get_info()
 
 ```
 
+For NAS devices reachable through QuickConnect, pass the NAS QuickConnect ID
+instead of an IP address and port. QuickConnect uses HTTPS automatically.
+
+```python
+fs = FileStation(
+    quickconnect_id='QuickConnect ID',
+    username='Username',
+    password='Password',
+    cert_verify=False,
+    dsm_version=7,
+    debug=True,
+    otp_code=None
+)
+```
+
 ## Available Functions
 
 At the moment there are around +300 APIs implemented with countless methods for each, the majority is not documented, but some are.
@@ -92,6 +107,7 @@ If this code helps and you wish to support me:
 ## See Related projects
 
 - [Synology API Telegram Bot](https://github.com/N4S4/synology-api-telegram-bot)
+- [Homeassistant Synology Pro](https://github.com/N4S4/homeassistant-synology-pro)
 
 If you want to show your project in this section, write me.
 
@@ -121,4 +137,3 @@ Check [Contribute - Contribution 101](https://n4s4.github.io/synology-api/docs/c
 ## Contributors
 
 - List of contributors here: [Contributors](https://github.com/N4S4/synology-api/graphs/contributors)
-

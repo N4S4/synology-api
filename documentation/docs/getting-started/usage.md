@@ -43,6 +43,25 @@ sidebar_position: 3
     ds_info = ds.get_info()
     ```
 
+### QuickConnect workflow
+QuickConnect connections use HTTPS automatically and do not require a NAS IP address or port.
+
+```python
+from synology_api.filestation import FileStation
+
+fs = FileStation(
+    quickconnect_id='QuickConnect ID',
+    username='Username',
+    password='Password',
+    cert_verify=False,
+    dsm_version=7,
+    debug=True,
+    otp_code=None
+)
+
+fs_info = fs.get_info()
+```
+
 ### Complete Example
 
 :::note

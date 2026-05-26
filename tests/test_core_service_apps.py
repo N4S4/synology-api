@@ -100,9 +100,52 @@ class TestCoreServiceApps(unittest.TestCase):
         self.instance.app_portal_access_control_get()
         self.instance.request_data.assert_called_once()
 
+    def test_app_portal_access_control_list_request_contract(self):
+        self.instance.app_portal_access_control_list()
+        self.instance.request_data.assert_called_once_with(
+            'SYNO.Core.AppPortal.AccessControl',
+            'entry.cgi',
+            {'version': 1, 'method': 'list'},
+        )
+
     def test_app_portal_access_control_set(self):
         self.instance.app_portal_access_control_set()
         self.instance.request_data.assert_called_once()
+
+    def test_app_portal_access_control_update_serializes_entry(self):
+        entry = {
+            'UUID': 'rule-uuid',
+            '_key': 'rule-key',
+            'name': 'block',
+            'rules': [
+                {'access': True, 'address': '192.0.2.1'},
+                {'access': False, 'address': '198.51.100.2'},
+            ],
+        }
+        expected_entry = (
+            '{"UUID":"rule-uuid","_key":"rule-key","name":"block",'
+            '"rules":[{"access":true,"address":"192.0.2.1"},'
+            '{"access":false,"address":"198.51.100.2"}]}'
+        )
+
+        self.instance.app_portal_access_control_update(entry)
+
+        self.instance.request_data.assert_called_once_with(
+            'SYNO.Core.AppPortal.AccessControl',
+            'entry.cgi',
+            {'version': 1, 'method': 'update', 'entry': expected_entry},
+        )
+
+    def test_app_portal_access_control_update_accepts_preencoded_entry(self):
+        entry = '{"UUID":"rule-uuid","rules":[]}'
+
+        self.instance.app_portal_access_control_update(entry)
+
+        self.instance.request_data.assert_called_once_with(
+            'SYNO.Core.AppPortal.AccessControl',
+            'entry.cgi',
+            {'version': 1, 'method': 'update', 'entry': entry},
+        )
 
     def test_app_portal_config_get(self):
         self.instance.app_portal_config_get()
@@ -114,11 +157,78 @@ class TestCoreServiceApps(unittest.TestCase):
 
     def test_app_portal_reverse_proxy_get(self):
         self.instance.app_portal_reverse_proxy_get()
-        self.instance.request_data.assert_called_once()
+        self.instance.request_data.assert_called_once_with(
+            'SYNO.Core.AppPortal.ReverseProxy',
+            'entry.cgi',
+            {'version': 1, 'method': 'list'},
+        )
+
+    def test_app_portal_reverse_proxy_list_request_contract(self):
+        self.instance.app_portal_reverse_proxy_list()
+        self.instance.request_data.assert_called_once_with(
+            'SYNO.Core.AppPortal.ReverseProxy',
+            'entry.cgi',
+            {'version': 1, 'method': 'list'},
+        )
+
+    def test_app_portal_reverse_proxy_create_serializes_entry(self):
+        entry = {
+            'description': 'test',
+            'frontend': {'fqdn': 'test.local', 'port': 18080, 'protocol': 0, 'acl': None},
+            'backend': {'fqdn': '127.0.0.1', 'port': 80, 'protocol': 0},
+            'proxy_intercept_errors': False,
+        }
+        expected_entry = (
+            '{"description":"test","frontend":{"fqdn":"test.local",'
+            '"port":18080,"protocol":0,"acl":null},"backend":'
+            '{"fqdn":"127.0.0.1","port":80,"protocol":0},'
+            '"proxy_intercept_errors":false}'
+        )
+
+        self.instance.app_portal_reverse_proxy_create(entry)
+
+        self.instance.request_data.assert_called_once_with(
+            'SYNO.Core.AppPortal.ReverseProxy',
+            'entry.cgi',
+            {'version': 1, 'method': 'create', 'entry': expected_entry},
+        )
+
+    def test_app_portal_reverse_proxy_update_accepts_preencoded_entry(self):
+        entry = '{"UUID":"rule-uuid","description":"test"}'
+
+        self.instance.app_portal_reverse_proxy_update(entry)
+
+        self.instance.request_data.assert_called_once_with(
+            'SYNO.Core.AppPortal.ReverseProxy',
+            'entry.cgi',
+            {'version': 1, 'method': 'update', 'entry': entry},
+        )
+
+    def test_app_portal_reverse_proxy_delete_serializes_uuid_list(self):
+        self.instance.app_portal_reverse_proxy_delete(
+            ['rule-uuid-1', 'rule-uuid-2'])
+        self.instance.request_data.assert_called_once_with(
+            'SYNO.Core.AppPortal.ReverseProxy',
+            'entry.cgi',
+            {
+                'version': 1,
+                'method': 'delete',
+                'uuids': '["rule-uuid-1","rule-uuid-2"]',
+            },
+        )
 
     def test_app_portal_reverse_proxy_set(self):
-        self.instance.app_portal_reverse_proxy_set()
-        self.instance.request_data.assert_called_once()
+        self.instance.app_portal_reverse_proxy_set(
+            entry='{"UUID":"rule-uuid"}')
+        self.instance.request_data.assert_called_once_with(
+            'SYNO.Core.AppPortal.ReverseProxy',
+            'entry.cgi',
+            {
+                'version': 1,
+                'method': 'update',
+                'entry': '{"UUID":"rule-uuid"}',
+            },
+        )
 
     def test_app_portal_set(self):
         self.instance.app_portal_set()
