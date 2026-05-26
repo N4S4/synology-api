@@ -17,6 +17,10 @@ Backup:
     status: partial
 Certificate:
     status: partial
+ChatUser:
+    status: finished  
+ChatBot:
+    status: finished
 CloudSync:
     status: finished
 CoreNotification:
