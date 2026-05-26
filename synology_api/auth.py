@@ -7,7 +7,7 @@ import json
 
 from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 
-from .error_codes import error_codes, CODE_SUCCESS, download_station_error_codes, file_station_error_codes
+from .error_codes import error_codes, CODE_SUCCESS, CODE_UNKNOWN, download_station_error_codes, file_station_error_codes
 from .error_codes import auth_error_codes, virtualization_error_codes
 from .error_codes import iscsi_lun_error_codes, iscsi_target_error_codes
 from urllib3 import disable_warnings
@@ -1238,10 +1238,40 @@ class Authentication:
             Error code, or 0 if successful.
         """
         if response.get('success'):
-            code = CODE_SUCCESS
-        else:
-            code = response.get('error').get('code')
-        return code
+            return CODE_SUCCESS
+        error = response.get('error')
+        if isinstance(error, dict) and isinstance(error.get('code'), int):
+            return error['code']
+        return CODE_UNKNOWN
+
+    @staticmethod
+    def _get_error_details(response: dict[str, object]) -> list[dict[str, object]]:
+        """
+        Extract per-item error details from an API response, if present.
+
+        Some Synology APIs (e.g. File Station, Active Directory) wrap a list
+        of more specific errors inside ``response['error']['errors']``, each
+        describing a single failed item — typically by ``path`` (file/folder
+        APIs) or ``msg`` (directory/LDAP APIs), alongside its own ``code``.
+        See https://kb.synology.com/en-global/DG/DSM_Login_Web_API_Guide/2.
+
+        Parameters
+        ----------
+        response : dict
+            The API response.
+
+        Returns
+        -------
+        list[dict]
+            The per-item error entries, or an empty list if none / malformed.
+        """
+        error = response.get('error')
+        if not isinstance(error, dict):
+            return []
+        details = error.get('errors')
+        if not isinstance(details, list):
+            return []
+        return [entry for entry in details if isinstance(entry, dict)]
 
     @staticmethod
     def _get_error_message(code: int, api_name: str) -> str:
