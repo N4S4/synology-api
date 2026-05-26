@@ -18,7 +18,7 @@ Backup:
 Certificate:
     status: partial
 ChatUser:
-    status: finished  
+    status: finished
 ChatBot:
     status: finished
 CloudSync:
