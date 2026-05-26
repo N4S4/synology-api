@@ -17,6 +17,10 @@ Backup:
     status: partial
 Certificate:
     status: partial
+ChatUser:
+    status: finished  # 35/39 APIs working + bot/webhook token modes
+ChatBot:
+    status: finished  # 5 bot + 1 webhook token methods
 CloudSync:
     status: finished
 CoreNotification:
