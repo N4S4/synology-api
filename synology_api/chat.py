@@ -1,4 +1,5 @@
-"""Synology Chat API wrapper for DSM 7.3.2.
+"""
+Synology Chat API wrapper for DSM 7.3.2.
 
 Tested against DSM 7.3.2 (DS218+) with Synology Chat Server 2.4.5-22148.
 39 Chat APIs registered; 35 confirmed working (+ bot/webhook token modes).
@@ -82,21 +83,6 @@ class ChatUser(BaseApi):
 
     For token-based access (no DSM login), use :class:`ChatBot`.
 
-    Parameters
-    ----------
-    ip_address : str
-    port : str
-    username : str
-    password : str
-    secure : bool, optional (default False)
-    cert_verify : bool, optional (default False)
-    dsm_version : int, optional (default 7)
-    debug : bool, optional (default True)
-    otp_code : str, optional
-    device_id : str, optional
-    device_name : str, optional
-    interactive_output : bool, optional (default False)
-
     Notes
     -----
     Most Chat APIs require admin permissions. Error code 119 means
@@ -111,15 +97,25 @@ class ChatUser(BaseApi):
     def channel_list(
         self, simple: bool = False
     ) -> dict[str, object] | str | dict[int, str]:
-        """List all chat channels.
+        """
+        List all chat channels.
 
-        Args:
-            simple: If True, return ``{channel_id: channel_name}``
-                instead of the full JSON response.
+        Parameters
+        ----------
+        simple : bool, optional
+            If True, return ``{channel_id: channel_name}``
+            instead of the full JSON response.
 
-        Example:
-            >>> chat.channel_list(simple=True)
-            ``{1: 'General', 27: '', 42: 'test'}``
+        Returns
+        -------
+        dict[str, object] or str or dict[int, str]
+            Full API response, or ``{channel_id: name}`` dict
+            when ``simple=True``.
+
+        Examples
+        --------
+        >>> chat.channel_list(simple=True)
+        ``{1: 'General', 27: '', 42: 'test'}``
         """
         api_name = "SYNO.Chat.Channel"
         info = self.gen_list[api_name]
@@ -147,7 +143,8 @@ class ChatUser(BaseApi):
     def channel_create(
         self, name: str, members: list[str] | None = None
     ) -> dict[str, object] | str:
-        """Create a new named chat channel and auto-join it.
+        """
+        Create a new named chat channel and auto-join it.
 
         Parameters
         ----------
@@ -156,7 +153,13 @@ class ChatUser(BaseApi):
         members : list[str], optional
             User IDs to invite after creation.
 
-        Example:
+        Returns
+        -------
+        dict[str, object] or str
+            Created channel with ``channel_id`` and ``auto_join`` flag.
+
+        Examples
+        --------
             >>> chat.channel_create("my_channel")
             >>> chat.channel_create("team", members=["2", "3"])
         """
@@ -202,12 +205,21 @@ class ChatUser(BaseApi):
         return create_result
 
     def channel_close(self, channel_id: int) -> dict[str, object] | str:
-        """Close (delete) a chat channel.
+        """
+        Close (delete) a chat channel.
 
-        Args:
-            channel_id: Numeric channel ID to close.
+        Parameters
+        ----------
+        channel_id : int
+            Numeric channel ID to close.
 
-        Example:
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+
+        Examples
+        --------
             >>> chat.channel_close(40)
         """
         api_name = "SYNO.Chat.Channel"
@@ -218,12 +230,21 @@ class ChatUser(BaseApi):
         )
 
     def channel_archive(self, channel_id: int) -> dict[str, object] | str:
-        """Archive a chat channel.
+        """
+        Archive a chat channel.
 
-        Args:
-            channel_id: Numeric channel ID to archive.
+        Parameters
+        ----------
+        channel_id : int
+            Numeric channel ID to archive.
 
-        Example:
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+
+        Examples
+        --------
             >>> chat.channel_archive(49)
         """
         api_name = "SYNO.Chat.Channel"
@@ -236,13 +257,23 @@ class ChatUser(BaseApi):
     def channel_invite(
         self, channel_id: int, user_ids: list[int],
     ) -> dict[str, object] | str:
-        """Invite users to a named channel.
+        """
+        Invite users to a named channel.
 
-        Args:
-            channel_id: Numeric channel ID.
-            user_ids: List of user IDs to invite.
+        Parameters
+        ----------
+        channel_id : int
+            Numeric channel ID.
+        user_ids : list[int]
+            List of user IDs to invite.
 
-        Example:
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+
+        Examples
+        --------
             >>> chat.channel_invite(42, [3])
         """
         api_name = "SYNO.Chat.Channel.Named"
@@ -259,12 +290,21 @@ class ChatUser(BaseApi):
         )
 
     def channel_join(self, channel_id: int) -> dict[str, object] | str:
-        """Join a channel (must be public or the user must be invited).
+        """
+        Join a channel (must be public or the user must be invited).
 
-        Args:
-            channel_id: Numeric channel ID to join.
+        Parameters
+        ----------
+        channel_id : int
+            Numeric channel ID to join.
 
-        Example:
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+
+        Examples
+        --------
             >>> chat.channel_join(11)
         """
         api_name = "SYNO.Chat.Channel.Named"
@@ -275,17 +315,26 @@ class ChatUser(BaseApi):
         )
 
     def channel_leave(self, channel_id: int) -> dict[str, object] | str:
-        """Leave a channel.
+        """
+        Leave a channel.
 
         .. warning::
            If you are the **only member**, the channel becomes orphaned
            (no one can rejoin or close it via API). Only leave channels
            that have other members.
 
-        Args:
-            channel_id: Numeric channel ID to leave.
+        Parameters
+        ----------
+        channel_id : int
+            Numeric channel ID to leave.
 
-        Example:
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+
+        Examples
+        --------
             >>> chat.channel_leave(11)
         """
         api_name = "SYNO.Chat.Channel.Named"
@@ -298,7 +347,8 @@ class ChatUser(BaseApi):
     def channel_view(
         self, channel_id: int, last_view_at: int | None = None
     ) -> dict[str, object] | str:
-        """Mark a channel as read up to a given timestamp.
+        """
+        Mark a channel as read up to a given timestamp.
 
         Parameters
         ----------
@@ -308,7 +358,13 @@ class ChatUser(BaseApi):
             Unix timestamp in **milliseconds** marking the last read
             point. Defaults to current time.
 
-        Example:
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+
+        Examples
+        --------
             >>> import time
             >>> chat.channel_view(72, int(time.time() * 1000))
         """
@@ -328,7 +384,19 @@ class ChatUser(BaseApi):
 
     def channel_preference_get(
             self, channel_id: int) -> dict[str, object] | str:
-        """Get channel preferences (notifications, etc.)."""
+        """
+        Get channel preferences (notifications, etc.).
+
+        Parameters
+        ----------
+        channel_id : int
+            Channel ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Channel.Preference"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -342,7 +410,14 @@ class ChatUser(BaseApi):
     # ═══════════════════════════════════════════════════════════════════════
 
     def user_list(self) -> dict[str, object] | str:
-        """List all chat users."""
+        """
+        List all chat users.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.User"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -351,7 +426,19 @@ class ChatUser(BaseApi):
         )
 
     def user_get(self, user_id: str) -> dict[str, object] | str:
-        """Get user details."""
+        """
+        Get user details.
+
+        Parameters
+        ----------
+        user_id : str
+            User ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.User"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -361,7 +448,19 @@ class ChatUser(BaseApi):
         )
 
     def user_status_get(self, user_id: str) -> dict[str, object] | str:
-        """Get user online status."""
+        """
+        Get user online status.
+
+        Parameters
+        ----------
+        user_id : str
+            User ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.User.Status"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -371,7 +470,19 @@ class ChatUser(BaseApi):
         )
 
     def user_avatar_get(self, user_id: str) -> dict[str, object] | str:
-        """Get user avatar."""
+        """
+        Get user avatar.
+
+        Parameters
+        ----------
+        user_id : str
+            User ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.User.Avatar"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -381,7 +492,14 @@ class ChatUser(BaseApi):
         )
 
     def user_preference_get(self) -> dict[str, object] | str:
-        """Get current user's Chat preferences."""
+        """
+        Get current user's Chat preferences.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.User.Preference"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -394,7 +512,14 @@ class ChatUser(BaseApi):
     # ═══════════════════════════════════════════════════════════════════════
 
     def incoming_webhook_list(self) -> dict[str, object] | str:
-        """List all incoming webhooks."""
+        """
+        List all incoming webhooks.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Webhook.Incoming"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -405,9 +530,10 @@ class ChatUser(BaseApi):
     def incoming_webhook_create(
         self, name: str, channel_id: str, icon_url: str | None = None
     ) -> dict[str, object] | str:
-        """Create an incoming webhook to post messages into a channel.
+        """
+        Create an incoming webhook to post messages into a channel.
 
-        Returns a token and webhook user_id. The webhook URL to POST
+        Provides a token and webhook user_id. The webhook URL to POST
         messages to must be constructed as::
 
             ``https://{host}:{port}/webapi/entry.cgi?api=SYNO.Chat.Webhook.Incoming&version=1&method=incoming&token=***``
@@ -415,6 +541,20 @@ class ChatUser(BaseApi):
         with ``payload={"text": "..."}`` as form-encoded POST body.
 
         For direct posting without webhooks, prefer :meth:`post_create`.
+
+        Parameters
+        ----------
+        name : str
+            Webhook name.
+        channel_id : str
+            Target channel ID.
+        icon_url : str, optional
+            URL for the webhook icon.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Created webhook with token and user_id.
         """
         api_name = "SYNO.Chat.Webhook.Incoming"
         info = self.gen_list[api_name]
@@ -428,7 +568,19 @@ class ChatUser(BaseApi):
 
     def incoming_webhook_delete(
             self, webhook_id: str) -> dict[str, object] | str:
-        """Delete an incoming webhook."""
+        """
+        Delete an incoming webhook.
+
+        Parameters
+        ----------
+        webhook_id : str
+            Webhook ID to delete.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Webhook.Incoming"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -442,7 +594,14 @@ class ChatUser(BaseApi):
     # ═══════════════════════════════════════════════════════════════════════
 
     def outgoing_webhook_list(self) -> dict[str, object] | str:
-        """List all outgoing webhooks."""
+        """
+        List all outgoing webhooks.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Webhook.Outgoing"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -453,7 +612,25 @@ class ChatUser(BaseApi):
     def outgoing_webhook_create(
         self, name: str, channel_id: str, url: str, events: list[str] | None = None
     ) -> dict[str, object] | str:
-        """Create an outgoing webhook (Chat POSTs events to your URL)."""
+        """
+        Create an outgoing webhook (Chat POSTs events to your URL).
+
+        Parameters
+        ----------
+        name : str
+            Webhook name.
+        channel_id : str
+            Channel ID.
+        url : str
+            Target URL for events.
+        events : list[str], optional
+            Event types (default ["message"]).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         if events is None:
             events = ["message"]
         api_name = "SYNO.Chat.Webhook.Outgoing"
@@ -467,7 +644,19 @@ class ChatUser(BaseApi):
 
     def outgoing_webhook_delete(
             self, webhook_id: str) -> dict[str, object] | str:
-        """Delete an outgoing webhook."""
+        """
+        Delete an outgoing webhook.
+
+        Parameters
+        ----------
+        webhook_id : str
+            Webhook ID to delete.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Webhook.Outgoing"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -481,7 +670,14 @@ class ChatUser(BaseApi):
     # ═══════════════════════════════════════════════════════════════════════
 
     def slash_command_list(self) -> dict[str, object] | str:
-        """List all slash commands."""
+        """
+        List all slash commands.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Webhook.Slash"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -492,7 +688,25 @@ class ChatUser(BaseApi):
     def slash_command_create(
         self, name: str, command: str, url: str, channel_id: str | None = None
     ) -> dict[str, object] | str:
-        """Create a slash command (/deploy, /alert, etc.)."""
+        """
+        Create a slash command (/deploy, /alert, etc.).
+
+        Parameters
+        ----------
+        name : str
+            Command display name.
+        command : str
+            Command text (e.g. "deploy").
+        url : str
+            Webhook URL to POST to.
+        channel_id : str, optional
+            Channel ID to restrict command to.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Webhook.Slash"
         info = self.gen_list[api_name]
         req: dict[str, Any] = {
@@ -504,7 +718,19 @@ class ChatUser(BaseApi):
         return self.request_data(api_name, info["path"], req)
 
     def slash_command_delete(self, command_id: str) -> dict[str, object] | str:
-        """Delete a slash command."""
+        """
+        Delete a slash command.
+
+        Parameters
+        ----------
+        command_id : str
+            Command ID to delete.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Webhook.Slash"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -518,7 +744,14 @@ class ChatUser(BaseApi):
     # ═══════════════════════════════════════════════════════════════════════
 
     def builtin_webhook_list(self) -> dict[str, object] | str:
-        """List built-in webhook integrations (e.g., GitHub, Jira)."""
+        """
+        List built-in webhook integrations (e.g., GitHub, Jira).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Webhook.BuiltIn"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -531,7 +764,14 @@ class ChatUser(BaseApi):
     # ═══════════════════════════════════════════════════════════════════════
 
     def broadcast_webhook_list(self) -> dict[str, object] | str:
-        """List broadcast webhooks."""
+        """
+        List broadcast webhooks.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Webhook.Broadcast"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -546,7 +786,8 @@ class ChatUser(BaseApi):
     def bot_set(
         self, user_id: int, nickname: str,
     ) -> dict[str, object] | str:
-        """Add/update a bot in the chat user list.
+        """
+        Add/update a bot in the chat user list.
 
         The ``user_id`` comes from a webhook or chatbot integration.
         Call this after creating an incoming webhook or chatbot to
@@ -559,7 +800,13 @@ class ChatUser(BaseApi):
         nickname : str
             Display name for the bot in chat.
 
-        Example:
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+
+        Examples
+        --------
             >>> wh = chat.incoming_webhook_create("mybot", "1")
             >>> chat.bot_set(wh["data"]["user_id"], "My Bot")
         """
@@ -574,14 +821,21 @@ class ChatUser(BaseApi):
         )
 
     def bot_delete(self, user_id: int) -> dict[str, object] | str:
-        """Remove a bot from the chat user list.
+        """
+        Remove a bot from the chat user list.
 
         Parameters
         ----------
         user_id : int
             Bot user ID to remove.
 
-        Example:
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+
+        Examples
+        --------
             >>> chat.bot_delete(40)
         """
         api_name = "SYNO.Chat.Bot"
@@ -596,7 +850,14 @@ class ChatUser(BaseApi):
     # ═══════════════════════════════════════════════════════════════════════
 
     def external_list(self) -> dict[str, object] | str:
-        """List all external integrations (combined view)."""
+        """
+        List all external integrations (combined view).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.External"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -611,7 +872,23 @@ class ChatUser(BaseApi):
     def post_list(
         self, channel_id: int, limit: int = 50, offset: int = 0
     ) -> dict[str, object] | str:
-        """List posts in a channel."""
+        """
+        List posts in a channel.
+
+        Parameters
+        ----------
+        channel_id : int
+            Channel ID.
+        limit : int
+            Max posts per page (default 50).
+        offset : int
+            Pagination offset (default 0).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Post"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -638,7 +915,8 @@ class ChatUser(BaseApi):
         offset: int = 0,
         limit: int = 50,
     ) -> dict[str, object] | str:
-        """Search posts across one or more channels.
+        """
+        Search posts across one or more channels.
 
         Powerful search with filters for post type, attachments (pin/url/star),
         author, time range, and sorting.
@@ -680,7 +958,7 @@ class ChatUser(BaseApi):
         Returns
         -------
         dict[str, object] or str
-            ``{"data": {"search_results": [...], "total": N, "offset": 0, "limit": 50}, "success": True}``
+            ``{"data": {"search_results": [...], "total": N, "offset": 0, "limit": 50}, "success": True}``.
 
         Examples
         --------
@@ -733,7 +1011,8 @@ class ChatUser(BaseApi):
     def post_create(
         self, channel_id: int, message: str, file_id: str | None = None
     ) -> dict[str, object] | str:
-        """Post a message to a channel (direct API, no webhook needed).
+        """
+        Post a message to a channel (direct API, no webhook needed).
 
         Parameters
         ----------
@@ -771,7 +1050,21 @@ class ChatUser(BaseApi):
     def post_attachment_list(
         self, channel_id: int, limit: int = 50
     ) -> dict[str, object] | str:
-        """List post attachments."""
+        """
+        List post attachments.
+
+        Parameters
+        ----------
+        channel_id : int
+            Channel ID.
+        limit : int
+            Max results (default 50).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Post.Attachment"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -784,7 +1077,8 @@ class ChatUser(BaseApi):
 
     def post_file_upload(self, channel_id: int,
                          file_path: str) -> dict[str, object] | str:
-        """Upload a file to a chat channel.
+        """
+        Upload a file to a chat channel.
 
         Sends a ``multipart/form-data`` POST to ``SYNO.Chat.Post``
         (``method=create``, ``version=5``).
@@ -801,7 +1095,8 @@ class ChatUser(BaseApi):
         dict[str, object] or str
             Success response with ``file_props`` including file name and size.
 
-        Example:
+        Examples
+        --------
             >>> chat.post_file_upload("72", "/tmp/report.pdf")
         """
         import os
@@ -849,7 +1144,8 @@ class ChatUser(BaseApi):
     def post_reaction_add(
         self, post_id: str, sticker_name: str
     ) -> dict[str, object] | str:
-        """Add a reaction (sticker) to a post.
+        """
+        Add a reaction (sticker) to a post.
 
         Parameters
         ----------
@@ -859,7 +1155,13 @@ class ChatUser(BaseApi):
             Sticker name, e.g. ``"grinning"``, ``"heart"``, ``"thumbsup"``.
             See Synology Chat sticker picker for available names.
 
-        Example:
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+
+        Examples
+        --------
             >>> chat.post_reaction_add("115964116996", "grinning")
         """
         api_name = "SYNO.Chat.Post.Reaction"
@@ -873,7 +1175,8 @@ class ChatUser(BaseApi):
         )
 
     def post_pin(self, post_id: str) -> dict[str, object] | str:
-        """Pin a post to the top of the channel.
+        """
+        Pin a post to the top of the channel.
 
         Pinned posts are visible via :meth:`post_search` with
         ``has=["pin"]``.
@@ -883,7 +1186,13 @@ class ChatUser(BaseApi):
         post_id : str
             Target post ID.
 
-        Example:
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+
+        Examples
+        --------
             >>> chat.post_pin("309237645323")
         """
         api_name = "SYNO.Chat.Post"
@@ -895,12 +1204,18 @@ class ChatUser(BaseApi):
         )
 
     def post_unpin(self, post_id: str) -> dict[str, object] | str:
-        """Unpin a previously pinned post.
+        """
+        Unpin a previously pinned post.
 
         Parameters
         ----------
         post_id : str
             Target post ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
         """
         api_name = "SYNO.Chat.Post"
         info = self.gen_list[api_name]
@@ -917,7 +1232,8 @@ class ChatUser(BaseApi):
         limit: int = 25,
         related_comment_count: int = 3,
     ) -> dict[str, object] | str:
-        """List threads (posts with replies) in a channel.
+        """
+        List threads (posts with replies) in a channel.
 
         Returns root posts that have replies, along with the reply
         posts themselves.
@@ -936,12 +1252,12 @@ class ChatUser(BaseApi):
         Returns
         -------
         dict[str, object] or str
-            ``{"data": {"search_results": [...], "related_posts": [...], "total": N}, "success": True}``
+            ``{"data": {"search_results": [...], "related_posts": [...], "total": N}, "success": True}``.
+            ``search_results`` contains root posts (``thread_id`` == own
+            ``post_id``). ``related_posts`` contains replies.
 
-        ``search_results`` contains root posts (``thread_id`` == own
-        ``post_id``). ``related_posts`` contains replies.
-
-        Example:
+        Examples
+        --------
             >>> threads = chat.post_thread_list(72)
             >>> for t in threads["data"]["search_results"]:
             ...     print(f"Thread: {t['message'][:50]} "
@@ -962,7 +1278,8 @@ class ChatUser(BaseApi):
     def post_reminder_list(
         self, channel_id: int
     ) -> dict[str, object] | str:
-        """List post reminders in a channel.
+        """
+        List post reminders in a channel.
 
         Parameters
         ----------
@@ -972,7 +1289,7 @@ class ChatUser(BaseApi):
         Returns
         -------
         dict[str, object] or str
-            ``{"data": {"posts": [...]}, "success": True}``
+            ``{"data": {"posts": [...]}, "success": True}``.
         """
         api_name = "SYNO.Chat.Post.Reminder"
         info = self.gen_list[api_name]
@@ -987,7 +1304,8 @@ class ChatUser(BaseApi):
     def post_reminder_delete(
         self, channel_id: int, post_id: str
     ) -> dict[str, object] | str:
-        """Delete a post reminder.
+        """
+        Delete a post reminder.
 
         Parameters
         ----------
@@ -995,6 +1313,11 @@ class ChatUser(BaseApi):
             Channel ID.
         post_id : str
             Post ID whose reminder should be deleted.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
         """
         api_name = "SYNO.Chat.Post.Reminder"
         info = self.gen_list[api_name]
@@ -1009,7 +1332,8 @@ class ChatUser(BaseApi):
     def post_reminder_get(
         self, post_id: str
     ) -> dict[str, object] | str:
-        """Get the reminder set on a post.
+        """
+        Get the reminder set on a post.
 
         Parameters
         ----------
@@ -1036,7 +1360,8 @@ class ChatUser(BaseApi):
     def post_reminder_set(
         self, post_id: str, remind_at: int
     ) -> dict[str, object] | str:
-        """Set or update a reminder on a post.
+        """
+        Set or update a reminder on a post.
 
         Parameters
         ----------
@@ -1046,7 +1371,13 @@ class ChatUser(BaseApi):
             Unix timestamp in **milliseconds** when to trigger the
             reminder.
 
-        Example:
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+
+        Examples
+        --------
             >>> import time
             >>> # Remind in 1 hour
             >>> remind_at = int((time.time() + 3600) * 1000)
@@ -1065,7 +1396,8 @@ class ChatUser(BaseApi):
     def post_schedule_list(
         self, channel_id: int
     ) -> dict[str, object] | str:
-        """List scheduled (delayed) posts in a channel.
+        """
+        List scheduled (delayed) posts in a channel.
 
         Parameters
         ----------
@@ -1075,7 +1407,7 @@ class ChatUser(BaseApi):
         Returns
         -------
         dict[str, object] or str
-            ``{"data": {"schedule_posts": [{"cronjob_id": N, "message": "...", "send_at": ms_ts}]}, "success": True}``
+            ``{"data": {"schedule_posts": [{"cronjob_id": N, "message": "...", "send_at": ms_ts}]}, "success": True}``.
         """
         api_name = "SYNO.Chat.Post.Schedule"
         info = self.gen_list[api_name]
@@ -1090,7 +1422,8 @@ class ChatUser(BaseApi):
     def post_schedule_create(
         self, channel_id: int, message: str, send_at: int
     ) -> dict[str, object] | str:
-        """Schedule a post to be sent at a future time.
+        """
+        Schedule a post to be sent at a future time.
 
         Parameters
         ----------
@@ -1107,7 +1440,8 @@ class ChatUser(BaseApi):
         dict[str, object] or str
             Response with ``cronjob_id``.
 
-        Example:
+        Examples
+        --------
             >>> import time
             >>> # Schedule 1 hour from now
             >>> send_at = int((time.time() + 3600) * 1000)
@@ -1127,12 +1461,18 @@ class ChatUser(BaseApi):
     def post_schedule_delete(
         self, cronjob_id: int
     ) -> dict[str, object] | str:
-        """Delete a scheduled post before it's sent.
+        """
+        Delete a scheduled post before it's sent.
 
         Parameters
         ----------
         cronjob_id : int
             Cron job ID (from :meth:`post_schedule_list`).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
         """
         api_name = "SYNO.Chat.Post.Schedule"
         info = self.gen_list[api_name]
@@ -1149,7 +1489,14 @@ class ChatUser(BaseApi):
     # ═══════════════════════════════════════════════════════════════════════
 
     def chatbot_list(self) -> dict[str, object] | str:
-        """List chatbots."""
+        """
+        List chatbots.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Chatbot"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -1161,7 +1508,8 @@ class ChatUser(BaseApi):
         self, user_id: int, url: str, purpose: str = "",
         welcome_note: str = "", hide_from_user: bool = True,
     ) -> dict[str, object] | str:
-        """Create/update a chatbot integration.
+        """
+        Create/update a chatbot integration.
 
         Requires a ``user_id`` from an incoming webhook.
         The chatbot will receive messages and can respond via the URL.
@@ -1184,7 +1532,13 @@ class ChatUser(BaseApi):
         hide_from_user : bool
             If True, bot is hidden from the "Add" list (default True).
 
-        Example:
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+
+        Examples
+        --------
             >>> wh = chat.incoming_webhook_create("mybot", "1")
             >>> chat.chatbot_set(
             ...     wh["data"]["user_id"],
@@ -1208,7 +1562,14 @@ class ChatUser(BaseApi):
     # ═══════════════════════════════════════════════════════════════════════
 
     def sticker_list(self) -> dict[str, object] | str:
-        """List available stickers."""
+        """
+        List available stickers.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Sticker"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -1221,7 +1582,14 @@ class ChatUser(BaseApi):
     # ═══════════════════════════════════════════════════════════════════════
 
     def admin_setting_get(self) -> dict[str, object] | str:
-        """Get Chat Server admin settings."""
+        """
+        Get Chat Server admin settings.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Admin.Setting"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -1234,7 +1602,14 @@ class ChatUser(BaseApi):
     # ═══════════════════════════════════════════════════════════════════════
 
     def app_info(self) -> dict[str, object] | str:
-        """Get Chat app information."""
+        """
+        Get Chat app information.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.App"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -1243,7 +1618,14 @@ class ChatUser(BaseApi):
         )
 
     def misc_info(self) -> dict[str, object] | str:
-        """Get miscellaneous Chat info."""
+        """
+        Get miscellaneous Chat info.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = "SYNO.Chat.Misc"
         info = self.gen_list[api_name]
         return self.request_data(
@@ -1256,7 +1638,8 @@ class ChatUser(BaseApi):
     # ═══════════════════════════════════════════════════════════════════════
 
     def build_webhook_url(self, token: str) -> str:
-        """Build the incoming webhook URL from a UI-created token.
+        """
+        Build the incoming webhook URL from a UI-created token.
 
         Use a token from the Chat UI Integration → Incoming Webhook page
         (64 characters).  API-created webhook tokens will NOT work —
@@ -1270,7 +1653,7 @@ class ChatUser(BaseApi):
         Returns
         -------
         str
-            ``https://{ip}:{port}/webapi/entry.cgi?api=SYNO.Chat.External&version=2&method=incoming&token={token}``
+            ``https://{ip}:{port}/webapi/entry.cgi?api=SYNO.Chat.External&version=2&method=incoming&token=***``.
         """
         protocol = "https" if self.session._secure else "http"
         return (
@@ -1286,7 +1669,8 @@ class ChatUser(BaseApi):
     def send_webhook(token: str, text: str,
                      nas_url: str,
                      verify: bool = False) -> dict[str, Any]:
-        """Send a message via incoming webhook token (UI-created).
+        """
+        Send a message via incoming webhook token (UI-created).
 
         No DSM session required — just the webhook token and NAS URL.
 
@@ -1295,7 +1679,7 @@ class ChatUser(BaseApi):
         token : str
             64-char webhook token from Chat UI Integration page.
         text : str
-            Message text. Supports \\n and <url|link> syntax.
+            Message text. Supports \\n and \<url|link\> syntax.
         nas_url : str
             Base NAS URL, e.g. ``https://your-nas.local:5001``.
         verify : bool
@@ -1304,7 +1688,7 @@ class ChatUser(BaseApi):
         Returns
         -------
         dict
-            ``{"success": True}`` or ``{"success": False, "error": ...}``
+            ``{"success": True}`` or ``{"success": False, "error": ...}``.
         """
         payload = f"payload={json.dumps({'text': text})}"
         url = (
@@ -1335,7 +1719,8 @@ class ChatUser(BaseApi):
 
 
 class ChatBot:
-    """Synology Chat bot/webhook API — no DSM session required.
+    """
+    Synology Chat bot/webhook API — no DSM session required.
 
     Works with tokens created in the Chat UI Integration page.
     Supports two token types:
@@ -1358,13 +1743,39 @@ class ChatBot:
     def __init__(
         self, nas_url: str, token: str, cert_verify: bool = False
     ) -> None:
+        """
+        Initialise a ChatBot client with a UI-created token.
+
+        Parameters
+        ----------
+        nas_url : str
+            Base URL of the NAS, e.g. ``https://your-nas.local:5001``.
+        token : str
+            64-character token from Chat UI Integration page.
+        cert_verify : bool
+            Verify SSL certificate (default False).
+        """
         self._base = nas_url.rstrip("/")
         self._token = token
         self._verify = cert_verify
         self._api_url = f"{self._base}/webapi/entry.cgi"
 
     def _get(self, method: str, **params: Any) -> dict[str, Any]:
-        """GET request to SYNO.Chat.External."""
+        """
+        GET request to SYNO.Chat.External.
+
+        Parameters
+        ----------
+        method : str
+            API method name.
+        **params : Any
+            Additional query parameters.
+
+        Returns
+        -------
+        dict[str, Any]
+            API response.
+        """
         url_params = {
             "api": "SYNO.Chat.External",
             "method": method,
@@ -1389,7 +1800,23 @@ class ChatBot:
 
     def _post(self, method: str, payload: dict[str, Any],
               extra_params: dict[str, Any] | None = None) -> dict[str, Any]:
-        """POST request to SYNO.Chat.External (form-encoded payload)."""
+        """
+        POST request to SYNO.Chat.External (form-encoded payload).
+
+        Parameters
+        ----------
+        method : str
+            API method name.
+        payload : dict[str, Any]
+            JSON-serializable payload.
+        extra_params : dict[str, Any], optional
+            Additional query parameters.
+
+        Returns
+        -------
+        dict[str, Any]
+            API response.
+        """
         url_params: dict[str, Any] = {
             "api": "SYNO.Chat.External",
             "method": method,
@@ -1421,16 +1848,28 @@ class ChatBot:
     # ── Read methods (Bot token only) ────────────────────────────────────
 
     def channel_list(self) -> dict[str, Any]:
-        """List channels visible to the bot.
+        """
+        List channels visible to the bot.
 
         Requires a **bot token**.  Webhook tokens return code 404.
+
+        Returns
+        -------
+        dict[str, Any]
+            API response.
         """
         return self._get("channel_list")
 
     def user_list(self) -> dict[str, Any]:
-        """List users visible to the bot.
+        """
+        List users visible to the bot.
 
         Requires a **bot token**.  Webhook tokens return code 404.
+
+        Returns
+        -------
+        dict[str, Any]
+            API response.
         """
         return self._get("user_list")
 
@@ -1441,7 +1880,8 @@ class ChatBot:
         next_count: int = 20,
         prev_count: int = 1,
     ) -> dict[str, Any]:
-        """List messages in a channel.
+        """
+        List messages in a channel.
 
         Requires a **bot token** and the bot must be a member of
         the channel (otherwise error 401).
@@ -1456,6 +1896,11 @@ class ChatBot:
             Messages after anchor.
         prev_count : int
             Messages before anchor.
+
+        Returns
+        -------
+        dict[str, Any]
+            API response.
         """
         params: dict[str, Any] = {
             "channel_id": channel_id,
@@ -1467,21 +1912,39 @@ class ChatBot:
         return self._get("post_list", **params)
 
     def post_file_get(self, post_id: str) -> dict[str, Any]:
-        """Download file attachment for a post (bot token)."""
+        """
+        Download file attachment for a post (bot token).
+
+        Parameters
+        ----------
+        post_id : str
+            Post ID with file attachment.
+
+        Returns
+        -------
+        dict[str, Any]
+            API response.
+        """
         return self._get("post_file_get", post_id=post_id)
 
     # ── Send methods ─────────────────────────────────────────────────────
 
     def send_incoming(self, text: str, file_url: str |
                       None = None) -> dict[str, Any]:
-        """Send a message to a channel via **incoming webhook token**.
+        """
+        Send a message to a channel via **incoming webhook token**.
 
         Parameters
         ----------
         text : str
-            Message text. Supports \\n and <url|link> syntax.
+            Message text. Supports \\n and \<url|link\> syntax.
         file_url : str, optional
             Publicly accessible file URL to attach (max 32 MB).
+
+        Returns
+        -------
+        dict[str, Any]
+            API response.
         """
         payload: dict[str, Any] = {"text": text}
         if file_url:
@@ -1489,7 +1952,8 @@ class ChatBot:
         return self._post("incoming", payload)
 
     def send_message(self, text: str, user_ids: list[int]) -> dict[str, Any]:
-        """Send a DM to specific users via **bot token**.
+        """
+        Send a DM to specific users via **bot token**.
 
         Parameters
         ----------
@@ -1497,6 +1961,11 @@ class ChatBot:
             Message text.
         user_ids : list[int]
             Target user IDs (e.g. ``[2]`` for user 2).
+
+        Returns
+        -------
+        dict[str, Any]
+            API response.
 
         Notes
         -----
