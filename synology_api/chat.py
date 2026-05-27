@@ -1679,7 +1679,7 @@ class ChatUser(BaseApi):
         token : str
             64-char webhook token from Chat UI Integration page.
         text : str
-            Message text. Supports \\n and \<url|link\> syntax.
+            Message text. Supports \\n and \\<url|link\\> syntax.
         nas_url : str
             Base NAS URL, e.g. ``https://your-nas.local:5001``.
         verify : bool
@@ -1937,7 +1937,7 @@ class ChatBot:
         Parameters
         ----------
         text : str
-            Message text. Supports \\n and \<url|link\> syntax.
+            Message text. Supports \\n and \\<url|link\\> syntax.
         file_url : str, optional
             Publicly accessible file URL to attach (max 32 MB).
 
