@@ -5,6 +5,7 @@ from . import \
     base_api, \
     chat, \
     cloud_sync, \
+    calendar, \
     core_active_backup, \
     core_backup, \
     core_certificate, \
@@ -33,6 +34,7 @@ from . import \
     downloadstation, \
     drive_admin_console, \
     filestation, \
+    ldap_server, \
     log_center, \
     notestation, \
     oauth, \

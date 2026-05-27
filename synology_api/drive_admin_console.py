@@ -291,6 +291,290 @@ class AdminConsole(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
+    # ═══════════════════════════════════════════════════════════════════════
+    # Additional Drive APIs (not in original AdminConsole)
+    # ═══════════════════════════════════════════════════════════════════════
+
+    def drive_info(self) -> dict[str, object] | str:
+        """
+        Get Synology Drive Server information.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Server metadata including DSM ID, versioning settings,
+            display preferences, and beta feature flags.
+
+        Examples
+        --------
+            >>> admin.drive_info()
+        """
+        api_name = 'SYNO.SynologyDrive.Info'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def drive_dsm_info(self) -> dict[str, object] | str:
+        """
+        Get DSM integration information for Drive.
+
+        Returns
+        -------
+        dict[str, object] or str
+            DSM-level Drive settings and integration status.
+
+        Examples
+        --------
+            >>> admin.drive_dsm_info()
+        """
+        api_name = 'SYNO.SynologyDrive.DSM'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def drive_statistics(self) -> dict[str, object] | str:
+        """
+        Get Synology Drive usage statistics.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Statistics including file counts, user counts,
+            and storage usage breakdowns.
+
+        Examples
+        --------
+            >>> admin.drive_statistics()
+        """
+        api_name = 'SYNO.SynologyDrive.Statistics'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def drive_activation(self) -> dict[str, object] | str:
+        """
+        Get Synology Drive license activation status.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Activation status, time, and serial number.
+
+        Examples
+        --------
+            >>> admin.drive_activation()
+        """
+        api_name = 'SYNO.SynologyDrive.Activation'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def drive_share_list(self) -> dict[str, object] | str:
+        """
+        List all Synology Drive shares (team folders).
+
+        Unlike :meth:`share_active_list` which uses ``list_active``,
+        this method uses the full ``list`` endpoint returning all
+        shares regardless of activity status.
+
+        Returns
+        -------
+        dict[str, object] or str
+            ``{"data": {"items": [...], "total": N}, "success": true}``.
+            Each item includes share name, permissions, watermark
+            settings, and download restrictions.
+
+        Examples
+        --------
+            >>> admin.drive_share_list()
+        """
+        api_name = 'SYNO.SynologyDrive.Share'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def drive_team_folder_list(self) -> dict[str, object] | str:
+        """
+        List all Synology Drive team folders.
+
+        Returns
+        -------
+        dict[str, object] or str
+            ``{"data": {"items": [...], "total": N}, "success": true}``.
+
+        Examples
+        --------
+            >>> admin.drive_team_folder_list()
+        """
+        api_name = 'SYNO.SynologyDrive.TeamFolders'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def drive_privilege_list(
+        self, offset: int = 0, limit: int = 100
+    ) -> dict[str, object] | str:
+        """
+        List Synology Drive user privileges.
+
+        Parameters
+        ----------
+        offset : int, optional
+            Pagination offset (default 0).
+        limit : int, optional
+            Maximum results per page (default 100).
+
+        Returns
+        -------
+        dict[str, object] or str
+            ``{"data": {"users": [...], "total": N, "offset": N}, "success": true}``.
+
+        Examples
+        --------
+            >>> admin.drive_privilege_list()
+            >>> admin.drive_privilege_list(offset=100, limit=50)
+        """
+        api_name = 'SYNO.SynologyDrive.Privilege'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'list',
+            'offset': offset,
+            'limit': limit,
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def drive_task_list(self) -> dict[str, object] | str:
+        """
+        List Synology Drive background tasks.
+
+        Returns
+        -------
+        dict[str, object] or str
+            ``{"data": {"items": [...], "total": N}, "success": true}``.
+
+        Examples
+        --------
+            >>> admin.drive_task_list()
+        """
+        api_name = 'SYNO.SynologyDrive.Tasks'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def drive_label_list(self) -> dict[str, object] | str:
+        """
+        List Synology Drive file labels/tags.
+
+        Returns
+        -------
+        dict[str, object] or str
+            ``{"data": {"items": [...], "total": N}, "success": true}``.
+
+        Examples
+        --------
+            >>> admin.drive_label_list()
+        """
+        api_name = 'SYNO.SynologyDrive.Labels'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def drive_notification_list(
+        self, offset: int = 0, limit: int = 50
+    ) -> dict[str, object] | str:
+        """
+        List Synology Drive notifications.
+
+        Parameters
+        ----------
+        offset : int, optional
+            Pagination offset (default 0).
+        limit : int, optional
+            Maximum results per page (default 50).
+
+        Returns
+        -------
+        dict[str, object] or str
+            ``{"data": {"items": [...], "total": N}, "success": true}``.
+
+        Examples
+        --------
+            >>> admin.drive_notification_list()
+        """
+        api_name = 'SYNO.SynologyDrive.Notifications'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'list',
+            'offset': offset,
+            'limit': limit,
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def drive_node_locking_option(self) -> dict[str, object] | str:
+        """
+        Get Synology Drive file locking configuration.
+
+        Returns
+        -------
+        dict[str, object] or str
+            File locking settings including auto-lock, view-level
+            permissions, and supported file type views.
+
+        Examples
+        --------
+            >>> admin.drive_node_locking_option()
+        """
+        api_name = 'SYNO.SynologyDrive.NodeLockingOption'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def sharesync_config(self) -> dict[str, object] | str:
+        """
+        Get Synology Drive ShareSync configuration.
+
+        Returns
+        -------
+        dict[str, object] or str
+            ShareSync settings including conflict policy,
+            rename handling, repository location, and
+            synchronization mode.
+
+        Examples
+        --------
+            >>> admin.sharesync_config()
+        """
+        api_name = 'SYNO.SynologyDriveShareSync.Config'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
     def index_pause(self, time_pause: int = 60) -> dict[str, object] | str:
         """
         Pause native client index for a specified duration.

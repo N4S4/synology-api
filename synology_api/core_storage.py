@@ -305,6 +305,98 @@ class CoreStorage(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
+    # ─── SYNO.Storage.CGI — Storage Manager (gen_list only) ──────────────
+
+    def storage_load_info(self) -> dict[str, object] | str:
+        """
+        Get full Storage Manager overview.
+
+        Returns disk, pool, volume, enclosure and port information
+        in a single call. This is the primary endpoint used by the
+        Storage Manager web UI.
+
+        Returns
+        -------
+        dict[str, object] or str
+            ``{"data": {"disks": [...], "detected_pools": [...],
+            "overview_data": {...}, "ports": [...], ...}, "success": true}``.
+
+        Examples
+        --------
+            >>> storage.storage_load_info()
+        """
+        api_name = 'SYNO.Storage.CGI.Storage'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'load_info'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def storage_smart_scheduler_list(self) -> dict[str, object] | str:
+        """
+        List S.M.A.R.T. test schedules.
+
+        Returns
+        -------
+        dict[str, object] or str
+            ``{"data": {"items": [...], "total": N}, "success": true}``.
+            Each item includes schedule type, frequency, and target disks.
+
+        Examples
+        --------
+            >>> storage.storage_smart_scheduler_list()
+        """
+        api_name = 'SYNO.Storage.CGI.Smart.Scheduler'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def storage_hdd_manager_get(self) -> dict[str, object] | str:
+        """
+        Get HDD health threshold settings.
+
+        Returns S.M.A.R.T. warning thresholds for bad sectors,
+        remaining life, and other disk health indicators.
+
+        Returns
+        -------
+        dict[str, object] or str
+            ``{"data": {"BadSctrThrEn": ..., "RemainLifeThrEn": ...,
+            ...}, "success": true}``.
+
+        Examples
+        --------
+            >>> storage.storage_hdd_manager_get()
+        """
+        api_name = 'SYNO.Storage.CGI.HddMan'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def storage_spare_list(self) -> dict[str, object] | str:
+        """
+        List hot spare disks.
+
+        Returns
+        -------
+        dict[str, object] or str
+            ``{"data": {"hotSpares": [...]}, "success": true}``.
+
+        Examples
+        --------
+            >>> storage.storage_spare_list()
+        """
+        api_name = 'SYNO.Storage.CGI.Spare'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
     # ─── SYNO.Core.Quota ───────────────────────────────────────────────
 
     def quota_get(self, volume_path: str) -> dict[str, object] | str:
