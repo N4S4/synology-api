@@ -1,58 +1,57 @@
-"""
-Synology Chat API wrapper for DSM 7.3.2.
+"""Synology Chat API wrapper for DSM 7.3.2.
 
 Tested against DSM 7.3.2 (DS218+) with Synology Chat Server 2.4.5-22148.
 39 Chat APIs registered; 35 confirmed working (+ bot/webhook token modes).
 
 Two authentication modes
-------------------------
-1. **DSM session** (username + password) — full API access via WebAPI.
+~~~~~~~~~~~~~~~~~~~~~~~~
+1. **DSM session** (username + password) -- full API access via WebAPI.
    Use ``ChatUser`` class.  Works for channel/user/post CRUD and webhook mgmt.
-2. **Bot / Webhook token** (no DSM login) — lightweight, token-only.
+2. **Bot / Webhook token** (no DSM login) -- lightweight, token-only.
    Use ``ChatBot`` class.  Token from Chat UI Integration page.
 
 Working APIs (DSM session)
---------------------------
-- SYNO.Chat.Channel.list              — List all channels
-- SYNO.Chat.Channel.archive           — Archive a channel
-- SYNO.Chat.Channel.close             — Close (delete) a channel
-- SYNO.Chat.Channel.view              — Mark channel as read
-- SYNO.Chat.Channel.Named.create      — Create a named channel
-- SYNO.Chat.Channel.Named.join        — Join a channel after creation
-- SYNO.Chat.Channel.Named.invite      — Invite users to a channel
-- SYNO.Chat.Channel.Preference.get    — Read channel preferences
-- SYNO.Chat.User.list / get           — List/get Chat users
-- SYNO.Chat.User.Preference.get       — Read user preferences
-- SYNO.Chat.Post.list / create        — Read/send channel messages
-- SYNO.Chat.Post.search               — Search with filters (keyword, type, has, author, time)
-- SYNO.Chat.Post.thread_list          — List threads (posts with replies)
-- SYNO.Chat.Post.pin / unpin          — Pin/unpin posts
-- SYNO.Chat.Post.Reaction.set         — Add sticker reactions to posts
-- SYNO.Chat.Post.Reminder.*           — Get/set/list/delete post reminders
-- SYNO.Chat.Post.Schedule.*           — List/create/delete scheduled posts
-- SYNO.Chat.Webhook.Incoming.*        — Full CRUD incoming webhooks
-- SYNO.Chat.Webhook.Outgoing.*        — Full CRUD outgoing webhooks
-- SYNO.Chat.Webhook.Slash.*           — Full CRUD slash commands
-- SYNO.Chat.Chatbot.list / set          — List/create chatbots
-- SYNO.Chat.Bot.set / delete           — Add/remove bots from chat
-- SYNO.Chat.Admin.Setting.get         — Read admin settings
-- SYNO.Chat.Sticker.list              — List stickers
-- SYNO.Chat.App.list                  — App info
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+- SYNO.Chat.Channel.list              -- List all channels
+- SYNO.Chat.Channel.archive           -- Archive a channel
+- SYNO.Chat.Channel.close             -- Close (delete) a channel
+- SYNO.Chat.Channel.view              -- Mark channel as read
+- SYNO.Chat.Channel.Named.create      -- Create a named channel
+- SYNO.Chat.Channel.Named.join        -- Join a channel after creation
+- SYNO.Chat.Channel.Named.invite      -- Invite users to a channel
+- SYNO.Chat.Channel.Preference.get    -- Read channel preferences
+- SYNO.Chat.User.list / get           -- List/get Chat users
+- SYNO.Chat.User.Preference.get       -- Read user preferences
+- SYNO.Chat.Post.list / create        -- Read/send channel messages
+- SYNO.Chat.Post.search               -- Search with filters (keyword, type, has, author, time)
+- SYNO.Chat.Post.thread_list          -- List threads (posts with replies)
+- SYNO.Chat.Post.pin / unpin          -- Pin/unpin posts
+- SYNO.Chat.Post.Reaction.set         -- Add sticker reactions to posts
+- SYNO.Chat.Post.Reminder.*           -- Get/set/list/delete post reminders
+- SYNO.Chat.Post.Schedule.*           -- List/create/delete scheduled posts
+- SYNO.Chat.Webhook.Incoming.*        -- Full CRUD incoming webhooks
+- SYNO.Chat.Webhook.Outgoing.*        -- Full CRUD outgoing webhooks
+- SYNO.Chat.Webhook.Slash.*           -- Full CRUD slash commands
+- SYNO.Chat.Chatbot.list / set        -- List/create chatbots
+- SYNO.Chat.Bot.set / delete          -- Add/remove bots from chat
+- SYNO.Chat.Admin.Setting.get         -- Read admin settings
+- SYNO.Chat.Sticker.list              -- List stickers
+- SYNO.Chat.App.list                  -- App info
 
-Working APIs (Bot token — ``ChatBot``)
--------------------------------------------
-- channel_list                        — Channels visible to bot
-- user_list                           — Users visible to bot
-- post_list                           — Messages in a channel (bot must be member)
-- chatbot (send)                      — Send DM to users via user_ids
-- post_file_get                       — Download file attachments
+Working APIs (Bot token)
+~~~~~~~~~~~~~~~~~~~~~~~~
+- channel_list                        -- Channels visible to bot
+- user_list                           -- Users visible to bot
+- post_list                           -- Messages in a channel (bot must be member)
+- chatbot (send)                      -- Send DM to users via user_ids
+- post_file_get                       -- Download file attachments
 
-Working APIs (Webhook token — ``ChatBot``)
------------------------------------------------
-- incoming (send)                     — Post messages to channel
+Working APIs (Webhook token)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- incoming (send)                     -- Post messages to channel
 
-Important notes
----------------
+Notes
+-----
 - Chat APIs are in ``self.gen_list`` (full_api_list), NOT ``core_list``.
 - ``post_create()`` uses ``message`` key (not ``text``).
 - **Sending DMs:** Synology Chat has no direct "send DM" API. DMs are
@@ -62,6 +61,7 @@ Important notes
   Only UI-created webhook tokens work with ``SYNO.Chat.External``.
 - Bot tokens from Chat UI give access to ``channel_list/user_list/post_list``.
 """
+
 
 from __future__ import annotations
 
@@ -119,7 +119,7 @@ class ChatUser(BaseApi):
 
         Example:
             >>> chat.channel_list(simple=True)
-            {1: 'General', 27: '', 42: 'test'}
+            ``{1: 'General', 27: '', 42: 'test'}``
         """
         api_name = "SYNO.Chat.Channel"
         info = self.gen_list[api_name]
@@ -170,7 +170,8 @@ class ChatUser(BaseApi):
         }
         create_result = self.request_data(api_name, info["path"], req)
 
-        if not isinstance(create_result, dict) or not create_result.get("success"):
+        if not isinstance(create_result,
+                          dict) or not create_result.get("success"):
             return create_result
 
         ch_id = create_result["data"]["channel_id"]
@@ -314,7 +315,8 @@ class ChatUser(BaseApi):
         import time as _time
         api_name = "SYNO.Chat.Channel"
         info = self.gen_list[api_name]
-        ts = last_view_at if last_view_at is not None else int(_time.time() * 1000)
+        ts = last_view_at if last_view_at is not None else int(
+            _time.time() * 1000)
         return self.request_data(
             api_name, info["path"],
             {
@@ -324,13 +326,15 @@ class ChatUser(BaseApi):
             },
         )
 
-    def channel_preference_get(self, channel_id: int) -> dict[str, object] | str:
+    def channel_preference_get(
+            self, channel_id: int) -> dict[str, object] | str:
         """Get channel preferences (notifications, etc.)."""
         api_name = "SYNO.Chat.Channel.Preference"
         info = self.gen_list[api_name]
         return self.request_data(
             api_name, info["path"],
-            {"version": info["maxVersion"], "method": "get", "channel_id": channel_id},
+            {"version": info["maxVersion"],
+                "method": "get", "channel_id": channel_id},
         )
 
     # ═══════════════════════════════════════════════════════════════════════
@@ -352,7 +356,8 @@ class ChatUser(BaseApi):
         info = self.gen_list[api_name]
         return self.request_data(
             api_name, info["path"],
-            {"version": info["maxVersion"], "method": "get", "user_id": user_id},
+            {"version": info["maxVersion"],
+                "method": "get", "user_id": user_id},
         )
 
     def user_status_get(self, user_id: str) -> dict[str, object] | str:
@@ -361,7 +366,8 @@ class ChatUser(BaseApi):
         info = self.gen_list[api_name]
         return self.request_data(
             api_name, info["path"],
-            {"version": info["maxVersion"], "method": "get", "user_id": user_id},
+            {"version": info["maxVersion"],
+                "method": "get", "user_id": user_id},
         )
 
     def user_avatar_get(self, user_id: str) -> dict[str, object] | str:
@@ -370,7 +376,8 @@ class ChatUser(BaseApi):
         info = self.gen_list[api_name]
         return self.request_data(
             api_name, info["path"],
-            {"version": info["maxVersion"], "method": "get", "user_id": user_id},
+            {"version": info["maxVersion"],
+                "method": "get", "user_id": user_id},
         )
 
     def user_preference_get(self) -> dict[str, object] | str:
@@ -401,9 +408,11 @@ class ChatUser(BaseApi):
         """Create an incoming webhook to post messages into a channel.
 
         Returns a token and webhook user_id. The webhook URL to POST
-        messages to must be constructed as:
-            https://{host}:{port}/webapi/entry.cgi?api=SYNO.Chat.Webhook.Incoming&version=1&method=incoming&token={token}
-        with payload={\"text\": \"...\"} as form-encoded POST body.
+        messages to must be constructed as::
+
+            ``https://{host}:{port}/webapi/entry.cgi?api=SYNO.Chat.Webhook.Incoming&version=1&method=incoming&token=***``
+
+        with ``payload={"text": "..."}`` as form-encoded POST body.
 
         For direct posting without webhooks, prefer :meth:`post_create`.
         """
@@ -417,13 +426,15 @@ class ChatUser(BaseApi):
             req["icon_url"] = icon_url
         return self.request_data(api_name, info["path"], req)
 
-    def incoming_webhook_delete(self, webhook_id: str) -> dict[str, object] | str:
+    def incoming_webhook_delete(
+            self, webhook_id: str) -> dict[str, object] | str:
         """Delete an incoming webhook."""
         api_name = "SYNO.Chat.Webhook.Incoming"
         info = self.gen_list[api_name]
         return self.request_data(
             api_name, info["path"],
-            {"version": info["maxVersion"], "method": "delete", "id": webhook_id},
+            {"version": info["maxVersion"],
+                "method": "delete", "id": webhook_id},
         )
 
     # ═══════════════════════════════════════════════════════════════════════
@@ -454,13 +465,15 @@ class ChatUser(BaseApi):
         }
         return self.request_data(api_name, info["path"], req)
 
-    def outgoing_webhook_delete(self, webhook_id: str) -> dict[str, object] | str:
+    def outgoing_webhook_delete(
+            self, webhook_id: str) -> dict[str, object] | str:
         """Delete an outgoing webhook."""
         api_name = "SYNO.Chat.Webhook.Outgoing"
         info = self.gen_list[api_name]
         return self.request_data(
             api_name, info["path"],
-            {"version": info["maxVersion"], "method": "delete", "id": webhook_id},
+            {"version": info["maxVersion"],
+                "method": "delete", "id": webhook_id},
         )
 
     # ═══════════════════════════════════════════════════════════════════════
@@ -496,7 +509,8 @@ class ChatUser(BaseApi):
         info = self.gen_list[api_name]
         return self.request_data(
             api_name, info["path"],
-            {"version": info["maxVersion"], "method": "delete", "id": command_id},
+            {"version": info["maxVersion"],
+                "method": "delete", "id": command_id},
         )
 
     # ═══════════════════════════════════════════════════════════════════════
@@ -666,8 +680,7 @@ class ChatUser(BaseApi):
         Returns
         -------
         dict[str, object] or str
-            ``{"data": {"search_results": [...], "total": N,
-            "offset": 0, "limit": 50}, "success": True}``
+            ``{"data": {"search_results": [...], "total": N, "offset": 0, "limit": 50}, "success": True}``
 
         Examples
         --------
@@ -769,7 +782,8 @@ class ChatUser(BaseApi):
             },
         )
 
-    def post_file_upload(self, channel_id: int, file_path: str) -> dict[str, object] | str:
+    def post_file_upload(self, channel_id: int,
+                         file_path: str) -> dict[str, object] | str:
         """Upload a file to a chat channel.
 
         Sends a ``multipart/form-data`` POST to ``SYNO.Chat.Post``
@@ -922,8 +936,7 @@ class ChatUser(BaseApi):
         Returns
         -------
         dict[str, object] or str
-            ``{"data": {"search_results": [...], "related_posts": [...],
-            "total": N}, "success": True}``
+            ``{"data": {"search_results": [...], "related_posts": [...], "total": N}, "success": True}``
 
         ``search_results`` contains root posts (``thread_id`` == own
         ``post_id``). ``related_posts`` contains replies.
@@ -1062,9 +1075,7 @@ class ChatUser(BaseApi):
         Returns
         -------
         dict[str, object] or str
-            ``{"data": {"schedule_posts": [
-            {"cronjob_id": N, "message": "...", "send_at": ms_ts}
-            ]}, "success": True}``
+            ``{"data": {"schedule_posts": [{"cronjob_id": N, "message": "...", "send_at": ms_ts}]}, "success": True}``
         """
         api_name = "SYNO.Chat.Post.Schedule"
         info = self.gen_list[api_name]
@@ -1320,7 +1331,7 @@ class ChatUser(BaseApi):
             return {"success": False, "error": str(e)}
 
 
-# ── Token-based external API (no DSM session required) ────────────────────────
+# ── Token-based external API (no DSM session required) ──────────────────
 
 
 class ChatBot:
@@ -1461,7 +1472,8 @@ class ChatBot:
 
     # ── Send methods ─────────────────────────────────────────────────────
 
-    def send_incoming(self, text: str, file_url: str | None = None) -> dict[str, Any]:
+    def send_incoming(self, text: str, file_url: str |
+                      None = None) -> dict[str, Any]:
         """Send a message to a channel via **incoming webhook token**.
 
         Parameters
