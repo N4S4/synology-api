@@ -38,33 +38,6 @@ class LdapServer(BaseApi):
 
     Requires the LDAP Server package installed and at least
     one LDAP directory configured on the target NAS.
-
-    Parameters
-    ----------
-    ip_address : str
-        NAS IP address (e.g. ``"192.168.1.x"``).
-    port : str
-        NAS web interface port (e.g. ``"5001"``).
-    username : str
-        DSM user account name.
-    password : str
-        DSM user account password.
-    secure : bool, optional
-        Use HTTPS instead of HTTP (default True).
-    cert_verify : bool, optional
-        Verify SSL certificates (default False).
-    dsm_version : int, optional
-        DSM major version (default 7).
-    debug : bool, optional
-        Enable debug output (default True).
-    otp_code : str, optional
-        One-time password for 2FA login.
-    device_id : str, optional
-        Device ID for login session binding.
-    device_name : str, optional
-        Device name for login session binding.
-    interactive_output : bool, optional
-        Format output for interactive terminal use (default False).
     """
 
     # ═══════════════════════════════════════════════════════════════════════

@@ -978,6 +978,90 @@ class Package(base_api.BaseApi):
             (package for package in installed_packages if package["id"] == package_id), None)
         return package_infos != None
 
+    def get_installation_queue(
+        self, pkgs: list[dict[str, object]] | None = None,
+    ) -> dict[str, object]:
+        """
+        Get installation queue status for given packages.
+
+        Returns the installation queue including conflicted, broken,
+        paused, and non-existent package entries.
+
+        Parameters
+        ----------
+        pkgs : list[dict[str, object]], optional
+            List of package descriptors. Each dict should contain
+            ``pkg`` (str, package ID), ``operation`` (str, e.g.
+            ``"install"``), ``version`` (str), and ``beta`` (bool).
+            When ``None``, queries the queue without filtering.
+
+        Returns
+        -------
+        dict[str, object]
+            Queue status with keys ``queue``, ``broken_pkgs``,
+            ``conflicted_pkgs``, ``paused_pkgs``,
+            ``non_exist_pkgs``, ``replaced_pkgs``, and
+            ``cause_pausing_pkgs``.
+
+        Examples
+        --------
+            >>> pkg.get_installation_queue()
+            >>> pkg.get_installation_queue([{
+            ...     "pkg": "SSOServer",
+            ...     "operation": "install",
+            ...     "version": "3.0.6-0485",
+            ...     "beta": False
+            ... }])
+        """
+        api_name = 'SYNO.Core.Package.Installation'
+        info = self.core_list[api_name]
+        req_param: dict[str, object] = {
+            "method": "get_queue",
+            "version": 1,
+        }
+        if pkgs is not None:
+            req_param["pkgs"] = json.dumps(pkgs)
+
+        return self.request_data(api_name, 'query.cgi', req_param)
+
+    def delete_downloaded_package(self, path: str) -> dict[str, object]:
+        """
+        Delete a downloaded package temporary file.
+
+        Cleans up temporary download artifacts left by
+        ``download_package``. Does not affect installed packages.
+
+        .. warning::
+           This is a **destructive** operation — the file at
+           ``path`` will be permanently deleted on the NAS.
+
+        Parameters
+        ----------
+        path : str
+            Absolute path to the temporary download directory
+            on the NAS (e.g. ``"/volume2/@tmp/synopkg/..."``).
+
+        Returns
+        -------
+        dict[str, object]
+            API response confirming deletion.
+
+        Examples
+        --------
+            >>> pkg.delete_downloaded_package(
+            ...     "/volume2/@tmp/synopkg/download.abc123/@SYNOPKG_DOWNLOAD_SSOServer"
+            ... )
+        """
+        api_name = 'SYNO.Core.Package.Installation'
+        info = self.core_list[api_name]
+        req_param = {
+            "method": "delete",
+            "version": 1,
+            "path": path,
+        }
+
+        return self.request_data(api_name, 'query.cgi', req_param)
+
     def easy_install(self, package_id: str, volume_path: str, install_dependencies: bool = True) -> dict:
         """
         Execute an easy installation process of the package.
