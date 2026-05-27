@@ -10,17 +10,21 @@ ActiveBackupBusiness:
 ActiveBackupMicrosoft:
     status: finished
 AdminConsole:
-    status: partial
+    status: finished
+Antivirus:
+    status: finished
 AudioStation:
     status: partial
 Backup:
-    status: partial
+    status: finished
+Calendar:
+    status: finished
 Certificate:
     status: partial
 ChatUser:
-    status: finished  # 35/39 APIs working + bot/webhook token modes
+    status: finished
 ChatBot:
-    status: finished  # 5 bot + 1 webhook token methods
+    status: finished
 CloudSync:
     status: finished
 CoreNotification:
@@ -69,9 +73,13 @@ KeyManagerStore:
     status: not_started
 KeyManagerAutoKey:
     status: not_started
+LdapServer:
+    status: partial
 LogCenter:
     status: partial
 LUN:
+    status: finished
+MailPlusServer:
     status: finished
 NoteStation:
     status: partial
@@ -107,3 +115,5 @@ VPN:
     status: partial
 Virtualization:
     status: not_started
+WebStation:
+    status: finished
