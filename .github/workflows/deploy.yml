@@ -1,8 +1,4 @@
 name: Deploy to GitHub Pages
-defaults:
-  run:
-    shell: bash
-    working-directory: ./documentation
 
 on:
   push:
@@ -12,21 +8,39 @@ on:
 jobs:
   build:
     name: Build Docs
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate API docs markdown
+        run: python3 -m scripts.docs_parser -a -l
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: npm
           cache-dependency-path: ./documentation/package-lock.json
 
-      - name: Install dependencies
+      - name: Install Node dependencies
         run: npm ci
-      - name: Build website
+        working-directory: ./documentation
+
+      - name: Build Docusaurus website
         run: npm run build
+        working-directory: ./documentation
 
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
@@ -37,12 +51,10 @@ jobs:
     name: Deploy to GitHub Pages
     needs: build
 
-    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
-      pages: write # to deploy to Pages
-      id-token: write # to verify the deployment originates from an appropriate source
+      pages: write
+      id-token: write
 
-    # Deploy to the github-pages environment
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
