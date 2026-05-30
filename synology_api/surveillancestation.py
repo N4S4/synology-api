@@ -7565,6 +7565,58 @@ class SurveillanceStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
+    def ctrl_led(self,
+                 camId: int = None,
+                 ctrlVal: bool = False) -> dict[str, object] | str:
+        """Control the white LED on a camera that supports ``ledCap``.
+
+            The camera LED status is available via
+            :meth:`camera_list` with ``optimize=True`` as
+            ``whiteLedStatus`` (0 = Off, 1 = On).
+
+            Only works on cameras that report ``ledCap`` in
+            :meth:`get_camera_info`.
+
+            Parameters
+            ----------
+            camId : int
+                Camera ID (from :meth:`camera_list`).
+
+            ctrlVal : bool, default=False
+                ``True`` to turn the LED on, ``False`` to turn it off.
+
+            Returns
+            -------
+            dict[str, object] or str
+                Result of the LED control operation or error details.
+
+            Examples
+            --------
+            ```python
+            # Turn the LED on
+            ss.ctrl_led(camId=1, ctrlVal=True)
+
+            # Turn the LED off
+            ss.ctrl_led(camId=1, ctrlVal=False)
+            ```
+
+            See Also
+            --------
+            :meth:`camera_list` : Returns ``whiteLedStatus`` when optimize=True.
+            :meth:`get_camera_info` : Returns ``ledCap`` capability flag.
+        """
+        api_name = 'SYNO.SurveillanceStation.DigitalOutput'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'CtrlLED',
+                     'ctrlVal': json.dumps(ctrlVal).lower()}
+
+        if camId is not None:
+            req_param['camId'] = camId
+
+        return self.request_data(api_name, api_path, req_param)
+
     def trigger_external_event(self,
                                eventId: int = None,
                                # TODO to check
