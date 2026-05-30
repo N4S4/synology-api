@@ -216,9 +216,10 @@ def gen_doc_metadata(class_name: str, docs_status_info: dict) -> tuple[str, str]
         try:
             status_indicator = DOCS_STATUS_INDICATOR[docs_status]
         except KeyError:
+            status_values = "', '".join(DOCS_STATUS_INDICATOR.keys())
             warnings.warn(
                 f"Unknown documentation status '{docs_status}' for class '{class_name}'. "
-                f"Possible values: '{'\', \''.join(DOCS_STATUS_INDICATOR.keys())}'. "
+                f"Possible values: '{status_values}'. "
                 f"Please update `{DOCS_TRACKER.name}` accordingly.", UserWarning)
     else:
         warnings.warn(
