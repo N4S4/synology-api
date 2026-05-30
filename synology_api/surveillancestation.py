@@ -7591,6 +7591,11 @@ class SurveillanceStation(base_api.BaseApi):
         dict[str, object] or str
             Result of the LED control operation or error details.
 
+        See Also
+        --------
+        :meth:`camera_list` : Returns ``whiteLedStatus`` when optimize=True.
+        :meth:`get_camera_info` : Returns ``ledCap`` capability flag.
+
         Examples
         --------
         ```python
@@ -7600,11 +7605,6 @@ class SurveillanceStation(base_api.BaseApi):
         # Turn the LED off
         ss.ctrl_led(camId=1, ctrlVal=False)
         ```
-
-        See Also
-        --------
-        :meth:`camera_list` : Returns ``whiteLedStatus`` when optimize=True.
-        :meth:`get_camera_info` : Returns ``ledCap`` capability flag.
         """
         api_name = 'SYNO.SurveillanceStation.DigitalOutput'
         info = self.gen_list[api_name]
