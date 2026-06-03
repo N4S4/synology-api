@@ -1,4 +1,4 @@
-﻿## :card_file_box: Summary
+## :card_file_box: Summary
 
 > **What does this pull request do?**
 > A brief, one-sentence description.
@@ -23,7 +23,7 @@
 
 ## :checkered_flag: Checklist
 
-- [ ] I have read and followed the [Contributing guidelines](CONTRIBUTING.md).
+- [ ] I have read and followed the [Contributing guidelines](https://N4S4.github.io/synology-api/docs/contribute/readme).
 - [ ] All new or modified code is covered by unit tests (`tests/`).
 - [ ] Tests pass locally (`pytest`).
 - [ ] I added or updated documentation where necessary.
@@ -69,4 +69,4 @@
 
 ---
 
-Thank you for contributing! ðŸ™
+Thank you for contributing! 🙏
