@@ -13,11 +13,11 @@ As I say the following are just _guidelines_ so do not feel obligated, **except 
 
 ## 📝 Documentation
 
-Documentation is **important**, specially in this end-user focused package, so please take a look at the [Documentation Guidelines](docs_guidelines).
+Documentation is **important**, specially in this end-user focused package, so please take a look at the [Documentation Guidelines](./docs_guidelines).
 
 ## 😁 Be cool
 
-Take a moment to check out our [Code of Conduct](conduct_code).
+Take a moment to check out our [Code of Conduct](./conduct_code).
 
 ## 🛠️ Setup your environment
 
