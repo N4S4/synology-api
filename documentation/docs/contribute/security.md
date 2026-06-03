@@ -29,7 +29,7 @@ We strongly encourage responsible disclosure. Do **not** post vulnerabilities in
 
 | Channel                      | How to report                                                                                                                               |
 |------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| **Email**                    | Send a private message to the maintainer: **renato@visaggio.io**. Include detailed steps to reproduce, affected DSM versions, and any logs. |
+| **Email**                    | Send a private message to the maintainer: **synology.python.api@gmail.com**. Include detailed steps to reproduce, affected DSM versions, and any logs. |
 | **GitHub Security Advisory** | Use GitHub's *Security* tab if you are a GitHub user with a private repository.                                                             |
 | **Encrypted Communication**  | For highly sensitive reports, use PGP encryption. Contact maintainer to obtain a public key.                                                |
 

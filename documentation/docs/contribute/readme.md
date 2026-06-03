@@ -37,6 +37,67 @@ Install the right version of tools:
 asdf install
 ```
 
+#### Windows setup
+
+`asdf` does not have a native Windows installer, but it works on Windows
+through **WSL2**, **Git Bash**, or **PowerShell Core**.
+If you prefer not to use `asdf`, install the required tools
+using one of the following package managers:
+
+- [Chocolatey](https://chocolatey.org/install) (`choco`)
+- [winget](https://github.com/microsoft/winget-cli) (built into Windows 10+)
+- [Scoop](https://scoop.sh/)
+- Manual installation from each tool's website
+
+##### Required tools and versions
+
+| Tool | Version | winget | choco | scoop |
+|------|---------|--------|-------|-------|
+| Node.js | `18.18.0` | `winget install OpenJS.NodeJS.LTS` | `choco install nodejs` | `scoop install nodejs-lts` |
+| Python | `3.13.5` | manual install | `choco install python` | `scoop install python`¹ |
+| Task (go-task) | `3.44.0` | `winget install Task.Task` | `choco install go-task` | `scoop install task` |
+| shfmt | `3.11.0` | `winget install mvdan.shfmt` | `choco install shfmt` | `scoop install shfmt` |
+| shellcheck | `0.10.0` | — | `choco install shellcheck` | `scoop install shellcheck` |
+| pre-commit | `4.2.0` | — | — | `pip install pre-commit==4.2.0` |
+
+¹ For Python 3.13 specifically: `scoop bucket add versions && scoop install python313`
+
+> **About versions:** The `.tool-versions` file pins exact versions for `asdf`,
+> but on Windows without `asdf`, installing the latest compatible version of
+> each tool is sufficient. `choco` and `scoop` install the latest available
+> version by default. To check available versions on Chocolatey:
+> `choco list <package> --all-versions`.
+
+You can also install **pre-commit** and **Task** via `pip`:
+
+```bash
+pip install pre-commit==4.2.0
+pip install go-task-bin  # or: go install github.com/go-task/task/v3/cmd/task@latest
+```
+
+> **Note:** `numpydoc` validation (used by pre-commit hooks) may have parsing
+> issues on Windows due to path separator differences. If you encounter
+> problems, try running the validation inside **WSL** (Windows Subsystem for Linux)
+> or in a Git Bash shell.
+
+#### Windows PowerShell helpers
+
+If you use PowerShell, you can add these helpers for common tasks:
+
+```powershell
+# Run pre-commit hooks
+function Invoke-PreCommit { pre-commit run --all-files }
+
+# Run numpydoc validation
+function Invoke-Numpydoc { task numpydoc-validation }
+
+# Install Python dependencies
+function Install-PythonDeps { task install-python-deps }
+
+# Format code
+function Invoke-Format { task format }
+```
+
 From now you can use Taskfile to run repetitive commands, for example:
 ```bash
 task docs
@@ -99,6 +160,22 @@ task numpydoc-validation
 ```
 
 Alternatively, before committing, pre-commit hooks will automatically run this validation for the files you commit.
+
+## 📄 Documentation Preview
+
+The "Supported APIs" listing and every class detail page (like ``SurveillanceStation``, ``Docker``, etc.) are all produced from Python docstrings — **nothing else is required**.
+
+When your PR is merged into `master`, the deploy workflow automatically:
+
+- runs `python3 -m scripts.docs_parser -a -l` to generate fresh Markdown from every docstring in the codebase
+- builds the Docusaurus site with `npm run build`
+- publishes the result to GitHub Pages
+
+If you want to preview the docs locally before pushing:
+
+```bash
+task docs
+```
 
 ## 🧪 Testing
 
