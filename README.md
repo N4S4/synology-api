@@ -108,6 +108,7 @@ If this code helps and you wish to support me:
 
 - [Synology API Telegram Bot](https://github.com/N4S4/synology-api-telegram-bot)
 - [Homeassistant Synology Pro](https://github.com/N4S4/homeassistant-synology-pro)
+- [Synology Recipes](https://github.com/N4S4/synology-api-recipes)
 
 If you want to show your project in this section, write me.
 
