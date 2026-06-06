@@ -448,6 +448,16 @@ class DownloadStation(base_api.BaseApi):
 
         You can choose between a url or a file path (.torrent).
 
+        The underlying API call depends on ``download_st_version``:
+
+        - **V1** (default, ``download_st_version`` is ``None`` or ``''``):
+          Uses the ``SYNO.DownloadStation.Task`` endpoint with the ``uri`` parameter.
+        - **V2** (``download_st_version=2``):
+          Uses the ``SYNO.DownloadStation2.Task`` endpoint with ``type=url``
+          and ``url=[...]`` parameters. Note: the V2 API is reserved by Synology
+          for internal use and may return ``Preserve for other purpose`` on most
+          DSM installations.
+
         Parameters
         ----------
         url : str, optional
@@ -455,7 +465,9 @@ class DownloadStation(base_api.BaseApi):
         file_path : str, optional
             Path to a file (e.g. a .torrent) to download.
         destination : str, optional
-            Download destination folder (default is "").
+            Download destination folder (default is ""). If DownloadStation has
+            no default destination configured, the API will return an error
+            asking for one.
 
         Returns
         -------
@@ -485,8 +497,19 @@ class DownloadStation(base_api.BaseApi):
 
             return self.request_data(api_name, api_path, method='post', data=data, req_param={})
 
-        req_param = {'version': info['maxVersion'], 'method': 'create', 'type': 'url',
-                     'create_list': 'true', 'destination': destination, 'url': f'["{url}"]'}
+        # V1 API (SYNO.DownloadStation.Task) uses 'uri' parameter.
+        # V2 API (SYNO.DownloadStation2.Task) uses 'type=url' + 'url=[...]' parameters.
+        # TODO: investigate V2 API — tested on DSM 7.2 and returns
+        #       'Preserve for other purpose' for all parameter combinations.
+        #       May work on other DSM versions or NAS models.
+        if self.download_st_version == '2':
+            req_param = {'version': info['maxVersion'], 'method': 'create', 'type': 'url',
+                         'create_list': 'true', 'destination': destination, 'url': f'["{url}"]'}
+        else:
+            req_param = {'version': info['maxVersion'],
+                         'method': 'create', 'uri': url}
+            if destination:
+                req_param['destination'] = destination
         return self.request_data(api_name, api_path, req_param)
 
     def delete_task(self, task_id: str, force: bool = False) -> dict[str, object] | str:
