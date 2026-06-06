@@ -506,7 +506,8 @@ class DownloadStation(base_api.BaseApi):
             req_param = {'version': info['maxVersion'], 'method': 'create', 'type': 'url',
                          'create_list': 'true', 'destination': destination, 'url': f'["{url}"]'}
         else:
-            req_param = {'version': info['maxVersion'], 'method': 'create', 'uri': url}
+            req_param = {'version': info['maxVersion'],
+                         'method': 'create', 'uri': url}
             if destination:
                 req_param['destination'] = destination
         return self.request_data(api_name, api_path, req_param)
