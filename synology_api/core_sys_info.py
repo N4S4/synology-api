@@ -1678,14 +1678,22 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    # TODO {'error': {'code': 103}, 'success': False}
-    '''def domain_info(self) -> dict[str, object] | str:
+    def domain_info(self) -> dict[str, object] | str:
+        """
+        Get domain directory information.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Domain info. Currently returns ``{'enable_domain': False}`` on DS218+.
+        """
         api_name = 'SYNO.Core.Directory.Domain'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'get': {'additional': 'true'}}
+        req_param = {'version': info['minVersion'], 'method': 'get',
+                     'get': {'additional': 'true'}}
 
-        return self.request_data(api_name, api_path, req_param)'''
+        return self.request_data(api_name, api_path, req_param)
 
     def sso_iwa_info(self) -> dict[str, object] | str:
         """
@@ -1792,17 +1800,53 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    # TODO {'error': {'code': 101}, 'success': False}
-    '''def upgrade_schedule_set(self, week_day=4, hour=4, minute=10) -> dict[str, object] | str:
+    def upgrade_setting_get(self) -> dict[str, object] | str:
+        """
+        Get upgrade settings.
+
+        Returns current ``autoupdate_type``, ``schedule``, and
+        ``smart_nano_enabled``. The only field settable via the API on
+        DS218+ is ``smart_nano_enabled`` — see ``upgrade_smart_nano_set``.
+
+        Returns
+        -------
+        dict[str, object] or str
+
+            - ``autoupdate_type`` : str — e.g. ``"hotfix-security"``
+            - ``schedule`` : dict — ``week_day``, ``hour``, ``minute``
+            - ``smart_nano_enabled`` : bool
+        """
         api_name = 'SYNO.Core.Upgrade.Setting'
         info = self.core_list[api_name]
         api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
 
-        schedule = {'week_day': '4', 'hour': 4, 'minute': 10}
-        req_param = {'version': info['maxVersion'], 'method': 'set', 'autoupdate_type': 'hotfix-security',
-                     'schedule': schedule}
+        return self.request_data(api_name, api_path, req_param)
 
-        return self.request_data(api_name, api_path, req_param)'''
+    def upgrade_smart_nano_set(self, enabled: bool) -> dict[str, object] | str:
+        """
+        Enable or disable Smart Nano updates.
+
+        This is the only writable field of ``SYNO.Core.Upgrade.Setting``.
+        ``autoupdate_type`` and ``schedule`` are read-only.
+
+        Parameters
+        ----------
+        enabled : bool
+            ``True`` to enable, ``False`` to disable.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
+        api_name = 'SYNO.Core.Upgrade.Setting'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'set',
+                     'smart_nano_enabled': enabled}
+
+        return self.request_data(api_name, api_path, req_param)
 
     def auto_upgrade_status(self) -> dict[str, object] | str:
         """
