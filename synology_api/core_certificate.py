@@ -282,7 +282,8 @@ class Certificate(base_api.BaseApi):
             if target_service is not None:
                 break
 
-        # we need to abort, if the certificate is already set, otherwise DSM6 just removes the whole default service...
+        # we need to abort, if the certificate is already set, otherwise DSM6
+        # just removes the whole default service...
         if old_certid == cert_id:
             if self._debug is True:
                 print('Certificate already set, aborting')
@@ -389,3 +390,111 @@ class Certificate(base_api.BaseApi):
             return BytesIO(result.content)
 
         return
+
+    def cert_crt_create(self) -> dict:
+        """
+        Create a new SSL/TLS certificate or certificate signing request (CSR).
+
+        Returns
+        -------
+        dict
+            API response with the created certificate/CSR details.
+        """
+        api_name = "SYNO.Core.Certificate.CRT"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "create",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def cert_crt_delete(self) -> dict:
+        """
+        Delete a stored certificate or certificate signing request.
+
+        Returns
+        -------
+        dict
+            API response confirming the deletion.
+        """
+        api_name = "SYNO.Core.Certificate.CRT"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "delete",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def cert_crt_list(self) -> dict:
+        """
+        List all SSL/TLS certificates and certificate signing requests.
+
+        Returns
+        -------
+        dict
+            API response with the list of certificates and CSRs.
+        """
+        api_name = "SYNO.Core.Certificate.CRT"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "list",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def cert_crt_recreate(self) -> dict:
+        """
+        Regenerate a certificate signing request (CSR) with new parameters.
+
+        Returns
+        -------
+        dict
+            API response with the regenerated CSR details.
+        """
+        api_name = "SYNO.Core.Certificate.CRT"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "recreate",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def cert_crt_renew(self) -> dict:
+        """
+        Renew an existing SSL/TLS certificate before expiration.
+
+        Returns
+        -------
+        dict
+            API response with the renewed certificate details.
+        """
+        api_name = "SYNO.Core.Certificate.CRT"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "renew",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def cert_crt_set(self) -> dict:
+        """
+        Set a certificate as the default or configure its properties.
+
+        Returns
+        -------
+        dict
+            API response confirming the certificate configuration.
+        """
+        api_name = "SYNO.Core.Certificate.CRT"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "set",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)

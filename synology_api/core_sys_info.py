@@ -1,5 +1,5 @@
 """
-Synology Core System Information API wrapper.
+Synology Core System Information + API Info wrapper.
 
 This module provides a Python interface for retrieving and managing system information
 on Synology NAS devices, including network, hardware, service, and package status.
@@ -794,7 +794,8 @@ class SysInfo(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     # coolfan , fullfan
-    def set_fan_speed(self, fan_speed: str = 'quietfan') -> dict[str, object] | str:
+    def set_fan_speed(
+            self, fan_speed: str = 'quietfan') -> dict[str, object] | str:
         """
         Set hardware fan speed.
 
@@ -901,7 +902,8 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def set_led_control(self, led_brightness: int = 2) -> dict[str, object] | str:
+    def set_led_control(
+            self, led_brightness: int = 2) -> dict[str, object] | str:
         """
         Set LED brightness.
 
@@ -923,7 +925,8 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def set_hibernation(self, internal_hd_idletime: int = 0, usb_idletime: int = 0) -> dict[str, object] | str:
+    def set_hibernation(self, internal_hd_idletime: int = 0,
+                        usb_idletime: int = 0) -> dict[str, object] | str:
         """
         Set hibernation times.
 
@@ -1015,7 +1018,8 @@ class SysInfo(base_api.BaseApi):
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'info'}
 
-        return self.request_data(api_name, api_path, req_param)['data']['sys_temp']
+        return self.request_data(api_name, api_path, req_param)[
+            'data']['sys_temp']
 
     def get_all_system_utilization(self) -> str:
         """
@@ -1079,7 +1083,8 @@ class SysInfo(base_api.BaseApi):
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'get'}
 
-        return self.request_data(api_name, api_path, req_param)['data']['memory']
+        return self.request_data(api_name, api_path, req_param)[
+            'data']['memory']
 
     def shutdown(self, version: str = None) -> dict[str, object] | str:
         """
@@ -1623,7 +1628,8 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def groups_info(self, offset: int = 0, limit: int = -1, name_only: bool = False) -> dict[str, object] | str:
+    def groups_info(self, offset: int = 0, limit: int = -1,
+                    name_only: bool = False) -> dict[str, object] | str:
         """
         Get groups information.
 
@@ -1672,14 +1678,22 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    # TODO {'error': {'code': 103}, 'success': False}
-    '''def domain_info(self) -> dict[str, object] | str:
+    def domain_info(self) -> dict[str, object] | str:
+        """
+        Get domain directory information.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Domain info. Currently returns ``{'enable_domain': False}`` on DS218+.
+        """
         api_name = 'SYNO.Core.Directory.Domain'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'get': {'additional': 'true'}}
+        req_param = {'version': info['minVersion'], 'method': 'get',
+                     'get': {'additional': 'true'}}
 
-        return self.request_data(api_name, api_path, req_param)'''
+        return self.request_data(api_name, api_path, req_param)
 
     def sso_iwa_info(self) -> dict[str, object] | str:
         """
@@ -1745,7 +1759,8 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def gateway_list(self, ip_type: str = 'ipv4', type: str = 'wan') -> dict[str, object] | str:
+    def gateway_list(self, ip_type: str = 'ipv4',
+                     type: str = 'wan') -> dict[str, object] | str:
         """
         Get gateway list.
 
@@ -1785,17 +1800,53 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    # TODO {'error': {'code': 101}, 'success': False}
-    '''def upgrade_schedule_set(self, week_day=4, hour=4, minute=10) -> dict[str, object] | str:
+    def upgrade_setting_get(self) -> dict[str, object] | str:
+        """
+        Get upgrade settings.
+
+        Returns current ``autoupdate_type``, ``schedule``, and
+        ``smart_nano_enabled``. The only field settable via the API on
+        DS218+ is ``smart_nano_enabled`` — see ``upgrade_smart_nano_set``.
+
+        Returns
+        -------
+        dict[str, object] or str
+
+            - ``autoupdate_type`` : str — e.g. ``"hotfix-security"``
+            - ``schedule`` : dict — ``week_day``, ``hour``, ``minute``
+            - ``smart_nano_enabled`` : bool
+        """
         api_name = 'SYNO.Core.Upgrade.Setting'
         info = self.core_list[api_name]
         api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
 
-        schedule = {'week_day': '4', 'hour': 4, 'minute': 10}
-        req_param = {'version': info['maxVersion'], 'method': 'set', 'autoupdate_type': 'hotfix-security',
-                     'schedule': schedule}
+        return self.request_data(api_name, api_path, req_param)
 
-        return self.request_data(api_name, api_path, req_param)'''
+    def upgrade_smart_nano_set(self, enabled: bool) -> dict[str, object] | str:
+        """
+        Enable or disable Smart Nano updates.
+
+        This is the only writable field of ``SYNO.Core.Upgrade.Setting``.
+        ``autoupdate_type`` and ``schedule`` are read-only.
+
+        Parameters
+        ----------
+        enabled : bool
+            ``True`` to enable, ``False`` to disable.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
+        api_name = 'SYNO.Core.Upgrade.Setting'
+        info = self.core_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'set',
+                     'smart_nano_enabled': enabled}
+
+        return self.request_data(api_name, api_path, req_param)
 
     def auto_upgrade_status(self) -> dict[str, object] | str:
         """
@@ -2017,4 +2068,243 @@ class SysInfo(base_api.BaseApi):
         info = self.core_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'status'}
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_findme_start(self) -> dict:
+        """
+        Start snapshot usage tracking.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.DSM.FindMe``.
+        """
+        api_name = "SYNO.DSM.FindMe"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "start",
+            "version": 2,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_findme_stop(self) -> dict:
+        """
+        Stop snapshot usage tracking.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.DSM.FindMe``.
+        """
+        api_name = "SYNO.DSM.FindMe"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "stop",
+            "version": 2,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_findme_supported(self) -> dict:
+        """
+        Check which email providers are supported.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.DSM.FindMe``.
+        """
+        api_name = "SYNO.DSM.FindMe"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "supported",
+            "version": 2,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_network_list(self) -> dict:
+        """
+        List snapshot usage entries.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.DSM.Network``.
+        """
+        api_name = "SYNO.DSM.Network"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "list",
+            "version": 2,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_port_is_pkg_enable(self, service: str) -> dict:
+        """
+        Check if a DSM service package is enabled on a network port.
+
+        Parameters
+        ----------
+        service : str
+            Service name (e.g. ``"ssh"``, ``"ftp"``, ``"http"``).
+
+        Returns
+        -------
+        dict
+            Whether the service package is enabled on this port.
+        """
+        api_name = "SYNO.DSM.PortEnable"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "is_pkg_enable",
+            "version": 1,
+            "service": service,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_port_is_port_block(self, service: str) -> dict:
+        """
+        Check if a network port is blocked for a given DSM service.
+
+        Parameters
+        ----------
+        service : str
+            Service name (e.g. ``"ssh"``, ``"ftp"``, ``"http"``).
+
+        Returns
+        -------
+        dict
+            Whether the port is blocked for this service.
+        """
+        api_name = "SYNO.DSM.PortEnable"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "is_port_block",
+            "version": 1,
+            "service": service,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_port_open_block_port(self) -> dict:
+        """
+        Open a block port in the network firewall.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.DSM.PortEnable``.
+        """
+        api_name = "SYNO.DSM.PortEnable"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "open_block_port",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+
+# ------------------------------------------------------------------
+# API Info / Entry Request Polling
+# ------------------------------------------------------------------
+
+class CoreApiInfo(base_api.BaseApi):
+    """
+    Core API Info wrapper for API discovery and entry request polling.
+
+    Covers SYNO.API.Info (query, Query) and SYNO.Entry.Request.Polling
+    (list, status) endpoints.
+    """
+
+    # SYNO.API.Info
+    # ------------------------------------------------------------------
+
+    def api_query(self, query: str = "all") -> dict[str, object] | str:
+        """
+        Query available DSM APIs.
+
+        Parameters
+        ----------
+        query : str
+            API name to query, or ``"all"`` for all registered APIs.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API info for the requested API name(s).
+        """
+        api_name = 'SYNO.API.Info'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'query',
+            'query': query,
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def api_info(self) -> dict[str, object] | str:
+        """
+        Get full API info (capital-Q Query variant).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Complete API info response.
+        """
+        api_name = 'SYNO.API.Info'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'Query',
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # SYNO.Entry.Request.Polling
+    # ------------------------------------------------------------------
+
+    def request_poll_list(self) -> dict[str, object] | str:
+        """
+        List pending entry request polling tasks.
+
+        Returns
+        -------
+        dict[str, object] or str
+            List of polling tasks.
+        """
+        api_name = 'SYNO.Entry.Request.Polling'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'list',
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def request_poll_status(self) -> dict[str, object] | str:
+        """
+        Get status of entry request polling tasks.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Polling status information.
+        """
+        api_name = 'SYNO.Entry.Request.Polling'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'status',
+        }
+
         return self.request_data(api_name, api_path, req_param)

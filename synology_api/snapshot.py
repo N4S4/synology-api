@@ -1156,3 +1156,129 @@ class Snapshot(base_api.BaseApi):
         }
 
         return self.request_data(api_name, api_path, req_param)
+
+    def snap_usage_cancel(self) -> dict:
+        """
+        Cancel an offline volume operation.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.Snap.Usage.Share``.
+        """
+        api_name = "SYNO.Snap.Usage.Share"
+        info = self.gen_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "cancel",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def snap_usage_clean(self) -> dict:
+        """
+        Clean/reset the remote credential verifier.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.Snap.Usage.Share``.
+        """
+        api_name = "SYNO.Snap.Usage.Share"
+        info = self.gen_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "clean",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def snap_usage_get_conf(self) -> dict:
+        """
+        Get the Btrfs deduplication configuration.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.Snap.Usage.Share``.
+        """
+        api_name = "SYNO.Snap.Usage.Share"
+        info = self.gen_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "get_conf",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def snap_usage_get_report(self) -> dict:
+        """
+        Generate a snapshot space usage report per share.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.Snap.Usage.Share``.
+        """
+        api_name = "SYNO.Snap.Usage.Share"
+        info = self.gen_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "get_report",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def snap_usage_set_conf(self) -> dict:
+        """
+        Set the Btrfs deduplication configuration.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.Snap.Usage.Share``.
+        """
+        api_name = "SYNO.Snap.Usage.Share"
+        info = self.gen_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "set_conf",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def snap_usage_start(self) -> dict:
+        """
+        Start snapshot usage tracking.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.Snap.Usage.Share``.
+        """
+        api_name = "SYNO.Snap.Usage.Share"
+        info = self.gen_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "start",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def snap_usage_status(self) -> dict:
+        """
+        Get snapshot usage tracking status.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.Snap.Usage.Share``.
+        """
+        api_name = "SYNO.Snap.Usage.Share"
+        info = self.gen_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "status",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)

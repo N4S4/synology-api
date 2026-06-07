@@ -183,3 +183,51 @@ class AudioStation(base_api.BaseApi):
                      'version': info['maxVersion'], 'action': 'prev'}
 
         return self.request_data(api_name, api_path, req_param)
+
+    def audiostream_stream(self, id: str) -> dict:
+        """
+        Start audio streaming for a given media ID.
+
+        Parameters
+        ----------
+        id : str
+            Media ID to stream (from ``list_media_info``).
+
+        Returns
+        -------
+        dict
+            Stream URL and metadata.
+        """
+        api_name = "SYNO.AudioPlayer.Stream"
+        info = self.gen_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "stream",
+            "version": 2,
+            "id": id,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def audiostream_transcode(self, id: str) -> dict:
+        """
+        Transcode an audio stream to a different format.
+
+        Parameters
+        ----------
+        id : str
+            Media ID to transcode (from ``list_media_info``).
+
+        Returns
+        -------
+        dict
+            Transcode stream URL and metadata.
+        """
+        api_name = "SYNO.AudioPlayer.Stream"
+        info = self.gen_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "transcode",
+            "version": 2,
+            "id": id,
+        }
+        return self.request_data(api_name, api_path, req_param)

@@ -122,3 +122,93 @@ class SecurityAdvisor(base_api.BaseApi):
                      'method': 'group_enum', 'argGroup': 'custom'}
 
         return self.request_data(api_name, api_path, req_param)
+
+    def advisor_alert_set(self) -> dict:
+        """
+        Set or update the configuration.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.SecurityAdvisor.Conf.Checklist.Alert``.
+        """
+        api_name = "SYNO.SecurityAdvisor.Conf.Checklist.Alert"
+        info = self.gen_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "set",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def advisor_login_get(self) -> dict:
+        """
+        Get user login activity log from Security Advisor.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.SecurityAdvisor.LoginActivity.User``.
+        """
+        api_name = "SYNO.SecurityAdvisor.LoginActivity.User"
+        info = self.gen_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "get",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def advisor_report_create(self) -> dict:
+        """
+        Create a new user group.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.SecurityAdvisor.Report``.
+        """
+        api_name = "SYNO.SecurityAdvisor.Report"
+        info = self.gen_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "create",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def advisor_report_list(self) -> dict:
+        """
+        List snapshot usage entries.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.SecurityAdvisor.Report``.
+        """
+        api_name = "SYNO.SecurityAdvisor.Report"
+        info = self.gen_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "list",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def advisor_report_html_open(self) -> dict:
+        """
+        Open a snapshot usage tracking session.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.SecurityAdvisor.Report.HTML``.
+        """
+        api_name = "SYNO.SecurityAdvisor.Report.HTML"
+        info = self.gen_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "open",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
