@@ -33,14 +33,24 @@ class NoteStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    # TODO success response but need more info about it
-    '''def notestation_settings_init(self) -> dict[str, object] | str:
+    def notestation_settings_init(self) -> dict[str, object] | str:
+        """
+        Initialise NoteStation settings.
+
+        The API returns ``{"success": true}`` on completion. This is a
+        one-time setup operation — call it after installing NoteStation.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = 'SYNO.NoteStation.Setting'
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'init'}
 
-        return self.request_data(api_name, api_path, req_param)'''
+        return self.request_data(api_name, api_path, req_param)
 
     def info(self) -> dict[str, object] | str:
         """
@@ -122,10 +132,16 @@ class NoteStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    # TODO need to investigate for additional params
-    def smart(self) -> dict[str, object] | str:
+    def smart_note_list(self, offset: int = 0, limit: int = 50) -> dict[str, object] | str:
         """
         Retrieve the list of smart notes.
+
+        Parameters
+        ----------
+        offset : int, optional
+            Pagination offset. Default ``0``.
+        limit : int, optional
+            Max items to return. Default ``50``.
 
         Returns
         -------
@@ -135,7 +151,8 @@ class NoteStation(base_api.BaseApi):
         api_name = 'SYNO.NoteStation.Smart'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list'}
+        req_param = {'version': info['maxVersion'], 'method': 'list',
+                     'offset': offset, 'limit': limit}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -181,11 +198,24 @@ class NoteStation(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    # TODO success response but need additional data
-    '''def note_idle(self) -> dict[str, object] | str:
+    def note_idle(self, note_id: str) -> dict[str, object] | str:
+        """
+        Put a note into idle state.
+
+        Parameters
+        ----------
+        note_id : str
+            The ``object_id`` of the note (from ``note_list()``).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response.
+        """
         api_name = 'SYNO.NoteStation.Note'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'idle'}
+        req_param = {'version': info['maxVersion'], 'method': 'idle',
+                     'object_id': note_id}
 
-        return self.request_data(api_name, api_path, req_param)'''
+        return self.request_data(api_name, api_path, req_param)
