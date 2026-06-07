@@ -794,7 +794,8 @@ class SysInfo(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     # coolfan , fullfan
-    def set_fan_speed(self, fan_speed: str = 'quietfan') -> dict[str, object] | str:
+    def set_fan_speed(
+            self, fan_speed: str = 'quietfan') -> dict[str, object] | str:
         """
         Set hardware fan speed.
 
@@ -901,7 +902,8 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def set_led_control(self, led_brightness: int = 2) -> dict[str, object] | str:
+    def set_led_control(
+            self, led_brightness: int = 2) -> dict[str, object] | str:
         """
         Set LED brightness.
 
@@ -923,7 +925,8 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def set_hibernation(self, internal_hd_idletime: int = 0, usb_idletime: int = 0) -> dict[str, object] | str:
+    def set_hibernation(self, internal_hd_idletime: int = 0,
+                        usb_idletime: int = 0) -> dict[str, object] | str:
         """
         Set hibernation times.
 
@@ -1015,7 +1018,8 @@ class SysInfo(base_api.BaseApi):
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'info'}
 
-        return self.request_data(api_name, api_path, req_param)['data']['sys_temp']
+        return self.request_data(api_name, api_path, req_param)[
+            'data']['sys_temp']
 
     def get_all_system_utilization(self) -> str:
         """
@@ -1079,7 +1083,8 @@ class SysInfo(base_api.BaseApi):
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'get'}
 
-        return self.request_data(api_name, api_path, req_param)['data']['memory']
+        return self.request_data(api_name, api_path, req_param)[
+            'data']['memory']
 
     def shutdown(self, version: str = None) -> dict[str, object] | str:
         """
@@ -1623,7 +1628,8 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def groups_info(self, offset: int = 0, limit: int = -1, name_only: bool = False) -> dict[str, object] | str:
+    def groups_info(self, offset: int = 0, limit: int = -1,
+                    name_only: bool = False) -> dict[str, object] | str:
         """
         Get groups information.
 
@@ -1745,7 +1751,8 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def gateway_list(self, ip_type: str = 'ipv4', type: str = 'wan') -> dict[str, object] | str:
+    def gateway_list(self, ip_type: str = 'ipv4',
+                     type: str = 'wan') -> dict[str, object] | str:
         """
         Get gateway list.
 
@@ -2093,7 +2100,7 @@ class SysInfo(base_api.BaseApi):
 
     def dsm_port_is_pkg_enable(self, service: str) -> dict:
         """
-        SYNO.DSM.PortEnable.is_pkg_enable
+        Check if a DSM service package is enabled on a network port.
 
         Parameters
         ----------
@@ -2117,7 +2124,7 @@ class SysInfo(base_api.BaseApi):
 
     def dsm_port_is_port_block(self, service: str) -> dict:
         """
-        SYNO.DSM.PortEnable.is_port_block
+        Check if a network port is blocked for a given DSM service.
 
         Parameters
         ----------
@@ -2158,7 +2165,6 @@ class SysInfo(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
 
-
 # ------------------------------------------------------------------
 # API Info / Entry Request Polling
 # ------------------------------------------------------------------
@@ -2175,7 +2181,8 @@ class CoreApiInfo(base_api.BaseApi):
     # ------------------------------------------------------------------
 
     def api_query(self, query: str = "all") -> dict[str, object] | str:
-        """Query available DSM APIs.
+        """
+        Query available DSM APIs.
 
         Parameters
         ----------
@@ -2199,7 +2206,8 @@ class CoreApiInfo(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def api_info(self) -> dict[str, object] | str:
-        """Get full API info (capital-Q Query variant).
+        """
+        Get full API info (capital-Q Query variant).
 
         Returns
         -------
@@ -2220,7 +2228,8 @@ class CoreApiInfo(base_api.BaseApi):
     # ------------------------------------------------------------------
 
     def request_poll_list(self) -> dict[str, object] | str:
-        """List pending entry request polling tasks.
+        """
+        List pending entry request polling tasks.
 
         Returns
         -------
@@ -2238,7 +2247,8 @@ class CoreApiInfo(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def request_poll_status(self) -> dict[str, object] | str:
-        """Get status of entry request polling tasks.
+        """
+        Get status of entry request polling tasks.
 
         Returns
         -------

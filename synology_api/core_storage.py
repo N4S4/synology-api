@@ -77,7 +77,8 @@ class CoreStorage(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def storage_disk_fw_upgrade_start(self, disk_id: str) -> dict[str, object] | str:
+    def storage_disk_fw_upgrade_start(
+            self, disk_id: str) -> dict[str, object] | str:
         """
         Start a disk firmware upgrade.
 
@@ -513,7 +514,8 @@ class CoreStorage(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def recycle_bin_clean(self, share_name: Optional[str] = None) -> dict[str, object] | str:
+    def recycle_bin_clean(
+            self, share_name: Optional[str] = None) -> dict[str, object] | str:
         """
         Empty the recycle bin.
 
@@ -2747,7 +2749,7 @@ class CoreStorage(base_api.BaseApi):
 
     def scrubbing_get_state(self, space_id: str) -> dict:
         """
-        SYNO.Storage.CGI.Scrubbing.get_state
+        Get the current data scrubbing state for a storage space.
 
         Parameters
         ----------

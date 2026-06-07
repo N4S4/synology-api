@@ -282,7 +282,8 @@ class Certificate(base_api.BaseApi):
             if target_service is not None:
                 break
 
-        # we need to abort, if the certificate is already set, otherwise DSM6 just removes the whole default service...
+        # we need to abort, if the certificate is already set, otherwise DSM6
+        # just removes the whole default service...
         if old_certid == cert_id:
             if self._debug is True:
                 print('Certificate already set, aborting')
@@ -391,7 +392,8 @@ class Certificate(base_api.BaseApi):
         return
 
     def cert_crt_create(self) -> dict:
-        """Create a new SSL/TLS certificate or certificate signing request (CSR).
+        """
+        Create a new SSL/TLS certificate or certificate signing request (CSR).
 
         Returns
         -------
@@ -408,7 +410,8 @@ class Certificate(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def cert_crt_delete(self) -> dict:
-        """Delete a stored certificate or certificate signing request.
+        """
+        Delete a stored certificate or certificate signing request.
 
         Returns
         -------
@@ -425,7 +428,8 @@ class Certificate(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def cert_crt_list(self) -> dict:
-        """List all SSL/TLS certificates and certificate signing requests.
+        """
+        List all SSL/TLS certificates and certificate signing requests.
 
         Returns
         -------
@@ -442,7 +446,8 @@ class Certificate(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def cert_crt_recreate(self) -> dict:
-        """Regenerate a certificate signing request (CSR) with new parameters.
+        """
+        Regenerate a certificate signing request (CSR) with new parameters.
 
         Returns
         -------
@@ -459,7 +464,8 @@ class Certificate(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def cert_crt_renew(self) -> dict:
-        """Renew an existing SSL/TLS certificate before expiration.
+        """
+        Renew an existing SSL/TLS certificate before expiration.
 
         Returns
         -------
@@ -476,7 +482,8 @@ class Certificate(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def cert_crt_set(self) -> dict:
-        """Set a certificate as the default or configure its properties.
+        """
+        Set a certificate as the default or configure its properties.
 
         Returns
         -------

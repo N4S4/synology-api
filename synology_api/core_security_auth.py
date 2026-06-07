@@ -95,7 +95,8 @@ class CoreSecurityAuth(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def smartblock_device_delete(self, devices: list[str]) -> dict[str, object] | str:
+    def smartblock_device_delete(
+            self, devices: list[str]) -> dict[str, object] | str:
         """
         Remove devices from the SmartBlock blocked list.
 
@@ -156,7 +157,8 @@ class CoreSecurityAuth(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def smartblock_trusted_set(self, entries: list[dict[str, object]]) -> dict[str, object] | str:
+    def smartblock_trusted_set(
+            self, entries: list[dict[str, object]]) -> dict[str, object] | str:
         """
         Set SmartBlock trusted list entries.
 
@@ -181,7 +183,8 @@ class CoreSecurityAuth(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def smartblock_trusted_delete(self, entries: list[str]) -> dict[str, object] | str:
+    def smartblock_trusted_delete(
+            self, entries: list[str]) -> dict[str, object] | str:
         """
         Delete entries from the SmartBlock trusted list.
 
@@ -242,7 +245,8 @@ class CoreSecurityAuth(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def smartblock_untrusted_set(self, entries: list[dict[str, object]]) -> dict[str, object] | str:
+    def smartblock_untrusted_set(
+            self, entries: list[dict[str, object]]) -> dict[str, object] | str:
         """
         Set SmartBlock untrusted list entries.
 
@@ -267,7 +271,8 @@ class CoreSecurityAuth(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def smartblock_untrusted_delete(self, entries: list[str]) -> dict[str, object] | str:
+    def smartblock_untrusted_delete(
+            self, entries: list[str]) -> dict[str, object] | str:
         """
         Delete entries from the SmartBlock untrusted list.
 
@@ -328,7 +333,8 @@ class CoreSecurityAuth(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def smartblock_user_set(self, users: list[dict[str, object]]) -> dict[str, object] | str:
+    def smartblock_user_set(
+            self, users: list[dict[str, object]]) -> dict[str, object] | str:
         """
         Set SmartBlock user-level blocks.
 
@@ -353,7 +359,8 @@ class CoreSecurityAuth(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def smartblock_user_delete(self, users: list[str]) -> dict[str, object] | str:
+    def smartblock_user_delete(
+            self, users: list[str]) -> dict[str, object] | str:
         """
         Delete SmartBlock user-level blocks.
 
@@ -480,7 +487,8 @@ class CoreSecurityAuth(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def otp_enforce_policy_set(self, **kwargs: object) -> dict[str, object] | str:
+    def otp_enforce_policy_set(
+            self, **kwargs: object) -> dict[str, object] | str:
         """
         Set OTP enforcement policy.
 
@@ -619,7 +627,8 @@ class CoreSecurityAuth(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def trust_device_delete(self, devices: list[str]) -> dict[str, object] | str:
+    def trust_device_delete(
+            self, devices: list[str]) -> dict[str, object] | str:
         """
         Remove devices from the trusted list.
 
@@ -686,7 +695,8 @@ class CoreSecurityAuth(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def rescue_email_get(self) -> dict[str, object] | str:
-        """Get rescue email configuration.
+        """
+        Get rescue email configuration.
 
         Returns
         -------
@@ -701,7 +711,8 @@ class CoreSecurityAuth(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def rescue_email_set(self, email: str) -> dict[str, object] | str:
-        """Set rescue email address.
+        """
+        Set rescue email address.
 
         Parameters
         ----------
@@ -716,12 +727,16 @@ class CoreSecurityAuth(base_api.BaseApi):
         api_name = 'SYNO.Auth.RescueEmail'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'set', 'email': email}
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'set',
+            'email': email}
 
         return self.request_data(api_name, api_path, req_param)
 
     def rescue_email_verify(self, code: str) -> dict[str, object] | str:
-        """Verify rescue email with confirmation code.
+        """
+        Verify rescue email with confirmation code.
 
         Parameters
         ----------
@@ -736,7 +751,10 @@ class CoreSecurityAuth(base_api.BaseApi):
         api_name = 'SYNO.Auth.RescueEmail'
         info = self.gen_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'verify', 'code': code}
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'verify',
+            'code': code}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -744,7 +762,8 @@ class CoreSecurityAuth(base_api.BaseApi):
     # ------------------------------------------------------------------
 
     def auth_key_get(self) -> dict[str, object] | str:
-        """Get the DSM authentication key.
+        """
+        Get the DSM authentication key.
 
         Returns
         -------
@@ -759,7 +778,8 @@ class CoreSecurityAuth(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def auth_key_grant(self) -> dict[str, object] | str:
-        """Request a new authentication key grant.
+        """
+        Request a new authentication key grant.
 
         Returns
         -------
@@ -774,7 +794,8 @@ class CoreSecurityAuth(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def auth_key_code_get(self) -> dict[str, object] | str:
-        """Get the authentication key code (used in login flow).
+        """
+        Get the authentication key code (used in login flow).
 
         Returns
         -------
@@ -792,7 +813,8 @@ class CoreSecurityAuth(base_api.BaseApi):
     # ------------------------------------------------------------------
 
     def auth_type_get(self) -> dict[str, object] | str:
-        """Get available authentication types on this DSM.
+        """
+        Get available authentication types on this DSM.
 
         Returns
         -------
@@ -810,7 +832,8 @@ class CoreSecurityAuth(base_api.BaseApi):
     # ------------------------------------------------------------------
 
     def auth_redirect_uri_check(self) -> dict[str, object] | str:
-        """Check if OAuth redirect URI is configured and available.
+        """
+        Check if OAuth redirect URI is configured and available.
 
         Returns
         -------
@@ -825,7 +848,8 @@ class CoreSecurityAuth(base_api.BaseApi):
         return self.request_data(api_name, api_path, req_param)
 
     def auth_redirect_uri_run(self) -> dict[str, object] | str:
-        """Execute the OAuth redirect URI workflow.
+        """
+        Execute the OAuth redirect URI workflow.
 
         Returns
         -------

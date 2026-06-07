@@ -186,7 +186,7 @@ class AudioStation(base_api.BaseApi):
 
     def audiostream_stream(self, id: str) -> dict:
         """
-        SYNO.AudioPlayer.Stream.stream
+        Start audio streaming for a given media ID.
 
         Parameters
         ----------
@@ -210,7 +210,7 @@ class AudioStation(base_api.BaseApi):
 
     def audiostream_transcode(self, id: str) -> dict:
         """
-        SYNO.AudioPlayer.Stream.transcode
+        Transcode an audio stream to a different format.
 
         Parameters
         ----------
