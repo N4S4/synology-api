@@ -747,6 +747,7 @@ class User(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
 
+
 class PersonMailAccount(base_api.BaseApi):
     """Synology Personal Mail Account API wrapper."""
 
