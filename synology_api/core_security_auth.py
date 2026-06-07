@@ -2,7 +2,8 @@
 Synology Core Security (Auth/OTP/SmartBlock) API wrapper.
 
 Covers SYNO.Core.SmartBlock.*, SYNO.Core.OTP.*, TrustDevice,
-and DisableAdmin endpoints on Synology NAS devices.
+DisableAdmin, Auth.Key, Auth.Type, Auth.RedirectURI,
+and RescueEmail endpoints on Synology NAS devices.
 """
 
 from __future__ import annotations
@@ -14,7 +15,8 @@ class CoreSecurityAuth(base_api.BaseApi):
     """
     Core Security Auth API for SmartBlock/OTP/TrustDevice/DisableAdmin.
 
-    Covers SYNO.Core.SmartBlock.*, OTP.*, TrustDevice, and DisableAdmin endpoints.
+    Covers SYNO.Core.SmartBlock.*, OTP.*, TrustDevice, DisableAdmin,
+    SYNO.API.Auth.Key, Auth.Type, Auth.RedirectURI, SYNO.Auth.RescueEmail.
     """
 
     # SYNO.Core.SmartBlock
@@ -680,5 +682,159 @@ class CoreSecurityAuth(base_api.BaseApi):
         info = self.gen_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'set', **kwargs}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def rescue_email_get(self) -> dict[str, object] | str:
+        """Get rescue email configuration.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Rescue email settings (verified: bool, email address if set).
+        """
+        api_name = 'SYNO.Auth.RescueEmail'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def rescue_email_set(self, email: str) -> dict[str, object] | str:
+        """Set rescue email address.
+
+        Parameters
+        ----------
+        email : str
+            Email address to use for account rescue.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Result of the set operation.
+        """
+        api_name = 'SYNO.Auth.RescueEmail'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'set', 'email': email}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def rescue_email_verify(self, code: str) -> dict[str, object] | str:
+        """Verify rescue email with confirmation code.
+
+        Parameters
+        ----------
+        code : str
+            Verification code sent to the rescue email.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Result of the verify operation.
+        """
+        api_name = 'SYNO.Auth.RescueEmail'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'verify', 'code': code}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # SYNO.API.Auth.Key
+    # ------------------------------------------------------------------
+
+    def auth_key_get(self) -> dict[str, object] | str:
+        """Get the DSM authentication key.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Authentication key data (auth_key: str).
+        """
+        api_name = 'SYNO.API.Auth.Key'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def auth_key_grant(self) -> dict[str, object] | str:
+        """Request a new authentication key grant.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Grant response from the DSM auth key service.
+        """
+        api_name = 'SYNO.API.Auth.Key'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'grant'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def auth_key_code_get(self) -> dict[str, object] | str:
+        """Get the authentication key code (used in login flow).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Key code data from ``SYNO.API.Auth.Key.Code``.
+        """
+        api_name = 'SYNO.API.Auth.Key.Code'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # SYNO.API.Auth.Type
+    # ------------------------------------------------------------------
+
+    def auth_type_get(self) -> dict[str, object] | str:
+        """Get available authentication types on this DSM.
+
+        Returns
+        -------
+        dict[str, object] or str
+            List of auth types (e.g. ``[{\"type\": \"passwd\"}]``).
+        """
+        api_name = 'SYNO.API.Auth.Type'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # SYNO.API.Auth.RedirectURI
+    # ------------------------------------------------------------------
+
+    def auth_redirect_uri_check(self) -> dict[str, object] | str:
+        """Check if OAuth redirect URI is configured and available.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Redirect URI availability (available: bool, code: int).
+        """
+        api_name = 'SYNO.API.Auth.RedirectURI'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'check'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def auth_redirect_uri_run(self) -> dict[str, object] | str:
+        """Execute the OAuth redirect URI workflow.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Redirect URI execution result.
+        """
+        api_name = 'SYNO.API.Auth.RedirectURI'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'run'}
 
         return self.request_data(api_name, api_path, req_param)

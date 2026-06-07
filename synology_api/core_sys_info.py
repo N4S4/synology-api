@@ -1,5 +1,5 @@
 """
-Synology Core System Information API wrapper.
+Synology Core System Information + API Info wrapper.
 
 This module provides a Python interface for retrieving and managing system information
 on Synology NAS devices, including network, hardware, service, and package status.
@@ -2017,4 +2017,240 @@ class SysInfo(base_api.BaseApi):
         info = self.core_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'status'}
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_findme_start(self) -> dict:
+        """
+        Start snapshot usage tracking.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.DSM.FindMe``.
+        """
+        api_name = "SYNO.DSM.FindMe"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "start",
+            "version": 2,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_findme_stop(self) -> dict:
+        """
+        Stop snapshot usage tracking.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.DSM.FindMe``.
+        """
+        api_name = "SYNO.DSM.FindMe"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "stop",
+            "version": 2,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_findme_supported(self) -> dict:
+        """
+        Check which email providers are supported.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.DSM.FindMe``.
+        """
+        api_name = "SYNO.DSM.FindMe"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "supported",
+            "version": 2,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_network_list(self) -> dict:
+        """
+        List snapshot usage entries.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.DSM.Network``.
+        """
+        api_name = "SYNO.DSM.Network"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "list",
+            "version": 2,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_port_is_pkg_enable(self, service: str) -> dict:
+        """
+        SYNO.DSM.PortEnable.is_pkg_enable
+
+        Parameters
+        ----------
+        service : str
+            Service name (e.g. ``"ssh"``, ``"ftp"``, ``"http"``).
+
+        Returns
+        -------
+        dict
+            Whether the service package is enabled on this port.
+        """
+        api_name = "SYNO.DSM.PortEnable"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "is_pkg_enable",
+            "version": 1,
+            "service": service,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_port_is_port_block(self, service: str) -> dict:
+        """
+        SYNO.DSM.PortEnable.is_port_block
+
+        Parameters
+        ----------
+        service : str
+            Service name (e.g. ``"ssh"``, ``"ftp"``, ``"http"``).
+
+        Returns
+        -------
+        dict
+            Whether the port is blocked for this service.
+        """
+        api_name = "SYNO.DSM.PortEnable"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "is_port_block",
+            "version": 1,
+            "service": service,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def dsm_port_open_block_port(self) -> dict:
+        """
+        Open a block port in the network firewall.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.DSM.PortEnable``.
+        """
+        api_name = "SYNO.DSM.PortEnable"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "open_block_port",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+
+
+# ------------------------------------------------------------------
+# API Info / Entry Request Polling
+# ------------------------------------------------------------------
+
+class CoreApiInfo(base_api.BaseApi):
+    """
+    Core API Info wrapper for API discovery and entry request polling.
+
+    Covers SYNO.API.Info (query, Query) and SYNO.Entry.Request.Polling
+    (list, status) endpoints.
+    """
+
+    # SYNO.API.Info
+    # ------------------------------------------------------------------
+
+    def api_query(self, query: str = "all") -> dict[str, object] | str:
+        """Query available DSM APIs.
+
+        Parameters
+        ----------
+        query : str
+            API name to query, or ``"all"`` for all registered APIs.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API info for the requested API name(s).
+        """
+        api_name = 'SYNO.API.Info'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'query',
+            'query': query,
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def api_info(self) -> dict[str, object] | str:
+        """Get full API info (capital-Q Query variant).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Complete API info response.
+        """
+        api_name = 'SYNO.API.Info'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'Query',
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+
+    # SYNO.Entry.Request.Polling
+    # ------------------------------------------------------------------
+
+    def request_poll_list(self) -> dict[str, object] | str:
+        """List pending entry request polling tasks.
+
+        Returns
+        -------
+        dict[str, object] or str
+            List of polling tasks.
+        """
+        api_name = 'SYNO.Entry.Request.Polling'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'list',
+        }
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def request_poll_status(self) -> dict[str, object] | str:
+        """Get status of entry request polling tasks.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Polling status information.
+        """
+        api_name = 'SYNO.Entry.Request.Polling'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {
+            'version': info['maxVersion'],
+            'method': 'status',
+        }
+
         return self.request_data(api_name, api_path, req_param)

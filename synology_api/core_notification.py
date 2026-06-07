@@ -979,3 +979,21 @@ class CoreNotification(base_api.BaseApi):
             req_param['settings'] = settings
 
         return self.request_data(api_name, api_path, req_param)
+
+    def push_notification_requesttoken(self) -> dict:
+        """
+        Request a push notification authentication token.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.DSM.PushNotification``.
+        """
+        api_name = "SYNO.DSM.PushNotification"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "requesttoken",
+            "version": 2,
+        }
+        return self.request_data(api_name, api_path, req_param)

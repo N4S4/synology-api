@@ -38,7 +38,7 @@ class User(base_api.BaseApi):
     See individual method docstrings for usage examples.
     """
 
-    def get_users(
+    def user_list(
         self, offset: int = 0, limit: int = -1, sort_by: str = "name", sort_direction: str = "ASC", additional: list[str] = []
     ) -> dict[str, object]:
         """
@@ -121,7 +121,7 @@ class User(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def get_user(self, name: str, additional: list[str] = []) -> dict[str, object]:
+    def user_get(self, name: str, additional: list[str] = []) -> dict[str, object]:
         """
         Retrieve user information.
 
@@ -177,7 +177,7 @@ class User(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def create_user(
+    def user_create(
         self, name: str, password: str, description: str = "", email: str = "", expire: str = "never", cannot_chg_passwd: bool = False,
         passwd_never_expire: bool = True, notify_by_email: bool = False, send_password: bool = False
     ) -> dict[str, object]:
@@ -253,7 +253,7 @@ class User(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param, method="post")
 
-    def modify_user(
+    def user_set(
         self, name: str, new_name: str, password: str = "", description: str = "", email: str = "", expire: str = "never", cannot_chg_passwd: bool = False,
         passwd_never_expire: bool = True, notify_by_email: bool = False, send_password: bool = False
     ) -> dict[str, object]:
@@ -327,7 +327,7 @@ class User(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param, method="post")
 
-    def delete_user(self, name: str) -> dict[str, object]:
+    def user_delete(self, name: str) -> dict[str, object]:
         """
         Delete a user.
 
@@ -364,7 +364,7 @@ class User(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def affect_groups(self, name: str, join_groups: list[str] = [], leave_groups: list[str] = []) -> dict[str, object]:
+    def user_group_join(self, name: str, join_groups: list[str] = [], leave_groups: list[str] = []) -> dict[str, object]:
         """
         Affect or disaffect groups to a user.
 
@@ -411,7 +411,7 @@ class User(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
 
-    def affect_groups_status(self, task_id: str):
+    def user_group_join_status(self, task_id: str):
         """
         Get the status of a join task.
 
@@ -462,7 +462,7 @@ class User(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
 
-    def get_password_policy(self) -> dict[str, object]:
+    def user_password_policy_get(self) -> dict[str, object]:
         """
         Get the password policy.
 
@@ -504,7 +504,7 @@ class User(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
 
-    def set_password_policy(
+    def user_password_policy_set(
         self, enable_reset_passwd_by_email: bool = False, password_must_change: bool = False,
         exclude_username: bool = True, included_numeric_char: bool = True, included_special_char: bool = False,
         min_length: int = 8, min_length_enable: bool = True, mixed_case: bool = True,
@@ -575,7 +575,7 @@ class User(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
 
-    def get_password_expiry(self) -> dict[str, object]:
+    def user_password_expiry_get(self) -> dict[str, object]:
         """
         Get the password expiry.
 
@@ -612,7 +612,7 @@ class User(base_api.BaseApi):
         }
         return self.request_data(api_name, api_path, req_param)
 
-    def set_password_expiry(
+    def user_password_expiry_set(
         self, password_expire_enable: bool = False, max_age: int = 30, min_age_enable: bool = False, min_age: int = 1,
         enable_login_prompt: bool = False, login_prompt_days: int = 1, allow_reset_after_expired: bool = True,
         enable_mail_notification: bool = False, never_expired_list: list[str] = []
@@ -717,7 +717,7 @@ class User(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param, method="post")
 
-    def get_username_policy(self) -> dict[str, object]:
+    def user_username_policy_get(self) -> dict[str, object]:
         """
         Get the username policy (list of usernames that are not usable).
 
@@ -744,5 +744,134 @@ class User(base_api.BaseApi):
         req_param = {
             "method": "list",
             "version": info['minVersion']
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+class PersonMailAccount(base_api.BaseApi):
+    """Synology Personal Mail Account API wrapper."""
+
+    def mail_contacts_list(self) -> dict:
+        """
+        List snapshot usage entries.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.PersonMailAccount.Contacts``.
+        """
+        api_name = "SYNO.PersonMailAccount.Contacts"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "list",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def mail_clean(self) -> dict:
+        """
+        Clean/reset the remote credential verifier.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.PersonMailAccount.Mail``.
+        """
+        api_name = "SYNO.PersonMailAccount.Mail"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "clean",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def mail_send(self) -> dict:
+        """
+        Send an email from the person mail account.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.PersonMailAccount.Mail``.
+        """
+        api_name = "SYNO.PersonMailAccount.Mail"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "send",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def mail_status(self) -> dict:
+        """
+        Get snapshot usage tracking status.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.PersonMailAccount.Mail``.
+        """
+        api_name = "SYNO.PersonMailAccount.Mail"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "status",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def mail_stop(self) -> dict:
+        """
+        Stop snapshot usage tracking.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.PersonMailAccount.Mail``.
+        """
+        api_name = "SYNO.PersonMailAccount.Mail"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "stop",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def mail_oauth_gmail(self) -> dict:
+        """
+        Configure Gmail as the person mail account.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.PersonMailAccount.Mail.Oauth``.
+        """
+        api_name = "SYNO.PersonMailAccount.Mail.Oauth"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "gmail",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def mail_oauth_outlook(self) -> dict:
+        """
+        Configure Outlook as the person mail account.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.PersonMailAccount.Mail.Oauth``.
+        """
+        api_name = "SYNO.PersonMailAccount.Mail.Oauth"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "outlook",
+            "version": 1,
         }
         return self.request_data(api_name, api_path, req_param)

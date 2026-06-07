@@ -840,3 +840,201 @@ class CoreSystem(base_api.BaseApi):
         req_param.update(kwargs)
 
         return self.request_data(api_name, api_path, req_param)
+
+    def socketio_emit(self) -> dict:
+        """
+        Emit/send a snapshot event notification.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.Entry.SocketIo``.
+        """
+        api_name = "SYNO.Entry.SocketIo"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "emit",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def socketio_listeners_count(self) -> dict:
+        """
+        Get the current number of active Socket.IO listeners.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.Entry.SocketIo``.
+        """
+        api_name = "SYNO.Entry.SocketIo"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "listeners_count",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def license_ha_get_uuid(self) -> dict:
+        """
+        Get the Taipei enclosure UUID.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.License.HA``.
+        """
+        api_name = "SYNO.License.HA"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "get_uuid",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def license_ha_ha_remote_login(self) -> dict:
+        """
+        Perform a remote login via High Availability credential.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.License.HA``.
+        """
+        api_name = "SYNO.License.HA"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "ha_remote_login",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def license_ha_save_vault(self) -> dict:
+        """
+        Save/persist the encryption key vault configuration.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.License.HA``.
+        """
+        api_name = "SYNO.License.HA"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "save_vault",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def remote_credential_set(self) -> dict:
+        """
+        Set or update the configuration.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.Remote.Credential``.
+        """
+        api_name = "SYNO.Remote.Credential"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "set",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def remote_credential_challenge_get(self) -> dict:
+        """
+        Get remote credential challenge parameters.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.Remote.Credential.Challenge``.
+        """
+        api_name = "SYNO.Remote.Credential.Challenge"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "get",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def remote_credential_info_get(self) -> dict:
+        """
+        Get remote credential service information.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.Remote.Credential.Info``.
+        """
+        api_name = "SYNO.Remote.Credential.Info"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "get",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def remote_credential_verifier_get(self) -> dict:
+        """
+        Get remote credential verifier status.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.Remote.Credential.Verifier``.
+        """
+        api_name = "SYNO.Remote.Credential.Verifier"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "get",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def videoplayer_subtitle_get(self) -> dict:
+        """
+        Get VideoPlayer subtitle configuration.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.VideoPlayer.Subtitle``.
+        """
+        api_name = "SYNO.VideoPlayer.Subtitle"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "get",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def videoplayer_drive_subtitle_get(self) -> dict:
+        """
+        Get Synology Drive VideoPlayer subtitle settings.
+
+        Returns
+        -------
+        dict
+            API response from ``SYNO.VideoPlayer.SynologyDrive.Subtitle``.
+        """
+        api_name = "SYNO.VideoPlayer.SynologyDrive.Subtitle"
+        info = self.core_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "method": "get",
+            "version": 1,
+        }
+        return self.request_data(api_name, api_path, req_param)
