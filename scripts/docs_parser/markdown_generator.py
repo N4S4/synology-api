@@ -1,4 +1,5 @@
 import re
+import json
 import warnings
 
 from docstring_parser import Docstring
@@ -13,8 +14,8 @@ from .config import DOCS_TRACKER
 META_TAG = '---\n'
 SEPARATOR = '\n\n\n---\n\n\n'
 NEWLINE = '  \n'
-AUTO_GEN_TAG = '\n<!-- ' + '-'*44 + ' -->\n'
-AUTO_GEN_MESSAGE = '<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->'
+AUTO_GEN_TAG = '\n{/* ' + '-'*44 + ' */}\n'
+AUTO_GEN_MESSAGE = '{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}'
 AUTO_GEN_DISCLAIMER = AUTO_GEN_TAG + AUTO_GEN_MESSAGE + AUTO_GEN_TAG + NEWLINE
 
 DOCS_STATUS_INDICATOR = {
@@ -114,6 +115,10 @@ def validate_str(context: str, strs: list[str | Any]):
                 f'[{context}] Invalid string: {current}', UserWarning)
 
 
+def sanitize_frontmatter(text: str) -> str:
+    return json.dumps(text if text else '')
+
+
 def multi_class_disclaimer(main_class: str, additional_classes: Sequence[str]) -> str:
     """Return tip informing about all classes documented on the page"""
     content = f'This page contains documentation for the `{main_class}` class and its subclasses:  \n'
@@ -180,6 +185,7 @@ def gen_supported_apis(supported_apis: dict[str, dict]) -> str:
     content = META_TAG
     content += 'sidebar_position: 1\n'
     content += 'title: Supported APIs\n'
+    content += 'description: Comprehensive list of all supported APIs in the package.\n'
     content += META_TAG
     content += AUTO_GEN_DISCLAIMER
     content += header('h1', 'Supported APIs')
@@ -206,7 +212,7 @@ def gen_supported_apis(supported_apis: dict[str, dict]) -> str:
     return content
 
 
-def gen_doc_metadata(class_name: str, docs_status_info: dict) -> tuple[str, str]:
+def gen_doc_metadata(class_name: str, docs_status_info: dict, description: str) -> tuple[str, str]:
     """Generate front matter header"""
     docs_status, display_order, status_indicator = '', '', ''
 
@@ -229,6 +235,7 @@ def gen_doc_metadata(class_name: str, docs_status_info: dict) -> tuple[str, str]
     content = META_TAG
     content += f'sidebar_position: {display_order}\n'
     content += f'title: {status_indicator} {class_name}\n'
+    content += f'description: {sanitize_frontmatter(description)} \n'
     content += META_TAG
     content += AUTO_GEN_DISCLAIMER
 
@@ -240,7 +247,8 @@ def gen_doc_header(class_name: str, docstring: Docstring, class_index: int, addi
     docs_status = ''
 
     if class_index == 0:
-        content, docs_status = gen_doc_metadata(class_name, docs_status_info)
+        content, docs_status = gen_doc_metadata(
+            class_name, docs_status_info, docstring.short_description or '')
 
         # File contains more than one class: disclaimer when parsing the first one
         if additional_classes:
