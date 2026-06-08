@@ -84,7 +84,7 @@
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme="dark"] {
 	--text: #d3f6fd;
-	--background: #010b0e;
+	--background: #1b1b1d;
 	--primary: #80e3fa;
 	--secondary: #1207a6;
 	--accent: #7119f5;
@@ -100,9 +100,12 @@
 	--ifm-color-emphasis-800: #5ea1ad;
 	--ifm-color-emphasis-900: #7cc3d1;
 	--ifm-color-emphasis-1000: var(--text);
+	--ifm-menu-color: var(--ifm-font-color-base);
 
 	--ifm-background-color: var(--background);
-	--ifm-background-surface-color: #081418;
+	--ifm-background-surface-color: #242526;
+	--ifm-navbar-background-color: #242526;
+	--ifm-footer-background-color: #1c1e21;
 
 	--ifm-hover-overlay: rgba(128, 227, 250, 0.15);
 
@@ -111,7 +114,7 @@
 
 	--ifm-breadcrumb-separator-filter: invert(75%) sepia(10%) saturate(300%)
 		hue-rotate(180deg) brightness(90%) contrast(100%);
-	--ifm-code-background: rgba(18, 7, 166, 0.2);
+	--ifm-code-background: #ffffff1a;
 
 	--ifm-scrollbar-track-background-color: #0f2027;
 	--ifm-scrollbar-thumb-background-color: #18434f;

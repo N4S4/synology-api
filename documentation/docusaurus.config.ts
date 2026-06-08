@@ -23,7 +23,22 @@ const config: Config = {
   
   trailingSlash: false,
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+
+  future: {
+    faster: true,
+    v4: true
+  },
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn'
+    }
+  },
+
+  storage: {
+    type: 'localStorage',
+    namespace: true
+  },
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
