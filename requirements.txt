@@ -2,7 +2,7 @@ setuptools==82.0.1
 requests==2.34.2
 urllib3==2.7.0
 requests-toolbelt==1.0.0
-tqdm==4.67.3
+tqdm==4.68.1
 psutil==7.2.2
 treelib==1.8.0
 PyYAML==6.0.3
