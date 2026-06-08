@@ -1,11 +1,12 @@
 ---
 sidebar_position: 18
 title: 🚧 CoreSecurity
+description: "Core Security API implementation for Synology NAS." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # CoreSecurity
 :::warning

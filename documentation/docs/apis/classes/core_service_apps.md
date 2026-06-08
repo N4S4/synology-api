@@ -1,11 +1,12 @@
 ---
 sidebar_position: 20
 title: 🚧 CoreServiceApps
+description: "Core app/file services: ACL, AppPortal, CMS, FileServ, Findhost, and more." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # CoreServiceApps
 :::warning

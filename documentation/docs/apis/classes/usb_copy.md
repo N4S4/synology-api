@@ -1,11 +1,12 @@
 ---
-sidebar_position: 32
+sidebar_position: 52
 title: ✅ USBCopy
+description: "USB Copy API wrapper for Synology NAS." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # USBCopy
 ## Overview
@@ -27,18 +28,22 @@ Retrieve package settings.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.USBCopy` 
+
+`SYNO.USBCopy`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 Parsed JSON into a dictionary.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```python
     {
         "data": {
@@ -52,7 +57,6 @@ Parsed JSON into a dictionary.
 </details>
 
 
-
 ---
 
 
@@ -61,28 +65,32 @@ Retrieve package logs.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.USBCopy` 
+
+`SYNO.USBCopy`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_offset_** `int`  
 Offset for logs. Defaults to 0.  
   
 **_limit_** `int`  
 Maximum number of logs to retrieve. Defaults to 200.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 Parsed response JSON into a dictionary.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```python
     {
         "data": {
@@ -104,7 +112,6 @@ Parsed response JSON into a dictionary.
 </details>
 
 
-
 ---
 
 
@@ -113,25 +120,29 @@ Retrieve task settings.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.USBCopy` 
+
+`SYNO.USBCopy`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `int`  
 Task ID to retrieve info for.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 Parsed response JSON into a dictionary.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```python
     {
         "data": {
@@ -171,7 +182,6 @@ Parsed response JSON into a dictionary.
 </details>
 
 
-
 ---
 
 
@@ -180,35 +190,38 @@ Enable or disable a USB Copy task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.USBCopy` 
+
+`SYNO.USBCopy`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `int`  
 Task ID to apply the setting to.  
   
 **_enable_** `bool`  
 Whether to enable (True) or disable (False) the USB Copy task. Defaults to True.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 Parsed response JSON into a dictionary.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```python
     {
         "success": True
     }
 ```
 </details>
-
 
 
 ---

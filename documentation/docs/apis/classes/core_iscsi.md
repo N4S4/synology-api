@@ -1,11 +1,12 @@
 ---
 sidebar_position: 33
 title: ✅ ISCSI
+description: "Abstract wrapper class for `SYNO.Core.ISCSI.*` requests." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 :::tip
  

@@ -1,11 +1,12 @@
 ---
 sidebar_position: 8
 title: ✅ Calendar
+description: "Synology Calendar API client." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # Calendar
 ## Overview

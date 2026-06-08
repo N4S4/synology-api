@@ -1,11 +1,12 @@
 ---
 sidebar_position: 37
 title: 🚧 LdapServer
+description: "Synology LDAP Server API client." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # LdapServer
 :::warning

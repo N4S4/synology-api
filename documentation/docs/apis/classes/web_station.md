@@ -1,11 +1,12 @@
 ---
 sidebar_position: 57
 title: ✅ WebStation
+description: "Synology Web Station API client." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # WebStation
 ## Overview

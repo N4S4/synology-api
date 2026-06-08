@@ -1,11 +1,12 @@
 ---
 sidebar_position: 19
 title: 🚧 CoreSecurityAuth
+description: "Core Security Auth API for SmartBlock/OTP/TrustDevice/DisableAdmin." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # CoreSecurityAuth
 :::warning
@@ -16,7 +17,8 @@ This API is partially documented or under construction.
 ## Overview
 Core Security Auth API for SmartBlock/OTP/TrustDevice/DisableAdmin.  
   
-Covers SYNO.Core.SmartBlock.*, OTP.*, TrustDevice, and DisableAdmin endpoints.  
+Covers SYNO.Core.SmartBlock.*, OTP.*, TrustDevice, DisableAdmin,
+SYNO.API.Auth.Key, Auth.Type, Auth.RedirectURI, SYNO.Auth.RescueEmail.  
   
 ## Methods
 ### `smartblock_get`
@@ -852,6 +854,227 @@ Key-value pairs of admin disable settings to update.
 
 `dict[str, object] or str`  
 Result of the set operation.  
+</div>
+  
+
+
+
+---
+
+
+### `rescue_email_get`
+Get rescue email configuration.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.Auth.RescueEmail`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict[str, object] or str`  
+Rescue email settings (verified: bool, email address if set).  
+</div>
+  
+
+
+
+---
+
+
+### `rescue_email_set`
+Set rescue email address.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.Auth.RescueEmail`  
+</div>
+  
+#### Parameters
+<div class="padding-left--md">
+
+**_email_** `str`  
+Email address to use for account rescue.  
+  
+</div>
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict[str, object] or str`  
+Result of the set operation.  
+</div>
+  
+
+
+
+---
+
+
+### `rescue_email_verify`
+Verify rescue email with confirmation code.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.Auth.RescueEmail`  
+</div>
+  
+#### Parameters
+<div class="padding-left--md">
+
+**_code_** `str`  
+Verification code sent to the rescue email.  
+  
+</div>
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict[str, object] or str`  
+Result of the verify operation.  
+</div>
+  
+
+
+
+---
+
+
+### `auth_key_get`
+Get the DSM authentication key.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.API.Auth.Key`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict[str, object] or str`  
+Authentication key data (auth_key: str).  
+</div>
+  
+
+
+
+---
+
+
+### `auth_key_grant`
+Request a new authentication key grant.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.API.Auth.Key`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict[str, object] or str`  
+Grant response from the DSM auth key service.  
+</div>
+  
+
+
+
+---
+
+
+### `auth_key_code_get`
+Get the authentication key code (used in login flow).  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.API.Auth.Key.Code`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict[str, object] or str`  
+Key code data from ``SYNO.API.Auth.Key.Code``.  
+</div>
+  
+
+
+
+---
+
+
+### `auth_type_get`
+Get available authentication types on this DSM.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.API.Auth.Type`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict[str, object] or str`  
+List of auth types (e.g. ``[{"type": "passwd"}]``).  
+</div>
+  
+
+
+
+---
+
+
+### `auth_redirect_uri_check`
+Check if OAuth redirect URI is configured and available.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.API.Auth.RedirectURI`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict[str, object] or str`  
+Redirect URI availability (available: bool, code: int).  
+</div>
+  
+
+
+
+---
+
+
+### `auth_redirect_uri_run`
+Execute the OAuth redirect URI workflow.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.API.Auth.RedirectURI`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict[str, object] or str`  
+Redirect URI execution result.  
 </div>
   
 

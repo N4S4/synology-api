@@ -1,11 +1,12 @@
 ---
-sidebar_position: 15
+sidebar_position: 31
 title: 🚧 FileStation
+description: "FileStation API implementation." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # FileStation
 :::warning
@@ -20,61 +21,62 @@ Provides methods to interact with Synology NAS FileStation API for file and fold
 search, upload, download, and background task management.
 
 ### Supported methods
- 
-    - **Getters** : 
-        - Get FileStation info 
-        - Get list of shared folders 
-        - Get file list in a folder 
-        - Get file information 
-        - Get search task results 
-        - Get mount point list 
-        - Get favorite list 
-        - Get directory size calculation status 
-        - Get MD5 calculation status 
-        - Check file/folder permissions 
-        - Get shared link information 
-        - Get shared link list 
-        - Get copy or move task status 
-        - Get delete task status 
-        - Get extract task status 
-        - Get file list of archive 
-        - Get compression task status 
-        - Get list of all background tasks 
-    - **Setters** : 
-        - Edit favorite name 
-        - Replace all favorites 
-        - Edit shared link 
-    - **Actions** : 
-        - Start search task 
-        - Stop search task 
-        - Stop all search tasks 
-        - Add a favorite 
-        - Delete a favorite 
-        - Clear broken favorites 
-        - Start directory size calculation 
-        - Stop directory size calculation 
-        - Start MD5 calculation 
-        - Stop MD5 calculation 
-        - Upload file 
-        - Create sharing link 
-        - Delete shared link 
-        - Clear invalid shared links 
-        - Create folder 
-        - Rename folder 
-        - Start copy or move task 
-        - Stop copy or move task 
-        - Start delete task 
-        - Stop delete task 
-        - Delete file or folder (blocking) 
-        - Start extract task 
-        - Stop extract task 
-        - Start file compression 
-        - Stop file compression 
-        - Download file 
+
+    - **Getters** :
+        - Get FileStation info
+        - Get list of shared folders
+        - Get file list in a folder
+        - Get file information
+        - Get search task results
+        - Get mount point list
+        - Get favorite list
+        - Get directory size calculation status
+        - Get MD5 calculation status
+        - Check file/folder permissions
+        - Get shared link information
+        - Get shared link list
+        - Get copy or move task status
+        - Get delete task status
+        - Get extract task status
+        - Get file list of archive
+        - Get compression task status
+        - Get list of all background tasks
+    - **Setters** :
+        - Edit favorite name
+        - Replace all favorites
+        - Edit shared link
+    - **Actions** :
+        - Start search task
+        - Stop search task
+        - Stop all search tasks
+        - Add a favorite
+        - Delete a favorite
+        - Clear broken favorites
+        - Start directory size calculation
+        - Stop directory size calculation
+        - Start MD5 calculation
+        - Stop MD5 calculation
+        - Upload file
+        - Create sharing link
+        - Delete shared link
+        - Clear invalid shared links
+        - Create folder
+        - Rename folder
+        - Start copy or move task
+        - Stop copy or move task
+        - Start delete task
+        - Stop delete task
+        - Delete file or folder (blocking)
+        - Start extract task
+        - Stop extract task
+        - Start file compression
+        - Stop file compression
+        - Download file
         - Generate file tree  
   
 ### Parameters
 <div class="padding-left--md">
+
 **_ip_address_** `str`  
 IP address of the Synology NAS.  
   
@@ -111,8 +113,11 @@ Name of the device. Default is None.
 **_interactive_output_** `bool`  
 If True, enables interactive output. Default is False.  
   
-
+**_quickconnect_id_** `str`  
+QuickConnect ID for relay-based access. Defaults to None.  
+  
 </div>
+  
   
 ## Methods
 ### `get_info`
@@ -120,15 +125,18 @@ Get FileStation information.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Info` 
+
+`SYNO.FileStation.Info`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 FileStation information or error message.  
-
 </div>
+  
 
 
 
@@ -140,11 +148,13 @@ List shared folders.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.List` 
+
+`SYNO.FileStation.List`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_additional_** `str or list of str`  
 Additional attributes to include.  
   
@@ -163,14 +173,15 @@ Sort direction ('asc' or 'desc').
 **_onlywritable_** `bool`  
 If True, only writable shares are listed.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 List of shared folders or error message.  
-
 </div>
+  
 
 
 
@@ -182,11 +193,13 @@ List files in a folder.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.List` 
+
+`SYNO.FileStation.List`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_folder_path_** `str`  
 Path to the folder.  
   
@@ -214,14 +227,15 @@ Path to go to.
 **_additional_** `str or list of str`  
 Additional attributes to include.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 List of files or error message.  
-
 </div>
+  
 
 
 
@@ -233,25 +247,28 @@ Get information about a file or files.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.List` 
+
+`SYNO.FileStation.List`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_path_** `str or list of str`  
 Path(s) to the file(s).  
   
 **_additional_param_** `str or list of str`  
 Additional attributes to retrieve.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 File information or error message.  
-
 </div>
+  
 
 
 
@@ -263,11 +280,13 @@ Start a search task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Search` 
+
+`SYNO.FileStation.Search`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_folder_path_** `str`  
 Path to the folder where the search will start.  
   
@@ -313,14 +332,15 @@ Owner filter.
 **_group_** `str`  
 Group filter.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Search task ID or error message.  
-
 </div>
+  
 
 
 
@@ -332,11 +352,13 @@ Get the results of a search task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Search` 
+
+`SYNO.FileStation.Search`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `str`  
 Task ID of the search task.  
   
@@ -358,14 +380,15 @@ Offset for pagination.
 **_additional_** `str or list of str`  
 Additional attributes to include.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Search results or error message.  
-
 </div>
+  
 
 
 
@@ -377,22 +400,25 @@ Stop a search task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Search` 
+
+`SYNO.FileStation.Search`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID of the search task to stop.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -404,15 +430,18 @@ Stop all running search tasks.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Search` 
+
+`SYNO.FileStation.Search`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `str`  
 Confirmation message.  
-
 </div>
+  
 
 
 
@@ -424,13 +453,16 @@ List mount points.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.VirtualFolder` 
+
+`SYNO.FileStation.VirtualFolder`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_mount_type_** `str`  
-Type of mount point to return.  
+Type of mount point to return.
+
 Posible values:
 - `"ftp"` = FTP and FTPS connections
 - `"davs"` = WebDAV connections
@@ -443,7 +475,8 @@ Offset for pagination.
 Limit for pagination.  
   
 **_sort_by_** `str`  
-Field to sort by.  
+Field to sort by.
+
 Posible values:
 - `"name"`
 - `"path"`  
@@ -452,7 +485,8 @@ Posible values:
 Sort direction ('asc' or 'desc').  
   
 **_additional_** `str or list of str`  
-Additional attributes to include. Defaults to `["real_path","owner","time","perm","mount_point_type"]`.  
+Additional attributes to include. Defaults to `["real_path","owner","time","perm","mount_point_type"]`.
+
 Possible values (not exhaustive):
 - `"real_path"`
 - `"size"`
@@ -461,14 +495,15 @@ Possible values (not exhaustive):
 - `"mount_point_type"`
 - `"perm"`  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 List of mount points or error message.  
-
 </div>
+  
 
 
 
@@ -480,11 +515,13 @@ List favorite files and folders.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Favorite` 
+
+`SYNO.FileStation.Favorite`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_offset_** `int`  
 Offset for pagination.  
   
@@ -500,14 +537,15 @@ Status filter.
 **_additional_** `str or list of str`  
 Additional attributes to include.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 List of favorites or error message.  
-
 </div>
+  
 
 
 
@@ -519,11 +557,13 @@ Add a file or folder to favorites.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Favorite` 
+
+`SYNO.FileStation.Favorite`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_path_** `str`  
 Path to the file or folder.  
   
@@ -533,14 +573,15 @@ Name for the favorite.
 **_index_** `int`  
 Index for the favorite.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -552,22 +593,25 @@ Delete a favorite.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Favorite` 
+
+`SYNO.FileStation.Favorite`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_path_** `str`  
 Path to the favorite to delete.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -579,15 +623,18 @@ Clear broken favorites.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Favorite` 
+
+`SYNO.FileStation.Favorite`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -599,25 +646,28 @@ Edit the name of a favorite.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Favorite` 
+
+`SYNO.FileStation.Favorite`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_path_** `str`  
 Path to the favorite.  
   
 **_new_name_** `str`  
 New name for the favorite.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -629,25 +679,28 @@ Replace all favorites with new paths and names.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Favorite` 
+
+`SYNO.FileStation.Favorite`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_path_** `str or list of str`  
 New path or list of new paths for the favorites.  
   
 **_name_** `str or list of str`  
 New name or list of new names for the favorites.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -659,22 +712,25 @@ Start a directory size calculation task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.DirSize` 
+
+`SYNO.FileStation.DirSize`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_path_** `str`  
 Path to the directory.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Task ID or error message.  
-
 </div>
+  
 
 
 
@@ -686,22 +742,25 @@ Stop a directory size calculation task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.DirSize` 
+
+`SYNO.FileStation.DirSize`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID of the size calculation task to stop.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `str`  
 Confirmation message.  
-
 </div>
+  
 
 
 
@@ -713,22 +772,25 @@ Get the status of a directory size calculation task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.DirSize` 
+
+`SYNO.FileStation.DirSize`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID of the size calculation task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Task status or error message.  
-
 </div>
+  
 
 
 
@@ -740,22 +802,25 @@ Start an MD5 calculation task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.MD5` 
+
+`SYNO.FileStation.MD5`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_file_path_** `str`  
 Path to the file.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `str or dict[str, object]`  
 Task ID or error message.  
-
 </div>
+  
 
 
 
@@ -767,22 +832,25 @@ Get the status of an MD5 calculation task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.MD5` 
+
+`SYNO.FileStation.MD5`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID of the MD5 calculation task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `str or dict[str, object]`  
 Task status or error message.  
-
 </div>
+  
 
 
 
@@ -794,22 +862,25 @@ Stop an MD5 calculation task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.DirSize` 
+
+`SYNO.FileStation.DirSize`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID of the MD5 calculation task to stop.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `str`  
 Confirmation message.  
-
 </div>
+  
 
 
 
@@ -821,11 +892,13 @@ Check permissions for a file or folder.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.CheckPermission` 
+
+`SYNO.FileStation.CheckPermission`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_path_** `str`  
 Path to the file or folder.  
   
@@ -838,14 +911,15 @@ If True, overwriting is allowed.
 **_create_only_** `bool`  
 If True, only creation is allowed.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Permission check result or error message.  
-
 </div>
+  
 
 
 
@@ -857,11 +931,13 @@ Upload a file to the server.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Upload` 
+
+`SYNO.FileStation.Upload`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_dest_path_** `str`  
 Destination path on the server.  
   
@@ -880,14 +956,15 @@ If True, SSL certificates will be verified.
 **_progress_bar_** `bool`  
 If True, shows a progress bar during upload.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `str or tuple[int, dict[str, object]]`  
 Upload result or error message.  
-
 </div>
+  
 
 
 
@@ -899,22 +976,25 @@ Get information about a shared link.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Sharing` 
+
+`SYNO.FileStation.Sharing`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_link_id_** `str`  
 ID of the shared link.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Shared link information or error message.  
-
 </div>
+  
 
 
 
@@ -926,11 +1006,13 @@ List shared links.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Sharing` 
+
+`SYNO.FileStation.Sharing`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_offset_** `int`  
 Offset for pagination.  
   
@@ -946,14 +1028,15 @@ Sort direction ('asc' or 'desc').
 **_force_clean_** `bool`  
 If True, forces a clean of the shared link list.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 List of shared links or error message.  
-
 </div>
+  
 
 
 
@@ -965,11 +1048,13 @@ Create a shared link.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Sharing` 
+
+`SYNO.FileStation.Sharing`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_path_** `str`  
 Path to the file or folder to share.  
   
@@ -985,14 +1070,15 @@ Availability date for the shared link (Unix timestamp or formatted string).
 **_expire_times_** `int`  
 Number of times the link can be accessed before expiring.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Shared link details or error message.  
-
 </div>
+  
 
 
 
@@ -1004,22 +1090,25 @@ Delete a shared link.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Sharing` 
+
+`SYNO.FileStation.Sharing`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_link_id_** `str`  
 ID of the shared link to delete.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -1031,15 +1120,18 @@ Clear invalid shared links.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Sharing` 
+
+`SYNO.FileStation.Sharing`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -1051,11 +1143,13 @@ Edit a shared link.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Sharing` 
+
+`SYNO.FileStation.Sharing`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_link_id_** `str`  
 ID of the shared link to edit.  
   
@@ -1071,14 +1165,15 @@ New availability date for the shared link (Unix timestamp or formatted string).
 **_expire_times_** `int`  
 New number of times the link can be accessed before expiring.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -1090,11 +1185,13 @@ Create a new folder.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.CreateFolder` 
+
+`SYNO.FileStation.CreateFolder`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_folder_path_** `str or list of str`  
 Path or list of paths where the folder should be created.  
   
@@ -1107,14 +1204,15 @@ If True, parent folders will be created if they don't exist.
 **_additional_** `str or list of str`  
 Additional attributes to include.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `str or dict[str, object]`  
 Creation result or error message.  
-
 </div>
+  
 
 
 
@@ -1126,11 +1224,13 @@ Rename a file or a folder.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Rename` 
+
+`SYNO.FileStation.Rename`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_path_** `str or list of str`  
 Current path or list of paths of the files or folder(s) to rename.  
   
@@ -1143,14 +1243,15 @@ Additional attributes to include.
 **_search_taskid_** `str`  
 Task ID of a search task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -1162,11 +1263,13 @@ Start a copy or move task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.CopyMove` 
+
+`SYNO.FileStation.CopyMove`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_path_** `str or list of str`  
 Source path or list of source paths to copy or move.  
   
@@ -1185,14 +1288,15 @@ If True, shows accurate progress.
 **_search_taskid_** `str`  
 Task ID of a search task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `str or dict[str, object]`  
 Task ID or error message.  
-
 </div>
+  
 
 
 
@@ -1204,22 +1308,25 @@ Get the status of a copy or move task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.CopyMove` 
+
+`SYNO.FileStation.CopyMove`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID of the copy or move task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Task status or error message.  
-
 </div>
+  
 
 
 
@@ -1231,22 +1338,25 @@ Stop a copy or move task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.CopyMove` 
+
+`SYNO.FileStation.CopyMove`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID of the copy or move task to stop.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -1258,11 +1368,13 @@ Start a delete task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Delete` 
+
+`SYNO.FileStation.Delete`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_path_** `str or list of str`  
 Path or list of paths to the file or folder to delete.  
   
@@ -1275,14 +1387,15 @@ If True, deletes folders recursively.
 **_search_taskid_** `str`  
 Task ID of a search task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Task ID or error message.  
-
 </div>
+  
 
 
 
@@ -1294,22 +1407,25 @@ Get the status of a delete task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Delete` 
+
+`SYNO.FileStation.Delete`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID of the delete task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Task status or error message.  
-
 </div>
+  
 
 
 
@@ -1321,22 +1437,25 @@ Stop a delete task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Delete` 
+
+`SYNO.FileStation.Delete`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID of the delete task to stop.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -1348,11 +1467,13 @@ Delete a file or folder (blocking function).
 This function will stop your script until done! Do not interrupt.  
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Delete` 
+
+`SYNO.FileStation.Delete`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_path_** `str or list of str`  
 Path or list of paths to the file or folder to delete.  
   
@@ -1362,14 +1483,15 @@ If True, deletes folders recursively.
 **_search_taskid_** `str`  
 Task ID of a search task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -1381,11 +1503,13 @@ Start an extract task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Extract` 
+
+`SYNO.FileStation.Extract`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_file_path_** `str`  
 Path to the archive file.  
   
@@ -1410,14 +1534,15 @@ Password for the archive, if required.
 **_item_id_** `str`  
 Item ID for the extraction task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Task ID or error message.  
-
 </div>
+  
 
 
 
@@ -1429,22 +1554,25 @@ Get the status of an extract task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Extract` 
+
+`SYNO.FileStation.Extract`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID of the extract task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Task status or error message.  
-
 </div>
+  
 
 
 
@@ -1456,22 +1584,25 @@ Stop an extract task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Extract` 
+
+`SYNO.FileStation.Extract`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID of the extract task to stop.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -1483,11 +1614,13 @@ Get the list of files in an archive.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Extract` 
+
+`SYNO.FileStation.Extract`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_file_path_** `str`  
 Path to the archive file.  
   
@@ -1512,14 +1645,15 @@ Password for the archive, if required.
 **_item_id_** `str`  
 Item ID for the archive.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 List of files in the archive or error message.  
-
 </div>
+  
 
 
 
@@ -1531,11 +1665,13 @@ Start a file compression task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Compress` 
+
+`SYNO.FileStation.Compress`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_path_** `str or list of str`  
 Path or list of paths to the file or folder to compress.  
   
@@ -1554,14 +1690,15 @@ Compression format.
 **_password_** `str`  
 Password for the compressed file, if required.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Task ID or error message.  
-
 </div>
+  
 
 
 
@@ -1573,22 +1710,25 @@ Get the status of a file compression task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Compress` 
+
+`SYNO.FileStation.Compress`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID of the compression task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Task status or error message.  
-
 </div>
+  
 
 
 
@@ -1600,22 +1740,25 @@ Stop a file compression task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Compress` 
+
+`SYNO.FileStation.Compress`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID of the compression task to stop.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Response from the API or error message.  
-
 </div>
+  
 
 
 
@@ -1627,11 +1770,13 @@ Get a list of all background tasks.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.BackgroundTask` 
+
+`SYNO.FileStation.BackgroundTask`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_offset_** `int`  
 Offset for pagination.  
   
@@ -1647,14 +1792,15 @@ Sort direction ('asc' or 'desc').
 **_api_filter_** `str`  
 API filter.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 List of background tasks or error message.  
-
 </div>
+  
 
 
 
@@ -1666,11 +1812,13 @@ Download a file from the server.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.FileStation.Download` 
+
+`SYNO.FileStation.Download`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_path_** `str`  
 The file path starting with a shared folder to be downloaded.  
   
@@ -1686,14 +1834,15 @@ Chunk size for downloading.
 **_verify_** `bool`  
 If True, SSL certificates will be verified.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `Optional[str]`  
 None if successful, error message otherwise.  
-
 </div>
+  
 
 
 
@@ -1706,6 +1855,7 @@ You need to create the root node before calling this function.
   
 #### Parameters
 <div class="padding-left--md">
+
 **_folder_path_** `str`  
 Folder path to generate file tree.  
   
@@ -1718,8 +1868,9 @@ Non-negative number of maximum depth of tree generation if node tree is director
 **_start_depth_** `int`  
 Non negative number to start to control tree generation default to '0'.  
   
-
 </div>
+  
+
 
 
 

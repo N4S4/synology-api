@@ -1,11 +1,12 @@
 ---
-sidebar_position: 25
+sidebar_position: 45
 title: 🚧 Share
+description: "Core Share API implementation." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 :::tip
  
@@ -33,11 +34,13 @@ Validate set of parameter for a new / modified shared folder.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share` 
+
+`SYNO.Core.Share`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 Share name.  
   
@@ -59,24 +62,25 @@ Encrypted password. Defaults to `""`.
 **_encryption_** `bool`  
 Enable encryption. Defaults to `False`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Success.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "success": true,
 }
 ```
 </details>
-
 
 
 ---
@@ -87,11 +91,13 @@ List all folders informations.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share` 
+
+`SYNO.Core.Share`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_share_type_** `str`  
 Share type. Defaults to `all`.  
   
@@ -105,17 +111,19 @@ All fields known are: `[
     "include_offline_share","is_offline_share","include_worm_share"
 ]`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 A dictionary containing the shared folders information.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -136,7 +144,6 @@ A dictionary containing the shared folders information.
 </details>
 
 
-
 ---
 
 
@@ -145,11 +152,13 @@ Get a folder by name.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share` 
+
+`SYNO.Core.Share`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 Share name.  
   
@@ -157,17 +166,19 @@ Share name.
 Additional fields to retrieve. Defaults to `[]`.
 All fields known are: `["disable_list","disable_modify","disable_download","unite_permission","is_aclmode"]`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 A dictionary containing the shared folder information.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -187,7 +198,6 @@ A dictionary containing the shared folder information.
 </details>
 
 
-
 ---
 
 
@@ -196,11 +206,13 @@ Create a new shared folder.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share` 
+
+`SYNO.Core.Share`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 Share name.  
   
@@ -240,17 +252,19 @@ Enable encryption. Defaults to `False`.
 **_enc_passwd_** `str`  
 Encrypted password. Defaults to `""`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Name of the created shared folder.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -261,7 +275,6 @@ Name of the created shared folder.
 </details>
 
 
-
 ---
 
 
@@ -270,32 +283,35 @@ Delete folder(s) by name(s).
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share` 
+
+`SYNO.Core.Share`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `List[str]`  
 Share names.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Success.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "success": true
 }
 ```
 </details>
-
 
 
 ---
@@ -306,11 +322,13 @@ Clone existing shared folder.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share` 
+
+`SYNO.Core.Share`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 New shared folder name.  
   
@@ -344,17 +362,19 @@ Enable share compress. Defaults to `False`.
 **_share_quota_** `int`  
 Share quota. Defaults to `0`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Name of the created shared folder.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -365,7 +385,6 @@ Name of the created shared folder.
 </details>
 
 
-
 ---
 
 
@@ -374,35 +393,38 @@ Decrypt a given share.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.Crypto` 
+
+`SYNO.Core.Share.Crypto`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 The share name to decrypt.  
   
 **_password_** `str`  
 The password to use for decrypting the share.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Success.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json
-    {
-        "success": true
-    }
-    ```
-</details>
 
+```json
+{
+    "success": true
+}
+```
+</details>
 
 
 ---
@@ -413,32 +435,35 @@ Encrypt a given share.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.Crypto` 
+
+`SYNO.Core.Share.Crypto`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 The share name to encrypt.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Success.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
-```json
-    {
-        "success": true
-    }
-    ```
-</details>
 
+```json
+{
+    "success": true
+}
+```
+</details>
 
 
 ---
@@ -456,11 +481,13 @@ Retrieve share permissions for a given folder filtered by permission name (sub s
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.Permission` 
+
+`SYNO.Core.Share.Permission`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 The folder name to list permissions for.  
   
@@ -483,17 +510,19 @@ Whether to include inherited permissions. Defaults to `False`.
 The type of user group to list permissions for. Defaults to `"local_user"`.
 All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 List of permission(s) on the folder.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -516,7 +545,6 @@ List of permission(s) on the folder.
 </details>
 
 
-
 ---
 
 
@@ -525,11 +553,13 @@ Retrieve share permissions for a given folder.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.Permission` 
+
+`SYNO.Core.Share.Permission`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 The folder name to list permissions for.  
   
@@ -549,17 +579,19 @@ Whether to include inherited permissions. Defaults to `False`.
 The type of user group to list permissions for. Defaults to `"local_user"`.
 All known values are: `["system", "local_user", "local_group", "ldap_user", "ldap_group"]`.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 All permissions on the folder.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -609,7 +641,6 @@ All permissions on the folder.
 </details>
 
 
-
 ---
 
 
@@ -618,11 +649,13 @@ Set folder permissions for a given folder.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.Permission` 
+
+`SYNO.Core.Share.Permission`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_name_** `str`  
 The folder name to set permissions for.  
   
@@ -633,24 +666,25 @@ All known values are: `["system", "local_user", "local_group", "ldap_user", "lda
 **_permissions_** `dict`  
 The permissions to set for the folder.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Success.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "success": true
 }
 ```
 </details>
-
 
 
 ---
@@ -661,25 +695,29 @@ Retrieve share permissions for a given group.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.Permission` 
+
+`SYNO.Core.Share.Permission`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_group_** `str`  
 The group to list permissions for.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Permissions of a group on Shared folders.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -705,7 +743,6 @@ Permissions of a group on Shared folders.
 </details>
 
 
-
 ---
 
 
@@ -714,35 +751,38 @@ Set group permissions for a given share.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.Permission` 
+
+`SYNO.Core.Share.Permission`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_group_** `str`  
 The group to set the permissions for.  
   
 **_permissions_** `list[dict[str, Any]]`  
 The permissions to set for the group.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Success.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "success": true
 }
 ```
 </details>
-
 
 
 ---
@@ -760,15 +800,18 @@ Initialize KeyManagerStore API.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.KeyManager.Store` 
+
+`SYNO.Core.Share.KeyManager.Store`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Not implemented yet.  
-
 </div>
+  
 
 
 
@@ -780,15 +823,18 @@ Not implemented yet.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.KeyManager.Store` 
+
+`SYNO.Core.Share.KeyManager.Store`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 Not implemented yet.  
-
 </div>
+  
 
 
 
@@ -800,18 +846,22 @@ Explore KeyManagerStore API.
 Get list of existing stores.  
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.KeyManager.Store` 
+
+`SYNO.Core.Share.KeyManager.Store`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 List of stores existing on the NAS.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -821,7 +871,6 @@ List of stores existing on the NAS.
 }
 ```
 </details>
-
 
 
 ---
@@ -839,18 +888,22 @@ List KeyManagerStore API.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Core.Share.KeyManager.AutoKey` 
+
+`SYNO.Core.Share.KeyManager.AutoKey`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict`  
 List of keys in the manager.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data": {
@@ -860,7 +913,6 @@ List of keys in the manager.
 }
 ```
 </details>
-
 
 
 ---
