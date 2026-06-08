@@ -45,8 +45,12 @@ class DownloadStation(base_api.BaseApi):
             - Delete RSS feed filter.
         - Actions:
             - Download task source.
+            - Clear all finished BT download tasks.
+            - Delete all BT download tasks.
             - Pause a download task.
             - Resume a download task.
+            - Pause all BT download tasks.
+            - Resume all BT download tasks.
             - Refresh RSS site.
             - Start a BT search.
             - Clean BT search tasks.
@@ -536,6 +540,92 @@ class DownloadStation(base_api.BaseApi):
 
         if type(task_id) is list:
             param['id'] = ",".join(task_id)
+
+        return self.request_data(api_name, api_path, param)
+
+    def clear_finished_tasks(self) -> dict[str, object] | str:
+        """
+        Clear all finished BT download tasks.
+
+        This deletes BT tasks that have completed
+        (status 5 = ``'finished'``).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response indicating success or failure.
+
+        Notes
+        -----
+        The ``type_inverse=true`` parameter ensures only BT tasks are
+        deleted (emule type tasks are excluded).
+        """
+        api_name = 'SYNO.DownloadStation2.Task'
+        info = self.download_list[api_name]
+        api_path = info['path']
+        param = {'version': '2', 'method': 'delete_condition',
+                 'type': json.dumps(['emule']),
+                 'type_inverse': 'true',
+                 'status': json.dumps([5])}
+
+        return self.request_data(api_name, api_path, param)
+
+    def delete_all_tasks(self) -> dict[str, object] | str:
+        """
+        Delete all BT download tasks regardless of status.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response indicating success or failure.
+
+        Warning
+        -------
+        This will delete **all** BT tasks including those currently
+        downloading. Use with caution.
+        """
+        api_name = 'SYNO.DownloadStation2.Task'
+        info = self.download_list[api_name]
+        api_path = info['path']
+        param = {'version': '2', 'method': 'delete_condition',
+                 'type': json.dumps(['emule']),
+                 'type_inverse': 'true'}
+
+        return self.request_data(api_name, api_path, param)
+
+    def pause_all_tasks(self) -> dict[str, object] | str:
+        """
+        Pause all BT download tasks.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response indicating success or failure.
+        """
+        api_name = 'SYNO.DownloadStation2.Task'
+        info = self.download_list[api_name]
+        api_path = info['path']
+        param = {'version': '2', 'method': 'pause_condition',
+                 'type': json.dumps(['emule']),
+                 'type_inverse': 'true'}
+
+        return self.request_data(api_name, api_path, param)
+
+    def resume_all_tasks(self) -> dict[str, object] | str:
+        """
+        Resume all paused BT download tasks.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response indicating success or failure.
+        """
+        api_name = 'SYNO.DownloadStation2.Task'
+        info = self.download_list[api_name]
+        api_path = info['path']
+        param = {'version': '2', 'method': 'resume_condition',
+                 'type': json.dumps(['emule']),
+                 'type_inverse': 'true'}
 
         return self.request_data(api_name, api_path, param)
 
