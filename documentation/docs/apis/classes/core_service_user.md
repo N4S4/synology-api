@@ -1,11 +1,12 @@
 ---
 sidebar_position: 22
 title: 🚧 CoreServiceUser
+description: "Core user/web services: Promotion, QuickConnect, Report, Share, Sharing, User, Web." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # CoreServiceUser
 :::warning

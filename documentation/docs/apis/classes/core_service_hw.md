@@ -1,11 +1,12 @@
 ---
 sidebar_position: 21
 title: 🚧 CoreServiceHW
+description: "Core hardware/media/package: Group, Hardware, ISCSI, Media, OAuth, Package, PortFwd." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # CoreServiceHW
 :::warning

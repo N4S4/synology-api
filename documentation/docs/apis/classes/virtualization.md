@@ -1,11 +1,12 @@
 ---
-sidebar_position: 35
+sidebar_position: 56
 title: 🚧 Virtualization
+description: "API wrapper for Synology Virtual Machine Manager." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # Virtualization
 :::warning
@@ -20,6 +21,7 @@ Provides methods to manage tasks, networks, storage, hosts, VMs, and images.
   
 ### Parameters
 <div class="padding-left--md">
+
 **_ip_address_** `str`  
 IP address of the Synology NAS.  
   
@@ -47,8 +49,11 @@ Enable debug mode. Default is True.
 **_otp_code_** `str`  
 One-time password for 2FA, if required.  
   
-
+**_quickconnect_id_** `str`  
+QuickConnect ID for relay-based access. Defaults to None.  
+  
 </div>
+  
   
 ## Methods
 ### `get_task_list`
@@ -56,15 +61,18 @@ Get the list of virtualization tasks.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Task.Info` 
+
+`SYNO.Virtualization.API.Task.Info`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `list of str`  
 List of task IDs.  
-
 </div>
+  
 
 
 
@@ -76,22 +84,25 @@ Clear a specific task by its ID.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Task.Info` 
+
+`SYNO.Virtualization.API.Task.Info`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID to clear.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Result of the clear operation or error message.  
-
 </div>
+  
 
 
 
@@ -103,22 +114,25 @@ Get information about a specific task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Task.Info` 
+
+`SYNO.Virtualization.API.Task.Info`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `str`  
 Task ID to retrieve information for.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Task information or error message.  
-
 </div>
+  
 
 
 
@@ -130,15 +144,18 @@ Get the list of network groups.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Network` 
+
+`SYNO.Virtualization.API.Network`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `list of dict`  
 List of network group information.  
-
 </div>
+  
 
 
 
@@ -150,15 +167,18 @@ Get the list of storage operations.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Storage` 
+
+`SYNO.Virtualization.API.Storage`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `list of str`  
 List of storage operation information.  
-
 </div>
+  
 
 
 
@@ -170,15 +190,18 @@ Get the list of host operations.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Host` 
+
+`SYNO.Virtualization.API.Host`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `list of str`  
 List of host operation information.  
-
 </div>
+  
 
 
 
@@ -190,22 +213,25 @@ Get the list of virtual machines.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Guest` 
+
+`SYNO.Virtualization.API.Guest`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_additional_** `bool`  
 Whether to include additional information. Default is False.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `list of dict`  
 List of VM information.  
-
 </div>
+  
 
 
 
@@ -217,11 +243,13 @@ Get information about a specific virtual machine.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Guest` 
+
+`SYNO.Virtualization.API.Guest`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_additional_** `str or list of str`  
 Additional fields to include.  
   
@@ -231,14 +259,15 @@ Guest VM ID.
 **_guest_name_** `str`  
 Guest VM name.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 VM information or error message.  
-
 </div>
+  
 
 
 
@@ -250,11 +279,13 @@ Set properties for a virtual machine.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Guest` 
+
+`SYNO.Virtualization.API.Guest`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_guest_id_** `str`  
 Guest VM ID.  
   
@@ -276,14 +307,15 @@ Number of virtual CPUs.
 **_vram_size_** `int`  
 RAM size in MB.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Result of the set operation or error message.  
-
 </div>
+  
 
 
 
@@ -295,25 +327,28 @@ Delete a virtual machine.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Guest` 
+
+`SYNO.Virtualization.API.Guest`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_guest_id_** `str`  
 Guest VM ID.  
   
 **_guest_name_** `str`  
 Guest VM name.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Result of the delete operation or error message.  
-
 </div>
+  
 
 
 
@@ -325,11 +360,13 @@ Power on a virtual machine.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Guest.Action` 
+
+`SYNO.Virtualization.API.Guest.Action`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_guest_id_** `str`  
 Guest VM ID.  
   
@@ -342,14 +379,15 @@ Host ID.
 **_host_name_** `str`  
 Host name.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Result of the power on operation or error message.  
-
 </div>
+  
 
 
 
@@ -361,25 +399,28 @@ Force power off a virtual machine.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Guest.Action` 
+
+`SYNO.Virtualization.API.Guest.Action`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_guest_id_** `str`  
 Guest VM ID.  
   
 **_guest_name_** `str`  
 Guest VM name.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Result of the power off operation or error message.  
-
 </div>
+  
 
 
 
@@ -391,25 +432,28 @@ Shut down a virtual machine.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Guest.Action` 
+
+`SYNO.Virtualization.API.Guest.Action`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_guest_id_** `str`  
 Guest VM ID.  
   
 **_guest_name_** `str`  
 Guest VM name.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Result of the shutdown operation or error message.  
-
 </div>
+  
 
 
 
@@ -421,15 +465,18 @@ Get the list of VM images.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Guest.Image` 
+
+`SYNO.Virtualization.API.Guest.Image`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object]`  
 Dictionary containing image information.  
-
 </div>
+  
 
 
 
@@ -441,25 +488,28 @@ Delete a VM image.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Guest.Image` 
+
+`SYNO.Virtualization.API.Guest.Image`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_image_id_** `str`  
 Image ID.  
   
 **_image_name_** `str`  
 Image name.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Result of the delete operation or error message.  
-
 </div>
+  
 
 
 
@@ -471,11 +521,13 @@ Create a new VM image.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Virtualization.API.Guest.Image` 
+
+`SYNO.Virtualization.API.Guest.Image`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_auto_clean_task_** `bool`  
 Whether to auto-clean the task after creation. Default is True.  
   
@@ -494,14 +546,15 @@ File path (should begin with a shared folder).
 **_image_name_** `str`  
 Name of the image.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Result of the create operation or error message.  
-
 </div>
+  
 
 
 

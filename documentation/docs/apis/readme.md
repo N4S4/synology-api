@@ -1,11 +1,12 @@
 ---
 sidebar_position: 1
 title: Supported APIs
+description: Comprehensive list of all supported APIs in the package.
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # Supported APIs
 At the moment there are quite a few APIs implemented. They could be totally or partially implemented, for specific documentation about an API in particular, please see   [APIs](./category/api-classes).  
@@ -54,12 +55,19 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.AntiVirus.Schedule`  
   
 ###  [AudioStation](./apis/classes/audiostation) 
+- `SYNO.AudioPlayer.Stream`  
 - `SYNO.AudioStation.Info`  
 - `SYNO.AudioStation.Pin`  
 - `SYNO.AudioStation.Playlist`  
 - `SYNO.AudioStation.RemotePlayer`  
   
 ###  [Backup](./apis/classes/core_backup) 
+- `SYNO.Backup.App`  
+- `SYNO.Backup.App.Backup`  
+- `SYNO.Backup.App.Restore`  
+- `SYNO.Backup.Config.AutoBackup`  
+- `SYNO.Backup.Config.Backup`  
+- `SYNO.Backup.Config.Restore`  
 - `SYNO.Backup.Repository`  
 - `SYNO.Backup.Service.VersionBackup.Config`  
 - `SYNO.Backup.Service.VersionBackup.Target`  
@@ -110,6 +118,10 @@ At the moment there are quite a few APIs implemented. They could be totally or p
   
 ###  [CloudSync](./apis/classes/cloud_sync) 
 - `SYNO.CloudSync`  
+  
+###  [CoreApiInfo](./apis/classes/core_sys_info) 
+- `SYNO.API.Info`  
+- `SYNO.Entry.Request.Polling`  
   
 ###  [CoreDirectory](./apis/classes/core_directory) 
 - `SYNO.Core.Directory.Azure.SSO`  
@@ -192,6 +204,7 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.Core.Notification.SMS`  
 - `SYNO.Core.Notification.SMS.Provider`  
 - `SYNO.Core.Notification.Sysnotify`  
+- `SYNO.DSM.PushNotification`  
   
 ###  [CoreSecurity](./apis/classes/core_security) 
 - `SYNO.Core.Security.AutoBlock.Rules`  
@@ -208,6 +221,11 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.Core.Security.Firewall.Rules.Serv`  
   
 ###  [CoreSecurityAuth](./apis/classes/core_security_auth) 
+- `SYNO.API.Auth.Key`  
+- `SYNO.API.Auth.Key.Code`  
+- `SYNO.API.Auth.RedirectURI`  
+- `SYNO.API.Auth.Type`  
+- `SYNO.Auth.RescueEmail`  
 - `SYNO.Core.DisableAdmin`  
 - `SYNO.Core.OTP`  
 - `SYNO.Core.OTP.Admin`  
@@ -390,10 +408,28 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.Core.Storage.Pool`  
 - `SYNO.Core.Storage.Volume`  
 - `SYNO.Core.Storage.iSCSILUN`  
+- `SYNO.Storage.CGI.BtrfsDedupe`  
+- `SYNO.Storage.CGI.Cache.Protection`  
+- `SYNO.Storage.CGI.Check`  
+- `SYNO.Storage.CGI.DetectedPool`  
+- `SYNO.Storage.CGI.DualEnclosure`  
+- `SYNO.Storage.CGI.Enclosure`  
+- `SYNO.Storage.CGI.EncryptionKeyVault`  
+- `SYNO.Storage.CGI.EncryptionKeyVault.UnlockMode`  
+- `SYNO.Storage.CGI.Flashcache`  
 - `SYNO.Storage.CGI.HddMan`  
+- `SYNO.Storage.CGI.KMIP`  
+- `SYNO.Storage.CGI.Pool`  
+- `SYNO.Storage.CGI.Scrubbing`  
+- `SYNO.Storage.CGI.Smart`  
 - `SYNO.Storage.CGI.Smart.Scheduler`  
 - `SYNO.Storage.CGI.Spare`  
+- `SYNO.Storage.CGI.Spare.Conf`  
 - `SYNO.Storage.CGI.Storage`  
+- `SYNO.Storage.CGI.TaipeiEnclosure`  
+- `SYNO.Storage.CGI.Volume`  
+- `SYNO.Storage.CGI.Volume.Installer`  
+- `SYNO.Storage.CGI.Volume.OfflineOp`  
   
 ###  [CoreSystem](./apis/classes/core_system) 
 - `SYNO.Core.Desktop.Defs`  
@@ -419,6 +455,14 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.Core.Theme.Login`  
 - `SYNO.Core.UISearch`  
 - `SYNO.Core.UserSettings`  
+- `SYNO.Entry.SocketIo`  
+- `SYNO.License.HA`  
+- `SYNO.Remote.Credential`  
+- `SYNO.Remote.Credential.Challenge`  
+- `SYNO.Remote.Credential.Info`  
+- `SYNO.Remote.Credential.Verifier`  
+- `SYNO.VideoPlayer.Subtitle`  
+- `SYNO.VideoPlayer.SynologyDrive.Subtitle`  
   
 ###  [CoreUpgrade](./apis/classes/core_upgrade) 
 - `SYNO.Core.Upgrade.AutoUpgrade.Security`  
@@ -434,6 +478,13 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.Core.Upgrade.Patch`  
 - `SYNO.Core.Upgrade.PreCheck`  
 - `SYNO.Core.Upgrade.RemoteAction`  
+  
+###  [DRNode](./apis/classes/core_backup) 
+- `SYNO.DR.Node`  
+- `SYNO.DR.Node.Credential`  
+- `SYNO.DR.Node.Session`  
+- `SYNO.DisasterRecovery.Log`  
+- `SYNO.DisasterRecovery.Retention`  
   
 ###  [DhcpServer](./apis/classes/dhcp_server) 
 - `SYNO.Core.Network.Bond`  
@@ -474,6 +525,7 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.DownloadStation.RSS.Site`  
 - `SYNO.DownloadStation.Schedule`  
 - `SYNO.DownloadStation.Statistic`  
+- `SYNO.DownloadStation2.Task`  
 - `SYNO.DownloadStation2.Task.Source`  
 - `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.BTSearch`  
 - `SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.RSS.Feed`  
@@ -577,24 +629,61 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.Core.Package.Setting.Volume`  
 - `SYNO.Core.Package.Uninstallation`  
   
+###  [PersonMailAccount](./apis/classes/core_user) 
+- `SYNO.PersonMailAccount.Contacts`  
+- `SYNO.PersonMailAccount.Mail`  
+- `SYNO.PersonMailAccount.Mail.Oauth`  
+  
 ###  [Photos](./apis/classes/photos) 
 - `SYNO.Foto.Browse.Album`  
+- `SYNO.Foto.Browse.Category`  
+- `SYNO.Foto.Browse.Concept`  
 - `SYNO.Foto.Browse.ConditionAlbum`  
 - `SYNO.Foto.Browse.Folder`  
+- `SYNO.Foto.Browse.GeneralTag`  
+- `SYNO.Foto.Browse.Geocoding`  
+- `SYNO.Foto.Browse.Item`  
+- `SYNO.Foto.Browse.NormalAlbum`  
+- `SYNO.Foto.Browse.Person`  
+- `SYNO.Foto.Browse.RecentlyAdded`  
+- `SYNO.Foto.Browse.SimilarItem`  
+- `SYNO.Foto.Browse.SimilarTimeline`  
+- `SYNO.Foto.Browse.Timeline`  
+- `SYNO.Foto.Download`  
+- `SYNO.Foto.Index`  
 - `SYNO.Foto.Search.Filter`  
+- `SYNO.Foto.Search.Search`  
+- `SYNO.Foto.Setting.Admin`  
 - `SYNO.Foto.Setting.Guest`  
+- `SYNO.Foto.Setting.MobileCompatibility`  
+- `SYNO.Foto.Setting.TeamSpace`  
+- `SYNO.Foto.Setting.User`  
+- `SYNO.Foto.Setting.Wizard`  
 - `SYNO.Foto.Sharing.Misc`  
 - `SYNO.Foto.Sharing.Passphrase`  
 - `SYNO.Foto.UserInfo`  
 - `SYNO.FotoTeam.Browse.Folder`  
+- `SYNO.FotoTeam.Browse.Item`  
+- `SYNO.FotoTeam.Browse.Person`  
+- `SYNO.FotoTeam.Browse.SimilarItem`  
+- `SYNO.FotoTeam.Browse.SimilarTimeline`  
+- `SYNO.FotoTeam.Browse.Timeline`  
+- `SYNO.FotoTeam.Index`  
 - `SYNO.FotoTeam.Sharing.Passphrase`  
+  
+###  [S2SServer](./apis/classes/core_backup) 
+- `SYNO.S2S.Server`  
   
 ###  [SecurityAdvisor](./apis/classes/security_advisor) 
 - `SYNO.Core.SecurityScan.Conf`  
 - `SYNO.SecurityAdvisor.Conf`  
 - `SYNO.SecurityAdvisor.Conf.Checklist`  
+- `SYNO.SecurityAdvisor.Conf.Checklist.Alert`  
 - `SYNO.SecurityAdvisor.Conf.Location`  
 - `SYNO.SecurityAdvisor.LoginActivity`  
+- `SYNO.SecurityAdvisor.LoginActivity.User`  
+- `SYNO.SecurityAdvisor.Report`  
+- `SYNO.SecurityAdvisor.Report.HTML`  
   
 ###  [Share](./apis/classes/core_share) 
 - `SYNO.Core.Share`  
@@ -607,6 +696,7 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.Core.ISCSI.LUN`  
 - `SYNO.Core.Share.Snapshot`  
 - `SYNO.DR.Plan`  
+- `SYNO.Snap.Usage.Share`  
   
 ###  [SurveillanceStation](./apis/classes/surveillancestation) 
 - `SYNO.SurveillanceStation.ActionRule`  
@@ -754,7 +844,10 @@ At the moment there are quite a few APIs implemented. They could be totally or p
 - `SYNO.Core.User`  
 - `SYNO.Core.User.Home`  
 - `SYNO.Core.Web.DSM`  
+- `SYNO.DSM.FindMe`  
 - `SYNO.DSM.Info`  
+- `SYNO.DSM.Network`  
+- `SYNO.DSM.PortEnable`  
 - `SYNO.Finder.FileIndexing.Status`  
 - `SYNO.ResourceMonitor.EventRule`  
 - `SYNO.ResourceMonitor.Log`  

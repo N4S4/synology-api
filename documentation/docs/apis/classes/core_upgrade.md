@@ -1,11 +1,12 @@
 ---
 sidebar_position: 25
 title: 🚧 CoreUpgrade
+description: "Extended Core Upgrade API implementation for Synology NAS." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # CoreUpgrade
 :::warning

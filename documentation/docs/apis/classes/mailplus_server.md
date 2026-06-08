@@ -1,11 +1,12 @@
 ---
 sidebar_position: 39
 title: ✅ MailPlusServer
+description: "Synology MailPlus Server API client." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # MailPlusServer
 ## Overview

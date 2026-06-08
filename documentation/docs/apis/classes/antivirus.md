@@ -1,11 +1,12 @@
 ---
 sidebar_position: 5
 title: ✅ Antivirus
+description: "Synology Antivirus Essential API client." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # Antivirus
 ## Overview

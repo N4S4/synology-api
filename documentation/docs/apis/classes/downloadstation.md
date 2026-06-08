@@ -1,11 +1,12 @@
 ---
-sidebar_position: 13
+sidebar_position: 29
 title: 🚧 DownloadStation
+description: "Core Download Station API implementation for Synology NAS." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # DownloadStation
 :::warning
@@ -44,14 +45,19 @@ This class provides methods to manage downloads, tasks, RSS feeds, and BT search
         - Delete RSS feed filter.
     - **Actions** :
         - Download task source.
+        - Clear all finished BT download tasks.
+        - Delete all BT download tasks.
         - Pause a download task.
         - Resume a download task.
+        - Pause all BT download tasks.
+        - Resume all BT download tasks.
         - Refresh RSS site.
         - Start a BT search.
         - Clean BT search tasks.  
   
 ### Parameters
 <div class="padding-left--md">
+
 **_ip_address_** `str`  
 IP address or hostname of the Synology NAS.  
   
@@ -91,8 +97,11 @@ Enable interactive output (default is True).
 **_download_st_version_** `int`  
 Download Station API version (default is None).  
   
-
+**_quickconnect_id_** `str`  
+QuickConnect ID for relay-based access. Defaults to None.  
+  
 </div>
+  
   
 ## Methods
 ### `get_info`
@@ -100,15 +109,18 @@ Get Download Station info.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation.Info` 
+
+`SYNO.DownloadStation.Info`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Download Station info.  
-
 </div>
+  
 
 
 
@@ -120,15 +132,18 @@ Get Download Station config.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation.Info` 
+
+`SYNO.DownloadStation.Info`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Download Station config.  
-
 </div>
+  
 
 
 
@@ -140,11 +155,13 @@ Set Download Station server configuration.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation.Info` 
+
+`SYNO.DownloadStation.Info`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_bt_max_download_** `Optional[int]`  
 Maximum BT download speed.  
   
@@ -178,14 +195,15 @@ Default download destination.
 **_emule_default_destination_** `Optional[str]`  
 Default eMule download destination.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -197,15 +215,18 @@ Get Download Station schedule configuration.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation.Schedule` 
+
+`SYNO.DownloadStation.Schedule`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Schedule configuration.  
-
 </div>
+  
 
 
 
@@ -217,25 +238,28 @@ Set Download Station schedule configuration.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation.Schedule` 
+
+`SYNO.DownloadStation.Schedule`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_enabled_** `bool`  
 Enable schedule (default is False).  
   
 **_emule_enabled_** `bool`  
 Enable eMule schedule (default is False).  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -247,11 +271,13 @@ List download tasks.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_additional_param_** `Optional[str or list[str]]`  
 Additional fields to retrieve.  
   
@@ -261,14 +287,15 @@ Offset for pagination (default is 0).
 **_limit_** `int`  
 Maximum number of tasks to retrieve (default is -1).  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 List of download tasks.  
-
 </div>
+  
 
 
 
@@ -280,25 +307,28 @@ Get information for specific download tasks.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `str or list[str]`  
 Task ID(s).  
   
 **_additional_param_** `Optional[str or list[str]]`  
 Additional fields to retrieve.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Task information.  
-
 </div>
+  
 
 
 
@@ -310,22 +340,25 @@ Download task source.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation2.Task.Source` 
+
+`SYNO.DownloadStation2.Task.Source`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `str or list[str]`  
 Task ID(s).  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `bytes`  
 Task source content.  
-
 </div>
+  
 
 
 
@@ -337,25 +370,29 @@ Get info from a task list containing the files to be downloaded.
 This is to be used after creating a task, and before starting the download.  
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task.List`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_list_id_** `str`  
 List ID returned by create_task.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, any]`  
 A dictionary containing a task list information.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     "data" : {
@@ -385,20 +422,34 @@ A dictionary containing a task list information.
 </details>
 
 
-
 ---
 
 
 ### `create_task`
 Create a new download task.  
 You can choose between a url or a file path (.torrent).  
+The underlying API call depends on ``download_st_version``:  
+- **V1** (default, ``download_st_version`` is ``None`` or ``''``):
+  Uses the ``SYNO.DownloadStation.Task`` endpoint with the ``uri`` parameter.
+- **V2** (``download_st_version=2``):
+  Uses the ``SYNO.DownloadStation2.Task`` endpoint with ``type=url``
+  and ``url=[...]`` parameters. :::note
+ 
+ the V2 API is reserved by Synology
+ 
+:::
+
+  for internal use and may return ``Preserve for other purpose`` on most
+  DSM installations.  
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_url_** `str`  
 Download URL. Use either `url` or `file_path`.  
   
@@ -406,16 +457,19 @@ Download URL. Use either `url` or `file_path`.
 Path to a file (e.g. a .torrent) to download.  
   
 **_destination_** `str`  
-Download destination folder (default is "").  
+Download destination folder (default is ""). If DownloadStation has
+no default destination configured, the API will return an error
+asking for one.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -427,25 +481,121 @@ Delete a download task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `str or list[str]`  
 Task ID(s).  
   
 **_force_** `bool`  
 Force delete (default is False).  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
+
+
+
+---
+
+
+### `clear_finished_tasks`
+Clear all finished BT download tasks.  
+This deletes BT tasks that have completed
+(status 5 = ``'finished'``).  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.DownloadStation2.Task`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict[str, object] or str`  
+API response indicating success or failure.  
+</div>
+  
+
+
+
+---
+
+
+### `delete_all_tasks`
+Delete all BT download tasks regardless of status.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.DownloadStation2.Task`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict[str, object] or str`  
+API response indicating success or failure.  
+</div>
+  
+
+
+
+---
+
+
+### `pause_all_tasks`
+Pause all BT download tasks.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.DownloadStation2.Task`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict[str, object] or str`  
+API response indicating success or failure.  
+</div>
+  
+
+
+
+---
+
+
+### `resume_all_tasks`
+Resume all paused BT download tasks.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.DownloadStation2.Task`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict[str, object] or str`  
+API response indicating success or failure.  
+</div>
+  
 
 
 
@@ -457,22 +607,25 @@ Pause a download task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `str or list[str]`  
 Task ID(s).  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -484,22 +637,25 @@ Resume a download task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `str or list[str]`  
 Task ID(s).  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -511,25 +667,28 @@ Edit a download task.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_task_id_** `str or list[str]`  
 Task ID(s).  
   
 **_destination_** `str`  
 New download destination (default is 'sharedfolder').  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -541,11 +700,13 @@ Download files from a task list.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.Task.List.Polling`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_list_id_** `str`  
 Task list ID.  
   
@@ -559,17 +720,19 @@ Download destination, e.g. 'sharedfolder/subfolder'
 **_create_subfolder_** `bool`  
 Create subfolder. Defaults to `True`  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 A dictionary containing the task_id for the started download task.  
-
 </div>
+  
 #### Example return
 <details>
 <summary>Click to expand</summary>
+
 ```json
 {
     'data': {
@@ -580,7 +743,6 @@ A dictionary containing the task_id for the started download task.
 </details>
 
 
-
 ---
 
 
@@ -589,15 +751,18 @@ Get Download Station statistics.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation.Statistic` 
+
+`SYNO.DownloadStation.Statistic`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Statistics information.  
-
 </div>
+  
 
 
 
@@ -609,25 +774,28 @@ Get RSS site info list.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation.RSS.Site` 
+
+`SYNO.DownloadStation.RSS.Site`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_offset_** `Optional[int]`  
 Offset for pagination.  
   
 **_limit_** `Optional[int]`  
 Maximum number of RSS sites to retrieve.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 RSS site info list.  
-
 </div>
+  
 
 
 
@@ -639,22 +807,25 @@ Refresh an RSS site.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation.RSS.Site` 
+
+`SYNO.DownloadStation.RSS.Site`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_rss_id_** `Optional[str]`  
 RSS site ID.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -666,11 +837,13 @@ Get RSS feed list.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.RSS.Feed`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_rss_id_** `Optional[str]`  
 RSS site ID.  
   
@@ -680,14 +853,15 @@ Offset for pagination.
 **_limit_** `Optional[int]`  
 Maximum number of RSS feeds to retrieve.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 RSS feed list.  
-
 </div>
+  
 
 
 
@@ -699,11 +873,13 @@ Get RSS feed filter list.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.RSS.Filter`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_feed_id_** `int`  
 RSS feed ID.  
   
@@ -713,14 +889,15 @@ Offset for pagination.
 **_limit_** `int`  
 Maximum number of filters to retrieve.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 RSS feed filter list.  
-
 </div>
+  
 
 
 
@@ -732,11 +909,13 @@ Add RSS feed filter.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.RSS.Filter`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_feed_id_** `int`  
 RSS feed ID.  
   
@@ -755,14 +934,15 @@ Download destination.
 **_is_regex_** `bool`  
 Use regex for matching (default is False).  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -774,11 +954,13 @@ Set RSS feed filter.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.RSS.Filter`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_filter_id_** `int`  
 Filter ID.  
   
@@ -797,14 +979,15 @@ Download destination.
 **_is_regex_** `bool`  
 Use regex for matching (default is False).  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -816,22 +999,25 @@ Delete RSS feed filter.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.RSS.Filter`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_filter_id_** `int`  
 Filter ID.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -843,25 +1029,28 @@ Start a BT search.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.BTSearch`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_keyword_** `Optional[str]`  
 Search keyword.  
   
 **_module_** `str`  
 BT search module (default is 'all').  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 BT search task information or message.  
-
 </div>
+  
 
 
 
@@ -873,11 +1062,13 @@ Get BT search results.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.BTSearch`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `Optional[str]`  
 BT search task ID.  
   
@@ -899,14 +1090,15 @@ Filter by category.
 **_filter_title_** `Optional[str]`  
 Filter by title.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 BT search results.  
-
 </div>
+  
 
 
 
@@ -918,15 +1110,18 @@ Get BT search categories.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.BTSearch`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 BT search categories.  
-
 </div>
+  
 
 
 
@@ -938,22 +1133,25 @@ Clean BT search tasks.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.BTSearch`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_taskid_** `Optional[str or list[str]]`  
 BT search task ID(s).  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 API response.  
-
 </div>
+  
 
 
 
@@ -965,15 +1163,18 @@ Get BT search modules.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.DownloadStation` 
+
+`SYNO.DownloadStation{DOWNLOAD_ST_VERSION}.BTSearch`  
 </div>
+  
   
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 BT search modules.  
-
 </div>
+  
 
 
 

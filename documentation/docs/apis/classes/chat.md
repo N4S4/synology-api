@@ -1,11 +1,12 @@
 ---
 sidebar_position: 11
 title: ✅ ChatUser
+description: "Synology Chat API via DSM session (username + password)." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 :::tip
  

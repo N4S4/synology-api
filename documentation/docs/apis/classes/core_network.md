@@ -1,11 +1,12 @@
 ---
 sidebar_position: 16
 title: 🚧 CoreNetwork
+description: "Core Network API implementation for Synology NAS." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # CoreNetwork
 :::warning

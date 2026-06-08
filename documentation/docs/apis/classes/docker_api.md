@@ -1,11 +1,12 @@
 ---
-sidebar_position: 11
+sidebar_position: 28
 title: ✅ Docker
+description: "Docker API implementation." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # Docker
 ## Overview

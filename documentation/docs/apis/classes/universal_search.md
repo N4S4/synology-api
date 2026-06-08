@@ -1,11 +1,12 @@
 ---
-sidebar_position: 31
+sidebar_position: 53
 title: 🚧 UniversalSearch
+description: "API wrapper for Synology Universal Search." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # UniversalSearch
 :::warning
@@ -24,22 +25,25 @@ Search for files and metadata matching the given keyword.
   
 #### Internal API
 <div class="padding-left--md">
-`SYNO.Finder.FileIndexing.Search` 
+
+`SYNO.Finder.FileIndexing.Search`  
 </div>
   
 #### Parameters
 <div class="padding-left--md">
+
 **_keyword_** `str`  
 The search keyword.  
   
-
 </div>
+  
 #### Returns
 <div class="padding-left--md">
+
 `dict[str, object] or str`  
 Search results as a dictionary, or a string with error details.  
-
 </div>
+  
 
 
 

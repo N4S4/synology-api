@@ -1,10 +1,11 @@
 ---
 sidebar_position: 1
 title: ✅ BaseApi
+description: Base class to be used for all API implementations. Takes auth and connection information to create a session to the NAS.  
 ---
-<!-- -------------------------------------------------------------------------------------- -->
-<!-- Hand generated docs, due to nature of API, it doesn't follow template Class docstring. -->
-<!-- -------------------------------------------------------------------------------------- -->
+{/* -------------------------------------------------------------------------------------- */}
+{/* Hand generated docs, due to nature of API, it doesn't follow template Class docstring. */}
+{/* -------------------------------------------------------------------------------------- */}
 
 # BaseApi
 ## Overview

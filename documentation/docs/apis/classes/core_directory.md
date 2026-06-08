@@ -1,11 +1,12 @@
 ---
 sidebar_position: 13
 title: 🚧 CoreDirectory
+description: "Core Directory API implementation for Synology NAS." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # CoreDirectory
 :::warning

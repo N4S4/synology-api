@@ -1,11 +1,12 @@
 ---
 sidebar_position: 17
 title: 🚧 CoreNotification
+description: "Core Notification API implementation for Synology NAS." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # CoreNotification
 :::warning
@@ -1096,6 +1097,29 @@ JSON-encoded system notification settings.
 
 `dict[str, object] or str`  
 API response.  
+</div>
+  
+
+
+
+---
+
+
+### `push_notification_requesttoken`
+Request a push notification authentication token.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.DSM.PushNotification`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict`  
+API response from ``SYNO.DSM.PushNotification``.  
 </div>
   
 

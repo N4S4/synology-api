@@ -1,11 +1,12 @@
 ---
 sidebar_position: 24
 title: 🚧 CoreSystem
+description: "Extended Core System API implementation for Synology NAS." 
 ---
 
-<!-- -------------------------------------------- -->
-<!-- THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  -->
-<!-- -------------------------------------------- -->
+{/* -------------------------------------------- */}
+{/* THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.  */}
+{/* -------------------------------------------- */}
   
 # CoreSystem
 :::warning
@@ -1068,6 +1069,259 @@ Settings key-value pairs.
 
 `dict[str, object] or str`  
 API response.  
+</div>
+  
+
+
+
+---
+
+
+### `socketio_emit`
+Emit/send a snapshot event notification.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.Entry.SocketIo`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict`  
+API response from ``SYNO.Entry.SocketIo``.  
+</div>
+  
+
+
+
+---
+
+
+### `socketio_listeners_count`
+Get the current number of active Socket.IO listeners.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.Entry.SocketIo`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict`  
+API response from ``SYNO.Entry.SocketIo``.  
+</div>
+  
+
+
+
+---
+
+
+### `license_ha_get_uuid`
+Get the Taipei enclosure UUID.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.License.HA`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict`  
+API response from ``SYNO.License.HA``.  
+</div>
+  
+
+
+
+---
+
+
+### `license_ha_ha_remote_login`
+Perform a remote login via High Availability credential.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.License.HA`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict`  
+API response from ``SYNO.License.HA``.  
+</div>
+  
+
+
+
+---
+
+
+### `license_ha_save_vault`
+Save/persist the encryption key vault configuration.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.License.HA`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict`  
+API response from ``SYNO.License.HA``.  
+</div>
+  
+
+
+
+---
+
+
+### `remote_credential_set`
+Set or update the configuration.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.Remote.Credential`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict`  
+API response from ``SYNO.Remote.Credential``.  
+</div>
+  
+
+
+
+---
+
+
+### `remote_credential_challenge_get`
+Get remote credential challenge parameters.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.Remote.Credential.Challenge`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict`  
+API response from ``SYNO.Remote.Credential.Challenge``.  
+</div>
+  
+
+
+
+---
+
+
+### `remote_credential_info_get`
+Get remote credential service information.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.Remote.Credential.Info`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict`  
+API response from ``SYNO.Remote.Credential.Info``.  
+</div>
+  
+
+
+
+---
+
+
+### `remote_credential_verifier_get`
+Get remote credential verifier status.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.Remote.Credential.Verifier`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict`  
+API response from ``SYNO.Remote.Credential.Verifier``.  
+</div>
+  
+
+
+
+---
+
+
+### `videoplayer_subtitle_get`
+Get VideoPlayer subtitle configuration.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.VideoPlayer.Subtitle`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict`  
+API response from ``SYNO.VideoPlayer.Subtitle``.  
+</div>
+  
+
+
+
+---
+
+
+### `videoplayer_drive_subtitle_get`
+Get Synology Drive VideoPlayer subtitle settings.  
+  
+#### Internal API
+<div class="padding-left--md">
+
+`SYNO.VideoPlayer.SynologyDrive.Subtitle`  
+</div>
+  
+  
+#### Returns
+<div class="padding-left--md">
+
+`dict`  
+API response from ``SYNO.VideoPlayer.SynologyDrive.Subtitle``.  
 </div>
   
 
