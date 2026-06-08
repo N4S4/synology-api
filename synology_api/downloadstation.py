@@ -579,8 +579,8 @@ class DownloadStation(base_api.BaseApi):
         dict[str, object] or str
             API response indicating success or failure.
 
-        Warning
-        -------
+        Warnings
+        --------
         This will delete **all** BT tasks including those currently
         downloading. Use with caution.
         """

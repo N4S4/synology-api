@@ -304,7 +304,7 @@ class Photos(base_api.BaseApi):
         dict[str, object] or str
             The folder information or None if not found.
         """
-        return self._lookup_folder(path, 'SYNO.FotoBrowse.Folder', 'SYNO.Foto.Browse.Folder')
+        return self._lookup_folder(path, 'SYNO.Foto.Browse.Folder', 'SYNO.Foto.Browse.Folder')
 
     def lookup_team_folder(self, path: str) -> dict[str, object] | str:
         """
@@ -454,7 +454,7 @@ class Photos(base_api.BaseApi):
 
     def create_album(self, name: str, condition: list[str]) -> dict[str, object] | str:
         """
-        Create a new album with the specified condition (smart).
+        Create a new album with the specified condition.
 
         Parameters
         ----------
@@ -1234,8 +1234,8 @@ class Photos(base_api.BaseApi):
             The API response for sharing the album.
         """
         api_name = 'SYNO.Foto.Sharing.Passphrase'
-        self._share(api_name, policy='album', permission=permission, album_id=album_id,
-                    enabled=enabled, expiration=expiration)
+        return self._share(api_name, policy='album', permission=permission, album_id=album_id,
+                           enabled=enabled, expiration=expiration)
 
     def share_team_folder(self,
                           folder_id: int,
@@ -1263,8 +1263,8 @@ class Photos(base_api.BaseApi):
             The API response for sharing the team folder.
         """
         api_name = 'SYNO.FotoTeam.Sharing.Passphrase'
-        self._share(api_name, policy='folder', permission=permission, folder_id=folder_id,
-                    enabled=enabled, expiration=expiration)
+        return self._share(api_name, policy='folder', permission=permission, folder_id=folder_id,
+                           enabled=enabled, expiration=expiration)
 
     def _share(self,
                api_name: str,
@@ -1762,7 +1762,7 @@ class Photos(base_api.BaseApi):
 
         Parameters
         ----------
-        **kwargs
+        **kwargs : dict
             Admin settings key-value pairs to set.
 
         Returns
@@ -1799,7 +1799,7 @@ class Photos(base_api.BaseApi):
 
         Parameters
         ----------
-        **kwargs
+        **kwargs : dict
             User settings key-value pairs to set.
 
         Returns
@@ -1836,7 +1836,7 @@ class Photos(base_api.BaseApi):
 
         Parameters
         ----------
-        **kwargs
+        **kwargs : dict
             Team Space settings key-value pairs to set.
 
         Returns
@@ -1873,7 +1873,7 @@ class Photos(base_api.BaseApi):
 
         Parameters
         ----------
-        **kwargs
+        **kwargs : dict
             Wizard settings key-value pairs to set.
 
         Returns
