@@ -34,8 +34,7 @@ T = TypeVar("T")
 
 def _make_async_callable(original: Any, name: str) -> Any:
     """
-    Wrap a synchronous callable so it runs in the default thread-pool
-    executor.
+    Wrap a synchronous callable so it runs in the default thread-pool executor.
 
     ``name`` is kept only for debug/traceback readability.
 
@@ -58,6 +57,21 @@ def _make_async_callable(original: Any, name: str) -> Any:
 
     @functools.wraps(original)
     async def wrapper(*args: Any, **kwargs: Any) -> Any:
+        """
+        Execute the wrapped callable in the default thread-pool executor.
+
+        Parameters
+        ----------
+        *args : Any
+            Positional arguments forwarded to the original callable.
+        **kwargs : Any
+            Keyword arguments forwarded to the original callable.
+
+        Returns
+        -------
+        Any
+            The return value of the original callable.
+        """
         loop = asyncio.get_running_loop()
         # functools.partial avoids closure-vs-loop issues.
         task = functools.partial(original, *args, **kwargs)
@@ -70,8 +84,7 @@ def _make_async_callable(original: Any, name: str) -> Any:
 
 class AsyncClient:
     """
-    Wrap a synology-api *instance* and expose every public method as
-    async.
+    Wrap a synology-api instance and expose every public method as async.
 
     All public callable attributes of the wrapped instance are intercepted
     and re-dispatched via ``loop.run_in_executor``.  Non-callable attributes
@@ -94,12 +107,20 @@ class AsyncClient:
     __slots__ = ("_sync",)
 
     def __init__(self, sync_instance: Any) -> None:
+        """
+        Store the sync instance for later delegation.
+
+        Parameters
+        ----------
+        sync_instance : Any
+            A fully-constructed synology-api instance (e.g.
+            ``FileStation(...)``).
+        """
         self._sync = sync_instance
 
     def __getattr__(self, name: str) -> Any:
         """
-        Intercept attribute access and return an awaitable wrapper for
-        callable attributes.
+        Intercept attribute access and return an awaitable wrapper for callables.
 
         Parameters
         ----------
@@ -133,10 +154,25 @@ class AsyncClient:
     # -- async context manager support --------------------------------
 
     async def __aenter__(self) -> "AsyncClient":
-        """Enter the async context manager (no-op)."""
+        """
+        Enter the async context manager (no-op).
+
+        Returns
+        -------
+        AsyncClient
+            The same AsyncClient instance.
+        """
         return self
 
     async def __aexit__(self, *args: Any) -> None:
-        """Exit the async context manager — calls ``logout()`` if available."""
+        """
+        Exit the async context manager — calls ``logout()`` if available.
+
+        Parameters
+        ----------
+        *args : Any
+            Exception type, value, and traceback (standard ``__aexit__``
+            signature).
+        """
         if hasattr(self._sync, "logout"):
             await _make_async_callable(self._sync.logout, "logout")()
