@@ -33,9 +33,25 @@ T = TypeVar("T")
 
 
 def _make_async_callable(original: Any, name: str) -> Any:
-    """Wrap a sync callable so it runs in the default thread-pool executor.
+    """
+    Wrap a synchronous callable so it runs in the default thread-pool
+    executor.
 
     ``name`` is kept only for debug/traceback readability.
+
+    Parameters
+    ----------
+    original : Any
+        The synchronous callable to wrap.
+    name : str
+        The attribute name, used only for debug/traceback context.
+
+    Returns
+    -------
+    Any
+        An async wrapper that, when awaited, executes ``original`` via
+        ``loop.run_in_executor``.  If ``original`` is not callable it
+        is returned unchanged.
     """
     if not callable(original):
         return original
@@ -53,7 +69,9 @@ def _make_async_callable(original: Any, name: str) -> Any:
 
 
 class AsyncClient:
-    """Wrap a synology-api *instance* and expose every public method as async.
+    """
+    Wrap a synology-api *instance* and expose every public method as
+    async.
 
     All public callable attributes of the wrapped instance are intercepted
     and re-dispatched via ``loop.run_in_executor``.  Non-callable attributes
@@ -64,16 +82,42 @@ class AsyncClient:
         async with AsyncClient(fs) as client:
             await client.get_info()
         # fs.logout() is called on exit.
+
+    Parameters
+    ----------
+    sync_instance : Any
+        A fully-constructed synology-api instance (e.g.
+        ``FileStation(...)``).  The wrapper does **not** accept a class
+        — instantiate the class first, then wrap it.
     """
 
     __slots__ = ("_sync",)
 
     def __init__(self, sync_instance: Any) -> None:
-        # Accept either a ready-made instance or a class+args (constructor call).
         self._sync = sync_instance
 
     def __getattr__(self, name: str) -> Any:
-        # Bypass the wrapper for __-prefixed attributes and non-callables.
+        """
+        Intercept attribute access and return an awaitable wrapper for
+        callable attributes.
+
+        Parameters
+        ----------
+        name : str
+            The attribute name to look up on the wrapped instance.
+
+        Returns
+        -------
+        Any
+            An awaitable wrapper if the attribute is callable, otherwise
+            the raw attribute value.
+
+        Raises
+        ------
+        AttributeError
+            If the attribute does not exist on the wrapped instance and
+            its name starts with an underscore.
+        """
         if name.startswith("_"):
             raise AttributeError(name)
 
@@ -89,8 +133,10 @@ class AsyncClient:
     # -- async context manager support --------------------------------
 
     async def __aenter__(self) -> "AsyncClient":
+        """Enter the async context manager (no-op)."""
         return self
 
     async def __aexit__(self, *args: Any) -> None:
+        """Exit the async context manager — calls ``logout()`` if available."""
         if hasattr(self._sync, "logout"):
             await _make_async_callable(self._sync.logout, "logout")()
