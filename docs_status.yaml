@@ -13,6 +13,8 @@ AdminConsole:
     status: finished
 Antivirus:
     status: finished
+AsyncClient:
+    status: finished
 AudioStation:
     status: partial
 Backup:

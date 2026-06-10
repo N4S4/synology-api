@@ -88,6 +88,35 @@ fs = FileStation(
 )
 ```
 
+## Async Client (beta)
+
+Every existing synology-api class can be made async with a single wrapper — no extra dependencies:
+
+```python
+import asyncio
+from synology_api.filestation import FileStation
+from synology_api.async_client import AsyncClient
+
+async def main():
+    fs = AsyncClient(FileStation("192.168.1.x", "5001", "admin", "pass",
+                                  secure=True, cert_verify=False, dsm_version=7))
+
+    # All methods automatically awaitable
+    info = await fs.get_info()
+    files = await fs.get_file_list("/home")
+
+    # Run parallel calls
+    a, b, c = await asyncio.gather(
+        fs.get_file_list("/home"),
+        fs.get_file_list("/photo"),
+        fs.get_file_list("/music"),
+    )
+
+asyncio.run(main())
+```
+
+Check the [Async Client documentation](https://n4s4.github.io/synology-api/docs/getting-started/async) for details.
+
 ## Available Functions
 
 At the moment there are around +300 APIs implemented with countless methods for each, the majority is not documented, but some are.
@@ -108,7 +137,6 @@ If this code helps and you wish to support me:
 
 - [Synology API Telegram Bot](https://github.com/N4S4/synology-api-telegram-bot)
 - [Homeassistant Synology Pro](https://github.com/N4S4/homeassistant-synology-pro)
-- [Synology Recipes](https://github.com/N4S4/synology-api-recipes)
 
 If you want to show your project in this section, write me.
 
