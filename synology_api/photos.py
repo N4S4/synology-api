@@ -92,7 +92,7 @@ class Photos(base_api.BaseApi):
         """
 
         super(Photos, self).__init__(ip_address, port, username, password, secure, cert_verify,
-                                     dsm_version, debug, otp_code, device_id, device_name, 'FotoStation',
+                                     dsm_version, debug, otp_code, device_id, device_name, 'Foto',
                                      quickconnect_id=quickconnect_id)
 
         self.session.get_api_list('Foto')
@@ -2070,5 +2070,949 @@ class Photos(base_api.BaseApi):
             with open(dest_path, 'wb') as f:
                 f.write(response.content)
             return dest_path
+
+        return None
+
+    def _foto_upload_headers(self) -> dict[str, str]:
+        """
+        Build headers required for Foto upload endpoints.
+
+        Returns
+        -------
+        dict[str, str]
+            Headers with ``X-Syno-Token`` and ``Cookie`` fields.
+        """
+        token = self.session._syno_token
+        sid = self.session._sid
+        if not token or not sid:
+            raise RuntimeError(
+                "Not logged in. Call a method that triggers auth first "
+                "(e.g. get_userinfo())."
+            )
+        return {
+            "X-Syno-Token": token,
+            "Cookie": "id=%s" % sid,
+        }
+
+    def _foto_get(
+        self, api_name: str, api_path: str, req_param: dict[str, object]
+    ) -> dict[str, object]:
+        """
+        GET request with Foto auth headers (X-Syno-Token + Cookie).
+
+        Use this for Foto API endpoints that require the mixed-case
+        ``X-Syno-Token`` header and ``Cookie: id={sid}`` instead of
+        the standard ``X-SYNO-TOKEN`` header used by other DSM APIs.
+
+        Parameters
+        ----------
+        api_name : str
+            The Foto API name (e.g. ``"SYNO.Foto.Browse.Unit"``).
+        api_path : str
+            The API path (from ``photos_list[api_name]["path"]``).
+        req_param : dict
+            Request parameters (version, method, ...).
+
+        Returns
+        -------
+        dict
+            JSON-decoded response body.
+        """
+        url = "%s%s?api=%s" % (self.base_url, api_path, api_name)
+        req_param["_sid"] = self.session._sid
+        headers = self._foto_upload_headers()
+
+        resp = self.session._get(
+            url, params=req_param, headers=headers, verify=self.session._verify
+        )
+        resp.raise_for_status()
+
+        data = resp.json()
+        if not data.get("success"):
+            from synology_api.exceptions import PhotosError
+
+            raise PhotosError(error_code=data.get("error", {}).get("code", -1))
+        return data
+
+    def upload_personal(
+        self,
+        file_path: str,
+        folder: str | list[str] = "PhotoLibrary",
+        duplicate: str = "ignore",
+        upload_destination: str | None = None,
+    ) -> dict[str, object] | str:
+        """
+        Upload a file to Synology Photos Personal Space.
+
+        Parameters
+        ----------
+        file_path : str
+            Path to the local file to upload.
+        folder : str or list of str, optional
+            Target folder(s). Pass a string like ``"PhotoLibrary"`` or a
+            list like ``["PhotoLibrary", "MyAlbum"]``.
+            Default is ``"PhotoLibrary"``.
+        duplicate : str, optional
+            How to handle duplicate filenames. ``"ignore"`` (skip),
+            ``"rename"`` (auto-rename), or ``"overwrite"``.
+            Default is ``"ignore"``.
+        upload_destination : str or None, optional
+            Where to place the photo. ``"timeline"`` (add to timeline),
+            ``"folder"`` (folder only), or ``None`` (default behaviour).
+            Default is ``None``.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with ``action``, ``id``, and ``unit_id`` on success.
+        """
+        return self._upload(
+            api_name="SYNO.Foto.Upload.Item",
+            file_path=file_path,
+            folder=folder,
+            duplicate=duplicate,
+            upload_destination=upload_destination,
+        )
+
+    def upload_team(
+        self,
+        file_path: str,
+        folder: str | list[str] = "PhotoLibrary",
+        duplicate: str = "ignore",
+        upload_destination: str | None = None,
+    ) -> dict[str, object] | str:
+        """
+        Upload a file to Synology Photos Team Space.
+
+        Parameters
+        ----------
+        file_path : str
+            Path to the local file to upload.
+        folder : str or list of str, optional
+            Target folder(s). Pass a string like ``"PhotoLibrary"`` or a
+            list like ``["PhotoLibrary", "TeamAlbum"]``.
+            Default is ``"PhotoLibrary"``.
+        duplicate : str, optional
+            How to handle duplicate filenames. ``"ignore"`` (skip),
+            ``"rename"`` (auto-rename), or ``"overwrite"``.
+            Default is ``"ignore"``.
+        upload_destination : str or None, optional
+            Where to place the photo. ``"timeline"`` (add to timeline),
+            ``"folder"`` (folder only), or ``None`` (default behaviour).
+            Default is ``None``.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with ``action``, ``id``, and ``unit_id`` on success.
+        """
+        return self._upload(
+            api_name="SYNO.FotoTeam.Upload.Item",
+            file_path=file_path,
+            folder=folder,
+            duplicate=duplicate,
+            upload_destination=upload_destination,
+        )
+
+    def _upload(
+        self,
+        api_name: str,
+        file_path: str,
+        folder: str | list[str],
+        duplicate: str,
+        upload_destination: str | None,
+    ) -> dict[str, object] | str:
+        """
+        Internal upload helper shared by personal and team space.
+
+        Parameters
+        ----------
+        api_name : str
+            API name (``"SYNO.Foto.Upload.Item"`` or
+            ``"SYNO.FotoTeam.Upload.Item"``).
+        file_path : str
+            Local path to the file to upload.
+        folder : str or list of str
+            Destination folder(s) in Synology Photos.
+        duplicate : str
+            Duplicate handling (``"ignore"``, ``"rename"``, etc.).
+        upload_destination : str or None, optional
+            Upload target. ``None`` for default.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with ``action``, ``id``, and ``unit_id`` on success.
+        """
+        import os
+
+        filename = os.path.basename(file_path)
+
+        # Build payload — note JSON-wrapped string values
+        payload: dict[str, str] = {
+            "api": api_name,
+            "version": "1",
+            "method": "upload",
+            "name": '"%s"' % filename,
+            "duplicate": '"%s"' % duplicate,
+        }
+
+        if isinstance(folder, list):
+            payload["folder"] = json.dumps(folder)
+        else:
+            payload["folder"] = '["%s"]' % folder
+
+        if upload_destination:
+            payload["uploadDestination"] = upload_destination
+
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        url = "%s%s" % (self.base_url, api_path)
+
+        headers = self._foto_upload_headers()
+
+        with open(file_path, "rb") as fh:
+            files = [("file", (filename, fh, ""))]
+            response = self.session._post(
+                url,
+                headers=headers,
+                data=payload,
+                files=files,
+                verify=self.session._verify,
+                timeout=120,
+            )
+
+        response.raise_for_status()
+        return response.json()
+
+    def get_thumbnail(
+        self,
+        item_id: int,
+        size: str = "sm",
+        dest_path: str | None = None,
+    ) -> str | None:
+        """
+        Download a photo thumbnail.
+
+        Parameters
+        ----------
+        item_id : int
+            The photo unit ID.
+        size : str, optional
+            Thumbnail size: ``"sm"`` (small), ``"m"`` (medium),
+            ``"xl"`` (large). Default is ``"sm"``.
+        dest_path : str or None, optional
+            Where to save the thumbnail. If ``None``, saves as
+            ``{item_id}_{size}.jpg`` in the current directory.
+
+        Returns
+        -------
+        str or None
+            Path to the saved thumbnail, or ``None`` on failure.
+        """
+
+        # Thumbnail requires Foto auth headers (X-Syno-Token + Cookie)
+        api_name = "SYNO.Foto.Thumbnail"
+        info = self.photos_list[api_name]
+        url = "%s%s" % (self.base_url, info["path"])
+        req_param = {
+            "api": api_name,
+            "version": info["maxVersion"],
+            "method": "get",
+            "id": item_id,
+            "type": "unit",
+            "size": size,
+        }
+        headers = self._foto_upload_headers()
+
+        response = self.session._get(
+            url, params=req_param, headers=headers, verify=self.session._verify
+        )
+        response.raise_for_status()
+
+        if response.status_code == 200 and len(response.content) > 100:
+            if dest_path is None:
+                dest_path = f"{item_id}_{size}.jpg"
+            with open(dest_path, "wb") as f:
+                f.write(response.content)
+            return dest_path
+
+        return None
+
+    def count_units(self, folder_id: int = 0) -> dict[str, object] | str:
+        """
+        Count all photo/video units in a folder.
+
+        Parameters
+        ----------
+        folder_id : int, optional
+            The folder ID. Default is 0 (root).
+
+        Returns
+        -------
+        dict[str, object] or str
+            The count of units or an error message.
+        """
+        api_name = "SYNO.Foto.Browse.Unit"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "count",
+            "id_item": folder_id,
+        }
+        return self._foto_get(api_name, api_path, req_param)
+
+    def get_unit(
+        self,
+        unit_id: int,
+        folder_id: int = 0,
+        additional: str | list[str] | None = None,
+    ) -> dict[str, object] | str:
+        """
+        Get a single photo/video unit by ID.
+
+        Parameters
+        ----------
+        unit_id : int
+            The unit ID.
+        folder_id : int, optional
+            The folder ID containing the unit. Default is 0.
+        additional : str or list of str, optional
+            Extra fields to return (e.g. ``["thumbnail"]``).
+
+        Returns
+        -------
+        dict[str, object] or str
+            The unit data or an error message.
+        """
+        if additional is None:
+            additional = []
+        api_name = "SYNO.Foto.Browse.Unit"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "get",
+            "id": json.dumps([unit_id]),
+            "id_item": folder_id,
+            "additional": json.dumps(additional),
+        }
+        return self._foto_get(api_name, api_path, req_param)
+
+    def get_thumbnail_status(
+        self,
+        folder_id: int = 0,
+    ) -> dict[str, object] | str:
+        """
+        Get thumbnail generation status queue.
+
+        Shows how many thumbnails are pending generation.
+
+        Parameters
+        ----------
+        folder_id : int, optional
+            The folder ID. Default is 0.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Thumbnail generation status or an error message.
+        """
+        api_name = "SYNO.Foto.Browse.Unit"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "get_thumbnail_status",
+            "id": folder_id,
+        }
+        return self._foto_get(api_name, api_path, req_param)
+
+    def get_diff(
+        self,
+        diff_version: int = 0,
+        limit: int = 200,
+        version_time: int = 0,
+    ) -> dict[str, object] | str:
+        """
+        Get incremental changes since a given diff version.
+
+        Useful for keeping a local index in sync with the NAS
+        without re-scanning the entire library.
+
+        Parameters
+        ----------
+        diff_version : int, optional
+            Last known diff version. Pass 0 to get everything.
+            Default is 0.
+        limit : int, optional
+            Max items to return. Default is 200.
+        version_time : int, optional
+            Timestamp for diff versioning. Default is 0.
+
+        Returns
+        -------
+        dict[str, object] or str
+            The diff data or an error message.
+        """
+        api_name = "SYNO.Foto.Browse.Diff"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "get",
+            "diff_version": diff_version,
+            "limit": limit,
+            "version_time": version_time,
+        }
+        return self._foto_get(api_name, api_path, req_param)
+
+    def get_diff_version(self) -> dict[str, object] | str:
+        """
+        Get the current diff version.
+
+        Store this value and pass it to ``get_diff()`` next time
+        to receive only changes since this point.
+
+        Returns
+        -------
+        dict[str, object] or str
+            The current diff version or an error message.
+        """
+        api_name = "SYNO.Foto.Browse.Diff"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {"version": info["maxVersion"], "method": "get_version"}
+        return self._foto_get(api_name, api_path, req_param)
+
+    def merge_persons(
+        self,
+        source_person_ids: list[int],
+        target_person_id: int,
+    ) -> dict[str, object] | str:
+        """
+        Merge one or more persons into a target person.
+
+        All faces assigned to the source persons will be reassigned
+        to the target person.
+
+        Parameters
+        ----------
+        source_person_ids : list of int
+            Person IDs to merge *from*.
+        target_person_id : int
+            Person ID to merge *into*.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with the result of the merge operation.
+        """
+        api_name = "SYNO.Foto.Browse.Person"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "merge",
+            "source_ids": json.dumps(source_person_ids),
+            "target_id": target_person_id,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def separate_person(
+        self,
+        person_id: int,
+        face_ids: list[int],
+    ) -> dict[str, object] | str:
+        """
+        Separate faces from a person into a new person.
+
+        Parameters
+        ----------
+        person_id : int
+            The person to separate faces from.
+        face_ids : list of int
+            Face IDs to move to a new person.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with the newly created person info.
+        """
+        api_name = "SYNO.Foto.Browse.Person"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "separate",
+            "id": person_id,
+            "face_id": json.dumps(face_ids),
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def list_faces(
+        self,
+        person_id: int,
+        offset: int = 0,
+        limit: int = 100,
+    ) -> dict[str, object] | str:
+        """
+        List faces assigned to a person.
+
+        Parameters
+        ----------
+        person_id : int
+            The person ID.
+        offset : int, optional
+            Results offset. Default 0.
+        limit : int, optional
+            Max results. Default 100.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with ``list`` of face objects.
+        """
+        api_name = "SYNO.Foto.Browse.Person"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "list_face",
+            "id": person_id,
+            "offset": offset,
+            "limit": limit,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_general_tag(
+        self,
+        tag_id: int,
+    ) -> dict[str, object] | str:
+        """
+        Get a single general tag by ID.
+
+        Parameters
+        ----------
+        tag_id : int
+            The tag ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with the tag data.
+        """
+        api_name = "SYNO.Foto.Browse.GeneralTag"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {"version": info["maxVersion"],
+                     "method": "get", "id": tag_id}
+        return self.request_data(api_name, api_path, req_param)
+
+    def create_general_tag(
+        self,
+        name: str,
+    ) -> dict[str, object] | str:
+        """
+        Create a new general tag.
+
+        Parameters
+        ----------
+        name : str
+            Tag name.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with the created tag data.
+        """
+        api_name = "SYNO.Foto.Browse.GeneralTag"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {"version": info["maxVersion"],
+                     "method": "create", "name": name}
+        return self.request_data(api_name, api_path, req_param)
+
+    def list_favorites(
+        self,
+        offset: int = 0,
+        limit: int = 200,
+    ) -> dict[str, object] | str:
+        """
+        List favorite items in Personal Space.
+
+        .. note::
+           This API endpoint (``SYNO.Foto.Favorite``) may not be available
+           on all DSM versions. On DSM 7.3 it returns error 103
+           (method not found). Use ``list_items`` with appropriate filters
+           as a fallback.
+
+        Parameters
+        ----------
+        offset : int, optional
+            Number of items to skip. Default is 0.
+        limit : int, optional
+            Max items to return. Default is 200.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with favorite items. May return error 103 on
+            DSM versions where ``SYNO.Foto.Favorite`` is unavailable.
+        """
+        api_name = "SYNO.Foto.Favorite"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "list",
+            "offset": offset,
+            "limit": limit,
+        }
+        return self._foto_get(api_name, api_path, req_param)
+
+    def get_shared_passphrase(
+        self,
+        shared_id: str,
+    ) -> dict[str, object] | str:
+        """
+        Get passphrase info for a shared item.
+
+        Parameters
+        ----------
+        shared_id : str
+            The shared item ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with passphrase info.
+        """
+        api_name = "SYNO.Foto.Sharing.Passphrase"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {"version": info["maxVersion"],
+                     "method": "get", "id": shared_id}
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_shared_permission(
+        self,
+        shared_id: str,
+        passphrase: str = "",
+    ) -> dict[str, object] | str:
+        """
+        Check permissions for a passphrase-protected share.
+
+        Parameters
+        ----------
+        shared_id : str
+            The shared item ID.
+        passphrase : str, optional
+            The passphrase to check.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with permission check result.
+        """
+        api_name = "SYNO.Foto.Sharing.Passphrase"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "get_permission",
+            "id": shared_id,
+            "passphrase": passphrase,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def set_shared_passphrase(
+        self,
+        shared_id: str,
+        passphrase: str = "",
+        enable_passphrase: bool = True,
+    ) -> dict[str, object] | str:
+        """
+        Set or update a passphrase on a shared item.
+
+        Parameters
+        ----------
+        shared_id : str
+            The shared item ID.
+        passphrase : str, optional
+            The passphrase. Empty string disables it.
+        enable_passphrase : bool, optional
+            Whether passphrase protection is active.
+            Default is ``True``.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response confirming the passphrase update.
+        """
+        api_name = "SYNO.Foto.Sharing.Passphrase"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "set_shared",
+            "id": shared_id,
+            "passphrase": passphrase,
+            "enable_passphrase": enable_passphrase,
+        }
+        return self.request_data(api_name, api_path, req_param)
+
+    def list_background_tasks(
+        self,
+    ) -> dict[str, object] | str:
+        """
+        List all user background tasks (indexing, thumbnail gen).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with the list of background tasks.
+        """
+        api_name = "SYNO.Foto.BackgroundTask.Info"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "list_user_task",
+        }
+        return self._foto_get(api_name, api_path, req_param)
+
+    def get_background_task_status(
+        self,
+        task_ids: list[str],
+    ) -> dict[str, object] | str:
+        """
+        Get status for specific background tasks.
+
+        Parameters
+        ----------
+        task_ids : list of str
+            Task IDs to query.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with task status details.
+        """
+        api_name = "SYNO.Foto.BackgroundTask.Info"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "get_status",
+            "id": json.dumps(task_ids),
+        }
+        return self._foto_get(api_name, api_path, req_param)
+
+    def get_background_task_error(
+        self,
+        task_ids: list[str],
+    ) -> dict[str, object] | str:
+        """
+        Get error details for failed background tasks.
+
+        Parameters
+        ----------
+        task_ids : list of str
+            Task IDs to query.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with error details for each task.
+        """
+        api_name = "SYNO.Foto.BackgroundTask.Info"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "get_error_detail",
+            "id": json.dumps(task_ids),
+        }
+        return self._foto_get(api_name, api_path, req_param)
+
+    def abort_background_task(
+        self,
+        task_ids: list[str],
+    ) -> dict[str, object] | str:
+        """
+        Abort running background tasks.
+
+        Parameters
+        ----------
+        task_ids : list of str
+            Task IDs to abort.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response confirming task abortion.
+        """
+        api_name = "SYNO.Foto.BackgroundTask.Info"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "abort_task",
+            "id": json.dumps(task_ids),
+        }
+        return self._foto_get(api_name, api_path, req_param)
+
+    def clear_completed_background_tasks(
+        self,
+    ) -> dict[str, object] | str:
+        """
+        Remove all completed/failed background tasks from the list.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response confirming the cleanup.
+        """
+        api_name = "SYNO.Foto.BackgroundTask.Info"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {"version": info["maxVersion"],
+                     "method": "clear_completed_task"}
+        return self._foto_get(api_name, api_path, req_param)
+
+    def get_migration_status(self) -> dict[str, object] | str:
+        """
+        Get Photo Station → Synology Photos migration status.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with migration progress info.
+        """
+        api_name = "SYNO.Foto.Migration"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        req_param = {"version": info["maxVersion"], "method": "get_status"}
+        return self._foto_get(api_name, api_path, req_param)
+
+    def stream_video(
+        self,
+        unit_id: int,
+        quality: str = "original",
+        dest_path: str | None = None,
+    ) -> bytes | str | None:
+        """
+        Stream a transcoded version of a video (HLS/adaptive).
+
+        Uses ``SYNO.Foto.Streaming``. Requires the NAS to have
+        finished transcoding the video — if the requested quality
+        is not yet available, this will return ``None``.
+
+        For a reliable way to get the raw file regardless of
+        transcoding state, use :meth:`download_video`.
+
+        Parameters
+        ----------
+        unit_id : int
+            The video unit ID.
+        quality : str, optional
+            Quality level.  Known values: ``"low"``, ``"medium"``,
+            ``"high"``, ``"original"``, ``"mobile"``.
+            Default is ``"original"``.
+        dest_path : str or None, optional
+            Where to save the video stream. If ``None``, returns bytes.
+
+        Returns
+        -------
+        bytes or str or None
+            Video data, saved file path, or ``None`` on failure.
+        """
+        api_name = "SYNO.Foto.Streaming"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        url = "%s%s?api=%s" % (self.base_url, api_path, api_name)
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "streaming",
+            "id": unit_id,
+            "quality": quality,
+            "_sid": self.session._sid,
+        }
+        headers = self._foto_upload_headers()
+
+        response = self.session._get(
+            url, params=req_param, headers=headers, verify=self.session._verify
+        )
+
+        # 404 = quality not available (not yet transcoded)
+        # 200 + JSON error = quality condition failed
+        if response.status_code == 404:
+            return None
+        response.raise_for_status()
+
+        ct = response.headers.get("content-type", "")
+        if "json" in ct:
+            # Quality not available — the body is a JSON error
+            return None
+
+        if len(response.content) > 100:
+            if dest_path is not None:
+                with open(dest_path, "wb") as f:
+                    f.write(response.content)
+                return dest_path
+            return response.content
+
+        return None
+
+    def download_video(
+        self,
+        unit_id: int,
+        dest_path: str | None = None,
+    ) -> bytes | str | None:
+        """
+        Download a video from Synology Photos.
+
+        Uses ``SYNO.Foto.Download`` to retrieve the raw video file.
+        This is the reliable way to get video content — the
+        ``Streaming`` API requires server-side transcoding and
+        may not be available for all videos.
+
+        Parameters
+        ----------
+        unit_id : int
+            The video unit ID.
+        dest_path : str or None, optional
+            Where to save the video. If ``None``, returns raw bytes.
+
+        Returns
+        -------
+        bytes or str or None
+            Raw video bytes, saved file path, or ``None`` on failure.
+        """
+        api_name = "SYNO.Foto.Download"
+        info = self.photos_list[api_name]
+        api_path = info["path"]
+        url = "%s%s?api=%s" % (self.base_url, api_path, api_name)
+        req_param = {
+            "version": info["maxVersion"],
+            "method": "download",
+            "unit_id": json.dumps([unit_id]),
+            "_sid": self.session._sid,
+        }
+        headers = self._foto_upload_headers()
+
+        response = self.session._get(
+            url, params=req_param, headers=headers, verify=self.session._verify
+        )
+        response.raise_for_status()
+
+        if response.status_code == 200 and len(response.content) > 100:
+            if dest_path is not None:
+                with open(dest_path, "wb") as f:
+                    f.write(response.content)
+                return dest_path
+            return response.content
 
         return None
