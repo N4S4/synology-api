@@ -2074,7 +2074,14 @@ class Photos(base_api.BaseApi):
         return None
 
     def _foto_upload_headers(self) -> dict[str, str]:
-        """Build headers required for Foto upload endpoints."""
+        """
+        Build headers required for Foto upload endpoints.
+
+        Returns
+        -------
+        dict[str, str]
+            Headers with ``X-Syno-Token`` and ``Cookie`` fields.
+        """
         token = self.session._syno_token
         sid = self.session._sid
         if not token or not sid:
@@ -2215,7 +2222,28 @@ class Photos(base_api.BaseApi):
         duplicate: str,
         upload_destination: str | None,
     ) -> dict[str, object] | str:
-        """Internal upload helper shared by personal and team space."""
+        """
+        Internal upload helper shared by personal and team space.
+
+        Parameters
+        ----------
+        api_name : str
+            API name (``"SYNO.Foto.Upload.Item"`` or
+            ``"SYNO.FotoTeam.Upload.Item"``).
+        file_path : str
+            Local path to the file to upload.
+        folder : str or list of str
+            Destination folder(s) in Synology Photos.
+        duplicate : str
+            Duplicate handling (``"ignore"``, ``"rename"``, etc.).
+        upload_destination : str or None, optional
+            Upload target. ``None`` for default.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with ``action``, ``id``, and ``unit_id`` on success.
+        """
         import os
 
         filename = os.path.basename(file_path)
@@ -2475,6 +2503,11 @@ class Photos(base_api.BaseApi):
             Person IDs to merge *from*.
         target_person_id : int
             Person ID to merge *into*.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with the result of the merge operation.
         """
         api_name = "SYNO.Foto.Browse.Person"
         info = self.photos_list[api_name]
@@ -2501,6 +2534,11 @@ class Photos(base_api.BaseApi):
             The person to separate faces from.
         face_ids : list of int
             Face IDs to move to a new person.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with the newly created person info.
         """
         api_name = "SYNO.Foto.Browse.Person"
         info = self.photos_list[api_name]
@@ -2530,6 +2568,11 @@ class Photos(base_api.BaseApi):
             Results offset. Default 0.
         limit : int, optional
             Max results. Default 100.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with ``list`` of face objects.
         """
         api_name = "SYNO.Foto.Browse.Person"
         info = self.photos_list[api_name]
@@ -2554,6 +2597,11 @@ class Photos(base_api.BaseApi):
         ----------
         tag_id : int
             The tag ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with the tag data.
         """
         api_name = "SYNO.Foto.Browse.GeneralTag"
         info = self.photos_list[api_name]
@@ -2573,6 +2621,11 @@ class Photos(base_api.BaseApi):
         ----------
         name : str
             Tag name.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with the created tag data.
         """
         api_name = "SYNO.Foto.Browse.GeneralTag"
         info = self.photos_list[api_name]
@@ -2601,6 +2654,12 @@ class Photos(base_api.BaseApi):
             Number of items to skip. Default is 0.
         limit : int, optional
             Max items to return. Default is 200.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with favorite items. May return error 103 on
+            DSM versions where ``SYNO.Foto.Favorite`` is unavailable.
         """
         api_name = "SYNO.Foto.Favorite"
         info = self.photos_list[api_name]
@@ -2624,6 +2683,11 @@ class Photos(base_api.BaseApi):
         ----------
         shared_id : str
             The shared item ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with passphrase info.
         """
         api_name = "SYNO.Foto.Sharing.Passphrase"
         info = self.photos_list[api_name]
@@ -2646,6 +2710,11 @@ class Photos(base_api.BaseApi):
             The shared item ID.
         passphrase : str, optional
             The passphrase to check.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with permission check result.
         """
         api_name = "SYNO.Foto.Sharing.Passphrase"
         info = self.photos_list[api_name]
@@ -2676,6 +2745,11 @@ class Photos(base_api.BaseApi):
         enable_passphrase : bool, optional
             Whether passphrase protection is active.
             Default is ``True``.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response confirming the passphrase update.
         """
         api_name = "SYNO.Foto.Sharing.Passphrase"
         info = self.photos_list[api_name]
@@ -2692,7 +2766,14 @@ class Photos(base_api.BaseApi):
     def list_background_tasks(
         self,
     ) -> dict[str, object] | str:
-        """List all user background tasks (indexing, thumbnail gen)."""
+        """
+        List all user background tasks (indexing, thumbnail gen).
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with the list of background tasks.
+        """
         api_name = "SYNO.Foto.BackgroundTask.Info"
         info = self.photos_list[api_name]
         api_path = info["path"]
@@ -2713,6 +2794,11 @@ class Photos(base_api.BaseApi):
         ----------
         task_ids : list of str
             Task IDs to query.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with task status details.
         """
         api_name = "SYNO.Foto.BackgroundTask.Info"
         info = self.photos_list[api_name]
@@ -2735,6 +2821,11 @@ class Photos(base_api.BaseApi):
         ----------
         task_ids : list of str
             Task IDs to query.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with error details for each task.
         """
         api_name = "SYNO.Foto.BackgroundTask.Info"
         info = self.photos_list[api_name]
@@ -2757,6 +2848,11 @@ class Photos(base_api.BaseApi):
         ----------
         task_ids : list of str
             Task IDs to abort.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response confirming task abortion.
         """
         api_name = "SYNO.Foto.BackgroundTask.Info"
         info = self.photos_list[api_name]
@@ -2771,7 +2867,14 @@ class Photos(base_api.BaseApi):
     def clear_completed_background_tasks(
         self,
     ) -> dict[str, object] | str:
-        """Remove all completed/failed background tasks from the list."""
+        """
+        Remove all completed/failed background tasks from the list.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response confirming the cleanup.
+        """
         api_name = "SYNO.Foto.BackgroundTask.Info"
         info = self.photos_list[api_name]
         api_path = info["path"]
@@ -2780,7 +2883,14 @@ class Photos(base_api.BaseApi):
         return self._foto_get(api_name, api_path, req_param)
 
     def get_migration_status(self) -> dict[str, object] | str:
-        """Get Photo Station → Synology Photos migration status."""
+        """
+        Get Photo Station → Synology Photos migration status.
+
+        Returns
+        -------
+        dict[str, object] or str
+            API response with migration progress info.
+        """
         api_name = "SYNO.Foto.Migration"
         info = self.photos_list[api_name]
         api_path = info["path"]
