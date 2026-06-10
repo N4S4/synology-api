@@ -2527,7 +2527,9 @@ class Photos(base_api.BaseApi):
         person_id : int
             The person ID.
         offset : int, optional
+            Results offset. Default 0.
         limit : int, optional
+            Max results. Default 100.
         """
         api_name = "SYNO.Foto.Browse.Person"
         info = self.photos_list[api_name]
@@ -2556,7 +2558,8 @@ class Photos(base_api.BaseApi):
         api_name = "SYNO.Foto.Browse.GeneralTag"
         info = self.photos_list[api_name]
         api_path = info["path"]
-        req_param = {"version": info["maxVersion"], "method": "get", "id": tag_id}
+        req_param = {"version": info["maxVersion"],
+                     "method": "get", "id": tag_id}
         return self.request_data(api_name, api_path, req_param)
 
     def create_general_tag(
@@ -2574,7 +2577,8 @@ class Photos(base_api.BaseApi):
         api_name = "SYNO.Foto.Browse.GeneralTag"
         info = self.photos_list[api_name]
         api_path = info["path"]
-        req_param = {"version": info["maxVersion"], "method": "create", "name": name}
+        req_param = {"version": info["maxVersion"],
+                     "method": "create", "name": name}
         return self.request_data(api_name, api_path, req_param)
 
     def list_favorites(
@@ -2624,7 +2628,8 @@ class Photos(base_api.BaseApi):
         api_name = "SYNO.Foto.Sharing.Passphrase"
         info = self.photos_list[api_name]
         api_path = info["path"]
-        req_param = {"version": info["maxVersion"], "method": "get", "id": shared_id}
+        req_param = {"version": info["maxVersion"],
+                     "method": "get", "id": shared_id}
         return self.request_data(api_name, api_path, req_param)
 
     def get_shared_permission(
@@ -2770,7 +2775,8 @@ class Photos(base_api.BaseApi):
         api_name = "SYNO.Foto.BackgroundTask.Info"
         info = self.photos_list[api_name]
         api_path = info["path"]
-        req_param = {"version": info["maxVersion"], "method": "clear_completed_task"}
+        req_param = {"version": info["maxVersion"],
+                     "method": "clear_completed_task"}
         return self._foto_get(api_name, api_path, req_param)
 
     def get_migration_status(self) -> dict[str, object] | str:
