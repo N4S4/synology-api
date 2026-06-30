@@ -1,6 +1,7 @@
 """Synology API Python Client."""
 from . import \
     audiostation, \
+    async_client, \
     auth, \
     base_api, \
     chat, \
