@@ -1,4 +1,4 @@
-setuptools==82.0.1
+setuptools==83.0.0
 requests==2.34.2
 urllib3==2.7.0
 requests-toolbelt==1.0.0
