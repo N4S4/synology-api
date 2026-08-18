@@ -76,9 +76,39 @@ class TestCoreServiceApps(unittest.TestCase):
         self.instance.acl_get(path='test')
         self.instance.request_data.assert_called_once()
 
+    def test_acl_get_request_contract(self):
+        self.instance.acl_get(path='/homes/elliot', acl_type='all',
+                              include_noname_rules=True)
+        self.instance.request_data.assert_called_once_with(
+            'SYNO.Core.ACL',
+            'entry.cgi',
+            {
+                'version': 1,
+                'method': 'get',
+                'type': '"all"',
+                'file_path': '"/homes/elliot"',
+                'include_noname_rules': 'true',
+            },
+            method='post',
+        )
+
     def test_acl_set(self):
         self.instance.acl_set(path='test', acl={"test": True})
         self.instance.request_data.assert_called_once()
+
+    def test_acl_set_request_contract(self):
+        self.instance.acl_set(path='/homes/elliot', acl={"test": True})
+        self.instance.request_data.assert_called_once_with(
+            'SYNO.Core.ACL',
+            'entry.cgi',
+            {
+                'version': 1,
+                'method': 'set',
+                'file_path': '"/homes/elliot"',
+                'acl': '{"test": true}',
+            },
+            method='post',
+        )
 
     def test_action_priv_get(self):
         self.instance.action_priv_get()

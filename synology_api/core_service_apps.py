@@ -19,7 +19,8 @@ class CoreServiceApps(base_api.BaseApi):
     # SYNO.Core.ACL
     # ------------------------------------------------------------------
 
-    def acl_get(self, path: str) -> dict[str, object] | str:
+    def acl_get(self, path: str, acl_type: str = 'all',
+                include_noname_rules: bool = True) -> dict[str, object] | str:
         """
         Get ACL for a given path.
 
@@ -27,16 +28,31 @@ class CoreServiceApps(base_api.BaseApi):
         ----------
         path : str
             The path value.
+        acl_type : str, optional
+            The ACL type to retrieve (default is 'all').
+        include_noname_rules : bool, optional
+            Whether to include non-name ACL rules (default is True).
 
         Returns
         -------
         dict[str, object] or str
             Result of the acl get operation.
+
+        Notes
+        -----
+        Uses ``version=1`` — version 2 drops the ``get`` method. The target
+        shared folder must have Windows ACL enabled, otherwise the NAS
+        returns error 403 (Unable to perform this operation).
         """
         api_name = 'SYNO.Core.ACL'
         info = self.gen_list[api_name]
-        return self.request_data(api_name, info['path'],
-                                 {'version': info['maxVersion'], 'method': 'get', 'path': path})
+        return self.request_data(api_name, info['path'], {
+            'version': 1,
+            'method': 'get',
+            'type': json.dumps(acl_type),
+            'file_path': json.dumps(path),
+            'include_noname_rules': str(include_noname_rules).lower(),
+        }, method='post')
 
     def acl_set(self, path: str, acl: dict) -> dict[str, object] | str:
         """
@@ -53,12 +69,21 @@ class CoreServiceApps(base_api.BaseApi):
         -------
         dict[str, object] or str
             Result of the acl set operation.
+
+        Notes
+        -----
+        Uses ``version=1`` — version 2 drops the ``set`` method. The target
+        shared folder must have Windows ACL enabled, otherwise the NAS
+        returns error 403 (Unable to perform this operation).
         """
         api_name = 'SYNO.Core.ACL'
         info = self.gen_list[api_name]
-        return self.request_data(api_name, info['path'],
-                                 {'version': info['maxVersion'], 'method': 'set',
-                                  'path': path, 'acl': json.dumps(acl)})
+        return self.request_data(api_name, info['path'], {
+            'version': 1,
+            'method': 'set',
+            'file_path': json.dumps(path),
+            'acl': json.dumps(acl),
+        }, method='post')
 
     # ------------------------------------------------------------------
     # SYNO.Core.ActionPriv / SYNO.Core.ActionPriv.Role
