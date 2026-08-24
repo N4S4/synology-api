@@ -324,8 +324,9 @@ class DownloadStation(base_api.BaseApi):
             additional_param = ['detail', 'transfer',
                                 'file', 'tracker', 'peer']
 
-        req_param['additional'] = json.dumps(additional_param if isinstance(
-            additional_param, list) else [additional_param])
+        req_param['additional'] = ",".join(
+            additional_param if isinstance(additional_param, list)
+            else [additional_param])
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -348,7 +349,8 @@ class DownloadStation(base_api.BaseApi):
         api_name = 'SYNO.DownloadStation' + self.download_st_version + '.Task'
         info = self.download_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get',
+        method = 'getinfo' if self.download_st_version == '' else 'get'
+        req_param = {'version': info['maxVersion'], 'method': method,
                      'id': task_id, 'additional': additional_param}
 
         if additional_param is None:
@@ -362,8 +364,8 @@ class DownloadStation(base_api.BaseApi):
         else:
             return "additional_param must be a string or a list of strings."
 
-        req_param['additional'] = json.dumps(additional_param)
-        req_param['id'] = json.dumps(
+        req_param['additional'] = ",".join(additional_param)
+        req_param['id'] = ",".join(
             task_id if isinstance(task_id, list) else [task_id])
 
         return self.request_data(api_name, api_path, req_param)
