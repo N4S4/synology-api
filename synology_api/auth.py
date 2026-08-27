@@ -427,7 +427,7 @@ class Authentication:
 
         params_enc = {
             'account': self._username,
-            'enable_device_token': 'no',
+            'enable_device_token': 'yes',
             'logintype': 'local',
             'otp_code': '',
             'rememberme': 0,
@@ -443,11 +443,14 @@ class Authentication:
 
         if self._otp_code:
             params['otp_code'] = self._otp_code
-        if self._device_id is not None and self._device_name is not None:
+        # Device token (2FA): when a device_id is available (either provided by
+        # the caller or captured from a previous OTP login), send it in place of
+        # the OTP. DSM then skips the 2FA challenge for subsequent logins.
+        if self._device_id is not None:
             params['device_id'] = self._device_id
-            params['device_name'] = self._device_name
-        if self._device_id is not None and self._device_name is None or self._device_id is None and self._device_name is not None:
-            print("device_id and device_name must be set together")
+            params['device_name'] = (
+                self._device_name or f"synology-api-{self._username}"
+            )
 
         if not self._session_expire and self._sid is not None:
             self._session_expire = False
@@ -479,6 +482,9 @@ class Authentication:
             if not error_code:
                 self._sid = session_request_json['data']['sid']
                 self._syno_token = session_request_json['data']['synotoken']
+                device_id = session_request_json['data'].get('device_id')
+                if device_id:
+                    self._device_id = device_id
                 self._finish_noise_handshake(session_request_json['data'])
                 self._session_expire = False
                 if self._debug is True:
