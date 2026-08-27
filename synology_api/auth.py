@@ -1401,6 +1401,19 @@ class Authentication:
         """
         return self._syno_token
 
+    @property
+    def device_id(self):
+        """
+        Get the DSM device token (2FA), if one was captured at login.
+
+        Returns
+        -------
+        str or None
+            Device ID returned by DSM when the account uses 2FA and
+            enable_device_token is set to yes, else None.
+        """
+        return self._device_id
+
 
 class AESCipher(object):
     """
