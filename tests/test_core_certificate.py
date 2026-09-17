@@ -116,6 +116,37 @@ class TestCoreCertificate(unittest.TestCase):
         self.assertEqual(result, (200, 'Certificate already set, aborting'))
         mock_session.assert_not_called()
 
+    def test_upload_cert_sends_basename_not_path(self):
+        import tempfile
+        import os
+
+        with tempfile.TemporaryDirectory() as tmp:
+            key_path = os.path.join(tmp, "my-key.pem")
+            cert_path = os.path.join(tmp, "my-cert.pem")
+            ca_cert_path = os.path.join(tmp, "my-ca.pem")
+            with open(key_path, "w") as f:
+                f.write("keydata")
+            with open(cert_path, "w") as f:
+                f.write("certdata")
+            with open(ca_cert_path, "w") as f:
+                f.write('cacertdata')
+
+            instance = _make_instance([])
+            instance.session.app_api_list['SYNO.Core.Certificate'] = {
+                'path': 'entry.cgi', 'minVersion': 1}
+
+            with patch('synology_api.core_certificate.requests.session') as mock_session:
+                mock_session.return_value.post.return_value.status_code = 200
+                mock_session.return_value.post.return_value.json.return_value = {
+                    'success': True}
+                instance.upload_cert(
+                    serv_key=key_path, ser_cert=cert_path, ca_cert=ca_cert_path)
+
+            files = mock_session.return_value.post.call_args.kwargs['files']
+            self.assertEqual(files['key'][0], "my-key.pem")
+            self.assertEqual(files['cert'][0], "my-cert.pem")
+            self.assertEqual(files['inter_cert'][0], "my-ca.pem")
+
 
 if __name__ == '__main__':
     unittest.main()
