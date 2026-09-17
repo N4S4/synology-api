@@ -137,13 +137,16 @@ class TestCoreCertificate(unittest.TestCase):
 
             with patch('synology_api.core_certificate.requests.session') as mock_session:
                 mock_session.return_value.post.return_value.status_code = 200
-                mock_session.return_value.post.return_value.json.return_value = {'success': True}
-                instance.upload_cert(serv_key=key_path, ser_cert=cert_path, ca_cert=ca_cert_path)
+                mock_session.return_value.post.return_value.json.return_value = {
+                    'success': True}
+                instance.upload_cert(
+                    serv_key=key_path, ser_cert=cert_path, ca_cert=ca_cert_path)
 
             files = mock_session.return_value.post.call_args.kwargs['files']
             self.assertEqual(files['key'][0], "my-key.pem")
             self.assertEqual(files['cert'][0], "my-cert.pem")
             self.assertEqual(files['inter_cert'][0], "my-ca.pem")
+
 
 if __name__ == '__main__':
     unittest.main()
