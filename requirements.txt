@@ -1,6 +1,6 @@
 setuptools==84.0.0
 requests==2.34.2
-urllib3==2.7.0
+urllib3==2.8.0
 requests-toolbelt==1.0.0
 tqdm==4.70.1
 psutil==7.2.2
