@@ -200,21 +200,29 @@ class Virtualization(base_api.BaseApi):
             method=http_method,
         )
 
-    def get_task_list(self) -> list[str]:
+    def get_task_list(self) -> list[str] | dict[str, object] | str | list[object]:
         """
         Get the list of virtualization tasks.
 
         Returns
         -------
-        list of str
-            List of task IDs.
+        list of str, dict, or str
+            Task IDs on success, or the raw response when the API returns an
+            error or an unexpected response shape.
         """
         api_name = 'SYNO.Virtualization.API.Task.Info'
         info = self.file_station_list[api_name]
         api_path = info['path']
         req_param = {'version': info['maxVersion'], 'method': 'list'}
 
-        self._taskid_list = self.request_data(api_name, api_path, req_param)
+        response = self.request_data(api_name, api_path, req_param)
+        if isinstance(response, dict):
+            data = response.get('data')
+            if isinstance(data, dict) and isinstance(data.get('tasks'), list):
+                self._taskid_list = data['tasks']
+                return self._taskid_list
+
+        self._taskid_list = response
 
         return self._taskid_list
 

@@ -105,6 +105,26 @@ class TestVirtualizationRouteDiscovery(unittest.TestCase):
 class TestVirtualizationExistingRoutes(unittest.TestCase):
     """Regression tests for existing Virtualization wrappers."""
 
+    def test_task_list_returns_ids_from_response_data(self):
+        response = {
+            'success': True,
+            'data': {'tasks': ['task-1', 'task-2']},
+        }
+        client = _make_virtualization(response)
+
+        result = client.get_task_list()
+
+        self.assertEqual(result, ['task-1', 'task-2'])
+        self.assertEqual(client._taskid_list, ['task-1', 'task-2'])
+
+    def test_task_list_preserves_api_error_response(self):
+        response = {'success': False, 'error': {'code': 403}}
+        client = _make_virtualization(response)
+
+        result = client.get_task_list()
+
+        self.assertEqual(result, response)
+
     def test_vm_list_extracts_ids_and_names_from_guest_records(self):
         response = {
             'success': True,
