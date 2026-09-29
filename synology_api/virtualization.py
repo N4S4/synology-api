@@ -15,6 +15,9 @@ class Virtualization(base_api.BaseApi):
     API wrapper for Synology Virtual Machine Manager.
 
     Provides methods to manage tasks, networks, storage, hosts, VMs, and images.
+    Routes advertised by a NAS but not covered by a typed helper can be
+    discovered with :meth:`get_unmapped_api_list` and called with
+    :meth:`request_api`.
 
     Parameters
     ----------
@@ -39,6 +42,16 @@ class Virtualization(base_api.BaseApi):
     quickconnect_id : str, optional
         QuickConnect ID for relay-based access. Defaults to None.
     """
+
+    _MAPPED_API_NAMES = frozenset({
+        'SYNO.Virtualization.API.Task.Info',
+        'SYNO.Virtualization.API.Network',
+        'SYNO.Virtualization.API.Storage',
+        'SYNO.Virtualization.API.Host',
+        'SYNO.Virtualization.API.Guest',
+        'SYNO.Virtualization.API.Guest.Action',
+        'SYNO.Virtualization.API.Guest.Image',
+    })
 
     def __init__(self,
                  ip_address: Optional[str] = None,
@@ -95,6 +108,97 @@ class Virtualization(base_api.BaseApi):
         self.session.get_api_list('Virtualization')
 
         self.file_station_list: Any = self.session.app_api_list
+
+    def get_unmapped_api_list(self) -> list[dict[str, object]]:
+        """
+        List Virtualization API routes advertised by this NAS without a typed wrapper.
+
+        The route catalogue is DSM- and package-dependent, so this method
+        reports routes discovered at runtime instead of relying on a fixed
+        global list.
+
+        Returns
+        -------
+        list of dict
+            Unmapped API names with their endpoint path and maximum version.
+        """
+        return [
+            {
+                'api_name': api_name,
+                'path': info['path'],
+                'max_version': info['maxVersion'],
+            }
+            for api_name, info in self.file_station_list.items()
+            if api_name.startswith('SYNO.Virtualization.')
+            and api_name not in self._MAPPED_API_NAMES
+        ]
+
+    def request_api(
+        self,
+        api_name: str,
+        api_method: str,
+        params: Optional[dict[str, object]] = None,
+        http_method: str = 'get',
+    ) -> dict[str, object] | str | list:
+        """
+        Call a Virtualization route advertised by the connected NAS.
+
+        Use this for a route returned by :meth:`get_unmapped_api_list` until
+        a dedicated typed wrapper is added. Route names are restricted to
+        the Virtualization namespace and must exist in this NAS's API list.
+
+        Parameters
+        ----------
+        api_name : str
+            Advertised ``SYNO.Virtualization.*`` API name.
+        api_method : str
+            Operation name accepted by the selected API route.
+        params : dict, optional
+            Operation-specific request parameters. Do not include ``version``
+            or ``method``; they are supplied by this wrapper.
+        http_method : str, optional
+            HTTP transport method, either ``get`` or ``post``. Defaults to
+            ``get``.
+
+        Returns
+        -------
+        dict, list, or str
+            Response returned by the Synology API.
+
+        Raises
+        ------
+        ValueError
+            If the route is not advertised by this NAS, is outside the
+            Virtualization namespace, or the HTTP method is unsupported.
+        """
+        if not api_name.startswith('SYNO.Virtualization.'):
+            raise ValueError('Only SYNO.Virtualization.* routes are supported')
+        if api_name not in self.file_station_list:
+            raise ValueError(f'Virtualization API is not available: {api_name}')
+        if not api_method:
+            raise ValueError('api_method must not be empty')
+        if http_method not in {'get', 'post'}:
+            raise ValueError("http_method must be 'get' or 'post'")
+
+        route_info = self.file_station_list[api_name]
+        req_param = {
+            'version': route_info['maxVersion'],
+            'method': api_method,
+        }
+        if params:
+            reserved = {'version', 'method'}.intersection(params)
+            if reserved:
+                raise ValueError(
+                    'params must not override version or method'
+                )
+            req_param.update(params)
+
+        return self.request_data(
+            api_name,
+            route_info['path'],
+            req_param,
+            method=http_method,
+        )
 
     def get_task_list(self) -> list[str]:
         """
@@ -222,7 +326,7 @@ class Virtualization(base_api.BaseApi):
 
         return self._host_operation_list
 
-    def get_vm_operation(self, additional: bool = False) -> list[dict[str, object]]:
+    def get_vm_operation(self, additional: bool = False) -> dict[str, object] | str | list:
         """
         Get the list of virtual machines.
 
@@ -233,8 +337,8 @@ class Virtualization(base_api.BaseApi):
 
         Returns
         -------
-        list of dict
-            List of VM information.
+        dict
+            Virtualization API response containing guest records and metadata.
         """
         api_name = 'SYNO.Virtualization.API.Guest'
         info = self.file_station_list[api_name]
@@ -244,11 +348,15 @@ class Virtualization(base_api.BaseApi):
 
         info = self.request_data(api_name, api_path, req_param)
 
-        for k, v in info['data']['guests']:
-            if k == 'guest_id':
-                self._vm_guest_id_list.append(info['data']['guests'][k])
-            elif k == 'guest_name':
-                self._vm_guest_name_list.append(info['data']['guests'][k])
+        guests = info.get('data', {}).get('guests', [])
+        self._vm_guest_id_list = [
+            guest['guest_id'] for guest in guests
+            if isinstance(guest, dict) and 'guest_id' in guest
+        ]
+        self._vm_guest_name_list = [
+            guest['guest_name'] for guest in guests
+            if isinstance(guest, dict) and 'guest_name' in guest
+        ]
 
         return info
 
@@ -339,29 +447,34 @@ class Virtualization(base_api.BaseApi):
         if guest_id is not None:
             req_param['guest_id'] = guest_id
             guest_name = None
-        if autorun is not None and isinstance(autorun, int):
+        if autorun is not None:
+            if (isinstance(autorun, bool)
+                    or not isinstance(autorun, int)
+                    or autorun not in (0, 1, 2)):
+                return 'autorun must be 0 (off), 1 (last state) or 2 (on)'
             req_param['autorun'] = autorun
-        else:
-            return 'autorun value must be an integer 0 (off), 1 (last state) or 2 (on)'
 
-        if description is not None and isinstance(description, str):
+        if description is not None:
+            if not isinstance(description, str):
+                return 'description must be a string'
             req_param['description'] = description
-        else:
-            return 'description must be a string, guest description'
 
-        if new_guest_name is not None and isinstance(new_guest_name, str):
+        if new_guest_name is not None:
+            if not isinstance(new_guest_name, str):
+                return 'new_guest_name must be a string'
             req_param['new_guest_name'] = new_guest_name
-        else:
-            return 'new_guest_name must be a string, new guest name'
 
-        if vcpu_num is not None and isinstance(vcpu_num, int):
+        if vcpu_num is not None:
+            if isinstance(vcpu_num, bool) or not isinstance(vcpu_num, int):
+                return 'vcpu_num must be an integer'
             req_param['vcpu_num'] = vcpu_num
-            return 'vcpu_num must be an integer, specify cpu number'
 
-        if vram_size is not None and isinstance(vram_size, int):
+        if vram_size is not None:
+            if isinstance(vram_size, bool) or not isinstance(vram_size, int):
+                return 'vram_size must be an integer'
             req_param['vram_size'] = vram_size
-        else:
-            return 'vram_size must be integer, specify ram size in MB'
+        if len(req_param) == 3:
+            return 'Specify at least one VM property to update'
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -551,7 +664,7 @@ class Virtualization(base_api.BaseApi):
         api_name = 'SYNO.Virtualization.API.Guest.Image'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'create'}
+        req_param = {'version': info['maxVersion'], 'method': 'delete'}
 
         if image_id is None and image_name is None:
             return 'Specify at least one of image_id or image_name'
@@ -603,7 +716,7 @@ class Virtualization(base_api.BaseApi):
                      'method': 'create', 'auto_clean_task': auto_clean_task}
 
         if storage_names is None and storage_ids is None:
-            return 'Specify at least one of storage_names or storge_ids'
+            return 'Specify at least one of storage_names or storage_ids'
         if storage_ids is not None:
             req_param['storage_ids'] = storage_ids
             storage_names = None
