@@ -19,17 +19,39 @@ class CoreStorage(base_api.BaseApi):
     iSCSI LUNs, quotas, and recycle bin operations.
     """
 
+    def _use_storage_manager(self) -> bool:
+        """
+        Whether the NAS exposes the Storage Manager API (DSM 7.4 and later).
+
+        Returns
+        -------
+        bool
+            True when ``SYNO.Storage.CGI.Storage`` is present in the full API
+            list, meaning the legacy ``SYNO.Core.Storage.*`` endpoints are no
+            longer served and ``load_info`` should be used instead.
+        """
+        return 'SYNO.Storage.CGI.Storage' in getattr(self, 'gen_list', {})
+
     # ─── SYNO.Core.Storage.Disk ─────────────────────────────────────────
 
     def storage_disk_list(self) -> dict[str, object] | str:
         """
         List all storage disks.
 
+        On DSM 7.4 and later the legacy ``SYNO.Core.Storage.Disk`` endpoint is
+        no longer served, so this method transparently uses the Storage Manager
+        ``load_info`` endpoint and returns the same result shape.
+
         Returns
         -------
         dict[str, object] or str
             List of storage disks and their status.
         """
+        if self._use_storage_manager():
+            result = self.storage_load_info()
+            data = result.get('data', {}) if isinstance(result, dict) else {}
+            return {'success': True, 'data': {'disks': data.get('disks', [])}}
+
         api_name = 'SYNO.Core.Storage.Disk'
         info = self.core_list[api_name]
         api_path = info['path']
@@ -106,11 +128,21 @@ class CoreStorage(base_api.BaseApi):
         """
         List all storage pools.
 
+        On DSM 7.4 and later the legacy ``SYNO.Core.Storage.Pool`` endpoint is
+        no longer served, so this method transparently uses the Storage Manager
+        ``load_info`` endpoint and returns the same result shape.
+
         Returns
         -------
         dict[str, object] or str
             List of storage pools.
         """
+        if self._use_storage_manager():
+            result = self.storage_load_info()
+            data = result.get('data', {}) if isinstance(result, dict) else {}
+            return {'success': True,
+                    'data': {'storagePools': data.get('storagePools', [])}}
+
         api_name = 'SYNO.Core.Storage.Pool'
         info = self.core_list[api_name]
         api_path = info['path']
@@ -173,11 +205,20 @@ class CoreStorage(base_api.BaseApi):
         """
         List all storage volumes.
 
+        On DSM 7.4 and later the legacy ``SYNO.Core.Storage.Volume`` endpoint
+        is no longer served, so this method transparently uses the Storage
+        Manager ``load_info`` endpoint and returns the same result shape.
+
         Returns
         -------
         dict[str, object] or str
             List of storage volumes.
         """
+        if self._use_storage_manager():
+            result = self.storage_load_info()
+            data = result.get('data', {}) if isinstance(result, dict) else {}
+            return {'success': True, 'data': {'volumes': data.get('volumes', [])}}
+
         api_name = 'SYNO.Core.Storage.Volume'
         info = self.core_list[api_name]
         api_path = info['path']
