@@ -151,5 +151,67 @@ class TestCoreStorageCoverage(unittest.TestCase):
                                 f"Expected 21+ methods, found {len(public)}")
 
 
+class TestCoreStorageStorageManager(unittest.TestCase):
+    """Tests for the DSM 7.4+ Storage Manager fallback path."""
+
+    def _make_storage_manager_instance(self):
+        with patch('synology_api.core_storage.base_api.BaseApi.__init__',
+                   return_value=None):
+            instance = CoreStorage.__new__(CoreStorage)
+
+        instance.gen_list = {
+            'SYNO.Storage.CGI.Storage': {'path': 'entry.cgi', 'maxVersion': 1},
+        }
+        instance.core_list = {
+            'SYNO.Core.Storage.Disk': {'path': 'entry.cgi', 'maxVersion': 1},
+            'SYNO.Core.Storage.Pool': {'path': 'entry.cgi', 'maxVersion': 1},
+            'SYNO.Core.Storage.Volume': {'path': 'entry.cgi', 'maxVersion': 1},
+        }
+        instance.storage_load_info = MagicMock(return_value={
+            'success': True,
+            'data': {
+                'disks': [{'id': 'sda'}, {'id': 'sdb'}],
+                'storagePools': [{'id': 'pool_1'}],
+                'volumes': [{'id': 'volume_1'}],
+            },
+        })
+        return instance
+
+    def test_use_storage_manager_true_when_present(self):
+        instance = self._make_storage_manager_instance()
+        self.assertTrue(instance._use_storage_manager())
+
+    def test_storage_volume_list_uses_load_info(self):
+        instance = self._make_storage_manager_instance()
+        result = instance.storage_volume_list()
+        self.assertEqual(result['data']['volumes'], [{'id': 'volume_1'}])
+        instance.storage_load_info.assert_called_once()
+
+    def test_storage_disk_list_uses_load_info(self):
+        instance = self._make_storage_manager_instance()
+        result = instance.storage_disk_list()
+        self.assertEqual(result['data']['disks'],
+                         [{'id': 'sda'}, {'id': 'sdb'}])
+
+    def test_storage_pool_list_uses_load_info(self):
+        instance = self._make_storage_manager_instance()
+        result = instance.storage_pool_list()
+        self.assertEqual(result['data']['storagePools'], [{'id': 'pool_1'}])
+
+
+class TestCoreStorageLegacyFallback(unittest.TestCase):
+    """Tests that the legacy API is still used when the new API is absent."""
+
+    def test_use_storage_manager_false_without_gen_list(self):
+        instance = _make_instance()
+        self.assertFalse(instance._use_storage_manager())
+
+    def test_legacy_path_still_calls_request_data(self):
+        instance = _make_instance()
+        result = instance.storage_volume_list()
+        self.assertEqual(result, {'success': True, 'data': {}})
+        instance.request_data.assert_called_once()
+
+
 if __name__ == '__main__':
     unittest.main()
