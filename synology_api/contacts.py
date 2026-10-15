@@ -240,4 +240,3 @@ class Contacts(base_api.BaseApi):
         req_param.update(kwargs)
 
         return self.request_data(api_name, api_path, req_param)
-

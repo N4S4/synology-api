@@ -247,11 +247,11 @@ class Virtualization(base_api.BaseApi):
 
         info = self.request_data(api_name, api_path, req_param)
 
-        for k, v in info['data']['guests']:
-            if k == 'guest_id':
-                self._vm_guest_id_list.append(info['data']['guests'][k])
-            elif k == 'guest_name':
-                self._vm_guest_name_list.append(info['data']['guests'][k])
+        for guest in info['data']['guests']:
+            if 'guest_id' in guest:
+                self._vm_guest_id_list.append(guest['guest_id'])
+            if 'guest_name' in guest:
+                self._vm_guest_name_list.append(guest['guest_name'])
 
         return info
 
@@ -810,7 +810,8 @@ class Virtualization(base_api.BaseApi):
         api_name = 'SYNO.Virtualization.GuestProtect.Plan'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': 1, 'method': 'delete', 'protect_id': protect_id}
+        req_param = {'version': 1, 'method': 'delete',
+                     'protect_id': protect_id}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -991,7 +992,8 @@ class Virtualization(base_api.BaseApi):
         api_name = 'SYNO.Virtualization.Guest'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'check_availability'}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'check_availability'}
 
         if guest_id is not None:
             req_param['guest_id'] = guest_id

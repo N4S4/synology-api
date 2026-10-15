@@ -32,9 +32,11 @@ from typing import Any, TypeVar
 T = TypeVar("T")
 
 
-def _make_async_callable(original: Any, name: str) -> Any:
+def _make_async_callable(
+    original: Any, name: str, semaphore: asyncio.Semaphore | None = None
+) -> Any:
     """
-    Wrap a synchronous callable so it runs in the default thread-pool executor.
+    Wrap a synchronous callable so it runs in a thread-pool executor.
 
     ``name`` is kept only for debug/traceback readability.
 
@@ -44,6 +46,10 @@ def _make_async_callable(original: Any, name: str) -> Any:
         The synchronous callable to wrap.
     name : str
         The attribute name, used only for debug/traceback context.
+    semaphore : asyncio.Semaphore, optional
+        If given, caps the number of concurrent in-flight calls.  This is
+        the guard against NAS session limits (e.g. the DS218+ drops
+        sessions under heavy parallel load).
 
     Returns
     -------
@@ -58,7 +64,7 @@ def _make_async_callable(original: Any, name: str) -> Any:
     @functools.wraps(original)
     async def wrapper(*args: Any, **kwargs: Any) -> Any:
         """
-        Execute the wrapped callable in the default thread-pool executor.
+        Execute the wrapped callable in a thread-pool executor.
 
         Parameters
         ----------
@@ -73,9 +79,13 @@ def _make_async_callable(original: Any, name: str) -> Any:
             The return value of the original callable.
         """
         loop = asyncio.get_running_loop()
-        # functools.partial avoids closure-vs-loop issues.
+        # functools.partial binds args/kwargs into a zero-arg callable,
+        # which is what run_in_executor expects.
         task = functools.partial(original, *args, **kwargs)
-        return await loop.run_in_executor(None, task)
+        if semaphore is None:
+            return await loop.run_in_executor(None, task)
+        async with semaphore:
+            return await loop.run_in_executor(None, task)
 
     # Stash the original so isinstance/reflection still work.
     wrapper.__wrapped__ = original  # type: ignore[attr-defined]
@@ -102,11 +112,15 @@ class AsyncClient:
         A fully-constructed synology-api instance (e.g.
         ``FileStation(...)``).  The wrapper does **not** accept a class
         — instantiate the class first, then wrap it.
+    max_concurrency : int, optional
+        Upper bound on simultaneous in-flight calls.  ``None`` (default)
+        means unlimited.  Set a small value (e.g. 4) if your NAS drops
+        sessions under heavy parallel load (observed on the DS218+).
     """
 
-    __slots__ = ("_sync",)
+    __slots__ = ("_sync", "_cache", "_semaphore")
 
-    def __init__(self, sync_instance: Any) -> None:
+    def __init__(self, sync_instance: Any, max_concurrency: int | None = None) -> None:
         """
         Store the sync instance for later delegation.
 
@@ -115,12 +129,23 @@ class AsyncClient:
         sync_instance : Any
             A fully-constructed synology-api instance (e.g.
             ``FileStation(...)``).
+        max_concurrency : int, optional
+            Upper bound on simultaneous in-flight calls.  ``None`` means
+            unlimited.
         """
         self._sync = sync_instance
+        self._cache: dict[str, Any] = {}
+        self._semaphore = (
+            asyncio.Semaphore(max_concurrency) if max_concurrency else None
+        )
 
     def __getattr__(self, name: str) -> Any:
         """
         Intercept attribute access and return an awaitable wrapper for callables.
+
+        Wrapped callables are memoized on first access, so ``functools.wraps``
+        is applied once per method and the returned object is stable across
+        repeated lookups.
 
         Parameters
         ----------
@@ -142,6 +167,9 @@ class AsyncClient:
         if name.startswith("_"):
             raise AttributeError(name)
 
+        if name in self._cache:
+            return self._cache[name]
+
         try:
             attr = getattr(self._sync, name)
         except AttributeError:
@@ -149,7 +177,9 @@ class AsyncClient:
                 f"{type(self._sync).__name__!r} object has no attribute {name!r}"
             ) from None
 
-        return _make_async_callable(attr, name)
+        wrapped = _make_async_callable(attr, name, self._semaphore)
+        self._cache[name] = wrapped
+        return wrapped
 
     # -- async context manager support --------------------------------
 
@@ -175,4 +205,5 @@ class AsyncClient:
             signature).
         """
         if hasattr(self._sync, "logout"):
-            await _make_async_callable(self._sync.logout, "logout")()
+            loop = asyncio.get_running_loop()
+            await loop.run_in_executor(None, self._sync.logout)

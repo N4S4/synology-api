@@ -1720,6 +1720,23 @@ class Replication(base_api.BaseApi):
         params: dict[str, Any],
         version: Optional[Union[int, str]] = None,
     ) -> dict[str, object]:
+        """
+        Utility wrapper for calling BaseApi.request_data().
+
+        Parameters
+        ----------
+        method : str
+            API method name.
+        params : dict[str, Any]
+            Dictionary of parameters.
+        version : Optional[Union[int, str]], optional
+            API method version. Leave blank for highest available version call.
+
+        Returns
+        -------
+        dict[str, object]
+            API response.
+        """
         info = self.gen_list[self._API_NAME]
         api_path = info["path"]
         req_param = {
@@ -1730,7 +1747,14 @@ class Replication(base_api.BaseApi):
         return self.request_data(self._API_NAME, api_path, req_param)
 
     def list(self) -> dict[str, object] | str:
-        """List iSCSI LUN replication tasks (read-only)."""
+        """
+        List iSCSI LUN replication tasks (read-only).
+
+        Returns
+        -------
+        dict[str, object] | str
+            API response with the replication task list.
+        """
         return self._request("list", {})
 
     def get(
@@ -1738,7 +1762,21 @@ class Replication(base_api.BaseApi):
         target_id: Optional[int] = None,
         lun_uuid: Optional[str] = None,
     ) -> dict[str, object] | str:
-        """Get iSCSI LUN replication task details (read-only)."""
+        """
+        Get iSCSI LUN replication task details (read-only).
+
+        Parameters
+        ----------
+        target_id : Optional[int], optional
+            Replication target ID.
+        lun_uuid : Optional[str], optional
+            LUN UUID.
+
+        Returns
+        -------
+        dict[str, object] | str
+            API response with the replication task details.
+        """
         return self._request("get", {"target_id": target_id, "lun_uuid": lun_uuid})
 
 
@@ -1762,6 +1800,23 @@ class VMware(base_api.BaseApi):
         params: dict[str, Any],
         version: Optional[Union[int, str]] = None,
     ) -> dict[str, object]:
+        """
+        Utility wrapper for calling BaseApi.request_data().
+
+        Parameters
+        ----------
+        method : str
+            API method name.
+        params : dict[str, Any]
+            Dictionary of parameters.
+        version : Optional[Union[int, str]], optional
+            API method version. Leave blank for highest available version call.
+
+        Returns
+        -------
+        dict[str, object]
+            API response.
+        """
         info = self.gen_list[self._API_NAME]
         api_path = info["path"]
         req_param = {
@@ -1772,9 +1827,28 @@ class VMware(base_api.BaseApi):
         return self.request_data(self._API_NAME, api_path, req_param)
 
     def list(self) -> dict[str, object] | str:
-        """List VMware storage integration entries (read-only)."""
+        """
+        List VMware storage integration entries (read-only).
+
+        Returns
+        -------
+        dict[str, object] | str
+            API response with the VMware integration entry list.
+        """
         return self._request("list", {})
 
     def get(self, target_id: Optional[int] = None) -> dict[str, object] | str:
-        """Get VMware storage integration entry details (read-only)."""
+        """
+        Get VMware storage integration entry details (read-only).
+
+        Parameters
+        ----------
+        target_id : Optional[int], optional
+            VMware integration target ID.
+
+        Returns
+        -------
+        dict[str, object] | str
+            API response with the VMware integration entry details.
+        """
         return self._request("get", {"target_id": target_id})

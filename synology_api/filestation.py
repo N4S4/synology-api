@@ -2281,7 +2281,6 @@ class FileStation(base_api.BaseApi):
                 tree.create_node(file_name, file_path, parent=folder_path, data={
                                  "isdir": isdir, "max_depth": False})
 
-
     def get_snapshot_list(self, path: str) -> dict[str, object] | str:
         """
         Get the list of snapshots for a file or folder (read-only).
@@ -2299,7 +2298,8 @@ class FileStation(base_api.BaseApi):
         api_name = 'SYNO.FileStation.Snapshot'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'list', 'path': path}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'list', 'path': path}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -2320,7 +2320,8 @@ class FileStation(base_api.BaseApi):
         api_name = 'SYNO.FileStation.Worm'
         info = self.file_station_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'get', 'path': path}
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'path': path}
 
         return self.request_data(api_name, api_path, req_param)
 
