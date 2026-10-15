@@ -1282,3 +1282,67 @@ class Snapshot(base_api.BaseApi):
             "version": 1,
         }
         return self.request_data(api_name, api_path, req_param)
+
+    def dr_plan_info(self) -> dict[str, object] | str:
+        """
+        Get disaster recovery plan information (read-only).
+
+        Returns
+        -------
+        dict[str, object] or str
+            DR plan info or error message.
+        """
+        api_name = 'SYNO.DR.Plan'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'info'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def dr_plan_get(self) -> dict[str, object] | str:
+        """
+        Get disaster recovery plan details (read-only).
+
+        Returns
+        -------
+        dict[str, object] or str
+            DR plan details or error message.
+        """
+        api_name = 'SYNO.DR.Plan'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def dr_topology_get(self) -> dict[str, object] | str:
+        """
+        Get disaster recovery topology (read-only).
+
+        Returns
+        -------
+        dict[str, object] or str
+            DR topology or error message.
+        """
+        api_name = 'SYNO.DR.Topology'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def dr_topology_list(self) -> dict[str, object] | str:
+        """
+        List disaster recovery topology entries (read-only).
+
+        Returns
+        -------
+        dict[str, object] or str
+            DR topology list or error message.
+        """
+        api_name = 'SYNO.DR.Topology'
+        info = self.gen_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)

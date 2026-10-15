@@ -1166,3 +1166,93 @@ class Calendar(BaseApi):
                 "list_dsm_only": list_dsm_only,
             },
         )
+
+    def proxy_cal_list(self) -> dict[str, object] | str:
+        """
+        List calendars exposed through the proxy (read-only).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Proxy calendar list or error message.
+        """
+        api_name = "SYNO.Cal.Proxy"
+        info = self.gen_list[api_name]
+        return self._cal_request(
+            api_name, {"version": info["maxVersion"], "method": "cal_list"}
+        )
+
+    def proxy_get_config(self) -> dict[str, object] | str:
+        """
+        Get the calendar proxy configuration (read-only).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Proxy config or error message.
+        """
+        api_name = "SYNO.Cal.Proxy"
+        info = self.gen_list[api_name]
+        return self._cal_request(
+            api_name, {"version": info["maxVersion"], "method": "get_config"}
+        )
+
+    def proxy_task_list(self) -> dict[str, object] | str:
+        """
+        List calendar proxy tasks (read-only).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Proxy task list or error message.
+        """
+        api_name = "SYNO.Cal.Proxy"
+        info = self.gen_list[api_name]
+        return self._cal_request(
+            api_name, {"version": info["maxVersion"], "method": "task_list"}
+        )
+
+    def auth_foreign_list(self) -> dict[str, object] | str:
+        """
+        List foreign calendar authentication entries (read-only).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Auth foreign list or error message.
+        """
+        api_name = "SYNO.Cal.AuthForeign"
+        info = self.gen_list[api_name]
+        return self._cal_request(
+            api_name, {"version": info["maxVersion"], "method": "list"}
+        )
+
+    def share_priv_list(self) -> dict[str, object] | str:
+        """
+        List calendar share privileges (read-only).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Share privilege list or error message.
+        """
+        api_name = "SYNO.Cal.Share.Priv"
+        info = self.gen_list[api_name]
+        return self._cal_request(
+            api_name, {"version": info["maxVersion"], "method": "list"}
+        )
+
+    def sharing_get(self) -> dict[str, object] | str:
+        """
+        Get calendar sharing settings (read-only).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Sharing settings or error message.
+        """
+        api_name = "SYNO.Cal.Sharing"
+        info = self.gen_list[api_name]
+        return self._cal_request(
+            api_name, {"version": info["maxVersion"], "method": "get"}
+        )

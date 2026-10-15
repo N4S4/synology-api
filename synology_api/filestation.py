@@ -2281,5 +2281,49 @@ class FileStation(base_api.BaseApi):
                 tree.create_node(file_name, file_path, parent=folder_path, data={
                                  "isdir": isdir, "max_depth": False})
 
+    def get_snapshot_list(self, path: str) -> dict[str, object] | str:
+        """
+        Get the list of snapshots for a file or folder (read-only).
+
+        Parameters
+        ----------
+        path : str
+            File or folder path.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Snapshot list or error message.
+        """
+        api_name = 'SYNO.FileStation.Snapshot'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'list', 'path': path}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_worm_info(self, path: str) -> dict[str, object] | str:
+        """
+        Get WORM (write once read many) information for a path (read-only).
+
+        Parameters
+        ----------
+        path : str
+            File or folder path.
+
+        Returns
+        -------
+        dict[str, object] or str
+            WORM info or error message.
+        """
+        api_name = 'SYNO.FileStation.Worm'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'],
+                     'method': 'get', 'path': path}
+
+        return self.request_data(api_name, api_path, req_param)
+
 
 # TODO SYNO.FileStation.Thumb to be done
