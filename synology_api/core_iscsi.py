@@ -1698,3 +1698,83 @@ class Target(base_api.BaseApi):
                 "lun_uuids": _json(_ensure_list(lun_uuid_or_uuids_list))
             }
         )
+
+
+# -----------------------------
+# Replication API
+# -----------------------------
+
+
+class Replication(base_api.BaseApi):
+    """
+    API wrapper for `SYNO.Core.ISCSI.Replication` (iSCSI LUN replication).
+
+    Read-only coverage of LUN replication tasks.
+    """
+
+    _API_NAME = "SYNO.Core.ISCSI.Replication"
+
+    def _request(
+        self,
+        method: str,
+        params: dict[str, Any],
+        version: Optional[Union[int, str]] = None,
+    ) -> dict[str, object]:
+        info = self.gen_list[self._API_NAME]
+        api_path = info["path"]
+        req_param = {
+            "version": str(version if version is not None else info.get("maxVersion", 1)),
+            "method": method,
+        }
+        req_param.update({k: v for k, v in params.items() if v is not None})
+        return self.request_data(self._API_NAME, api_path, req_param)
+
+    def list(self) -> dict[str, object] | str:
+        """List iSCSI LUN replication tasks (read-only)."""
+        return self._request("list", {})
+
+    def get(
+        self,
+        target_id: Optional[int] = None,
+        lun_uuid: Optional[str] = None,
+    ) -> dict[str, object] | str:
+        """Get iSCSI LUN replication task details (read-only)."""
+        return self._request("get", {"target_id": target_id, "lun_uuid": lun_uuid})
+
+
+# -----------------------------
+# VMware API
+# -----------------------------
+
+
+class VMware(base_api.BaseApi):
+    """
+    API wrapper for `SYNO.Core.ISCSI.VMware` (VMware VAAI integration).
+
+    Read-only coverage of VMware storage integration entries.
+    """
+
+    _API_NAME = "SYNO.Core.ISCSI.VMware"
+
+    def _request(
+        self,
+        method: str,
+        params: dict[str, Any],
+        version: Optional[Union[int, str]] = None,
+    ) -> dict[str, object]:
+        info = self.gen_list[self._API_NAME]
+        api_path = info["path"]
+        req_param = {
+            "version": str(version if version is not None else info.get("maxVersion", 1)),
+            "method": method,
+        }
+        req_param.update({k: v for k, v in params.items() if v is not None})
+        return self.request_data(self._API_NAME, api_path, req_param)
+
+    def list(self) -> dict[str, object] | str:
+        """List VMware storage integration entries (read-only)."""
+        return self._request("list", {})
+
+    def get(self, target_id: Optional[int] = None) -> dict[str, object] | str:
+        """Get VMware storage integration entry details (read-only)."""
+        return self._request("get", {"target_id": target_id})

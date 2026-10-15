@@ -7,6 +7,7 @@ from . import \
     chat, \
     cloud_sync, \
     calendar, \
+    contacts, \
     core_active_backup, \
     core_backup, \
     core_certificate, \
@@ -31,6 +32,7 @@ from . import \
     core_user, \
     dhcp_server, \
     directory_server, \
+    document_viewer, \
     docker_api, \
     downloadstation, \
     drive_admin_console, \
@@ -42,6 +44,7 @@ from . import \
     photos, \
     security_advisor, \
     snapshot, \
+    storage_analyzer, \
     surveillancestation, \
     universal_search, \
     usb_copy, \

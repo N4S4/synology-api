@@ -6,7 +6,10 @@ on Synology NAS devices via the Virtual Machine Manager API.
 """
 
 from __future__ import annotations
+
+import json
 from typing import Optional, Any
+
 from . import base_api
 
 
@@ -136,7 +139,7 @@ class Virtualization(base_api.BaseApi):
         if taskid is None:
             return 'Enter a valid taskid, choose between get_task_list results'
         else:
-            req_param['taskid'] = taskid
+            req_param['task_id'] = taskid
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -162,7 +165,7 @@ class Virtualization(base_api.BaseApi):
         if taskid is None:
             return 'Enter a valid taskid, choose between get_task_list results'
         else:
-            req_param['taskid'] = taskid
+            req_param['task_id'] = taskid
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -625,6 +628,397 @@ class Virtualization(base_api.BaseApi):
             return 'Specify image_name'
         if image_name is not None:
             req_param['image_name'] = image_name
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_snapshot_list(self, guest_id: Optional[str] = None) -> dict[str, object] | str:
+        """
+        Get the list of snapshots for a virtual machine.
+
+        Parameters
+        ----------
+        guest_id : str, optional
+            Guest VM ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Snapshot list (gsnaps array) or error message.
+        """
+        api_name = 'SYNO.Virtualization.GuestProtect.Snap'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        if guest_id is None:
+            return 'Specify guest_id, you can get using get_vm_operation'
+        req_param['guest_id'] = guest_id
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def create_snapshot(self, guest_id: Optional[str] = None, desc: Optional[str] = None,
+                        is_user_locked: bool = False, taken_by: str = 'user') -> dict[str, object] | str:
+        """
+        Create a snapshot of a virtual machine.
+
+        Non-blocking: returns a task_id, poll get_task_info to check completion.
+
+        Parameters
+        ----------
+        guest_id : str, optional
+            Guest VM ID.
+        desc : str, optional
+            Snapshot description.
+        is_user_locked : bool, optional
+            Whether to lock the snapshot against automatic retention removal.
+        taken_by : str, optional
+            Who took the snapshot (username).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Result containing task_id, or error message.
+        """
+        api_name = 'SYNO.Virtualization.GuestProtect.Snap'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'create_start'}
+
+        if guest_id is None:
+            return 'Specify guest_id, you can get using get_vm_operation'
+        req_param['guest_id'] = guest_id
+        if desc is not None:
+            req_param['desc'] = desc
+        req_param['taken_by'] = taken_by
+        req_param['is_user_locked'] = is_user_locked
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def delete_snapshot(self, guest_id: Optional[str] = None, gsnap_id: Optional[str] = None) -> dict[str, object] | str:
+        """
+        Delete a snapshot of a virtual machine.
+
+        Non-blocking: returns a task_id. The snapshot id (gsnap_id) is obtained from
+        get_snapshot_list.
+
+        Parameters
+        ----------
+        guest_id : str, optional
+            Guest VM ID.
+        gsnap_id : str, optional
+            Snapshot ID (from get_snapshot_list).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Result containing task_id, or error message.
+        """
+        api_name = 'SYNO.Virtualization.GuestProtect.Snap'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'delete_start'}
+
+        if guest_id is None or gsnap_id is None:
+            return 'Specify guest_id and gsnap_id, you can get using get_vm_operation and get_snapshot_list'
+        req_param['gsnap_ids'] = json.dumps([gsnap_id])
+        req_param['deleted_by'] = 'user'
+        req_param['site'] = 'main'
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def restore_snapshot(self, guest_id: Optional[str] = None, gsnap_id: Optional[str] = None,
+                         is_gsnap_created: bool = False, poweroff_guest: bool = True) -> dict[str, object] | str:
+        """
+        Restore a virtual machine from a snapshot.
+
+        Non-blocking: returns a task_id.
+
+        Parameters
+        ----------
+        guest_id : str, optional
+            Guest VM ID.
+        gsnap_id : str, optional
+            Snapshot ID (from get_snapshot_list).
+        is_gsnap_created : bool, optional
+            Whether to take a snapshot of the current state before restoring.
+        poweroff_guest : bool, optional
+            Whether to power off the guest before restoring.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Result containing task_id, or error message.
+        """
+        api_name = 'SYNO.Virtualization.GuestProtect.Snap'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'restore_start'}
+
+        if guest_id is None or gsnap_id is None:
+            return 'Specify guest_id and gsnap_id, you can get using get_vm_operation and get_snapshot_list'
+        req_param['guest_id'] = guest_id
+        req_param['gsnap_id'] = gsnap_id
+        req_param['is_gsnap_created'] = is_gsnap_created
+        req_param['poweroff_guest'] = poweroff_guest
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def create_protection_plan(self, name: str, guest_id: str) -> dict[str, object] | str:
+        """
+        Create a VMM protection plan (Local Snapshot) for a virtual machine.
+
+        Note: this API is implemented in version 1 only on the NAS (version 2
+        returns error 103 for create/delete). The ``guest_id`` parameter is
+        singular, not ``guest_ids``.
+
+        Parameters
+        ----------
+        name : str
+            Protection plan name.
+        guest_id : str
+            Guest VM ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Result containing ``protect_id``, or error message.
+        """
+        api_name = 'SYNO.Virtualization.GuestProtect.Plan'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': 1, 'method': 'create',
+                     'name': name, 'guest_id': guest_id}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def delete_protection_plan(self, protect_id: str) -> dict[str, object] | str:
+        """
+        Delete a VMM protection plan.
+
+        Note: this API is implemented in version 1 only on the NAS.
+
+        Parameters
+        ----------
+        protect_id : str
+            Protection plan ID (from create_protection_plan or list_protection_plan).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Result or error message.
+        """
+        api_name = 'SYNO.Virtualization.GuestProtect.Plan'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': 1, 'method': 'delete', 'protect_id': protect_id}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def list_protection_plan(self) -> dict[str, object] | str:
+        """
+        List VMM protection plans.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Plan list (``protect_ids`` array) or error message.
+        """
+        api_name = 'SYNO.Virtualization.GuestProtect.Plan'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': 1, 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_host_list(self) -> dict[str, object] | str:
+        """
+        Get the list of VMM hosts (v2 API).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Host list or error message.
+        """
+        api_name = 'SYNO.Virtualization.Host'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_host_basic_list(self) -> dict[str, object] | str:
+        """
+        Get the basic list of VMM hosts (v2 API).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Basic host list or error message.
+        """
+        api_name = 'SYNO.Virtualization.Host'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list_basic'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_network_list(self) -> dict[str, object] | str:
+        """
+        Get the list of VMM networks (v2 API).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Network list or error message.
+        """
+        api_name = 'SYNO.Virtualization.Network'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_repo_list(self) -> dict[str, object] | str:
+        """
+        Get the list of VMM repositories (v2 API).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Repository list or error message.
+        """
+        api_name = 'SYNO.Virtualization.Repo'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_guest_list_basic(self) -> dict[str, object] | str:
+        """
+        Get the basic list of VMM guests (v2 API).
+
+        Returns
+        -------
+        dict[str, object] or str
+            Basic guest list or error message.
+        """
+        api_name = 'SYNO.Virtualization.Guest'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list_basic'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_log_list(self) -> dict[str, object] | str:
+        """
+        Get the list of VMM logs.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Log list or error message.
+        """
+        api_name = 'SYNO.Virtualization.Log'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_setting_general(self) -> dict[str, object] | str:
+        """
+        Get the VMM general settings.
+
+        Returns
+        -------
+        dict[str, object] or str
+            General settings or error message.
+        """
+        api_name = 'SYNO.Virtualization.Setting.General'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_package_list(self) -> dict[str, object] | str:
+        """
+        Get the list of VMM packages.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Package list or error message.
+        """
+        api_name = 'SYNO.Virtualization.Package'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'list'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def get_login_info(self) -> dict[str, object] | str:
+        """
+        Get the VMM user login information.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Login info or error message.
+        """
+        api_name = 'SYNO.Virtualization.User'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'get_login_info'}
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def check_guest_availability(self, guest_id: Optional[str] = None) -> dict[str, object] | str:
+        """
+        Check guest VM availability (read-only, safe pre-flight check).
+
+        Parameters
+        ----------
+        guest_id : str, optional
+            Guest VM ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Availability check result or error message.
+        """
+        api_name = 'SYNO.Virtualization.Guest'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'check_availability'}
+
+        if guest_id is not None:
+            req_param['guest_id'] = guest_id
+
+        return self.request_data(api_name, api_path, req_param)
+
+    def snapshot_can_do(self, guest_id: Optional[str] = None) -> dict[str, object] | str:
+        """
+        Check whether a snapshot operation can be performed (read-only validator).
+
+        Parameters
+        ----------
+        guest_id : str, optional
+            Guest VM ID.
+
+        Returns
+        -------
+        dict[str, object] or str
+            Feasibility result or error message.
+        """
+        api_name = 'SYNO.Virtualization.GuestProtect.Snap'
+        info = self.file_station_list[api_name]
+        api_path = info['path']
+        req_param = {'version': info['maxVersion'], 'method': 'can_do'}
+
+        if guest_id is not None:
+            req_param['guest_id'] = guest_id
 
         return self.request_data(api_name, api_path, req_param)
 
