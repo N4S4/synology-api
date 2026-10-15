@@ -116,6 +116,24 @@ User:
 VPN:
     status: partial
 Virtualization:
-    status: not_started
+    status: partial
 WebStation:
     status: finished
+
+ActiveInsight:
+    status: partial
+
+Contacts:
+    status: partial
+
+DocumentViewer:
+    status: partial
+
+Replication:
+    status: partial
+
+StorageAnalyzer:
+    status: partial
+
+VMware:
+    status: partial
