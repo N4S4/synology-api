@@ -23,29 +23,27 @@ const octokit = new OctokitThrottled({
 });
 
 export const getRepoStars = async () => {
-  const data = cache.get('stars');
-  if (data) {
+  const cached = cache.get('starCount');
+  if (cached) {
     console.debug(`[getRepoStars] Using cache`);
-    return data.length;
+    return cached;
   }
 
   try {
-    let data: object[] = [];
-    data = await octokit.paginate("GET /repos/N4S4/synology-api/stargazers", {
-      per_page: 100,
+    const { data } = await octokit.request("GET /repos/N4S4/synology-api", {
       headers: {
         "X-GitHub-Api-Version": "2022-11-28",
       },
     });
 
-    cache.set('stars', data);
-    return data.length;
+    cache.set('starCount', data.stargazers_count);
+    return data.stargazers_count;
   } catch (error) {
     console.error(error);
 
-    if (cache.getExpired('stars')) {
+    if (cache.getExpired('starCount')) {
       console.debug(`[getRepoStars] Using expired cache`);
-      return cache.getExpired('stars').length;
+      return cache.getExpired('starCount');
     }
 
     return 0;
