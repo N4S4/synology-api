@@ -665,9 +665,19 @@ class SysInfo(base_api.BaseApi):
 
         return self.request_data(api_name, api_path, req_param)
 
-    def sys_upgrade_download(self) -> dict[str, object] | str:
+    def sys_upgrade_download(self,
+                             need_download_target: bool = False
+                             ) -> dict[str, object] | str:
         """
         Get system upgrade download progress.
+
+        The update panel asks at version 2 and requests the download target.
+        With no argument the previous request is kept unchanged.
+
+        Parameters
+        ----------
+        need_download_target : bool, optional
+            Ask the response to include the download target. Defaults to False.
 
         Returns
         -------
@@ -677,7 +687,11 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.Upgrade.Server.Download'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'progress'}
+        if need_download_target:
+            req_param = {'version': 2, 'method': 'progress',
+                         'need_download_target': True}
+        else:
+            req_param = {'version': info['maxVersion'], 'method': 'progress'}
 
         return self.request_data(api_name, api_path, req_param)
 
@@ -2055,9 +2069,19 @@ class SysInfo(base_api.BaseApi):
         req_param = {'version': info['maxVersion'], 'method': 'get'}
         return self.request_data(api_name, api_path, req_param)
 
-    def upgrade_status(self) -> dict[str, object] | str:
+    def upgrade_status(self,
+                       feasibility_check: bool = False) -> dict[str, object] | str:
         """
         Get upgrade status.
+
+        The update panel runs its feasibility check through this call, at
+        version 1 with the extra flag. With no argument the previous request
+        is kept unchanged.
+
+        Parameters
+        ----------
+        feasibility_check : bool, optional
+            Run the feasibility check and return its result. Defaults to False.
 
         Returns
         -------
@@ -2067,7 +2091,11 @@ class SysInfo(base_api.BaseApi):
         api_name = 'SYNO.Core.Upgrade'
         info = self.core_list[api_name]
         api_path = info['path']
-        req_param = {'version': info['maxVersion'], 'method': 'status'}
+        if feasibility_check:
+            req_param = {'version': 1, 'method': 'status',
+                         'feasibility_check': True}
+        else:
+            req_param = {'version': info['maxVersion'], 'method': 'status'}
         return self.request_data(api_name, api_path, req_param)
 
     def dsm_findme_start(self) -> dict:
